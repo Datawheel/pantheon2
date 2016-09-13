@@ -1,0 +1,28 @@
+@import '../../common/typography';
+
+nav.profile-nav {
+  text-align: center;
+  border: solid 1px black;
+
+  &:before {
+    background: black;
+    color: white;
+    content: "profile-nav";
+    display: block;
+    font-size: 11px;
+    text-align: center;
+  }
+}
+
+
+nav.profile-nav ul {
+  margin: 0;
+  padding: 0;
+
+  li {
+    border: solid 1px black;
+  }
+}
+
+/*.description { @apply --normal; }
+.contribute { @apply --small; }*/

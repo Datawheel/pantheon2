@@ -7,7 +7,7 @@ npm-debug.log*
 build/Release
 
 # Compiled App
-build/public
+public
 
 # Dependency directory
 node_modules

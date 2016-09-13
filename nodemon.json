@@ -1,0 +1,17 @@
+{
+    "verbose": false,
+    "watch": [
+      "/app/pages",
+      "app/actions",
+      "/app/reducers/",
+      "app/server.jsx",
+      "app/routes.jsx",
+      "app/helmconfig.js",
+      "app/components/Meta.jsx",
+      "app/components/profile/",
+      "server",
+      "webpack/webpack.config.dev-client.js",
+      "webpack/webpack.config.dev-server.js"
+    ],
+    "exec": "npm run build:dev && npm run babel-node -- server/index.js"
+}

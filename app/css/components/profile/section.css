@@ -1,0 +1,16 @@
+section {
+  border: solid 1px black;
+
+  &:before {
+    background: black;
+    color: white;
+    content: "section";
+    display: block;
+    font-size: 11px;
+    text-align: center;
+  }
+}
+
+.aaa {
+  color: red;
+}

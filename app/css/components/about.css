@@ -1,0 +1,21 @@
+@import '../common/typography';
+
+.header {
+  @apply --heading;
+  text-align: center;
+}
+
+.description { @apply --normal; }
+.contribute { @apply --small; }
+
+.rankPeers {
+  background: #eee;
+  margin: 20px 0;
+  padding: 10px;
+}
+
+li {
+  border: solid 1px black;
+  display: inline-block;
+  padding: 10px;
+}
