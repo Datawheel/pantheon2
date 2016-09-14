@@ -5,11 +5,11 @@ import {Icon} from 'react-fa'
 
 // const cx = classNames.bind(styles);
 
-const Section = ({ children, index, numSections, title }) => {
+const Section = ({ children, index, numSections, slug, title }) => {
 
   return (
     <section>
-      {title}
+      <a name={slug}>{title}</a>
       {[...Array(numSections)].map((x, i) =>
         i === index ? <Icon name="circle" /> : <Icon name="circle-o" />
       )}

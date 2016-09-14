@@ -2,14 +2,14 @@
 @import 'common/layout';
 @import 'common/typography';
 
-@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+@import url(https://fonts.googleapis.com/css?family=Amiko);
 
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: var(--fontMontserrat);
+  font-family: var(--fontAmiko);
 }
 
 .app {

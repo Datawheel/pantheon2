@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route, IndexRoute, IndexRedirect, Redirect } from 'react-router';
 
 import App from 'containers/App';
 import Home from 'containers/Home';
@@ -48,15 +48,16 @@ export default (store) => {
     callback();
   };
 
-  const redirectAuth = (nextState, replace, callback) => {
-    const { user: { authenticated }} = store.getState();
-    if (authenticated) {
-      replace({
-        pathname: '/'
-      });
+  function xx(nextState, replaceState) {
+    if (!nextState.params.id) {
+      const reqestedUrl = nextState.location.pathname;
+      const randId = Math.round(Math.random()*10) + 1;
+      const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}${randId}` : `${reqestedUrl}/${randId}`;
+      replaceState({id:randId}, nextUrl)
     }
-    callback();
-  };
+  }
+
+
   return (
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
@@ -77,7 +78,8 @@ export default (store) => {
       </Route>
 
       <Route path="profile" component={Profile}>
-        <Route path="person(/:id)" component={Person} />
+        <IndexRedirect to="person/1" />
+        <Route path="person(/:id)" component={Person} onEnter={xx} />
         <Route path="geo(/:id)" component={Geo} />
         <Route path="domain(/:id)" component={Domain} />
       </Route>

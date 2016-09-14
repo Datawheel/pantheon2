@@ -15,7 +15,8 @@ const clientConfig = {
 
 // configure baseURL for axios requests (for serverside API calls)
 // axios.defaults.baseURL = `http://${clientConfig.host}:${clientConfig.port}`;
-axios.defaults.baseURL = `http://${clientConfig.host}`;
+// axios.defaults.baseURL = `http://${clientConfig.host}`;
+axios.defaults.baseURL = `http://localhost:3100`;
 console.log(axios.defaults.baseURL)
 
 const analtyicsScript =

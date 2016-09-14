@@ -4,20 +4,13 @@ import styles from 'css/components/profile/nav';
 
 const cx = classNames.bind(styles);
 
-const Nav = () => {
-  const sections = [
-    "Metrics",
-    "Among Singers",
-    "Contemporaries",
-    "Among People in the US",
-    "Digital Afterlife"
-  ];
+const Nav = ({ sections }) => {
 
   return (
     <nav className={cx('profile-nav')}>
       <ul>
-      {sections.map((section, key) =>
-        <li key={key}>{section}</li>
+      {sections.map((section) =>
+        <li key={section.slug}><a href={`#${section.slug}`}>{section.title}</a></li>
       )}
       </ul>
     </nav>

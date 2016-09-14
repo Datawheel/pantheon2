@@ -22,13 +22,15 @@ class Person extends Component {
   constructor(props) {
     super(props);
     const {personProfile} = this.props;
+    const occupation = personProfile.person.occupation;
+    const birthcountry = personProfile.person.birthcountry;
 
     this.sections = [
-      {title: "Memorability Metrics"},
-      {title: "Among Singers", rankings: [personProfile.occupationRank], type:"occupation"},
-      {title: "Contemporaries", rankings: [personProfile.birthyearRank], type:"birthyear"},
-      {title: "Among People in the US", rankings: [personProfile.birthcountryRank], type:"birthcountry"},
-      {title: "Digital Afterlife"}
+      {title: "Memorability Metrics", slug: "metrics"},
+      {title: `Among ${occupation.name}`, slug: "occupation_peers", rankings: [personProfile.occupationRank], type:"occupation"},
+      {title: "Contemporaries", slug: "year_peers", rankings: [personProfile.birthyearRank], type:"birthyear"},
+      {title: `Among People in ${birthcountry.name}`, slug: "country_peers", rankings: [personProfile.birthcountryRank], type:"birthcountry"},
+      {title: "Digital Afterlife", slug: "afterlife"}
     ];
   }
 
@@ -40,7 +42,7 @@ class Person extends Component {
   ]
 
   render() {
-    const {personProfile} = this.props;;
+    const {personProfile} = this.props;
 
     // return (<div>testing...</div>)
     const sections = this.sections.map((section, key) => {
@@ -49,22 +51,16 @@ class Person extends Component {
           index={key}
           key={key}
           numSections={this.sections.length}
-          title={section.title}>
+          title={section.title}
+          slug={section.slug}>
         {section.rankings ? <Ranking person={personProfile.person} rankings={section.rankings} type={section.type} /> : null}
         </Section>);
     });
 
-    // return (
-    //   <div>
-    //     <Header person={personProfile.person} />
-    //     <ProfileNav />
-    //     <Intro person={personProfile.person} />
-    //   </div>
-    // )
     return (
       <div>
         <Header person={personProfile.person} />
-        <ProfileNav />
+        <ProfileNav sections={this.sections} />
         <Intro person={personProfile.person} />
         {sections}
       </div>
