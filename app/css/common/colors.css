@@ -1,17 +1,39 @@
 :root {
 
-  --colorBlack:               #000;
-  --colorWhite:               #fff;
-  --colorDodgerBlue:          #2196F3;
-  --colorSalem:               #0F9D58;
-  --colorDarkerSalem:         #0b6e3e;
-  --colorPunch:               #db4437;
-  --colorLoblolly:            #c3c8ce;
-  --colorLimedSpruce:         #333f48;
-  --colorAthensGray:          #f5f5f6;
-  --colorMercury:             #e3e3e3;
-  --colorBombay:              #b4bac1;
-  --colorCrimson:             #ed193a;
-  --colorDarkerCrimson:       color(var(--colorCrimson) blackness(+20%));
+  /* neutrals (from light > dark) */
+  --colorSnow:                #FFF;
+  --colorEggshell:            #F4F4F1;
+  --colorMatza:               #D6D6D0;
+  --colorMatza2:              #D0C9BF;
+  --colorSand:                #AFAAA4;
+  --colorTan:                 #9E978D;
+  --colorStone:               #82817F;
+  --colorSlate:               #4B4A48;
+  --colorDark:                #363636;
+  --colorBlackhole:           #000;
 
+  /* occupations groupings */
+  --colorSports:              #BB3B57;
+  --colorScienceTech:         #0E5E5B;
+  --colorPublicFigure:        #67AF8C;
+  --colorInstitutions:        #B12D11;
+  --colorHumanities:          #732945;
+  --colorExploration:         #4C5ED7;
+  --colorBusiness:            #4F680A;
+  --colorArts:                #D28629;
+
+  /* more colors! */
+  --colorMidnight:            #260348;
+  --colorRoyal:               #160B5B;
+  --colorAtlantic:            #162A6D;
+  --colorPacific:             #255A7F;
+  --colorAqua:                #378D91;
+  --colorSpring:              #4CA487;
+  --colorClover:              #63B67D;
+  --colorLime:                #82C87E;
+  --colorSummer:              #B6DA9C;
+  --colorCucumber:            #E2ECBD;
+  --colorLemonade:            #FFFBE2;
+
+  --colorDarkerLemonade:       color(var(--colorLemonade) blackness(+20%));
 }

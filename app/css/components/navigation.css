@@ -2,22 +2,21 @@
 @import '../common/typography';
 
 .navigation {
-  padding: 0 28px;
+  text-align: center;
+  width: 100%;
 }
 
 .item {
   display: inline-block;
   text-decoration: none;
   padding: 16px 32px;
-  color: var(--colorBlack);
+  color: var(--colorBlackhole);
 }
 
 .logo {
   font-size: var(--fontHuge);
 }
 
-$blue:   #00ffff;
-
 .active {
-  color: $blue;
+  color: var(--colorClover);
 }

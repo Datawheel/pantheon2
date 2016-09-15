@@ -11,7 +11,7 @@ const Section = ({ children, index, numSections, slug, title }) => {
     <section>
       <a name={slug}>{title}</a>
       {[...Array(numSections)].map((x, i) =>
-        i === index ? <Icon name="circle" /> : <Icon name="circle-o" />
+        i === index ? <Icon key={i} name="circle" /> : <Icon key={i} name="circle-o" />
       )}
       { children }
     </section>
