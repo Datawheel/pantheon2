@@ -6,9 +6,9 @@ import Header from 'pages/profile/place/Header';
 import ProfileNav from 'components/profile/Nav';
 import Intro from 'pages/profile/place/Intro';
 import Section from 'components/profile/Section';
-import Ranking from 'components/profile/Ranking';
+import Ranking from 'pages/profile/place/Ranking';
 
-import { fetchPlace } from 'actions/place';
+import { fetchPlace, fetchPeopleBornHere } from 'actions/place';
 
 const cx = classNames.bind(styles);
 
@@ -16,9 +16,10 @@ class Place extends Component {
 
   constructor(props) {
     super(props);
+    const {placeProfile} = this.props;
 
     this.sections = [
-      {title: "People", slug: "people"},
+      {title: "People", slug: "people", rankings: [placeProfile.peopleBornHere]},
       {title: "Professions", slug: "professions"},
       {title: "Profession Trends", slug: "profession_trends"},
       {title: "Cities", slug: "cities"},
@@ -30,12 +31,13 @@ class Place extends Component {
 
   static need = [
     fetchPlace,
+    fetchPeopleBornHere
   ]
 
   render() {
     const {placeProfile} = this.props;
-    console.log(" ---- place ------")
-    console.log(placeProfile)
+    // console.log(" ---- place ------")
+    // console.log(placeProfile)
 
     // return (<div>testing...</div>)
     const sections = this.sections.map((section, key) => {
@@ -46,7 +48,7 @@ class Place extends Component {
           numSections={this.sections.length}
           title={section.title}
           slug={section.slug}>
-        {section.rankings ? <Ranking person={personProfile.person} rankings={section.rankings} type={section.type} /> : null}
+        {section.rankings ? <Ranking rankings={section.rankings} /> : null}
         </Section>);
     });
 

@@ -21,3 +21,5 @@ node_modules
 # OSX .DS_STORE
 .DS_STORE
 .DS_Store
+
+img/

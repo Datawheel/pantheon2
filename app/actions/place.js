@@ -5,16 +5,25 @@ import * as types from 'types';
 
 polyfill();
 
-export function makePersonRequest(method, id, data, api = '/country') {
+export function makePlaceRequest(method, id, data, api = '/country') {
   const requestedURL = api + (id ? ('?id=eq.' + id) : '');
   // console.log(requestedURL)
   return request[method](requestedURL, data);
 }
 
 export function fetchPlace(store) {
-  const prom = makePersonRequest('get', store["id"]);
+  const prom = makePlaceRequest('get', store["id"]);
   return {
     type: "GET_PLACE",
     promise: prom
+  };
+}
+
+export function fetchPeopleBornHere(store) {
+  const getPeopleProm = makePlaceRequest('get', null, null, `/person?birthcountry=eq.${store["id"]}&limit=12&order=langs.desc`);
+
+  return {
+    type: "GET_PEOPLE_BORN",
+    promise: getPeopleProm
   };
 }

@@ -13,8 +13,21 @@ const place = (
   }
 }
 
+const peopleBornHere = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_PEOPLE_BORN_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
 const placeProfileReducer = combineReducers({
-  place
+  place,
+  peopleBornHere
 });
 
 export default placeProfileReducer;
