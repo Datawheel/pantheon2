@@ -7,7 +7,7 @@ import Home from 'containers/Home';
 // profile components
 import Profile from 'pages/profile/Index';
 import Person from 'pages/profile/Person';
-import Geo from 'pages/profile/Geo';
+import Place from 'pages/profile/place/Index';
 import Domain from 'pages/profile/Domain';
 
 // about components
@@ -48,7 +48,7 @@ export default (store) => {
     callback();
   };
 
-  function xx(nextState, replaceState) {
+  function checkForId(nextState, replaceState) {
     if (!nextState.params.id) {
       const reqestedUrl = nextState.location.pathname;
       const randId = Math.round(Math.random()*10) + 1;
@@ -79,8 +79,8 @@ export default (store) => {
 
       <Route path="profile" component={Profile}>
         <IndexRedirect to="person/1" />
-        <Route path="person(/:id)" component={Person} onEnter={xx} />
-        <Route path="geo(/:id)" component={Geo} />
+        <Route path="person(/:id)" component={Person} onEnter={checkForId} />
+        <Route path="place(/:id)" component={Place} />
         <Route path="domain(/:id)" component={Domain} />
       </Route>
 

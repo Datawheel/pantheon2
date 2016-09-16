@@ -6,7 +6,7 @@
   display: none;
   padding: 12px 0;
   border-radius: var(--globalRadius);
-  color: var(--colorBlack);
+  color: var(--colorBlackhole);
   font-size: var(--fontMedium);
   text-align: center;
 }
@@ -16,6 +16,6 @@
 }
 
 .success {
-  background-color: var(--colorSalem);
-  color: var(--colorWhite);
+  background-color: var(--colorClover);
+  color: var(--colorSnow);
 }
