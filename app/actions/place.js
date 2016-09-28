@@ -27,3 +27,21 @@ export function fetchPeopleBornHere(store) {
     promise: getPeopleProm
   };
 }
+
+export function fetchOccupations(store) {
+  const getOccupationsProm = makePlaceRequest('get', null, null, `/country_occupation?country=eq.${store["id"]}&limit=5&order=num_people.desc&select=occupation{*},*`);
+
+  return {
+    type: "GET_OCCUPATIONS",
+    promise: getOccupationsProm
+  };
+}
+
+export function fetchPeopleBornHereAlive(store) {
+  const getPeopleProm = makePlaceRequest('get', null, null, `/person?birthcountry=eq.${store["id"]}&limit=3&order=langs.desc&deathyear=is.null`);
+
+  return {
+    type: "GET_PEOPLE_BORN_ALIVE",
+    promise: getPeopleProm
+  };
+}

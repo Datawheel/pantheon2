@@ -22,6 +22,9 @@
 > npm run dev
 ```
 
+## Running API locally
+postgrest postgres://[username]:@localhost:5432/pantheon -a [username] --schema public -p 3100
+
 
 ## Downloading images
 

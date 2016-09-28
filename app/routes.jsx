@@ -48,10 +48,18 @@ export default (store) => {
     callback();
   };
 
+  function genRandId(path) {
+    if(path.includes("place")){
+      const countries = ["us", "gb", "ir", "ch", "cl", "sa", "ca"];
+      return countries[Math.floor(Math.random()*countries.length)];
+    }
+    return Math.round(Math.random()*10) + 1;
+  }
+
   function checkForId(nextState, replaceState) {
     if (!nextState.params.id) {
       const reqestedUrl = nextState.location.pathname;
-      const randId = Math.round(Math.random()*10) + 1;
+      const randId = genRandId(reqestedUrl);
       const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}${randId}` : `${reqestedUrl}/${randId}`;
       replaceState({id:randId}, nextUrl)
     }
@@ -78,9 +86,8 @@ export default (store) => {
       </Route>
 
       <Route path="profile" component={Profile}>
-        <IndexRedirect to="person/1" />
         <Route path="person(/:id)" component={Person} onEnter={checkForId} />
-        <Route path="place(/:id)" component={Place} />
+        <Route path="place(/:id)" component={Place} onEnter={checkForId} />
         <Route path="domain(/:id)" component={Domain} />
       </Route>
 

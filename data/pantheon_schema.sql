@@ -103,6 +103,15 @@ CREATE TABLE person_birthcountry_rank
   langs integer
 );
 
+CREATE TABLE country_occupation
+(
+  country CHARACTER VARYING(2) REFERENCES country (id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION,
+  occupation integer REFERENCES occupation (id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION,
+  num_people integer
+);
+
 COMMIT;
 
 
@@ -159,3 +168,20 @@ COMMIT;
 -- SET num_died=subq.num_died
 -- FROM (SELECT deathyear, count(*) AS num_died FROM person GROUP BY deathyear) AS subq
 -- WHERE year.id=subq.deathyear;
+
+-- UPDATE year
+-- SET num_died=subq.num_died
+-- FROM (SELECT deathyear, count(*) AS num_died FROM person GROUP BY deathyear) AS subq
+-- WHERE year.id=subq.deathyear;
+
+-- INSERT INTO country_occupation (country, occupation, num_people) (
+-- SELECT
+-- 	birthcountry, occupation, count(*)
+-- FROM
+-- 	person
+-- WHERE
+-- 	birthcountry IS NOT NULL AND occupation IS NOT NULL
+-- GROUP BY
+-- 	birthcountry, occupation
+-- ORDER BY birthcountry, occupation
+-- );

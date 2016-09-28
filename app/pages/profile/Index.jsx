@@ -16,7 +16,7 @@ const Profile = ({children}) => {
       <h1 className={cx('header')}>Profiles</h1>
       <nav className={cx('subNav')} role="navigation">
         <Link to="/profile/person" className={cx('item')} activeClassName={cx('active')}>Person</Link>
-        <Link to="/profile/geo" className={cx('item')} activeClassName={cx('active')}>Geo</Link>
+        <Link to="/profile/place" className={cx('item')} activeClassName={cx('active')}>Place</Link>
         <Link to="/profile/domain" className={cx('item')} activeClassName={cx('active')}>Domain</Link>
       </nav>
 

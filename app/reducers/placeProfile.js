@@ -25,9 +25,35 @@ const peopleBornHere = (
   }
 }
 
+const occupations = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_OCCUPATIONS_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
+const peopleBornHereAlive = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_PEOPLE_BORN_ALIVE_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
 const placeProfileReducer = combineReducers({
   place,
-  peopleBornHere
+  peopleBornHere,
+  occupations,
+  peopleBornHereAlive
 });
 
 export default placeProfileReducer;

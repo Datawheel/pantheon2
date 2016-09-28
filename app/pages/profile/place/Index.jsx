@@ -6,9 +6,12 @@ import Header from 'pages/profile/place/Header';
 import ProfileNav from 'components/profile/Nav';
 import Intro from 'pages/profile/place/Intro';
 import Section from 'components/profile/Section';
-import Ranking from 'pages/profile/place/Ranking';
 
-import { fetchPlace, fetchPeopleBornHere } from 'actions/place';
+import Ranking from 'pages/profile/place/Ranking';
+import Occupations from 'pages/profile/place/Occupations';
+import LivingPeople from 'pages/profile/place/LivingPeople';
+
+import { fetchPlace, fetchPeopleBornHere, fetchOccupations, fetchPeopleBornHereAlive } from 'actions/place';
 
 const cx = classNames.bind(styles);
 
@@ -20,24 +23,24 @@ class Place extends Component {
 
     this.sections = [
       {title: "People", slug: "people", rankings: [placeProfile.peopleBornHere]},
-      {title: "Professions", slug: "professions"},
+      {title: "Professions", slug: "professions", content: <Occupations data={placeProfile.occupations} />},
       {title: "Profession Trends", slug: "profession_trends"},
       {title: "Cities", slug: "cities"},
       {title: "Historical Places", slug: "historical_places"},
       {title: "Overlapping Lives", slug: "overlapping_lives"},
-      {title: "Living People", slug: "living_people"}
+      {title: "Living People", slug: "living_people", content: <LivingPeople data={placeProfile.peopleBornHereAlive} />}
     ];
   }
 
   static need = [
     fetchPlace,
-    fetchPeopleBornHere
+    fetchPeopleBornHere,
+    fetchOccupations,
+    fetchPeopleBornHereAlive
   ]
 
   render() {
     const {placeProfile} = this.props;
-    // console.log(" ---- place ------")
-    // console.log(placeProfile)
 
     // return (<div>testing...</div>)
     const sections = this.sections.map((section, key) => {
@@ -48,7 +51,8 @@ class Place extends Component {
           numSections={this.sections.length}
           title={section.title}
           slug={section.slug}>
-        {section.rankings ? <Ranking rankings={section.rankings} /> : null}
+          {section.rankings ? <Ranking rankings={section.rankings} /> : null}
+          {section.content ? section.content : null}
         </Section>);
     });
 
