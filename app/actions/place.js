@@ -20,7 +20,7 @@ export function fetchPlace(store) {
 }
 
 export function fetchPeopleBornHere(store) {
-  const getPeopleProm = makePlaceRequest('get', null, null, `/person?birthcountry=eq.${store["id"]}&limit=12&order=langs.desc`);
+  const getPeopleProm = makePlaceRequest('get', null, null, `/person?birthcountry=eq.${store["id"]}&order=langs.desc`);
 
   return {
     type: "GET_PEOPLE_BORN",
@@ -29,11 +29,20 @@ export function fetchPeopleBornHere(store) {
 }
 
 export function fetchOccupations(store) {
-  const getOccupationsProm = makePlaceRequest('get', null, null, `/country_occupation?country=eq.${store["id"]}&limit=5&order=num_people.desc&select=occupation{*},*`);
+  const getOccupationsProm = makePlaceRequest('get', null, null, `/occupation`);
 
   return {
     type: "GET_OCCUPATIONS",
     promise: getOccupationsProm
+  };
+}
+
+export function fetchOccupationsHere(store) {
+  const getOccupationsHereProm = makePlaceRequest('get', null, null, `/country_occupation?country=eq.${store["id"]}&limit=5&order=num_people.desc&select=occupation{*},*`);
+
+  return {
+    type: "GET_OCCUPATIONS_HERE",
+    promise: getOccupationsHereProm
   };
 }
 

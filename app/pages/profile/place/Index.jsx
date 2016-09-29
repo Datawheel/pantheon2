@@ -11,7 +11,9 @@ import PeopleRanking from 'pages/profile/place/PeopleRanking';
 import Occupations from 'pages/profile/place/Occupations';
 import LivingPeople from 'pages/profile/place/LivingPeople';
 
-import { fetchPlace, fetchPeopleBornHere, fetchOccupations, fetchPeopleBornHereAlive } from 'actions/place';
+import Viz from 'components/viz/Index'
+
+import { fetchPlace, fetchPeopleBornHere, fetchOccupationsHere, fetchOccupations, fetchPeopleBornHereAlive } from 'actions/place';
 
 const cx = classNames.bind(styles);
 
@@ -19,16 +21,25 @@ class Place extends Component {
 
   constructor(props) {
     super(props);
-    const {placeProfile} = this.props;
+    const {peopleBornHere, occupationsHere, occupations, peopleBornHereAlive} = this.props.placeProfile;
 
     this.sections = [
-      {title: "People", slug: "people", content: <PeopleRanking ranking={placeProfile.peopleBornHere} />},
-      {title: "Professions", slug: "professions", content: <Occupations data={placeProfile.occupations} />},
+      {title: "People", slug: "people", content: <PeopleRanking ranking={peopleBornHere.slice(0, 12)} />},
+      {
+        title: "Professions",
+        slug: "professions",
+        content: <Occupations data={occupationsHere} />,
+        viz: <Viz
+                data={peopleBornHere}
+                attrs={occupations}
+                groupBy={["group", "domain", "name"]}
+                time={(d) => d.birthYear} />
+      },
       {title: "Profession Trends", slug: "profession_trends"},
       {title: "Cities", slug: "cities"},
       {title: "Historical Places", slug: "historical_places"},
       {title: "Overlapping Lives", slug: "overlapping_lives"},
-      {title: "Living People", slug: "living_people", content: <LivingPeople data={placeProfile.peopleBornHereAlive} />}
+      {title: "Living People", slug: "living_people", content: <LivingPeople data={peopleBornHereAlive} />}
     ];
   }
 
@@ -36,6 +47,7 @@ class Place extends Component {
     fetchPlace,
     fetchPeopleBornHere,
     fetchOccupations,
+    fetchOccupationsHere,
     fetchPeopleBornHereAlive
   ]
 
@@ -52,6 +64,7 @@ class Place extends Component {
           title={section.title}
           slug={section.slug}>
           {section.content ? section.content : null}
+          {section.viz ? section.viz : null}
         </Section>);
     });
 
