@@ -23,7 +23,33 @@
 ```
 
 ## Running API locally
-postgrest postgres://[username]:@localhost:5432/pantheon -a [username] --schema public -p 3100
+1. Install postgrest via Homebrew
+
+```
+# Ensure brew is up to date
+> brew update
+
+# Check for any problems with brew's setup
+> brew doctor
+
+# Install the postgrest package
+> brew install postgrest
+```
+
+2. Initialize the DB
+```
+> createdb pantheon
+```
+
+3. Copy data to local DB
+```
+> cat pantheon_db_dump_MM-DD-YYYY.sql | psql pantheon
+```
+
+4. Run postgrest and point to local copy of DB
+```
+> postgrest postgres://[username]:@localhost:5432/pantheon -a [username] --schema public -p 3100
+```
 
 
 ## Downloading images
