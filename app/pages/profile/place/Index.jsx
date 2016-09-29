@@ -7,7 +7,7 @@ import ProfileNav from 'components/profile/Nav';
 import Intro from 'pages/profile/place/Intro';
 import Section from 'components/profile/Section';
 
-import Ranking from 'pages/profile/place/Ranking';
+import PeopleRanking from 'pages/profile/place/PeopleRanking';
 import Occupations from 'pages/profile/place/Occupations';
 import LivingPeople from 'pages/profile/place/LivingPeople';
 
@@ -22,7 +22,7 @@ class Place extends Component {
     const {placeProfile} = this.props;
 
     this.sections = [
-      {title: "People", slug: "people", rankings: [placeProfile.peopleBornHere]},
+      {title: "People", slug: "people", content: <PeopleRanking ranking={placeProfile.peopleBornHere} />},
       {title: "Professions", slug: "professions", content: <Occupations data={placeProfile.occupations} />},
       {title: "Profession Trends", slug: "profession_trends"},
       {title: "Cities", slug: "cities"},
@@ -51,7 +51,6 @@ class Place extends Component {
           numSections={this.sections.length}
           title={section.title}
           slug={section.slug}>
-          {section.rankings ? <Ranking rankings={section.rankings} /> : null}
           {section.content ? section.content : null}
         </Section>);
     });

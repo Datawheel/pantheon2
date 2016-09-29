@@ -6,9 +6,9 @@ import Home from 'containers/Home';
 
 // profile components
 import Profile from 'pages/profile/Index';
-import Person from 'pages/profile/Person';
+import Person from 'pages/profile/person/Index';
 import Place from 'pages/profile/place/Index';
-import Domain from 'pages/profile/Domain';
+import Domain from 'pages/profile/domain/Index';
 
 // about components
 import About from 'pages/about/Index';
@@ -49,11 +49,19 @@ export default (store) => {
   };
 
   function genRandId(path) {
+    console.log(' ----------- path -----------')
+    console.log(path)
+    let candidates;
     if(path.includes("place")){
-      const countries = ["us", "gb", "ir", "ch", "cl", "sa", "ca"];
-      return countries[Math.floor(Math.random()*countries.length)];
+      candidates = ["us", "gb", "ir", "ch", "cl", "sa", "ca"];
     }
-    return Math.round(Math.random()*10) + 1;
+    else if(path.includes("domain")){
+      candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
+    }
+    else if(path.includes("person")){
+      candidates = ["Joseph_Cook", "Pope_Paschal_II", "Nick_Drake", "Lewis_Carroll", "Eddie_Irvine", "Manfred,_King_of_Sicily"];
+    }
+    return candidates[Math.floor(Math.random()*candidates.length)];
   }
 
   function checkForId(nextState, replaceState) {
@@ -88,7 +96,7 @@ export default (store) => {
       <Route path="profile" component={Profile}>
         <Route path="person(/:id)" component={Person} onEnter={checkForId} />
         <Route path="place(/:id)" component={Place} onEnter={checkForId} />
-        <Route path="domain(/:id)" component={Domain} />
+        <Route path="domain(/:id)" component={Domain} onEnter={checkForId} />
       </Route>
 
       <Route path="data" component={Data}>

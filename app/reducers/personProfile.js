@@ -13,32 +13,6 @@ const person = (
   }
 }
 
-
-// export default function person(
-//   state = {person:{}, occRanks:[], byRanks:[], cyRanks:[]},
-//   action = {}) {
-//   switch (action.type) {
-//     case types.GET_PERSON_SUCCESS:
-//       return {person:action.res[0].data[0], occRanks:action.res[1].data, byRanks:action.res[2].data, cyRanks:action.res[3].data}
-//     default:
-//       return state;
-//   }
-// }
-
-//
-// export default person = (
-//   state = {person:{}, occRanks:[], byRanks:[], cyRanks:[]},
-//   action
-// ) => {
-//   // console.log(action.type)
-//   switch (action.type) {
-//     case types.GET_PERSON_SUCCESS:
-//       return {person:action.res[0].data[0], occRanks:action.res[1].data, byRanks:action.res[2].data, cyRanks:action.res[3].data}
-//     default:
-//       return state;
-//   }
-// };
-
 const occupationRank = (
   state = {me:{}, peers:[]},
   action
