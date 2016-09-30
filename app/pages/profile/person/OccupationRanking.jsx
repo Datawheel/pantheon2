@@ -12,10 +12,10 @@ const OccupationRanking = ({ person, ranking }) => {
       worsePeers = null;
 
   if(ranking.betterPeers.length){
-    betterPeers = <span>Before { person.gender ? "her" : "him" } are: <AnchorList items={ranking.betterPeers} name={(d) => `${d.person.name} (${d.person.birthcountry.toUpperCase()})`} url={(d) => `/profile/person/${d.person.slug}/`} />. </span>
+    betterPeers = <span>Before { person.gender ? "her" : "him" } are: <AnchorList items={ranking.betterPeers} name={(d) => `${d.person.name} (${d.person.birthcountry})`} url={(d) => `/profile/person/${d.person.slug}/`} />. </span>
   }
   if(ranking.worsePeers.length){
-    worsePeers = <span>After { person.gender ? "her" : "him" } are: <AnchorList items={ranking.worsePeers} name={(d) => `${d.person.name} (${d.person.birthcountry.toUpperCase()})`} url={(d) => `/profile/person/${d.person.slug}/`} />.</span>
+    worsePeers = <span>After { person.gender ? "her" : "him" } are: <AnchorList items={ranking.worsePeers} name={(d) => `${d.person.name} (${d.person.birthcountry})`} url={(d) => `/profile/person/${d.person.slug}/`} />.</span>
   }
 
   return (

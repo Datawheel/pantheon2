@@ -16,13 +16,6 @@ const colors = {
 
 class Viz extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      viz: new types[props.type]()
-    }
-  }
-
   componentDidMount() {
     const {time} = this.props;
     const attrs = this.props.attrs.reduce((obj, d) => {
@@ -53,7 +46,7 @@ class Viz extends Component {
       d.occupation = `${d.occupation}`;
     });
 
-    this.state.viz
+    const viz = new types[this.props.type]()
       .shapeConfig({
         fill: d => {
           let occ = d.occupation;
@@ -67,7 +60,8 @@ class Viz extends Component {
       .select(this.refs.svg)
       .sum(d => d.values ? void 0 : d.id instanceof Array ? d.id.length : 1)
       .time(time);
-    this.forceUpdate();
+    this.setState({viz});
+    // this.forceUpdate();
   }
 
   componentDidUpdate() {

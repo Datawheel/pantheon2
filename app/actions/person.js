@@ -1,6 +1,7 @@
 /* eslint consistent-return: 0, no-else-return: 0*/
 import { polyfill } from 'es6-promise';
 import request from 'axios';
+import axios from 'axios';
 import * as types from 'types';
 
 polyfill();
@@ -8,7 +9,9 @@ polyfill();
 export function makePersonRequest(method, id, data, api = '/person') {
   const requestedURL = api + (id ? ('?id=eq.' + id) : '');
   // console.log(requestedURL)
-  return request[method](requestedURL, data);
+  // return request[method](requestedURL, data);
+  console.log(`http://localhost:3100${requestedURL}`)
+  return axios.get(`http://localhost:3100${requestedURL}`)
 }
 
 export function fetchPerson(store) {

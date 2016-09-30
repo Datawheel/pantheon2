@@ -105,7 +105,7 @@ CREATE TABLE person_birthcountry_rank
 (
   person integer REFERENCES person (id)
     ON UPDATE NO ACTION ON DELETE NO ACTION,
-  birthcountry CHARACTER VARYING(2) REFERENCES country (id)
+  birthcountry integer REFERENCES place (id)
     ON UPDATE NO ACTION ON DELETE NO ACTION,
   rank integer,
   rank_unique integer,
@@ -114,7 +114,7 @@ CREATE TABLE person_birthcountry_rank
 
 CREATE TABLE country_occupation
 (
-  country CHARACTER VARYING(2) REFERENCES country (id)
+  country integer REFERENCES place (id)
     ON UPDATE NO ACTION ON DELETE NO ACTION,
   occupation integer REFERENCES occupation (id)
     ON UPDATE NO ACTION ON DELETE NO ACTION,

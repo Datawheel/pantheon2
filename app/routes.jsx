@@ -49,11 +49,9 @@ export default (store) => {
   };
 
   function genRandId(path) {
-    console.log(' ----------- path -----------')
-    console.log(path)
     let candidates;
     if(path.includes("place")){
-      candidates = ["us", "gb", "ir", "ch", "cl", "sa", "ca"];
+      candidates = ["India", "United_States", "France", "Italy", "Chile", "Brazil", "Bulgaria"];
     }
     else if(path.includes("domain")){
       candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];

@@ -19,10 +19,6 @@ class Domain extends Component {
 
   constructor(props) {
     super(props);
-    const {domainProfile} = this.props;
-
-    this.sections = [
-    ];
   }
 
   static need = [
@@ -31,34 +27,13 @@ class Domain extends Component {
 
   render() {
     const {domainProfile} = this.props;
+
     // return (<div>testing domain...</div>)
     return (
       <div>
         <Header domain={domainProfile.domain} />
         <ProfileNav sections={this.sections} />
         <Intro domain={domainProfile.domain} />
-      </div>
-    );
-
-    const sections = this.sections.map((section, key) => {
-      return (
-        <Section
-          index={key}
-          key={key}
-          numSections={this.sections.length}
-          title={section.title}
-          slug={section.slug}>
-          {section.rankings ? <Ranking rankings={section.rankings} /> : null}
-          {section.content ? section.content : null}
-        </Section>);
-    });
-
-    return (
-      <div>
-        <Header place={placeProfile.place} />
-        <ProfileNav sections={this.sections} />
-        <Intro place={placeProfile.place} />
-        {sections}
       </div>
     );
   }
