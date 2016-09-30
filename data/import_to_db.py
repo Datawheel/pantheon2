@@ -152,7 +152,6 @@ with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
         # Name
         slug = row["title"]
         slug = strip_accents(slug.decode('utf8'))
-        slug = urllib2.quote(slug.encode('utf8'))
 
         name = row["title"].replace("_", " ")
 
