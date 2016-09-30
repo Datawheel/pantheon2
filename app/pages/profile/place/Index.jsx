@@ -33,7 +33,7 @@ class Place extends Component {
 
   render() {
     const {placeProfile} = this.props;
-    const {peopleBornHere, occupationsHere, occupations, peopleBornHereAlive} = placeProfile;
+    const {place, peopleBornHere, occupationsHere, occupations, peopleBornHereAlive} = placeProfile;
     const sections = [
       {title: "People", slug: "people", content: <PeopleRanking ranking={peopleBornHere.slice(0, 12)} />},
       {
@@ -50,15 +50,15 @@ class Place extends Component {
       {title: "Cities", slug: "cities"},
       {title: "Historical Places", slug: "historical_places"},
       {title: "Overlapping Lives", slug: "overlapping_lives"},
-      {title: "Living People", slug: "living_people", content: <LivingPeople data={peopleBornHereAlive} />}
+      {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
     ];
 
     // return (<div>testing...</div>)
     return (
       <div>
-        <Header place={placeProfile.place} />
+        <Header place={place} />
         <ProfileNav sections={sections} />
-        <Intro place={placeProfile.place} />
+        <Intro place={place} />
         {sections.map((section, key) =>
           <Section
             index={key}

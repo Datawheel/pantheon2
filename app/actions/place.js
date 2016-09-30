@@ -23,9 +23,12 @@ export function fetchPlace(store) {
 }
 
 export function fetchPeopleBornHere(store) {
-  const getPeopleProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
+  const getPeopleProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id,name,country_name`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/person?birthcountry=eq.${placeId}&order=langs.desc`);
+    const placeName = placeIdRes.data[0].name;
+    const placeCountryName = placeIdRes.data[0].country_name;
+    const placeColumn = placeName === placeCountryName ? "birthcountry" : "birthplace";
+    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc`);
   })
 
   return {
@@ -46,7 +49,7 @@ export function fetchOccupations(store) {
 export function fetchOccupationsHere(store) {
   const getOccupationsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/country_occupation?country=eq.${placeId}&limit=5&order=num_people.desc&select=occupation{*},*`);
+    return makePlaceRequest('get', null, null, `/place_occupation?place=eq.${placeId}&limit=5&order=num_born.desc&select=occupation{*},*`);
   })
 
   return {
@@ -56,9 +59,12 @@ export function fetchOccupationsHere(store) {
 }
 
 export function fetchPeopleBornHereAlive(store) {
-  const getPeopleProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
+  const getPeopleProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id,name,country_name`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/person?birthcountry=eq.${placeId}&limit=3&order=langs.desc&alive=is.true`);
+    const placeName = placeIdRes.data[0].name;
+    const placeCountryName = placeIdRes.data[0].country_name;
+    const placeColumn = placeName === placeCountryName ? "birthcountry" : "birthplace";
+    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&limit=3&order=langs.desc&alive=is.true`);
   })
 
   return {
