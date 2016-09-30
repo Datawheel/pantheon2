@@ -14,7 +14,12 @@ CREATE TABLE place
   id serial PRIMARY KEY,
   wiki_id integer,
   name text NOT NULL,
-  slug CHARACTER VARYING(255)
+  slug CHARACTER VARYING(255),
+  country_name CHARACTER VARYING(255),
+  country_code CHARACTER VARYING(2),
+  lat real,
+  lon real,
+  pop real
 );
 
 CREATE TABLE year
@@ -59,15 +64,19 @@ CREATE TABLE person
     ON UPDATE NO ACTION ON DELETE NO ACTION,
   birthplace integer REFERENCES place (id)
     ON UPDATE NO ACTION ON DELETE NO ACTION,
-  birthcountry CHARACTER VARYING(2) REFERENCES country (id)
+  birthcountry integer REFERENCES place (id)
     ON UPDATE NO ACTION ON DELETE NO ACTION,
   deathplace integer REFERENCES place (id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION,
+  deathcountry integer REFERENCES place (id)
     ON UPDATE NO ACTION ON DELETE NO ACTION,
   occupation integer NOT NULL REFERENCES occupation (id)
     ON UPDATE CASCADE ON DELETE CASCADE,
   occ_acc real,
   langs integer,
-  langs_adopt integer
+  langs_adopt integer,
+  twitter CHARACTER VARYING(100),
+  alive boolean
 );
 
 CREATE TABLE person_occupation_rank

@@ -1,10 +1,52 @@
-import psycopg2, csv, sys
+import psycopg2, csv, sys, urllib2, unicodedata
 
 conn = psycopg2.connect("dbname=pantheon user=alexandersimoes")
 cursor = conn.cursor()
 
-occ_lookup = {}
+def strip_accents(s):
+   return ''.join(c for c in unicodedata.normalize('NFD', s)
+                  if unicodedata.category(c) != 'Mn')
 
+place_lookup = {}
+with open('data/cities.tsv', 'rb') as cfile:
+    creader = csv.reader(cfile, delimiter='\t', quotechar='"')
+    creader.next()
+    for row in creader:
+        [geonameid, city_name, lat, lon, pop, cname, ccode] = row
+        geonameid = int(geonameid)
+        ccode = ccode.lower()
+
+        if ccode not in place_lookup:
+            # lets add it to the db
+            cslug = cname.replace(" ", "_")
+            cslug = strip_accents(cslug.decode('utf8'))
+            cslug = urllib2.quote(cslug.encode('utf8'))
+            query = 'INSERT INTO place (slug, name, country_name, country_code) VALUES (%s, %s, %s, %s) RETURNING id;'
+            data = (cslug, cname, cname, ccode)
+
+            cursor.execute(query, data)
+            res = cursor.fetchone()
+            last_inserted_id = res[0]
+
+            place_lookup[ccode] = last_inserted_id
+
+        lat, lon, pop = int(float(lat)), int(float(lon)), int(float(pop))
+
+        city_slug = city_name.replace(" ", "_")
+        city_slug = strip_accents(city_slug.decode('utf8'))
+        city_slug = urllib2.quote(city_slug.encode('utf8'))
+        query = 'INSERT INTO place (wiki_id, name, slug, country_name, country_code, lat, lon, pop) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;'
+        data = (geonameid, city_name, city_slug, cname, ccode, lat, lon, pop)
+
+        cursor.execute(query, data)
+        res = cursor.fetchone()
+        last_inserted_id = res[0]
+        place_lookup[geonameid] = last_inserted_id
+
+conn.commit()
+
+
+occ_lookup = {}
 with open('data/classification.csv', 'rb') as cfile:
     creader = csv.reader(cfile, delimiter=',', quotechar='"')
     creader.next()
@@ -23,53 +65,40 @@ with open('data/classification.csv', 'rb') as cfile:
 
 conn.commit()
 
-with open('data/Pantheon2.0Sept7.csv', 'rb') as pfile:
+with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
     preader = csv.DictReader(pfile, delimiter=',', quotechar='"')
     for i, row in enumerate(preader):
         # if i > 2000: continue
         '''
             ###########################
-            GET PLACE OF BIRTH
+            GET PLACE OF BIRTH / DEATH
             ###########################
         '''
-        try:
-            birthplace_wiki_id = int(float(row["pcurid"]))
-            cursor.execute("SELECT id FROM place WHERE wiki_id = %s", (birthplace_wiki_id,))
-            row_found = cursor.fetchone()
-            if row_found:
-                birthplace_id = row_found[0]
-            else:
-                birthplace_name = row["pname"]
-                birthplace_name_slug = birthplace_name.replace(" ", "_")
-                query = 'INSERT INTO place (wiki_id, name, slug) VALUES (%s, %s, %s) RETURNING id;'
-                data = (birthplace_wiki_id, birthplace_name, birthplace_name_slug)
-                cursor.execute(query, data)
-                conn.commit()
-                res = cursor.fetchone()
-                birthplace_id = res[0]
-        except ValueError:
-            birthplace_id = None
+        places = [row["geonameid"], row["dgeonameid"]]
+        for i, p in enumerate(places):
+            try:
+                places[i] = int(float(p))
+                # print places[i]
+                try:
+                    places[i] = place_lookup[places[i]]
+                except KeyError:
+                    places[i] = None
+                # print places[i]
+            except:
+                places[i] = None
 
-        '''
-            ###########################
-            GET COUNTRY OF BIRTH
-            ###########################
-        '''
-        try:
-            birthplace_country_id = row["ccode"].lower()
-            cursor.execute("SELECT id FROM country WHERE id = %s", (birthplace_country_id,))
-            row_found = cursor.fetchone()
-            if row_found:
-                birthplace_country_id = row_found[0]
-            else:
-                birthplace_name = row["cname"]
-                birthplace_name_slug = birthplace_name.replace(" ", "_")
-                query = 'INSERT INTO country (id, name, slug) VALUES (%s, %s, %s);'
-                data = (birthplace_country_id, birthplace_name, birthplace_name_slug)
-                cursor.execute(query, data)
-                conn.commit()
-        except ValueError:
-            birthplace_country_id = None
+        birthplace_id, deathplace_id = places
+
+        countries = [row["ccode"], row["dccode"]]
+        for i, c in enumerate(countries):
+            try:
+                countries[i] = place_lookup[c.lower()]
+            except KeyError:
+                countries[i] = None
+
+        birthcountry_id, deathcountry_id = countries
+
+        # print birthplace_id, deathplace_id, birthcountry_id, deathcountry_id
 
         '''
             ###########################
@@ -96,7 +125,9 @@ with open('data/Pantheon2.0Sept7.csv', 'rb') as pfile:
             ###########################
         '''
         try:
+            # print "deathyear:", row["birthyear"]
             deathyear_id = int(float(row["deathyear"]))
+            # print "deathyear_id:", row["birthyear"]
             cursor.execute("SELECT id FROM year WHERE id = %s", (deathyear_id,))
             row_found = cursor.fetchone()
             if row_found:
@@ -120,6 +151,9 @@ with open('data/Pantheon2.0Sept7.csv', 'rb') as pfile:
 
         # Name
         slug = row["title"]
+        slug = strip_accents(slug.decode('utf8'))
+        slug = urllib2.quote(slug.encode('utf8'))
+
         name = row["title"].replace("_", " ")
 
         # Gender
@@ -131,13 +165,6 @@ with open('data/Pantheon2.0Sept7.csv', 'rb') as pfile:
         except:
             print "[ERROR] Cannot find occupation:", row["occupation"]
 
-        # birth locations
-        try:
-            lat = float(row["lat"])
-            lon = float(row["lon"])
-        except ValueError:
-            lat, lon = None, None
-
         # VALUES
         langs = int(row["L"])
         try:
@@ -145,14 +172,20 @@ with open('data/Pantheon2.0Sept7.csv', 'rb') as pfile:
         except ValueError:
             prob_ratio = None
 
+        # Twitter handles
+        twitter = row["twitter"] if row["twitter"] != "NA" else None
+
+        # Check if alive
+        alive = True if row["deathyear"] == "alive" else False
+
         '''
             ###########################
             ADD TO DB
             ###########################
         '''
-        print slug, name, gender, langs, prob_ratio, birthyear_id, deathyear_id, lat, lon, birthplace_id, birthplace_country_id
-        query = 'INSERT INTO person (wiki_id, name, slug, gender, birthyear, deathyear, birthplace, birthcountry, occupation, langs) VALUES (%s, %s, %s,%s, %s, %s,%s, %s, %s, %s) RETURNING id;'
-        data = (wiki_id, name, slug, gender, birthyear_id, deathyear_id, birthplace_id, birthplace_country_id, occupation, langs)
+        # print slug, name, gender, langs, prob_ratio, birthyear_id, deathyear_id, lat, lon, birthplace_id, birthcountry_id
+        query = 'INSERT INTO person (wiki_id, name, slug, gender, birthyear, deathyear, birthplace, birthcountry, deathplace, deathcountry, occupation, langs, twitter, alive) VALUES (%s, %s, %s, %s,%s, %s, %s,%s, %s, %s, %s, %s, %s, %s) RETURNING id;'
+        data = (wiki_id, name, slug, gender, birthyear_id, deathyear_id, birthplace_id, birthcountry_id, deathplace_id, deathcountry_id, occupation, langs, twitter, alive)
         cursor.execute(query, data)
         conn.commit()
         # raw_input('')
