@@ -29,11 +29,11 @@ class Place extends Component {
         title: "Professions",
         slug: "professions",
         content: <Occupations data={occupationsHere} />,
-        viz: <Viz
+      viz: <Viz type="Treemap"
                 data={peopleBornHere}
                 attrs={occupations}
-                groupBy={["group", "domain", "name"]}
-                time={(d) => d.birthYear} />
+                groupBy={["domain", "group", "name"]}
+                time={(d) => d.birthyear} />
       },
       {title: "Profession Trends", slug: "profession_trends"},
       {title: "Cities", slug: "cities"},
