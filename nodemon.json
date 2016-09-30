@@ -9,6 +9,7 @@
       "app/helmconfig.js",
       "app/components/Meta.jsx",
       "app/components/profile/",
+      "app/components/viz/",
       "server",
       "webpack/webpack.config.dev-client.js",
       "webpack/webpack.config.dev-server.js"
