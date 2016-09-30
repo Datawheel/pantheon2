@@ -29,8 +29,8 @@ class Person extends Component {
   static need = [
     fetchPerson,
     fetchOccupationRanks,
-    fetchBirthcountryRanks,
-    fetchBirthyearRanks
+    // fetchBirthcountryRanks,
+    // fetchBirthyearRanks
   ]
 
   render() {
@@ -41,9 +41,9 @@ class Person extends Component {
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
       {title: `Among ${occupation.name}`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
-      {title: "Contemporaries", slug: "year_peers", content: <BirthyearRanking person={personProfile.person} ranking={personProfile.birthyearRank} />},
-      {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <BirthcountryRanking person={personProfile.person} ranking={personProfile.birthcountryRank} />},
-      {title: "Digital Afterlife", slug: "afterlife"}
+      // {title: "Contemporaries", slug: "year_peers", content: <BirthyearRanking person={personProfile.person} ranking={personProfile.birthyearRank} />},
+      // {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <BirthcountryRanking person={personProfile.person} ranking={personProfile.birthcountryRank} />},
+      // {title: "Digital Afterlife", slug: "afterlife"}
     ];
 
     // return (<div>testing...</div>)

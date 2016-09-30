@@ -4,18 +4,18 @@ import AnchorList from 'components/utils/AnchorList';
 const OccupationRanking = ({ person, ranking }) => {
 
   ranking = Object.assign({}, ranking, {
-    betterPeers: ranking.peers.filter(p => p.rank_unique < ranking.me.rank_unique),
-    worsePeers: ranking.peers.filter(p => p.rank_unique > ranking.me.rank_unique)
+    betterPeers: ranking.peers.filter(p => p.occupation_rank_unique < ranking.me.occupation_rank_unique),
+    worsePeers: ranking.peers.filter(p => p.occupation_rank_unique > ranking.me.occupation_rank_unique)
   });
 
   let betterPeers = null,
       worsePeers = null;
 
   if(ranking.betterPeers.length){
-    betterPeers = <span>Before { person.gender ? "her" : "him" } are: <AnchorList items={ranking.betterPeers} name={(d) => `${d.person.name} (${d.person.birthcountry})`} url={(d) => `/profile/person/${d.person.slug}/`} />. </span>
+    betterPeers = <span>Before { person.gender ? "her" : "him" } are: <AnchorList items={ranking.betterPeers} name={(d) => `${d.name} (${d.birthcountry.country_code.toUpperCase()})`} url={(d) => `/profile/person/${d.slug}/`} />. </span>
   }
   if(ranking.worsePeers.length){
-    worsePeers = <span>After { person.gender ? "her" : "him" } are: <AnchorList items={ranking.worsePeers} name={(d) => `${d.person.name} (${d.person.birthcountry})`} url={(d) => `/profile/person/${d.person.slug}/`} />.</span>
+    worsePeers = <span>After { person.gender ? "her" : "him" } are: <AnchorList items={ranking.worsePeers} name={(d) => `${d.name} (${d.birthcountry.country_code.toUpperCase()})`} url={(d) => `/profile/person/${d.slug}/`} />.</span>
   }
 
   return (
@@ -27,11 +27,11 @@ const OccupationRanking = ({ person, ranking }) => {
       </p>
       <div>
         {ranking.peers.map((peer) =>
-          <li key={peer.person.id}>
-            <img src={`/people/${peer.person.wiki_id}.jpg`} alt={`Photo of ${peer.person.name}`} />
-            <h2><a href={`/profile/person/${peer.person.slug}/`}>{peer.person.name}</a></h2>
-            <p>{peer.person.birthyear} - {peer.person.deathyear}</p>
-            <p>Rank: {peer.rank}</p>
+          <li key={peer.id}>
+            <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+            <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
+            <p>{peer.birthyear} - {peer.deathyear}</p>
+            <p>Rank: {peer.occupation_rank}</p>
           </li>
         )}
       </div>

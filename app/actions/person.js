@@ -23,20 +23,17 @@ export function fetchPerson(store) {
 }
 
 export function fetchOccupationRanks(store) {
-  const getOccRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id`).then(function(personIdRes) {
-    const personId = personIdRes.data[0].id;
-    return makePersonRequest('get', null, null, `/person_occupation_rank?person=eq.${personId}&select=occupation{*},rank,rank_unique,langs`)
-  })
+  const getOccRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id,occupation{*},occupation_rank,occupation_rank_unique,langs`)
   const getOccRankPeers = getOccRank.then(function(occRankRes) {
         const occRank = occRankRes.data[0];
         const occId = occRank.occupation.id;
-        let rankSub = Math.max(1, parseInt(occRank.rank_unique) - 2);
-        let rankPlus = Math.max(5, parseInt(occRank.rank_unique) + 2);
-        if(rankPlus > occRank.occupation.people){
-          rankSub = occRank.occupation.people - 5;
-          rankPlus = occRank.occupation.people;
+        let rankSub = Math.max(1, parseInt(occRank.occupation_rank_unique) - 2);
+        let rankPlus = Math.max(5, parseInt(occRank.occupation_rank_unique) + 2);
+        if(rankPlus > occRank.occupation.num_born){
+          rankSub = occRank.occupation.num_born - 5;
+          rankPlus = occRank.occupation.num_born;
         }
-        const apiURL = `/person_occupation_rank?occupation=eq.${occId}&rank_unique=gte.${rankSub}&rank_unique=lte.${rankPlus}&select=occupation{*},person{*},langs,rank,rank_unique`;
+        const apiURL = `/person?occupation=eq.${occId}&occupation_rank_unique=gte.${rankSub}&occupation_rank_unique=lte.${rankPlus}&select=occupation{*},birthcountry{*},langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
         // console.log("OccRank API:", apiURL)
         return makePersonRequest('get', null, null, apiURL);
     });
