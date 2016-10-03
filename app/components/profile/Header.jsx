@@ -11,7 +11,7 @@ const Header = ({ person }) => {
       <p className={cx('description')}>Cultural Memory of</p>
       <h2>{person.occupation.name}</h2>
       <h1>{person.name}</h1>
-      <p>{person.birthyear.name} &mdash; {person.deathyear}</p>
+      <p>{person.birthyear.name} {person.deathyear ? `— ${person.deathyear.name}` : null}</p>
       <pre>[VIZ] SPARK LINE HERE</pre>
     </header>
   );

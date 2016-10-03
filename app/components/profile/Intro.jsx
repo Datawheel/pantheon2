@@ -9,13 +9,13 @@ const Intro = ({ person }) => {
   const year = today.getFullYear();
   let age = year - person.birthyear.id;
   if(person.deathyear)
-    age = person.deathyear - person.birthyear.id;
+    age = person.deathyear.id - person.birthyear.id;
   return (
     <div>
       <p>
       {person.name} {person.deathyear ? "was" : "is"} a {person.occupation.name} born in {person.birthplace.name}, {person.birthcountry.name} in {person.birthyear.name}.&nbsp;
       {person.deathyear ?
-        `${person.gender ? "She" : "He"} lived to be ${age} before passing in ${person.deathyear}.` :
+        `${person.gender ? "She" : "He"} lived to be ${age} before passing in ${person.deathyear.name}.` :
         `${person.gender ? "She" : "He"} is currently ${age} years old.`
       }
       &nbsp;Pantheon aims to help us understand global cultural development by visualizing a dataset of “globally memorable people” through their professions, birth and resting places, and Wikipedia activity.

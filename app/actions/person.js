@@ -15,7 +15,7 @@ export function makePersonRequest(method, id, data, api = '/person') {
 }
 
 export function fetchPerson(store) {
-  const prom = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=occupation{*},birthcountry{*},birthplace{*},birthyear{*},*`);
+  const prom = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=occupation{*},birthcountry{*},birthplace{*},birthyear{*},deathcountry{*},deathplace{*},deathyear{*},*`);
   return {
     type: types.GET_PERSON,
     promise: prom
@@ -46,28 +46,69 @@ export function fetchOccupationRanks(store) {
   };
 }
 
-export function fetchBirthcountryRanks(store) {
-  const getBCRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id`).then(function(personIdRes) {
-    const personId = personIdRes.data[0].id;
-    return makePersonRequest('get', null, null, `/person_birthcountry_rank?person=eq.${personId}&select=birthcountry{*},rank,rank_unique,langs`);
-  })
+export function fetchCountryRanks(store) {
+  const getCountryRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id,birthcountry{*},deathcountry{*},birthcountry_rank,birthcountry_rank_unique,deathcountry_rank,deathcountry_rank_unique,langs`)
 
-  const getBCRankPeers = getBCRank.then(function(bcRankRes) {
+  const getBCRankPeers = getCountryRank.then(function(bcRankRes) {
         const bcRank = bcRankRes.data[0];
         const bcId = bcRank.birthcountry.id;
-        const rankSub = Math.max(1, parseInt(bcRank.rank_unique) - 2);
-        const rankPlus = Math.max(5, parseInt(bcRank.rank_unique) + 2);
-        const apiURL = `/person_birthcountry_rank?birthcountry=eq.${bcId}&rank_unique=gte.${rankSub}&rank_unique=lte.${rankPlus}&select=birthcountry{*},person{*},langs,rank,rank_unique`;
+        const rankSub = Math.max(1, parseInt(bcRank.birthcountry_rank_unique) - 2);
+        const rankPlus = Math.max(5, parseInt(bcRank.birthcountry_rank_unique) + 2);
+        const apiURL = `/person?birthcountry=eq.${bcId}&birthcountry_rank_unique=gte.${rankSub}&birthcountry_rank_unique=lte.${rankPlus}&order=birthcountry_rank_unique&select=birthcountry{*},langs,birthcountry_rank,birthcountry_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
         // console.log("Birthcountry API:", apiURL)
         return makePersonRequest('get', null, null, apiURL);
     });
 
-  const bcProm = Promise.all([getBCRank, getBCRankPeers])
+  const getDCRankPeers = getCountryRank.then(function(bcRankRes) {
+        const dcRank = bcRankRes.data[0];
+        // console.log('dcRank -- ', dcRank)
+        let apiURL;
+        if(dcRank.deathcountry){
+          let dcId = dcRank.deathcountry.id;
+          let rankSub = Math.max(1, parseInt(dcRank.deathcountry_rank_unique) - 2);
+          let rankPlus = Math.max(5, parseInt(dcRank.deathcountry_rank_unique) + 2);
+          apiURL = `/person?deathcountry=eq.${dcId}&deathcountry_rank_unique=gte.${rankSub}&deathcountry_rank_unique=lte.${rankPlus}&order=deathcountry_rank_unique&select=deathcountry{*},langs,deathcountry_rank,deathcountry_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
+        }
+        else {
+          let bcRank = bcRankRes.data[0];
+          let bcId = bcRank.birthcountry.id;
+          let rankSub = Math.max(1, parseInt(bcRank.birthcountry_rank_unique) - 2);
+          let rankPlus = Math.max(5, parseInt(bcRank.birthcountry_rank_unique) + 2);
+          apiURL = `/person?deathcountry=eq.0`;
+        }
+        // console.log('444444', apiURL)
+        return makePersonRequest('get', null, null, apiURL);
+    }).catch((e) => { console.log(e) });
+
+
+  const bcProm = Promise.all([getCountryRank, getBCRankPeers, getDCRankPeers])
 
   return {
     type: "GET_BIRTHCOUNTRY_RANKS",
     promise: bcProm
   };
+
+  // const getBCRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id`).then(function(personIdRes) {
+  //   const personId = personIdRes.data[0].id;
+  //   return makePersonRequest('get', null, null, `/person_birthcountry_rank?person=eq.${personId}&select=birthcountry{*},rank,rank_unique,langs`);
+  // })
+  //
+  // const getBCRankPeers = getBCRank.then(function(bcRankRes) {
+  //       const bcRank = bcRankRes.data[0];
+  //       const bcId = bcRank.birthcountry.id;
+  //       const rankSub = Math.max(1, parseInt(bcRank.rank_unique) - 2);
+  //       const rankPlus = Math.max(5, parseInt(bcRank.rank_unique) + 2);
+  //       const apiURL = `/person_birthcountry_rank?birthcountry=eq.${bcId}&rank_unique=gte.${rankSub}&rank_unique=lte.${rankPlus}&select=birthcountry{*},person{*},langs,rank,rank_unique`;
+  //       // console.log("Birthcountry API:", apiURL)
+  //       return makePersonRequest('get', null, null, apiURL);
+  //   });
+  //
+  // const bcProm = Promise.all([getBCRank, getBCRankPeers])
+  //
+  // return {
+  //   type: "GET_BIRTHCOUNTRY_RANKS",
+  //   promise: bcProm
+  // };
 }
 
 export function fetchBirthyearRanks(store) {

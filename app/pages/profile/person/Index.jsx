@@ -9,9 +9,9 @@ import Section from 'components/profile/Section';
 // import Ranking from 'components/profile/Ranking';
 import OccupationRanking from 'pages/profile/person/OccupationRanking';
 import BirthyearRanking from 'pages/profile/person/BirthyearRanking';
-import BirthcountryRanking from 'pages/profile/person/BirthcountryRanking';
+import CountryRanking from 'pages/profile/person/CountryRanking';
 
-import { fetchPerson, fetchOccupationRanks, fetchBirthcountryRanks, fetchBirthyearRanks } from 'actions/person';
+import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchBirthyearRanks } from 'actions/person';
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +29,7 @@ class Person extends Component {
   static need = [
     fetchPerson,
     fetchOccupationRanks,
-    // fetchBirthcountryRanks,
+    fetchCountryRanks,
     // fetchBirthyearRanks
   ]
 
@@ -42,16 +42,33 @@ class Person extends Component {
       {title: "Memorability Metrics", slug: "metrics"},
       {title: `Among ${occupation.name}`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
       // {title: "Contemporaries", slug: "year_peers", content: <BirthyearRanking person={personProfile.person} ranking={personProfile.birthyearRank} />},
-      // {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <BirthcountryRanking person={personProfile.person} ranking={personProfile.birthcountryRank} />},
+      {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
       // {title: "Digital Afterlife", slug: "afterlife"}
     ];
 
-    // return (<div>testing...</div>)
     return (
       <div>
         <Header person={personProfile.person} />
         <ProfileNav sections={sections} />
         <Intro person={personProfile.person} />
+        {sections.map((section, key) =>
+          <Section
+            index={key}
+            key={key}
+            numSections={sections.length}
+            title={section.title}
+            slug={section.slug}>
+            {section.content ? section.content : null}
+          </Section>
+        )}
+      </div>
+    )
+    return (<div>testing...</div>)
+    return (
+      <div>
+        // <Header person={personProfile.person} />
+        // <ProfileNav sections={sections} />
+        // <Intro person={personProfile.person} />
         {sections.map((section, key) =>
           <Section
             index={key}
