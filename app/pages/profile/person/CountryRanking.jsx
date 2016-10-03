@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import AnchorList from 'components/utils/AnchorList';
 
-const BirthcountryRanking = ({ person, ranking }) => {
+const CountryRanking = ({ person, ranking }) => {
 
   let betterBirthPeers = null,
       worseBirthPeers = null,
@@ -77,4 +77,4 @@ const BirthcountryRanking = ({ person, ranking }) => {
   )
 }
 
-export default BirthcountryRanking;
+export default CountryRanking;

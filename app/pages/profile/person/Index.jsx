@@ -8,10 +8,10 @@ import Intro from 'components/profile/Intro';
 import Section from 'components/profile/Section';
 // import Ranking from 'components/profile/Ranking';
 import OccupationRanking from 'pages/profile/person/OccupationRanking';
-import BirthyearRanking from 'pages/profile/person/BirthyearRanking';
+import YearRanking from 'pages/profile/person/YearRanking';
 import CountryRanking from 'pages/profile/person/CountryRanking';
 
-import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchBirthyearRanks } from 'actions/person';
+import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks } from 'actions/person';
 
 const cx = classNames.bind(styles);
 
@@ -30,7 +30,7 @@ class Person extends Component {
     fetchPerson,
     fetchOccupationRanks,
     fetchCountryRanks,
-    // fetchBirthyearRanks
+    fetchYearRanks
   ]
 
   render() {
@@ -41,9 +41,9 @@ class Person extends Component {
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
       {title: `Among ${occupation.name}`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
-      // {title: "Contemporaries", slug: "year_peers", content: <BirthyearRanking person={personProfile.person} ranking={personProfile.birthyearRank} />},
+      {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
       {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
-      // {title: "Digital Afterlife", slug: "afterlife"}
+      {title: "Digital Afterlife", slug: "afterlife"}
     ];
 
     return (

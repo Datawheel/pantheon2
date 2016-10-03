@@ -43,13 +43,13 @@ const countryRank = (
   }
 };
 
-const birthyearRank = (
-  state = {me:{}, peers:[]},
+const yearRank = (
+  state = {me:{}, birthyearPeers:[], deathyearPeers:[]},
   action
 ) => {
   switch (action.type) {
-    case "GET_BIRTHYEAR_RANKS_SUCCESS":
-      return {me:action.res[0].data[0], peers:action.res[1].data}
+    case "GET_YEAR_RANKS_SUCCESS":
+      return {me:action.res[0].data[0], birthyearPeers:action.res[1].data, deathyearPeers:action.res[2].data}
     default:
       return state;
   }
@@ -59,7 +59,7 @@ const personProfileReducer = combineReducers({
   person,
   occupationRank,
   countryRank,
-  birthyearRank
+  yearRank
 });
 
 export default personProfileReducer;
