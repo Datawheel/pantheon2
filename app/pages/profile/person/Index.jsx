@@ -2,11 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import {connect} from "react-redux";
 import classNames from 'classnames/bind';
 import styles from 'css/components/about';
-import Header from 'components/profile/Header';
 import ProfileNav from 'components/profile/Nav';
-import Intro from 'components/profile/Intro';
+
 import Section from 'components/profile/Section';
 // import Ranking from 'components/profile/Ranking';
+import Header from 'pages/profile/person/Header';
+import Intro from 'pages/profile/person/Intro';
 import OccupationRanking from 'pages/profile/person/OccupationRanking';
 import YearRanking from 'pages/profile/person/YearRanking';
 import CountryRanking from 'pages/profile/person/CountryRanking';

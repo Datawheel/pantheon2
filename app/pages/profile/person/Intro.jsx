@@ -12,6 +12,7 @@ const Intro = ({ person }) => {
     age = person.deathyear.id - person.birthyear.id;
   return (
     <div>
+      <img src={`/people/${person.wiki_id}.jpg`} alt={`Photo of ${person.name}`} />
       <p>
       {person.name} {person.deathyear ? "was" : "is"} a {person.occupation.name} born in {person.birthplace.name}, {person.birthcountry.name} in {person.birthyear.name}.&nbsp;
       {person.deathyear ?

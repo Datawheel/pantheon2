@@ -33,7 +33,7 @@ export function fetchOccupationRanks(store) {
           rankSub = occRank.occupation.num_born - 5;
           rankPlus = occRank.occupation.num_born;
         }
-        const apiURL = `/person?occupation=eq.${occId}&occupation_rank_unique=gte.${rankSub}&occupation_rank_unique=lte.${rankPlus}&select=occupation{*},birthcountry{*},langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
+        const apiURL = `/person?occupation=eq.${occId}&occupation_rank_unique=gte.${rankSub}&occupation_rank_unique=lte.${rankPlus}&order=occupation_rank_unique&select=occupation{*},birthcountry{*},langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
         // console.log("OccRank API:", apiURL)
         return makePersonRequest('get', null, null, apiURL);
     });
