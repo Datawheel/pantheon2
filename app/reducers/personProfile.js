@@ -55,11 +55,24 @@ const yearRank = (
   }
 };
 
+const pageviews = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_PAGEVIEWS_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
 const personProfileReducer = combineReducers({
   person,
   occupationRank,
   countryRank,
-  yearRank
+  yearRank,
+  pageviews
 });
 
 export default personProfileReducer;

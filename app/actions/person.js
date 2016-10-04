@@ -116,3 +116,15 @@ export function fetchYearRanks(store) {
     promise: byProm
   };
 }
+
+export function fetchPageviews(store) {
+  const getPageviewsProm = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id`).then(function(personIdRes) {
+    const personId = personIdRes.data[0].id;
+    return makePersonRequest('get', null, null, `/pageview?person=eq.${personId}`);
+  })
+
+  return {
+    type: "GET_PAGEVIEWS",
+    promise: getPageviewsProm
+  };
+}

@@ -12,7 +12,9 @@ import OccupationRanking from 'pages/profile/person/OccupationRanking';
 import YearRanking from 'pages/profile/person/YearRanking';
 import CountryRanking from 'pages/profile/person/CountryRanking';
 
-import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks } from 'actions/person';
+import Viz from 'components/viz/Index'
+
+import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews } from 'actions/person';
 
 const cx = classNames.bind(styles);
 
@@ -31,7 +33,8 @@ class Person extends Component {
     fetchPerson,
     fetchOccupationRanks,
     fetchCountryRanks,
-    fetchYearRanks
+    fetchYearRanks,
+    fetchPageviews
   ]
 
   render() {
@@ -44,7 +47,13 @@ class Person extends Component {
       {title: `Among ${occupation.name}`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
       {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
-      {title: "Digital Afterlife", slug: "afterlife"}
+      {
+        title: "Digital Afterlife",
+        slug: "afterlife",
+        viz: <Viz type="LinePlot"
+                  data={personProfile.pageviews}
+                  time={(d) => d.pageview_date} />
+      }
     ];
 
     return (
@@ -60,28 +69,12 @@ class Person extends Component {
             title={section.title}
             slug={section.slug}>
             {section.content ? section.content : null}
+            {section.viz ? section.viz : null}
           </Section>
         )}
       </div>
     )
     return (<div>testing...</div>)
-    return (
-      <div>
-        // <Header person={personProfile.person} />
-        // <ProfileNav sections={sections} />
-        // <Intro person={personProfile.person} />
-        {sections.map((section, key) =>
-          <Section
-            index={key}
-            key={key}
-            numSections={sections.length}
-            title={section.title}
-            slug={section.slug}>
-            {section.content ? section.content : null}
-          </Section>
-        )}
-      </div>
-    )
   }
 };
 
