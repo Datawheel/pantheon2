@@ -23,7 +23,7 @@
 ```
 
 ## Running API locally
-1. Install postgrest via Homebrew
+1. Install postgresql && postgrest via Homebrew
 
 ```
 # Ensure brew is up to date
@@ -33,7 +33,7 @@
 > brew doctor
 
 # Install the postgrest package
-> brew install postgrest
+> brew install postgrest postgresql
 ```
 
 2. Initialize the DB
@@ -49,6 +49,28 @@
 4. Run postgrest and point to local copy of DB
 ```
 > postgrest postgres://[username]:@localhost:5432/pantheon -a [username] --schema public -p 3100
+```
+
+## Import pantheon data from scratch
+
+1. Initialize the DB
+```
+> createdb pantheon
+```
+
+2. Create tables via DB schema file
+```
+> psql pantheon < data/pantheon_schema.sql
+```
+
+3. Run data ETL process (warning: need the following python libs)
+```
+> python data/import_to_db.py
+```
+
+3. Run post data insert SQL commands
+```
+> psql pantheon < data/post_insert_updates.sql
 ```
 
 
