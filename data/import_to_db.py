@@ -1,72 +1,84 @@
 import psycopg2, csv, sys, urllib2, unicodedata
 
-conn = psycopg2.connect("dbname=pantheon user=alexandersimoes")
+conn = psycopg2.connect("dbname=pantheon user=zeus")
 cursor = conn.cursor()
 
 def strip_accents(s):
    return ''.join(c for c in unicodedata.normalize('NFD', s)
                   if unicodedata.category(c) != 'Mn')
 
-place_lookup = {}
-with open('data/cities.tsv', 'rb') as cfile:
-    creader = csv.reader(cfile, delimiter='\t', quotechar='"')
-    creader.next()
-    for row in creader:
-        [geonameid, city_name, lat, lon, pop, cname, ccode] = row
-        geonameid = int(geonameid)
-        ccode = ccode.lower()
+cursor.execute("SELECT wiki_id, id from place where wiki_id is not null")
+place_lookup = {r[0]:r[1] for r in cursor.fetchall()}
+cursor.execute("SELECT country_code, id from place where wiki_id is null")
+for r in cursor.fetchall(): place_lookup[r[0]] = r[1]
 
-        if ccode not in place_lookup:
-            # lets add it to the db
-            cslug = cname.replace(" ", "_")
-            cslug = strip_accents(cslug.decode('utf8'))
-            cslug = urllib2.quote(cslug.encode('utf8'))
-            query = 'INSERT INTO place (slug, name, country_name, country_code) VALUES (%s, %s, %s, %s) RETURNING id;'
-            data = (cslug, cname, cname, ccode)
+if not place_lookup:
+    with open('data/cities.tsv', 'rb') as cfile:
+        creader = csv.reader(cfile, delimiter='\t', quotechar='"')
+        creader.next()
+        for row in creader:
+            [geonameid, city_name, lat, lon, pop, cname, ccode] = row
+            geonameid = int(geonameid)
+            ccode = ccode.lower()
+
+            if ccode == "na":
+                ccode = None
+            elif ccode not in place_lookup:
+                # lets add it to the db
+                cslug = cname.replace(" ", "_")
+                cslug = strip_accents(cslug.decode('utf8'))
+                cslug = urllib2.quote(cslug.encode('utf8'))
+                query = 'INSERT INTO place (slug, name, country_name, country_code) VALUES (%s, %s, %s, %s) RETURNING id;'
+                data = (cslug, cname, cname, ccode)
+
+                cursor.execute(query, data)
+                res = cursor.fetchone()
+                last_inserted_id = res[0]
+
+                place_lookup[ccode] = last_inserted_id
+
+            lat, lon, pop = int(float(lat)), int(float(lon)), int(float(pop))
+
+            city_slug = city_name.replace(" ", "_")
+            city_slug = strip_accents(city_slug.decode('utf8'))
+            city_slug = urllib2.quote(city_slug.encode('utf8'))
+            query = 'INSERT INTO place (wiki_id, name, slug, country_name, country_code, lat, lon, pop) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;'
+            data = (geonameid, city_name, city_slug, cname, ccode, lat, lon, pop)
+
+            cursor.execute(query, data)
+            res = cursor.fetchone()
+            last_inserted_id = res[0]
+            place_lookup[geonameid] = last_inserted_id
+    conn.commit()
+print "First 5 places in DB:"
+print place_lookup.items()[:5]
+
+cursor.execute("SELECT name, id from occupation")
+occ_lookup = {r[0].upper():r[1] for r in cursor.fetchall()}
+
+if not occ_lookup:
+    with open('data/classification.csv', 'rb') as cfile:
+        creader = csv.reader(cfile, delimiter=',', quotechar='"')
+        creader.next()
+        for row in creader:
+            [occupation, industry, domain, group] = map(str.lower, row)
+            slug = occupation.replace(" ", "_")
+
+            query = 'INSERT INTO occupation (slug, name, industry, domain, "group") VALUES (%s, %s, %s, %s, %s) RETURNING id;'
+            data = (slug, occupation, industry, domain, group)
 
             cursor.execute(query, data)
             res = cursor.fetchone()
             last_inserted_id = res[0]
 
-            place_lookup[ccode] = last_inserted_id
-
-        lat, lon, pop = int(float(lat)), int(float(lon)), int(float(pop))
-
-        city_slug = city_name.replace(" ", "_")
-        city_slug = strip_accents(city_slug.decode('utf8'))
-        city_slug = urllib2.quote(city_slug.encode('utf8'))
-        query = 'INSERT INTO place (wiki_id, name, slug, country_name, country_code, lat, lon, pop) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;'
-        data = (geonameid, city_name, city_slug, cname, ccode, lat, lon, pop)
-
-        cursor.execute(query, data)
-        res = cursor.fetchone()
-        last_inserted_id = res[0]
-        place_lookup[geonameid] = last_inserted_id
-
-conn.commit()
-
-
-occ_lookup = {}
-with open('data/classification.csv', 'rb') as cfile:
-    creader = csv.reader(cfile, delimiter=',', quotechar='"')
-    creader.next()
-    for row in creader:
-        [occupation, industry, domain, group] = map(str.lower, row)
-        slug = occupation.replace(" ", "_")
-
-        query = 'INSERT INTO occupation (slug, name, industry, domain, "group") VALUES (%s, %s, %s, %s, %s) RETURNING id;'
-        data = (slug, occupation, industry, domain, group)
-
-        cursor.execute(query, data)
-        res = cursor.fetchone()
-        last_inserted_id = res[0]
-
-        occ_lookup[occupation.upper()] = last_inserted_id
-
-conn.commit()
+            occ_lookup[occupation.upper()] = last_inserted_id
+    conn.commit()
+print "First 5 occupations in DB:"
+print occ_lookup.items()[:5]
 
 with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
     preader = csv.DictReader(pfile, delimiter=',', quotechar='"')
+    print "Inserting people to DB..."
     for i, row in enumerate(preader):
         # if i > 2000: continue
         '''
@@ -78,12 +90,10 @@ with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
         for i, p in enumerate(places):
             try:
                 places[i] = int(float(p))
-                # print places[i]
                 try:
                     places[i] = place_lookup[places[i]]
                 except KeyError:
                     places[i] = None
-                # print places[i]
             except:
                 places[i] = None
 
@@ -182,20 +192,11 @@ with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
             ADD TO DB
             ###########################
         '''
-        # print slug, name, gender, langs, prob_ratio, birthyear_id, deathyear_id, lat, lon, birthplace_id, birthcountry_id
+        # print wiki_id, name, slug, gender, birthyear_id, deathyear_id, birthplace_id, birthcountry_id, deathplace_id, deathcountry_id, occupation, langs, twitter, alive
+
         query = 'INSERT INTO person (wiki_id, name, slug, gender, birthyear, deathyear, birthplace, birthcountry, deathplace, deathcountry, occupation, langs, twitter, alive) VALUES (%s, %s, %s, %s,%s, %s, %s,%s, %s, %s, %s, %s, %s, %s) RETURNING id;'
         data = (wiki_id, name, slug, gender, birthyear_id, deathyear_id, birthplace_id, birthcountry_id, deathplace_id, deathcountry_id, occupation, langs, twitter, alive)
         cursor.execute(query, data)
         conn.commit()
         # raw_input('')
 
-'''
-CREATE MATERIALIZED VIEW
-	public.person_occupation AS
-SELECT
-	id as person_id, occupation_id, langs, rank()
-	OVER (PARTITION BY occupation_id ORDER BY langs DESC)
-FROM
-	person
-ORDER BY occupation_id, langs DESC;
-'''
