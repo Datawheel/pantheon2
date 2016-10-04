@@ -94,6 +94,20 @@ CREATE TABLE place_occupation
   num_died integer
 );
 
+CREATE TABLE creation
+(
+  person integer REFERENCES person (id),
+  lang CHARACTER VARYING(16) NOT NULL,
+  creation_date timestamp NOT NULL
+);
+
+CREATE TABLE pageview
+(
+  person integer REFERENCES person (id),
+  pageview_date timestamp NOT NULL,
+  num_pageviews integer
+);
+
 COMMIT;
 
 UPDATE person
