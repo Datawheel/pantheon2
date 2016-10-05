@@ -28,11 +28,15 @@ class Domain extends Component {
   render() {
     const {domainProfile} = this.props;
 
+    const sections = [
+      {title: "Memorability Metrics", slug: "metrics"},
+    ];
+
     // return (<div>testing domain...</div>)
     return (
       <div>
         <Header domain={domainProfile.domain} />
-        <ProfileNav sections={this.sections} />
+        <ProfileNav sections={sections} />
         <Intro domain={domainProfile.domain} />
       </div>
     );
