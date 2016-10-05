@@ -7,9 +7,22 @@ import rank from 'reducers/rank';
 import message from 'reducers/message';
 import { routerReducer as routing } from 'react-router-redux';
 
+const searchActive = (
+  state = {visible: false},
+  action
+) => {
+  switch (action.type) {
+    case "ACTIVATE_SEARCH":
+      return {visible: true};
+    default:
+      return state;
+  }
+};
+
 // Combine reducers with routeReducer which keeps track of
 // router state
 const rootReducer = combineReducers({
+  searchActive,
   rank,
   user,
   personProfile,

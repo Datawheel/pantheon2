@@ -1,0 +1,38 @@
+.search {
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  padding: 50px;
+}
+
+.search input {
+  background: transparent;
+  border: none;
+  border-bottom: solid 2px rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.search input:focus {
+    outline: none;
+}
+
+.search ul {
+  margin: 0;
+  padding: 0;
+}
+.search ul li {
+  color: rgba(255, 255, 255, 0.6);
+  display: block;
+}
+.search ul li a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+}
