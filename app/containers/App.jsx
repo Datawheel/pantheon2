@@ -22,7 +22,7 @@ const App = ({children, searchActive}) => {
   console.log("searchActive---",searchActive)
   return (
     <div className={cx('app')}>
-      { searchActive.visible ? <Search /> : null }
+      { searchActive ? <Search /> : null }
       <Navigation />
       <Message />
         {children}
@@ -32,13 +32,13 @@ const App = ({children, searchActive}) => {
 
 App.propTypes = {
   children: PropTypes.object,
-  searchActive: PropTypes.object.isRequired
+  searchActive: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
-  console.log("state---",state)
+  // console.log("state---",state)
   return {
-    searchActive: state.searchActive
+    searchActive: state.search.searchActive
   };
 }
 

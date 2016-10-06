@@ -14,6 +14,8 @@ import CountryRanking from 'pages/profile/person/CountryRanking';
 
 import Viz from 'components/viz/Index'
 
+import { activateSearch } from 'actions/users';
+
 import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews } from 'actions/person';
 
 const cx = classNames.bind(styles);
@@ -38,7 +40,7 @@ class Person extends Component {
   ]
 
   render() {
-    const {personProfile} = this.props;
+    const {personProfile, activateSearch} = this.props;
     const occupation = personProfile.person.occupation;
     const birthcountry = personProfile.person.birthcountry;
 
@@ -88,4 +90,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Person);
+export default connect(mapStateToProps, { activateSearch })(Person);

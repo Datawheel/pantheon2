@@ -38,23 +38,27 @@ class Search extends Component {
       })
   }
 
+  componentDidMount() {
+    this._input.focus();
+  }
+
   render() {
     return (
       <div className={cx('search')}>
-        <input type="text" onChange={this.onChange.bind(this)}/ >
+        <input type="text" ref={(c) => this._input = c} onChange={this.onChange.bind(this)}/ >
         <ul>
           {this.state.domainResults.map((result) =>
-            <li>
+            <li key={`domain_${result.slug}`}>
               <a href={`/profile/domain/${result.slug}`}>{result.name}</a>
             </li>
           )}
           {this.state.placeResults.map((result) =>
-            <li>
+            <li key={`place_${result.slug}`}>
               <a href={`/profile/place/${result.slug}`}>{result.name}</a>
             </li>
           )}
           {this.state.personResults.map((result) =>
-            <li>
+            <li key={`person_${result.slug}`}>
               <a href={`/profile/person/${result.slug}`}>{result.name}</a>
             </li>
           )}

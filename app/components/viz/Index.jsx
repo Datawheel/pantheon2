@@ -17,6 +17,8 @@ const colors = {
 class Viz extends Component {
 
   componentDidMount() {
+    if (this.props.type != "Treemap") return;
+
     const {time} = this.props;
     const attrs = this.props.attrs.reduce((obj, d) => {
       obj[d.id] = d;
@@ -65,7 +67,9 @@ class Viz extends Component {
   }
 
   componentDidUpdate() {
-    this.state.viz.render();
+    if(this.state) {
+      this.state.viz.render();
+    }
   }
 
   render() {
