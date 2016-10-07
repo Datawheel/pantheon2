@@ -3,16 +3,49 @@
 header {
   border: solid 1px black;
   text-align: center;
-
-  &:before {
-    background: black;
-    color: white;
-    content: "header";
-    display: block;
-    font-size: 11px;
-    text-align: center;
-  }
 }
 
-.description { @apply --normal; }
+.bgImg {
+  background-size: contain;
+  filter: blur(5px) saturate(160%);
+  height: 430px;
+  opacity: 0.45;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+header .info {
+  background: rgba(244, 244, 244, 0.85);
+  border: solid 1px #979797;
+  margin: 100px auto 60px auto;
+  width: 620px;
+  z-index: 99;
+}
+
+.topDesc {
+  color: #9E978D;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.topSubtitle {
+  color: #363636;
+  font-size: 21px;
+  text-transform: uppercase;
+}
+
+.title {
+  color: #363636;
+  font-size: 48px;
+  margin: 20px 0 0px 0;
+  text-transform: uppercase;
+}
+
+.bottomSubtitle {
+  color: #90908D;
+  font-size: 21px;
+  text-transform: uppercase;
+}
+
 .contribute { @apply --small; }

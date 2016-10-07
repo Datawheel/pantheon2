@@ -2,6 +2,7 @@
 @import '../common/typography';
 
 .navigation {
+  position: absolute;
   text-align: center;
   width: 100%;
 }

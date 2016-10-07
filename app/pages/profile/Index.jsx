@@ -13,16 +13,15 @@ const cx = classNames.bind(styles);
 const Profile = ({children}) => {
   return (
     <div className={cx('profile')}>
-      <h1 className={cx('header')}>Profiles</h1>
-      <nav className={cx('subNav')} role="navigation">
-        <Link to="/profile/person" className={cx('item')} activeClassName={cx('active')}>Person</Link>
-        <Link to="/profile/place" className={cx('item')} activeClassName={cx('active')}>Place</Link>
-        <Link to="/profile/domain" className={cx('item')} activeClassName={cx('active')}>Domain</Link>
-      </nav>
-
       {children}
     </div>
   );
 };
 
 export default Profile;
+
+// <nav className={cx('subNav')} role="navigation">
+//   <Link to="/profile/person" className={cx('item')} activeClassName={cx('active')}>Person</Link>
+//   <Link to="/profile/place" className={cx('item')} activeClassName={cx('active')}>Place</Link>
+//   <Link to="/profile/domain" className={cx('item')} activeClassName={cx('active')}>Domain</Link>
+// </nav>

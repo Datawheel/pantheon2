@@ -8,11 +8,14 @@ const Header = ({ person }) => {
 
   return (
     <header>
-      <p className={cx('description')}>Cultural Memory of</p>
-      <h2>{person.occupation.name}</h2>
-      <h1>{person.name}</h1>
-      <p>{person.birthyear.name} {person.deathyear ? `— ${person.deathyear.name}` : null}</p>
-      <pre>[VIZ] SPARK LINE HERE</pre>
+      <div className={cx('bgImg')} style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
+      <div className={cx('info')}>
+        <p className={cx('topDesc')}>Cultural Memory of</p>
+        <h2 className={cx('topSubtitle')}>{person.occupation.name}</h2>
+        <h1 className={cx('title')}>{person.name}</h1>
+        <p className={cx('bottomSubtitle')}>{person.birthyear.name} {person.deathyear ? `— ${person.deathyear.name}` : null}</p>
+        <pre>[VIZ] SPARK LINE HERE</pre>
+      </div>
     </header>
   );
 }

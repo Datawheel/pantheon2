@@ -4,6 +4,8 @@ import axios from 'axios';
 import {connect} from "react-redux";
 import classNames from 'classnames/bind';
 import styles from 'css/components/search';
+import { Icon } from 'react-fa';
+import { activateSearch } from 'actions/users';
 
 const cx = classNames.bind(styles);
 
@@ -39,13 +41,17 @@ class Search extends Component {
   }
 
   componentDidMount() {
-    this._input.focus();
+    this._searchInput.focus();
   }
 
   render() {
+    const { activateSearch } = this.props;
     return (
       <div className={cx('search')}>
-        <input type="text" ref={(c) => this._input = c} onChange={this.onChange.bind(this)}/ >
+        <div className={cx('search_close')}>
+          <Icon name="close" onClick={ activateSearch } size="2x" />
+        </div>
+        <input type="text" ref={(el) => this._searchInput = el} onChange={this.onChange.bind(this)}/ >
         <ul>
           {this.state.domainResults.map((result) =>
             <li key={`domain_${result.slug}`}>
@@ -74,4 +80,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Search);
+export default connect(mapStateToProps, { activateSearch })(Search);
