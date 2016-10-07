@@ -2,12 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { polyfill } from 'es6-promise';
 import axios from 'axios';
 import {connect} from "react-redux";
-import classNames from 'classnames/bind';
-import styles from 'css/components/search';
 import { Icon } from 'react-fa';
 import { activateSearch } from 'actions/users';
-
-const cx = classNames.bind(styles);
+import styles from 'css/components/search';
 
 polyfill();
 
@@ -47,8 +44,8 @@ class Search extends Component {
   render() {
     const { activateSearch } = this.props;
     return (
-      <div className={cx('search')}>
-        <div className={cx('search_close')}>
+      <div className='search'>
+        <div className='search_close'>
           <Icon name="close" onClick={ activateSearch } size="2x" />
         </div>
         <input type="text" ref={(el) => this._searchInput = el} onChange={this.onChange.bind(this)}/ >

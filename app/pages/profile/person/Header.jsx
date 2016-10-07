@@ -1,19 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import classNames from 'classnames/bind';
 import styles from 'css/components/profile/header';
 
-const cx = classNames.bind(styles);
-
 const Header = ({ person }) => {
-
   return (
     <header>
-      <div className={cx('bgImg')} style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
-      <div className={cx('info')}>
-        <p className={cx('topDesc')}>Cultural Memory of</p>
-        <h2 className={cx('topSubtitle')}>{person.occupation.name}</h2>
-        <h1 className={cx('title')}>{person.name}</h1>
-        <p className={cx('bottomSubtitle')}>{person.birthyear.name} {person.deathyear ? `— ${person.deathyear.name}` : null}</p>
+      <div className='bgImg'>
+        <div className='bgImg-l' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
+        <div className='bgImg-r' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
+      </div>
+      <div className='info'>
+        <p className='topDesc'>Cultural Memory of</p>
+        <h2 className='topSubtitle'>{person.occupation.name}</h2>
+        <h1 className='title'>{person.name}</h1>
+        <p className='bottomSubtitle'>{person.birthyear.name} {person.deathyear ? `— ${person.deathyear.name}` : null}</p>
         <pre>[VIZ] SPARK LINE HERE</pre>
       </div>
     </header>

@@ -18,11 +18,9 @@ nav.profile-nav {
 nav.profile-nav ul {
   margin: 0;
   padding: 0;
-
-  li {
-    border: solid 1px black;
-  }
 }
-
-/*.description { @apply --normal; }
-.contribute { @apply --small; }*/
+nav.profile-nav ul li {
+  display: inline-block;
+  border: solid 1px green;
+  padding: 5px;
+}

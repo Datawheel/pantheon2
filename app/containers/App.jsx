@@ -1,13 +1,8 @@
 import React, { PropTypes } from 'react';
 import {connect} from "react-redux";
 import Navigation from 'containers/Navigation';
-import Message from 'containers/Message';
 import Search from 'components/Search';
-import classNames from 'classnames/bind';
 import styles from 'css/main';
-
-const cx = classNames.bind(styles);
-
 
 /*
  * React-router's <Router> component renders <Route>'s
@@ -21,11 +16,10 @@ const cx = classNames.bind(styles);
 const App = ({children, searchActive}) => {
   console.log("searchActive---",searchActive)
   return (
-    <div className={cx('app')}>
+    <div className='app'>
       { searchActive ? <Search /> : null }
       <Navigation />
-      <Message />
-        {children}
+      {children}
     </div>
   );
 };

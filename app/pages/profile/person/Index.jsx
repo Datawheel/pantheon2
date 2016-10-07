@@ -1,9 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from "react-redux";
-import classNames from 'classnames/bind';
-import styles from 'css/components/about';
 import ProfileNav from 'components/profile/Nav';
-
 import Section from 'components/profile/Section';
 // import Ranking from 'components/profile/Ranking';
 import Header from 'pages/profile/person/Header';
@@ -17,8 +14,6 @@ import Viz from 'components/viz/Index'
 import { activateSearch } from 'actions/users';
 
 import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews } from 'actions/person';
-
-const cx = classNames.bind(styles);
 
 class Person extends Component {
 

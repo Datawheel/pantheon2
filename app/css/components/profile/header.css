@@ -3,24 +3,43 @@
 header {
   border: solid 1px black;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .bgImg {
-  background-size: contain;
+  /*background-size: contain;*/
+  display: flex;
   filter: blur(5px) saturate(160%);
-  height: 430px;
   opacity: 0.45;
   position: absolute;
   width: 100%;
   z-index: -1;
+  height: 100vh;
+}
+
+.bgImg-l {
+  background-position: center right;
+  background-size: cover;
+  height: 100vh;
+  width: 50vw;
+}
+.bgImg-r {
+  background-position: center right;
+  background-size: cover;
+  height: 100vh;
+  width: 50vw;
+  transform: scaleX(-1);
 }
 
 header .info {
   background: rgba(244, 244, 244, 0.85);
   border: solid 1px #979797;
   margin: 100px auto 60px auto;
+  /*margin: 0 auto;*/
   width: 620px;
-  z-index: 99;
+  z-index: 9;
 }
 
 .topDesc {

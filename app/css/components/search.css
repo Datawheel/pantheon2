@@ -1,11 +1,12 @@
 .search {
-  background: rgba(0, 0, 0, 0.8);
-  position: absolute;
+  background: rgba(0, 0, 0, 0.85);
+  position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;
   left: 0;
   padding: 50px;
+  z-index: 99;
 }
 
 .search input {

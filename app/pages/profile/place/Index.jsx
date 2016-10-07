@@ -1,21 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from "react-redux";
-import classNames from 'classnames/bind';
-import styles from 'css/components/about';
 import Header from 'pages/profile/place/Header';
 import ProfileNav from 'components/profile/Nav';
 import Intro from 'pages/profile/place/Intro';
 import Section from 'components/profile/Section';
-
 import PeopleRanking from 'pages/profile/place/PeopleRanking';
 import Occupations from 'pages/profile/place/Occupations';
 import LivingPeople from 'pages/profile/place/LivingPeople';
-
 import Viz from 'components/viz/Index'
-
 import { fetchPlace, fetchPeopleBornHere, fetchOccupationsHere, fetchOccupations, fetchPeopleBornHereAlive } from 'actions/place';
-
-const cx = classNames.bind(styles);
 
 class Place extends Component {
 
