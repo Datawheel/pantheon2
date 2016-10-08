@@ -42,6 +42,7 @@ var commonLoaders = [
 var postCSSConfig = function () {
   return [
     require('postcss-simple-vars')(),
+    require('postcss-nesting')(),
     require('postcss-import')({
       path: path.join(__dirname, '..', 'app', 'css'),
       addDependencyTo: webpack // for hot-reloading

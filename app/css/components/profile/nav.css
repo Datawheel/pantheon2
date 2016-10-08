@@ -12,15 +12,15 @@ nav.profile-nav {
     font-size: 11px;
     text-align: center;
   }
-}
 
+  & ul {
+    margin: 0;
+    padding: 0;
 
-nav.profile-nav ul {
-  margin: 0;
-  padding: 0;
-}
-nav.profile-nav ul li {
-  display: inline-block;
-  border: solid 1px green;
-  padding: 5px;
+    & li {
+      display: inline-block;
+      border: solid 1px red;
+      padding: 5px;
+    }
+  }
 }
