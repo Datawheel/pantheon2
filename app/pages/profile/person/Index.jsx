@@ -13,7 +13,7 @@ import Viz from 'components/viz/Index'
 
 import { activateSearch } from 'actions/users';
 
-import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews } from 'actions/person';
+import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from 'actions/person';
 
 class Person extends Component {
 
@@ -31,7 +31,8 @@ class Person extends Component {
     fetchOccupationRanks,
     fetchCountryRanks,
     fetchYearRanks,
-    fetchPageviews
+    fetchPageviews,
+    fetchCreationdates
   ]
 
   render() {
@@ -48,14 +49,14 @@ class Person extends Component {
         title: "Digital Afterlife",
         slug: "afterlife",
         viz: <Viz type="LinePlot"
-                  data={personProfile.pageviews}
+                  data={pageviews: personProfile.pageviews, creationdates:personProfile.creationdates}
                   time={(d) => d.pageview_date} />
       }
     ];
 
     return (
       <div>
-        <Header person={personProfile.person} />
+        <Header person={personProfile.person} pageviews={personProfile.pageviews} />
         <ProfileNav sections={sections} />
         <Intro person={personProfile.person} />
         {sections.map((section, key) =>

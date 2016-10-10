@@ -75,6 +75,15 @@ class Viz extends Component {
   render() {
     const {data} = this.props;
 
+    // NOTE
+    // for LinePlot, data is an object w/ 2 keys: pageviews and creationdates
+    // pageviews is an array of objects like:
+    //    {num_pageviews: x, pageview_date: "YYYY-MM-DDT00:00:00", person: ID}
+    // creationdates is an arry of objects like:
+    //    {creation_date:"YYYY-MM-DDT00:00:00", lang:"xx", person:1234}
+    // For creation date data, it is a sparse arrow only containing rows for
+    // the dates of wiki page creations in the given lenguage.
+
     return (
       <div className="viz">
         <svg ref="svg" style={{width: "100%", height: "500px"}}></svg>

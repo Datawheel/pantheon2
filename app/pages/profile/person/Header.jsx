@@ -1,7 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import styles from 'css/components/profile/header';
 
-const Header = ({ person }) => {
+const Header = ({ pageviews, person }) => {
+  // NOTE:
+  // pageviews = data for spark line
+  // each row = {num_pageviews: x, pageview_date: "YYYY-MM-DDT00:00:00", person: ID}
+  // console.log(pageviews)
+
   return (
     <header>
       <div className='bgImg'>

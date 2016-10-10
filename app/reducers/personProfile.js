@@ -67,12 +67,25 @@ const pageviews = (
   }
 }
 
+const creationdates = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_CREATIONDATES_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
 const personProfileReducer = combineReducers({
   person,
   occupationRank,
   countryRank,
   yearRank,
-  pageviews
+  pageviews,
+  creationdates
 });
 
 export default personProfileReducer;
