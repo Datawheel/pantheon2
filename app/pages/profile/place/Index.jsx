@@ -1,14 +1,15 @@
-import React, { Component, PropTypes } from 'react';
-import {connect} from "react-redux";
-import Header from 'pages/profile/place/Header';
-import ProfileNav from 'components/profile/Nav';
-import Intro from 'pages/profile/place/Intro';
-import Section from 'components/profile/Section';
-import PeopleRanking from 'pages/profile/place/PeopleRanking';
-import Occupations from 'pages/profile/place/Occupations';
-import LivingPeople from 'pages/profile/place/LivingPeople';
-import Viz from 'components/viz/Index'
-import { fetchPlace, fetchPeopleBornHere, fetchOccupationsHere, fetchOccupations, fetchPeopleBornHereAlive } from 'actions/place';
+import React, { Component, PropTypes } from "react";
+import { connect } from "react-redux";
+import Helmet from "react-helmet";
+import Header from "pages/profile/place/Header";
+import ProfileNav from "components/profile/Nav";
+import Intro from "pages/profile/place/Intro";
+import Section from "components/profile/Section";
+import PeopleRanking from "pages/profile/place/PeopleRanking";
+import Occupations from "pages/profile/place/Occupations";
+import LivingPeople from "pages/profile/place/LivingPeople";
+import Viz from "components/viz/Index";
+import { fetchPlace, fetchPeopleBornHere, fetchOccupationsHere, fetchOccupations, fetchPeopleBornHereAlive } from "actions/place";
 
 class Place extends Component {
 
@@ -49,6 +50,7 @@ class Place extends Component {
     // return (<div>testing...</div>)
     return (
       <div>
+        <Helmet title={place.name} meta={[ {property: 'og:title', content: place.name}, ]} />
         <Header place={place} />
         <ProfileNav sections={sections} />
         <Intro place={place} />

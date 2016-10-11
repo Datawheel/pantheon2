@@ -1,11 +1,13 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from "react";
+import { Link } from "react-router";
+import Helmet from "react-helmet";
 
 const About = ({children}) => {
   return (
-    <div className={cx('about')}>
-      <h1 className={cx('header')}>About Pantheon</h1>
-      <nav className={cx('subNav')} role="navigation">
+    <div className="about">
+      <Helmet title="About Pantheon" />
+      <h1 className="header">About Pantheon</h1>
+      <nav className="subNav" role="navigation">
         <Link to="/about/vision" className='item' activeClassName='active'>Vision</Link>
         <Link to="/about/methods" className='item' activeClassName='active'>Methods</Link>
         <Link to="/about/team" className='item' activeClassName='active'>Team</Link>
@@ -15,7 +17,6 @@ const About = ({children}) => {
         <Link to="/about/references" className='item' activeClassName='active'>References</Link>
         <Link to="/about/contact" className='item' activeClassName='active'>Contact</Link>
       </nav>
-
       {children}
     </div>
   );

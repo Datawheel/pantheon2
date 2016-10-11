@@ -13,7 +13,7 @@ if (__DEVSERVER__) {
 const Meta = () => (
   <Helmet
     htmlAttributes={{"lang": "en", "amp": undefined}}
-    title="React Webpack Node" meta={config.meta}
+    defaultTitle="Pantheon - Mapping Historical Cultural Production" meta={config.meta}
     link={config.link}
   />
 )

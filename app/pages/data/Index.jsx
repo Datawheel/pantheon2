@@ -1,9 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from "react";
+import { Link } from "react-router";
+import Helmet from "react-helmet";
 
 const Data = ({children}) => {
   return (
     <div className='data'>
+      <Helmet title="Data" />
       <h1 className='header'>Data</h1>
       <nav className='subNav' role="navigation">
         <Link to="/data/datasets" className='item' activeClassName='active'>Datasets</Link>

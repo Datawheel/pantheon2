@@ -1,19 +1,16 @@
-import React, { Component, PropTypes } from 'react';
-import {connect} from "react-redux";
-import ProfileNav from 'components/profile/Nav';
-import Section from 'components/profile/Section';
-// import Ranking from 'components/profile/Ranking';
-import Header from 'pages/profile/person/Header';
-import Intro from 'pages/profile/person/Intro';
-import OccupationRanking from 'pages/profile/person/OccupationRanking';
-import YearRanking from 'pages/profile/person/YearRanking';
-import CountryRanking from 'pages/profile/person/CountryRanking';
-
-import Viz from 'components/viz/Index'
-
-import { activateSearch } from 'actions/users';
-
-import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from 'actions/person';
+import React, { Component, PropTypes } from "react";
+import { connect } from "react-redux";
+import Helmet from "react-helmet";
+import ProfileNav from "components/profile/Nav";
+import Section from "components/profile/Section";
+import Header from "pages/profile/person/Header";
+import Intro from "pages/profile/person/Intro";
+import OccupationRanking from "pages/profile/person/OccupationRanking";
+import YearRanking from "pages/profile/person/YearRanking";
+import CountryRanking from "pages/profile/person/CountryRanking";
+import Viz from "components/viz/Index";
+import { activateSearch } from "actions/users";
+import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
 
 class Person extends Component {
 
@@ -56,6 +53,7 @@ class Person extends Component {
 
     return (
       <div>
+        <Helmet title={personProfile.person.name} meta={[ {property: 'og:title', content: personProfile.person.name}, ]} />
         <Header person={personProfile.person} pageviews={personProfile.pageviews} />
         <ProfileNav sections={sections} />
         <Intro person={personProfile.person} />
@@ -72,7 +70,6 @@ class Person extends Component {
         )}
       </div>
     )
-    return (<div>testing...</div>)
   }
 };
 
