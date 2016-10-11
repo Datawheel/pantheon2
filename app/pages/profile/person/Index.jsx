@@ -49,7 +49,7 @@ class Person extends Component {
         title: "Digital Afterlife",
         slug: "afterlife",
         viz: <Viz type="LinePlot"
-                  data={pageviews: personProfile.pageviews, creationdates:personProfile.creationdates}
+                  data={{pageviews: personProfile.pageviews, creationdates: personProfile.creationdates}}
                   time={(d) => d.pageview_date} />
       }
     ];
