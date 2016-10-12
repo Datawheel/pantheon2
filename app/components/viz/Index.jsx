@@ -15,6 +15,14 @@ const colors = {
   "arts": "#D28629"
 };
 
+const uniques = ["birthyear", "id"].reduce((obj, k) => {
+  obj[k] = a => {
+    const v = Array.from(new Set(a));
+    return v.length === 1 ? v[0] : v;
+  }
+  return obj;
+}, {});
+
 class Viz extends Component {
 
   componentDidMount() {
@@ -46,27 +54,22 @@ class Viz extends Component {
       }
     }) : ["id"];
 
+    config.data.forEach(d => {
+      if (d.occupation !== void 0) d.occupation = `${d.occupation}`;
+    })
+
     // Filters data by the time filter.
     if (config.time) config.data = config.data.filter(config.time);
 
-    // Standardizes various variables that are potentially present in the data.
-    config.data.forEach(d => {
-
-      d.id = `${d.id}`;
-
-      if (d.birthyear !== void 0) d.birthyear = `${d.birthyear}/01/01`;
-      if (d.occupation !== void 0) d.occupation = `${d.occupation}`;
-
-    });
-
     switch(this.props.type) {
       case "Treemap":
-        config.sum = d => d.values ? void 0 : d.id instanceof Array ? d.id.length : 1;
+        config.sum = d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0;
         break;
     }
 
     // Draws the visualization!
     const viz = new types[this.props.type]()
+      .aggs(uniques)
       .shapeConfig({
         fill: d => {
           if (d.color) return d.color;
