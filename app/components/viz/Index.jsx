@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from "react";
 
+import {LinePlot} from "d3plus-plot";
 import {Treemap} from "d3plus-treemap";
-const types = {Treemap};
+const types = {LinePlot, Treemap};
 
 const colors = {
   "sports": "#BB3B57",
@@ -17,73 +18,78 @@ const colors = {
 class Viz extends Component {
 
   componentDidMount() {
-    if (this.props.type != "Treemap") return;
 
-    const {time} = this.props;
-    const attrs = this.props.attrs.reduce((obj, d) => {
+    // if (this.props.type !== "Treemap") return;
+
+    // Grabs config from props.
+    const {config} = this.props;
+
+    // Preps attribute list from config, and removes it when done.
+    const attrs = config.attrs ? config.attrs.reduce((obj, d) => {
       obj[d.id] = d;
       return obj;
-    }, {});
+    }, {}) : {};
+    delete config.attrs;
 
-    const groupBy = this.props.groupBy.map(function(g) {
+    // Preps groupBy, using attrs if necessary.
+    config.groupBy = config.groupBy ? config.groupBy.map(function(g) {
       return function(d) {
+
         let val;
+
         if (d[g]) val = d[g];
-        else {
-          if (d.occupation instanceof Array) {
-            val = attrs[d.occupation[0]][g];
-          }
-          else {
-            val = attrs[d.occupation][g];
-          }
-        }
+        else if (d.occupation instanceof Array) val = attrs[d.occupation[0]][g];
+        else val = attrs[d.occupation][g];
+
         return `${val}`;
+
       }
-    });
+    }) : ["id"];
 
-    const data = this.props.data.filter(time);
-    data.forEach(d => {
-      d.birthyear = `${d.birthyear}/01/01`;
+    // Filters data by the time filter.
+    if (config.time) config.data = config.data.filter(config.time);
+
+    // Standardizes various variables that are potentially present in the data.
+    config.data.forEach(d => {
+
       d.id = `${d.id}`;
-      d.occupation = `${d.occupation}`;
+
+      if (d.birthyear !== void 0) d.birthyear = `${d.birthyear}/01/01`;
+      if (d.occupation !== void 0) d.occupation = `${d.occupation}`;
+
     });
 
+    switch(this.props.type) {
+      case "Treemap":
+        config.sum = d => d.values ? void 0 : d.id instanceof Array ? d.id.length : 1;
+        break;
+    }
+
+    // Draws the visualization!
     const viz = new types[this.props.type]()
       .shapeConfig({
         fill: d => {
-          let occ = d.occupation;
-          if (occ.constructor === Array) occ = occ[0];
-          return colors[attrs[occ].domain];
+          if (d.color) return d.color;
+          else if (d.occupation !== void 0) {
+            let occ = d.occupation.constructor === Array ? d.occupation[0] : d.occupation;
+            return colors[attrs[occ].domain];
+          }
+          return "#ccc";
         }
       })
-      .data(data)
       .depth(0)
-      .groupBy(groupBy)
-      .select(this.refs.svg)
-      .sum(d => d.values ? void 0 : d.id instanceof Array ? d.id.length : 1)
-      .time(time);
+      .config(config)
+      .select(this.refs.svg);
+
     this.setState({viz});
-    // this.forceUpdate();
+
   }
 
   componentDidUpdate() {
-    if(this.state) {
-      this.state.viz.render();
-    }
+    if (this.state) this.state.viz.render();
   }
 
   render() {
-    const {data} = this.props;
-
-    // NOTE
-    // for LinePlot, data is an object w/ 2 keys: pageviews and creationdates
-    // pageviews is an array of objects like:
-    //    {num_pageviews: x, pageview_date: "YYYY-MM-DDT00:00:00", person: ID}
-    // creationdates is an arry of objects like:
-    //    {creation_date:"YYYY-MM-DDT00:00:00", lang:"xx", person:1234}
-    // For creation date data, it is a sparse arrow only containing rows for
-    // the dates of wiki page creations in the given lenguage.
-
     return (
       <div className="viz">
         <svg ref="svg" style={{width: "100%", height: "500px"}}></svg>

@@ -37,6 +37,41 @@ class Person extends Component {
     const occupation = personProfile.person.occupation;
     const birthcountry = personProfile.person.birthcountry;
 
+    const maxPageViews = Math.max(...personProfile.pageviews.map(d => d.num_pageviews));
+    const totalLanguages = personProfile.creationdates.length;
+    let languageCounter = 0, lMod = 0.95;
+    const lineData = personProfile.creationdates
+      .sort((a, b) => new Date(a.creation_date) - new Date(b.creation_date))
+      .map(d => {
+        languageCounter++;
+        return {
+          color: "#67AF8C",
+          id: "LANGUAGES (L)",
+          language: d.lang,
+          x: new Date(d.creation_date),
+          y: (languageCounter / totalLanguages) * lMod
+        }
+      })
+      .concat(personProfile.pageviews.map(d => ({
+        color: "#4C5ED7",
+        id: "PAGE VIEWS (PV)",
+        num_pageviews: d.num_pageviews,
+        x: new Date(d.pageview_date),
+        y: d.num_pageviews / maxPageViews
+      })));
+
+    const latestLanguage = Math.max(...personProfile.creationdates.map(d => new Date(d.creation_date))),
+          latestPageView = Math.max(...personProfile.pageviews.map(d => new Date(d.pageview_date)));
+
+    if (latestPageView > latestLanguage) {
+      lineData.push({
+        color: "#67AF8C",
+        id: "LANGUAGES (L)",
+        x: latestPageView,
+        y: 1 * lMod
+      })
+    }
+
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
       {title: `Among ${occupation.name}`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
@@ -46,8 +81,43 @@ class Person extends Component {
         title: "Digital Afterlife",
         slug: "afterlife",
         viz: <Viz type="LinePlot"
-                  data={{pageviews: personProfile.pageviews, creationdates: personProfile.creationdates}}
-                  time={(d) => d.pageview_date} />
+                  config={{
+                    data: lineData,
+                    legendConfig: {
+                      shapeConfig: {
+                        fontColor: "#363636",
+                        fontFamily: () => "Amiko",
+                        fontSize: () => 12
+                      }
+                    },
+                    time: d => d.x,
+                    shapeConfig: {
+                      Line: {
+                        fill: "none",
+                        stroke: d => d.color,
+                        strokeWidth: 1
+                      }
+                    },
+                    timeline: false,
+                    xConfig: {
+                      barConfig: {stroke: "#AFAAA4"},
+                      gridConfig: {"stroke-width": 0},
+                      shapeConfig: {
+                        fill: "#AFAAA4",
+                        fontColor: "#AFAAA4",
+                        fontFamily: () => "Amiko",
+                        fontSize: () => 10,
+                        stroke: "#AFAAA4"
+                      },
+                      title: false
+                    },
+                    yConfig: {
+                      barConfig: {"stroke-width": 0},
+                      labels: [],
+                      title: false,
+                      ticks: []
+                    }
+                  }} />
       }
     ];
 
