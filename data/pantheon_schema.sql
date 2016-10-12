@@ -15,7 +15,7 @@ CREATE TABLE place
   name text NOT NULL,
   slug CHARACTER VARYING(255),
   country_name CHARACTER VARYING(255),
-  country_code CHARACTER VARYING(2),
+  country_code CHARACTER VARYING(3),
   lat real,
   lon real,
   pop real,

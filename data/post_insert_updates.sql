@@ -18,8 +18,8 @@ FROM (
 		row_number() OVER (PARTITION BY birthcountry ORDER BY langs DESC) as birthcountry_rank_unique,
 		dense_rank() OVER (PARTITION BY birthplace ORDER BY langs DESC) as birthplace_rank,
 		row_number() OVER (PARTITION BY birthplace ORDER BY langs DESC) as birthplace_rank_unique,
-		dense_rank() OVER (PARTITION BY deathyear ORDER BY langs DESC) as deathyear_rank,
-		row_number() OVER (PARTITION BY deathyear ORDER BY langs DESC) as deathyear_rank_unique,
+		dense_rank() OVER (PARTITION BY deathyear ORDER BY langs DESC WHERE deathyear is not null) as deathyear_rank,
+		row_number() OVER (PARTITION BY deathyear ORDER BY langs DESC WHERE deathyear is not null) as deathyear_rank_unique,
 		dense_rank() OVER (PARTITION BY deathcountry ORDER BY langs DESC) as deathcountry_rank,
 		row_number() OVER (PARTITION BY deathcountry ORDER BY langs DESC) as deathcountry_rank_unique,
 		dense_rank() OVER (PARTITION BY deathplace ORDER BY langs DESC) as deathplace_rank,
@@ -107,3 +107,7 @@ FROM (
     GROUP BY deathplace, occupation
 ) AS subq
 WHERE place_occupation.place=subq.deathplace AND place_occupation.occupation=subq.occupation;
+
+UPDATE person 
+SET deathplace=NULL, deathplace_rank=NULL, deathplace_rank_unique=NULL, deathcountry=NULL, deathcountry_rank=NULL, deathcountry_rank_unique=NULL, deathyear=NULL, deathyear_rank=NULL, deathyear_rank_unique=NULL
+WHERE alive=TRUE;

@@ -1,10 +1,18 @@
+# -*- coding: utf-8 -*-
 import psycopg2, csv, sys, urllib2, unicodedata
 
-conn = psycopg2.connect("dbname=pantheon user=zeus")
+conn = psycopg2.connect("dbname=pantheon user=alexandersimoes")
 cursor = conn.cursor()
 
+country_lookup = {"afago":"ao","afbdi":"bi","afben":"bj","afbfa":"bf","afbwa":"bw","afcaf":"cf","afciv":"ci","afcmr":"cm","afcod":"cd","afcog":"cg","afcom":"km","afcpv":"cv","afdji":"dj","afdza":"dz","afegy":"eg","aferi":"er","afesh":"eh","afeth":"et","afgab":"ga","afgha":"gh","afgin":"gn","afgmb":"gm","afgnb":"gw","afgnq":"gq","afken":"ke","aflbr":"lr","aflby":"ly","aflso":"ls","afmar":"ma","afmdg":"mg","afmli":"ml","afmoz":"mz","afmrt":"mr","afmus":"mu","afmwi":"mw","afmyt":"yt","afnam":"na","afner":"ne","afnga":"ng","afreu":"re","afrwa":"rw","afsdn":"sd","afsen":"sn","afshn":"sh","afsle":"sl","afsom":"so","afssd":"ss","afstp":"st","afswz":"sz","afsyc":"sc","aftcd":"td","aftgo":"tg","aftun":"tn","aftza":"tz","afuga":"ug","afzaf":"za","afzmb":"zm","afzwe":"zw","anata":"aq","anatf":"tf","anbvt":"bv","anhmd":"hm","ansgs":"gs","asafg":"af","asare":"ae","asarm":"am","asaze":"az","asbgd":"bd","asbhr":"bh","asbrn":"bn","asbtn":"bt","ascck":"cc","aschn":"cn","ascxr":"cx","ascyp":"cy","asgeo":"ge","ashkg":"hk","asidn":"id","asind":"in","asiot":"io","asirn":"ir","asirq":"iq","asisr":"il","asjor":"jo","asjpn":"jp","askaz":"kz","askgz":"kg","askhm":"kh","askor":"kr","askwt":"kw","aslao":"la","aslbn":"lb","aslka":"lk","asmac":"mo","asmdv":"mv","asmmr":"mm","asmng":"mn","asmys":"my","asnpl":"np","asomn":"om","aspak":"pk","asphl":"ph","asprk":"kp","aspse":"ps","asqat":"qa","assau":"sa","assgp":"sg","assyr":"sy","astha":"th","astjk":"tj","astkm":"tm","astls":"tl","astur":"tr","astwn":"tw","asuzb":"uz","asvnm":"vn","asyem":"ye","asymd":"yd","eualb":"al","euand":"ad","euaut":"at","eubel":"be","eubgr":"bg","eubih":"ba","eublr":"by","euche":"ch","eucze":"cz","eudeu":"de","eudnk":"dk","euesp":"es","euest":"ee","eufin":"fi","eufra":"fr","eufro":"fo","eugbr":"gb","eugib":"gi","eugrc":"gr","euhrv":"hr","euhun":"hu","euimn":"im","euirl":"ie","euisl":"is","euita":"it","euksv":"kv","eulie":"li","eultu":"lt","eulux":"lu","eulva":"lv","eumco":"mc","eumda":"md","eumkd":"mk","eumlt":"mt","eumne":"me","eunld":"nl","eunor":"no","eupol":"pl","euprt":"pt","eurou":"ro","eurus":"ru","eusjm":"sj","eusmr":"sm","eusrb":"rs","eusvk":"sk","eusvn":"si","euswe":"se","euukr":"ua","euvat":"va","naabw":"aw","naaia":"ai","naant":"an","naatg":"ag","nabes":"bq","nabhs":"bs","nablm":"bl","nablz":"bz","nabmu":"bm","nabrb":"bb","nacan":"ca","nacri":"cr","nacub":"cu","nacuw":"cw","nacym":"ky","nadma":"dm","nadom":"do","nagrd":"gd","nagrl":"gl","nagtm":"gt","nahnd":"hn","nahti":"ht","najam":"jm","nakna":"kn","nalca":"lc","namaf":"mf","namex":"mx","namsr":"ms","namtq":"mq","nanic":"ni","napan":"pa","napri":"pr","naslv":"sv","naspm":"pm","natca":"tc","natto":"tt","naumi":"um","nausa":"us","navct":"vc","navgb":"vg","navir":"vi","ocasm":"as","ocaus":"au","occok":"ck","ocfji":"fj","ocfsm":"fm","ocglp":"gp","ocgum":"gu","ockir":"ki","ocmhl":"mh","ocmnp":"mp","ocncl":"nc","ocnfk":"nf","ocniu":"nu","ocnru":"nr","ocnzl":"nz","ocpcn":"pn","ocplw":"pw","ocpng":"pg","ocpyf":"pf","ocslb":"sb","octkl":"tk","octon":"to","octuv":"tv","ocvut":"vu","ocwlf":"wf","ocwsm":"ws","saarg":"ar","sabol":"bo","sabra":"br","sachl":"cl","sacol":"co","saecu":"ec","saflk":"fk","saguf":"gf","saguy":"gy","saper":"pe","sapry":"py","sasur":"sr","saury":"uy","saven":"ve","xxwld":"1w"};
+country_lookup = {v:k[2:] for k, v in country_lookup.items()}
+
 def strip_accents(s):
-   return ''.join(c for c in unicodedata.normalize('NFD', s)
+    xtra_chars = {u",":"", u"ł":u'l', u"Ł":"L", u'ı':u'i', u'‘':u"", u'ø':u'o', u"Ø":"O", u"'":"", u"’":"", u"œ":"oe", u"ß":"ss", u"đ":"d", u"ð":"d", u"Ð":"D", u"æ":"ae", u"ṭ":"t", u"Ṭ":"T", u"Ħ":"H", u"ħ":"h"}
+    for k, v in xtra_chars.iteritems():
+        pass
+        s = s.replace(k, v)
+    return ''.join(c for c in unicodedata.normalize('NFD', s)
                   if unicodedata.category(c) != 'Mn')
 
 cursor.execute("SELECT wiki_id, id from place where wiki_id is not null")
@@ -17,7 +25,7 @@ if not place_lookup:
         creader = csv.reader(cfile, delimiter='\t', quotechar='"')
         creader.next()
         for row in creader:
-            [geonameid, city_name, lat, lon, pop, cname, ccode] = row
+            [geonameid, city_name, lat, lon, pop, ccode, cname] = row
             geonameid = int(geonameid)
             ccode = ccode.lower()
 
@@ -27,7 +35,7 @@ if not place_lookup:
                 # lets add it to the db
                 cslug = cname.replace(" ", "_")
                 cslug = strip_accents(cslug.decode('utf8'))
-                cslug = urllib2.quote(cslug.encode('utf8'))
+                # cslug = urllib2.quote(cslug.encode('utf8'))
                 query = 'INSERT INTO place (slug, name, country_name, country_code) VALUES (%s, %s, %s, %s) RETURNING id;'
                 data = (cslug, cname, cname, ccode)
 
@@ -41,7 +49,7 @@ if not place_lookup:
 
             city_slug = city_name.replace(" ", "_")
             city_slug = strip_accents(city_slug.decode('utf8'))
-            city_slug = urllib2.quote(city_slug.encode('utf8'))
+            # city_slug = urllib2.quote(city_slug.encode('utf8'))
             query = 'INSERT INTO place (wiki_id, name, slug, country_name, country_code, lat, lon, pop) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;'
             data = (geonameid, city_name, city_slug, cname, ccode, lat, lon, pop)
 
@@ -76,7 +84,7 @@ if not occ_lookup:
 print "First 5 occupations in DB:"
 print occ_lookup.items()[:5]
 
-with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
+with open('data/Pantheon2.0_Oct11.csv', 'rb') as pfile:
     preader = csv.DictReader(pfile, delimiter=',', quotechar='"')
     print "Inserting people to DB..."
     for i, row in enumerate(preader):
@@ -102,7 +110,8 @@ with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
         countries = [row["ccode"], row["dccode"]]
         for i, c in enumerate(countries):
             try:
-                countries[i] = place_lookup[c.lower()]
+                c = country_lookup[c.lower()]
+                countries[i] = place_lookup[c]
             except KeyError:
                 countries[i] = None
 
@@ -160,7 +169,7 @@ with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
         wd_id = row["wd_id"]
 
         # Name
-        slug = row["title"]
+        slug = row["title"].replace(" ", "_")
         slug = strip_accents(slug.decode('utf8'))
 
         name = row["title"].replace("_", " ")
@@ -199,4 +208,3 @@ with open('data/Pantheon2.0_Sept29.csv', 'rb') as pfile:
         cursor.execute(query, data)
         conn.commit()
         # raw_input('')
-
