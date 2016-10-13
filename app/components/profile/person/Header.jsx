@@ -19,7 +19,7 @@ const Header = ({ pageviews, person }) => {
         <p className='topDesc'>Cultural Memory of</p>
         <h2 className='topSubtitle'>{person.profession.name}</h2>
         <h1 className='title'>{person.name}</h1>
-        <p className='bottomSubtitle'>{person.birthyear.name} {person.deathyear ? `— ${person.deathyear.name}` : null}</p>
+        <p className='bottomSubtitle'>{person.birthyear.name} - {person.deathyear ? `— ${person.deathyear.name}` : "Present"}</p>
         <pre>[VIZ] SPARK LINE HERE</pre>
       </div>
     </header>
