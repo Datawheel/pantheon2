@@ -1,7 +1,7 @@
+@import '../../common/colors';
 @import '../../common/typography';
 
 header {
-  border: solid 1px black;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -41,30 +41,47 @@ header {
   }
 }
 
-.bgImg {
-  /*background-size: contain;*/
-  display: flex;
-  filter: blur(5px) saturate(160%);
-  opacity: 0.45;
-  position: absolute;
-  width: 100%;
-  z-index: -1;
-  height: 100vh;
+.bg-container {
+  &::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(244, 244, 241, 0.6) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAJElEQVQYV2P88uXjfx4efkYGJADmoEvAVSBLoGiDSaAIwowCABjtE96SXaX4AAAAAElFTkSuQmCC) repeat;
+  }
+}
 
-  & .bgImg-l {
-    background-position: center right;
-    background-size: cover;
-    height: 100vh;
-    width: 50vw;
+.bg-img-mask {
+  display: flex;
+  justify-content: space-between;
+  filter: blur(7px) saturate(160%);
+  position: absolute;
+  width: 105%;
+  height: 105%;
+  top: -2.5%;
+  left: -2.5%;
+  z-index: -1;
+  overflow: hidden;
+
+  & .bg-img-l {
   }
 
-  & .bgImg-r {
-    background-position: center right;
-    background-size: cover;
-    height: 100vh;
-    width: 50vw;
+  & .bg-img-r {
     transform: scaleX(-1);
   }
+}
+
+.bg-img {
+  background-color: var(--colorArts);
+  background-blend-mode: darken;
+  background-position: center right;
+  background-size: cover;
+  height: 100%;
+  width: 50%;
 }
 
 .contribute { @apply --small; }

@@ -9,9 +9,11 @@ const Header = ({ pageviews, person }) => {
 
   return (
     <header>
-      <div className='bgImg'>
-        <div className='bgImg-l' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
-        <div className='bgImg-r' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
+      <div className='bg-container'>
+        <div className='bg-img-mask'>
+          <div className='bg-img bg-img-l' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
+          <div className='bg-img bg-img-r' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
+        </div>
       </div>
       <div className='info'>
         <p className='topDesc'>Cultural Memory of</p>
