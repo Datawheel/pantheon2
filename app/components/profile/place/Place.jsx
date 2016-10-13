@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import Helmet from "react-helmet";
-import Header from "pages/profile/place/Header";
+import Header from "components/profile/place/Header";
 import ProfileNav from "components/profile/Nav";
-import Intro from "pages/profile/place/Intro";
+import Intro from "components/profile/place/Intro";
 import Section from "components/profile/Section";
-import PeopleRanking from "pages/profile/place/PeopleRanking";
-import Occupations from "pages/profile/place/Occupations";
-import LivingPeople from "pages/profile/place/LivingPeople";
+import PeopleRanking from "components/profile/place/PeopleRanking";
+import Occupations from "components/profile/place/Occupations";
+import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
 import { fetchPlace, fetchPeopleBornHere, fetchOccupationsHere, fetchOccupations, fetchPeopleBornHereAlive } from "actions/place";
 

@@ -5,31 +5,31 @@ import App from 'containers/App';
 import Home from 'containers/Home';
 
 // profile components
-import Profile from 'pages/profile/Index';
-import Person from 'pages/profile/person/Index';
-import Place from 'pages/profile/place/Index';
-import Domain from 'pages/profile/domain/Index';
+import Profile from 'components/profile/Profile';
+import Person from 'components/profile/person/Person';
+import Place from 'components/profile/place/Place';
+import Profession from 'components/profile/profession/Profession';
 
 // about components
-import About from 'pages/about/Index';
-import Vision from 'pages/about/Vision';
-import Methods from 'pages/about/Methods';
-import Team from 'pages/about/Team';
-import Publications from 'pages/about/Publications';
-import DataSources from 'pages/about/DataSources';
-import Resources from 'pages/about/Resources';
-import References from 'pages/about/References';
-import Contact from 'pages/about/Contact';
+import About from 'components/about/About';
+import Vision from 'components/about/Vision';
+import Methods from 'components/about/Methods';
+import Team from 'components/about/Team';
+import Publications from 'components/about/Publications';
+import DataSources from 'components/about/DataSources';
+import Resources from 'components/about/Resources';
+import References from 'components/about/References';
+import Contact from 'components/about/Contact';
 
 // explore componenets
-import Explore from 'pages/explore/Index';
+import Explore from 'components/explore/Explore';
 
 // data section components
-import Data from 'pages/data/Index';
-import Datasets from 'pages/data/Datasets';
-import Api from 'pages/data/Api';
-import Permissions from 'pages/data/Permissions';
-import Faq from 'pages/data/Faq';
+import Data from 'components/data/Data';
+import Datasets from 'components/data/Datasets';
+import Api from 'components/data/Api';
+import Permissions from 'components/data/Permissions';
+import Faq from 'components/data/Faq';
 
 /*
  * @param {Redux Store}
@@ -53,7 +53,7 @@ export default (store) => {
     if(path.includes("place")){
       candidates = ["India", "United_States", "France", "Italy", "Chile", "Brazil", "Bulgaria"];
     }
-    else if(path.includes("domain")){
+    else if(path.includes("profession")){
       candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
     }
     else if(path.includes("person")){
@@ -94,7 +94,7 @@ export default (store) => {
       <Route path="profile" component={Profile}>
         <Route path="person(/:id)" component={Person} onEnter={checkForId} />
         <Route path="place(/:id)" component={Place} onEnter={checkForId} />
-        <Route path="domain(/:id)" component={Domain} onEnter={checkForId} />
+        <Route path="profession(/:id)" component={Profession} onEnter={checkForId} />
       </Route>
 
       <Route path="data" component={Data}>

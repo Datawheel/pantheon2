@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 import Helmet from "react-helmet";
 import ProfileNav from "components/profile/Nav";
 import Section from "components/profile/Section";
-import Header from "pages/profile/person/Header";
-import Intro from "pages/profile/person/Intro";
-import OccupationRanking from "pages/profile/person/OccupationRanking";
-import YearRanking from "pages/profile/person/YearRanking";
-import CountryRanking from "pages/profile/person/CountryRanking";
+import Header from "components/profile/person/Header";
+import Intro from "components/profile/person/Intro";
+import OccupationRanking from "components/profile/person/OccupationRanking";
+import YearRanking from "components/profile/person/YearRanking";
+import CountryRanking from "components/profile/person/CountryRanking";
 import Viz from "components/viz/Index";
 import { activateSearch } from "actions/users";
-import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
+import { fetchPerson, fetchProfessionRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
 
 class Person extends Component {
 
@@ -25,7 +25,7 @@ class Person extends Component {
 
   static need = [
     fetchPerson,
-    fetchOccupationRanks,
+    fetchProfessionRanks,
     fetchCountryRanks,
     fetchYearRanks,
     fetchPageviews,
@@ -34,7 +34,7 @@ class Person extends Component {
 
   render() {
     const {personProfile, activateSearch} = this.props;
-    const occupation = personProfile.person.occupation;
+    const profession = personProfile.person.profession;
     const birthcountry = personProfile.person.birthcountry;
 
     const maxPageViews = Math.max(...personProfile.pageviews.map(d => d.num_pageviews));
@@ -74,7 +74,7 @@ class Person extends Component {
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
-      {title: `Among ${occupation.name}`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
+      {title: `Among ${profession.name}`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.professionRank} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
       {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
       {

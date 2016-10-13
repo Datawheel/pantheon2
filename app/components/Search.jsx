@@ -13,7 +13,7 @@ class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      domainResults: [],
+      professionResults: [],
       placeResults: [],
       personResults: []
     }
@@ -22,18 +22,18 @@ class Search extends Component {
   onChange(e) {
     const userQuery = e.target.value;
     if (userQuery.length < 3) return;
-    if (userQuery.length === 0) this.setState({ domainResults:[], placeResults:[], personResults:[] });
+    if (userQuery.length === 0) this.setState({ professionResults:[], placeResults:[], personResults:[] });
 
-    const domainQuery = axios.get(`http://localhost:3100/occupation?name=@@.${e.target.value}`);
+    const professionQuery = axios.get(`http://localhost:3100/profession?name=@@.${e.target.value}`);
     const placeQuery = axios.get(`http://localhost:3100/place?name=@@.${e.target.value}`);
     const personQuery = axios.get(`http://localhost:3100/person?name=@@.${e.target.value}&order=langs.desc.nullslast`);
 
-    Promise.all([domainQuery, placeQuery, personQuery])
+    Promise.all([professionQuery, placeQuery, personQuery])
       .then((queryResults) => {
-        const domainResults = queryResults[0].data;
+        const professionResults = queryResults[0].data;
         const placeResults = queryResults[1].data;
         const personResults = queryResults[2].data;
-        this.setState({ domainResults, placeResults, personResults });
+        this.setState({ professionResults, placeResults, personResults });
       })
   }
 
@@ -50,9 +50,9 @@ class Search extends Component {
         </div>
         <input type="text" ref={(el) => this._searchInput = el} onChange={this.onChange.bind(this)}/ >
         <ul>
-          {this.state.domainResults.map((result) =>
-            <li key={`domain_${result.slug}`}>
-              <a href={`/profile/domain/${result.slug}`}>{result.name}</a>
+          {this.state.professionResults.map((result) =>
+            <li key={`profession_${result.slug}`}>
+              <a href={`/profile/profession/${result.slug}`}>{result.name}</a>
             </li>
           )}
           {this.state.placeResults.map((result) =>

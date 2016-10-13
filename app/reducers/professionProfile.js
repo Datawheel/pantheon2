@@ -1,20 +1,20 @@
 import { combineReducers } from 'redux';
 import * as types from 'types';
 
-const domain = (
+const profession = (
   state = {},
   action
 ) => {
   switch (action.type) {
-    case "GET_DOMAIN_SUCCESS":
+    case "GET_PROFESSION_SUCCESS":
       return action.res.data[0]
     default:
       return state;
   }
 }
 
-const domainProfileReducer = combineReducers({
-  domain
+const professionProfileReducer = combineReducers({
+  profession
 });
 
-export default domainProfileReducer;
+export default professionProfileReducer;

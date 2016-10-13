@@ -4,8 +4,8 @@ import AnchorList from 'components/utils/AnchorList';
 const OccupationRanking = ({ person, ranking }) => {
 
   ranking = Object.assign({}, ranking, {
-    betterPeers: ranking.peers.filter(p => p.occupation_rank_unique < ranking.me.occupation_rank_unique),
-    worsePeers: ranking.peers.filter(p => p.occupation_rank_unique > ranking.me.occupation_rank_unique)
+    betterPeers: ranking.peers.filter(p => p.profession_rank_unique < ranking.me.profession_rank_unique),
+    worsePeers: ranking.peers.filter(p => p.profession_rank_unique > ranking.me.profession_rank_unique)
   });
 
   let betterPeers = null,
@@ -21,7 +21,7 @@ const OccupationRanking = ({ person, ranking }) => {
   return (
     <div>
       <p>
-        Among {person.occupation.name}, {person.name} ranks {ranking.me.rank_unique} out of {person.occupation.num_born}.&nbsp;
+        Among {person.profession.name}, {person.name} ranks {ranking.me.rank_unique} out of {person.profession.num_born}.&nbsp;
         { betterPeers }
         { worsePeers }
       </p>
@@ -31,7 +31,7 @@ const OccupationRanking = ({ person, ranking }) => {
             <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
             <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
             <p>{peer.birthyear} - {peer.deathyear}</p>
-            <p>Rank: {peer.occupation_rank}</p>
+            <p>Rank: {peer.profession_rank}</p>
           </li>
         )}
       </div>

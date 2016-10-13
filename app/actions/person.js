@@ -15,25 +15,25 @@ export function makePersonRequest(method, id, data, api = '/person') {
 }
 
 export function fetchPerson(store) {
-  const prom = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=occupation{*},birthcountry{*},birthplace{*},birthyear{*},deathcountry{*},deathplace{*},deathyear{*},*`);
+  const prom = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=profession{*},birthcountry{*},birthplace{*},birthyear{*},deathcountry{*},deathplace{*},deathyear{*},*`);
   return {
     type: types.GET_PERSON,
     promise: prom
   };
 }
 
-export function fetchOccupationRanks(store) {
-  const getOccRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id,occupation{*},occupation_rank,occupation_rank_unique,langs`)
+export function fetchProfessionRanks(store) {
+  const getOccRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id,profession{*},profession_rank,profession_rank_unique,langs`)
   const getOccRankPeers = getOccRank.then(function(occRankRes) {
         const occRank = occRankRes.data[0];
-        const occId = occRank.occupation.id;
-        let rankSub = Math.max(1, parseInt(occRank.occupation_rank_unique) - 2);
-        let rankPlus = Math.max(5, parseInt(occRank.occupation_rank_unique) + 2);
-        if(rankPlus > occRank.occupation.num_born){
-          rankSub = occRank.occupation.num_born - 5;
-          rankPlus = occRank.occupation.num_born;
+        const occId = occRank.profession.id;
+        let rankSub = Math.max(1, parseInt(occRank.profession_rank_unique) - 2);
+        let rankPlus = Math.max(5, parseInt(occRank.profession_rank_unique) + 2);
+        if(rankPlus > occRank.profession.num_born){
+          rankSub = occRank.profession.num_born - 5;
+          rankPlus = occRank.profession.num_born;
         }
-        const apiURL = `/person?occupation=eq.${occId}&occupation_rank_unique=gte.${rankSub}&occupation_rank_unique=lte.${rankPlus}&order=occupation_rank_unique&select=occupation{*},birthcountry{*},langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
+        const apiURL = `/person?profession=eq.${occId}&profession_rank_unique=gte.${rankSub}&profession_rank_unique=lte.${rankPlus}&order=profession_rank_unique&select=profession{*},birthcountry{*},langs,profession_rank,profession_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
         // console.log("OccRank API:", apiURL)
         return makePersonRequest('get', null, null, apiURL);
     });
@@ -41,7 +41,7 @@ export function fetchOccupationRanks(store) {
   const prom = Promise.all([getOccRank, getOccRankPeers])
 
   return {
-    type: "GET_OCCUPATION_RANKS",
+    type: "GET_PROFESSION_RANKS",
     promise: prom
   };
 }
