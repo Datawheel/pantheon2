@@ -8,7 +8,7 @@ const Header = ({ pageviews, person }) => {
   // console.log(pageviews)
 
   return (
-    <header>
+    <header className='hero'>
       <div className='bg-container'>
         <div className='bg-img-mask'>
           <div className='bg-img bg-img-l' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>

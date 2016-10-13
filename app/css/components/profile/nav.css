@@ -1,6 +1,6 @@
 @import '../../common/typography';
 
-nav.profile-nav {
+.profile-nav {
   text-align: center;
   border: solid 1px black;
 
