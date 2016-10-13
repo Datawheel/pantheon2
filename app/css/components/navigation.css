@@ -6,10 +6,18 @@
   text-align: center;
   width: 100%;
   z-index: 100;
+
+  & ul {
+    padding: 0;
+    list-style-type: none;
+  }
+
+  & li {
+    display: inline-block;
+  }
 }
 
 .item {
-  display: inline-block;
   text-decoration: none;
   padding: 16px 32px;
   color: var(--colorBlackhole);
