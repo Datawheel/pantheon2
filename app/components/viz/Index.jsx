@@ -46,8 +46,8 @@ class Viz extends Component {
         let val;
 
         if (d[g]) val = d[g];
-        else if (d.occupation instanceof Array) val = attrs[d.occupation[0]][g];
-        else val = attrs[d.occupation][g];
+        else if (d.profession instanceof Array) val = attrs[d.profession[0]][g];
+        else val = attrs[d.profession][g];
 
         return `${val}`;
 
@@ -55,7 +55,7 @@ class Viz extends Component {
     }) : ["id"];
 
     config.data.forEach(d => {
-      if (d.occupation !== void 0) d.occupation = `${d.occupation}`;
+      if (d.profession !== void 0) d.profession = `${d.profession}`;
     })
 
     // Filters data by the time filter.
@@ -73,8 +73,8 @@ class Viz extends Component {
       .shapeConfig({
         fill: d => {
           if (d.color) return d.color;
-          else if (d.occupation !== void 0) {
-            let occ = d.occupation.constructor === Array ? d.occupation[0] : d.occupation;
+          else if (d.profession !== void 0) {
+            let occ = d.profession.constructor === Array ? d.profession[0] : d.profession;
             return colors[attrs[occ].domain];
           }
           return "#ccc";

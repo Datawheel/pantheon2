@@ -5,7 +5,7 @@ import ProfileNav from "components/profile/Nav";
 import Section from "components/profile/Section";
 import Header from "components/profile/person/Header";
 import Intro from "components/profile/person/Intro";
-import OccupationRanking from "components/profile/person/OccupationRanking";
+import ProfessionRanking from "components/profile/person/ProfessionRanking";
 import YearRanking from "components/profile/person/YearRanking";
 import CountryRanking from "components/profile/person/CountryRanking";
 import Viz from "components/viz/Index";
@@ -74,7 +74,7 @@ class Person extends Component {
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
-      {title: `Among ${profession.name}`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.professionRank} />},
+      {title: `Among ${profession.name}`, slug: "profession_peers", content: <ProfessionRanking person={personProfile.person} ranking={personProfile.professionRank} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
       {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
       {

@@ -11,7 +11,7 @@ const Intro = ({ person }) => {
     <div>
       <img src={`/people/${person.wiki_id}.jpg`} alt={`Photo of ${person.name}`} />
       <p>
-      {person.name} {person.deathyear ? "was" : "is"} a {person.occupation.name} born in {person.birthplace.name}, {person.birthcountry.name} in {person.birthyear.name}.&nbsp;
+      {person.name} {person.deathyear ? "was" : "is"} a {person.profession.name} born in {person.birthplace.name}, {person.birthcountry.name} in {person.birthyear.name}.&nbsp;
       {person.deathyear ?
         `${person.gender ? "She" : "He"} lived to be ${age} before passing in ${person.deathyear.name}.` :
         `${person.gender ? "She" : "He"} is currently ${age} years old.`
