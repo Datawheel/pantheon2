@@ -1,7 +1,19 @@
 @import '../../common/colors';
 @import '../../common/typography';
 
-.hero {
+@font-face {
+  font-family: 'Sell Your Soul';
+  src: url('/sell-your-soul.ttf') format('truetype');
+}
+
+:root {
+  --fontSYS: 'Sell Your Soul', Times, serif;
+}
+
+/* what is this? */
+/*.contribute { @apply --small; }*/
+
+header {
   position: relative;
   width: 100%;
   height: 100vh;
@@ -9,6 +21,7 @@
   text-align: center;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .bg-container {
@@ -66,37 +79,50 @@
   width: 50%;
 }
 
-.contribute { @apply --small; }
-
 .info {
   background: rgba(244, 244, 244, 0.85);
-  border: solid 1px #979797;
-  margin: 100px auto 60px auto;
+  border: solid 1px var(--colorStone);
+  margin: 0 auto;
+  padding: 40px;
   width: 620px;
+  box-sizing: border-box;
   z-index: 9;
 }
 
-.topDesc {
-  color: #9E978D;
+.top-desc {
+  color: var(--colorTan);
   font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
   text-transform: uppercase;
+  margin: 0 auto 24px;
 }
 
-.topSubtitle {
-  color: #363636;
-  font-size: 21px;
-  text-transform: uppercase;
-}
-
-.title {
-  color: #363636;
+h1 {
+  font-family: var(--fontSYS);
   font-size: 48px;
-  margin: 20px 0 0px 0;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: var(--colorDark);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
   text-transform: uppercase;
 }
 
-.bottomSubtitle {
-  color: #90908D;
-  font-size: 21px;
+.profile-type {
+  color: var(--colorDark);
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 2px;
   text-transform: uppercase;
+  margin: 0 auto 13px;
+}
+
+.date-subtitle {
+  color: var(--colorTan);
+  font-size: 19px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 400;
+  margin: 13px auto 0;
 }
