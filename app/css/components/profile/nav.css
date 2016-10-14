@@ -1,26 +1,42 @@
+@import '../../common/colors';
 @import '../../common/typography';
 
 .profile-nav {
-  text-align: center;
-  border: solid 1px black;
+  width: 100%;
+  position: absolute;
+  padding: 24px 0;
+  bottom: 0;
+  background-color: var(--colorDark);
 
-  &:before {
-    background: black;
-    color: white;
-    content: "profile-nav";
-    display: block;
-    font-size: 11px;
-    text-align: center;
+  & ol {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    counter-reset: li;
   }
 
-  & ul {
-    margin: 0;
-    padding: 0;
+  & li {
+    position: relative;
+    list-style: none;
+    padding: 3px;
+    margin: 0 0 0 5px;
 
-    & li {
-      display: inline-block;
-      border: solid 1px red;
-      padding: 5px;
+    &::before {
+      content: counter(li, upper-roman);
+      counter-increment: li;
+      @apply --profileNav;
+      color: var(--colorEggshell);
     }
+  }
+
+  & a {
+    text-decoration: none;
+    outline: none;
+    padding: 5px 5px 5px 0;
+    @apply --profileNav;
+    color: var(--colorEggshell);
   }
 }

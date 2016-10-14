@@ -52,4 +52,13 @@
     }
   }
 
+  --profileNav {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    -webkit-font-smoothing: antialiased;
+  }
+
 }

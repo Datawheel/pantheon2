@@ -4,11 +4,13 @@ import styles from 'css/components/profile/nav';
 const Nav = ({ sections }) => {
   return (
     <nav className='profile-nav'>
-      <ul>
+      <ol>
       {sections.map((section) =>
-        <li key={section.slug}><a href={`#${section.slug}`}>{section.title}</a></li>
+        <li key={section.slug}>
+          <a href={`#${section.slug}`} className={`${section.slug}`}>. {section.title}</a>
+        </li>
       )}
-      </ul>
+      </ol>
     </nav>
   );
 };
