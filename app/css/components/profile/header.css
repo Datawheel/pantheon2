@@ -43,7 +43,7 @@ header {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(244, 244, 241, 0.7) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAJElEQVQYV2P88uXjfx4efkYGJADmoEvAVSBLoGiDSaAIwowCABjtE96SXaX4AAAAAElFTkSuQmCC) repeat;
+    background: rgba(244, 244, 241, 0.7) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC) repeat;
   }
 }
 
@@ -83,24 +83,25 @@ header {
   background: rgba(244, 244, 244, 0.85);
   border: solid 1px var(--colorStone);
   margin: 0 auto;
-  padding: 40px;
-  width: 620px;
+  padding: 32px;
+  width: 430px;
   box-sizing: border-box;
   z-index: 9;
 }
 
 .top-desc {
   color: var(--colorTan);
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin: 0 auto 24px;
+  -webkit-font-smoothing: antialiased;
+  margin: 0 auto 20px;
 }
 
 h1 {
   font-family: var(--fontSYS);
-  font-size: 48px;
+  font-size: 34px;
   font-weight: 400;
   letter-spacing: 2px;
   color: var(--colorDark);
@@ -111,18 +112,23 @@ h1 {
 
 .profile-type {
   color: var(--colorDark);
-  font-size: 19px;
+  font-size: 14px;
   font-weight: 400;
   letter-spacing: 2px;
   text-transform: uppercase;
-  margin: 0 auto 13px;
+  -webkit-font-smoothing: antialiased;
+  margin: 0 auto 8px;
 }
 
 .date-subtitle {
   color: var(--colorTan);
-  font-size: 19px;
-  text-transform: uppercase;
+  font-size: 14px;
   letter-spacing: 1px;
   font-weight: 400;
+  -webkit-font-smoothing: antialiased;
   margin: 13px auto 0;
+}
+
+.sparkline {
+  width: 272px;
 }

@@ -32,11 +32,12 @@
   }
 
   --globalNav {
-    font-size: 14px;
-    font-weight: 400;
+    font-size: 12px;
+    font-weight: 600;
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 1.96px;
+    -webkit-font-smoothing: antialiased;
   }
 
   --dropdownLink {
@@ -44,16 +45,16 @@
       content: '';
       position: relative;
       display: inline-block;
-      height: 6px;
-      width: 12px;
-      margin: 0 0 2px 3px;
+      height: 5px;
+      width: 10px;
+      margin: 0 0 2px 2px;
       background: url('/tri-down.svg') no-repeat;
       background-size: contain;
     }
   }
 
   --profileNav {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     line-height: 1;
     text-transform: uppercase;
