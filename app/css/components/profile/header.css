@@ -1,13 +1,10 @@
 @import '../../common/colors';
 @import '../../common/typography';
 
-/*@font-face {
-  font-family: 'Sell Your Soul';
-  src: url('../../../images/sell-your-soul.ttf') format('truetype');
-}*/
+@import url('https://fonts.googleapis.com/css?family=Marcellus');
 
 :root {
-  --fontSYS: 'Sell Your Soul', Times, serif;
+  --fontTitle: 'Marcellus', Times, serif;
 }
 
 /* what is this? */
@@ -100,7 +97,7 @@ header {
 }
 
 h1 {
-  font-family: var(--fontSYS);
+  font-family: var(--fontTitle);
   font-size: 34px;
   font-weight: 400;
   letter-spacing: 2px;
