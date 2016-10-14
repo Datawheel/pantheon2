@@ -14,7 +14,6 @@ import styles from 'css/main';
  * https://github.com/rackt/react-router/blob/latest/docs/Introduction.md
  */
 const App = ({children, searchActive}) => {
-  console.log("searchActive---",searchActive)
   return (
     <div className='app'>
       { searchActive ? <Search /> : null }
@@ -30,7 +29,6 @@ App.propTypes = {
 };
 
 function mapStateToProps(state) {
-  // console.log("state---",state)
   return {
     searchActive: state.search.searchActive
   };

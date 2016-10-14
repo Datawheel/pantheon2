@@ -1,10 +1,10 @@
 @import '../../common/colors';
 @import '../../common/typography';
 
-@font-face {
+/*@font-face {
   font-family: 'Sell Your Soul';
-  src: url('/sell-your-soul.ttf') format('truetype');
-}
+  src: url('../../../images/sell-your-soul.ttf') format('truetype');
+}*/
 
 :root {
   --fontSYS: 'Sell Your Soul', Times, serif;

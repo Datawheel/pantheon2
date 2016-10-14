@@ -21,22 +21,22 @@ var commonLoaders = [
     exclude: path.join(__dirname, '..', 'node_modules')
   },
   { test: /\.json$/, loader: 'json-loader' },
-  // {
-  //   test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
-  //   loader: 'url',
-  //   query: {
-  //       name: '[hash].[ext]',
-  //       limit: 10000,
-  //   }
-  // },
-  {test: /\.(jpg|png|svg)$/, loader: "file?name=[path][name].[ext]"},
+  {
+    test: /\.(png|jpg|jpeg|gif|svg)$/,
+    loader: 'url',
+    query: {
+        name: '[hash].[ext]',
+        limit: 10000,
+    }
+  },
+  // {test: /\.(jpg|png|svg)$/, loader: "file?name=[path][name].[ext]"},
   { test: /\.html$/, loader: 'html-loader' },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     loader: 'url-loader?limit=10000&mimetype=application/font-woff'
   },
   {
-    test: /\.(ttf|eot|svg)(\?.*)?$/,
+    test: /webfont\.(ttf|eot|svg)(\?.*)?$/,
     loader: 'file-loader'
   }
 ];

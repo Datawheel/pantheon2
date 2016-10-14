@@ -21,7 +21,7 @@ var commonLoaders = [
     exclude: path.join(__dirname, '..', 'node_modules')
   },
   {
-    test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+    test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf)$/,
     loader: 'url',
     query: {
         name: '[hash].[ext]',
@@ -33,10 +33,14 @@ var commonLoaders = [
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     loader: 'url-loader?limit=10000&mimetype=application/font-woff'
   },
-  {
-    test: /\.(ttf|eot|svg)(\?.*)?$/,
-    loader: 'file-loader'
-  }
+  // {
+  //   test: /\.(ttf|eot|svg)(\?.*)?$/,
+  //   loader: 'file-loader'
+  // },
+  // {
+  //   test: /webfont\.(ttf|eot|svg)(\?.*)?$/,
+  //   loader: 'file-loader'
+  // }
 ];
 
 var postCSSConfig = function () {

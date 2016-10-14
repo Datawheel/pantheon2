@@ -53,7 +53,7 @@
     }
 
     &.explore::before {
-      background: url('/globalNav/explore.svg') no-repeat;
+      background: url('../../images/globalNav/explore.svg') no-repeat;
       background-size: contain;
       left: -20px;
       top: -3px;
@@ -62,7 +62,7 @@
     }
 
     &.profiles::before {
-      background: url('/globalNav/profile.svg') no-repeat;
+      background: url('../../images/globalNav/profile.svg') no-repeat;
       background-size: contain;
       left: -18px;
       top: -4px;
@@ -71,7 +71,7 @@
     }
 
     &.about::before {
-      background: url('/globalNav/about.svg') no-repeat;
+      background: url('../../images/globalNav/about.svg') no-repeat;
       background-size: contain;
       left: -20px;
       top: -2px;
@@ -80,7 +80,7 @@
     }
 
     &.data::before {
-      background: url('/globalNav/data.svg') no-repeat;
+      background: url('../../images/globalNav/data.svg') no-repeat;
       background-size: contain;
       left: -19px;
       top: -2px;

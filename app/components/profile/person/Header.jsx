@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import styles from 'css/components/profile/header';
+import sparklineSvg from 'images/sparkline.svg';
 
 const Header = ({ pageviews, person }) => {
   // NOTE:
@@ -21,7 +22,7 @@ const Header = ({ pageviews, person }) => {
         <h1 className='profile-name'>{person.name}</h1>
         <p className='date-subtitle'>{person.birthyear.name} - {person.deathyear ? `${person.deathyear.name}` : "Present"}</p>
         <pre>
-          <img className='sparkline' src={`/sparkline.svg`} alt={`Sparkline here`} />
+          <img className='sparkline' src={sparklineSvg} alt={`Sparkline here`} />
         </pre>
       </div>
     </header>
