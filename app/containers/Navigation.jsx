@@ -5,6 +5,7 @@ import { logOut, activateSearch } from 'actions/users';
 import classNames from 'classnames/bind';
 import styles from 'css/components/navigation';
 import pantheonLogoSvg from 'images/logo.svg';
+import searchSvg from 'images/icon-search.svg';
 
 const Navigation = ({ user, logOut, activateSearch }) => {
     return (
@@ -28,7 +29,9 @@ const Navigation = ({ user, logOut, activateSearch }) => {
             <Link to="/data" className='item-link data' activeClassName='active'>Data</Link>
           </li>
           <li className='item'>
-            <div onClick={ activateSearch }>Search</div>
+            <span onClick={ activateSearch }>
+              <img className='search-btn' src={searchSvg} alt={`Search`} />
+            </span>
           </li>
         </ul>
       </nav>
