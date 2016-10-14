@@ -61,28 +61,31 @@ if not place_lookup:
 print "First 5 places in DB:"
 print place_lookup.items()[:5]
 
-cursor.execute("SELECT name, id from occupation")
-occ_lookup = {r[0].upper():r[1] for r in cursor.fetchall()}
+cursor.execute("SELECT name, id from profession")
+prof_lookup = {r[0].upper():r[1] for r in cursor.fetchall()}
 
-if not occ_lookup:
+def slugify(s):
+    return s.lower().replace("&", "and").replace(" ", "_")
+
+if not prof_lookup:
     with open('data/classification.csv', 'rb') as cfile:
         creader = csv.reader(cfile, delimiter=',', quotechar='"')
         creader.next()
         for row in creader:
-            [occupation, industry, domain, group] = map(str.lower, row)
-            slug = occupation.replace(" ", "_")
+            [profession, industry, domain, group] = map(str.title, row)
+            [profession_slug, industry_slug, domain_slug, group_slug] = map(slugify, row)
 
-            query = 'INSERT INTO occupation (slug, name, industry, domain, "group") VALUES (%s, %s, %s, %s, %s) RETURNING id;'
-            data = (slug, occupation, industry, domain, group)
+            query = 'INSERT INTO profession (slug, name, industry, industry_slug, domain, domain_slug, "group", group_slug) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;'
+            data = (profession_slug, profession, industry, industry_slug, domain, domain_slug, group, group_slug)
 
             cursor.execute(query, data)
             res = cursor.fetchone()
             last_inserted_id = res[0]
 
-            occ_lookup[occupation.upper()] = last_inserted_id
+            prof_lookup[profession.upper()] = last_inserted_id
     conn.commit()
 print "First 5 occupations in DB:"
-print occ_lookup.items()[:5]
+print prof_lookup.items()[:5]
 
 with open('data/Pantheon2.0_Oct11.csv', 'rb') as pfile:
     preader = csv.DictReader(pfile, delimiter=',', quotechar='"')
@@ -177,11 +180,11 @@ with open('data/Pantheon2.0_Oct11.csv', 'rb') as pfile:
         # Gender
         gender = True if row["gender"] == "female" else False
 
-        # Occupation
+        # Profession
         try:
-            occupation = occ_lookup[row["occupation"]]
+            profession = prof_lookup[row["occupation"]]
         except:
-            print "[ERROR] Cannot find occupation:", row["occupation"]
+            print "[ERROR] Cannot find profession:", row["occupation"]
 
         # VALUES
         langs = int(row["L"])
@@ -201,10 +204,10 @@ with open('data/Pantheon2.0_Oct11.csv', 'rb') as pfile:
             ADD TO DB
             ###########################
         '''
-        # print wiki_id, name, slug, gender, birthyear_id, deathyear_id, birthplace_id, birthcountry_id, deathplace_id, deathcountry_id, occupation, langs, twitter, alive
+        # print wiki_id, name, slug, gender, birthyear_id, deathyear_id, birthplace_id, birthcountry_id, deathplace_id, deathcountry_id, profession, langs, twitter, alive
 
-        query = 'INSERT INTO person (wiki_id, name, slug, gender, birthyear, deathyear, birthplace, birthcountry, deathplace, deathcountry, occupation, langs, twitter, alive) VALUES (%s, %s, %s, %s,%s, %s, %s,%s, %s, %s, %s, %s, %s, %s) RETURNING id;'
-        data = (wiki_id, name, slug, gender, birthyear_id, deathyear_id, birthplace_id, birthcountry_id, deathplace_id, deathcountry_id, occupation, langs, twitter, alive)
+        query = 'INSERT INTO person (wiki_id, name, slug, gender, birthyear, deathyear, birthplace, birthcountry, deathplace, deathcountry, profession, langs, twitter, alive) VALUES (%s, %s, %s, %s,%s, %s, %s,%s, %s, %s, %s, %s, %s, %s) RETURNING id;'
+        data = (wiki_id, name, slug, gender, birthyear_id, deathyear_id, birthplace_id, birthcountry_id, deathplace_id, deathcountry_id, profession, langs, twitter, alive)
         cursor.execute(query, data)
         conn.commit()
         # raw_input('')

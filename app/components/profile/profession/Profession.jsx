@@ -29,7 +29,7 @@ class Profession extends Component {
     return (
       <div>
         <Helmet title={profession.name} meta={[ {property: 'og:title', content: profession.name}, ]} />
-        <Header domain={profession} />
+        <Header profession={profession} />
         <ProfileNav sections={sections} />
         <Intro profession={profession} />
       </div>

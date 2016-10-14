@@ -32,14 +32,17 @@ CREATE TABLE year
   num_died integer
 );
 
-CREATE TABLE occupation
+CREATE TABLE profession
 (
   id serial PRIMARY KEY,
   slug CHARACTER VARYING(255) NOT NULL,
-  name text NOT NULL,
-  industry text NOT NULL,
-  domain text NOT NULL,
-  "group" text NOT NULL,
+  name CHARACTER VARYING(255) NOT NULL,
+  industry CHARACTER VARYING(255),
+  industry_slug CHARACTER VARYING(255),
+  domain CHARACTER VARYING(255),
+  domain_slug CHARACTER VARYING(255),
+  "group" CHARACTER VARYING(255),
+  group_slug CHARACTER VARYING(255),
   num_born integer
 );
 

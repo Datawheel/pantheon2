@@ -13,7 +13,23 @@ export function makeProfessionRequest(method, id, data, api = '/profession') {
 }
 
 export function fetchProfession(store) {
-  const prom = makeProfessionRequest('get', store["id"]);
+  const prom = makeProfessionRequest('get', store["id"]).then(function(profIdRes) {
+    if(!profIdRes.data.length) {
+      return makeProfessionRequest('get', null, null, `/profession?industry_slug=eq.${store["id"]}`).then(function(profIdRes) {
+        if(!profIdRes.data.length) {
+          return makeProfessionRequest('get', null, null, `/profession?domain_slug=eq.${store["id"]}`).then(function(profIdRes) {
+            if(!profIdRes.data.length) {
+              return makeProfessionRequest('get', null, null, `/profession?group_slug=eq.${store["id"]}`);
+            }
+            return makeProfessionRequest('get', null, null, `/profession?domain_slug=eq.${store["id"]}`);
+          })
+        }
+        return makeProfessionRequest('get', null, null, `/profession?industry_slug=eq.${store["id"]}`);
+      })
+    }
+    return makeProfessionRequest('get', store["id"]);
+  })
+
   return {
     type: "GET_PROFESSION",
     promise: prom
