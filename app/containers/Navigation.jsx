@@ -12,22 +12,24 @@ const Navigation = ({ user, logOut, activateSearch }) => {
     return (
       <nav className={cx('navigation')} role="navigation">
         <ul>
-          <li>
-            <Link to="/explore" className={cx('item')} activeClassName={cx('active')}>Explore</Link>
+          <li className={cx('item')}>
+            <Link to="/explore" className={cx('item-link', 'explore')} activeClassName={cx('active')}>Explore</Link>
           </li>
-          <li>
-            <Link to="/profile" className={cx('item')} activeClassName={cx('active')}>Profiles</Link>
+          <li className={cx('item')}>
+            <Link to="/profile" className={cx('item-link', 'profiles')} activeClassName={cx('active')}>Profiles</Link>
           </li>
-          <li>
-            <Link to="/" className={cx('item', 'logo')} activeClassName={cx('active')}>Pantheon</Link>
+          <li className={cx('item')}>
+            <Link to="/" className={cx('home')} activeClassName={cx('active')}>
+              <img className={cx('logo')} src={`/logo.svg`} alt={`Pantheon`} />
+            </Link>
           </li>
-          <li>
-            <Link to="/about" className={cx('item')} activeClassName={cx('active')}>About</Link>
+          <li className={cx('item')}>
+            <Link to="/about" className={cx('item-link', 'about')} activeClassName={cx('active')}>About</Link>
           </li>
-          <li>
-            <Link to="/data" className={cx('item')} activeClassName={cx('active')}>Data</Link>
+          <li className={cx('item')}>
+            <Link to="/data" className={cx('item-link', 'data')} activeClassName={cx('active')}>Data</Link>
           </li>
-          <li>
+          <li className={cx('item')}>
             <Icon name="search" onClick={ activateSearch } />
           </li>
         </ul>

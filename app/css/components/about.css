@@ -3,6 +3,8 @@
 .header {
   @apply --heading;
   text-align: center;
+  position:relative;
+  top: 200px;
 }
 
 .description { @apply --normal; }

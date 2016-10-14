@@ -3,7 +3,7 @@
 @import 'common/layout';
 @import 'common/typography';
 
-@import url(https://fonts.googleapis.com/css?family=Amiko);
+@import url('https://fonts.googleapis.com/css?family=Amiko:400,600,700');
 
 
 * { box-sizing: border-box; }

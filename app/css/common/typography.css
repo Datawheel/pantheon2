@@ -31,4 +31,25 @@
     line-height: 24px;
   }
 
+  --globalNav {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 1.96px;
+  }
+
+  --dropdownLink {
+    &::after {
+      content: '';
+      position: relative;
+      display: inline-block;
+      height: 6px;
+      width: 12px;
+      margin: 0 0 2px 3px;
+      background: url('/tri-down.svg') no-repeat;
+      background-size: contain;
+    }
+  }
+
 }
