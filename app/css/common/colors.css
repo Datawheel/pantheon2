@@ -36,4 +36,15 @@
   --colorLemonade:            #FFFBE2;
 
   --colorDarkerLemonade:       color(var(--colorLemonade) blackness(+20%));
+
+  /* color themes */
+  --themeDark {
+    background-color: var(--colorDark);
+    color: var(--colorEggshell);
+  }
+
+  --themeLight {
+    background-color: var(--colorEggshell);
+    color: var(--colorDark);
+  }
 }

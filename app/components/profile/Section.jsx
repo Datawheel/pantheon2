@@ -4,7 +4,7 @@ import styles from 'css/components/profile/section';
 const Section = ({ children, index, numSections, slug, title }) => {
 
   return (
-    <section>
+    <section className={'profile-section'}>
       <a name={slug}>{title}</a>
       {[...Array(numSections)].map((x, i) =>
         i === index ? 'circle-icon' : 'open-circle-icon'

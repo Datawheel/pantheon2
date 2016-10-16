@@ -31,6 +31,20 @@
     line-height: 24px;
   }
 
+  --bodyText {
+    font-size: 12px;
+    line-height: 22px;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  --smallCaps {
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
   --globalNav {
     font-size: 12px;
     font-weight: 600;
@@ -48,7 +62,20 @@
       height: 5px;
       width: 10px;
       margin: 0 0 2px 2px;
-      background: url('/tri-down.svg') no-repeat;
+      background: url('/images/tri-down.svg') no-repeat;
+      background-size: contain;
+    }
+  }
+
+  --deepLink {
+    &::after {
+      content: '';
+      position: relative;
+      display: inline-block;
+      height: 10px;
+      width: 5px;
+      margin: 0 0 2px 2px;
+      background: url('/images/tri-right.svg') no-repeat;
       background-size: contain;
     }
   }

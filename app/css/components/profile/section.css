@@ -1,5 +1,7 @@
-section {
-  border: solid 1px black;
+@import '../../common/colors';
+@import '../../common/typography';
+
+.profile-section {
 
   &:before {
     background: black;
