@@ -87,7 +87,18 @@
       width: 16px;
       height: 16px;
     }
+  }
 
+  & .search-btn {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    padding: 24px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.6;
+    }
   }
 
   & .active {
