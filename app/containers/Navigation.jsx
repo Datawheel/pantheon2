@@ -28,9 +28,9 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           <li className='item'>
             <Link to="/data" className='item-link data' activeClassName='active'>Data</Link>
           </li>
-          <li className='item'>
+          <li className='item search-btn'>
             <span onClick={ activateSearch }>
-              <img className='search-btn' src={searchSvg} alt={`Search`} />
+              <img src={searchSvg} alt={`Search`} />
             </span>
           </li>
         </ul>

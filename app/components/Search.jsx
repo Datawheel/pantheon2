@@ -44,7 +44,7 @@ class Search extends Component {
     const { activateSearch } = this.props;
     return (
       <div className='search'>
-        <div className='search_close'>
+        <div className='search-close'>
           <div onClick={ activateSearch }>X</div>
         </div>
         <input type="text" ref={(el) => this._searchInput = el} onChange={this.onChange.bind(this)}/ >
