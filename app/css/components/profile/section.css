@@ -2,13 +2,49 @@
 @import '../../common/typography';
 
 .profile-section {
+  max-width: 1200px;
+  margin: 70px auto;
 
-  &:before {
+  &:not(:last-child) {
+  }
+
+  & > * {
+    width: 100%;
+  }
+
+  & .section-head {
+    & > * {
+      display: inline-block;
+    }
+
+    & h4 {
+      @apply --profileSectionTitle;
+      margin: 0;
+      padding-right: 10px;
+    }
+  }
+
+  & .icon-circle {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border: 1px solid var(--colorSlate);
+    border-radius: 50%;
+    margin: 0 6px;
+    cursor: pointer;
+
+    &.active {
+      background-color: var(--colorSlate);
+      cursor: default;
+    }
+  }
+
+  /*&:before {
     background: black;
     color: white;
     content: "section";
     display: block;
     font-size: 11px;
     text-align: center;
-  }
+  }*/
 }

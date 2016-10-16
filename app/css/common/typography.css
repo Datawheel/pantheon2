@@ -89,4 +89,12 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  --profileSectionTitle {
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
 }

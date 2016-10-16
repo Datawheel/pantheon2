@@ -5,11 +5,17 @@ const Section = ({ children, index, numSections, slug, title }) => {
 
   return (
     <section className={'profile-section'}>
-      <a name={slug}>{title}</a>
-      {[...Array(numSections)].map((x, i) =>
-        i === index ? 'circle-icon' : 'open-circle-icon'
-      )}
-      { children }
+      <div className={'section-head'}>
+        <a name={slug}><h4>{title}</h4></a>
+        <span className={'section-nav'}>
+          {[...Array(numSections)].map((x, i) =>
+            i === index ? <span className={'icon-circle active'}></span> : <span className={'icon-circle'}></span>
+          )}
+        </span>
+      </div>
+      <div className={'section-body'}>
+        { children }
+      </div>
     </section>
   );
 }
