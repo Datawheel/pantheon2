@@ -17,7 +17,7 @@ const clientConfig = {
 // axios.defaults.baseURL = `http://${clientConfig.host}:${clientConfig.port}`;
 // axios.defaults.baseURL = `http://${clientConfig.host}`;
 axios.defaults.baseURL = "http://localhost:3100";
-console.log(axios.defaults.baseURL)
+console.log("API endpoint:", axios.defaults.baseURL)
 
 const analtyicsScript =
   typeof trackingID === "undefined" ? ``

@@ -17,10 +17,38 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
   }
 
   & li {
     display: inline-block;
+
+    &:hover {
+      & ul {
+        display: block;
+      }
+    }
+
+    & ul {
+      border: solid 1px var(--colorDark);
+      display: none;
+      margin: 10px 0 0 -20px;
+      padding: 0;
+      position: absolute;
+
+      & li {
+        display: block;
+
+        & a {
+          display: block;
+          padding: 0 10px 10px 10px;
+        }
+        &:first-child a {
+          padding: 10px;
+        }
+      }
+    }
+
   }
 
   & a {
@@ -34,11 +62,15 @@
 
   & .item {
     padding: 8px 16px;
+
+    & > .item-link {
+      @apply --dropdownLink;
+      padding: 0 0 10px 0;
+    }
   }
 
   & .item-link {
     @apply --globalNav;
-    @apply --dropdownLink;
     color: var(--colorDark);
     position: relative;
 
