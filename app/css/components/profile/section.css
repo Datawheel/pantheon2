@@ -69,7 +69,16 @@
 
     & a {
       @apply --smallCaps;
-      @apply --deepLink;
+      &::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        height: 10px;
+        width: 5px;
+        margin: 0 0 2px 2px;
+        background: url('../../../images/tri-right.svg') no-repeat;
+        background-size: contain;
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 UPDATE person
 SET
-	occupation_rank=subq.occupation_rank, occupation_rank_unique=subq.occupation_rank_unique,
+	profession_rank=subq.profession_rank, profession_rank_unique=subq.profession_rank_unique,
 	birthyear_rank=subq.birthyear_rank, birthyear_rank_unique=subq.birthyear_rank_unique,
 	birthcountry_rank=subq.birthcountry_rank, birthcountry_rank_unique=subq.birthcountry_rank_unique,
 	birthplace_rank=subq.birthplace_rank, birthplace_rank_unique=subq.birthplace_rank_unique,
@@ -10,8 +10,8 @@ SET
 FROM (
 	SELECT
 		id AS person,
-		dense_rank() OVER (PARTITION BY occupation ORDER BY langs DESC) as occupation_rank,
-		row_number() OVER (PARTITION BY occupation ORDER BY langs DESC) as occupation_rank_unique,
+		dense_rank() OVER (PARTITION BY profession ORDER BY langs DESC) as profession_rank,
+		row_number() OVER (PARTITION BY profession ORDER BY langs DESC) as profession_rank_unique,
 		dense_rank() OVER (PARTITION BY birthyear ORDER BY langs DESC) as birthyear_rank,
 		row_number() OVER (PARTITION BY birthyear ORDER BY langs DESC) as birthyear_rank_unique,
 		dense_rank() OVER (PARTITION BY birthcountry ORDER BY langs DESC) as birthcountry_rank,
@@ -29,10 +29,10 @@ FROM (
 ) AS subq
 WHERE person.id=subq.person;
 
-UPDATE occupation
+UPDATE profession
 SET num_born=subq.num_born
-FROM (SELECT occupation, count(*) AS num_born FROM person GROUP BY occupation) AS subq
-WHERE occupation.id=subq.occupation;
+FROM (SELECT profession, count(*) AS num_born FROM person GROUP BY profession) AS subq
+WHERE profession.id=subq.profession;
 
 UPDATE place
 SET num_born=subq.num_born
@@ -64,50 +64,50 @@ SET num_died=subq.num_died
 FROM (SELECT deathyear, count(*) AS num_died FROM person GROUP BY deathyear) AS subq
 WHERE year.id=subq.deathyear;
 
-INSERT INTO place_occupation (place, occupation, num_born) (
+INSERT INTO place_profession (place, profession, num_born) (
 SELECT
-    birthcountry, occupation, count(*)
+    birthcountry, profession, count(*)
 FROM
     person
 WHERE
-    birthcountry IS NOT NULL AND occupation IS NOT NULL
+    birthcountry IS NOT NULL AND profession IS NOT NULL
 GROUP BY
-    birthcountry, occupation
-ORDER BY birthcountry, occupation
+    birthcountry, profession
+ORDER BY birthcountry, profession
 );
 
-UPDATE place_occupation
+UPDATE place_profession
 SET num_died=subq.num_died
 FROM (
-    SELECT deathcountry, occupation, count(*) AS num_died
+    SELECT deathcountry, profession, count(*) AS num_died
     FROM person
-    WHERE deathcountry IS NOT NULL AND occupation IS NOT NULL
-    GROUP BY deathcountry, occupation
+    WHERE deathcountry IS NOT NULL AND profession IS NOT NULL
+    GROUP BY deathcountry, profession
 ) AS subq
-WHERE place_occupation.place=subq.deathcountry AND place_occupation.occupation=subq.occupation;
+WHERE place_profession.place=subq.deathcountry AND place_profession.profession=subq.profession;
 
-INSERT INTO place_occupation (place, occupation, num_born) (
+INSERT INTO place_profession (place, profession, num_born) (
 SELECT
-    birthplace, occupation, count(*)
+    birthplace, profession, count(*)
 FROM
     person
 WHERE
-    birthplace IS NOT NULL AND occupation IS NOT NULL
+    birthplace IS NOT NULL AND profession IS NOT NULL
 GROUP BY
-    birthplace, occupation
-ORDER BY birthplace, occupation
+    birthplace, profession
+ORDER BY birthplace, profession
 );
 
-UPDATE place_occupation
+UPDATE place_profession
 SET num_died=subq.num_died
 FROM (
-    SELECT deathplace, occupation, count(*) AS num_died
+    SELECT deathplace, profession, count(*) AS num_died
     FROM person
-    WHERE deathplace IS NOT NULL AND occupation IS NOT NULL
-    GROUP BY deathplace, occupation
+    WHERE deathplace IS NOT NULL AND profession IS NOT NULL
+    GROUP BY deathplace, profession
 ) AS subq
-WHERE place_occupation.place=subq.deathplace AND place_occupation.occupation=subq.occupation;
+WHERE place_profession.place=subq.deathplace AND place_profession.profession=subq.profession;
 
-UPDATE person 
+UPDATE person
 SET deathplace=NULL, deathplace_rank=NULL, deathplace_rank_unique=NULL, deathcountry=NULL, deathcountry_rank=NULL, deathcountry_rank_unique=NULL, deathyear=NULL, deathyear_rank=NULL, deathyear_rank_unique=NULL
 WHERE alive=TRUE;

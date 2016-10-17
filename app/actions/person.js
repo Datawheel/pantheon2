@@ -30,7 +30,7 @@ export function fetchProfessionRanks(store) {
         let rankSub = Math.max(1, parseInt(occRank.profession_rank_unique) - 2);
         let rankPlus = Math.max(5, parseInt(occRank.profession_rank_unique) + 2);
         if(rankPlus > occRank.profession.num_born){
-          rankSub = occRank.profession.num_born - 5;
+          rankSub = Math.max(1, (occRank.profession.num_born - 5));
           rankPlus = occRank.profession.num_born;
         }
         const apiURL = `/person?profession=eq.${occId}&profession_rank_unique=gte.${rankSub}&profession_rank_unique=lte.${rankPlus}&order=profession_rank_unique&select=profession{*},birthcountry{*},langs,profession_rank,profession_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
