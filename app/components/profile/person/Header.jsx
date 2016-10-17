@@ -1,12 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import styles from 'css/components/profile/header';
 import sparklineSvg from 'images/sparkline.svg';
+import Viz from "components/viz/Index";
 
 const Header = ({ pageviews, person }) => {
-  // NOTE:
-  // pageviews = data for spark line
-  // each row = {num_pageviews: x, pageview_date: "YYYY-MM-DDT00:00:00", person: ID}
-  // console.log(pageviews)
+
+  const viewData = pageviews.map(d => {
+    d.pageview_date = new Date(d.pageview_date);
+    return d;
+  });
+  const dates = viewData.map(d => d.pageview_date);
+  const sparkTicks = [new Date(Math.min(...dates)), new Date(Math.max(...dates))];
+  const sparkNums = sparkTicks.map(Number);
+  const circleData = viewData.filter(d => sparkNums.includes(d.pageview_date.getTime())).sort((a, b) => a.pageview_date - b.pageview_date);
+  const sparkData = viewData.concat([
+    Object.assign({}, circleData[0], {shape: "Circle", person: "start"}),
+    Object.assign({}, circleData[1], {shape: "Circle", person: "end"})
+  ]);
 
   return (
     <header className='hero'>
@@ -22,7 +32,58 @@ const Header = ({ pageviews, person }) => {
         <h1 className='profile-name'>{person.name}</h1>
         <p className='date-subtitle'>{person.birthyear.name} - {person.deathyear ? `${person.deathyear.name}` : "Present"}</p>
         <pre>
-          <img className='sparkline' src={sparklineSvg} alt={`Sparkline here`} />
+          <Viz type="LinePlot"
+               config={{
+                 data: sparkData,
+                 height: 100,
+                 groupBy: "person",
+                 legend: false,
+                 on: {
+                   click: null,
+                   mouseenter: null,
+                   mouseleave: null,
+                   mousemove: null
+                 },
+                 shape: d => d.shape || "Line",
+                 shapeConfig: {
+                   Circle: {
+                     fill: "#4B4A48",
+                     r: () => 3.5
+                   },
+                   Line: {
+                     fill: "none",
+                     stroke: "#4B4A48",
+                     strokeWidth: 1
+                   }
+                 },
+                 time: d => d.pageview_date,
+                 timeline: false,
+                 width: 275,
+                 x: d => d.pageview_date,
+                 xConfig: {
+                   barConfig: {"stroke-width": 0},
+                   gridConfig: {"stroke-width": 0},
+                   labels: sparkTicks,
+                   shapeConfig: {
+                     fill: "#4B4A48",
+                     fontColor: "#4B4A48",
+                     fontFamily: () => "Amiko",
+                     fontSize: () => 8,
+                     stroke: "#4B4A48"
+                   },
+                   tickFormat: d => new Date(d).getFullYear(),
+                   ticks: sparkTicks,
+                   tickSize: 0,
+                   title: false
+                 },
+                 y: d => d.num_pageviews,
+                 yConfig: {
+                   barConfig: {"stroke-width": 0},
+                   labels: [],
+                   title: false,
+                   ticks: []
+                 }
+               }} />
         </pre>
       </div>
     </header>

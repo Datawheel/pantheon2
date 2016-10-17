@@ -40,7 +40,7 @@ class Viz extends Component {
     delete config.attrs;
 
     // Preps groupBy, using attrs if necessary.
-    config.groupBy = config.groupBy ? config.groupBy.map(function(g) {
+    config.groupBy = config.groupBy ? (config.groupBy instanceof Array ? config.groupBy : [config.groupBy]).map(function(g) {
       return function(d) {
 
         let val;
@@ -84,7 +84,9 @@ class Viz extends Component {
       .config(config)
       .select(this.refs.svg);
 
-    this.setState({viz});
+    setTimeout(() => {
+      this.setState({viz});
+    }, 500);
 
   }
 
@@ -93,9 +95,10 @@ class Viz extends Component {
   }
 
   render() {
+    const {height, width} = this.props.config;
     return (
       <div className="viz">
-        <svg ref="svg" style={{width: "100%", height: "500px"}}></svg>
+        <svg ref="svg" style={{width: width || "100%", height: height || 500}}></svg>
       </div>
     );
   }
