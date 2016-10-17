@@ -4,16 +4,7 @@ import {LinePlot} from "d3plus-plot";
 import {Treemap} from "d3plus-treemap";
 const types = {LinePlot, Treemap};
 
-const colors = {
-  "sports": "#BB3B57",
-  "science_and_technology": "#0E5E5B",
-  "public_figure": "#67AF8C",
-  "institutions": "#B12D11",
-  "humanities": "#732945",
-  "exploration": "#4C5ED7",
-  "business_and_law": "#4F680A",
-  "arts": "#D28629"
-};
+import {COLORS_DOMAIN} from "types";
 
 const uniques = ["birthyear", "id"].reduce((obj, k) => {
   obj[k] = a => {
@@ -75,7 +66,7 @@ class Viz extends Component {
           if (d.color) return d.color;
           else if (d.profession !== void 0) {
             let occ = d.profession.constructor === Array ? d.profession[0] : d.profession;
-            return colors[attrs[occ].domain_slug];
+            return COLORS_DOMAIN[attrs[occ].domain_slug];
           }
           return "#ccc";
         }

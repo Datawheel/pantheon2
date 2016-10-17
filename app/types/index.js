@@ -33,3 +33,14 @@ export const SIGNUP_ERROR_USER = 'SIGNUP_ERROR_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
 export const LOGOUT_SUCCESS_USER = 'LOGOUT_SUCCESS_USER';
 export const LOGOUT_ERROR_USER = 'LOGOUT_ERROR_USER';
+
+export const COLORS_DOMAIN = {
+  "sports": "#BB3B57",
+  "science_and_technology": "#0E5E5B",
+  "public_figure": "#67AF8C",
+  "institutions": "#B12D11",
+  "humanities": "#732945",
+  "exploration": "#4C5ED7",
+  "business_and_law": "#4F680A",
+  "arts": "#D28629"
+};
