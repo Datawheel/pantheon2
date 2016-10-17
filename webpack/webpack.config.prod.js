@@ -37,14 +37,19 @@ var commonLoaders = [
         limit: 10000,
     }
   },
-  { test: /\.css$/,
-    loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module!postcss-loader')
+  // { test: /\.css$/,
+  //   loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module!postcss-loader')
+  // }
+  {
+    test: /\.css$/,
+    loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader')
   }
 ];
 
 var postCSSConfig = function () {
   return [
     require('postcss-simple-vars')(),
+    require('postcss-nesting')(),
     require('postcss-import')(),
     require('postcss-cssnext')({
       browsers: ['> 1%', 'last 2 versions']

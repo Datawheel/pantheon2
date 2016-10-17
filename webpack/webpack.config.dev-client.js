@@ -101,12 +101,7 @@ module.exports = {
         {
           test: /\.css$/,
           // loader: 'style!css?module&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader',
-          loader: 'style!css!postcss-loader',
-          exclude: /font-awesome.css/
-        },
-        {
-          test: /font-awesome.css/,
-          loader: 'style!css',
+          loader: 'style!css!postcss-loader'
         }
       ])
     },

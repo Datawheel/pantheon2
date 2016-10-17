@@ -8,7 +8,7 @@ import helmet from 'helmet';
 
 
 export default (app) => {
-  app.set('port', (process.env.PORT || 3000));
+  app.set('port', (process.env.PORT || 3300));
 
   if (ENV === 'production') {
     app.use(gzip());
@@ -17,6 +17,8 @@ export default (app) => {
   }
 
   app.use(express.static(path.join(__dirname, '../..', 'img')));
+
+  app.use(express.static(path.join(__dirname, '../..', 'public')));
 
   // I am adding this here so that the Heroku deploy will work
   // Indicates the app is behind a front-facing proxy,
