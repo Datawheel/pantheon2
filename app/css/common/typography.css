@@ -38,6 +38,18 @@
     font-weight: 400;
   }
 
+  --bodyLink {
+    font-weight: 700;
+    color: currentColor;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+      border-bottom: 1px solid currentColor;
+    }
+  }
+
   --smallCaps {
     font-size: 12px;
     font-weight: 400;
@@ -95,6 +107,13 @@
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 1.5px;
+  }
+
+  --profileVizTitle {
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--colorBlackhole);
+    text-transform: capitalize;
   }
 
 }

@@ -12,29 +12,36 @@ const ProfessionRanking = ({ person, ranking }) => {
       worsePeers = null;
 
   if(ranking.betterPeers.length){
-    betterPeers = <span>Before { person.gender ? "her" : "him" } are: <AnchorList items={ranking.betterPeers} name={(d) => `${d.name} (${d.birthcountry.country_code.toUpperCase()})`} url={(d) => `/profile/person/${d.slug}/`} />. </span>
+    betterPeers = <span>Before { person.gender ? "her" : "him" } are <AnchorList items={ranking.betterPeers} name={(d) => `${d.name} (${d.birthcountry.country_code.toUpperCase()})`} url={(d) => `/profile/person/${d.slug}/`} />. </span>
   }
   if(ranking.worsePeers.length){
-    worsePeers = <span>After { person.gender ? "her" : "him" } are: <AnchorList items={ranking.worsePeers} name={(d) => `${d.name} (${d.birthcountry.country_code.toUpperCase()})`} url={(d) => `/profile/person/${d.slug}/`} />.</span>
+    worsePeers = <span>After { person.gender ? "her" : "him" } are <AnchorList items={ranking.worsePeers} name={(d) => `${d.name} (${d.birthcountry.country_code.toUpperCase()})`} url={(d) => `/profile/person/${d.slug}/`} />.</span>
   }
 
   return (
     <div>
       <p>
-        Among {person.profession.name}, {person.name} ranks {ranking.me.rank_unique} out of {person.profession.num_born}.&nbsp;
+        Among {person.profession.name}s, {person.name} ranks {ranking.me.rank_unique} out of {person.profession.num_born}.&nbsp;
         { betterPeers }
         { worsePeers }
       </p>
-      <div>
+      <div className={'rank-title'}>
+        <h3>Top Global {person.profession.name}s</h3>
+        <a href='#'>Go to all Rankings</a>
+      </div>
+      <ul className={'rank-list'}>
         {ranking.peers.map((peer) =>
-          <li key={peer.id}>
-            <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+          <li key={peer.id} className={ranking.me.profession_rank_unique === peer.profession_rank_unique ? 'rank-me' : null}>
+            <div className={'rank-photo'}>
+              <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+            </div>
             <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-            <p>{peer.birthyear} - {peer.deathyear}</p>
-            <p>Rank: {peer.profession_rank}</p>
+            <p className={'rank-year'}>{peer.birthyear} - {peer.deathyear ? `${peer.deathyear}` : 'Present'}</p>
+            <p className={'rank-prof'}>{peer.profession.name}</p>
+            <p className={'rank-num'}>Rank <span>{peer.profession_rank}</span></p>
           </li>
         )}
-      </div>
+      </ul>
     </div>
   )
 }

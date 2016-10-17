@@ -15,10 +15,10 @@ const YearRanking = ({ person, ranking }) => {
   });
 
   if(birthyearRanking.betterPeers.length){
-    betterBirthPeers = <span>Before { person.gender ? "her" : "him" } are: {<AnchorList items={birthyearRanking.betterPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />}. </span>
+    betterBirthPeers = <span>Before { person.gender ? "her" : "him" } are {<AnchorList items={birthyearRanking.betterPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />}. </span>
   }
   if(birthyearRanking.worsePeers.length){
-    worseBirthPeers = <span>After { person.gender ? "her" : "him" } are: {<AnchorList items={birthyearRanking.worsePeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />}.</span>
+    worseBirthPeers = <span>After { person.gender ? "her" : "him" } are {<AnchorList items={birthyearRanking.worsePeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />}.</span>
   }
 
   if(ranking.deathyearPeers.length){
@@ -27,10 +27,10 @@ const YearRanking = ({ person, ranking }) => {
       worsePeers: ranking.deathyearPeers.filter(p => p.deathyear_rank_unique > ranking.me.deathyear_rank_unique)
     });
     if(deathyearRanking.betterPeers.length){
-      betterDeathPeers = <span>Before { person.gender ? "her" : "him" } are: {<AnchorList items={deathyearRanking.betterPeers} name={d => d.deathcountry ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />}. </span>
+      betterDeathPeers = <span>Before { person.gender ? "her" : "him" } are {<AnchorList items={deathyearRanking.betterPeers} name={d => d.deathcountry ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />}. </span>
     }
     if(deathyearRanking.worsePeers.length){
-      worseDeathPeers = <span>After { person.gender ? "her" : "him" } are: {<AnchorList items={deathyearRanking.worsePeers} name={d => d.deathcountry ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />}.</span>
+      worseDeathPeers = <span>After { person.gender ? "her" : "him" } are {<AnchorList items={deathyearRanking.worsePeers} name={d => d.deathcountry ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />}.</span>
     }
   }
 
@@ -47,29 +47,40 @@ const YearRanking = ({ person, ranking }) => {
         { betterDeathPeers }
         { worseDeathPeers }
       </p>
-      <div>
+      <div className={'rank-title'}>
+        <h3>People Born in {person.birthyear.name}</h3>
+        <a href='#'>Go to all Rankings</a>
+      </div>
+      <ul className={'rank-list'}>
         {ranking.birthyearPeers.map((peer) =>
-          <li key={peer.id}>
-            <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+          <li key={peer.id} className={ranking.me.birthyear_rank_unique === peer.birthyear_rank_unique ? 'rank-me' : null}>
+            <div className={'rank-photo'}>
+              <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+            </div>
             <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-            <p>{peer.birthyear} - {peer.deathyear}</p>
-            <p>Rank: {peer.birthyear_rank}</p>
+            <p className={'rank-year'}>{peer.birthyear} - {peer.deathyear ? `${peer.deathyear}` : 'Present'}</p>
+            <p className={'rank-num'}>Rank <span>{peer.birthyear_rank}</span></p>
           </li>
         )}
-      </div>
+      </ul>
       { ranking.deathyearPeers.length ?
-        <div>
-          <h3>People deceased in {person.deathyear.name}</h3>
-          <div>
+        <div className={'rank-sec-body'}>
+          <div className={'rank-title'}>
+            <h3>People Deceased in {person.deathyear.name}</h3>
+            <a href='#'>Go to all Rankings</a>
+          </div>
+          <ul className={'rank-list'}>
             {ranking.deathyearPeers.map((peer) =>
-              <li key={peer.id}>
-                <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+              <li key={peer.id} className={ranking.me.deathyear_rank_unique === peer.deathyear_rank_unique ? 'rank-me' : null}>
+                <div className={'rank-photo'}>
+                  <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+                </div>
                 <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-                <p>{peer.birthyear} - {peer.deathyear}</p>
-                <p>Rank: {peer.deathyear_rank}</p>
+                <p className={'rank-year'}>{peer.birthyear} - {peer.deathyear ? `${peer.deathyear}` : 'Present'}</p>
+                <p className={'rank-num'}>Rank <span>{peer.deathyear_rank}</span></p>
               </li>
             )}
-          </div>
+          </ul>
         </div>
         : null }
     </div>

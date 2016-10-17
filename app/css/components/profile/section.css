@@ -39,12 +39,99 @@
     }
   }
 
-  /*&:before {
-    background: black;
-    color: white;
-    content: "section";
-    display: block;
-    font-size: 11px;
+  & .section-body {
+    margin-top: 17.3px;
+
+    & p {
+      @apply --bodyText;
+      max-width: 60%;
+    }
+
+    & a {
+      @apply --bodyLink;
+    }
+
+  }
+
+  & .rank-sec-body {
+    margin-top: 15px;
+  }
+
+  & .rank-title {
     text-align: center;
-  }*/
+    margin: 0 auto;
+    padding: 10px 0 15px;
+
+    & h3 {
+      @apply --profileVizTitle;
+      margin: 0;
+    }
+
+    & a {
+      @apply --smallCaps;
+      @apply --deepLink;
+    }
+  }
+
+  & .rank-list {
+    max-width: 1200px;
+    margin: 0 auto;
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    & li {
+      display: inline-block;
+      margin: 0 18px;
+    }
+
+    & h2 {
+      margin: 13px 0 0;
+      padding: 0;
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+    }
+
+    & a {
+      text-decoration: none;
+      outline: none;
+    }
+
+    & p {
+      max-width: 100%;
+      font-size: 12px;
+      line-height: 18px;
+      letter-spacing: 0.01em;
+      text-transform: capitalize;
+    }
+
+    & .rank-prof {
+      @apply --smallCaps;
+    }
+
+    & .rank-photo {
+      width: 145px;
+      height: 145px;
+      overflow: hidden;
+      position: relative;
+      margin: auto;
+      box-sizing: border-box;
+      border: 1px solid var(--colorMatza);
+
+      & img {
+        width: 105%;
+        margin-top: -7%;
+        margin-left: -2.5%;
+      }
+    }
+
+    & .rank-me .rank-photo {
+      width: 180px;
+      height: 180px;
+    }
+  }
 }
