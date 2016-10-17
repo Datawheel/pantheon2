@@ -2,7 +2,7 @@
 import { polyfill } from 'es6-promise';
 import request from 'axios';
 import axios from 'axios';
-import * as types from 'types';
+import { GET_PERSON, NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST } from 'types'
 
 polyfill();
 
@@ -17,7 +17,7 @@ export function makePersonRequest(method, id, data, api = '/person') {
 export function fetchPerson(store) {
   const prom = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=profession{*},birthcountry{*},birthplace{*},birthyear{*},deathcountry{*},deathplace{*},deathyear{*},*`);
   return {
-    type: types.GET_PERSON,
+    type: GET_PERSON,
     promise: prom
   };
 }
@@ -27,10 +27,10 @@ export function fetchProfessionRanks(store) {
   const getOccRankPeers = getOccRank.then(function(occRankRes) {
         const occRank = occRankRes.data[0];
         const occId = occRank.profession.id;
-        let rankSub = Math.max(1, parseInt(occRank.profession_rank_unique) - 2);
-        let rankPlus = Math.max(5, parseInt(occRank.profession_rank_unique) + 2);
+        let rankSub = Math.max(1, parseInt(occRank.profession_rank_unique) - NUM_RANKINGS_PRE);
+        let rankPlus = Math.max(NUM_RANKINGS, parseInt(occRank.profession_rank_unique) + NUM_RANKINGS_POST);
         if(rankPlus > occRank.profession.num_born){
-          rankSub = Math.max(1, (occRank.profession.num_born - 5));
+          rankSub = Math.max(1, (occRank.profession.num_born - NUM_RANKINGS));
           rankPlus = occRank.profession.num_born;
         }
         const apiURL = `/person?profession=eq.${occId}&profession_rank_unique=gte.${rankSub}&profession_rank_unique=lte.${rankPlus}&order=profession_rank_unique&select=profession{*},birthcountry{*},langs,profession_rank,profession_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
@@ -52,8 +52,8 @@ export function fetchCountryRanks(store) {
   const getBCRankPeers = getCountryRank.then(function(bcRankRes) {
         const bcRank = bcRankRes.data[0];
         const bcId = bcRank.birthcountry.id;
-        const rankSub = Math.max(1, parseInt(bcRank.birthcountry_rank_unique) - 2);
-        const rankPlus = Math.max(5, parseInt(bcRank.birthcountry_rank_unique) + 2);
+        const rankSub = Math.max(1, parseInt(bcRank.birthcountry_rank_unique) - NUM_RANKINGS_PRE);
+        const rankPlus = Math.max(NUM_RANKINGS, parseInt(bcRank.birthcountry_rank_unique) + NUM_RANKINGS_POST);
         const apiURL = `/person?birthcountry=eq.${bcId}&birthcountry_rank_unique=gte.${rankSub}&birthcountry_rank_unique=lte.${rankPlus}&order=birthcountry_rank_unique&select=birthcountry{*},langs,birthcountry_rank,birthcountry_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
         return makePersonRequest('get', null, null, apiURL);
     });
@@ -63,8 +63,8 @@ export function fetchCountryRanks(store) {
         let apiURL;
         if(dcRank.deathcountry){
           const dcId = dcRank.deathcountry.id;
-          const rankSub = Math.max(1, parseInt(dcRank.deathcountry_rank_unique) - 2);
-          const rankPlus = Math.max(5, parseInt(dcRank.deathcountry_rank_unique) + 2);
+          const rankSub = Math.max(1, parseInt(dcRank.deathcountry_rank_unique) - NUM_RANKINGS_PRE);
+          const rankPlus = Math.max(NUM_RANKINGS, parseInt(dcRank.deathcountry_rank_unique) + NUM_RANKINGS_POST);
           apiURL = `/person?deathcountry=eq.${dcId}&deathcountry_rank_unique=gte.${rankSub}&deathcountry_rank_unique=lte.${rankPlus}&order=deathcountry_rank_unique&select=deathcountry{*},langs,deathcountry_rank,deathcountry_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
         }
         else {
@@ -88,8 +88,8 @@ export function fetchYearRanks(store) {
   const getBYRankPeers = getYearRank.then(function(byRankRes) {
         const byRank = byRankRes.data[0];
         const byId = byRank.birthyear.id;
-        const rankSub = Math.max(1, parseInt(byRank.birthyear_rank_unique) - 2);
-        const rankPlus = Math.max(5, parseInt(byRank.birthyear_rank_unique) + 2);
+        const rankSub = Math.max(1, parseInt(byRank.birthyear_rank_unique) - NUM_RANKINGS_PRE);
+        const rankPlus = Math.max(NUM_RANKINGS, parseInt(byRank.birthyear_rank_unique) + NUM_RANKINGS_POST);
         const apiURL = `/person?birthyear=eq.${byId}&birthyear_rank_unique=gte.${rankSub}&birthyear_rank_unique=lte.${rankPlus}&order=birthyear_rank_unique&select=birthcountry{*},langs,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
         return makePersonRequest('get', null, null, apiURL);
     });
@@ -99,8 +99,8 @@ export function fetchYearRanks(store) {
         let apiURL;
         if(dyRank.deathyear){
           const dyId = dyRank.deathyear.id;
-          const rankSub = Math.max(1, parseInt(dyRank.deathyear_rank_unique) - 2);
-          const rankPlus = Math.max(5, parseInt(dyRank.deathyear_rank_unique) + 2);
+          const rankSub = Math.max(1, parseInt(dyRank.deathyear_rank_unique) - NUM_RANKINGS_PRE);
+          const rankPlus = Math.max(NUM_RANKINGS, parseInt(dyRank.deathyear_rank_unique) + NUM_RANKINGS_POST);
           apiURL = `/person?deathyear=eq.${dyId}&deathyear_rank_unique=gte.${rankSub}&deathyear_rank_unique=lte.${rankPlus}&order=deathyear_rank_unique&select=deathcountry{*},langs,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,wiki_id,birthyear,deathyear`;
         }
         else {

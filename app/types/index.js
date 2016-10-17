@@ -1,3 +1,7 @@
+export const NUM_RANKINGS = 7;
+export const NUM_RANKINGS_PRE = Math.floor(NUM_RANKINGS/2);
+export const NUM_RANKINGS_POST = Math.floor(NUM_RANKINGS/2);
+
 export const DISMISS_MESSAGE = 'DISMISS_MESSAGE';
 
 export const CREATE_TOPIC_REQUEST = 'CREATE_TOPIC_REQUEST';
