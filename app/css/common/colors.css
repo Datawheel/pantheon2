@@ -12,6 +12,8 @@
   --colorDark:                #363636;
   --colorBlackhole:           #000;
 
+  --colorEggshellOverlay:     rgba(244, 244, 241, 0.7);
+
   /* occupations groupings */
   --colorSports:              #BB3B57;
   --colorScienceTech:         #0E5E5B;

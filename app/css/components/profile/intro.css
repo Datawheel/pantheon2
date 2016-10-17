@@ -3,7 +3,7 @@
 
 .intro-section {
   @apply --themeDark;
-  height: 240px;
+  height: 260px;
   position: relative;
 
   & .intro-deco {

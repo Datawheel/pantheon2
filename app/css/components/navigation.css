@@ -9,7 +9,7 @@
   width: 100%;
   z-index: 98;
 
-  & ul {
+  & .items {
     max-width: 950px;
     margin: 0 auto;
     padding: 24px 0;
@@ -17,38 +17,39 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
   }
 
-  & li {
+  & .item {
     display: inline-block;
 
     &:hover {
-      & ul {
+      & .sub-items {
         display: block;
       }
     }
+  }
 
-    & ul {
-      border: solid 1px var(--colorDark);
-      display: none;
-      margin: 10px 0 0 -20px;
-      padding: 0;
-      position: absolute;
+  & .sub-items {
+    border: solid 1px var(--colorStone);
+    background-color: var(--colorEggshellOverlay);
+    box-sizing: border-box;
+    display: none;
+    margin: 6px 0 0 -20px;
+    padding: 6px 0;
+    position: absolute;
+    text-align: left;
 
-      & li {
+    & li {
+      display: block;
+
+      & a {
         display: block;
-
-        & a {
-          display: block;
-          padding: 0 10px 10px 10px;
-        }
-        &:first-child a {
-          padding: 10px;
-        }
+        padding: 5px 14px 2px;
+        line-height: 24px;
+        font-weight: 400;
+        cursor: pointer;
       }
     }
-
   }
 
   & a {
@@ -62,6 +63,8 @@
 
   & .item {
     padding: 8px 16px;
+    min-width: 120px;
+    text-align: center;
 
     & > .item-link {
       @apply --dropdownLink;

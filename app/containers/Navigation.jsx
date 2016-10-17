@@ -19,17 +19,17 @@ const toggleSubNav = (e) => {
 const Navigation = ({ user, logOut, activateSearch }) => {
     return (
       <nav className='navigation' role="navigation">
-        <ul>
+        <ul className='items'>
           <li className='item'>
             <Link to="/explore" className='item-link explore' activeClassName='active'>Explore</Link>
-            <ul>
+            <ul className={'sub-items'}>
               <li><Link to="/explore" className='item-link' activeClassName='active'>Data Explorer</Link></li>
               <li><Link to="/explore" className='item-link' activeClassName='active'>Rankings</Link></li>
             </ul>
           </li>
           <li className='item'>
             <Link to="/profile" className='item-link profiles' activeClassName='active'>Profiles</Link>
-            <ul>
+            <ul className={'sub-items'}>
               <li><Link to="/profile/person" className='item-link' activeClassName='active'>People</Link></li>
               <li><Link to="/profile/place" className='item-link' activeClassName='active'>Places</Link></li>
               <li><Link to="/profile/profession" className='item-link' activeClassName='active'>Professions</Link></li>
@@ -42,7 +42,7 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           </li>
           <li className='item'>
             <Link to="/about" className='item-link about' activeClassName='active'>About</Link>
-            <ul>
+            <ul className={'sub-items'}>
               <li><Link to="/about/team" className='item-link' activeClassName='active'>Team</Link></li>
               <li><Link to="/about/vision" className='item-link' activeClassName='active'>Vision</Link></li>
               <li><Link to="/about/publications" className='item-link' activeClassName='active'>Publications</Link></li>
@@ -55,14 +55,14 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           </li>
           <li className='item'>
             <Link to="/data" className='item-link data' activeClassName='active'>Data</Link>
-            <ul>
+            <ul className={'sub-items'}>
               <li><Link to="/data/data" className='item-link' activeClassName='active'>Data</Link></li>
               <li><Link to="/about/api" className='item-link' activeClassName='active'>API</Link></li>
               <li><Link to="/about/permissions" className='item-link' activeClassName='active'>Permissions</Link></li>
               <li><Link to="/about/faq" className='item-link' activeClassName='active'>FAQ</Link></li>
             </ul>
           </li>
-          <li className='item search-btn'>
+          <li className='search-btn'>
             <span onClick={ activateSearch }>
               <img src={searchSvg} alt={`Search`} />
             </span>
