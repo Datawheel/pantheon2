@@ -6,12 +6,12 @@ const types = {LinePlot, Treemap};
 
 const colors = {
   "sports": "#BB3B57",
-  "science & technology": "#0E5E5B",
-  "public figure": "#67AF8C",
+  "science_and_technology": "#0E5E5B",
+  "public_figure": "#67AF8C",
   "institutions": "#B12D11",
   "humanities": "#732945",
   "exploration": "#4C5ED7",
-  "business & law": "#4F680A",
+  "business_and_law": "#4F680A",
   "arts": "#D28629"
 };
 
@@ -75,7 +75,7 @@ class Viz extends Component {
           if (d.color) return d.color;
           else if (d.profession !== void 0) {
             let occ = d.profession.constructor === Array ? d.profession[0] : d.profession;
-            return colors[attrs[occ].domain];
+            return colors[attrs[occ].domain_slug];
           }
           return "#ccc";
         }

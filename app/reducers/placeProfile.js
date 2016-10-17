@@ -25,24 +25,24 @@ const peopleBornHere = (
   }
 }
 
-const occupations = (
+const professions = (
   state = [],
   action
 ) => {
   switch (action.type) {
-    case "GET_OCCUPATIONS_SUCCESS":
+    case "GET_PROFESSIONS_SUCCESS":
       return action.res.data
     default:
       return state;
   }
 }
 
-const occupationsHere = (
+const professionsHere = (
   state = [],
   action
 ) => {
   switch (action.type) {
-    case "GET_OCCUPATIONS_HERE_SUCCESS":
+    case "GET_PROFESSIONS_HERE_SUCCESS":
       return action.res.data
     default:
       return state;
@@ -64,8 +64,8 @@ const peopleBornHereAlive = (
 const placeProfileReducer = combineReducers({
   place,
   peopleBornHere,
-  occupations,
-  occupationsHere,
+  professions,
+  professionsHere,
   peopleBornHereAlive
 });
 

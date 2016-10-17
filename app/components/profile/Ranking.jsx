@@ -11,7 +11,7 @@ const PeerList = ({ peers }) => {
     {peers.map((peer, index) =>
       <span key={index}>
        { (index && index === peers.length-1) ? " and " : null }
-       <PersonAnchor person={peer.person} type="occupation" />
+       <PersonAnchor person={peer.person} type="profession" />
        { peers.length !== 2 ? index < peers.length-1 ? ", " : null : null }
       </span>
     )}
@@ -32,7 +32,7 @@ const Ranking = ({ person, rankings, type }) => {
       {rankings.map((ranking, i) =>
       <div key={i}>
         <p>
-        Among {type !== "occupation" ? "people born in" : null} {type === "birthyear" ? person[type].name : person[type].name}, {person.name} ranks {ranking.me.rank_unique} out of {person[type].num_born}.&nbsp;
+        Among {type !== "profession" ? "people born in" : null} {type === "birthyear" ? person[type].name : person[type].name}, {person.name} ranks {ranking.me.rank_unique} out of {person[type].num_born}.&nbsp;
         { ranking.betterPeers.length ? `Before ${person.gender ? "her" : "him"} are:` : null } { ranking.betterPeers.length ? <PeerList peers={ranking.betterPeers} /> : null }{ ranking.betterPeers.length ? ". " : null }
         { ranking.worsePeers.length ? `After ${person.gender ? "her" : "him"} are:` : null } { ranking.worsePeers.length ? <PeerList peers={ranking.worsePeers} /> : null }{ ranking.worsePeers.length ? "." : null }
         </p>

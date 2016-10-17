@@ -37,24 +37,24 @@ export function fetchPeopleBornHere(store) {
   };
 }
 
-export function fetchOccupations(store) {
-  const getOccupationsProm = makePlaceRequest('get', null, null, `/occupation`);
+export function fetchProfessions(store) {
+  const getProfessionsProm = makePlaceRequest('get', null, null, `/profession`);
 
   return {
-    type: "GET_OCCUPATIONS",
-    promise: getOccupationsProm
+    type: "GET_PROFESSIONS",
+    promise: getProfessionsProm
   };
 }
 
-export function fetchOccupationsHere(store) {
-  const getOccupationsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
+export function fetchProfessionsHere(store) {
+  const getProfessionsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/place_occupation?place=eq.${placeId}&limit=5&order=num_born.desc&select=occupation{*},*`);
+    return makePlaceRequest('get', null, null, `/place_profession?place=eq.${placeId}&limit=5&order=num_born.desc&select=profession{*},*`);
   })
 
   return {
-    type: "GET_OCCUPATIONS_HERE",
-    promise: getOccupationsHereProm
+    type: "GET_PROFESSIONS_HERE",
+    promise: getProfessionsHereProm
   };
 }
 

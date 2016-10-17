@@ -6,10 +6,10 @@ import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/place/Intro";
 import Section from "components/profile/Section";
 import PeopleRanking from "components/profile/place/PeopleRanking";
-import Occupations from "components/profile/place/Occupations";
+import Professions from "components/profile/place/Professions";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
-import { fetchPlace, fetchPeopleBornHere, fetchOccupationsHere, fetchOccupations, fetchPeopleBornHereAlive } from "actions/place";
+import { fetchPlace, fetchPeopleBornHere, fetchProfessionsHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
 
 class Place extends Component {
 
@@ -20,23 +20,24 @@ class Place extends Component {
   static need = [
     fetchPlace,
     fetchPeopleBornHere,
-    fetchOccupations,
-    fetchOccupationsHere,
+    fetchProfessions,
+    fetchProfessionsHere,
     fetchPeopleBornHereAlive
   ]
 
   render() {
     const {placeProfile} = this.props;
-    const {place, peopleBornHere, occupationsHere, occupations, peopleBornHereAlive} = placeProfile;
+    const {place, peopleBornHere, professionsHere, professions, peopleBornHereAlive} = placeProfile;
+    console.log(placeProfile);
     const sections = [
       {title: "People", slug: "people", content: <PeopleRanking ranking={peopleBornHere.slice(0, 12)} />},
       {
         title: "Professions",
         slug: "professions",
-        content: <Occupations data={occupationsHere} />,
+        content: <Professions data={professionsHere} />,
         viz: <Viz type="Treemap"
                   config={{
-                    attrs: occupations,
+                    attrs: professions,
                     data: peopleBornHere,
                     groupBy: ["domain", "group", "name"],
                     time: d => d.birthyear
