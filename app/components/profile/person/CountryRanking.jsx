@@ -48,7 +48,7 @@ const CountryRanking = ({ person, ranking }) => {
         { worseDeathPeers }
       </p>
       <div className={'rank-title'}>
-        <h3>People born in {person.birthcountry.name}</h3>
+        <h3>Others born in {person.birthcountry.name}</h3>
         <a href='#'>Go to all Rankings</a>
       </div>
       <ul className={'rank-list'}>
@@ -66,7 +66,7 @@ const CountryRanking = ({ person, ranking }) => {
       { ranking.deathcountryPeers.length ?
         <div className={'rank-sec-body'}>
           <div className={'rank-title'}>
-            <h3>People deceased in {person.deathcountry.name}</h3>
+            <h3>Others deceased in {person.deathcountry.name}</h3>
             <a href='#'>Go to all Rankings</a>
           </div>
           <ul className={'rank-list'}>

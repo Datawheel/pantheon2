@@ -76,9 +76,9 @@ class Person extends Component {
       {title: "Memorability Metrics", slug: "metrics"},
       {title: `Among ${profession.name}s`, slug: "profession_peers", content: <ProfessionRanking person={personProfile.person} ranking={personProfile.professionRank} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
-      {title: `Among People in ${birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
+      {title: `In the Same Place`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
       {
-        title: "Digital Afterlife",
+        title: personProfile.person.alive ? "Global Cultural Path" : "Digital Afterlife",
         slug: "afterlife",
         viz: <Viz type="LinePlot"
                   config={{

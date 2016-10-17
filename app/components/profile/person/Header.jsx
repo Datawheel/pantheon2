@@ -17,7 +17,7 @@ const Header = ({ pageviews, person }) => {
         </div>
       </div>
       <div className='info'>
-        <p className='top-desc'>Cultural Memory of</p>
+        <p className='top-desc'>The Cultural Memory of</p>
         <h2 className='profile-type'>{person.profession.name}</h2>
         <h1 className='profile-name'>{person.name}</h1>
         <p className='date-subtitle'>{person.birthyear.name} - {person.deathyear ? `${person.deathyear.name}` : "Present"}</p>
