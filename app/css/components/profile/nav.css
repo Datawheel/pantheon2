@@ -7,6 +7,7 @@
   padding: 24px 0;
   bottom: 0;
   background-color: var(--colorDark);
+  z-index: 10;
 
   & ol {
     max-width: 1200px;
@@ -38,5 +39,12 @@
     padding: 5px 5px 5px 0;
     @apply --profileNav;
     color: var(--colorEggshell);
+  }
+}
+
+@media screen and ( min-height: 900px ){
+  .profile-nav {
+    bottom: auto;
+    top: 825px;
   }
 }
