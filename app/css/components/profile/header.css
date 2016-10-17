@@ -48,7 +48,7 @@ header {
   background-color: var(--colorArts);
   display: flex;
   justify-content: space-between;
-  filter: blur(7px) saturate(160%);
+  filter: blur(8px) saturate(120%) contrast(130%);
   position: absolute;
   width: 105%;
   height: 105%;

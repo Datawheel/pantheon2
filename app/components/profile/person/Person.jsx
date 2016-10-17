@@ -78,7 +78,7 @@ class Person extends Component {
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
       {title: `In the Same Place`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
       {
-        title: personProfile.person.alive ? "Global Cultural Path" : "Digital Afterlife",
+        title: personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife",
         slug: "afterlife",
         viz: <Viz type="LinePlot"
                   config={{

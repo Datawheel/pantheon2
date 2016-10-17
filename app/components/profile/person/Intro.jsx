@@ -20,26 +20,31 @@ const Intro = ({ person }) => {
           <span className={'deco-line'}></span>
           <span className={'deco-line'}></span>
           <span className={'deco-line'}></span>
+          <span className={'deco-line'}></span>
+          <span className={'deco-line'}></span>
+          <span className={'deco-line'}></span>
+          <span className={'deco-line'}></span>
+          <span className={'deco-line'}></span>
+          <span className={'deco-line'}></span>
         </div>
       </div>
       <div className={'intro-content'}>
         <img src={`/people/${person.wiki_id}.jpg`} alt={`Photo of ${person.name}`} />
         <div className={'intro-text'}>
           <h3>
-            <img src={iconProfW} alt={`Individual Cultural Production`} />
+            <img src={iconProfW} />
             {person.deathyear ?
             `In Cultural Memory of ${person.name}` :
-            `The Cultural Production of ${person.name}`
+            `The Global Cultural Production of ${person.name}`
             }
           </h3>
           <p>
             {person.name} {person.deathyear ? "was" : "is"} a <a href="">{person.profession.name}</a> born in <a href="">{person.birthplace.name}</a>, <a href="">{person.birthcountry.name}</a> in <a href="">{person.birthyear.name}</a>.&nbsp;
             {person.deathyear ?
-              `${person.gender ? "She" : "He"} lived to be ${age} before passing in ${person.deathyear.name}.` :
-              `${person.gender ? "She" : "He"} is currently ${age} years old.`
-            }
-            &nbsp;Pantheon aims to help us understand global cultural development by visualizing a dataset of “globally memorable people” through their professions, birth and resting places, and Wikipedia activity.&nbsp;
-            <a href="/about/" className={'deep-link'}>Read more</a>
+              `${person.gender ? "She" : "He"} lived to be ${age} before passing in ${person.deathyear.name}.` : null }
+            At {age} years old, {person.gender ? "she" : "he"} has reached (total page views) page views on Wikipedia, hitting a peak of (max page views) in (max page view year).
+            &nbsp;By analyzing all "globally remembered people", Pantheon aims to understand cultural development through changes in professions, birth and death places, and Wikipedia activity.&nbsp;
+            <a href="/about/" className={'deep-link'}>More about our research</a>
           </p>
         </div>
       </div>

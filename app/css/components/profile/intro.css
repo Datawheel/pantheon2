@@ -44,6 +44,7 @@
   & img {
       height: 100%;
       z-index: 2;
+      filter: grayscale(100%) contrast(105%) brightness(105%);
   }
 
   & .intro-text {
@@ -66,9 +67,9 @@
       content: '';
       position: relative;
       display: inline-block;
-      height: 10px;
-      width: 5px;
-      margin: 0 0 2px 2px;
+      height: 8px;
+      width: 6px;
+      margin: 0 0 0 3px;
       background: url('../../../images/tri-right.svg') no-repeat;
       background-size: contain;
     }
