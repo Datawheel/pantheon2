@@ -45,23 +45,27 @@ class Search extends Component {
     return (
       <div className='search'>
         <div className='search-close'>
-          <div onClick={ activateSearch }>X</div>
+          <i onClick={ activateSearch }>✕</i>
         </div>
         <input type="text" ref={(el) => this._searchInput = el} onChange={this.onChange.bind(this)}/ >
-        <ul>
+        <ul className={'search-results'}>
           {this.state.professionResults.map((result) =>
-            <li key={`profession_${result.slug}`}>
+            <li key={`profession_${result.slug}`} className={'result-profession'}>
               <a href={`/profile/profession/${result.slug}`}>{result.name}</a>
             </li>
           )}
           {this.state.placeResults.map((result) =>
-            <li key={`place_${result.slug}`}>
+            <li key={`place_${result.slug}`} className={'result-place'}>
               <a href={`/profile/place/${result.slug}`}>{result.name}</a>
             </li>
           )}
           {this.state.personResults.map((result) =>
-            <li key={`person_${result.slug}`}>
+            <li key={`person_${result.slug}`} className={'result-person'}>
               <a href={`/profile/person/${result.slug}`}>{result.name}</a>
+              <sub>
+                <span>{result.profession}</span>
+                <span>{result.birthplace}</span>
+              </sub>
             </li>
           )}
         </ul>

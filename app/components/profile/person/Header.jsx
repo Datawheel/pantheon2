@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import styles from 'css/components/profile/header';
-import sparklineSvg from 'images/sparkline.svg';
 import Viz from "components/viz/Index";
 
 const Header = ({ pageviews, person }) => {
