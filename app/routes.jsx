@@ -51,13 +51,13 @@ export default (store) => {
   function genRandId(path) {
     let candidates;
     if(path.includes("place")){
-      candidates = ["India", "United_States", "France", "Italy", "Chile", "Brazil", "Bulgaria"];
+      candidates = ["India", "United_States", "France", "Italy", "Chile", "Brazil", "Bulgaria", "Riom", "Coimbra", "Albuquerque", "Oslo", "Sydney", "St._Louis", "Cote_dIvoire_(Ivory_Coast)", "Ljusdal", "Dallas", "Olias_del_Rey", "Tbilisi", "Philippines", "Sogndal"];
     }
     else if(path.includes("profession")){
       candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
     }
     else if(path.includes("person")){
-      candidates = ["Joseph_Cook", "Pope_Paschal_II", "Nick_Drake", "Lewis_Carroll", "Eddie_Irvine", "Manfred,_King_of_Sicily"];
+      candidates = ["Joseph_Cook", "Pope_Paschal_II", "Nick_Drake", "Lewis_Carroll", "Eddie_Irvine", "Manfred_King_of_Sicily", "Julius_Caesar", "John_L._Hall", "Jenny_Lind", "Henri_Nestle", "Raif_Badawi", "Emma_Shapplin"];
     }
     return candidates[Math.floor(Math.random()*candidates.length)];
   }
