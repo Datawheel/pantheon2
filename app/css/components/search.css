@@ -8,7 +8,7 @@
   height: 100vh;
   top: 0;
   left: 0;
-  padding: 50px;
+  padding: 24px 50px;
   z-index: 101;
 
   &::before {
@@ -43,24 +43,43 @@
     }
   }
 
-  & input {
-    background: transparent;
-    border: none;
-    border-bottom: solid 1px var(--colorSand);
-    color: var(--colorSlate);
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 1.5px;
-    padding: 10px 0 15px;
-    width: 100%;
-    z-index: 1;
+  & .search-results {
+    margin: 0 34px;
+    box-sizing: border-box;
+  }
 
-    &:focus {
-      outline: none;
+  & .search-result-input {
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      background: url('../../images/icon-search.svg') no-repeat;
+      background-size: contain;
+      width: 34px;
+      height: 34px;
+      margin: 13px -45px;
+    }
+
+    & input {
+      width: 100%;
+      padding: 15px 0 10px;
+      border: none;
+      border-bottom: solid 1px var(--colorSand);
+      background: transparent;
+      color: var(--colorBlackhole);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 0;
+      z-index: 1;
+
+      &:focus {
+        outline: none;
+      }
     }
   }
 
-  & .search-results {
+  & .results-list {
     margin: 0;
     padding: 20px 0;
     list-style-type: none;
@@ -72,6 +91,7 @@
       padding: 12px 0;
 
       & a {
+        position: relative;
         color: var(--colorSlate);
         text-decoration: none;
         @apply --searchResults;
@@ -79,6 +99,13 @@
 
         &:hover {
           border-bottom: 1px solid currentColor;
+        }
+
+        &::before {
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          margin: 0 -35px;
         }
       }
 
@@ -89,6 +116,32 @@
         min-width: 90px;
         padding-left: 20px;
         @apply --searchResults;
+      }
+    }
+
+    & .result-profession {
+      & a::before {
+        content: '';
+        background: url('../../images/icon-prof.svg') no-repeat;
+        background-size: contain;
+      }
+    }
+
+    & .result-person {
+
+      & a::before {
+        content: '';
+        background: url('../../images/icon-person.svg') no-repeat;
+        background-size: contain;
+      }
+    }
+
+    & .result-place {
+
+      & a::before {
+        content: '';
+        background: url('../../images/icon-place.svg') no-repeat;
+        background-size: contain;
       }
     }
   }

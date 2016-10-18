@@ -43,32 +43,36 @@ class Search extends Component {
   render() {
     const { activateSearch } = this.props;
     return (
-      <div className='search'>
-        <div className='search-close'>
+      <div className={'search'}>
+        <div className={'search-close'}>
           <i onClick={ activateSearch }>✕</i>
         </div>
-        <input type="text" ref={(el) => this._searchInput = el} onChange={this.onChange.bind(this)}/ >
-        <ul className={'search-results'}>
-          {this.state.professionResults.map((result) =>
-            <li key={`profession_${result.slug}`} className={'result-profession'}>
-              <a href={`/profile/profession/${result.slug}`}>{result.name}</a>
-            </li>
-          )}
-          {this.state.placeResults.map((result) =>
-            <li key={`place_${result.slug}`} className={'result-place'}>
-              <a href={`/profile/place/${result.slug}`}>{result.name}</a>
-            </li>
-          )}
-          {this.state.personResults.map((result) =>
-            <li key={`person_${result.slug}`} className={'result-person'}>
-              <a href={`/profile/person/${result.slug}`}>{result.name}</a>
-              <sub>
-                <span>{result.profession}</span>
-                <span>{result.birthplace}</span>
-              </sub>
-            </li>
-          )}
-        </ul>
+        <div className={'search-results'}>
+          <div className={'search-result-input'}>
+            <input type={'text'} ref={(el) => this._searchInput = el} onChange={this.onChange.bind(this)}/ >
+          </div>
+          <ul className={'results-list'}>
+            {this.state.professionResults.map((result) =>
+              <li key={`profession_${result.slug}`} className={'result-profession'}>
+                <a href={`/profile/profession/${result.slug}`}>{result.name}</a>
+              </li>
+            )}
+            {this.state.placeResults.map((result) =>
+              <li key={`place_${result.slug}`} className={'result-place'}>
+                <a href={`/profile/place/${result.slug}`}>{result.name}</a>
+              </li>
+            )}
+            {this.state.personResults.map((result) =>
+              <li key={`person_${result.slug}`} className={'result-person'}>
+                <a href={`/profile/person/${result.slug}`}>{result.name}</a>
+                <sub>
+                  <span>{result.profession}</span>
+                  <span>{result.birthplace}</span>
+                </sub>
+              </li>
+            )}
+          </ul>
+        </div>
       </div>
     )
   }
