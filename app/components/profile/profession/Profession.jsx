@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import Helmet from "react-helmet";
+import config from "helmconfig.js";
 import Header from "components/profile/profession/Header";
 import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/profession/Intro";
@@ -28,7 +29,12 @@ class Profession extends Component {
     // return (<div>testing profession...</div>)
     return (
       <div>
-        <Helmet title={profession.name} meta={[ {property: 'og:title', content: profession.name}, ]} />
+        <Helmet
+          htmlAttributes={{"lang": "en", "amp": undefined}}
+          title={profession.name}
+          meta={config.meta.concat([ {property: 'og:title', content: profession.name} ])}
+          link={config.link}
+        />
         <Header profession={profession} />
         <ProfileNav sections={sections} />
         <Intro profession={profession} />

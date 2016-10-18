@@ -1,11 +1,17 @@
 import React from "react";
 import { Link } from "react-router";
 import Helmet from "react-helmet";
+import config from "helmconfig.js";
 
 const About = ({children}) => {
   return (
     <div className="about">
-      <Helmet title="About Pantheon" />
+      <Helmet
+        htmlAttributes={{"lang": "en", "amp": undefined}}
+        title="About Pantheon"
+        meta={config.meta}
+        link={config.link}
+      />
       <h1 className="header">About Pantheon</h1>
       <nav className="subNav" role="navigation">
         <Link to="/about/vision" className='item' activeClassName='active'>Vision</Link>

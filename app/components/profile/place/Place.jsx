@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import Helmet from "react-helmet";
+import config from "helmconfig.js";
 import Header from "components/profile/place/Header";
 import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/place/Intro";
@@ -28,7 +29,7 @@ class Place extends Component {
   render() {
     const {placeProfile} = this.props;
     const {place, peopleBornHere, professionsHere, professions, peopleBornHereAlive} = placeProfile;
-    console.log(placeProfile);
+
     const sections = [
       {title: "People", slug: "people", content: <PeopleRanking ranking={peopleBornHere.slice(0, 12)} />},
       {
@@ -53,7 +54,12 @@ class Place extends Component {
     // return (<div>testing...</div>)
     return (
       <div>
-        <Helmet title={place.name} meta={[ {property: 'og:title', content: place.name}, ]} />
+        <Helmet
+          htmlAttributes={{"lang": "en", "amp": undefined}}
+          title={place.name}
+          meta={config.meta.concat([ {property: 'og:title', content: place.name} ])}
+          link={config.link}
+        />
         <Header place={place} />
         <ProfileNav sections={sections} />
         <Intro place={place} />

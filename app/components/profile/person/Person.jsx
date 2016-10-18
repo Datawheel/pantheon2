@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import Helmet from "react-helmet";
+import config from "helmconfig.js";
 import ProfileNav from "components/profile/Nav";
 import Section from "components/profile/Section";
 import Header from "components/profile/person/Header";
@@ -123,7 +124,12 @@ class Person extends Component {
 
     return (
       <div>
-        <Helmet title={personProfile.person.name} meta={[ {property: 'og:title', content: personProfile.person.name}, ]} />
+        <Helmet
+          htmlAttributes={{"lang": "en", "amp": undefined}}
+          title={personProfile.person.name}
+          meta={config.meta.concat([ {property: 'og:title', content: personProfile.person.name} ])}
+          link={config.link}
+        />
         <Header person={personProfile.person} pageviews={personProfile.pageviews} />
         <ProfileNav sections={sections} />
         <Intro person={personProfile.person} />
