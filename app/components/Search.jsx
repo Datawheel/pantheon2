@@ -23,9 +23,19 @@ class Search extends Component {
     if (userQuery.length < 3) return;
     if (userQuery.length === 0) this.setState({ professionResults:[], placeResults:[], personResults:[] });
 
-    const professionQuery = axios.get(`http://localhost:3100/profession?name=@@.${e.target.value}`);
-    const placeQuery = axios.get(`http://localhost:3100/place?name=@@.${e.target.value}`);
-    const personQuery = axios.get(`http://localhost:3100/person?name=@@.${e.target.value}&order=langs.desc.nullslast`);
+    let userQueryCleaned = userQuery.split(" ")
+    if(userQueryCleaned.length > 1){
+      const lastItem = userQueryCleaned[userQueryCleaned.length-1];
+      userQueryCleaned[userQueryCleaned.length-1] = `${lastItem}:*`;
+      userQueryCleaned = userQueryCleaned.join("&");
+    }
+    else {
+      userQueryCleaned = userQuery;
+    }
+
+    const professionQuery = axios.get(`http://localhost:3100/profession?name=@@.${e.target.value}&select=slug,name,domain`);
+    const placeQuery = axios.get(`http://localhost:3100/place?name=@@.${e.target.value}&select=slug,name,country_name`);
+    const personQuery = axios.get(`http://localhost:3100/person?name=@@.${userQueryCleaned}&order=langs.desc.nullslast&select=slug,name,profession{id,name},birthcountry{id,name}`);
 
     Promise.all([professionQuery, placeQuery, personQuery])
       .then((queryResults) => {
@@ -60,14 +70,17 @@ class Search extends Component {
             {this.state.placeResults.map((result) =>
               <li key={`place_${result.slug}`} className={'result-place'}>
                 <a href={`/profile/place/${result.slug}`}>{result.name}</a>
+                <sub>
+                  <span>{result.name !== result.country_name ? result.country_name : null}</span>
+                </sub>
               </li>
             )}
             {this.state.personResults.map((result) =>
               <li key={`person_${result.slug}`} className={'result-person'}>
                 <a href={`/profile/person/${result.slug}`}>{result.name}</a>
                 <sub>
-                  <span>{result.profession}</span>
-                  <span>{result.birthplace}</span>
+                  <span>{result.profession.name}</span>
+                  <span>{result.birthcountry ? result.birthcountry.name : null}</span>
                 </sub>
               </li>
             )}
