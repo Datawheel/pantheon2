@@ -7,11 +7,11 @@ const Header = ({ pageviews, person }) => {
   const viewData = pageviews.map(d => {
     d.pageview_date = new Date(d.pageview_date);
     return d;
-  });
+  }).sort((a, b) => a.pageview_date - b.pageview_date);
   const dates = viewData.map(d => d.pageview_date);
   const sparkTicks = [new Date(Math.min(...dates)), new Date(Math.max(...dates))];
   const sparkNums = sparkTicks.map(Number);
-  const circleData = viewData.filter(d => sparkNums.includes(d.pageview_date.getTime())).sort((a, b) => a.pageview_date - b.pageview_date);
+  const circleData = viewData.filter(d => sparkNums.includes(d.pageview_date.getTime()));
   const sparkData = viewData.concat([
     Object.assign({}, circleData[0], {shape: "Circle", person: "start"}),
     Object.assign({}, circleData[1], {shape: "Circle", person: "end"})
