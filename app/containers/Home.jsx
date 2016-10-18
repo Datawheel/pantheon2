@@ -1,9 +1,4 @@
 import React from 'react';
-import classNames from 'classnames/bind';
-import styles from 'css/components/about';
-import { fetchTopics } from 'actions/data';
-
-const cx = classNames.bind(styles);
 
 /*
  * Note: This is kept as a container-level component,
