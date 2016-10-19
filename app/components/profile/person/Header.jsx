@@ -20,7 +20,7 @@ const Header = ({ pageviews, person }) => {
   return (
     <header className='hero'>
       <div className='bg-container'>
-        <div className='bg-img-mask'>
+        <div className='bg-img-mask person'>
           <div className='bg-img bg-img-l' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
           <div className='bg-img bg-img-r' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
         </div>
