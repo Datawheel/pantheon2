@@ -27,8 +27,19 @@ class Place extends Component {
   ]
 
   render() {
+
     const {placeProfile} = this.props;
     const {place, peopleBornHere, professionsHere, professions, peopleBornHereAlive} = placeProfile;
+
+    var tmapData = peopleBornHere
+      .filter(p => p.birthyear !== null);
+
+    var priestleyMax = 25;
+
+    var priestleyData = tmapData
+      .filter(p => p.deathyear !== null)
+      .sort((a, b) => b.langs - a.langs)
+      .slice(0, priestleyMax);
 
     const sections = [
       {title: "People", slug: "people", content: <PeopleRanking ranking={peopleBornHere.slice(0, 12)} />},
@@ -39,7 +50,7 @@ class Place extends Component {
         viz: <Viz type="Treemap"
                   config={{
                     attrs: professions,
-                    data: peopleBornHere,
+                    data: tmapData,
                     groupBy: ["domain", "group", "name"],
                     time: d => d.birthyear
                   }} />
@@ -47,7 +58,19 @@ class Place extends Component {
       {title: "Profession Trends", slug: "profession_trends"},
       {title: "Cities", slug: "cities"},
       {title: "Historical Places", slug: "historical_places"},
-      {title: "Overlapping Lives", slug: "overlapping_lives"},
+      {
+        title: `Top ${priestleyMax} Overlapping Lives`,
+        slug: "overlapping_lives",
+        viz: <Viz type="Priestley"
+                  config={{
+                    attrs: professions,
+                    data: priestleyData,
+                    depth: 1,
+                    groupBy: ["domain", "name"],
+                    start: d => d.birthyear,
+                    end: d => d.deathyear
+                  }} />
+      },
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
     ];
 

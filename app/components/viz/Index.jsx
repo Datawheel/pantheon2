@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from "react";
 
 import {LinePlot} from "d3plus-plot";
+import {Priestley} from "d3plus-priestley";
 import {Treemap} from "d3plus-treemap";
-const types = {LinePlot, Treemap};
+const types = {LinePlot, Priestley, Treemap};
 
 import {COLORS_DOMAIN} from "types";
 
@@ -47,10 +48,7 @@ class Viz extends Component {
 
     config.data.forEach(d => {
       if (d.profession !== void 0) d.profession = `${d.profession}`;
-    })
-
-    // Filters data by the time filter.
-    if (config.time) config.data = config.data.filter(config.time);
+    });
 
     switch(this.props.type) {
       case "Treemap":
