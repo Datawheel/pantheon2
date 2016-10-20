@@ -44,3 +44,11 @@ export const COLORS_DOMAIN = {
   business_and_law: "#4F680A",
   arts: "#D28629"
 };
+
+import {format} from "d3-format";
+import {timeFormat} from "d3-time-format";
+
+export const FORMATTERS = {
+  commas: format(","),
+  date: timeFormat("%B %d, %Y")
+}
