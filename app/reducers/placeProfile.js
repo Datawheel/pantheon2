@@ -25,6 +25,18 @@ const peopleBornHere = (
   }
 }
 
+const peopleDiedHere = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_PEOPLE_DIED_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
 const professions = (
   state = [],
   action
@@ -49,6 +61,30 @@ const professionsHere = (
   }
 }
 
+const professionsBornHere = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_PROFESSIONS_BORN_HERE_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
+const professionsDiedHere = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_PROFESSIONS_DIED_HERE_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
 const peopleBornHereAlive = (
   state = [],
   action
@@ -64,8 +100,10 @@ const peopleBornHereAlive = (
 const placeProfileReducer = combineReducers({
   place,
   peopleBornHere,
+  peopleDiedHere,
   professions,
-  professionsHere,
+  professionsBornHere,
+  professionsDiedHere,
   peopleBornHereAlive
 });
 

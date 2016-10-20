@@ -10,7 +10,7 @@ import PeopleRanking from "components/profile/place/PeopleRanking";
 import Professions from "components/profile/place/Professions";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
-import { fetchPlace, fetchPeopleBornHere, fetchProfessionsHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
+import { fetchPlace, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
 
 class Place extends Component {
 
@@ -21,36 +21,43 @@ class Place extends Component {
   static need = [
     fetchPlace,
     fetchPeopleBornHere,
+    fetchPeopleDiedHere,
     fetchProfessions,
-    fetchProfessionsHere,
+    fetchProfessionsBornHere,
+    fetchProfessionsDiedHere,
     fetchPeopleBornHereAlive
   ]
 
   render() {
 
     const {placeProfile} = this.props;
-    const {place, peopleBornHere, professionsHere, professions, peopleBornHereAlive} = placeProfile;
+    const {place, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, professions, peopleBornHereAlive} = placeProfile;
 
-    var tmapData = peopleBornHere
+    const tmapBornData = peopleBornHere
       .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
-    var priestleyMax = 25;
+    const tmapDeathData = peopleDiedHere
+      .filter(p => p.deathyear !== null)
+      .sort((a, b) => b.langs - a.langs);
 
-    var priestleyData = tmapData
+    const priestleyMax = 25;
+
+    const priestleyData = tmapBornData
       .filter(p => p.deathyear !== null)
       .slice(0, priestleyMax);
 
     const sections = [
-      {title: "People", slug: "people", content: <PeopleRanking ranking={peopleBornHere.slice(0, 12)} />},
+      {title: "People", slug: "people", content: <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />},
       {
         title: "Professions",
         slug: "professions",
-        content: <Professions data={professionsHere} />,
-        viz: <Viz type="Treemap"
+        content: <Professions place={place} professionsBorn={professionsBornHere} professionsDied={professionsDiedHere} />,
+        viz: [
+            <Viz type="Treemap"
                   config={{
                     attrs: professions,
-                    data: tmapData,
+                    data: tmapBornData,
                     groupBy: ["domain", "group", "name"],
                     time: d => d.birthyear,
                     tooltipConfig: {
@@ -64,7 +71,15 @@ class Place extends Component {
                         return txt;
                       }
                     }
+                  }} />,
+            <Viz type="Treemap"
+                  config={{
+                    attrs: professions,
+                    data: tmapDeathData,
+                    groupBy: ["domain", "group", "name"],
+                    time: d => d.deathyear
                   }} />
+        ]
       },
       {title: "Profession Trends", slug: "profession_trends"},
       {title: "Cities", slug: "cities"},
@@ -72,7 +87,7 @@ class Place extends Component {
       {
         title: `Top ${priestleyMax} Overlapping Lives`,
         slug: "overlapping_lives",
-        viz: <Viz type="Priestley"
+        viz: [<Viz type="Priestley"
                   config={{
                     attrs: professions,
                     data: priestleyData,
@@ -83,7 +98,7 @@ class Place extends Component {
                     tooltipConfig: {
                       body: d => `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`
                     }
-                  }} />
+                  }} />]
       },
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
     ];
@@ -108,7 +123,7 @@ class Place extends Component {
             title={section.title}
             slug={section.slug}>
             {section.content ? section.content : null}
-            {section.viz ? section.viz : null}
+            {section.viz ? section.viz.map((v, key) => v) : null}
           </Section>
         )}
       </div>

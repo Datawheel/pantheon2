@@ -1,36 +1,30 @@
 import React, { Component, PropTypes } from 'react';
 import AnchorList from 'components/utils/AnchorList';
+import PhotoCarousel from 'components/utils/PhotoCarousel';
 
-const PeopleRanking = ({ ranking }) => {
-  // console.log(ranking)
-  // return (<div>rankking here...</div>)
+const PeopleRanking = ({ place, peopleBorn, peopleDied }) => {
+  const youngestBirthyear = Math.max.apply(Math, peopleBorn.map(r => r.birthyear));
+  const oldestBirthyear = Math.min.apply(Math, peopleBorn.map(r => r.birthyear));
+  const moreDeaths = peopleDied.length > peopleBorn.length ? true : false;
+
+  const topRankingBorn = peopleBorn.slice(0, 7);
+  const topRankingDied = peopleDied.slice(0, 7);
   return (
     <div>
       <p>
-        Between [year of 1st person born here] and [year of last person born here or present], the United Kingdom was the birth place of 132 globally memorable people, including JK Rowling, Keira Knightley, and Steven Hawking. Interestingly, a significantly greater amount of globally remembered people passed away in the UK, including Albert Einstein, Bono, and Archimedes.
+        Between {oldestBirthyear} and {youngestBirthyear}, {place.name} was the birth place of {peopleBorn.length} globally memorable people, including <AnchorList items={peopleBorn.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. Additionaly, {peopleDied.length} globally memorable people have passed away in {place.name} including <AnchorList items={peopleDied.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. { moreDeaths ? `Interestingly, more notably known people have passed away in ${place.name} than were born there.`: null}
       </p>
       <div className={'rank-title'}>
         <h3>Born in MAGICAL PLACEHOLDER</h3>
         <a href='#'>Go to all Rankings</a>
       </div>
-      <ul className={'rank-list'}>
-        {ranking.map((person) =>
-          <li key={person.id}>
-            <div className={'rank-photo'}>
-              <img src={`/people/${person.wiki_id}.jpg`} alt={`Photo of ${person.name}`} />
-            </div>
-            <h2><a href={`/profile/person/${person.slug}/`}>{person.name}</a></h2>
-            <p className={'rank-year'}>{person.birthyear} - {person.deathyear ? `${person.deathyear}` : 'Present'}</p>
-          </li>
-        )}
-      </ul>
+      <PhotoCarousel people={topRankingBorn} />
       <div className={'rank-sec-body'}>
         <div className={'rank-title'}>
           <h3>Deceased in MAGICAL PLACEHOLDER</h3>
           <a href='#'>Go to all Rankings</a>
         </div>
-        <ul className={'rank-list'}></ul>
-        <h2>missing dead people plz</h2>
+        <PhotoCarousel people={topRankingDied} />
       </div>
     </div>
   )

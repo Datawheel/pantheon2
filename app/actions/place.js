@@ -37,6 +37,21 @@ export function fetchPeopleBornHere(store) {
   };
 }
 
+export function fetchPeopleDiedHere(store) {
+  const getPeopleProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id,name,country_name`).then(function(placeIdRes) {
+    const placeId = placeIdRes.data[0].id;
+    const placeName = placeIdRes.data[0].name;
+    const placeCountryName = placeIdRes.data[0].country_name;
+    const placeColumn = placeName === placeCountryName ? "deathcountry" : "deathplace";
+    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc`);
+  })
+
+  return {
+    type: "GET_PEOPLE_DIED",
+    promise: getPeopleProm
+  };
+}
+
 export function fetchProfessions(store) {
   const getProfessionsProm = makePlaceRequest('get', null, null, `/profession`);
 
@@ -46,14 +61,26 @@ export function fetchProfessions(store) {
   };
 }
 
-export function fetchProfessionsHere(store) {
+export function fetchProfessionsBornHere(store) {
   const getProfessionsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/place_profession?place=eq.${placeId}&limit=5&order=num_born.desc&select=profession{*},*`);
+    return makePlaceRequest('get', null, null, `/place_profession?place=eq.${placeId}&limit=5&order=num_born.desc.nullslast&select=profession{*},*`);
   })
 
   return {
-    type: "GET_PROFESSIONS_HERE",
+    type: "GET_PROFESSIONS_BORN_HERE",
+    promise: getProfessionsHereProm
+  };
+}
+
+export function fetchProfessionsDiedHere(store) {
+  const getProfessionsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
+    const placeId = placeIdRes.data[0].id;
+    return makePlaceRequest('get', null, null, `/place_profession?place=eq.${placeId}&limit=5&order=num_died.desc.nullslast&select=profession{*},*`);
+  })
+
+  return {
+    type: "GET_PROFESSIONS_DIED_HERE",
     promise: getProfessionsHereProm
   };
 }
