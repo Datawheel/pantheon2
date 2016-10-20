@@ -21,6 +21,9 @@ body {
   font-smoothing: antialiased;
 }
 
+.home a.home {
+  border: solid 1px green;
+}
 
 /* Add your global styles below... */
 

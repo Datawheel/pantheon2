@@ -9,12 +9,8 @@ const Header = ({ place }) => {
     <header className='hero'>
       <div className='bg-container'>
         <div className='bg-img-mask place'>
-          <div className='bg-img bg-img-t'>
-            <img src={placeholderImg} />
-          </div>
-          <div className='bg-img bg-img-b'>
-            <img src={placeholderImg} />
-          </div>
+          <div className='bg-img bg-img-t' style={{backgroundImage: `url('/place/${place.id}.jpg')`}}></div>
+          <div className='bg-img bg-img-b' style={{backgroundImage: `url('/place/${place.id}.jpg')`}}></div>
         </div>
       </div>
       <div className='info'>
