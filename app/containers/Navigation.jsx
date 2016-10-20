@@ -23,16 +23,16 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           <li className='item'>
             <Link to="/explore" className='item-link explore' activeClassName='active'>Explore</Link>
             <ul className={'sub-items'}>
-              <li><Link to="/explore" className='item-link' activeClassName='active'>Data Explorer</Link></li>
-              <li><Link to="/explore" className='item-link' activeClassName='active'>Rankings</Link></li>
+              <li><a href="/explore" className='item-link'>Data Explorer</a></li>
+              <li><a href="/explore" className='item-link'>Rankings</a></li>
             </ul>
           </li>
           <li className='item'>
             <Link to="/profile" className='item-link profiles' activeClassName='active'>Profiles</Link>
             <ul className={'sub-items'}>
-              <li><Link to="/profile/person" className='item-link' activeClassName='active'>People</Link></li>
-              <li><Link to="/profile/place" className='item-link' activeClassName='active'>Places</Link></li>
-              <li><Link to="/profile/profession" className='item-link' activeClassName='active'>Professions</Link></li>
+              <li><a href="/profile/person" className='item-link'>People</a></li>
+              <li><a href="/profile/place" className='item-link'>Places</a></li>
+              <li><a href="/profile/profession" className='item-link'>Professions</a></li>
             </ul>
           </li>
           <li className='item'>
@@ -43,23 +43,23 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           <li className='item'>
             <Link to="/about" className='item-link about' activeClassName='active'>About</Link>
             <ul className={'sub-items'}>
-              <li><Link to="/about/team" className='item-link' activeClassName='active'>Team</Link></li>
-              <li><Link to="/about/vision" className='item-link' activeClassName='active'>Vision</Link></li>
-              <li><Link to="/about/publications" className='item-link' activeClassName='active'>Publications</Link></li>
-              <li><Link to="/about/methods" className='item-link' activeClassName='active'>Methods</Link></li>
-              <li><Link to="/about/data_sources" className='item-link' activeClassName='active'>Data Sources</Link></li>
-              <li><Link to="/about/resources" className='item-link' activeClassName='active'>Resources</Link></li>
-              <li><Link to="/about/references" className='item-link' activeClassName='active'>References</Link></li>
-              <li><Link to="/about/contact" className='item-link' activeClassName='active'>Contact</Link></li>
+              <li><a href="/about/team" className='item-link'>Team</a></li>
+              <li><a href="/about/vision" className='item-link'>Vision</a></li>
+              <li><a href="/about/publications" className='item-link'>Publications</a></li>
+              <li><a href="/about/methods" className='item-link'>Methods</a></li>
+              <li><a href="/about/data_sources" className='item-link'>Data Sources</a></li>
+              <li><a href="/about/resources" className='item-link'>Resources</a></li>
+              <li><a href="/about/references" className='item-link'>References</a></li>
+              <li><a href="/about/contact" className='item-link'>Contact</a></li>
             </ul>
           </li>
           <li className='item'>
             <Link to="/data" className='item-link data' activeClassName='active'>Data</Link>
             <ul className={'sub-items'}>
-              <li><Link to="/data/data" className='item-link' activeClassName='active'>Data</Link></li>
-              <li><Link to="/about/api" className='item-link' activeClassName='active'>API</Link></li>
-              <li><Link to="/about/permissions" className='item-link' activeClassName='active'>Permissions</Link></li>
-              <li><Link to="/about/faq" className='item-link' activeClassName='active'>FAQ</Link></li>
+              <li><a href="/data/data" className='item-link'>Data</a></li>
+              <li><a href="/about/api" className='item-link'>API</a></li>
+              <li><a href="/about/permissions" className='item-link'>Permissions</a></li>
+              <li><a href="/about/faq" className='item-link'>FAQ</a></li>
             </ul>
           </li>
           <li className='search-btn'>
