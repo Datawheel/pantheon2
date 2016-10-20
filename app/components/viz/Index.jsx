@@ -1,11 +1,15 @@
 import React, {Component, PropTypes} from "react";
 
+import styles from 'css/components/viz/tooltip.css';
+import {default as tooltipStyle} from "css/components/viz/tooltip.js";
+
 import {LinePlot} from "d3plus-plot";
 import {Priestley} from "d3plus-priestley";
 import {Treemap} from "d3plus-treemap";
 const types = {LinePlot, Priestley, Treemap};
 
 import {COLORS_DOMAIN} from "types";
+
 
 const uniques = ["birthyear", "id"].reduce((obj, k) => {
   obj[k] = a => {
@@ -70,6 +74,7 @@ class Viz extends Component {
         }
       })
       .depth(0)
+      .tooltipConfig(tooltipStyle)
       .config(config)
       .select(this.refs.svg);
 

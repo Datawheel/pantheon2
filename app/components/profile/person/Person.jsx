@@ -13,6 +13,8 @@ import Viz from "components/viz/Index";
 import { activateSearch } from "actions/users";
 import { fetchPerson, fetchProfessionRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
 
+import {FORMATTERS} from "types";
+
 class Person extends Component {
 
   /*
@@ -48,7 +50,7 @@ class Person extends Component {
         return {
           color: "#67AF8C",
           id: "LANGUAGES (L)",
-          language: d.lang,
+          langs: languageCounter,
           x: new Date(d.creation_date),
           y: (languageCounter / totalLanguages) * lMod
         }
@@ -56,7 +58,7 @@ class Person extends Component {
       .concat(personProfile.pageviews.map(d => ({
         color: "#4C5ED7",
         id: "PAGE VIEWS (PV)",
-        num_pageviews: d.num_pageviews,
+        views: d.num_pageviews,
         x: new Date(d.pageview_date),
         y: d.num_pageviews / maxPageViews
       })));
@@ -67,6 +69,7 @@ class Person extends Component {
     if (latestPageView > latestLanguage) {
       lineData.push({
         color: "#67AF8C",
+        langs: languageCounter,
         id: "LANGUAGES (L)",
         x: latestPageView,
         y: 1 * lMod
@@ -83,6 +86,9 @@ class Person extends Component {
         slug: "afterlife",
         viz: <Viz type="LinePlot"
                   config={{
+                    aggs: {
+                      langs: a => Math.max(...a)
+                    },
                     data: lineData,
                     legendConfig: {
                       shapeConfig: {
@@ -100,6 +106,9 @@ class Person extends Component {
                       }
                     },
                     timeline: false,
+                    tooltipConfig: {
+                      body: d => FORMATTERS.commas(d.langs || d.views)
+                    },
                     xConfig: {
                       barConfig: {stroke: "#AFAAA4"},
                       gridConfig: {"stroke-width": 0},

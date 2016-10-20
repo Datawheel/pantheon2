@@ -1,0 +1,29 @@
+@import '../../common/colors';
+@import '../../common/typography';
+
+.d3plus-tooltip {
+  color: #82817f;
+  font-family: var(--fontAmiko);
+  z-index: 100;
+
+  & .d3plus-tooltip-body {
+    padding: 6px;
+
+    & .sub {
+      color: #82817f;
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: 2px;
+      padding-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    & .bold {
+      font-size: 12px;
+      font-weight: 800;
+      margin-right: 6px;
+    }
+
+  }
+
+}

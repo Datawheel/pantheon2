@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import styles from 'css/components/profile/header';
 import Viz from "components/viz/Index";
 
+import {FORMATTERS} from "types";
+
 const Header = ({ pageviews, person }) => {
 
   const viewData = pageviews.map(d => {
@@ -37,12 +39,6 @@ const Header = ({ pageviews, person }) => {
                  height: 100,
                  groupBy: "person",
                  legend: false,
-                 on: {
-                   click: null,
-                   mouseenter: null,
-                   mouseleave: null,
-                   mousemove: null
-                 },
                  shape: d => d.shape || "Line",
                  shapeConfig: {
                    Circle: {
@@ -57,6 +53,10 @@ const Header = ({ pageviews, person }) => {
                  },
                  time: d => d.pageview_date,
                  timeline: false,
+                 tooltipConfig: {
+                   "body": d => `<span class="bold">${FORMATTERS.date(d.pageview_date)}</span>${FORMATTERS.commas(d.num_pageviews)}`,
+                   "title": "Page Views (PV)"
+                 },
                  width: 275,
                  x: d => d.pageview_date,
                  xConfig: {

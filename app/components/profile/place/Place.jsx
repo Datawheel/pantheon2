@@ -32,13 +32,13 @@ class Place extends Component {
     const {place, peopleBornHere, professionsHere, professions, peopleBornHereAlive} = placeProfile;
 
     var tmapData = peopleBornHere
-      .filter(p => p.birthyear !== null);
+      .filter(p => p.birthyear !== null)
+      .sort((a, b) => b.langs - a.langs);
 
     var priestleyMax = 25;
 
     var priestleyData = tmapData
       .filter(p => p.deathyear !== null)
-      .sort((a, b) => b.langs - a.langs)
       .slice(0, priestleyMax);
 
     const sections = [
@@ -52,7 +52,18 @@ class Place extends Component {
                     attrs: professions,
                     data: tmapData,
                     groupBy: ["domain", "group", "name"],
-                    time: d => d.birthyear
+                    time: d => d.birthyear,
+                    tooltipConfig: {
+                      body: d => {
+                        if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
+                        let txt = "<span class='sub'>Notable People</span>";
+                        const names = d.name.slice(0, 3);
+                        tmapData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
+                          txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
+                        });
+                        return txt;
+                      }
+                    }
                   }} />
       },
       {title: "Profession Trends", slug: "profession_trends"},
@@ -66,9 +77,12 @@ class Place extends Component {
                     attrs: professions,
                     data: priestleyData,
                     depth: 1,
+                    end: d => d.deathyear,
                     groupBy: ["domain", "name"],
                     start: d => d.birthyear,
-                    end: d => d.deathyear
+                    tooltipConfig: {
+                      body: d => `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`
+                    }
                   }} />
       },
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
