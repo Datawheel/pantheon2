@@ -15,4 +15,75 @@
       }
     }
   }
+
+  & .home-container {
+    width: 100%;
+  }
+
+  & .home-head {
+    margin: 0 auto;
+    padding: 120px 0 60px;
+    text-align: center;
+
+    & h1 {
+      margin: 0 auto;
+
+      & img {
+        width: 266px;
+      }
+    }
+
+    & h3 {
+      @apply --smallCaps;
+      font-size: 14px;
+      letter-spacing: 2.2px;
+      margin: 5px auto 25px;
+    }
+
+    & .home-search {
+      position: relative;
+      max-width: 266px;
+      margin: 0 auto;
+      text-align: left;
+
+      & img {
+        position: absolute;
+        width: 16px;
+        margin: 5px;
+        opacity: 0.4;
+      }
+
+      & input {
+        width: 100%;
+        padding: 5px 28px 7px;
+        border: 0;
+        border-bottom: 1px solid var(--colorMatza);
+        box-sizing: border-box;
+        background: none;
+        @apply --normal;
+        line-height: 1;
+
+        &::placeholder {
+          @apply --normal;
+          letter-spacing: 0.5px;
+        }
+
+        &:active, &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+
+  & .placeholder-home-img {
+    /*height: 100%;*/
+    height: 1344px;
+    width: 889px;
+    margin: 0 auto;
+    background: url('../../images/placeholder_home.png') no-repeat;
+    background-size: contain;
+    background-position: 50%;
+    background-blend-mode: multiply;
+    background-color: var(--colorEggshell);
+  }
 }

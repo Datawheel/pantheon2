@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from 'css/components/home';
-import { logOut, activateSearch } from 'actions/users';
 import searchSvg from 'images/icon-search.svg';
+import pantheonLogoSvg from 'images/logo.svg';
+import placeholderHome from 'images/placeholder_home.png';
 
 /*
  * Note: This is kept as a container-level component,
@@ -10,10 +11,17 @@ import searchSvg from 'images/icon-search.svg';
  */
 const Home = () => {
   return (
-    <div>
-      <h1>Home Page</h1>
-      <div onClick={ activateSearch }>
-        <img src={searchSvg} alt={`Search`} />
+    <div className='home-container'>
+      <div className='home-head'>
+        <h1><img src={pantheonLogoSvg} alt={`Pantheon`} /></h1>
+        <h3>Mapping Cultural Memory</h3>
+        <div className='home-search'>
+          <img src={searchSvg} alt={`Search`} />
+          <input type={'text'} placeholder={'Napoleon, fine arts, Syria'} />
+        </div>
+      </div>
+      <div className='home-body'>
+        <div className='placeholder-home-img'></div>
       </div>
     </div>
   );
