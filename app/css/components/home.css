@@ -1,0 +1,18 @@
+@import '../common/typography';
+@import '../common/colors';
+
+.home {
+  & .navigation {
+    & .items {
+      max-width: 590px;
+
+      & .item.home {
+        display: none;
+      }
+
+      & .search-btn {
+        display: none;
+      }
+    }
+  }
+}

@@ -1,4 +1,7 @@
 import React from 'react';
+import styles from 'css/components/home';
+import { logOut, activateSearch } from 'actions/users';
+import searchSvg from 'images/icon-search.svg';
 
 /*
  * Note: This is kept as a container-level component,
@@ -9,6 +12,9 @@ const Home = () => {
   return (
     <div>
       <h1>Home Page</h1>
+      <div onClick={ activateSearch }>
+        <img src={searchSvg} alt={`Search`} />
+      </div>
     </div>
   );
 };
