@@ -15,8 +15,8 @@ const Header = ({ pageviews, person }) => {
   const sparkNums = sparkTicks.map(Number);
   const circleData = viewData.filter(d => sparkNums.includes(d.pageview_date.getTime()));
   const sparkData = viewData.concat([
-    Object.assign({}, circleData[0], {shape: "Circle", person: "start"}),
-    Object.assign({}, circleData[1], {shape: "Circle", person: "end"})
+    Object.assign({}, circleData[0], {shape: "Circle", person: "circle"}),
+    Object.assign({}, circleData[1], {shape: "Circle", person: "circle"})
   ]);
 
   const backgroundColor = COLORS_DOMAIN[person.profession.domain_slug],
@@ -76,7 +76,13 @@ const Header = ({ pageviews, person }) => {
                    tickFormat: d => new Date(d).getFullYear(),
                    ticks: sparkTicks,
                    tickSize: 0,
-                   title: false
+                   title: "PAGE VIEWS (PV)",
+                   titleConfig: {
+                     fontColor: "#4B4A48",
+                     fontFamily: () => "Amiko",
+                     fontSize: () => 10,
+                     stroke: "#4B4A48"
+                   }
                  },
                  y: d => d.num_pageviews,
                  yConfig: {
