@@ -14,11 +14,15 @@ const ProfessionTrends = ({ place, peopleBorn, peopleDied, professions }) => {
     .sortValues((a, b) => b.langs-a.langs)
     .entries(peopleBorn)
     .sort(function (a, b) { return b.values.length-a.values.length });
+  const professionsLookup = professions.reduce(function(obj, item){
+        obj[item.id] = item;
+        return obj;
+    },{});
 
   return (
     <div>
       <p>
-        Over the past 100 years the top profession of globally memorable people from {place.name} has been {professions[topModern[0].key].name}, including <AnchorList items={topModern[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />. Whereas throughout history the profession with the most memorable people from {place.name} has been {professions[topOverall[0].key].name}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />.
+        Over the past 100 years the top profession of globally memorable people from {place.name} has been {professionsLookup[topModern[0].key].name}, including <AnchorList items={topModern[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />. Whereas throughout history the profession with the most memorable people from {place.name} has been {professionsLookup[topOverall[0].key].name}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />.
       </p>
     </div>
   );
