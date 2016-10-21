@@ -65,7 +65,7 @@ class Place extends Component {
                         if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
                         let txt = "<span class='sub'>Notable People</span>";
                         const names = d.name.slice(0, 3);
-                        tmapData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
+                        tmapBornData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
                           txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
                         });
                         return txt;
@@ -77,7 +77,18 @@ class Place extends Component {
                     attrs: professions,
                     data: tmapDeathData,
                     groupBy: ["domain", "group", "name"],
-                    time: d => d.deathyear
+                    time: d => d.deathyear,
+                    tooltipConfig: {
+                      body: d => {
+                        if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
+                        let txt = "<span class='sub'>Notable People</span>";
+                        const names = d.name.slice(0, 3);
+                        tmapDeathData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
+                          txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
+                        });
+                        return txt;
+                      }
+                    }
                   }} />
         ]
       },
