@@ -22,7 +22,6 @@
   }
 
   & .deco-line {
-    background-color: var(--colorArts);
     width: 1px;
     height: 300%;
     display: inline-block;
