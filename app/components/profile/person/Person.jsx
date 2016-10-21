@@ -13,7 +13,7 @@ import Viz from "components/viz/Index";
 import { activateSearch } from "actions/users";
 import { fetchPerson, fetchProfessionRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
 
-import {FORMATTERS} from "types";
+import { FORMATTERS } from "types";
 
 class Person extends Component {
 

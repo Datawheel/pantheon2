@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import AnchorList from 'components/utils/AnchorList';
+import { FORMATTERS } from "types";
 
 const YearRanking = ({ person, ranking }) => {
 
@@ -38,17 +39,17 @@ const YearRanking = ({ person, ranking }) => {
   return (
     <div>
       <p>
-        Among people born in {person.birthyear.name}, {person.name} ranks {ranking.me.birthyear_rank_unique} out of {person.birthyear.num_born}.&nbsp;
+        Among people born in {FORMATTERS.year(person.birthyear.name)}, {person.name} ranks {ranking.me.birthyear_rank_unique} out of {person.birthyear.num_born}.&nbsp;
         { betterBirthPeers }
         { worseBirthPeers }
         { ranking.deathyearPeers.length ?
-          <span>&nbsp;Among people deceased in {person.deathyear.name}, {person.name} ranks {ranking.me.deathyear_rank_unique} out of {person.deathyear.num_died}.&nbsp;</span>
+          <span>&nbsp;Among people deceased in {FORMATTERS.year(person.deathyear.name)}, {person.name} ranks {ranking.me.deathyear_rank_unique} out of {person.deathyear.num_died}.&nbsp;</span>
           : null}
         { betterDeathPeers }
         { worseDeathPeers }
       </p>
       <div className={'rank-title'}>
-        <h3>Others Born in {person.birthyear.name}</h3>
+        <h3>Others Born in {FORMATTERS.year(person.birthyear.name)}</h3>
         <a href='#'>Go to all Rankings</a>
       </div>
       <ul className={'rank-list'}>
@@ -58,7 +59,7 @@ const YearRanking = ({ person, ranking }) => {
               <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
             </div>
             <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-            <p className={'rank-year'}>{peer.birthyear} - {peer.deathyear ? `${peer.deathyear}` : 'Present'}</p>
+            <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
             <p className={'rank-num'}>Rank <span>{peer.birthyear_rank}</span></p>
           </li>
         )}
@@ -66,7 +67,7 @@ const YearRanking = ({ person, ranking }) => {
       { ranking.deathyearPeers.length ?
         <div className={'rank-sec-body'}>
           <div className={'rank-title'}>
-            <h3>Others Deceased in {person.deathyear.name}</h3>
+            <h3>Others Deceased in {FORMATTERS.year(person.deathyear.name)}</h3>
             <a href='#'>Go to all Rankings</a>
           </div>
           <ul className={'rank-list'}>
@@ -76,7 +77,7 @@ const YearRanking = ({ person, ranking }) => {
                   <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
                 </div>
                 <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-                <p className={'rank-year'}>{peer.birthyear} - {peer.deathyear ? `${peer.deathyear}` : 'Present'}</p>
+                <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
                 <p className={'rank-num'}>Rank <span>{peer.deathyear_rank}</span></p>
               </li>
             )}

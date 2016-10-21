@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import AnchorList from 'components/utils/AnchorList';
+import { FORMATTERS } from "types";
 
 const CountryRanking = ({ person, ranking }) => {
 
@@ -15,10 +16,10 @@ const CountryRanking = ({ person, ranking }) => {
   });
 
   if(birthcountryRanking.betterPeers.length){
-    betterBirthPeers = <span>Before { person.gender ? "her" : "him" } are {<AnchorList items={birthcountryRanking.betterPeers} name={(d) => `${d.name} (${d.birthyear})`} url={(d) => `/profile/person/${d.slug}/`} />}. </span>
+    betterBirthPeers = <span>Before { person.gender ? "her" : "him" } are {<AnchorList items={birthcountryRanking.betterPeers} name={(d) => `${d.name} (${FORMATTERS.year(d.birthyear)})`} url={(d) => `/profile/person/${d.slug}/`} />}. </span>
   }
   if(birthcountryRanking.worsePeers.length){
-    worseBirthPeers = <span>After { person.gender ? "her" : "him" } are {<AnchorList items={birthcountryRanking.worsePeers} name={(d) => `${d.name} (${d.birthyear})`} url={(d) => `/profile/person/${d.slug}/`} />}.</span>
+    worseBirthPeers = <span>After { person.gender ? "her" : "him" } are {<AnchorList items={birthcountryRanking.worsePeers} name={(d) => `${d.name} (${FORMATTERS.year(d.birthyear)})`} url={(d) => `/profile/person/${d.slug}/`} />}.</span>
   }
 
   if(ranking.deathcountryPeers.length){
@@ -27,10 +28,10 @@ const CountryRanking = ({ person, ranking }) => {
       worsePeers: ranking.deathcountryPeers.filter(p => p.deathcountry_rank_unique > ranking.me.deathcountry_rank_unique)
     });
     if(deathcountryRanking.betterPeers.length){
-      betterDeathPeers = <span>Before { person.gender ? "her" : "him" } are {<AnchorList items={deathcountryRanking.betterPeers} name={(d) => `${d.name} (${d.birthyear})`} url={(d) => `/profile/person/${d.slug}/`} />}. </span>
+      betterDeathPeers = <span>Before { person.gender ? "her" : "him" } are {<AnchorList items={deathcountryRanking.betterPeers} name={(d) => `${d.name} (${FORMATTERS.year(d.birthyear)})`} url={(d) => `/profile/person/${d.slug}/`} />}. </span>
     }
     if(deathcountryRanking.worsePeers.length){
-      worseDeathPeers = <span>After { person.gender ? "her" : "him" } are {<AnchorList items={deathcountryRanking.worsePeers} name={(d) => `${d.name} (${d.birthyear})`} url={(d) => `/profile/person/${d.slug}/`} />}.</span>
+      worseDeathPeers = <span>After { person.gender ? "her" : "him" } are {<AnchorList items={deathcountryRanking.worsePeers} name={(d) => `${d.name} (${FORMATTERS.year(d.birthyear)})`} url={(d) => `/profile/person/${d.slug}/`} />}.</span>
     }
   }
 
@@ -58,7 +59,7 @@ const CountryRanking = ({ person, ranking }) => {
               <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
             </div>
             <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-            <p className={'rank-year'}>{peer.birthyear} - {peer.deathyear ? `${peer.deathyear}` : 'Present'}</p>
+            <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
             <p className={'rank-num'}>Rank <span>{peer.birthcountry_rank}</span></p>
           </li>
         )}
@@ -76,7 +77,7 @@ const CountryRanking = ({ person, ranking }) => {
                   <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
                   </div>
                 <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-                <p className={'rank-year'}>{peer.birthyear} - {peer.deathyear ? `${peer.deathyear}` : 'Present'}</p>
+                <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
                 <p className={'rank-num'}>Rank <span>{peer.deathcountry_rank}</span></p>
               </li>
             )}

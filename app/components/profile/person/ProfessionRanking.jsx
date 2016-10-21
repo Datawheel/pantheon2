@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import AnchorList from 'components/utils/AnchorList';
+import { FORMATTERS } from "types";
 
 const ProfessionRanking = ({ person, ranking }) => {
 
@@ -36,7 +37,7 @@ const ProfessionRanking = ({ person, ranking }) => {
               <img src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
             </div>
             <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-            <p className={'rank-year'}>{peer.birthyear} - {peer.deathyear ? `${peer.deathyear}` : 'Present'}</p>
+            <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
             <p className={'rank-prof'}>{peer.profession.name}</p>
             <p className={'rank-num'}>Rank <span>{peer.profession_rank}</span></p>
           </li>

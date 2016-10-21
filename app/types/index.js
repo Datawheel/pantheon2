@@ -50,5 +50,6 @@ import {timeFormat} from "d3-time-format";
 
 export const FORMATTERS = {
   commas: format(","),
-  date: timeFormat("%B %d, %Y")
+  date: timeFormat("%B %d, %Y"),
+  year: (y) => y < 0 ? `${Math.abs(y)} BC` : y,
 }
