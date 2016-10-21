@@ -33,13 +33,23 @@ class Place extends Component {
     const {placeProfile} = this.props;
     const {place, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, professions, peopleBornHereAlive} = placeProfile;
 
+    const yearBuckets = 50;
+
     const tmapBornData = peopleBornHere
       .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
+    tmapBornData.forEach(d => {
+      d.bucketyear = Math.round(d.birthyear / yearBuckets) * yearBuckets;
+    });
+
     const tmapDeathData = peopleDiedHere
       .filter(p => p.deathyear !== null)
       .sort((a, b) => b.langs - a.langs);
+
+    tmapDeathData.forEach(d => {
+      d.bucketyear = Math.round(d.deathyear / yearBuckets) * yearBuckets;
+    });
 
     const priestleyMax = 25;
 
@@ -92,7 +102,52 @@ class Place extends Component {
                   }} />
         ]
       },
-      {title: "Profession Trends", slug: "profession_trends"},
+      {
+        title: "Profession Trends",
+        slug: "profession_trends",
+        viz: [
+          <Viz type="StackedArea"
+                config={{
+                  attrs: professions,
+                  data: tmapBornData,
+                  groupBy: ["domain", "group", "name"],
+                  time: d => d.bucketyear,
+                  tooltipConfig: {
+                    body: d => {
+                      if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
+                      let txt = "<span class='sub'>Notable People</span>";
+                      const names = d.name.slice(0, 3);
+                      tmapBornData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
+                        txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
+                      });
+                      return txt;
+                    }
+                  },
+                  x: "bucketyear",
+                  y: d => d.id instanceof Array ? d.id.length : 1,
+                }} />,
+            <Viz type="StackedArea"
+                  config={{
+                    attrs: professions,
+                    data: tmapDeathData,
+                    groupBy: ["domain", "group", "name"],
+                    time: d => d.bucketyear,
+                    tooltipConfig: {
+                      body: d => {
+                        if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
+                        let txt = "<span class='sub'>Notable People</span>";
+                        const names = d.name.slice(0, 3);
+                        tmapDeathData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
+                          txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
+                        });
+                        return txt;
+                      }
+                    },
+                    x: "bucketyear",
+                    y: d => d.id instanceof Array ? d.id.length : 1,
+                  }} />
+        ]
+      },
       {title: "Cities", slug: "cities"},
       {title: "Historical Places", slug: "historical_places"},
       {
@@ -134,7 +189,7 @@ class Place extends Component {
             title={section.title}
             slug={section.slug}>
             {section.content ? section.content : null}
-            {section.viz ? section.viz.map((v, key) => v) : null}
+            {section.viz && section.viz.length ? section.viz : null}
           </Section>
         )}
       </div>

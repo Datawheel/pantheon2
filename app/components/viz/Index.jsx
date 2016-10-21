@@ -3,10 +3,10 @@ import React, {Component, PropTypes} from "react";
 import styles from 'css/components/viz/tooltip.css';
 import {default as tooltipStyle} from "css/components/viz/tooltip.js";
 
-import {LinePlot} from "d3plus-plot";
+import {LinePlot, StackedArea} from "d3plus-plot";
 import {Priestley} from "d3plus-priestley";
 import {Treemap} from "d3plus-treemap";
-const types = {LinePlot, Priestley, Treemap};
+const types = {LinePlot, Priestley, StackedArea, Treemap};
 
 import {COLORS_DOMAIN} from "types";
 
