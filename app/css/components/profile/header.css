@@ -64,7 +64,7 @@ header {
 
     & .bg-img {
       background-blend-mode: darken;
-      background-position: center right;
+      background-position: top right;
       background-size: cover;
       height: 100%;
       width: 50%;
