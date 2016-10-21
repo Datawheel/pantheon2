@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import styles from 'css/components/profile/header';
 import Viz from "components/viz/Index";
 
-import {FORMATTERS} from "types";
+import {COLORS_DOMAIN, FORMATTERS} from "types";
 
 const Header = ({ pageviews, person }) => {
 
@@ -19,12 +19,15 @@ const Header = ({ pageviews, person }) => {
     Object.assign({}, circleData[1], {shape: "Circle", person: "end"})
   ]);
 
+  const backgroundColor = COLORS_DOMAIN[person.profession.domain_slug],
+        backgroundImage = `url('/people/${person.wiki_id}.jpg')`;
+
   return (
     <header className='hero'>
       <div className='bg-container'>
-        <div className='bg-img-mask person'>
-          <div className='bg-img bg-img-l' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
-          <div className='bg-img bg-img-r' style={{backgroundImage: `url('/people/${person.wiki_id}.jpg')`}}></div>
+        <div className='bg-img-mask person' style={{backgroundColor}}>
+          <div className='bg-img bg-img-l' style={{backgroundColor, backgroundImage}}></div>
+          <div className='bg-img bg-img-r' style={{backgroundColor, backgroundImage}}></div>
         </div>
       </div>
       <div className='info'>

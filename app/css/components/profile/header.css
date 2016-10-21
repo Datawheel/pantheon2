@@ -60,11 +60,9 @@ header {
   overflow: hidden;
 
   &.person {
-    background-color: var(--colorArts);
     filter: blur(6px) saturate(120%) contrast(130%);
 
     & .bg-img {
-      background-color: var(--colorArts);
       background-blend-mode: darken;
       background-position: center right;
       background-size: cover;
