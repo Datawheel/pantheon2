@@ -4,6 +4,8 @@ import Viz from "components/viz/Index";
 
 import {COLORS_DOMAIN, FORMATTERS} from "types";
 
+const formatYear = (y) => y < 0 ? `${Math.abs(y)} BC` : y;
+
 const Header = ({ pageviews, person }) => {
 
   const viewData = pageviews.map(d => {
@@ -34,7 +36,7 @@ const Header = ({ pageviews, person }) => {
         <p className='top-desc'>The Cultural Memory of</p>
         <h2 className='profile-type'>{person.profession.name}</h2>
         <h1 className='profile-name'>{person.name}</h1>
-        <p className='date-subtitle'>{person.birthyear.name} - {person.deathyear ? `${person.deathyear.name}` : "Present"}</p>
+        <p className='date-subtitle'>{formatYear(person.birthyear.name)} - {person.deathyear ? `${formatYear(person.deathyear.name)}` : "Present"}</p>
         <pre>
           <Viz type="LinePlot"
                config={{
