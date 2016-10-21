@@ -8,6 +8,7 @@ import Intro from "components/profile/place/Intro";
 import Section from "components/profile/Section";
 import PeopleRanking from "components/profile/place/PeopleRanking";
 import Professions from "components/profile/place/Professions";
+import ProfessionTrends from "components/profile/place/ProfessionTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
 import { fetchPlace, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
@@ -109,6 +110,7 @@ class Place extends Component {
       {
         title: "Profession Trends",
         slug: "profession_trends",
+        content: <ProfessionTrends place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} professions={professions} />,
         viz: [
           <Viz type="StackedArea"
                 title="Births Over Time"
