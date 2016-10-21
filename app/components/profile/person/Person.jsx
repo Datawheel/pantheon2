@@ -108,7 +108,7 @@ class Person extends Component {
                     },
                     timeline: false,
                     tooltipConfig: {
-                      body: d => FORMATTERS.commas(d.langs || d.views)
+                      body: d => `<span class="center">${FORMATTERS.date(d.x)} - ${FORMATTERS.commas(d.langs || d.views)}</span>`
                     },
                     xConfig: {
                       barConfig: {stroke: "#AFAAA4"},

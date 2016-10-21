@@ -2,26 +2,41 @@
 @import '../../common/typography';
 
 .d3plus-tooltip {
-  color: #82817f;
+  border: 1px solid var(--colorMatza) !important;
   font-family: var(--fontAmiko);
   z-index: 100;
 
   & .d3plus-tooltip-body {
-    padding: 6px;
+    color: var(--colorStone);
+    font-size: 8px;
+    letter-spacing: 0;
+    padding: 7px 7px 0;
 
     & .sub {
-      color: #82817f;
+      color: var(--colorSlate);
       display: inline-block;
-      font-size: 8px;
-      letter-spacing: 2px;
+      font-size: 9px;
+      letter-spacing: 0.7px;
       padding-bottom: 6px;
       text-transform: uppercase;
     }
 
+    & .center {
+      color: var(--colorSlate);
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.7px;
+      padding-bottom: 6px;
+      text-align: center;
+    }
+
     & .bold {
-      font-size: 12px;
-      font-weight: 800;
-      margin-right: 6px;
+      color: var(--colorSlate);
+      display: inline-block;
+      font-size: 10px;
+      font-weight: bold;
+      margin-bottom: 7px;
+      margin-right: 5px;
     }
 
   }

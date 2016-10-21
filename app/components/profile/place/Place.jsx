@@ -72,38 +72,16 @@ class Place extends Component {
                     attrs: professions,
                     data: tmapBornData,
                     groupBy: ["domain", "group", "name"],
-                    time: d => d.birthyear,
-                    tooltipConfig: {
-                      body: d => {
-                        if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
-                        let txt = "<span class='sub'>Notable People</span>";
-                        const names = d.name.slice(0, 3);
-                        tmapBornData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
-                          txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
-                        });
-                        return txt;
-                      }
-                    }
+                    time: "birthyear"
                   }} />,
             <Viz type="Treemap"
-                  title={`Professions of People Born in ${place.name}`}
+                  title={`Professions of People Deceased in ${place.name}`}
                   key="tmap2"
                   config={{
                     attrs: professions,
                     data: tmapDeathData,
                     groupBy: ["domain", "group", "name"],
-                    time: d => d.deathyear,
-                    tooltipConfig: {
-                      body: d => {
-                        if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
-                        let txt = "<span class='sub'>Notable People</span>";
-                        const names = d.name.slice(0, 3);
-                        tmapDeathData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
-                          txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
-                        });
-                        return txt;
-                      }
-                    }
+                    time: "deathyear"
                   }} />
         ]
       },
@@ -119,18 +97,7 @@ class Place extends Component {
                   attrs: professions,
                   data: tmapBornData,
                   groupBy: ["domain", "group", "name"],
-                  time: d => d.bucketyear,
-                  tooltipConfig: {
-                    body: d => {
-                      if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
-                      let txt = "<span class='sub'>Notable People</span>";
-                      const names = d.name.slice(0, 3);
-                      tmapBornData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
-                        txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
-                      });
-                      return txt;
-                    }
-                  },
+                  time: "bucketyear",
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1,
                 }} />,
@@ -141,18 +108,7 @@ class Place extends Component {
                     attrs: professions,
                     data: tmapDeathData,
                     groupBy: ["domain", "group", "name"],
-                    time: d => d.bucketyear,
-                    tooltipConfig: {
-                      body: d => {
-                        if (!(d.name instanceof Array)) return `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`;
-                        let txt = "<span class='sub'>Notable People</span>";
-                        const names = d.name.slice(0, 3);
-                        tmapDeathData.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
-                          txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
-                        });
-                        return txt;
-                      }
-                    },
+                    time: "bucketyear",
                     x: "bucketyear",
                     y: d => d.id instanceof Array ? d.id.length : 1,
                   }} />
@@ -170,12 +126,9 @@ class Place extends Component {
                     attrs: professions,
                     data: priestleyData,
                     depth: 1,
-                    end: d => d.deathyear,
+                    end: "deathyear",
                     groupBy: ["domain", "name"],
-                    start: d => d.birthyear,
-                    tooltipConfig: {
-                      body: d => `<span class="bold">Born</span> ${d.birthyear}<br /><span class="bold">Died</span> ${d.deathyear}`
-                    }
+                    start: "birthyear"
                   }} />]
       },
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}

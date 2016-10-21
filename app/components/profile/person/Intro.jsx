@@ -6,7 +6,7 @@ import {COLORS_DOMAIN} from "types";
 
 const Intro = ({ person }) => {
 
-  const age = person.deathyear
+  const age = person.deathyear !== null
             ? person.deathyear.id - person.birthyear.id
             : new Date().getFullYear() - person.birthyear.id,
         backgroundColor = COLORS_DOMAIN[person.profession.domain_slug],

@@ -75,6 +75,24 @@ class Viz extends Component {
       })
       .depth(0)
       .tooltipConfig(tooltipStyle)
+      .tooltipConfig({
+        body: d => {
+          if (!(d.name instanceof Array)) {
+            const age = d.deathyear !== null
+                      ? d.deathyear - d.birthyear
+                      : new Date().getFullYear() - d.birthyear;
+            return d.deathyear !== null
+                 ? `<span class="center">${d.birthyear} - ${d.deathyear}, ${age} years old</span>`
+                 : `<span class="center">Born ${d.birthyear}, ${age} years old</span>`;
+          }
+          let txt = "<span class='sub'>Notable People</span>";
+          const names = d.name.slice(0, 3);
+          config.data.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
+            txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
+          });
+          return txt;
+        }
+      })
       .config(config)
       .select(this.refs.svg);
 
