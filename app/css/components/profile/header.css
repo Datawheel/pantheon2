@@ -82,6 +82,7 @@ header {
       height: 50%;
       width: 100%;
       position: relative;
+      background-position: center;
 
       & img {
         position: absolute;

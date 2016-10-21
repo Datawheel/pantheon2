@@ -17,6 +17,7 @@ const Header = ({ place }) => {
         <p className='top-desc'>Cultural Production in</p>
         <h2 className='profile-type'>Present Day</h2>
         <h1 className='profile-name'>{place.name}</h1>
+        { place.name !== place.country_name ? <p className='date-subtitle'>{place.country_name}</p> : null}
         <p className='date-subtitle'>9000 - Present</p>
         <pre>
           <img className='sparkline' src={sparklineSvg} alt={`Sparkline here`} />
