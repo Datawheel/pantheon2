@@ -114,7 +114,6 @@
     font-size: 17px;
     font-weight: 400;
     color: var(--colorBlackhole);
-    text-transform: capitalize;
   }
 
   --searchResults {
