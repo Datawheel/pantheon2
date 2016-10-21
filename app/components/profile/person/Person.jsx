@@ -85,6 +85,7 @@ class Person extends Component {
         title: personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife",
         slug: "afterlife",
         viz: <Viz type="LinePlot"
+                  title={`${personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife"} of ${personProfile.person.name}`}
                   config={{
                     aggs: {
                       langs: a => Math.max(...a)

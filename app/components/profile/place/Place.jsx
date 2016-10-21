@@ -65,6 +65,8 @@ class Place extends Component {
         content: <Professions place={place} professionsBorn={professionsBornHere} professionsDied={professionsDiedHere} />,
         viz: [
             <Viz type="Treemap"
+                  title={`Professions of People Born in ${place.name}`}
+                  key="tmap1"
                   config={{
                     attrs: professions,
                     data: tmapBornData,
@@ -83,6 +85,8 @@ class Place extends Component {
                     }
                   }} />,
             <Viz type="Treemap"
+                  title={`Professions of People Born in ${place.name}`}
+                  key="tmap2"
                   config={{
                     attrs: professions,
                     data: tmapDeathData,
@@ -107,6 +111,8 @@ class Place extends Component {
         slug: "profession_trends",
         viz: [
           <Viz type="StackedArea"
+                title="Births Over Time"
+                key="stacked1"
                 config={{
                   attrs: professions,
                   data: tmapBornData,
@@ -127,6 +133,8 @@ class Place extends Component {
                   y: d => d.id instanceof Array ? d.id.length : 1,
                 }} />,
             <Viz type="StackedArea"
+                  title="Deaths Over Time"
+                  key="stacked2"
                   config={{
                     attrs: professions,
                     data: tmapDeathData,
@@ -151,9 +159,11 @@ class Place extends Component {
       {title: "Cities", slug: "cities"},
       {title: "Historical Places", slug: "historical_places"},
       {
-        title: `Top ${priestleyMax} Overlapping Lives`,
+        title: `Overlapping Lives`,
         slug: "overlapping_lives",
         viz: [<Viz type="Priestley"
+                  title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
+                  key="priestley1"
                   config={{
                     attrs: professions,
                     data: priestleyData,

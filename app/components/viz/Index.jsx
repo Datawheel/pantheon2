@@ -89,9 +89,16 @@ class Viz extends Component {
   }
 
   render() {
+    const {title} = this.props;
     const {height, width} = this.props.config;
     return (
       <div className="viz">
+        { title ? 
+          <div className="rank-title">
+            <h3>{ title }</h3>
+            <a href="#">Keep Exploring</a>
+          </div>
+        : null }
         <svg ref="svg" style={{width: width || "100%", height: height || 500}}></svg>
       </div>
     );
