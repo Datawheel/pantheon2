@@ -2,30 +2,34 @@ import React, { Component, PropTypes } from 'react';
 import styles from 'css/components/profile/intro';
 import iconProfW from 'images/globalNav/profile-w.svg';
 
+import {COLORS_DOMAIN} from "types";
+
 const Intro = ({ person }) => {
   const today = new Date();
   const year = today.getFullYear();
   let age = year - person.birthyear.id;
   if(person.deathyear) age = person.deathyear.id - person.birthyear.id;
 
+  const backgroundColor = COLORS_DOMAIN[person.profession.domain_slug];
+
   return (
     <section className={'intro-section'}>
       <div className={'intro-deco'}>
         <div className={'deco-lines'}>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
-          <span className={'deco-line'}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
+          <span className={'deco-line'} style={{backgroundColor}}></span>
         </div>
       </div>
       <div className={'intro-content'}>
