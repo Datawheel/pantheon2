@@ -26,7 +26,7 @@ class Viz extends Component {
     // if (this.props.type !== "Treemap") return;
 
     // Grabs config from props.
-    const {config} = this.props;
+    const {config, type} = this.props;
 
     // Preps attribute list from config, and removes it when done.
     const attrs = config.attrs ? config.attrs.reduce((obj, d) => {
@@ -45,7 +45,7 @@ class Viz extends Component {
         else if (d.profession instanceof Array) val = attrs[d.profession[0]][g];
         else val = attrs[d.profession][g];
 
-        return `${val}`;
+        return val;
 
       }
     }) : ["id"];
@@ -61,7 +61,7 @@ class Viz extends Component {
     }
 
     // Draws the visualization!
-    const viz = new types[this.props.type]()
+    const viz = new types[type]()
       .aggs(uniques)
       .shapeConfig({
         fill: d => {
@@ -93,7 +93,7 @@ class Viz extends Component {
     const {height, width} = this.props.config;
     return (
       <div className="viz">
-        { title ? 
+        { title ?
           <div className="rank-title">
             <h3>{ title }</h3>
             <a href="#">Keep Exploring</a>
