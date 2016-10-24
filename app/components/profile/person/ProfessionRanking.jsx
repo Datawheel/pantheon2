@@ -31,19 +31,21 @@ const ProfessionRanking = ({ person, ranking }) => {
         <h3>Top Global {person.profession.name}s</h3>
         <a href='#'>Go to all Rankings</a>
       </div>
-      <ul className={'rank-list'}>
-        {ranking.peers.map((peer) =>
-          <li key={peer.id} className={ranking.me.profession_rank_unique === peer.profession_rank_unique ? 'rank-me' : null}>
-            <div className={'rank-photo'}>
-              <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
-            </div>
-            <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-            <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
-            <p className={'rank-prof'}>{peer.profession.name}</p>
-            <p className={'rank-num'}>Rank <span>{peer.profession_rank}</span></p>
-          </li>
-        )}
-      </ul>
+      <div className={'rank-carousel'}>
+        <ul className={'rank-list'}>
+          {ranking.peers.map((peer) =>
+            <li key={peer.id} className={ranking.me.profession_rank_unique === peer.profession_rank_unique ? 'rank-me' : null}>
+              <div className={'rank-photo'}>
+                <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+              </div>
+              <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
+              <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
+              <p className={'rank-prof'}>{peer.profession.name}</p>
+              <p className={'rank-num'}>Rank <span>{peer.profession_rank}</span></p>
+            </li>
+          )}
+        </ul>
+      </div>
     </div>
   )
 }

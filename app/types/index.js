@@ -1,4 +1,4 @@
-export const NUM_RANKINGS = 7;
+export const NUM_RANKINGS = 12;
 export const NUM_RANKINGS_PRE = Math.floor(NUM_RANKINGS/2);
 export const NUM_RANKINGS_POST = Math.floor(NUM_RANKINGS/2);
 

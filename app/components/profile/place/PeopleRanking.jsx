@@ -8,8 +8,8 @@ const PeopleRanking = ({ place, peopleBorn, peopleDied }) => {
   const oldestBirthyear = Math.min.apply(Math, peopleBorn.map(r => r.birthyear));
   const moreDeaths = peopleDied.length > peopleBorn.length ? true : false;
 
-  const topRankingBorn = peopleBorn.slice(0, 7);
-  const topRankingDied = peopleDied.slice(0, 7);
+  const topRankingBorn = peopleBorn.slice(0, 12);
+  const topRankingDied = peopleDied.slice(0, 12);
   return (
     <div>
       <p>

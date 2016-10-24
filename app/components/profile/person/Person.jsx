@@ -12,6 +12,7 @@ import CountryRanking from "components/profile/person/CountryRanking";
 import Viz from "components/viz/Index";
 import { activateSearch } from "actions/users";
 import { fetchPerson, fetchProfessionRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
+import styles from 'css/components/profile/person';
 
 import { FORMATTERS } from "types";
 
@@ -133,7 +134,7 @@ class Person extends Component {
     ];
 
     return (
-      <div>
+      <div className='person'>
         <Helmet
           htmlAttributes={{"lang": "en", "amp": undefined}}
           title={personProfile.person.name}

@@ -1,0 +1,22 @@
+@import '../../common/colors';
+@import '../../common/typography';
+@import '../../common/photocarousel';
+
+.person {
+  & .rank-carousel {
+    position: relative;
+
+    &::after {
+      @apply --photocarousel;
+      top: 72px;
+      right: -45px;
+    }
+
+    &::before {
+      @apply --photocarousel;
+      transform: scaleX(-1);
+      top: 72px;
+      left: -45px;
+    }
+  }
+}
