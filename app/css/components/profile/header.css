@@ -7,9 +7,6 @@
   --fontTitle: 'Marcellus', Times, serif;
 }
 
-/* what is this? */
-/*.contribute { @apply --small; }*/
-
 header {
   position: relative;
   width: 100%;
@@ -64,7 +61,7 @@ header {
 
     & .bg-img {
       background-blend-mode: darken;
-      background-position: top right;
+      background-position: 0% 0%;
       background-size: cover;
       height: 100%;
       width: 50%;
@@ -82,24 +79,12 @@ header {
       height: 50%;
       width: 100%;
       position: relative;
-      background-position: center;
-
-      & img {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: auto;
-      }
+      background-position: 100% 50%;
+      background-size: cover;
     }
 
     & .bg-img-b {
       transform: scaleY(-1);
-
-      & img {
-        bottom: -1px;
-      }
     }
   }
 
