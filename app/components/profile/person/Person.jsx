@@ -142,7 +142,7 @@ class Person extends Component {
         />
         <Header person={personProfile.person} pageviews={personProfile.pageviews} />
         <ProfileNav sections={sections} />
-        <Intro person={personProfile.person} />
+        <Intro />
         {sections.map((section, key) =>
           <Section
             index={key}

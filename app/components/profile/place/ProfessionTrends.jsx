@@ -5,12 +5,12 @@ import AnchorList from 'components/utils/AnchorList';
 const ProfessionTrends = ({ place, peopleBorn, peopleDied, professions }) => {
   const currentYear = new Date().getFullYear();
   const topModern = nest()
-    .key(function(d) { return d.profession; })
+    .key(function(d) { return d.profession.id; })
     .sortValues((a, b) => b.langs-a.langs)
     .entries(peopleBorn.filter(d => d.birthyear >= (currentYear-100)))
     .sort(function (a, b) { return b.values.length-a.values.length });
   const topOverall = nest()
-    .key(function(d) { return d.profession; })
+    .key(function(d) { return d.profession.id; })
     .sortValues((a, b) => b.langs-a.langs)
     .entries(peopleBorn)
     .sort(function (a, b) { return b.values.length-a.values.length });

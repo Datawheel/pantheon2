@@ -42,8 +42,8 @@ class Viz extends Component {
         let val;
 
         if (d[g]) val = d[g];
-        else if (d.profession instanceof Array) val = attrs[d.profession[0]][g];
-        else val = attrs[d.profession][g];
+        else if (d.profession_id instanceof Array) val = attrs[d.profession_id[0]][g];
+        else val = attrs[d.profession_id][g];
 
         return val;
 
@@ -51,7 +51,7 @@ class Viz extends Component {
     }) : ["id"];
 
     config.data.forEach(d => {
-      if (d.profession !== void 0) d.profession = `${d.profession}`;
+      if (d.profession_id !== void 0) d.profession_id = `${d.profession_id}`;
     });
 
     switch(this.props.type) {
@@ -66,8 +66,8 @@ class Viz extends Component {
       .shapeConfig({
         fill: d => {
           if (d.color) return d.color;
-          else if (d.profession !== void 0) {
-            let occ = d.profession.constructor === Array ? d.profession[0] : d.profession;
+          else if (d.profession_id !== void 0) {
+            let occ = d.profession_id.constructor === Array ? d.profession_id[0] : d.profession_id;
             return COLORS_DOMAIN[attrs[occ].domain_slug];
           }
           return "#ccc";

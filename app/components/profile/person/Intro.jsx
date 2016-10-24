@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import styles from 'css/components/profile/intro';
 import iconProfW from 'images/globalNav/profile-w.svg';
+import PersonImage from "components/utils/PersonImage";
 import { FORMATTERS } from "types";
 
 import {COLORS_DOMAIN} from "types";
@@ -17,11 +19,11 @@ const Intro = ({ person }) => {
     <section className="intro-section">
       <div className="intro-deco">
         <div className="deco-lines">
-          { Array(decoLines).fill().map(i => <span key={i} className="deco-line" style={{backgroundColor}}></span>) }
+          { Array(decoLines).fill().map((d, i) => <span key={i} className="deco-line" style={{backgroundColor}}></span>) }
         </div>
       </div>
       <div className="intro-content">
-        <img src={`/people/${person.wiki_id}.jpg`} alt={`Photo of ${person.name}`} />
+        <PersonImage src={`/people/${person.wiki_id}.jpg`} alt={`Photo of ${person.name}`} />
         <div className="intro-text">
           <h3>
             <img src={iconProfW} />
@@ -48,4 +50,10 @@ Intro.propTypes = {
   person: PropTypes.object
 };
 
-export default Intro;
+function mapStateToProps(state) {
+  return {
+    person: state.personProfile.person
+  };
+}
+
+export default connect(mapStateToProps)(Intro);

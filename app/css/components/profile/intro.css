@@ -47,6 +47,10 @@
     filter: grayscale(100%) contrast(105%) brightness(105%);
   }
 
+  & .missing-image {
+    display: none;
+  }
+
   & .intro-text {
     width: 47.5vw;
     max-width: 550px;
