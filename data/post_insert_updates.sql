@@ -111,3 +111,47 @@ WHERE place_profession.place=subq.deathplace AND place_profession.profession=sub
 UPDATE person
 SET deathplace=NULL, deathplace_rank=NULL, deathplace_rank_unique=NULL, deathcountry=NULL, deathcountry_rank=NULL, deathcountry_rank_unique=NULL, deathyear=NULL, deathyear_rank=NULL, deathyear_rank_unique=NULL
 WHERE alive=TRUE;
+
+-- UPDATE places to add rank for people born in a given COUNTRY
+UPDATE place
+SET
+	born_rank=subq2.born_rank, born_rank_unique=subq2.born_rank_unique
+FROM (
+	SELECT
+		subq.country, subq.num_people,
+		dense_rank() OVER (ORDER BY subq.num_people DESC) as born_rank,
+		row_number() OVER (ORDER BY subq.num_people DESC) as born_rank_unique
+	FROM (
+		SELECT
+			birthcountry AS country,
+			count(*) as num_people
+		FROM
+			person
+		WHERE
+			birthcountry is not null
+		GROUP BY country
+	) AS subq
+) AS subq2
+WHERE place.id=subq2.country;
+
+-- UPDATE places to add rank for people born in a give PLACE
+UPDATE place
+SET
+	born_rank=subq2.born_rank, born_rank_unique=subq2.born_rank_unique
+FROM (
+	SELECT
+		subq.place, subq.num_people,
+		dense_rank() OVER (ORDER BY subq.num_people DESC) as born_rank,
+		row_number() OVER (ORDER BY subq.num_people DESC) as born_rank_unique
+	FROM (
+		SELECT
+			birthplace AS place,
+			count(*) as num_people
+		FROM
+			person
+		WHERE
+			birthplace is not null
+		GROUP BY place
+	) AS subq
+) AS subq2
+WHERE place.id=subq2.place;
