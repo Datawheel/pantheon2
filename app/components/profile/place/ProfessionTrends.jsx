@@ -3,6 +3,7 @@ import {nest} from 'd3-collection';
 import AnchorList from 'components/utils/AnchorList';
 
 const ProfessionTrends = ({ place, peopleBorn, peopleDied, professions }) => {
+
   const currentYear = new Date().getFullYear();
   const topModern = nest()
     .key(function(d) { return d.profession.id; })
@@ -18,6 +19,10 @@ const ProfessionTrends = ({ place, peopleBorn, peopleDied, professions }) => {
         obj[item.id] = item;
         return obj;
     },{});
+
+  if(!topOverall.length){
+    return null;
+  }
 
   return (
     <div>
