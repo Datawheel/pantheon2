@@ -22,6 +22,18 @@ export function fetchPlace(store) {
   };
 }
 
+export function fetchCountry(store) {
+  const getPlaceProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=country_code`).then(function(placeIdRes) {
+    const placeCountryCode = placeIdRes.data[0].country_code;
+    return makePlaceRequest('get', null, null, `/place?country_code=eq.${placeCountryCode}&wiki_id=is.null`);
+  })
+
+  return {
+    type: "GET_COUNTRY",
+    promise: getPlaceProm
+  };
+}
+
 export function fetchPeopleBornHere(store) {
   const getPeopleProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id,name,country_name`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;

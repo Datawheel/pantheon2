@@ -11,7 +11,7 @@ import Professions from "components/profile/place/Professions";
 import ProfessionTrends from "components/profile/place/ProfessionTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
-import { fetchPlace, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
+import { fetchPlace, fetchCountry, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
 
 class Place extends Component {
 
@@ -21,6 +21,7 @@ class Place extends Component {
 
   static need = [
     fetchPlace,
+    fetchCountry,
     fetchPeopleBornHere,
     fetchPeopleDiedHere,
     fetchProfessions,
@@ -32,7 +33,7 @@ class Place extends Component {
   render() {
 
     const {placeProfile} = this.props;
-    const {place, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, professions, peopleBornHereAlive} = placeProfile;
+    const {place, country, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, professions, peopleBornHereAlive} = placeProfile;
 
     const yearBuckets = 50;
 
@@ -143,7 +144,7 @@ class Place extends Component {
           meta={config.meta.concat([ {property: 'og:title', content: place.name} ])}
           link={config.link}
         />
-        <Header place={place} />
+        <Header place={place} country={country} />
         <ProfileNav sections={sections} />
         <Intro place={place} />
         {sections.map((section, key) =>

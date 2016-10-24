@@ -3,14 +3,15 @@ import styles from 'css/components/profile/header';
 import sparklineSvg from 'images/sparkline.svg';
 import placeholderImg from 'images/placeholder_place_hero.jpg';
 
-const Header = ({ place }) => {
+const Header = ({ place, country }) => {
+  const placeImg = place.wiki_id && !place.img_link ? `/place/${country.id}.jpg` : `/place/${place.id}.jpg`;
 
   return (
     <header className='hero'>
       <div className='bg-container'>
         <div className='bg-img-mask place'>
-          <div className='bg-img bg-img-t' style={{backgroundImage: `url('/place/${place.id}.jpg')`}}></div>
-          <div className='bg-img bg-img-b' style={{backgroundImage: `url('/place/${place.id}.jpg')`}}></div>
+          <div className='bg-img bg-img-t' style={{backgroundImage: `url(${placeImg})`}}></div>
+          <div className='bg-img bg-img-b' style={{backgroundImage: `url(${placeImg})`}}></div>
         </div>
       </div>
       <div className='info'>

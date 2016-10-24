@@ -13,6 +13,18 @@ const place = (
   }
 }
 
+const country = (
+  state = {},
+  action
+) => {
+  switch (action.type) {
+    case "GET_COUNTRY_SUCCESS":
+      return action.res.data[0]
+    default:
+      return state;
+  }
+}
+
 const peopleBornHere = (
   state = [],
   action
@@ -99,6 +111,7 @@ const peopleBornHereAlive = (
 
 const placeProfileReducer = combineReducers({
   place,
+  country,
   peopleBornHere,
   peopleDiedHere,
   professions,
