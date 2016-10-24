@@ -3,6 +3,7 @@ import { polyfill } from 'es6-promise';
 import request from 'axios';
 import axios from 'axios';
 import * as types from 'types';
+import { NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST } from 'types'
 
 polyfill();
 
@@ -31,6 +32,28 @@ export function fetchCountry(store) {
   return {
     type: "GET_COUNTRY",
     promise: getPlaceProm
+  };
+}
+
+export function fetchPlaceRanks(store) {
+  const getPlaceRank = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id,name,country_name,born_rank,born_rank_unique`)
+  const getPlaceRankPeers = getPlaceRank.then(function(placeRankRes) {
+      const placeRankData = placeRankRes.data[0];
+      const placeRank = placeRankData.born_rank_unique;
+      const isCountry = placeRankData.name === placeRankData.country_name ? true : false;
+      const sumlevelFilter = isCountry ? "wiki_id=is.null" : "wiki_id=isnot.null";
+      let rankSub = Math.max(1, parseInt(placeRank) - NUM_RANKINGS_PRE);
+      let rankPlus = Math.max(NUM_RANKINGS, parseInt(placeRank) + NUM_RANKINGS_POST);
+      const apiURL = `/place?born_rank_unique=gte.${rankSub}&born_rank_unique=lte.${rankPlus}&order=born_rank_unique&${sumlevelFilter}`;
+      // console.log("PlaceRank API:", apiURL)
+      return makePlaceRequest('get', null, null, apiURL);
+  });
+
+  const prom = Promise.all([getPlaceRank, getPlaceRankPeers])
+
+  return {
+    type: "GET_PLACE_RANKS",
+    promise: prom
   };
 }
 

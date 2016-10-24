@@ -13,6 +13,18 @@ const place = (
   }
 }
 
+const placeRanks = (
+  state = {me:{}, peers:[]},
+  action
+) => {
+  switch (action.type) {
+    case "GET_PLACE_RANKS_SUCCESS":
+      return {me:action.res[0].data[0], peers:action.res[1].data}
+    default:
+      return state;
+  }
+}
+
 const country = (
   state = {},
   action
@@ -111,6 +123,7 @@ const peopleBornHereAlive = (
 
 const placeProfileReducer = combineReducers({
   place,
+  placeRanks,
   country,
   peopleBornHere,
   peopleDiedHere,

@@ -11,7 +11,7 @@ import Professions from "components/profile/place/Professions";
 import ProfessionTrends from "components/profile/place/ProfessionTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
-import { fetchPlace, fetchCountry, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
+import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
 
 class Place extends Component {
 
@@ -21,6 +21,7 @@ class Place extends Component {
 
   static need = [
     fetchPlace,
+    fetchPlaceRanks,
     fetchCountry,
     fetchPeopleBornHere,
     fetchPeopleDiedHere,
@@ -33,7 +34,7 @@ class Place extends Component {
   render() {
 
     const {placeProfile} = this.props;
-    const {place, country, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, professions, peopleBornHereAlive} = placeProfile;
+    const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, professions, peopleBornHereAlive} = placeProfile;
 
     const yearBuckets = 50;
 
@@ -146,7 +147,7 @@ class Place extends Component {
         />
         <Header place={place} country={country} />
         <ProfileNav sections={sections} />
-        <Intro place={place} />
+        <Intro place={place} placeRanks={placeRanks} />
         {sections.map((section, key) =>
           <Section
             index={key}
