@@ -16,13 +16,13 @@ const PeopleRanking = ({ place, peopleBorn, peopleDied }) => {
         Between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}, {place.name} was the birth place of {peopleBorn.length} globally memorable people, including <AnchorList items={peopleBorn.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. Additionaly, {peopleDied.length} globally memorable people have passed away in {place.name} including <AnchorList items={peopleDied.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. { moreDeaths ? `Interestingly, more notably known people have passed away in ${place.name} than were born there.`: null}
       </p>
       <div className={'rank-title'}>
-        <h3>Born in {place.name}</h3>
+        <h3>People Born in {place.name}</h3>
         <a href='#'>Go to all Rankings</a>
       </div>
       <PhotoCarousel people={topRankingBorn} />
       <div className={'rank-sec-body'}>
         <div className={'rank-title'}>
-          <h3>Deceased in {place.name}</h3>
+          <h3>People Deceased in {place.name}</h3>
           <a href='#'>Go to all Rankings</a>
         </div>
         <PhotoCarousel people={topRankingDied} />

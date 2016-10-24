@@ -15,6 +15,7 @@ const Intro = ({ place }) => {
           <p>
             {place.name} ranks <code>X</code> for producing culturally remembered individuals, behind <code>Country A</code> and <code>Country B</code>.
             Pantheon aims to help us understand global cultural development by visualizing a dataset of "globally memorable people" through their professions, birth and resting places, and Wikipedia activity.
+            &nbsp;<a href="/about/" className="deep-link">Read more about our research</a>
           </p>
         </div>
       </div>
