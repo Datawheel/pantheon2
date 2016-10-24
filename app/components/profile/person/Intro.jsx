@@ -31,7 +31,7 @@ const Intro = ({ person }) => {
             }
           </h3>
           <p>
-            {person.name} {person.deathyear ? "was" : "is"} a <a href="">{person.profession.name}</a> born in <a href="">{person.birthplace.name}</a>, <a href="">{person.birthcountry.name}</a> in <a href="">{FORMATTERS.year(person.birthyear.name)}</a>.&nbsp;
+            {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/profession/${person.profession.slug}`}>{person.profession.name}</a> born in <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> in <b>{FORMATTERS.year(person.birthyear.name)}</b>.&nbsp;
             {person.deathyear ?
               `${person.gender ? "She" : "He"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }&nbsp;
             At {age} years old, {person.gender ? "she" : "he"} has reached (total page views) page views on Wikipedia, hitting a peak of (max page views) in (max page view year).

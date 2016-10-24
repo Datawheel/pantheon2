@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import AnchorList from 'components/utils/AnchorList';
 import PhotoCarousel from 'components/utils/PhotoCarousel';
+import { FORMATTERS } from "types";
 
 const PeopleRanking = ({ place, peopleBorn, peopleDied }) => {
   const youngestBirthyear = Math.max.apply(Math, peopleBorn.map(r => r.birthyear));
@@ -12,7 +13,7 @@ const PeopleRanking = ({ place, peopleBorn, peopleDied }) => {
   return (
     <div>
       <p>
-        Between {oldestBirthyear} and {youngestBirthyear}, {place.name} was the birth place of {peopleBorn.length} globally memorable people, including <AnchorList items={peopleBorn.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. Additionaly, {peopleDied.length} globally memorable people have passed away in {place.name} including <AnchorList items={peopleDied.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. { moreDeaths ? `Interestingly, more notably known people have passed away in ${place.name} than were born there.`: null}
+        Between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}, {place.name} was the birth place of {peopleBorn.length} globally memorable people, including <AnchorList items={peopleBorn.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. Additionaly, {peopleDied.length} globally memorable people have passed away in {place.name} including <AnchorList items={peopleDied.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. { moreDeaths ? `Interestingly, more notably known people have passed away in ${place.name} than were born there.`: null}
       </p>
       <div className={'rank-title'}>
         <h3>Born in {place.name}</h3>
