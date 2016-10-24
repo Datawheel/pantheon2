@@ -20,7 +20,12 @@ CREATE TABLE place
   lon real,
   pop real,
   num_born integer,
-  num_died integer
+  num_died integer,
+  img_link CHARACTER VARYING(255),
+  img_author CHARACTER VARYING(255),
+  img_meta CHARACTER VARYING(255),
+  born_rank integer,
+  born_rank_unique integer
 );
 
 CREATE TABLE year
@@ -86,7 +91,8 @@ CREATE TABLE person
   langs integer,
   langs_adopt integer,
   twitter CHARACTER VARYING(100),
-  alive boolean
+  alive boolean,
+  youtube CHARACTER VARYING(100)
 );
 
 CREATE TABLE place_occupation
