@@ -85,7 +85,7 @@ if not prof_lookup:
 print "First 5 occupations in DB:"
 print prof_lookup.items()[:5]
 
-with open('data/Pantheon2.0_Oct24.csv', 'rb') as pfile:
+with open('data/Pantheon2.0_Oct25_2.csv', 'rb') as pfile:
     preader = csv.DictReader(pfile, delimiter=',', quotechar='"')
     print "Inserting people to DB..."
     for i, row in enumerate(preader):

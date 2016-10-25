@@ -74,6 +74,11 @@
   > psql pantheon < data/post_insert_updates.sql
   ```
 
+6. Import page creation data
+  ```
+  > python data/import_creation_to_db.py
+  ```
+
 
 ## Downloading images
 
