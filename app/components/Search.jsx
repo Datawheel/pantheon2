@@ -12,9 +12,7 @@ class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      professionResults: [],
-      placeResults: [],
-      personResults: []
+      results: []
     }
   }
 
@@ -24,27 +22,24 @@ class Search extends Component {
     if (userQuery.length === 0) this.setState({ professionResults:[], placeResults:[], personResults:[] });
 
     let userQueryCleaned = userQuery.split(" ")
-    if(userQueryCleaned.length > 1){
-      const lastItem = userQueryCleaned[userQueryCleaned.length-1];
-      userQueryCleaned[userQueryCleaned.length-1] = `${lastItem}:*`;
-      userQueryCleaned = userQueryCleaned.join("%26");
-    }
-    else {
-      userQueryCleaned = userQuery;
-    }
+    // if(userQueryCleaned.length > 1){
+    //   const lastItem = userQueryCleaned[userQueryCleaned.length-1];
+    //   userQueryCleaned[userQueryCleaned.length-1] = `${lastItem}:*`;
+    //   userQueryCleaned = userQueryCleaned.join("%26");
+    // }
+    // else {
+    //   userQueryCleaned = userQuery;
+    // }
+    const lastItem = userQueryCleaned[userQueryCleaned.length-1];
+    userQueryCleaned[userQueryCleaned.length-1] = `${lastItem}:*`;
+    userQueryCleaned = userQueryCleaned.join("%26");
 
-    const professionQuery = axios.get(`http://localhost:3100/profession?name=@@.${userQueryCleaned}&select=slug,name,domain`);
-    const placeQuery = axios.get(`http://localhost:3100/place?name=@@.${userQueryCleaned}&select=slug,name,country_name`);
-    const personQuery = axios.get(`http://localhost:3100/person?name=@@.${userQueryCleaned}&order=langs.desc.nullslast&select=slug,name,profession{id,name},birthcountry{id,name}`);
-    console.log("person search query:")
-    console.log(`http://localhost:3100/person?name=@@.${userQueryCleaned}&order=langs.desc.nullslast&select=slug,name,profession{id,name},birthcountry{id,name}`)
+    const searchQuery = axios.get(`http://localhost:3100/search?document=@@.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`);
 
-    Promise.all([professionQuery, placeQuery, personQuery])
+    Promise.all([searchQuery])
       .then((queryResults) => {
-        const professionResults = queryResults[0].data;
-        const placeResults = queryResults[1].data;
-        const personResults = queryResults[2].data;
-        this.setState({ professionResults, placeResults, personResults });
+        const results = queryResults[0].data;
+        this.setState({ results });
       })
   }
 
@@ -64,25 +59,12 @@ class Search extends Component {
             <input type={'text'} ref={(el) => this._searchInput = el} onChange={this.onChange.bind(this)}/ >
           </div>
           <ul className={'results-list'}>
-            {this.state.professionResults.map((result) =>
-              <li key={`profession_${result.slug}`} className={'result-profession'}>
-                <a href={`/profile/profession/${result.slug}`}>{result.name}</a>
-              </li>
-            )}
-            {this.state.placeResults.map((result) =>
-              <li key={`place_${result.slug}`} className={'result-place'}>
-                <a href={`/profile/place/${result.slug}`}>{result.name}</a>
-                <sub>
-                  <span>{result.name !== result.country_name ? result.country_name : null}</span>
-                </sub>
-              </li>
-            )}
-            {this.state.personResults.map((result) =>
+            {this.state.results.map((result) =>
               <li key={`person_${result.slug}`} className={'result-person'}>
-                <a href={`/profile/person/${result.slug}`}>{result.name}</a>
+                <a href={`/profile/${result.profile_type}/${result.slug}`}>{result.name}</a>
                 <sub>
-                  <span>{result.profession.name}</span>
-                  <span>{result.birthcountry ? result.birthcountry.name : null}</span>
+                  {result.primary_meta ? <span>{result.primary_meta}</span> : null}
+                  {result.secondary_meta ? <span>{result.secondary_meta}</span> : null}
                 </sub>
               </li>
             )}

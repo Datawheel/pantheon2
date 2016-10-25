@@ -155,3 +155,65 @@ FROM (
 	) AS subq
 ) AS subq2
 WHERE place.id=subq2.place;
+
+
+--
+-- BUILD THE SEARCH TABLE
+-- Note: only do this once all other scripts have been run
+--
+
+INSERT INTO search (id, name, slug, weight, primary_meta, secondary_meta, document, profile_type)
+SELECT
+person.id,
+person.name,
+person.slug,
+person.langs as weight,
+profession.name as primary_meta,
+country.name as secondary_meta,
+setweight(to_tsvector(unaccent(person.name)), 'A') ||
+setweight(to_tsvector(unaccent(profession.name)), 'D') ||
+setweight(to_tsvector(unaccent(place.name)), 'D') as document,
+'person' as profile_type
+from person, place, profession, place as country
+where person.birthplace=place.id
+AND person.birthcountry=country.id
+AND person.profession=profession.id;
+
+INSERT INTO search (id, name, slug, weight, document, profile_type)
+select
+profession.id,
+profession.name,
+profession.slug,
+profession.num_born as weight,
+setweight(to_tsvector(unaccent(profession.name)), 'A') ||
+setweight(to_tsvector(unaccent(profession.industry)), 'C') ||
+setweight(to_tsvector(unaccent(profession.group)), 'D') ||
+setweight(to_tsvector(unaccent(profession.domain)), 'D') as document,
+'profession' as profile_type
+from profession;
+
+INSERT INTO search (id, name, slug, weight, primary_meta, document, profile_type)
+SELECT
+place.id,
+place.name,
+place.slug,
+place.num_born as weight,
+place.country_name as primary_meta,
+setweight(to_tsvector(unaccent(place.name)), 'A') ||
+setweight(to_tsvector(unaccent(place.country_name)), 'C') ||
+setweight(to_tsvector(place.country_code), 'D') as document,
+'place' as profile_type
+from place
+where wiki_id is not null;
+
+INSERT INTO search (id, name, slug, weight, document, profile_type)
+SELECT
+place.id,
+place.name,
+place.slug,
+place.num_born as weight,
+setweight(to_tsvector(unaccent(place.name)), 'A') ||
+setweight(to_tsvector(place.country_code), 'B') as document,
+'place' as profile_type
+from place
+where wiki_id is null;

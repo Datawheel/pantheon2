@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from "react-redux";
+import { activateSearch } from 'actions/users';
 import Navigation from 'containers/Navigation';
 import Search from 'components/Search';
 import styles from 'css/main';
@@ -20,6 +21,23 @@ class App extends Component {
       </div>
     );
   }
+
+  componentWillMount(){
+    document.addEventListener("keydown", () => {
+      // 's' key
+      if(event.keyCode == 83){
+        if(event.target.tagName != "INPUT"){
+          event.preventDefault();
+          this.props.activateSearch();
+        }
+      }
+      // 'esc' key
+      if(event.keyCode == 27){
+        event.preventDefault();
+        this.props.activateSearch();
+      }
+    }, false);
+  }
 }
 
 App.propTypes = {
@@ -33,4 +51,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { activateSearch })(App);

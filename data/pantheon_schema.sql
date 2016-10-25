@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS year CASCADE;
 DROP TABLE IF EXISTS place_profession CASCADE;
 DROP TABLE IF EXISTS creation CASCADE;
 DROP TABLE IF EXISTS pageview CASCADE;
+DROP TABLE IF EXISTS search CASCADE;
 
 CREATE TABLE place
 (
@@ -117,6 +118,18 @@ CREATE TABLE pageview
   person integer REFERENCES person (id),
   pageview_date timestamp NOT NULL,
   num_pageviews integer
+);
+
+CREATE EXTENSION unaccent;
+CREATE TABLE search (
+    id integer,
+    name character varying(255),
+    slug character varying(255),
+    weight real,
+    primary_meta character varying(255),
+    secondary_meta character varying(255),
+    document tsvector,
+    profile_type character varying(20)
 );
 
 COMMIT;
