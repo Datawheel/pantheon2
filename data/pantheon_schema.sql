@@ -1,12 +1,12 @@
 BEGIN;
 
-DROP TABLE IF EXISTS person_occupation_rank;
-DROP TABLE IF EXISTS person_birthyear_rank;
-DROP TABLE IF EXISTS person_birthplace_rank;
 DROP TABLE IF EXISTS person;
-DROP TABLE IF EXISTS occupation;
+DROP TABLE IF EXISTS profession;
 DROP TABLE IF EXISTS place;
 DROP TABLE IF EXISTS year;
+DROP TABLE IF EXISTS place_profession;
+DROP TABLE IF EXISTS creation;
+DROP TABLE IF EXISTS pageview;
 
 CREATE TABLE place
 (
@@ -25,7 +25,9 @@ CREATE TABLE place
   img_author CHARACTER VARYING(255),
   img_meta CHARACTER VARYING(255),
   born_rank integer,
-  born_rank_unique integer
+  born_rank_unique integer,
+  soverign_date integer,
+  soverign_date_latest integer
 );
 
 CREATE TABLE year
@@ -83,9 +85,9 @@ CREATE TABLE person
   deathcountry_rank integer,
   deathcountry_rank_unique integer,
 
-  occupation integer NOT NULL REFERENCES occupation (id),
-  occupation_rank integer,
-  occupation_rank_unique integer,
+  profession integer NOT NULL REFERENCES profession (id),
+  profession_rank integer,
+  profession_rank_unique integer,
 
   occ_acc real,
   langs integer,
@@ -95,10 +97,10 @@ CREATE TABLE person
   youtube CHARACTER VARYING(100)
 );
 
-CREATE TABLE place_occupation
+CREATE TABLE place_profession
 (
   place integer REFERENCES place (id),
-  occupation integer REFERENCES occupation (id),
+  profession integer REFERENCES profession (id),
   num_born integer,
   num_died integer
 );

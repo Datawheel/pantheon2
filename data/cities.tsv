@@ -23,8 +23,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2654255	Burntisland	56.06248	-3.23176	5518	GBR	United Kingdom
 4554800	Watonga	35.84477	-98.41313	5111	USA	United States
 2162737	Ingham	-18.64552	146.16248	6127	AUS	Australia
-2162737	Ingham	-18.64552	146.16248	6127	AUS	Ashmore and Cartier Islands
-2162737	Ingham	-18.64552	146.16248	6127	AUS	Coral Sea Islands
 5177396	Worthington	40.09312	-83.01796	13575	USA	United States
 360502	Luxor	25.69893	32.6421	422407	EGY	Egypt
 2654264	Burnley	53.8	-2.23333	73480	GBR	United Kingdom
@@ -143,11 +141,8 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2130203	Hachinohe	40.5	141.5	239046	JPN	Japan
 3703068	Penonomé	8.51889	-80.35727	12394	PAN	Panama
 611717	Tbilisi	41.69411	44.83368	1049498	GEO	Georgia
-611717	Tbilisi	41.69411	44.83368	1049498	GEO	Abkhazia
-611717	Tbilisi	41.69411	44.83368	1049498	GEO	South Ossetia
 426272	Gitega	-3.4264	29.9308	23167	BDI	Burundi
 147504	Mincivan	39.03058	46.7214	6353	AZE	Azerbaijan
-147504	Mincivan	39.03058	46.7214	6353	AZE	Nagorno-Karabakh
 5412230	Aspen	39.1911	-106.81754	6658	USA	United States
 2523434	Sanluri	39.56176	8.89969	7745	ITA	Italy
 5341483	Dana Point	33.46697	-117.69811	33351	USA	United States
@@ -182,8 +177,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1276634	Beāwar	26.10119	74.32028	130777	IND	India
 295277	Eilat	29.55805	34.94821	45588	ISR	Israel
 2163055	Horsham	-36.71131	142.19981	14285	AUS	Australia
-2163055	Horsham	-36.71131	142.19981	14285	AUS	Ashmore and Cartier Islands
-2163055	Horsham	-36.71131	142.19981	14285	AUS	Coral Sea Islands
 5374322	Montebello	34.00946	-118.10535	62500	USA	United States
 2654579	Bromsgrove	52.33574	-2.05983	29237	GBR	United Kingdom
 5144948	Woodbury	41.36454	-74.10598	10686	USA	United States
@@ -194,8 +187,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2302357	Cape Coast	5.10535	-1.2466	143015	GHA	Ghana
 360829	Al Maḩallah al Kubrá	30.97063	31.1669	431052	EGY	Egypt
 2064768	Newman	-23.35644	119.73553	5138	AUS	Australia
-2064768	Newman	-23.35644	119.73553	5138	AUS	Ashmore and Cartier Islands
-2064768	Newman	-23.35644	119.73553	5138	AUS	Coral Sea Islands
 5505411	Henderson	36.0397	-114.98194	257729	USA	United States
 1278340	Aruppukkottai	9.50842	78.09449	85369	IND	India
 1310460	Martaban	16.52834	97.6157	48629	MMR	Myanmar (Burma)
@@ -331,8 +322,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3577284	Angochi	12.51667	-69.95	29442	ABW	Aruba
 3179162	Cento	44.73099	11.28716	18191	ITA	Italy
 2163355	Hobart	-42.87936	147.32941	216656	AUS	Australia
-2163355	Hobart	-42.87936	147.32941	216656	AUS	Ashmore and Cartier Islands
-2163355	Hobart	-42.87936	147.32941	216656	AUS	Coral Sea Islands
 2878234	Leverkusen	51.0303	6.98432	162738	DEU	Germany
 4752031	Charlottesville	38.02931	-78.47668	43475	USA	United States
 1179760	Dīpālpur	30.67091	73.65292	74640	PAK	Pakistan
@@ -440,7 +429,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1344377	Haldia	22.06046	88.10975	170695	IND	India
 3015546	Gourdon	44.73333	1.38333	5342	FRA	France
 617279	Sîngera	46.91557	28.96673	7200	MDA	Moldova
-617279	Sîngera	46.91557	28.96673	7200	MDA	Pridnestrovie (Transnistria)
 3539093	San Luis	20.18809	-75.85031	67293	CUB	Cuba
 518976	Novocheboksarsk	56.11095	47.47755	128468	RUS	Russia
 1082243	Ambilobe	-13.2	49.05	56000	MDG	Madagascar
@@ -600,8 +588,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2753719	Hoogeveen	52.7225	6.47639	38754	NLD	Netherlands
 2784604	Vilvoorde	50.92814	4.42938	36955	BEL	Belgium
 2065594	Mount Isa	-20.72523	139.49727	22785	AUS	Australia
-2065594	Mount Isa	-20.72523	139.49727	22785	AUS	Ashmore and Cartier Islands
-2065594	Mount Isa	-20.72523	139.49727	22785	AUS	Coral Sea Islands
 361661	Akhmīm	26.56217	31.74503	99446	EGY	Egypt
 4621503	Fairview	35.98201	-87.1214	7720	USA	United States
 296134	Yunak	38.81418	31.73223	14050	TUR	Turkey
@@ -659,8 +645,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2348595	Azare	11.67478	10.19069	105687	NGA	Nigeria
 492853	Sinegorskiy	48.01389	40.84468	6660	RUS	Russia
 2164025	Hamilton	-37.74425	142.02202	10104	AUS	Australia
-2164025	Hamilton	-37.74425	142.02202	10104	AUS	Ashmore and Cartier Islands
-2164025	Hamilton	-37.74425	142.02202	10104	AUS	Coral Sea Islands
 1279290	Agartala	23.83605	91.27939	203264	IND	India
 5374175	Monrovia	34.14806	-117.99895	36590	USA	United States
 2655548	Bishopton	55.90969	-4.5056	5029	GBR	United Kingdom
@@ -824,8 +808,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2981629	Saint-Arnoult-en-Yvelines	48.57111	1.9395	5698	FRA	France
 2524869	Cutro	39.03484	16.98658	7977	ITA	Italy
 2164422	Griffith	-34.28853	146.05093	15455	AUS	Australia
-2164422	Griffith	-34.28853	146.05093	15455	AUS	Ashmore and Cartier Islands
-2164422	Griffith	-34.28853	146.05093	15455	AUS	Coral Sea Islands
 3147465	Lillestrøm	59.95597	11.04918	14000	NOR	Norway
 2659959	Le Mont-sur-Lausanne	46.55815	6.63145	5270	CHE	Switzerland
 2623181	Christianshavn	55.67383	12.59541	10140	DNK	Denmark
@@ -986,8 +968,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2656287	Barnoldswick	53.91711	-2.18705	11101	GBR	United Kingdom
 2295840	Prestea	5.43274	-2.14284	35155	GHA	Ghana
 2164771	Grafton	-29.68104	152.93394	9955	AUS	Australia
-2164771	Grafton	-29.68104	152.93394	9955	AUS	Ashmore and Cartier Islands
-2164771	Grafton	-29.68104	152.93394	9955	AUS	Coral Sea Islands
 3180580	Caravaggio	45.49627	9.64165	13340	ITA	Italy
 2656295	Barnet	51.65	-0.2	30000	GBR	United Kingdom
 2885672	Konz	49.70045	6.57652	17879	DEU	Germany
@@ -1024,8 +1004,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2754659	Heerhugowaard	52.67144	4.84862	47580	NLD	Netherlands
 2885732	Königs Wusterhausen	52.30141	13.633	32513	DEU	Germany
 2164837	Goulburn	-34.75155	149.72086	20940	AUS	Australia
-2164837	Goulburn	-34.75155	149.72086	20940	AUS	Ashmore and Cartier Islands
-2164837	Goulburn	-34.75155	149.72086	20940	AUS	Coral Sea Islands
 2033766	Xingcheng	40.61667	120.71667	98968	CHN	China, People's Republic of
 3016807	Gaillon	49.16104	1.34016	6818	FRA	France
 2658240	Unterseen	46.6853	7.84722	5150	CHE	Switzerland
@@ -1143,7 +1121,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5081454	Wayne	42.23056	-97.01782	5660	USA	United States
 264559	Árta	39.16014	20.98561	21895	GRC	Greece
 8063344	Taiohae	-8.91093	-140.09972	1224	PYF	French Polynesia
-8063344	Taiohae	-8.91093	-140.09972	1224	PYF	Clipperton Island
 690545	Uzyn	49.82619	30.41487	12726	UKR	Ukraine
 3836277	Santa Fe de la Vera Cruz	-31.63333	-60.7	489505	ARG	Argentina
 595689	Plunge	55.91139	21.84417	23381	LTU	Lithuania
@@ -1170,8 +1147,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2918840	Goslar	51.90425	10.42766	43560	DEU	Germany
 2787769	Ronse	50.74574	3.6005	24204	BEL	Belgium
 2170260	Corowa	-35.99704	146.38552	5178	AUS	Australia
-2170260	Corowa	-35.99704	146.38552	5178	AUS	Ashmore and Cartier Islands
-2170260	Corowa	-35.99704	146.38552	5178	AUS	Coral Sea Islands
 2755003	Haarlem	52.38084	4.63683	147590	NLD	Netherlands
 2525628	Bagheria	38.07892	13.51237	52952	ITA	Italy
 1729524	Bacoor	14.45903	120.92903	356974	PHL	Philippines
@@ -1185,7 +1160,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2656713	Aylsham	52.79672	1.25107	5627	GBR	United Kingdom
 5245387	Beloit	42.50835	-89.03178	36966	USA	United States
 64460	Beledweyne	4.73583	45.20361	55410	SOM	Somalia
-64460	Beledweyne	4.73583	45.20361	55410	SOM	Somaliland
 2525646	Augusta	37.24065	15.22121	30723	ITA	Italy
 2656719	Aylesbury	51.81665	-0.81458	74565	GBR	United Kingdom
 3082704	Wałcz	53.27787	16.47122	25971	POL	Poland
@@ -1216,8 +1190,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 723455	Stropkov	49.20211	21.65216	10874	SVK	Slovakia
 690688	Uman’	48.74838	30.22184	87658	UKR	Ukraine
 6949377	Canterbury	-33.91192	151.11862	5417	AUS	Australia
-6949377	Canterbury	-33.91192	151.11862	5417	AUS	Ashmore and Cartier Islands
-6949377	Canterbury	-33.91192	151.11862	5417	AUS	Coral Sea Islands
 4751421	Cave Spring	37.22764	-80.01282	24922	USA	United States
 1280517	Nagqu	31.47678	92.05729	30000	CHN	China, People's Republic of
 2558470	Khemisset	33.82404	-6.06627	106991	MAR	Morocco
@@ -1272,8 +1244,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2755204	Grootegast	53.2125	6.27361	11623	NLD	Netherlands
 2643734	Londonderry County Borough	54.99721	-7.30917	87153	GBR	United Kingdom
 2163137	Hornsby	-33.70244	151.09931	19863	AUS	Australia
-2163137	Hornsby	-33.70244	151.09931	19863	AUS	Ashmore and Cartier Islands
-2163137	Hornsby	-33.70244	151.09931	19863	AUS	Coral Sea Islands
 789128	Kragujevac	44.01667	20.91667	147473	SRB	Serbia
 1797181	Renqiu	38.69889	116.09361	98569	CHN	China, People's Republic of
 2919054	Göppingen	48.70354	9.65209	58040	DEU	Germany
@@ -1303,8 +1273,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4885186	Blue Island	41.65726	-87.68005	23706	USA	United States
 2394819	Cotonou	6.36536	2.41833	780000	BEN	Benin
 7932612	Glen Iris	-37.85995	145.05489	23270	AUS	Australia
-7932612	Glen Iris	-37.85995	145.05489	23270	AUS	Ashmore and Cartier Islands
-7932612	Glen Iris	-37.85995	145.05489	23270	AUS	Coral Sea Islands
 2853574	Pirmasens	49.20145	7.60529	43582	DEU	Germany
 2951881	Bautzen	51.18035	14.43494	41972	DEU	Germany
 2656970	Ashby de la Zouch	52.74632	-1.4732	11663	GBR	United Kingdom
@@ -1321,8 +1289,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 789228	Kosovo Polje	42.66394	21.09611	16154		
 1280757	Laojunmiao	39.83333	97.73333	84769	CHN	China, People's Republic of
 7932664	Raceview	-27.63472	152.77519	6896	AUS	Australia
-7932664	Raceview	-27.63472	152.77519	6896	AUS	Ashmore and Cartier Islands
-7932664	Raceview	-27.63472	152.77519	6896	AUS	Coral Sea Islands
 2820860	Tübingen	48.52266	9.05222	83416	DEU	Germany
 2984701	Quimper	48	-4.1	63849	FRA	France
 723713	Rožňava	48.66009	20.53758	19261	SVK	Slovakia
@@ -1331,8 +1297,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 10062599	Pašilaičiai	54.73429	25.21912	33056	LTU	Lithuania
 4393739	Kirkwood	38.58339	-90.40678	27540	USA	United States
 2157698	Mildura	-34.18551	142.16251	30016	AUS	Australia
-2157698	Mildura	-34.18551	142.16251	30016	AUS	Ashmore and Cartier Islands
-2157698	Mildura	-34.18551	142.16251	30016	AUS	Coral Sea Islands
 10062609	Rasos	54.67877	25.31173	10597	LTU	Lithuania
 2263827	Rio de Mouro	38.77457	-9.3276	54695	PRT	Portugal
 3637721	La Guaira	10.59901	-66.9346	25259	VEN	Venezuela
@@ -1373,8 +1337,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4950898	Shrewsbury	42.29593	-71.71285	33893	USA	United States
 2263923	Riachos	39.44472	-8.5142	5463	PRT	Portugal
 2146793	Thornbury	-37.75	145	17434	AUS	Australia
-2146793	Thornbury	-37.75	145	17434	AUS	Ashmore and Cartier Islands
-2146793	Thornbury	-37.75	145	17434	AUS	Coral Sea Islands
 2755449	Goor	52.23333	6.58611	11460	NLD	Netherlands
 5376890	Newport Beach	33.61891	-117.92895	85186	USA	United States
 1805179	Jiujiang	29.70475	116.00206	258807	CHN	China, People's Republic of
@@ -1454,8 +1416,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2755619	Geldrop	51.42167	5.55972	27900	NLD	Netherlands
 786950	Podujeva	42.91056	21.19306	35000		
 2165798	Geelong	-38.14711	144.36069	226034	AUS	Australia
-2165798	Geelong	-38.14711	144.36069	226034	AUS	Ashmore and Cartier Islands
-2165798	Geelong	-38.14711	144.36069	226034	AUS	Coral Sea Islands
 8948778	Airali	44.8167	7.25157	5619	ITA	Italy
 2821164	Trier	49.75565	6.63935	100129	DEU	Germany
 3443758	Artigas	-30.4	-56.46667	41909	URY	Uruguay
@@ -1521,7 +1481,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2919625	Goch	51.67873	6.15895	33706	DEU	Germany
 2264268	Queluz	38.75657	-9.25451	103399	PRT	Portugal
 147105	Shushi	39.76006	46.74989	18662	AZE	Azerbaijan
-147105	Shushi	39.76006	46.74989	18662	AZE	Nagorno-Karabakh
 4951248	Somerset	41.76955	-71.12866	18165	USA	United States
 5014051	Warren	42.47754	-83.0277	134056	USA	United States
 2993358	Mondeville	49.17497	-0.32238	11582	FRA	France
@@ -1610,7 +1569,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4189423	Cordele	31.96351	-83.78239	11147	USA	United States
 3050909	Jászárokszállás	47.64238	19.98038	8107	HUN	Hungary
 4033951	Papao	-17.75	-149.55	10360	PYF	French Polynesia
-4033951	Papao	-17.75	-149.55	10360	PYF	Clipperton Island
 2657697	Acton	51.50901	-0.2762	53689	GBR	United Kingdom
 789923	Jagodina	43.97713	21.26121	35589	SRB	Serbia
 1000006	Greytown	-29.06415	30.59279	13912	ZAF	South Africa
@@ -1796,8 +1754,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3182390	Barberino di Mugello	43.9993	11.23676	5680	ITA	Italy
 2638473	Sawtry	52.43984	-0.28422	5692	GBR	United Kingdom
 2166584	Fitzroy	-37.79839	144.97833	9000	AUS	Australia
-2166584	Fitzroy	-37.79839	144.97833	9000	AUS	Ashmore and Cartier Islands
-2166584	Fitzroy	-37.79839	144.97833	9000	AUS	Coral Sea Islands
 2035513	Panshan	41.18806	122.04944	625040	CHN	China, People's Republic of
 2746504	Tegelen	51.34417	6.13611	20190	NLD	Netherlands
 6098747	Parry Sound	45.34732	-80.03527	6469	CAN	Canada
@@ -1886,7 +1842,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1273173	Derā Nānak	32.03733	75.02787	7491	IND	India
 5115904	East Hills	40.79371	-73.62707	6955	USA	United States
 4034561	Faaa	-17.55	-149.6	29851	PYF	French Polynesia
-4034561	Faaa	-17.55	-149.6	29851	PYF	Clipperton Island
 2035715	Mudanjiang	44.58333	129.6	665915	CHN	China, People's Republic of
 4493316	Statesville	35.78264	-80.8873	24532	USA	United States
 593926	Telsiai	55.98139	22.24722	30098	LTU	Lithuania
@@ -1921,7 +1876,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 692301	Sudova Vyshnya	49.78892	23.37218	6420	UKR	Ukraine
 2756686	Doorn	52.03343	5.34571	10330	NLD	Netherlands
 2660365	Herisau	47.38615	9.27916	15438	CHE	Switzerland
-2822224	Tiergarten	52.51667	13.36667	12328	DEU	Germany
 5115985	East New York	40.66677	-73.88236	173198	USA	United States
 311111	İskenderun	36.58718	36.17347	159965	TUR	Turkey
 5083221	Bedford	42.94647	-71.5159	21188	USA	United States
@@ -1969,8 +1923,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2920620	Giengen an der Brenz	48.62219	10.24312	20201	DEU	Germany
 5935277	Dartmouth	44.67134	-63.57719	101343	CAN	Canada
 2068655	Katherine	-14.46517	132.26347	5849	AUS	Australia
-2068655	Katherine	-14.46517	132.26347	5849	AUS	Ashmore and Cartier Islands
-2068655	Katherine	-14.46517	132.26347	5849	AUS	Coral Sea Islands
 3117232	El Masnou	41.47978	2.3188	22288	ESP	Spain
 3444914	Vitória da Conquista	-14.86611	-40.83944	253137	BRA	Brazil
 2953395	Bad Nauheim	50.36463	8.73859	30291	DEU	Germany
@@ -2050,8 +2002,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 6066513	Markham	43.86682	-79.2663	261573	CAN	Canada
 2953558	Bad Aibling	47.8638	12.01055	17672	DEU	Germany
 2068823	Kalgoorlie	-30.74614	121.4742	31107	AUS	Australia
-2068823	Kalgoorlie	-30.74614	121.4742	31107	AUS	Ashmore and Cartier Islands
-2068823	Kalgoorlie	-30.74614	121.4742	31107	AUS	Coral Sea Islands
 522799	Nekrasovskoye	57.67663	40.36567	6353	RUS	Russia
 4985180	Bay City	43.59447	-83.88886	34932	USA	United States
 4053050	Calera	33.1029	-86.7536	11620	USA	United States
@@ -2112,8 +2062,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3452327	Presidente Olegário	-18.41778	-46.41806	13586	BRA	Brazil
 463343	Zheleznogorsk	52.331	35.3711	97900	RUS	Russia
 2167280	Epping	-33.77271	151.08184	18969	AUS	Australia
-2167280	Epping	-33.77271	151.08184	18969	AUS	Ashmore and Cartier Islands
-2167280	Epping	-33.77271	151.08184	18969	AUS	Coral Sea Islands
 2494962	Hadjout	36.51257	2.41382	27549	DZA	Algeria
 5325147	Atherton	37.46133	-122.19774	6914	USA	United States
 3019256	Évry	48.63333	2.45	51900	FRA	France
@@ -2125,8 +2073,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3019265	Évreux	49.02414	1.15082	57795	FRA	France
 627202	Klimavichy	53.6079	31.9586	14951	BLR	Belarus
 2157995	Merrylands	-33.83333	150.98333	5803	AUS	Australia
-2157995	Merrylands	-33.83333	150.98333	5803	AUS	Ashmore and Cartier Islands
-2157995	Merrylands	-33.83333	150.98333	5803	AUS	Coral Sea Islands
 2986501	Poissy	48.92902	2.04952	36431	FRA	France
 4035078	Samamea	-13.93375	-171.53122	89	WSM	Samoa
 3052040	Gyöngyös	47.78257	19.928	32938	HUN	Hungary
@@ -2135,8 +2081,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2979657	Saint-Girons	42.98333	1.15	7004	FRA	France
 561679	Gdov	58.74424	27.81977	5521	RUS	Russia
 6951440	Tamborine Mountain	-27.96954	153.19937	6535	AUS	Australia
-6951440	Tamborine Mountain	-27.96954	153.19937	6535	AUS	Ashmore and Cartier Islands
-6951440	Tamborine Mountain	-27.96954	153.19937	6535	AUS	Coral Sea Islands
 2855441	Parchim	53.42631	11.84875	19161	DEU	Germany
 1511954	Alapayevsk	57.85158	61.69627	44000	RUS	Russia
 736928	Alexandroúpoli	40.84995	25.87644	52979	GRC	Greece
@@ -2194,8 +2138,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1512064	Ak-Dovurak	51.18333	90.6	12593	RUS	Russia
 3108288	Tarragona	41.11667	1.25	140323	ESP	Spain
 2167426	Emerald	-23.52296	148.15784	9398	AUS	Australia
-2167426	Emerald	-23.52296	148.15784	9398	AUS	Ashmore and Cartier Islands
-2167426	Emerald	-23.52296	148.15784	9398	AUS	Coral Sea Islands
 1504826	Kamensk-Ural’skiy	56.4185	61.9329	182500	RUS	Russia
 230166	Lira	2.2499	32.89985	119323	UGA	Uganda
 1806988	Huayin	34.56528	110.06639	242488	CHN	China, People's Republic of
@@ -2380,8 +2322,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3445764	Unaí	-16.3575	-46.90611	60202	BRA	Brazil
 2638678	Sale	53.42519	-2.32443	55689	GBR	United Kingdom
 2167817	Echuca	-36.14057	144.75185	19457	AUS	Australia
-2167817	Echuca	-36.14057	144.75185	19457	AUS	Ashmore and Cartier Islands
-2167817	Echuca	-36.14057	144.75185	19457	AUS	Coral Sea Islands
 2298890	Kumasi	6.68848	-1.62443	1468609	GHA	Ghana
 3180630	Capri	40.55073	14.24263	6770	ITA	Italy
 2659344	Obersiggenthal	47.4875	8.29652	7990	CHE	Switzerland
@@ -2590,8 +2530,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2720679	Bollnäs	61.34817	16.39464	12145	SWE	Sweden
 1185263	Bhairab Bāzār	24.0524	90.9764	105457	BGD	Bangladesh
 2168305	Dubbo	-32.24295	148.60484	32327	AUS	Australia
-2168305	Dubbo	-32.24295	148.60484	32327	AUS	Ashmore and Cartier Islands
-2168305	Dubbo	-32.24295	148.60484	32327	AUS	Coral Sea Islands
 6559224	Münstertal/Schwarzwald	47.85472	7.78417	5199	DEU	Germany
 595449	Radviliskis	55.81667	23.53333	20339	LTU	Lithuania
 5412347	Aurora	39.72943	-104.83192	325078	USA	United States
@@ -2636,8 +2574,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3315287	Rathgar	53.31457	-6.275	8394	IRL	Ireland
 1289828	Wakema	16.60333	95.18278	42705	MMR	Myanmar (Burma)
 2070106	Happy Valley	-35.08333	138.53333	11531	AUS	Australia
-2070106	Happy Valley	-35.08333	138.53333	11531	AUS	Ashmore and Cartier Islands
-2070106	Happy Valley	-35.08333	138.53333	11531	AUS	Coral Sea Islands
 5379678	Orinda	37.87715	-122.17969	17643	USA	United States
 2725471	Arboga	59.39387	15.83882	10369	SWE	Sweden
 4691553	Floresville	29.13358	-98.15612	6448	USA	United States
@@ -3081,8 +3017,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5380698	Palmdale	34.57943	-118.11646	152750	USA	United States
 1120863	Zarghūn Shahr	32.84734	68.44573	13737	AFG	Afghanistan
 2824801	Sulzbach-Rosenberg	49.50126	11.74598	20780	DEU	Germany
-3578466	Sainte-Anne	16.22636	-61.37919	22859	GLP	Saint Barthelemy
-3578466	Sainte-Anne	16.22636	-61.37919	22859	GLP	Saint Martin
 3578466	Sainte-Anne	16.22636	-61.37919	22859	GLP	Guadeloupe
 3021411	Dieppe	49.93333	1.08333	35707	FRA	France
 3447399	Sorocaba	-23.50167	-47.45806	558862	BRA	Brazil
@@ -3091,8 +3025,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2988657	Panazol	45.83465	1.32759	10055	FRA	France
 4954738	Wellesley	42.29649	-71.29256	27982	USA	United States
 2169460	Dandenong	-37.98333	145.2	24919	AUS	Australia
-2169460	Dandenong	-37.98333	145.2	24919	AUS	Ashmore and Cartier Islands
-2169460	Dandenong	-37.98333	145.2	24919	AUS	Coral Sea Islands
 5118398	Geneva	42.86896	-76.97774	13261	USA	United States
 2136697	Lakatoro	-16.09992	167.41636	705	VUT	Vanuatu
 2660989	Dornach	47.48038	7.61644	6449	CHE	Switzerland
@@ -3127,8 +3059,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1809077	Haikou	24.77985	102.57548	112644	CHN	China, People's Republic of
 5642934	Butte	46.00382	-112.53474	34190	USA	United States
 2071223	Fremantle	-32.05	115.76667	24835	AUS	Australia
-2071223	Fremantle	-32.05	115.76667	24835	AUS	Ashmore and Cartier Islands
-2071223	Fremantle	-32.05	115.76667	24835	AUS	Coral Sea Islands
 5128539	New Paltz	41.74759	-74.08681	6818	USA	United States
 5386015	Rancho Mirage	33.73974	-116.41279	17218	USA	United States
 2759356	Bedum	53.30083	6.60278	10750	NLD	Netherlands
@@ -3151,8 +3081,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1514210	Chirchiq	41.46889	69.58222	167842	UZB	Uzbekistan
 5053156	Winona	44.04996	-91.63932	27592	USA	United States
 5118693	Glens Falls	43.30952	-73.64401	14700	USA	United States
-3578599	Pointe-à-Pitre	16.24125	-61.53614	18264	GLP	Saint Barthelemy
-3578599	Pointe-à-Pitre	16.24125	-61.53614	18264	GLP	Saint Martin
 3578599	Pointe-à-Pitre	16.24125	-61.53614	18264	GLP	Guadeloupe
 2562792	Senglea	35.8875	14.51694	2964	MLT	Malta
 2890473	Kirchheim unter Teck	48.64683	9.45378	40206	DEU	Germany
@@ -3190,8 +3118,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2661169	Chur	46.84986	9.53287	32429	CHE	Switzerland
 2235189	Bafoussam	5.47775	10.41759	290768	CMR	Cameroon
 1841976	Kurye	35.20944	127.46444	30000	KOR	Korea, South
-3578682	Petit-Bourg	16.19135	-61.59159	24994	GLP	Saint Barthelemy
-3578682	Petit-Bourg	16.19135	-61.59159	24994	GLP	Saint Martin
 3578682	Petit-Bourg	16.19135	-61.59159	24994	GLP	Guadeloupe
 2923325	Gaildorf	49.00027	9.76953	12571	DEU	Germany
 662334	Zalău	47.2	23.05	63232	ROU	Romania
@@ -3264,8 +3190,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2989013	Ouistreham	49.27566	-0.2591	9067	FRA	France
 5282297	Bethel	41.37121	-73.41401	9549	USA	United States
 2171586	Chipping Norton	-33.9	150.95	8579	AUS	Australia
-2171586	Chipping Norton	-33.9	150.95	8579	AUS	Ashmore and Cartier Islands
-2171586	Chipping Norton	-33.9	150.95	8579	AUS	Coral Sea Islands
 935076	Hluti	-27.21667	31.61667	6763	SWZ	Swaziland
 2661338	Bülach	47.52197	8.54049	13172	CHE	Switzerland
 302043	Salihli	38.48258	28.14774	88906	TUR	Turkey
@@ -3318,8 +3242,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5201658	Monaca	40.68729	-80.27145	5737	USA	United States
 3179703	Castel di Sangro	41.78392	14.10653	5891	ITA	Italy
 4168782	Plantation	26.13421	-80.23184	84955	USA	United States
-3578959	Les Abymes	16.27095	-61.50451	63058	GLP	Saint Barthelemy
-3578959	Les Abymes	16.27095	-61.50451	63058	GLP	Saint Martin
 3578959	Les Abymes	16.27095	-61.50451	63058	GLP	Guadeloupe
 2825297	Stuttgart	48.78232	9.17702	589793	DEU	Germany
 4981250	Turner	44.25646	-70.25617	5470	USA	United States
@@ -3334,8 +3256,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3179795	Cassano d'Adda	45.52637	9.51528	17267	ITA	Italy
 2923625	Fürstenfeldbruck	48.17904	11.2547	33533	DEU	Germany
 612366	P’ot’i	42.14616	41.67197	47149	GEO	Georgia
-612366	P’ot’i	42.14616	41.67197	47149	GEO	Abkhazia
-612366	P’ot’i	42.14616	41.67197	47149	GEO	South Ossetia
 5807212	Port Angeles	48.11815	-123.43074	19038	USA	United States
 2563181	Cospicua	35.88556	14.5275	6096	MLT	Malta
 1580142	Hưng Yên	20.64637	106.05112	40273	VNM	Vietnam
@@ -3373,8 +3293,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2268339	Faro	37.01937	-7.93223	41355	PRT	Portugal
 5414069	Black Forest	39.01305	-104.70081	13116	USA	United States
 7281850	Ferntree Gully	-37.88461	145.29539	24724	AUS	Australia
-7281850	Ferntree Gully	-37.88461	145.29539	24724	AUS	Ashmore and Cartier Islands
-7281850	Ferntree Gully	-37.88461	145.29539	24724	AUS	Coral Sea Islands
 335035	Harar	9.31387	42.11815	90218	ETH	Ethiopia
 5102369	Palisades Park	40.84816	-73.99764	19622	USA	United States
 2661567	Bellinzona	46.19278	9.01703	16572	CHE	Switzerland
@@ -3396,8 +3314,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2661604	Basel	47.55839	7.57327	164488	CHE	Switzerland
 2694375	Löddeköpinge	55.76667	13.01667	5582	SWE	Sweden
 2170089	Craigieburn	-37.6	144.95	19728	AUS	Australia
-2170089	Craigieburn	-37.6	144.95	19728	AUS	Ashmore and Cartier Islands
-2170089	Craigieburn	-37.6	144.95	19728	AUS	Coral Sea Islands
 597231	Marijampolė	54.56667	23.35	47613	LTU	Lithuania
 2989297	Orly	48.74792	2.39253	20528	FRA	France
 5119218	Great Neck	40.80066	-73.72846	9989	USA	United States
@@ -3464,7 +3380,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1514879	Khŭjand	40.28256	69.62216	144865	TJK	Tajikistan
 2235776	Akonolinga	3.76667	12.25	17181	CMR	Cameroon
 400769	Laascaanood	8.47738	47.35971	60100	SOM	Somalia
-400769	Laascaanood	8.47738	47.35971	60100	SOM	Somaliland
 3120514	Huesca	42.13615	-0.4087	52059	ESP	Spain
 3065067	Strakonice	49.26141	13.90237	23545	CZE	Czech Republic
 3370903	Jamestown	-15.93872	-5.71675	637	SHN	Saint Helena
@@ -3650,8 +3565,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1798449	Putian	25.43944	119.01028	376558	CHN	China, People's Republic of
 2890381	Kirchseeon	48.07143	11.88875	9174	DEU	Germany
 1253200	Vidisha	23.52604	77.81092	140045	IND	India
-3579732	Basse-Terre	15.99854	-61.72548	11472	GLP	Saint Barthelemy
-3579732	Basse-Terre	15.99854	-61.72548	11472	GLP	Saint Martin
 3579732	Basse-Terre	15.99854	-61.72548	11472	GLP	Guadeloupe
 2120334	Tymovskoye	50.84925	142.6652	8030	RUS	Russia
 5152599	East Cleveland	41.53311	-81.57901	17843	USA	United States
@@ -3790,8 +3703,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1253577	Vadnagar	23.78593	72.63893	24832	IND	India
 4792522	Waynesboro	38.06847	-78.88947	21006	USA	United States
 2171085	Coffs Harbour	-30.29626	153.11351	26353	AUS	Australia
-2171085	Coffs Harbour	-30.29626	153.11351	26353	AUS	Ashmore and Cartier Islands
-2171085	Coffs Harbour	-30.29626	153.11351	26353	AUS	Coral Sea Islands
 2760910	Wolfsberg	46.84056	14.84417	25610	AUT	Austria
 2990287	Nœux-les-Mines	50.48333	2.66667	11970	FRA	France
 3875024	Puente Alto	-33.61169	-70.57577	510417	CHL	Chile
@@ -3800,8 +3711,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3186906	Zagorje ob Savi	46.13179	14.99694	6439	SVN	Slovenia
 3449053	São Gotardo	-19.31111	-46.04889	34145	BRA	Brazil
 2142245	Young	-34.3135	148.30107	7501	AUS	Australia
-2142245	Young	-34.3135	148.30107	7501	AUS	Ashmore and Cartier Islands
-2142245	Young	-34.3135	148.30107	7501	AUS	Coral Sea Islands
 172256	‘Ayn al ‘Arab	36.89095	38.35347	50000	SYR	Syria
 2924770	Friedenau	52.47133	13.32813	26972	DEU	Germany
 5120228	Hauppauge	40.82565	-73.20261	20882	USA	United States
@@ -3827,8 +3736,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3121437	Getafe	40.30571	-3.73295	167164	ESP	Spain
 2620279	Hirtshals	57.58812	9.95922	6653	DNK	Denmark
 2171168	Coburg	-37.75	144.96667	24977	AUS	Australia
-2171168	Coburg	-37.75	144.96667	24977	AUS	Ashmore and Cartier Islands
-2171168	Coburg	-37.75	144.96667	24977	AUS	Coral Sea Islands
 3154209	Halden	59.12478	11.38754	21970	NOR	Norway
 2522975	Taormina	37.85358	15.28851	5790	ITA	Italy
 500004	Rybinsk	58.0446	38.84259	216724	RUS	Russia
@@ -3850,8 +3757,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2269514	Castelo Branco	39.82219	-7.49087	33479	PRT	Portugal
 3059767	Ivanka pri Dunaji	48.18675	17.2554	6245	SVK	Slovakia
 3580236	Grenville	12.12278	-61.62498	2476	GRD	Grenada
-3578594	Pointe-Noire	16.23086	-61.78783	7749	GLP	Saint Barthelemy
-3578594	Pointe-Noire	16.23086	-61.78783	7749	GLP	Saint Martin
 3578594	Pointe-Noire	16.23086	-61.78783	7749	GLP	Guadeloupe
 4989266	Coldwater	41.94033	-85.00052	10945	USA	United States
 4071763	Lanett	32.86874	-85.1905	6468	USA	United States
@@ -3935,8 +3840,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3449344	São Bernardo do Campo	-23.69389	-46.565	743372	BRA	Brazil
 5186053	Croydon	40.08733	-74.9035	9950	USA	United States
 2147756	Swan Hill	-35.33781	143.5544	9276	AUS	Australia
-2147756	Swan Hill	-35.33781	143.5544	9276	AUS	Ashmore and Cartier Islands
-2147756	Swan Hill	-35.33781	143.5544	9276	AUS	Coral Sea Islands
 2957834	Altenberg	50.76556	13.75334	5167	DEU	Germany
 5579276	Longmont	40.16721	-105.10193	86270	USA	United States
 3513090	Willemstad	12.1084	-68.93354	125000		
@@ -3952,8 +3855,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5120545	Herkimer	43.02563	-74.98599	7743	USA	United States
 2368035	Amlamé	7.46667	0.9	9870	TGO	Togo
 2073124	Darwin	-12.46113	130.84185	129062	AUS	Australia
-2073124	Darwin	-12.46113	130.84185	129062	AUS	Ashmore and Cartier Islands
-2073124	Darwin	-12.46113	130.84185	129062	AUS	Coral Sea Islands
 789178	Kovačica	45.11167	20.62139	7357	SRB	Serbia
 2841351	Sassenberg	51.99223	8.04068	14273	DEU	Germany
 1849814	Toyota	35.08333	137.15	362383	JPN	Japan
@@ -3983,8 +3884,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1679980	Vigan	17.57472	120.38694	48545	PHL	Philippines
 1712751	Gonzaga	18.25937	121.99495	7228	PHL	Philippines
 2171507	Wollongong	-34.424	150.89345	292190	AUS	Australia
-2171507	Wollongong	-34.424	150.89345	292190	AUS	Ashmore and Cartier Islands
-2171507	Wollongong	-34.424	150.89345	292190	AUS	Coral Sea Islands
 3023476	Cosne-Cours-sur-Loire	47.41101	2.92528	11613	FRA	France
 5129662	Old Bethpage	40.7626	-73.45318	5523	USA	United States
 4170358	Rockledge	28.35084	-80.72533	24926	USA	United States
@@ -4083,8 +3982,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4301683	Mount Sterling	38.05647	-83.94326	6895	USA	United States
 664437	Turnu Măgurele	43.75	24.86667	28783	ROU	Romania
 2171766	Charlestown	-32.95	151.66667	11725	AUS	Australia
-2171766	Charlestown	-32.95	151.66667	11725	AUS	Ashmore and Cartier Islands
-2171766	Charlestown	-32.95	151.66667	11725	AUS	Coral Sea Islands
 3449720	Santo Amaro	-12.54667	-38.71194	46748	BRA	Brazil
 2990969	Nantes	47.21725	-1.55336	277269	FRA	France
 2990970	Nanterre	48.89198	2.20675	86719	FRA	France
@@ -4217,8 +4114,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2991297	Mouy	49.31535	2.31954	5588	FRA	France
 3024066	Compiègne	49.41794	2.82606	44243	FRA	France
 2172106	Castlemaine	-37.06709	144.21684	6604	AUS	Australia
-2172106	Castlemaine	-37.06709	144.21684	6604	AUS	Ashmore and Cartier Islands
-2172106	Castlemaine	-37.06709	144.21684	6604	AUS	Coral Sea Islands
 2857847	Oettingen in Bayern	48.95274	10.60465	5336	DEU	Germany
 4531405	Broken Arrow	36.0526	-95.79082	98850	USA	United States
 3941584	Cusco	-13.52264	-71.96734	312140	PER	Peru
@@ -4299,8 +4194,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3646869	Cantaura	9.30571	-64.35841	33040	VEN	Venezuela
 730518	Kavarna	43.43333	28.33333	11205	BGR	Bulgaria
 2172311	Caringbah	-34.04726	151.12051	21283	AUS	Australia
-2172311	Caringbah	-34.04726	151.12051	21283	AUS	Ashmore and Cartier Islands
-2172311	Caringbah	-34.04726	151.12051	21283	AUS	Coral Sea Islands
 2967108	Blaye	45.13333	-0.66667	5277	FRA	France
 763291	Olecko	54.03374	22.50704	15923	POL	Poland
 6694300	El entrego	43.28752	-5.638	7400	ESP	Spain
@@ -4386,8 +4279,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5383777	Pleasanton	37.66243	-121.87468	70285	USA	United States
 5121636	Huntington	40.86815	-73.42568	18046	USA	United States
 2172517	Canberra	-35.28346	149.12807	367752	AUS	Australia
-2172517	Canberra	-35.28346	149.12807	367752	AUS	Ashmore and Cartier Islands
-2172517	Canberra	-35.28346	149.12807	367752	AUS	Coral Sea Islands
 5409059	Whittier	33.97918	-118.03284	85331	USA	United States
 468587	Yavas	54.4159	42.8491	7783	RUS	Russia
 4925037	Portland	40.43449	-84.97775	6223	USA	United States
@@ -4403,15 +4294,11 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2762372	Villach	46.61028	13.85583	58882	AUT	Austria
 1812101	Shengli	37.46271	118.49165	306450	CHN	China, People's Republic of
 2154219	Orange	-33.28397	149.10018	39329	AUS	Australia
-2154219	Orange	-33.28397	149.10018	39329	AUS	Ashmore and Cartier Islands
-2154219	Orange	-33.28397	149.10018	39329	AUS	Coral Sea Islands
 3122826	Esplugues de Llobregat	41.37732	2.08809	46862	ESP	Spain
 763534	Nowy Sącz	49.62177	20.69705	84376	POL	Poland
 5129837	Oneida	43.09257	-75.65129	11393	USA	United States
 700696	Mostys'ka	49.79467	23.15077	11000	UKR	Ukraine
 2172563	Camperdown	-33.88965	151.17642	6545	AUS	Australia
-2172563	Camperdown	-33.88965	151.17642	6545	AUS	Ashmore and Cartier Islands
-2172563	Camperdown	-33.88965	151.17642	6545	AUS	Coral Sea Islands
 3024532	Cluses	46.06251	6.57497	19789	FRA	France
 3384987	Vitória de Santo Antão	-8.11806	-35.29139	107383	BRA	Brazil
 2991772	Morlaix	48.58333	-3.83333	17516	FRA	France
@@ -4543,8 +4430,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4302828	Oak Grove	37.34421	-86.75471	7989	USA	United States
 4728826	Sinton	28.03668	-97.50916	5665	USA	United States
 2153471	Penrith	-33.75	150.7	11813	AUS	Australia
-2153471	Penrith	-33.75	150.7	11813	AUS	Ashmore and Cartier Islands
-2153471	Penrith	-33.75	150.7	11813	AUS	Coral Sea Islands
 5187580	Duquesne	40.38146	-79.85977	5565	USA	United States
 4256085	Connersville	39.64116	-85.14107	13481	USA	United States
 2992132	Montpon-Ménestérol	45	0.16667	5658	FRA	France
@@ -4685,8 +4570,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5155207	Fremont	41.35033	-83.12186	16734	USA	United States
 3746184	La Habana Vieja	23.13028	-82.35306	95383	CUB	Cuba
 2206089	Sandy Bay	-42.89449	147.32439	11334	AUS	Australia
-2206089	Sandy Bay	-42.89449	147.32439	11334	AUS	Ashmore and Cartier Islands
-2206089	Sandy Bay	-42.89449	147.32439	11334	AUS	Coral Sea Islands
 5024138	Delano	45.04191	-93.78913	5464	USA	United States
 3058060	Považská Bystrica	49.12153	18.42169	43936	SVK	Slovakia
 665997	Strehaia	44.61667	23.2	11607	ROU	Romania
@@ -4803,8 +4686,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1256126	Singtam	27.23467	88.50168	6133	IND	India
 2763459	Traismauer	48.35	15.73333	5815	AUT	Austria
 9972422	Keilor East	-37.73261	144.86504	13259	AUS	Australia
-9972422	Keilor East	-37.73261	144.86504	13259	AUS	Ashmore and Cartier Islands
-9972422	Keilor East	-37.73261	144.86504	13259	AUS	Coral Sea Islands
 247103	Saḩam al Kaffārāt	32.69763	35.7762	6203	JOR	Jordan
 4846028	Woodbury	41.54454	-73.209	9755	USA	United States
 961226	Ritchie	-29.03801	24.60278	9960	ZAF	South Africa
@@ -4853,11 +4734,8 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3058472	Nové Zámky	47.98544	18.16195	42044	SVK	Slovakia
 2992938	Montbéliard	47.51667	6.8	28865	FRA	France
 63795	Burao	9.52213	45.53363	99270	SOM	Somalia
-63795	Burao	9.52213	45.53363	99270	SOM	Somaliland
 1256237	Shimla	31.10442	77.16662	173503	IND	India
 9972527	Frankston South	-38.16604	145.13643	17360	AUS	Australia
-9972527	Frankston South	-38.16604	145.13643	17360	AUS	Ashmore and Cartier Islands
-9972527	Frankston South	-38.16604	145.13643	17360	AUS	Coral Sea Islands
 4588682	Murrells Inlet	33.551	-79.04143	7547	USA	United States
 5637146	Anaconda	46.12854	-112.94226	9417	USA	United States
 273203	Jbaïl	34.12111	35.64806	20784	LBN	Lebanon
@@ -4884,20 +4762,14 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2993002	Montauban	44.01667	1.35	52434	FRA	France
 2861934	Nordhorn	52.43081	7.06833	52803	DEU	Germany
 611403	Ts’khinvali	42.22764	43.96861	30000	GEO	Georgia
-611403	Ts’khinvali	42.22764	43.96861	30000	GEO	Abkhazia
-611403	Ts’khinvali	42.22764	43.96861	30000	GEO	South Ossetia
 2464915	Sousse	35.82539	10.63699	164123	TUN	Tunisia
 1583992	Da Nang	16.06778	108.22083	752493	VNM	Vietnam
 2661524	Biasca	46.35972	8.96965	5885	CHE	Switzerland
 9972602	Berala	-33.87197	151.03386	8799	AUS	Australia
-9972602	Berala	-33.87197	151.03386	8799	AUS	Ashmore and Cartier Islands
-9972602	Berala	-33.87197	151.03386	8799	AUS	Coral Sea Islands
 2993024	Montargis	48	2.75	17457	FRA	France
 1649539	Baucau	-8.47111	126.45833	16000	TLS	Timor-Leste (East Timor)
 4533130	Choctaw	35.49756	-97.26892	11146	USA	United States
 9972622	Cambridge Park	-33.74784	150.72208	6160	AUS	Australia
-9972622	Cambridge Park	-33.74784	150.72208	6160	AUS	Ashmore and Cartier Islands
-9972622	Cambridge Park	-33.74784	150.72208	6160	AUS	Coral Sea Islands
 174991	Ararat	39.83069	44.70569	28832	ARM	Armenia
 338832	Dire Dawa	9.59306	41.86611	252279	ETH	Ethiopia
 3025809	Chauvigny	46.56747	0.64928	7526	FRA	France
@@ -4905,8 +4777,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4565908	Lares	18.29467	-66.87712	7184	PRI	Puerto Rico
 4893591	Geneva	41.88753	-88.30535	21495	USA	United States
 2861982	Nordhausen	51.5018	10.7957	43912	DEU	Germany
-3578467	Saint-Claude	16.02409	-61.70215	10134	GLP	Saint Barthelemy
-3578467	Saint-Claude	16.02409	-61.70215	10134	GLP	Saint Martin
 3578467	Saint-Claude	16.02409	-61.70215	10134	GLP	Guadeloupe
 4911600	Skokie	42.03336	-87.73339	64784	USA	United States
 3582883	Usulután	13.35	-88.45	51910	SLV	El Salvador
@@ -4921,8 +4791,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2960316	Luxembourg	49.61167	6.13	76684	LUX	Luxembourg
 4107198	Crossett	33.12818	-91.96124	5507	USA	United States
 9972671	Fairfield East	-33.86938	150.97129	5074	AUS	Australia
-9972671	Fairfield East	-33.86938	150.97129	5074	AUS	Ashmore and Cartier Islands
-9972671	Fairfield East	-33.86938	150.97129	5074	AUS	Coral Sea Islands
 306112	Kozan	37.45517	35.81573	88115	TUR	Turkey
 2563232	Attard	35.88972	14.4425	9510	MLT	Malta
 2993092	Montaigu	46.97667	-1.30846	5070	FRA	France
@@ -4966,17 +4834,11 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2862118	Norden	53.59552	7.20639	25093	DEU	Germany
 2260009	Ewo	-0.8725	14.82056	4923	COG	Congo, (Congo  Brazzaville)
 9972778	Killara	-33.76604	151.16213	9284	AUS	Australia
-9972778	Killara	-33.76604	151.16213	9284	AUS	Ashmore and Cartier Islands
-9972778	Killara	-33.76604	151.16213	9284	AUS	Coral Sea Islands
 4452871	Archdale	35.91458	-79.97198	11415	USA	United States
 10103855	Mayfield	-32.89793	151.73613	12248	AUS	Australia
-10103855	Mayfield	-32.89793	151.73613	12248	AUS	Ashmore and Cartier Islands
-10103855	Mayfield	-32.89793	151.73613	12248	AUS	Coral Sea Islands
 2894897	Jever	53.57368	7.89806	13937	DEU	Germany
 601138	Aleksotas	54.88333	23.9	24270	LTU	Lithuania
 2174003	Brisbane	-27.46794	153.02809	2189878	AUS	Australia
-2174003	Brisbane	-27.46794	153.02809	2189878	AUS	Ashmore and Cartier Islands
-2174003	Brisbane	-27.46794	153.02809	2189878	AUS	Coral Sea Islands
 699445	Novomoskovs’k	48.63799	35.24548	73100	UKR	Ukraine
 1846326	Changwon	35.22806	128.68111	550000	KOR	Korea, South
 3174921	Legnano	45.59788	8.91506	57589	ITA	Italy
@@ -5161,7 +5023,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2262957	Sesimbra	38.44451	-9.10149	41134	PRT	Portugal
 4697616	Highland Park	32.83346	-96.79195	8564	USA	United States
 863761	Badamdar	40.34024	49.8045	11398	AZE	Azerbaijan
-863761	Badamdar	40.34024	49.8045	11398	AZE	Nagorno-Karabakh
 470546	Vyborg	60.70763	28.75283	78633	RUS	Russia
 3026451	Charvieu-Chavagneux	45.75	5.15	8506	FRA	France
 1584661	Củ Chi	10.97333	106.49325	75000	VNM	Vietnam
@@ -5346,8 +5207,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5574991	Boulder	40.01499	-105.27055	97385	USA	United States
 700371	Nedryhayliv	50.83398	33.87626	6031	UKR	Ukraine
 2174933	Bongaree	-27.08367	153.15942	13649	AUS	Australia
-2174933	Bongaree	-27.08367	153.15942	13649	AUS	Ashmore and Cartier Islands
-2174933	Bongaree	-27.08367	153.15942	13649	AUS	Coral Sea Islands
 4992982	Flint	43.01253	-83.68746	102434	USA	United States
 3655673	Ibarra	0.35171	-78.12233	132977	ECU	Ecuador
 2994139	Meulan-en-Yvelines	49.00768	1.90602	8829	FRA	France
@@ -5368,8 +5227,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2633729	Witney	51.7836	-1.4854	24103	GBR	United Kingdom
 733191	Blagoevgrad	42.01667	23.1	71306	BGR	Bulgaria
 2207753	Paddington	-33.88419	151.23151	11661	AUS	Australia
-2207753	Paddington	-33.88419	151.23151	11661	AUS	Ashmore and Cartier Islands
-2207753	Paddington	-33.88419	151.23151	11661	AUS	Coral Sea Islands
 2961423	Sligo	54.26969	-8.46943	20228	IRL	Ireland
 2633744	Withernsea	53.7311	0.03347	6113	GBR	United Kingdom
 372753	Kassala	15.45099	36.39998	401477	SDN	Sudan
@@ -5436,8 +5293,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3125408	Cercedilla	40.74101	-4.05644	6747	ESP	Spain
 3027105	Champigny-sur-Marne	48.81642	2.49366	76726	FRA	France
 6697124	East Lismore	-28.81933	153.28743	5209	AUS	Australia
-6697124	East Lismore	-28.81933	153.28743	5209	AUS	Ashmore and Cartier Islands
-6697124	East Lismore	-28.81933	153.28743	5209	AUS	Coral Sea Islands
 5320871	Wickenburg	33.96864	-112.72962	6363	USA	United States
 1607708	Phitsanulok	16.82481	100.25858	103427	THA	Thailand
 2928810	Essen	51.45657	7.01228	593085	DEU	Germany
@@ -5517,8 +5372,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1290596	Taungoo	18.94291	96.43408	106945	MMR	Myanmar (Burma)
 3027301	Chamonix-Mont-Blanc	45.92375	6.86933	10614	FRA	France
 2077030	Bassendean	-31.90906	115.9437	8776	AUS	Australia
-2077030	Bassendean	-31.90906	115.9437	8776	AUS	Ashmore and Cartier Islands
-2077030	Bassendean	-31.90906	115.9437	8776	AUS	Coral Sea Islands
 5517675	Brownfield	33.1812	-102.27435	9657	USA	United States
 302482	Pozantı	37.42778	34.87167	10517	TUR	Turkey
 2634096	Whitehaven	54.54897	-3.58412	24803	GBR	United Kingdom
@@ -5553,8 +5406,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1487281	Verkhnyaya Pyshma	56.97047	60.58219	59061	RUS	Russia
 733618	Asenovgrad	42.01667	24.86667	52170	BGR	Bulgaria
 2175411	Blacktown	-33.76667	150.91667	39000	AUS	Australia
-2175411	Blacktown	-33.76667	150.91667	39000	AUS	Ashmore and Cartier Islands
-2175411	Blacktown	-33.76667	150.91667	39000	AUS	Coral Sea Islands
 1225142	Valvedditturai	9.81667	80.16667	78205	LKA	Sri Lanka
 4501943	Gloucester City	39.89178	-75.11629	11456	USA	United States
 2994617	Mende	44.51667	3.5	14837	FRA	France
@@ -5590,8 +5441,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 504341	Pskov	57.8136	28.3496	201990	RUS	Russia
 2339354	Ibadan	7.37756	3.90591	3565108	NGA	Nigeria
 2142747	Wynyard	-40.9897	145.72617	5706	AUS	Australia
-2142747	Wynyard	-40.9897	145.72617	5706	AUS	Ashmore and Cartier Islands
-2142747	Wynyard	-40.9897	145.72617	5706	AUS	Coral Sea Islands
 3027484	Chalon-sur-Saône	46.78333	4.85	47251	FRA	France
 3430940	Malabrigo	-29.34636	-59.96957	7026	ARG	Argentina
 3027487	Châlons-en-Champagne	48.95393	4.36724	51257	FRA	France
@@ -5600,8 +5449,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3027491	Chalonnes-sur-Loire	47.3516	-0.7631	5950	FRA	France
 2863652	Aschau im Chiemgau	47.77689	12.32297	5410	DEU	Germany
 2175527	Blackmans Bay	-43.00311	147.31694	6341	AUS	Australia
-2175527	Blackmans Bay	-43.00311	147.31694	6341	AUS	Ashmore and Cartier Islands
-2175527	Blackmans Bay	-43.00311	147.31694	6341	AUS	Coral Sea Islands
 2961960	Raheny	53.38681	-6.18067	7197	IRL	Ireland
 6697514	Asahi	35.97259	136.12455	9800	JPN	Japan
 1520172	Petropavl	54.86667	69.15	200920	KAZ	Kazakhstan
@@ -5750,8 +5597,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 6173577	Vaughan	43.8361	-79.49827	238866	CAN	Canada
 2667402	Trelleborg	55.37514	13.15691	25494	SWE	Sweden
 2077579	Armadale	-32.14607	116.0093	62296	AUS	Australia
-2077579	Armadale	-32.14607	116.0093	62296	AUS	Ashmore and Cartier Islands
-2077579	Armadale	-32.14607	116.0093	62296	AUS	Coral Sea Islands
 3453837	Pindamonhangaba	-22.92389	-45.46167	132218	BRA	Brazil
 2831250	Sonneberg	50.3592	11.17463	23908	DEU	Germany
 5125011	Lockport	43.17061	-78.69031	21165	USA	United States
@@ -5822,15 +5667,11 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1283613	Bharatpur	27.68333	84.43333	107157	NPL	Nepal
 1258526	Ranchi	23.34316	85.3094	846454	IND	India
 2176031	Berwick	-38.03333	145.35	44779	AUS	Australia
-2176031	Berwick	-38.03333	145.35	44779	AUS	Ashmore and Cartier Islands
-2176031	Berwick	-38.03333	145.35	44779	AUS	Coral Sea Islands
 1848354	Yokohama	35.43333	139.65	3574443	JPN	Japan
 5911592	Burlington	43.38621	-79.83713	164415	CAN	Canada
 2831403	Sömmerda	51.15914	11.11524	20853	DEU	Germany
 2634801	Wantage	51.58846	-1.42565	9767	GBR	United Kingdom
 2143285	Wodonga	-36.12179	146.88809	31605	AUS	Australia
-2143285	Wodonga	-36.12179	146.88809	31605	AUS	Ashmore and Cartier Islands
-2143285	Wodonga	-36.12179	146.88809	31605	AUS	Coral Sea Islands
 4305974	Richmond	37.74786	-84.29465	31364	USA	United States
 570427	Buzuluk	52.7807	52.2635	87714	RUS	Russia
 668732	Roman	46.92119	26.92646	67819	ROU	Romania
@@ -5915,8 +5756,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2831580	Solingen	51.17343	7.0845	164359	DEU	Germany
 4928733	Adams	42.62425	-73.1176	5515	USA	United States
 2176225	Benalla	-36.55113	145.98425	9020	AUS	Australia
-2176225	Benalla	-36.55113	145.98425	9020	AUS	Ashmore and Cartier Islands
-2176225	Benalla	-36.55113	145.98425	9020	AUS	Coral Sea Islands
 1848550	Yanai	33.96667	132.11667	32229	JPN	Japan
 1651944	Vientiane	17.96667	102.6	196731	LAO	Laos
 3093739	Lębork	54.53921	17.75012	35161	POL	Poland
@@ -5966,8 +5805,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5322053	Yuma	32.72532	-114.6244	93064	USA	United States
 701768	Marshintsy	48.21751	26.29133	5141	UKR	Ukraine
 2078025	Adelaide	-34.92866	138.59863	1225235	AUS	Australia
-2078025	Adelaide	-34.92866	138.59863	1225235	AUS	Ashmore and Cartier Islands
-2078025	Adelaide	-34.92866	138.59863	1225235	AUS	Coral Sea Islands
 734540	Polýkastro	40.99444	22.56909	6961	GRC	Greece
 3192144	Radeče	46.06806	15.18389	2168	SVN	Slovenia
 4753635	Collinsville	36.71514	-79.91532	7335	USA	United States
@@ -6088,16 +5925,12 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3164433	Viareggio	43.86693	10.2502	49099	ITA	Italy
 5879400	Anchorage	61.21806	-149.90028	291826	USA	United States
 2078313	Eaton	-33.31664	115.70503	7481	AUS	Australia
-2078313	Eaton	-33.31664	115.70503	7481	AUS	Ashmore and Cartier Islands
-2078313	Eaton	-33.31664	115.70503	7481	AUS	Coral Sea Islands
 5125738	Mamaroneck	40.94871	-73.73263	18929	USA	United States
 4568683	Villalba	18.12718	-66.49212	4555	PRI	Puerto Rico
 3126899	Cambados	42.51222	-8.8131	13708	ESP	Spain
 727217	Simeonovgrad	42.03333	25.83333	7388	BGR	Bulgaria
 8074174	Muratpaşa	36.89157	30.76498	450000	TUR	Turkey
 2176632	Bathurst	-33.41665	149.5806	33110	AUS	Australia
-2176632	Bathurst	-33.41665	149.5806	33110	AUS	Ashmore and Cartier Islands
-2176632	Bathurst	-33.41665	149.5806	33110	AUS	Coral Sea Islands
 3061370	Zlín	49.22645	17.67065	78759	CZE	Czech Republic
 7648891	Kharkhorin	47.19245	102.81349	8977	MNG	Mongolia
 6534786	Renon - Ritten	46.54152	11.45728	6993	ITA	Italy
@@ -6219,8 +6052,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2963370	Cill Airne	52.05	-9.51667	7300	IRL	Ireland
 2641267	North Shields	55.01646	-1.44925	39747	GBR	United Kingdom
 2176947	Bankstown	-33.91667	151.03333	30572	AUS	Australia
-2176947	Bankstown	-33.91667	151.03333	30572	AUS	Ashmore and Cartier Islands
-2176947	Bankstown	-33.91667	151.03333	30572	AUS	Coral Sea Islands
 2996148	Mantes-la-Jolie	48.98333	1.71667	44263	FRA	France
 728734	Novi Pazar	43.35	27.2	13276	BGR	Bulgaria
 2635703	Tonbridge	51.19532	0.27363	36894	GBR	United Kingdom
@@ -6263,8 +6094,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 178202	Webuye	0.60751	34.76966	22507	KEN	Kenya
 702491	Lysyanka	49.25229	30.82946	7954	UKR	Ukraine
 2177052	Balmain	-33.85481	151.1833	9783	AUS	Australia
-2177052	Balmain	-33.85481	151.1833	9783	AUS	Ashmore and Cartier Islands
-2177052	Balmain	-33.85481	151.1833	9783	AUS	Coral Sea Islands
 2799645	Dendermonde	51.02869	4.10106	43055	BEL	Belgium
 2799647	Denderleeuw	50.88506	4.07601	16969	BEL	Belgium
 2929670	Erfurt	50.9787	11.03283	203254	DEU	Germany
@@ -6292,7 +6121,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 702550	Lviv	49.83826	24.02324	717803	UKR	Ukraine
 2264575	Pombal	39.91674	-8.62847	17355	PRT	Portugal
 585156	Shamakhi	40.63141	48.64137	29403	AZE	Azerbaijan
-585156	Shamakhi	40.63141	48.64137	29403	AZE	Nagorno-Karabakh
 5802340	Maple Valley	47.39272	-122.04641	22684	USA	United States
 1816670	Beijing	39.9075	116.39723	11716620	CHN	China, People's Republic of
 649630	Kirkkonummi	60.12381	24.43853	32920	FIN	Finland
@@ -6355,8 +6183,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4471025	High Point	35.95569	-80.00532	104371	USA	United States
 2636021	Thirsk	54.23298	-1.34411	9302	GBR	United Kingdom
 2144502	Warwick	-28.21901	152.03438	12562	AUS	Australia
-2144502	Warwick	-28.21901	152.03438	12562	AUS	Ashmore and Cartier Islands
-2144502	Warwick	-28.21901	152.03438	12562	AUS	Coral Sea Islands
 1849592	Tsuruga	35.64547	136.0558	68482	JPN	Japan
 3029241	Caen	49.18585	-0.35912	110624	FRA	France
 5185237	Connellsville	40.01785	-79.58948	7637	USA	United States
@@ -6411,8 +6237,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2111855	Mobara	35.42583	140.29608	97315	JPN	Japan
 2701680	Karlstad	59.3793	13.50357	59266	SWE	Sweden
 2177394	Bacchus Marsh	-37.67268	144.43829	13575	AUS	Australia
-2177394	Bacchus Marsh	-37.67268	144.43829	13575	AUS	Ashmore and Cartier Islands
-2177394	Bacchus Marsh	-37.67268	144.43829	13575	AUS	Coral Sea Islands
 2636147	Teddington	51.42233	-0.33053	9615	GBR	United Kingdom
 3029365	Buxerolles	46.61667	0.48333	9415	FRA	France
 997751	Harrismith	-28.27276	29.12946	35108	ZAF	South Africa
@@ -6481,8 +6305,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1860871	Kadoma	34.7381	135.57442	131727	JPN	Japan
 6240770	Cambridge	-37.87822	175.4402	15192	NZL	New Zealand
 2177541	Atherton	-17.26864	145.47522	6959	AUS	Australia
-2177541	Atherton	-17.26864	145.47522	6959	AUS	Ashmore and Cartier Islands
-2177541	Atherton	-17.26864	145.47522	6959	AUS	Coral Sea Islands
 3169811	Priverno	41.47047	13.17867	10005	ITA	Italy
 3095049	Koszalin	54.19438	16.17222	107450	POL	Poland
 3062283	Vyškov	49.27747	16.99897	22265	CZE	Czech Republic
@@ -6496,7 +6318,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2996764	Magny-en-Vexin	49.15515	1.78669	5444	FRA	France
 2662149	Ystad	55.42966	13.82041	17266	SWE	Sweden
 145952	Ýpsonas	34.68797	32.96191	7348	CYP	Cyprus
-145952	Ýpsonas	34.68797	32.96191	7348	CYP	Northern Cyprus
 1165744	Shabqadar	34.21599	71.5548	66541	PAK	Pakistan
 5273927	Sparta	43.94413	-90.81291	9522	USA	United States
 2634843	Waltham Abbey	51.687	-0.00421	18069	GBR	United Kingdom
@@ -6612,11 +6433,9 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 310044	Karacasu	37.72816	28.60569	6201	TUR	Turkey
 3455775	Osasco	-23.5325	-46.79167	677856	BRA	Brazil
 146209	Paralímni	35.03945	33.98181	11836	CYP	Cyprus
-146209	Paralímni	35.03945	33.98181	11836	CYP	Northern Cyprus
 3095330	Koniecpol	50.77468	19.68896	6318	POL	Poland
 1850147	Tokyo	35.6895	139.69171	8336599	JPN	Japan
 146214	Paphos	34.77679	32.42451	35961	CYP	Cyprus
-146214	Paphos	34.77679	32.42451	35961	CYP	Northern Cyprus
 3029799	Bruges	44.87981	-0.61219	12650	FRA	France
 1850152	Tokuyama	34.05	131.81667	101133	JPN	Japan
 2634887	Walkden	53.51667	-2.4	35937	GBR	United Kingdom
@@ -6643,11 +6462,8 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1784658	Zhengzhou	34.75778	113.64861	4253913	CHN	China, People's Republic of
 2997076	Lure	47.68333	6.5	9415	FRA	France
 2145110	Wagga Wagga	-35.12577	147.35375	46913	AUS	Australia
-2145110	Wagga Wagga	-35.12577	147.35375	46913	AUS	Ashmore and Cartier Islands
-2145110	Wagga Wagga	-35.12577	147.35375	46913	AUS	Coral Sea Islands
 2833242	Seligenstadt	50.0432	8.97394	19569	DEU	Germany
 146268	Nicosia	35.17531	33.3642	200452	CYP	Cyprus
-146268	Nicosia	35.17531	33.3642	200452	CYP	Northern Cyprus
 2800481	Charleroi	50.41136	4.44448	200132	BEL	Belgium
 1260387	Paramagudi	9.54633	78.5907	85695	IND	India
 2505572	Batna	35.55597	6.17414	280798	DZA	Algeria
@@ -6703,16 +6519,13 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2636749	Stowmarket	52.18893	0.99774	15394	GBR	United Kingdom
 2989901	Noyelles-Godault	50.41753	2.99306	5624	FRA	France
 146384	Limassol	34.68406	33.03794	154000	CYP	Cyprus
-146384	Limassol	34.68406	33.03794	154000	CYP	Northern Cyprus
 3869657	Tomé	-36.61756	-72.95593	46698	CHL	Chile
 3029974	Brive-la-Gaillarde	45.15	1.53333	53466	FRA	France
 2866135	Neubrandenburg	53.56414	13.27532	68082	DEU	Germany
 146392	Léfka	35.11199	32.84997	7835	CYP	Cyprus
-146392	Léfka	35.11199	32.84997	7835	CYP	Northern Cyprus
 2997210	Luçon	46.45773	-1.16512	10140	FRA	France
 5127134	Mineola	40.74927	-73.64068	18799	USA	United States
 146400	Larnaca	34.92291	33.6233	72000	CYP	Cyprus
-146400	Larnaca	34.92291	33.6233	72000	CYP	Northern Cyprus
 2636769	Stourbridge	52.45608	-2.14317	56284	GBR	United Kingdom
 605155	Kiruna	67.85572	20.22513	18154	SWE	Sweden
 113636	Tafresh	34.69307	50.01601	14399	IRN	Iran
@@ -6722,7 +6535,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5356521	Hermosa Beach	33.86224	-118.39952	19506	USA	United States
 3029995	Brioude	45.3	3.4	7451	FRA	France
 146412	Kyrenia	35.33634	33.31729	26701	CYP	Cyprus
-146412	Kyrenia	35.33634	33.31729	26701	CYP	Northern Cyprus
 113646	Tabriz	38.08	46.2919	1424641	IRN	Iran
 6173864	Vernon	50.26729	-119.27337	47274	CAN	Canada
 2636786	Storrington	50.91765	-0.45473	7899	GBR	United Kingdom
@@ -6774,8 +6586,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2964574	Dublin	53.33306	-6.24889	1024027	IRL	Ireland
 4832353	Danbury	41.39482	-73.45401	80893	USA	United States
 2176187	Bendigo	-36.75818	144.28024	100617	AUS	Australia
-2176187	Bendigo	-36.75818	144.28024	100617	AUS	Ashmore and Cartier Islands
-2176187	Bendigo	-36.75818	144.28024	100617	AUS	Coral Sea Islands
 2112615	Inawashiro	37.56667	140.11667	17413	JPN	Japan
 1850472	Tawaramoto	34.5542	135.79297	32659	JPN	Japan
 3357804	Eenhana	-17.46667	16.33333	0		
@@ -6784,8 +6594,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2374775	Bissau	11.86357	-15.59767	388028	GNB	Guinea-Bissau
 1817720	Shangyu	30.01556	120.87111	770000	CHN	China, People's Republic of
 2178174	Albury	-36.07482	146.92401	45627	AUS	Australia
-2178174	Albury	-36.07482	146.92401	45627	AUS	Ashmore and Cartier Islands
-2178174	Albury	-36.07482	146.92401	45627	AUS	Coral Sea Islands
 2636928	Steyning	50.88744	-0.32787	9713	GBR	United Kingdom
 4799622	Bluefield	37.26984	-81.22232	10447	USA	United States
 2733249	Valbom	41.13247	-8.56414	14443	PRT	Portugal
@@ -6805,8 +6613,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 670888	Piatra Olt	44.36667	24.26667	6313	ROU	Romania
 4832425	Darien	41.07871	-73.46929	20732	USA	United States
 2077895	Alice Springs	-23.69748	133.88362	25186	AUS	Australia
-2077895	Alice Springs	-23.69748	133.88362	25186	AUS	Ashmore and Cartier Islands
-2077895	Alice Springs	-23.69748	133.88362	25186	AUS	Coral Sea Islands
 4570284	Beaufort	32.43158	-80.66983	12361	USA	United States
 5586093	Blackfoot	43.19047	-112.34498	11899	USA	United States
 2968176	Villiers-le-Bel	49.00875	2.39819	27028	FRA	France
@@ -6837,7 +6643,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 933088	Serowe	-22.38754	26.71077	47419	BWA	Botswana
 769250	Kielce	50.87033	20.62752	208598	POL	Poland
 146661	Derýneia	35.06484	33.96083	5161	CYP	Cyprus
-146661	Derýneia	35.06484	33.96083	5161	CYP	Northern Cyprus
 3194086	Oplotnica	46.38778	15.44667	1352	SVN	Slovenia
 1850600	Tarui	35.36667	136.53333	29070	JPN	Japan
 3388626	São João de Pirabas	-0.77472	-47.17722	10065	BRA	Brazil
@@ -6908,16 +6713,13 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5160315	Lakewood	41.48199	-81.79819	52131	USA	United States
 3188366	Vareš	44.16444	18.32833	7193	BIH	Bosnia and Herzegovina
 2148928	Southport	-27.96724	153.39796	28315	AUS	Australia
-2148928	Southport	-27.96724	153.39796	28315	AUS	Ashmore and Cartier Islands
-2148928	Southport	-27.96724	153.39796	28315	AUS	Coral Sea Islands
 7290243	Bergedorf	53.48462	10.22904	119665	DEU	Germany
 4898182	Kankakee	41.12003	-87.86115	27537	USA	United States
 2897132	Husum	54.4858	9.05239	20841	DEU	Germany
 5374340	Montecito	34.43666	-119.63208	8965	USA	United States
 4930956	Boston	42.35843	-71.05977	617594	USA	United States
 4636045	Lebanon	36.20811	-86.2911	26190	USA	United States
-7290254	Berlin Schöneberg	52.48388	13.3477	116286	DEU	Germany
-7290255	Berlin Treptow	52.49376	13.44469	50000	DEU	Germany
+2950159	Berlin	52.52437	13.41053	3426354	DEU	Germany
 5946768	Edmonton	53.55014	-113.46871	712391	CAN	Canada
 5212853	Somerset	40.00841	-79.07808	6277	USA	United States
 5750162	Salem	44.9429	-123.0351	154637	USA	United States
@@ -7114,8 +6916,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3456826	Montenegro	-29.68861	-51.46111	54057	BRA	Brazil
 2637627	Slough	51.50949	-0.59541	134072	GBR	United Kingdom
 2146108	Traralgon	-38.19528	146.5415	21960	AUS	Australia
-2146108	Traralgon	-38.19528	146.5415	21960	AUS	Ashmore and Cartier Islands
-2146108	Traralgon	-38.19528	146.5415	21960	AUS	Coral Sea Islands
 4439869	Olive Branch	34.96176	-89.82953	33484	USA	United States
 2834240	Schwetzingen	49.38217	8.5823	22593	DEU	Germany
 630752	Ylöjärvi	61.55632	23.59606	22140	FIN	Finland
@@ -7132,8 +6932,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2637659	Sleaford	52.99826	-0.40941	15558	GBR	United Kingdom
 2867037	Nassau	50.31453	7.80025	5015	DEU	Germany
 2146142	Townsville	-19.26639	146.80569	196219	AUS	Australia
-2146142	Townsville	-19.26639	146.80569	196219	AUS	Ashmore and Cartier Islands
-2146142	Townsville	-19.26639	146.80569	196219	AUS	Coral Sea Islands
 2033866	Xifeng	42.73722	124.72222	61087	CHN	China, People's Republic of
 2624144	Billund	55.73349	9.10785	6160	DNK	Denmark
 2473826	Bekalta	35.61739	10.99466	15937	TUN	Tunisia
@@ -7170,15 +6968,12 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3030949	Bourg-Saint-Maurice	45.61716	6.76902	8114	FRA	France
 704422	Krasnoarmiys’k	48.28198	37.17585	68263	UKR	Ukraine
 147368	Ordubad	38.90961	46.02274	9781	AZE	Azerbaijan
-147368	Ordubad	38.90961	46.02274	9781	AZE	Nagorno-Karabakh
 1261481	New Delhi	28.63576	77.22445	317797	IND	India
 4999837	Livonia	42.36837	-83.35271	96942	USA	United States
 2645442	Kingsteignton	50.55	-3.58333	11360	GBR	United Kingdom
 6141256	Saskatoon	52.13238	-106.66892	198958	CAN	Canada
 2646003	Islington	51.53622	-0.10304	319143	GBR	United Kingdom
 2143561	Williamstown	-37.857	144.89769	13203	AUS	Australia
-2143561	Williamstown	-37.857	144.89769	13203	AUS	Ashmore and Cartier Islands
-2143561	Williamstown	-37.857	144.89769	13203	AUS	Coral Sea Islands
 2637752	Skelmersdale	53.55024	-2.77348	38944	GBR	United Kingdom
 3063739	Uherské Hradiště	49.06975	17.45969	26421	CZE	Czech Republic
 4734909	Sulphur Springs	33.13845	-95.60107	15449	USA	United States
@@ -7201,8 +6996,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5357527	Hollywood	34.09834	-118.32674	167664	USA	United States
 638936	Rovaniemi	66.5	25.71667	34781	FIN	Finland
 2146268	Toowoomba	-27.56056	151.95386	131258	AUS	Australia
-2146268	Toowoomba	-27.56056	151.95386	131258	AUS	Ashmore and Cartier Islands
-2146268	Toowoomba	-27.56056	151.95386	131258	AUS	Coral Sea Islands
 3031005	Bourges	47.08333	2.4	67987	FRA	France
 7258078	Carmel Hamlet	41.41485	-73.68524	6817	USA	United States
 4177887	West Palm Beach	26.71534	-80.05337	99919	USA	United States
@@ -7210,15 +7003,12 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3031009	Bourg-en-Bresse	46.20574	5.2258	45340	FRA	France
 3522531	Nuevo Padilla	24.04784	-98.90085	5624	MEX	Mexico
 147429	Nakhchivan	39.20889	45.41222	64754	AZE	Azerbaijan
-147429	Nakhchivan	39.20889	45.41222	64754	AZE	Nagorno-Karabakh
 3457001	Mogi das Cruzes	-23.52278	-46.18833	325746	BRA	Brazil
 1884138	Yeosu	34.76278	127.66528	295538	KOR	Korea, South
 2998251	Linas	48.63041	2.26266	6050	FRA	France
 6930414	Stuttgart-Ost	48.78363	9.21032	47500	DEU	Germany
 6078447	Morden	49.1919	-98.10136	6395	CAN	Canada
 2146291	Toorak	-37.84165	145.01438	12871	AUS	Australia
-2146291	Toorak	-37.84165	145.01438	12871	AUS	Ashmore and Cartier Islands
-2146291	Toorak	-37.84165	145.01438	12871	AUS	Coral Sea Islands
 5423092	Glenwood Springs	39.55054	-107.32478	9614	USA	United States
 3170694	Pinerolo	44.88534	7.33135	30866	ITA	Italy
 6534232	Lamezia Terme	38.96255	16.30938	70501	ITA	Italy
@@ -7260,7 +7050,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 704573	Kozelets’	50.91334	31.1214	8305	UKR	Ukraine
 3489854	Kingston	17.99702	-76.79358	937700	JAM	Jamaica
 4033205	Uturoa	-16.72891	-151.44482	3668	PYF	French Polynesia
-4033205	Uturoa	-16.72891	-151.44482	3668	PYF	Clipperton Island
 2834498	Schweinfurt	50.04937	10.22175	54012	DEU	Germany
 2637891	Shrewsbury	52.71009	-2.75208	69519	GBR	United Kingdom
 1261641	Nawābganj	26.93129	81.19841	79246	IND	India
@@ -7681,13 +7470,10 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 738329	Üsküdar	41.02252	29.02369	582666	TUR	Turkey
 2835482	Schwäbisch Gmünd	48.79947	9.79809	61338	DEU	Germany
 8045596	Baki	9.89206	43.38531	20000	SOM	Somalia
-8045596	Baki	9.89206	43.38531	20000	SOM	Somaliland
 2638878	Saffron Walden	52.02337	0.24234	14632	GBR	United Kingdom
 3621922	San Felipe	9.90488	-84.10551	24985	CRI	Costa Rica
 2016307	Solnechnyy	50.72367	136.63831	14227	RUS	Russia
 2147381	Taree	-31.91099	152.45387	16621	AUS	Australia
-2147381	Taree	-31.91099	152.45387	16621	AUS	Ashmore and Cartier Islands
-2147381	Taree	-31.91099	152.45387	16621	AUS	Coral Sea Islands
 3130422	Alella	41.49379	2.29451	8859	ESP	Spain
 115770	Shahr-e Kord	32.32556	50.86444	129153	IRN	Iran
 2984799	Querqueville	49.66251	-1.69119	5670	FRA	France
@@ -7827,8 +7613,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4179320	Albany	31.57851	-84.15574	77434	USA	United States
 2803073	Arlon	49.68333	5.81667	26179	BEL	Belgium
 2147714	Sydney	-33.86785	151.20732	4627345	AUS	Australia
-2147714	Sydney	-33.86785	151.20732	4627345	AUS	Ashmore and Cartier Islands
-2147714	Sydney	-33.86785	151.20732	4627345	AUS	Coral Sea Islands
 5129603	Oceanside	40.63871	-73.64013	32109	USA	United States
 5391749	San Bruno	37.63049	-122.41108	41114	USA	United States
 247176	Şabḩā	32.32696	36.50159	5315	JOR	Jordan
@@ -7876,8 +7660,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3065328	Staré Město	50.087	14.42024	10127	CZE	Czech Republic
 740264	Samsun	41.28667	36.33	394050	TUR	Turkey
 2147826	Surrey Hills	-37.81667	145.1	13133	AUS	Australia
-2147826	Surrey Hills	-37.81667	145.1	13133	AUS	Ashmore and Cartier Islands
-2147826	Surrey Hills	-37.81667	145.1	13133	AUS	Coral Sea Islands
 1852915	Sasaguri	33.61561	130.55105	32588	JPN	Japan
 3687925	Cali	3.43722	-76.5225	2392877	COL	Colombia
 5850616	Makawao	20.85694	-156.31306	7184	USA	United States
@@ -7886,8 +7668,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3558315	Gibara	21.10988	-76.13145	27603	CUB	Cuba
 2803204	Andenne	50.48941	5.09513	24055	BEL	Belgium
 2147849	Surfers Paradise	-28.00274	153.42999	18501	AUS	Australia
-2147849	Surfers Paradise	-28.00274	153.42999	18501	AUS	Ashmore and Cartier Islands
-2147849	Surfers Paradise	-28.00274	153.42999	18501	AUS	Coral Sea Islands
 3589643	San Pedro Carchá	15.48333	-90.26667	13332	GTM	Guatemala
 1263120	Merta	26.64859	74.03414	43758	IND	India
 3655185	Nueva Loja	0.086	-76.89528	24211	ECU	Ecuador
@@ -8068,8 +7848,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5097402	East Brunswick	40.42788	-74.41598	48495	USA	United States
 1853371	Ryōtsu-minato	38.07817	138.43939	16359	JPN	Japan
 2154826	North Wonthaggi	-38.6	145.6	5985	AUS	Australia
-2154826	North Wonthaggi	-38.6	145.6	5985	AUS	Ashmore and Cartier Islands
-2154826	North Wonthaggi	-38.6	145.6	5985	AUS	Coral Sea Islands
 3393470	Orobó	-7.745	-35.60222	5884	BRA	Brazil
 3196864	Kutina	45.475	16.78194	14886	HRV	Croatia
 734880	Orestiáda	41.50306	26.52972	16221	GRC	Greece
@@ -8564,8 +8342,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2640967	Omagh	54.6	-7.3	21056	GBR	United Kingdom
 2859532	Obernkirchen	52.2721	9.12912	10120	DEU	Germany
 8014922	Ballarat Central	-37.56206	143.85082	5645	AUS	Australia
-8014922	Ballarat Central	-37.56206	143.85082	5645	AUS	Ashmore and Cartier Islands
-8014922	Ballarat Central	-37.56206	143.85082	5645	AUS	Coral Sea Islands
 4869195	North Liberty	41.74918	-91.59795	13374	USA	United States
 2640972	Olney	52.15345	-0.70201	6166	GBR	United Kingdom
 1849186	Urayasu	35.67056	139.88861	143758	JPN	Japan
@@ -8752,8 +8528,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1560037	Yên Vinh	18.66667	105.66667	107082	VNM	Vietnam
 5131757	Pleasantville	41.13287	-73.79263	7019	USA	United States
 2144168	Wellington	-32.55588	148.94508	5428	AUS	Australia
-2144168	Wellington	-32.55588	148.94508	5428	AUS	Ashmore and Cartier Islands
-2144168	Wellington	-32.55588	148.94508	5428	AUS	Coral Sea Islands
 467539	Yemetsk	63.47191	41.78023	12000	RUS	Russia
 4525310	Springdale	39.287	-84.48522	11223	USA	United States
 478711	Urkarakh	42.16297	47.63068	5548	RUS	Russia
@@ -8789,8 +8563,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4902476	Moline	41.5067	-90.51513	43483	USA	United States
 511565	Penza	53.20066	45.00464	512602	RUS	Russia
 2149645	Shepparton	-36.38047	145.39867	38773	AUS	Australia
-2149645	Shepparton	-36.38047	145.39867	38773	AUS	Ashmore and Cartier Islands
-2149645	Shepparton	-36.38047	145.39867	38773	AUS	Coral Sea Islands
 3198549	Sveti Jurij ob Ščavnici	46.5695	16.02347	204	SVN	Slovenia
 1855066	Nōgata	33.74051	130.72263	56821	JPN	Japan
 3460699	Itapira	-22.43611	-46.82167	61607	BRA	Brazil
@@ -9025,7 +8797,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4575352	Columbia	34.00071	-81.03481	129272	USA	United States
 522260	Nikel’	69.41285	30.22198	15596	RUS	Russia
 53372	Oodweyne	9.4092	45.06397	5491	SOM	Somalia
-53372	Oodweyne	9.4092	45.06397	5491	SOM	Somaliland
 675968	Hotarele	44.1725	26.37028	8790	ROU	Romania
 3002499	Le Pré-Saint-Gervais	48.88549	2.40422	17786	FRA	France
 2281606	Sinfra	6.62103	-5.91144	59919	CIV	Cote d'Ivoire (Ivory Coast)
@@ -9084,14 +8855,10 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 101760	Sulţānah	24.49258	39.58572	946697	SAU	Saudi Arabia
 3002626	Le Poinçonnet	46.7641	1.7179	5120	FRA	France
 2150660	Saint Kilda	-37.8676	144.98099	17795	AUS	Australia
-2150660	Saint Kilda	-37.8676	144.98099	17795	AUS	Ashmore and Cartier Islands
-2150660	Saint Kilda	-37.8676	144.98099	17795	AUS	Coral Sea Islands
 3657990	Esmeraldas	0.9592	-79.65397	165216	ECU	Ecuador
 3035403	Bagnolet	48.86667	2.41667	33504	FRA	France
 2642189	Morley	53.74013	-1.59877	57385	GBR	United Kingdom
 2177069	Ballina	-28.86414	153.56541	14242	AUS	Australia
-2177069	Ballina	-28.86414	153.56541	14242	AUS	Ashmore and Cartier Islands
-2177069	Ballina	-28.86414	153.56541	14242	AUS	Coral Sea Islands
 3100946	Częstochowa	50.79646	19.12409	248125	POL	Poland
 2347283	Benin City	6.33815	5.62575	1125058	NGA	Nigeria
 3363094	Paarl	-33.73378	18.97523	190000	ZAF	South Africa
@@ -9128,14 +8895,11 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 577881	Beloretsk	53.96306	58.39806	70468	RUS	Russia
 2806108	Worpswede	53.21667	8.93333	9417	DEU	Germany
 4033936	Papeete	-17.53733	-149.5665	26357	PYF	French Polynesia
-4033936	Papeete	-17.53733	-149.5665	26357	PYF	Clipperton Island
 4116834	Jonesboro	35.8423	-90.70428	67263	USA	United States
 2969958	Verdun	49.16667	5.38333	21798	FRA	France
 3166571	Sezze	41.50032	13.06176	16071	ITA	Italy
 1855852	Nakanojōmachi	36.58717	138.84083	17741	JPN	Japan
 2150765	Rye	-38.36667	144.81667	8160	AUS	Australia
-2150765	Rye	-38.36667	144.81667	8160	AUS	Ashmore and Cartier Islands
-2150765	Rye	-38.36667	144.81667	8160	AUS	Coral Sea Islands
 3166574	Seveso	45.6467	9.14296	22733	ITA	Italy
 4903279	Naperville	41.78586	-88.14729	141853	USA	United States
 1853433	Ōzu	32.8804	130.87161	29820	JPN	Japan
@@ -9149,8 +8913,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3625346	Villa Bruzual	9.33278	-69.12083	27993	VEN	Venezuela
 5165445	Oberlin	41.29394	-82.21738	8286	USA	United States
 2150791	Rutherford	-32.71667	151.53333	10182	AUS	Australia
-2150791	Rutherford	-32.71667	151.53333	10182	AUS	Ashmore and Cartier Islands
-2150791	Rutherford	-32.71667	151.53333	10182	AUS	Coral Sea Islands
 1298824	Yangon	16.80528	96.15611	4477638	MMR	Myanmar (Burma)
 2642313	Monmouth	51.81265	-2.71363	8547	GBR	United Kingdom
 3395981	Maceió	-9.66583	-35.73528	954991	BRA	Brazil
@@ -9160,7 +8922,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3101076	Czechowice-Dziedzice	49.91342	19.00479	34703	POL	Poland
 2974446	Sisteron	44.18758	5.94623	7605	FRA	France
 53654	Mogadishu	2.03711	45.34375	2587183	SOM	Somalia
-53654	Mogadishu	2.03711	45.34375	2587183	SOM	Somaliland
 4936087	Fairhaven	41.6376	-70.90365	16453	USA	United States
 1834885	Tangjin	36.89444	126.62972	32778	KOR	Korea, South
 2740637	Coimbra	40.20564	-8.41955	106582	PRT	Portugal
@@ -9212,8 +8973,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2249222	Louga	15.61867	-16.22436	67154	SEN	Senegal
 1790471	Xiangxiang	27.73333	112.53333	87592	CHN	China, People's Republic of
 610824	Zugdidi	42.5088	41.87088	73006	GEO	Georgia
-610824	Zugdidi	42.5088	41.87088	73006	GEO	Abkhazia
-610824	Zugdidi	42.5088	41.87088	73006	GEO	South Ossetia
 5131692	Plattsburgh	44.69949	-73.45291	19989	USA	United States
 2839050	Schkeuditz	51.39678	12.22141	18487	DEU	Germany
 2642450	Minehead	51.20452	-3.48284	11960	GBR	United Kingdom
@@ -9237,8 +8996,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1266222	Konanūr	12.63016	76.05037	9555	IND	India
 3854895	Granadero Baigorria	-32.85683	-60.71754	32427	ARG	Argentina
 610864	Zestap’oni	42.11	43.0525	25891	GEO	Georgia
-610864	Zestap’oni	42.11	43.0525	25891	GEO	Abkhazia
-610864	Zestap’oni	42.11	43.0525	25891	GEO	South Ossetia
 7262771	Napili-Honokowai	20.97533	-156.67826	7261	USA	United States
 2642484	Milngavie	55.94071	-4.32311	12999	GBR	United Kingdom
 1856057	Nagoya	35.18147	136.90641	2191279	JPN	Japan
@@ -9282,8 +9039,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2652269	Cottenham	52.28743	0.1254	5600	GBR	United Kingdom
 4608657	Bristol	36.59511	-82.18874	26702	USA	United States
 2170577	Cooma	-36.23517	149.12408	6520	AUS	Australia
-2170577	Cooma	-36.23517	149.12408	6520	AUS	Ashmore and Cartier Islands
-2170577	Cooma	-36.23517	149.12408	6520	AUS	Coral Sea Islands
 4383513	De Soto	38.1395	-90.55513	6400	USA	United States
 3461786	Guarulhos	-23.46278	-46.53333	1169577	BRA	Brazil
 3461789	Guarujá	-23.99306	-46.25639	310424	BRA	Brazil
@@ -9343,8 +9098,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1626895	Sinjai	-5.1241	120.253	40797	IDN	Indonesia
 3407216	Arcoverde	-8.41889	-37.05389	57163	BRA	Brazil
 2151187	Roma	-26.56741	148.78751	5496	AUS	Australia
-2151187	Roma	-26.56741	148.78751	5496	AUS	Ashmore and Cartier Islands
-2151187	Roma	-26.56741	148.78751	5496	AUS	Coral Sea Islands
 2839316	Schiffweiler	49.36667	7.13333	15780	DEU	Germany
 2908974	Hausach	48.28426	8.17602	5748	DEU	Germany
 4805404	Fairmont	39.48508	-80.14258	18704	USA	United States
@@ -9456,8 +9209,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5006166	Pontiac	42.63892	-83.29105	59515	USA	United States
 3855370	Fray Luis A. Beltrán	-32.79122	-60.72819	14390	ARG	Argentina
 2151437	Rockhampton	-23.38032	150.50595	61724	AUS	Australia
-2151437	Rockhampton	-23.38032	150.50595	61724	AUS	Ashmore and Cartier Islands
-2151437	Rockhampton	-23.38032	150.50595	61724	AUS	Coral Sea Islands
 775183	Brzesko	49.96911	20.60606	16866	POL	Poland
 686254	Arad	46.18333	21.31667	169065	ROU	Romania
 1510916	Barabinsk	55.35709	78.35697	31508	RUS	Russia
@@ -9467,8 +9218,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5180934	Bloomsburg	41.0037	-76.45495	14855	USA	United States
 4903976	North Peoria	40.71754	-89.58426	113004	USA	United States
 611373	Tsnori	41.62088	45.96943	6609	GEO	Georgia
-611373	Tsnori	41.62088	45.96943	6609	GEO	Abkhazia
-611373	Tsnori	41.62088	45.96943	6609	GEO	South Ossetia
 2878018	Lichterfelde	52.4333	13.30762	80149	DEU	Germany
 2642999	Marple	53.39452	-2.06292	18886	GBR	United Kingdom
 1856569	Moriyama	35.06667	135.98333	68584	JPN	Japan
@@ -9523,7 +9272,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2872504	Meerbusch	51.26118	6.6717	54826	DEU	Germany
 4261585	Mooresville	39.61282	-86.37416	9326	USA	United States
 54460	Mahaddayweyne	2.9726	45.5347	8273	SOM	Somalia
-54460	Mahaddayweyne	2.9726	45.5347	8273	SOM	Somaliland
 1856703	Miyazu	35.53333	135.18333	21632	JPN	Japan
 3855554	Firmat	-33.45937	-61.4832	18294	ARG	Argentina
 3200197	Gornja Radgona	46.67333	15.99222	3159	SVN	Slovenia
@@ -9541,11 +9289,7 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2643160	Maldon	51.7311	0.67463	21193	GBR	United Kingdom
 5383527	Placentia	33.87224	-117.87034	50533	USA	United States
 611551	Tsalenjikha	42.60444	42.06825	8879	GEO	Georgia
-611551	Tsalenjikha	42.60444	42.06825	8879	GEO	Abkhazia
-611551	Tsalenjikha	42.60444	42.06825	8879	GEO	South Ossetia
 2151649	Richmond	-37.81819	145.00176	26121	AUS	Australia
-2151649	Richmond	-37.81819	145.00176	26121	AUS	Ashmore and Cartier Islands
-2151649	Richmond	-37.81819	145.00176	26121	AUS	Coral Sea Islands
 3036386	Aubervilliers	48.91667	2.38333	70914	FRA	France
 3462371	Goiatuba	-18.0125	-49.35472	25925	BRA	Brazil
 4740328	Waxahachie	32.38653	-96.84833	29621	USA	United States
@@ -9558,8 +9302,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2930900	Ellrich	51.58656	10.66326	6423	DEU	Germany
 2512127	Puçol	39.61667	-0.3	19018	ESP	Spain
 611584	Tqibuli	42.35121	42.99874	13201	GEO	Georgia
-611584	Tqibuli	42.35121	42.99874	13201	GEO	Abkhazia
-611584	Tqibuli	42.35121	42.99874	13201	GEO	South Ossetia
 3036418	Aubenas	44.62006	4.38994	13134	FRA	France
 2872580	Meckesheim	49.32167	8.81944	5409	DEU	Germany
 939270	Witbank	-25.87133	29.23323	262491	ZAF	South Africa
@@ -9606,8 +9348,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5854571	Waimea	20.02323	-155.67288	9212	USA	United States
 5914653	Camrose	53.01684	-112.83525	15686	CAN	Canada
 611694	Telavi	41.91978	45.47315	21800	GEO	Georgia
-611694	Telavi	41.91978	45.47315	21800	GEO	Abkhazia
-611694	Telavi	41.91978	45.47315	21800	GEO	South Ossetia
 2643312	Lymington	50.75767	-1.5443	14544	GBR	United Kingdom
 2905457	Herzogenaurach	49.56798	10.88565	23319	DEU	Germany
 2643318	Lydney	51.72598	-2.52605	9160	GBR	United Kingdom
@@ -9649,8 +9389,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2807240	Wittlich	49.98596	6.89308	17887	DEU	Germany
 480716	Tuapse	44.1053	39.0802	64234	RUS	Russia
 2151886	Redlynch	-16.88333	145.7	6069	AUS	Australia
-2151886	Redlynch	-16.88333	145.7	6069	AUS	Ashmore and Cartier Islands
-2151886	Redlynch	-16.88333	145.7	6069	AUS	Coral Sea Islands
 2676176	Södertälje	59.19554	17.62525	60279	SWE	Sweden
 1856977	Mishima	35.11667	138.91667	113479	JPN	Japan
 2512340	Pozoblanco	38.37906	-4.84827	17669	ESP	Spain
@@ -9661,8 +9399,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 262603	Ermoúpolis	37.44227	24.94248	11351	GRC	Greece
 2741728	Caldelas	41.67101	-8.38148	5724	PRT	Portugal
 611809	Surami	42.02431	43.55556	10091	GEO	Georgia
-611809	Surami	42.02431	43.55556	10091	GEO	Abkhazia
-611809	Surami	42.02431	43.55556	10091	GEO	South Ossetia
 1571067	Phan Rang-Tháp Chàm	11.56432	108.98858	91520	VNM	Vietnam
 2204582	Labasa	-16.4332	179.36451	27949	FJI	Fiji
 4707814	Longview	32.5007	-94.74049	80455	USA	United States
@@ -9679,16 +9415,12 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3364346	Malmesbury	-33.4608	18.72714	34991	ZAF	South Africa
 5330427	Boyes Hot Springs	38.3138	-122.48193	6656	USA	United States
 2151932	Redfern	-33.89279	151.20415	11482	AUS	Australia
-2151932	Redfern	-33.89279	151.20415	11482	AUS	Ashmore and Cartier Islands
-2151932	Redfern	-33.89279	151.20415	11482	AUS	Coral Sea Islands
 3429886	Posadas	-27.36708	-55.89608	323739	ARG	Argentina
 2905599	Hersbruck	49.51083	11.43151	12404	DEU	Germany
 2676224	Söderhamn	61.30373	17.05921	12022	SWE	Sweden
 677377	Ghimeş-Făget	46.58333	26.06667	5248	ROU	Romania
 2905604	Herrsching am Ammersee	47.99888	11.17679	10000	DEU	Germany
 611847	Sokhumi	43.00697	40.9893	81546	GEO	Georgia
-611847	Sokhumi	43.00697	40.9893	81546	GEO	Abkhazia
-611847	Sokhumi	43.00697	40.9893	81546	GEO	South Ossetia
 2938376	Delitzsch	51.52546	12.34284	24998	DEU	Germany
 3003918	Le Grau-du-Roi	43.53881	4.13559	6368	FRA	France
 2971154	Vaison-la-Romaine	44.23896	5.07461	6207	FRA	France
@@ -9794,8 +9526,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3987224	San Felipe	31.02468	-114.83919	15386	MEX	Mexico
 2643741	City of London	51.51279	-0.09184	7556900	GBR	United Kingdom
 612126	Samtredia	42.1537	42.33517	28748	GEO	Georgia
-612126	Samtredia	42.1537	42.33517	28748	GEO	Abkhazia
-612126	Samtredia	42.1537	42.33517	28748	GEO	South Ossetia
 2643743	London	51.50853	-0.12574	7556900	GBR	United Kingdom
 2652464	Congleton	53.16314	-2.21253	26030	GBR	United Kingdom
 2905891	Herne	51.5388	7.22572	172108	DEU	Germany
@@ -9824,8 +9554,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1070940	Antananarivo	-18.91368	47.53613	1391433	MDG	Madagascar
 4544349	Oklahoma City	35.46756	-97.51643	579999	USA	United States
 2152286	Queanbeyan	-35.35493	149.232	40661	AUS	Australia
-2152286	Queanbeyan	-35.35493	149.232	40661	AUS	Ashmore and Cartier Islands
-2152286	Queanbeyan	-35.35493	149.232	40661	AUS	Coral Sea Islands
 2042249	Yŏnggwang-ŭp	40.01833	127.45472	21882	PRK	Korea, North
 3463011	Franca	-20.53861	-47.40083	305041	BRA	Brazil
 907111	Mazabuka	-15.85601	27.748	64006	ZMB	Zambia
@@ -9845,8 +9573,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4347778	Baltimore	39.29038	-76.61219	620961	USA	United States
 776069	Białystok	53.13333	23.16433	291855	POL	Poland
 612230	Sagarejo	41.73397	45.33149	12173	GEO	Georgia
-612230	Sagarejo	41.73397	45.33149	12173	GEO	Abkhazia
-612230	Sagarejo	41.73397	45.33149	12173	GEO	South Ossetia
 579464	Balashikha	55.80945	37.95806	150103	RUS	Russia
 3037068	Argelers	42.54714	3.02253	10044	FRA	France
 2643853	Locharbriggs	55.10337	-3.58438	6333	GBR	United Kingdom
@@ -9872,8 +9598,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 484340	Tarkhovka	60.06687	29.97435	7000	RUS	Russia
 604490	Luleå	65.58415	22.15465	45551	SWE	Sweden
 612287	Rust’avi	41.54949	44.99323	50000	GEO	Georgia
-612287	Rust’avi	41.54949	44.99323	50000	GEO	Abkhazia
-612287	Rust’avi	41.54949	44.99323	50000	GEO	South Ossetia
 4839366	New Haven	41.30815	-72.92816	129779	USA	United States
 2873289	Marktredwitz	50.00443	12.08593	18204	DEU	Germany
 2873291	Marktoberdorf	47.77964	10.61713	18505	DEU	Germany
@@ -9891,8 +9615,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 776175	Biała Podlaska	52.03238	23.11652	57541	POL	Poland
 1267696	Karol Bāgh	28.65136	77.19072	505241	IND	India
 612338	Qvareli	41.95493	45.81716	8612	GEO	Georgia
-612338	Qvareli	41.95493	45.81716	8612	GEO	Abkhazia
-612338	Qvareli	41.95493	45.81716	8612	GEO	South Ossetia
 5134323	Roosevelt	40.67871	-73.58902	16258	USA	United States
 1926142	Hōjō	33.97661	132.77767	27992	JPN	Japan
 2709494	Habo	57.91185	14.07444	6244	SWE	Sweden
@@ -9979,8 +9701,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3168438	San Daniele del Friuli	46.15714	13.00726	6700	ITA	Italy
 1527497	Kyzyl-Suu	42.34211	78.00644	16927	KGZ	Kyrgyzstan
 612536	Ozurgeti	41.92442	42.00682	20636	GEO	Georgia
-612536	Ozurgeti	41.92442	42.00682	20636	GEO	Abkhazia
-612536	Ozurgeti	41.92442	42.00682	20636	GEO	South Ossetia
 776384	Barczewo	53.83055	20.69112	7315	POL	Poland
 3201217	Drenova	45.35	14.43028	7638	HRV	Croatia
 2611396	Tórshavn	62.00973	-6.77164	13200	FRO	Faroe Islands
@@ -9991,8 +9711,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5101775	New Providence	40.69843	-74.40154	12171	USA	United States
 2513106	Ontinyent	38.82191	-0.60603	37735	ESP	Spain
 2152659	Port Macquarie	-31.43084	152.90894	41491	AUS	Australia
-2152659	Port Macquarie	-31.43084	152.90894	41491	AUS	Ashmore and Cartier Islands
-2152659	Port Macquarie	-31.43084	152.90894	41491	AUS	Coral Sea Islands
 1005781	Elliot	-31.33333	27.85	11836	ZAF	South Africa
 3004630	Le Chesnay	48.8222	2.12213	29154	FRA	France
 284890	Ar Rām wa Ḑāḩiyat al Barīd	31.84945	35.2342	24838		
@@ -10074,7 +9792,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3070325	Moravská Třebová	49.75793	16.66426	11414	CZE	Czech Republic
 1857910	Kyoto	35.02107	135.75385	1459640	JPN	Japan
 55671	Kismayo	-0.35817	42.54536	234852	SOM	Somalia
-55671	Kismayo	-0.35817	42.54536	234852	SOM	Somaliland
 3168633	Salò	45.60685	10.5205	8165	ITA	Italy
 5921147	Chibougamau	49.91684	-74.36586	7563	CAN	Canada
 5036420	Mankato	44.15906	-94.00915	39309	USA	United States
@@ -10112,8 +9829,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2644419	Liphook	51.07673	-0.8032	6165	GBR	United Kingdom
 4315588	Baton Rouge	30.45075	-91.15455	229493	USA	United States
 9957327	Stafford	-27.41044	153.01105	6041	AUS	Australia
-9957327	Stafford	-27.41044	153.01105	6041	AUS	Ashmore and Cartier Islands
-9957327	Stafford	-27.41044	153.01105	6041	AUS	Coral Sea Islands
 1497543	Nizhnevartovsk	60.9344	76.5531	244937	RUS	Russia
 3430863	Mar del Plata	-38.00228	-57.55754	553935	ARG	Argentina
 3070420	Modřany	50.01116	14.4096	31901	CZE	Czech Republic
@@ -10142,8 +9857,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1858067	Kusatsu	35.01667	135.96667	127680	JPN	Japan
 2644501	Limavady	55.05045	-6.95074	12970	GBR	United Kingdom
 612890	Mtskheta	41.84514	44.71875	7423	GEO	Georgia
-612890	Mtskheta	41.84514	44.71875	7423	GEO	Abkhazia
-612890	Mtskheta	41.84514	44.71875	7423	GEO	South Ossetia
 2742811	Arcos	40.44779	-8.44171	6725	PRT	Portugal
 2513436	Mula	38.04095	-1.49014	16941	ESP	Spain
 2906654	Helsa	51.26667	9.68333	5882	DEU	Germany
@@ -10228,8 +9941,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 547523	Klin	56.33333	36.73333	80778	RUS	Russia
 2638035	Shepton Mallet	51.18972	-2.54722	9027	GBR	United Kingdom
 613065	Mart’vili	42.41436	42.37924	5483	GEO	Georgia
-613065	Mart’vili	42.41436	42.37924	5483	GEO	Abkhazia
-613065	Mart’vili	42.41436	42.37924	5483	GEO	South Ossetia
 2658082	Wädenswil	47.22683	8.6687	13269	CHE	Switzerland
 3037902	Amboise	47.41249	0.98266	12685	FRA	France
 2644688	Leeds	53.79648	-1.54785	455123	GBR	United Kingdom
@@ -10303,8 +10014,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 187231	Maua	0.23206	37.94052	10804	KEN	Kenya
 303022	Özalp	38.65455	43.98869	8249	TUR	Turkey
 613226	Lent’ekhi	42.78893	42.72226	10442	GEO	Georgia
-613226	Lent’ekhi	42.78893	42.72226	10442	GEO	Abkhazia
-613226	Lent’ekhi	42.78893	42.72226	10442	GEO	South Ossetia
 5102443	Passaic	40.85677	-74.12848	69781	USA	United States
 940909	Welkom	-27.97742	26.73506	431944	ZAF	South Africa
 3084093	Świdnica	50.84378	16.48859	60351	POL	Poland
@@ -10329,8 +10038,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 514966	Orichi	58.40356	49.05719	7805	RUS	Russia
 4709272	Marshall	32.54487	-94.36742	23523	USA	United States
 2175403	Blackwater	-23.58351	148.87912	7250	AUS	Australia
-2175403	Blackwater	-23.58351	148.87912	7250	AUS	Ashmore and Cartier Islands
-2175403	Blackwater	-23.58351	148.87912	7250	AUS	Coral Sea Islands
 3625515	Valle de La Pascua	9.21554	-66.00734	89080	VEN	Venezuela
 2939811	Cottbus	51.75769	14.32888	84754	DEU	Germany
 318372	Çine	37.61266	28.05912	21327	TUR	Turkey
@@ -10370,8 +10077,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 711669	Boryslav	49.28672	23.43238	36704	UKR	Ukraine
 3169272	Riva del Garda	45.88577	10.84117	14727	ITA	Italy
 2153467	Penshurst	-33.96667	151.08333	11692	AUS	Australia
-2153467	Penshurst	-33.96667	151.08333	11692	AUS	Ashmore and Cartier Islands
-2153467	Penshurst	-33.96667	151.08333	11692	AUS	Coral Sea Islands
 2513917	Mérida	38.91611	-6.34366	56395	ESP	Spain
 2186239	New Plymouth	-39.06667	174.08333	49168	NZL	New Zealand
 547840	Kizlyar	43.84712	46.71445	50564	RUS	Russia
@@ -10380,7 +10085,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1793036	Tengzhou	35.07706	117.15176	105456	CHN	China, People's Republic of
 154638	Matai	-8.3	31.51667	24070	TZA	Tanzania
 56335	Jawhar	2.78087	45.50048	47086	SOM	Somalia
-56335	Jawhar	2.78087	45.50048	47086	SOM	Somaliland
 3038224	Alès	44.12489	4.08082	42410	FRA	France
 3038230	Alençon	48.43333	0.08333	30786	FRA	France
 2972695	Thouars	46.97602	-0.21507	11517	FRA	France
@@ -10413,7 +10117,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2939995	Clausthal-Zellerfeld	51.80949	10.33821	15345	DEU	Germany
 2841693	Sangerhausen	51.47221	11.29533	23347	DEU	Germany
 56414	Jalalaqsi	3.3766	45.5996	9743	SOM	Somalia
-56414	Jalalaqsi	3.3766	45.5996	9743	SOM	Somaliland
 6151264	Sooke	48.37463	-123.72762	6145	CAN	Canada
 2645093	Knutsford	53.30289	-2.37482	12938	GBR	United Kingdom
 1489425	Tomsk	56.49771	84.97437	485519	RUS	Russia
@@ -10446,7 +10149,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 711841	Bolhrad	45.68262	28.61487	16708	UKR	Ukraine
 5375480	Mountain View	37.38605	-122.08385	74066	USA	United States
 585145	Saray	40.53299	49.71681	10173	AZE	Azerbaijan
-585145	Saray	40.53299	49.71681	10173	AZE	Nagorno-Karabakh
 2645163	Knaresborough	54.0091	-1.46851	14740	GBR	United Kingdom
 3202220	Đakovo	45.30833	18.41056	19491	HRV	Croatia
 2874545	Magdeburg	52.12773	11.62916	229826	DEU	Germany
@@ -10472,8 +10174,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4351184	Chesapeake Beach	38.68623	-76.53468	5753	USA	United States
 2940132	Chemnitz	50.8357	12.92922	247220	DEU	Germany
 613607	Kutaisi	42.26791	42.69459	178338	GEO	Georgia
-613607	Kutaisi	42.26791	42.69459	178338	GEO	Abkhazia
-613607	Kutaisi	42.26791	42.69459	178338	GEO	South Ossetia
 3071213	Malá Strana	50.08774	14.40449	6350	CZE	Czech Republic
 2514158	Marchena	37.329	-5.41681	19768	ESP	Spain
 3169522	Reggio nell'Emilia	44.69825	10.63125	133296	ITA	Italy
@@ -10545,8 +10245,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5102970	Prospect Park	40.24039	-74.76627	5794	USA	United States
 3089642	Otmuchów	50.46627	17.17348	5181	POL	Poland
 613762	Kobuleti	41.82	41.77528	18600	GEO	Georgia
-613762	Kobuleti	41.82	41.77528	18600	GEO	Abkhazia
-613762	Kobuleti	41.82	41.77528	18600	GEO	South Ossetia
 3104132	Aleksandrów Łódzki	51.81965	19.30384	20292	POL	Poland
 3628423	San Felipe	10.33991	-68.74247	76766	VEN	Venezuela
 5070216	Holdrege	40.44029	-99.36982	5495	USA	United States
@@ -10621,8 +10319,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 548408	Kirov	58.59665	49.66007	457383	RUS	Russia
 4185657	Calhoun	34.50259	-84.95105	15650	USA	United States
 2155783	Narara	-33.4	151.35	7792	AUS	Australia
-2155783	Narara	-33.4	151.35	7792	AUS	Ashmore and Cartier Islands
-2155783	Narara	-33.4	151.35	7792	AUS	Coral Sea Islands
 581179	Ardon	43.1772	44.29702	18313	RUS	Russia
 3104316	Zarautz	43.28444	-2.16992	22627	ESP	Spain
 5201470	Milton	41.01203	-76.84774	7042	USA	United States
@@ -10668,7 +10364,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1793700	Taishan	22.25135	112.7799	145440	CHN	China, People's Republic of
 5103269	Ridgewood	40.97926	-74.11653	24958	USA	United States
 57000	Hobyo	5.3505	48.5268	12564	SOM	Somalia
-57000	Hobyo	5.3505	48.5268	12564	SOM	Somaliland
 2743977	Zeist	52.09	5.23333	60949	NLD	Netherlands
 3166151	Stezzano	45.64968	9.65192	12316	ITA	Italy
 763165	Olsztynek	53.58374	20.28471	7591	POL	Poland
@@ -10803,14 +10498,11 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 6545348	Praga Południe	52.24424	21.08545	187845	POL	Poland
 2966883	Arklow	52.79306	-6.14139	11761	IRL	Ireland
 57289	Hargeysa	9.56	44.065	477876	SOM	Somalia
-57289	Hargeysa	9.56	44.065	477876	SOM	Somaliland
 2514891	Lorca	37.67119	-1.7017	91906	ESP	Spain
 5103564	Rumson	40.37205	-73.99903	7122	USA	United States
 785058	Veles	41.71556	21.77556	57873	MKD	Macedonia
 3006414	La Seyne-sur-Mer	43.09818	5.88471	62330	FRA	France
 614351	Gurjaani	41.74292	45.80111	9466	GEO	Georgia
-614351	Gurjaani	41.74292	45.80111	9466	GEO	Abkhazia
-614351	Gurjaani	41.74292	45.80111	9466	GEO	South Ossetia
 2645972	Jarrow	54.98036	-1.48423	27264	GBR	United Kingdom
 664910	Tismana	45.05	22.96667	7751	ROU	Romania
 2805753	Wuppertal	51.27027	7.16755	360797	DEU	Germany
@@ -10843,8 +10535,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2973703	Sully-sur-Loire	47.76372	2.37238	6285	FRA	France
 2842632	Saarlouis	49.31366	6.75154	38333	DEU	Germany
 614409	Gudauta	43.10547	40.62067	7700	GEO	Georgia
-614409	Gudauta	43.10547	40.62067	7700	GEO	Abkhazia
-614409	Gudauta	43.10547	40.62067	7700	GEO	South Ossetia
 2647383	Harwich	51.94194	1.28437	20578	GBR	United Kingdom
 385038	Ar Rifā‘	26.13	50.555	79550	BHR	Bahrain
 2646032	Irvine	55.6194	-4.65508	32748	GBR	United Kingdom
@@ -10863,16 +10553,12 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2772998	Langenzersdorf	48.3	16.35	7733	AUT	Austria
 90150	Tikrīt	34.61581	43.67861	42477	IRQ	Iraq
 8469169	North Adelaide	-34.90733	138.59141	6678	AUS	Australia
-8469169	North Adelaide	-34.90733	138.59141	6678	AUS	Ashmore and Cartier Islands
-8469169	North Adelaide	-34.90733	138.59141	6678	AUS	Coral Sea Islands
 2514984	Llucmajor	39.49093	2.89108	36078	ESP	Spain
 2646057	Ipswich	52.05917	1.15545	143767	GBR	United Kingdom
 2023469	Irkutsk	52.29778	104.29639	586695	RUS	Russia
 5136433	Scarsdale	41.0051	-73.78458	17166	USA	United States
 3009481	La Ferté-sous-Jouarre	48.9514	3.12724	9443	FRA	France
 614455	Gori	41.98422	44.11578	46676	GEO	Georgia
-614455	Gori	41.98422	44.11578	46676	GEO	Abkhazia
-614455	Gori	41.98422	44.11578	46676	GEO	South Ossetia
 1859642	Kawasaki	35.52056	139.71722	1306785	JPN	Japan
 4351327	Cheverly	38.92817	-76.91581	6173	USA	United States
 2842688	Saalfeld	50.64826	11.36536	28023	DEU	Germany
@@ -10895,8 +10581,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4350049	California	38.3004	-76.50745	11857	USA	United States
 2515045	Linares	38.09519	-3.63602	61338	ESP	Spain
 2063036	Port Lincoln	-34.72625	135.87442	13044	AUS	Australia
-2063036	Port Lincoln	-34.72625	135.87442	13044	AUS	Ashmore and Cartier Islands
-2063036	Port Lincoln	-34.72625	135.87442	13044	AUS	Coral Sea Islands
 648953	Lapinlahti	63.36667	27.4	7350	FIN	Finland
 2773010	Langenlois	48.46667	15.66667	7081	AUT	Austria
 1265683	Kumbakonam	10.96209	79.39124	139264	IND	India
@@ -10936,8 +10620,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2875601	Lübeck	53.86893	10.68729	212207	DEU	Germany
 2613460	Slagelse	55.40276	11.35459	31896	DNK	Denmark
 614613	Gali	42.62655	41.73808	11861	GEO	Georgia
-614613	Gali	42.62655	41.73808	11861	GEO	Abkhazia
-614613	Gali	42.62655	41.73808	11861	GEO	South Ossetia
 233508	Entebbe	0.06444	32.44694	62969	UGA	Uganda
 3176014	Goito	45.25076	10.66121	5538	ITA	Italy
 2941150	Burgstädt	50.91333	12.806	12477	DEU	Germany
@@ -10969,8 +10651,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3128026	Bilbao	43.26271	-2.92528	354860	ESP	Spain
 4776222	Norfolk	36.84681	-76.28522	242803	USA	United States
 2154787	Nowra	-34.88422	150.60036	34479	AUS	Australia
-2154787	Nowra	-34.88422	150.60036	34479	AUS	Ashmore and Cartier Islands
-2154787	Nowra	-34.88422	150.60036	34479	AUS	Coral Sea Islands
 3465508	Cornélio Procópio	-23.18111	-50.64667	48487	BRA	Brazil
 5202215	Mount Lebanon	40.35535	-80.0495	32730	USA	United States
 2973993	Soultz-Haut-Rhin	47.8874	7.23042	6963	FRA	France
@@ -11020,8 +10700,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3465624	Contagem	-19.93167	-44.05361	627123	BRA	Brazil
 5431710	Montrose	38.47832	-107.87617	19132	USA	United States
 2154912	North Melbourne	-37.8	144.96667	11755	AUS	Australia
-2154912	North Melbourne	-37.8	144.96667	11755	AUS	Ashmore and Cartier Islands
-2154912	North Melbourne	-37.8	144.96667	11755	AUS	Coral Sea Islands
 6185377	Yellowknife	62.45411	-114.37248	15865	CAN	Canada
 2843042	Runkel	50.40574	8.15457	9872	DEU	Germany
 2646435	Humberston	53.53036	-0.02465	8216	GBR	United Kingdom
@@ -11224,8 +10902,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 981827	Louis Trichardt	-23.04385	29.90319	86854	ZAF	South Africa
 3564436	Cerro	23.10861	-82.37778	132351	CUB	Cuba
 8348565	Glendenning	-33.7483	150.85411	5026	AUS	Australia
-8348565	Glendenning	-33.7483	150.85411	5026	AUS	Ashmore and Cartier Islands
-8348565	Glendenning	-33.7483	150.85411	5026	AUS	Coral Sea Islands
 418710	Khomeynī Shahr	32.6856	51.53609	277334	IRN	Iran
 2789529	Oudenaarde	50.85168	3.60891	27935	BEL	Belgium
 3531673	Cancún	21.17429	-86.84656	542043	MEX	Mexico
@@ -11266,8 +10942,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2810855	Wermelskirchen	51.1397	7.21583	36816	DEU	Germany
 2745321	Voorburg	52.07417	4.35972	38000	NLD	Netherlands
 615403	Borjomi	41.85272	43.41284	13825	GEO	Georgia
-615403	Borjomi	41.85272	43.41284	13825	GEO	Abkhazia
-615403	Borjomi	41.85272	43.41284	13825	GEO	South Ossetia
 2647021	Hetton-Le-Hole	54.81667	-1.45	13100	GBR	United Kingdom
 1795055	Shiqiao	22.9464	113.35769	135308	CHN	China, People's Republic of
 2647026	Heswall	53.32733	-3.09648	30065	GBR	United Kingdom
@@ -11275,8 +10949,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3007477	Laon	49.56667	3.61667	28688	FRA	France
 5202938	Nazareth	40.74038	-75.30962	5746	USA	United States
 615419	Bolnisi	41.44794	44.53838	13800	GEO	Georgia
-615419	Bolnisi	41.44794	44.53838	13800	GEO	Abkhazia
-615419	Bolnisi	41.44794	44.53838	13800	GEO	South Ossetia
 2745340	Volendam	52.495	5.07083	22000	NLD	Netherlands
 2810878	Werl	51.55493	7.91403	32149	DEU	Germany
 3466752	Cássia	-20.58306	-46.92194	14391	BRA	Brazil
@@ -11323,8 +10995,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2647143	Helston	50.10319	-5.27045	9780	GBR	United Kingdom
 4547690	Pauls Valley	34.74008	-97.22225	6187	USA	United States
 615532	Batumi	41.64228	41.63392	121806	GEO	Georgia
-615532	Batumi	41.64228	41.63392	121806	GEO	Abkhazia
-615532	Batumi	41.64228	41.63392	121806	GEO	South Ossetia
 320621	Bozkır	37.18963	32.24736	10958	TUR	Turkey
 2548851	Figuig (Centre)	32.10891	-1.22855	12516	MAR	Morocco
 3007609	Lannion	48.73333	-3.46667	21473	FRA	France
@@ -11383,8 +11053,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3171576	Palma Campania	40.86608	14.5517	12689	ITA	Italy
 2516217	La Algaba	37.46325	-6.01113	14942	ESP	Spain
 2155772	Narellan	-34.03333	150.73333	7350	AUS	Australia
-2155772	Narellan	-34.03333	150.73333	7350	AUS	Ashmore and Cartier Islands
-2155772	Narellan	-34.03333	150.73333	7350	AUS	Coral Sea Islands
 255229	Pýrgos	37.67513	21.44102	22399	GRC	Greece
 5405228	Vacaville	38.35658	-121.98774	92428	USA	United States
 2647297	Hawick	55.42273	-2.78666	14053	GBR	United Kingdom
@@ -11395,8 +11063,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2647311	Haverfordwest	51.80169	-4.96914	13469	GBR	United Kingdom
 2838744	Schleiden	50.52896	6.47692	14160	DEU	Germany
 2155796	Naracoorte	-36.95785	140.7383	5674	AUS	Australia
-2155796	Naracoorte	-36.95785	140.7383	5674	AUS	Ashmore and Cartier Islands
-2155796	Naracoorte	-36.95785	140.7383	5674	AUS	Coral Sea Islands
 4547861	Perry	36.28949	-97.2881	5126	USA	United States
 3171606	Palestrina	41.83274	12.88178	14925	ITA	Italy
 2685828	Östermalm	59.33879	18.08487	36418	SWE	Sweden
@@ -11431,8 +11097,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2614611	Rødekro	55.07015	9.31641	5452	DNK	Denmark
 4449620	Vicksburg	32.35265	-90.87788	23856	USA	United States
 2155862	Nambour	-26.62613	152.95941	10221	AUS	Australia
-2155862	Nambour	-26.62613	152.95941	10221	AUS	Ashmore and Cartier Islands
-2155862	Nambour	-26.62613	152.95941	10221	AUS	Coral Sea Islands
 2778455	Gloggnitz	47.67487	15.93893	6213	AUT	Austria
 3073371	Kolín	50.02814	15.20057	29690	CZE	Czech Republic
 2516318	Jijona	38.54086	-0.50263	7430	ESP	Spain
@@ -11470,8 +11134,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2712993	Gamla Uppsala	59.89817	17.63386	16231	SWE	Sweden
 779683	Hammerfest	70.66336	23.68209	6788	NOR	Norway
 615844	Akhmet’a	42.03111	45.2075	8569	GEO	Georgia
-615844	Akhmet’a	42.03111	45.2075	8569	GEO	Abkhazia
-615844	Akhmet’a	42.03111	45.2075	8569	GEO	South Ossetia
 2647461	Harlow	51.77655	0.11158	94365	GBR	United Kingdom
 2445553	Dogondoutchi	13.63933	4.02875	31767	NER	Niger
 3177372	Erba	45.8088	9.22609	16431	ITA	Italy
@@ -11480,8 +11142,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 7890350	Al ‘Ubaydīyah	31.71697	35.29007	10618		
 11101616	N’diareme limamoulaye	14.78148	-17.3841	35171	SEN	Senegal
 615860	Akhaltsikhe	41.63901	42.98262	17298	GEO	Georgia
-615860	Akhaltsikhe	41.63901	42.98262	17298	GEO	Abkhazia
-615860	Akhaltsikhe	41.63901	42.98262	17298	GEO	South Ossetia
 3013534	Hendaye	43.37172	-1.77382	14415	FRA	France
 2745783	Veendam	53.10667	6.87917	28155	NLD	Netherlands
 3859904	Crespo	-32.02873	-60.30658	18296	ARG	Argentina
@@ -11513,8 +11173,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2516480	Ibi	38.62533	-0.57225	24113	ESP	Spain
 2975233	Sélestat	48.26667	7.45	18941	FRA	France
 2156034	Muswellbrook	-32.26118	150.89009	11791	AUS	Australia
-2156034	Muswellbrook	-32.26118	150.89009	11791	AUS	Ashmore and Cartier Islands
-2156034	Muswellbrook	-32.26118	150.89009	11791	AUS	Coral Sea Islands
 3139075	Skien	59.20962	9.60897	50595	NOR	Norway
 4744709	Arlington	38.88101	-77.10428	207627	USA	United States
 747014	Gebze	40.80276	29.43068	281436	TUR	Turkey
@@ -11628,8 +11286,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1795816	Shashi	30.30722	112.24472	498780	CHN	China, People's Republic of
 255721	Páros	37.08333	25.15	5289	GRC	Greece
 2155859	Nambucca	-30.63333	152.98333	6137	AUS	Australia
-2155859	Nambucca	-30.63333	152.98333	6137	AUS	Ashmore and Cartier Islands
-2155859	Nambucca	-30.63333	152.98333	6137	AUS	Coral Sea Islands
 4613868	Clarksville	36.52977	-87.35945	132929	USA	United States
 2975469	Sceaux	48.77644	2.29026	21511	FRA	France
 3172079	Oleggio	45.59674	8.64213	12655	ITA	Italy
@@ -11793,8 +11449,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2779229	Friesach	46.95528	14.40583	5369	AUT	Austria
 1632353	Parepare	-4.0135	119.6255	140000	IDN	Indonesia
 2156643	Mount Gambier	-37.8318	140.77919	23209	AUS	Australia
-2156643	Mount Gambier	-37.8318	140.77919	23209	AUS	Ashmore and Cartier Islands
-2156643	Mount Gambier	-37.8318	140.77919	23209	AUS	Coral Sea Islands
 2975844	Saujon	45.67309	-0.9262	5803	FRA	France
 3074149	Jindřichův Hradec	49.14404	15.00301	22812	CZE	Czech Republic
 4483174	Ogden	34.27239	-77.81859	6766	USA	United States
@@ -11807,8 +11461,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1861749	Ikoma	34.68333	135.7	117601	JPN	Japan
 2648182	Grays	51.47566	0.32521	70934	GBR	United Kingdom
 2156663	Mount Eliza	-38.18333	145.08333	17248	AUS	Australia
-2156663	Mount Eliza	-38.18333	145.08333	17248	AUS	Ashmore and Cartier Islands
-2156663	Mount Eliza	-38.18333	145.08333	17248	AUS	Coral Sea Islands
 5367929	Long Beach	33.76696	-118.18923	462257	USA	United States
 2648187	Gravesend	51.44138	0.37371	54263	GBR	United Kingdom
 2517117	Granada	37.18817	-3.60667	234325	ESP	Spain
@@ -11850,7 +11502,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1894616	Okinawa	26.33583	127.80139	125483	JPN	Japan
 2189529	Invercargill	-46.4	168.35	47287	NZL	New Zealand
 59611	Gaalkacyo	6.76972	47.43083	61200	SOM	Somalia
-59611	Gaalkacyo	6.76972	47.43083	61200	SOM	Somaliland
 4876510	Sioux Center	43.07971	-96.17558	7048	USA	United States
 2975967	Sarrebourg	48.73333	7.05	14677	FRA	France
 2648290	Gorseinon	51.66931	-4.04163	19478	GBR	United Kingdom
@@ -11868,8 +11519,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 485643	Svetlyy Yar	48.4748	44.78096	13131	RUS	Russia
 256268	Orchomenós	38.4929	22.97962	5919	GRC	Greece
 2156813	Mosman	-33.83902	151.23956	26236	AUS	Australia
-2156813	Mosman	-33.83902	151.23956	26236	AUS	Ashmore and Cartier Islands
-2156813	Mosman	-33.83902	151.23956	26236	AUS	Coral Sea Islands
 92430	Al-Hamdaniya	36.27093	43.37758	50000	IRQ	Iraq
 1162285	Zafarwāl	32.34631	74.89987	23078	PAK	Pakistan
 4319507	Chackbay	29.88354	-90.79732	5177	USA	United States
@@ -12004,8 +11653,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 584243	Adler	43.42896	39.92391	70200	RUS	Russia
 2746932	Spijkenisse	51.845	4.32917	74988	NLD	Netherlands
 2157109	Mooloolaba	-26.68164	153.11925	7376	AUS	Australia
-2157109	Mooloolaba	-26.68164	153.11925	7376	AUS	Ashmore and Cartier Islands
-2157109	Mooloolaba	-26.68164	153.11925	7376	AUS	Coral Sea Islands
 2255414	Pointe-Noire	-4.77609	11.86352	659084	COG	Congo, (Congo  Brazzaville)
 3074615	Ivančice	49.10144	16.37752	9354	CZE	Czech Republic
 3205690	Uhldingen-Mühlhofen	47.73333	9.25	8013	DEU	Germany
@@ -12066,8 +11713,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5106331	Westfield	40.65899	-74.34737	30316	USA	United States
 1862302	Hōfu	34.05	131.56667	116925	JPN	Japan
 2161776	Katoomba	-33.71977	150.30739	18593	AUS	Australia
-2161776	Katoomba	-33.71977	150.30739	18593	AUS	Ashmore and Cartier Islands
-2161776	Katoomba	-33.71977	150.30739	18593	AUS	Coral Sea Islands
 682660	Cărpiniş	45.78722	20.90417	7071	ROU	Romania
 715429	Szeged	46.253	20.14824	164883	HUN	Hungary
 2953507	Bad Ems	50.33544	7.71369	9735	DEU	Germany
@@ -12115,7 +11760,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 675231	Jilava	44.33333	26.07806	12023	ROU	Romania
 4844309	Torrington	41.80065	-73.12122	36383	USA	United States
 617239	Tiraspolul	46.84274	29.62909	157000	MDA	Moldova
-617239	Tiraspolul	46.84274	29.62909	157000	MDA	Pridnestrovie (Transnistria)
 4942618	Lowell	42.63342	-71.31617	106519	USA	United States
 1268806	Jua	15.5307	73.95047	5470	IND	India
 2911007	Hanau am Main	50.13423	8.91418	88648	DEU	Germany
@@ -12172,11 +11816,9 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1567621	Sơn Tây	21.14053	105.50686	40636	VNM	Vietnam
 2511730	Ronda	36.74231	-5.16709	36827	ESP	Spain
 584586	Zardob	40.21991	47.70997	10612	AZE	Azerbaijan
-584586	Zardob	40.21991	47.70997	10612	AZE	Nagorno-Karabakh
 1862540	Hirakata	34.81352	135.64914	406331	JPN	Japan
 2190224	Hastings	-39.6381	176.84918	61696	NZL	New Zealand
 584596	Zaqatala	41.6316	46.64479	18277	AZE	Azerbaijan
-584596	Zaqatala	41.6316	46.64479	18277	AZE	Nagorno-Karabakh
 1142239	Farkhār	36.57288	69.85783	10480	AFG	Afghanistan
 3074967	Hradec Králové	50.20923	15.83277	95195	CZE	Czech Republic
 1862555	Hirado	33.36853	129.55247	22516	JPN	Japan
@@ -12205,7 +11847,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1862599	Hino	35.67306	139.40028	171777	JPN	Japan
 3107784	Torrejón de Ardoz	40.45535	-3.46973	118162	ESP	Spain
 584649	Yevlakh	40.61832	47.15014	59036	AZE	Azerbaijan
-584649	Yevlakh	40.61832	47.15014	59036	AZE	Nagorno-Karabakh
 3035639	Avranches	48.68333	-1.36667	9295	FRA	France
 682958	Călineşti	44.81667	25.05	10419	ROU	Romania
 3173331	Modena	44.64783	10.92539	158886	ITA	Italy
@@ -12236,7 +11877,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2135171	Port-Vila	-17.73381	168.32188	35901	VUT	Vanuatu
 2911240	Hamm	51.68033	7.82089	185327	DEU	Germany
 617486	Rîbniţa	47.76817	29.01	55455	MDA	Moldova
-617486	Rîbniţa	47.76817	29.01	55455	MDA	Pridnestrovie (Transnistria)
 3173391	Minturno	41.26294	13.74583	16236	ITA	Italy
 5105496	Trenton	40.21705	-74.74294	84913	USA	United States
 1862389	Hisai-motomachi	34.66667	136.46667	41642	JPN	Japan
@@ -12245,7 +11885,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1272860	Dhāriwāl	31.95616	75.32386	20604	IND	India
 4189213	Conyers	33.66761	-84.01769	15195	USA	United States
 617502	Rezina	47.74928	28.96583	9806	MDA	Moldova
-617502	Rezina	47.74928	28.96583	9806	MDA	Pridnestrovie (Transnistria)
 692742	Stari Kuty	48.27093	25.17293	5068	UKR	Ukraine
 2911271	Hameln	52.10397	9.35623	58666	DEU	Germany
 1567788	Sóc Trăng	9.59995	105.97193	114453	VNM	Vietnam
@@ -12268,7 +11907,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 289877	Ash Shayḩānīyah	25.37088	51.22264	8380	QAT	Qatar
 4058198	Danville	34.41454	-87.08751	6242	USA	United States
 146617	Famagusta	35.12054	33.93894	42526	CYP	Cyprus
-146617	Famagusta	35.12054	33.93894	42526	CYP	Northern Cyprus
 3468376	Cachoeiro de Itapemirim	-20.84889	-41.11278	187019	BRA	Brazil
 2975588	Saverne	48.74164	7.36221	12439	FRA	France
 4954654	Wayland	42.3626	-71.36145	13155	USA	United States
@@ -12305,7 +11943,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2911395	Haltern	51.74297	7.18163	37788	DEU	Germany
 4254884	Brazil	39.52365	-87.12502	7912	USA	United States
 617638	Orhei	47.38494	28.82446	24918	MDA	Moldova
-617638	Orhei	47.38494	28.82446	24918	MDA	Pridnestrovie (Transnistria)
 519336	Velikiy Novgorod	58.52131	31.27104	215062	RUS	Russia
 2511388	San Fernando	36.4759	-6.19817	96366	ESP	Spain
 2649258	Folkestone	51.08169	1.16734	45992	GBR	United Kingdom
@@ -12332,7 +11969,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2976984	Saint-Sébastien-sur-Loire	47.20768	-1.50332	29238	FRA	France
 748761	Daday	41.47866	33.46667	5199	TUR	Turkey
 584923	Sumqayıt	40.58972	49.66861	265150	AZE	Azerbaijan
-584923	Sumqayıt	40.58972	49.66861	265150	AZE	Nagorno-Karabakh
 2616540	Neder Holluf	55.36451	10.44824	5612	DNK	Denmark
 3599582	Barberena	14.30944	-90.36111	30539	GTM	Guatemala
 2649312	Fleetwood	53.92527	-3.01085	27077	GBR	United Kingdom
@@ -12345,8 +11981,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 752850	Adapazarı	40.78056	30.40333	286787	TUR	Turkey
 290030	Doha	25.27932	51.52245	344939	QAT	Qatar
 2172797	Cairns	-16.92304	145.76625	153075	AUS	Australia
-2172797	Cairns	-16.92304	145.76625	153075	AUS	Ashmore and Cartier Islands
-2172797	Cairns	-16.92304	145.76625	153075	AUS	Coral Sea Islands
 2511401	La Laguna	28.4853	-16.32014	150661	ESP	Spain
 4943097	Marblehead	42.5001	-70.85783	19808	USA	United States
 388349	Al Başrah al Qadīmah	30.50316	47.81507	2015483	IRQ	Iraq
@@ -12426,16 +12060,12 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2944440	Breitungen	50.76355	10.32724	5281	DEU	Germany
 4058553	Decatur	34.60593	-86.98334	55683	USA	United States
 617914	Sîngerei	47.63632	28.14296	14600	MDA	Moldova
-617914	Sîngerei	47.63632	28.14296	14600	MDA	Pridnestrovie (Transnistria)
 3108285	Tàrrega	41.64704	1.13957	16539	ESP	Spain
 3108286	Terrassa	41.56667	2.01667	210941	ESP	Spain
 585152	Shamkhor	40.82975	46.0178	35421	AZE	Azerbaijan
-585152	Shamkhor	40.82975	46.0178	35421	AZE	Nagorno-Karabakh
 3861953	Chacabuco	-34.64167	-60.47389	34587	ARG	Argentina
 3075522	Horažďovice	49.32069	13.701	5727	CZE	Czech Republic
 2158020	Merimbula	-36.88901	149.90961	6367	AUS	Australia
-2158020	Merimbula	-36.88901	149.90961	6367	AUS	Ashmore and Cartier Islands
-2158020	Merimbula	-36.88901	149.90961	6367	AUS	Coral Sea Islands
 290247	Madīnat Ḩamad	26.11528	50.50694	52718	BHR	Bahrain
 1174984	Kanganpur	30.76629	74.12311	21788	PAK	Pakistan
 6155721	St. Catharines	43.17126	-79.24267	131989	CAN	Canada
@@ -12444,7 +12074,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2846158	Rodalben	49.2394	7.63962	7638	DEU	Germany
 5107152	Amsterdam	42.93869	-74.18819	18620	USA	United States
 585170	Sheki	41.19194	47.17056	63000	AZE	Azerbaijan
-585170	Sheki	41.19194	47.17056	63000	AZE	Nagorno-Karabakh
 355795	Ḩalwān	29.84144	31.30084	230000	EGY	Egypt
 3108308	Tarazona	41.90475	-1.72678	11211	ESP	Spain
 3173845	Martignacco	46.09313	13.13973	5050	ITA	Italy
@@ -12458,8 +12087,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 4451810	Yazoo City	32.85513	-90.40565	11403	USA	United States
 2649571	Feltham	51.4462	-0.41388	24325	GBR	United Kingdom
 7302628	Adelaide Hills	-34.91119	138.70735	60394	AUS	Australia
-7302628	Adelaide Hills	-34.91119	138.70735	60394	AUS	Ashmore and Cartier Islands
-7302628	Adelaide Hills	-34.91119	138.70735	60394	AUS	Coral Sea Islands
 5116497	Elmira	42.0898	-76.80773	29200	USA	United States
 2645836	Kemnay	57.23573	-2.44395	6000	GBR	United Kingdom
 3010025	La Ciotat	43.17476	5.60449	33113	FRA	France
@@ -12468,20 +12095,15 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 692818	Starokostyantyniv	49.75764	27.20342	33897	UKR	Ukraine
 3173870	Marsciano	42.92093	12.35066	9631	ITA	Italy
 7302640	Toormina	-30.35384	153.08843	6551	AUS	Australia
-7302640	Toormina	-30.35384	153.08843	6551	AUS	Ashmore and Cartier Islands
-7302640	Toormina	-30.35384	153.08843	6551	AUS	Coral Sea Islands
 683506	Bucharest	44.43225	26.10626	1877155	ROU	Romania
 2747891	Rotterdam	51.9225	4.47917	598199	NLD	Netherlands
 359678	El-Tor	28.24168	33.6222	14972	EGY	Egypt
 3173878	Marostica	45.74541	11.66237	9264	ITA	Italy
 2649593	Featherstone	53.67688	-1.35647	10613	GBR	United Kingdom
 60928	Dhuusamarreeb	5.53597	46.38666	9000	SOM	Somalia
-60928	Dhuusamarreeb	5.53597	46.38666	9000	SOM	Somaliland
 650754	Kronoby	63.72859	23.03387	6813	FIN	Finland
 585221	Quba	41.36108	48.51341	22405	AZE	Azerbaijan
-585221	Quba	41.36108	48.51341	22405	AZE	Nagorno-Karabakh
 617993	Hînceşti	46.83047	28.59064	16900	MDA	Moldova
-617993	Hînceşti	46.83047	28.59064	16900	MDA	Pridnestrovie (Transnistria)
 2511447	San Bartolomé	29.00093	-13.613	18517	ESP	Spain
 716301	Püspökladány	47.31667	21.11667	15990	HUN	Hungary
 2977295	Saint-Quentin	49.84889	3.28757	55407	FRA	France
@@ -12492,8 +12114,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2813464	Wedel	53.58374	9.69835	31995	DEU	Germany
 2747930	Roosendaal	51.53083	4.46528	77725	NLD	Netherlands
 7302683	Southbank	-37.8228	144.96434	9364	AUS	Australia
-7302683	Southbank	-37.8228	144.96434	9364	AUS	Ashmore and Cartier Islands
-7302683	Southbank	-37.8228	144.96434	9364	AUS	Coral Sea Islands
 3587333	Armenia	13.74361	-89.49889	14997	SLV	El Salvador
 2813472	Wedding	52.54734	13.35594	78290	DEU	Germany
 454178	Viļāni	56.55253	26.92449	3934	LVA	Latvia
@@ -12511,7 +12131,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2977350	Saint-Priest-en-Jarez	45.47501	4.37614	5924	FRA	France
 2649671	Farnborough	51.35948	0.06905	9033	GBR	United Kingdom
 618057	Cocieri	47.3017	29.11755	4151	MDA	Moldova
-618057	Cocieri	47.3017	29.11755	4151	MDA	Pridnestrovie (Transnistria)
 2977356	Saint-Priest	45.69613	4.93891	41641	FRA	France
 2846286	Röbel	53.37555	12.60372	5521	DEU	Germany
 2473229	Chebba	35.23722	11.115	21559	TUN	Tunisia
@@ -12523,8 +12142,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2649692	Fareham	50.85162	-1.17929	57390	GBR	United Kingdom
 2748000	Roermond	51.19417	5.9875	44975	NLD	Netherlands
 2158177	Melbourne	-37.814	144.96332	4246375	AUS	Australia
-2158177	Melbourne	-37.814	144.96332	4246375	AUS	Ashmore and Cartier Islands
-2158177	Melbourne	-37.814	144.96332	4246375	AUS	Coral Sea Islands
 2616933	Middelfart	55.50591	9.73054	13596	DNK	Denmark
 3468902	Brodósqui	-20.99139	-47.65861	18366	BRA	Brazil
 5140072	Suffern	41.11482	-74.14959	10723	USA	United States
@@ -12626,7 +12243,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3075921	Havířov	49.77984	18.43688	82768	CZE	Czech Republic
 1273687	Dohad	22.83283	74.25986	83966	IND	India
 618329	Floreşti	47.89137	28.29312	16759	MDA	Moldova
-618329	Floreşti	47.89137	28.29312	16759	MDA	Pridnestrovie (Transnistria)
 2813786	Wassenberg	51.10009	6.15484	16641	DEU	Germany
 2781023	Deutschlandsberg	46.81528	15.22222	8049	AUT	Austria
 3094303	Kudowa-Zdrój	50.44297	16.24397	10176	POL	Poland
@@ -12664,9 +12280,7 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5238685	Montpelier	44.26006	-72.57539	7855	USA	United States
 4452256	Ahoskie	36.28682	-76.98468	5039	USA	United States
 618405	Comrat	46.29456	28.6565	22911	MDA	Moldova
-618405	Comrat	46.29456	28.6565	22911	MDA	Pridnestrovie (Transnistria)
 618406	Cimişlia	46.52685	28.76441	12464	MDA	Moldova
-618406	Cimişlia	46.52685	28.76441	12464	MDA	Pridnestrovie (Transnistria)
 2650023	Ely	52.39964	0.26196	14265	GBR	United Kingdom
 4943784	Merrimac	42.83065	-71.00228	6245	USA	United States
 4353962	Easton	38.77428	-76.07633	15945	USA	United States
@@ -12677,7 +12291,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1273780	Cuttack	20.46497	85.87927	580000	IND	India
 5140405	Syracuse	43.04812	-76.14742	145170	USA	United States
 618426	Chisinau	47.00556	28.8575	635994	MDA	Moldova
-618426	Chisinau	47.00556	28.8575	635994	MDA	Pridnestrovie (Transnistria)
 749508	Çaycuma	41.42639	32.07556	21773	TUR	Turkey
 1863627	Ginowan	26.26265	127.76147	91800	JPN	Japan
 978895	Margate	-30.8636	30.37052	34407	ZAF	South Africa
@@ -12690,11 +12303,7 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3043293	Vác	47.77591	19.13612	35108	HUN	Hungary
 3174367	Macomer	40.26233	8.76733	10375	ITA	Italy
 2158561	Maryborough	-37.04562	143.73923	7046	AUS	Australia
-2158561	Maryborough	-37.04562	143.73923	7046	AUS	Ashmore and Cartier Islands
-2158561	Maryborough	-37.04562	143.73923	7046	AUS	Coral Sea Islands
 2158562	Maryborough	-25.54073	152.70493	21501	AUS	Australia
-2158562	Maryborough	-25.54073	152.70493	21501	AUS	Ashmore and Cartier Islands
-2158562	Maryborough	-25.54073	152.70493	21501	AUS	Coral Sea Islands
 5238755	Morristown	44.55727	-72.62373	5653	USA	United States
 3068582	Pardubice	50.04075	15.77659	88741	CZE	Czech Republic
 458065	Lieģi	56.58173	21.33399	0	LVA	Latvia
@@ -12720,7 +12329,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2486284	Nedroma	35.01361	-1.74799	36995	DZA	Algeria
 3108877	Sitges	41.23506	1.81193	27668	ESP	Spain
 618510	Briceni	48.36289	27.07787	9900	MDA	Moldova
-618510	Briceni	48.36289	27.07787	9900	MDA	Pridnestrovie (Transnistria)
 2650128	Elderslie	55.83327	-4.48598	5142	GBR	United Kingdom
 4845585	Westport	41.14149	-73.3579	26391	USA	United States
 1273874	Cochin	9.93988	76.26022	604696	IND	India
@@ -12733,8 +12341,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3076127	Frýdek-Místek	49.68333	18.35	59416	CZE	Czech Republic
 2977824	Saint-Ouen	48.90654	2.33339	39353	FRA	France
 2158626	Marrickville	-33.90318	151.15176	23161	AUS	Australia
-2158626	Marrickville	-33.90318	151.15176	23161	AUS	Ashmore and Cartier Islands
-2158626	Marrickville	-33.90318	151.15176	23161	AUS	Coral Sea Islands
 3076132	Frenštát pod Radhoštěm	49.54835	18.21078	11334	CZE	Czech Republic
 5828648	Jackson	43.47993	-110.76243	9577	USA	United States
 3436585	Ypacarai	-25.40777	-57.28889	9655	PRY	Paraguay
@@ -12754,7 +12360,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3183287	Alfonsine	44.50768	12.03743	9838	ITA	Italy
 7303248	Jiashan	30.84918	120.92583	137112	CHN	China, People's Republic of
 618577	Bender	46.83156	29.47769	110175	MDA	Moldova
-618577	Bender	46.83156	29.47769	110175	MDA	Pridnestrovie (Transnistria)
 3174483	Luino	46.00185	8.74512	12146	ITA	Italy
 4943958	Milford	42.13982	-71.51617	25055	USA	United States
 1273943	Vikāsnagar	30.46944	77.77275	13055	IND	India
@@ -12765,7 +12370,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5107812	Ballston Spa	43.00091	-73.84901	5409	USA	United States
 160263	Dar es Salaam	-6.82349	39.26951	2698652	TZA	Tanzania
 618605	Bălţi	47.76314	27.92932	125000	MDA	Moldova
-618605	Bălţi	47.76314	27.92932	125000	MDA	Pridnestrovie (Transnistria)
 454768	Tukums	56.96694	23.15528	18348	LVA	Latvia
 2650225	Edinburgh	55.95206	-3.19648	435791	GBR	United Kingdom
 4354163	Eldersburg	39.40371	-76.95026	30531	USA	United States
@@ -13009,8 +12613,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2880111	Lauffen am Neckar	49.0734	9.14567	11068	DEU	Germany
 684657	Bistriţa	47.13316	24.50011	81318	ROU	Romania
 2159220	Mackay	-21.15345	149.16554	74219	AUS	Australia
-2159220	Mackay	-21.15345	149.16554	74219	AUS	Ashmore and Cartier Islands
-2159220	Mackay	-21.15345	149.16554	74219	AUS	Coral Sea Islands
 5370493	Marina	36.6844	-121.80217	19718	USA	United States
 2650752	Dundee	56.46913	-2.97489	151592	GBR	United Kingdom
 2880129	Laufen	47.93568	12.92856	6869	DEU	Germany
@@ -13046,7 +12648,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3568312	Artemisa	22.81667	-82.75944	68073	CUB	Cuba
 2519738	Castilleja de la Cuesta	37.38594	-6.05258	17150	ESP	Spain
 586427	Geoktschai	40.65055	47.74219	35348	AZE	Azerbaijan
-586427	Geoktschai	40.65055	47.74219	35348	AZE	Nagorno-Karabakh
 946877	Uitenhage	-33.75757	25.3971	228912	ZAF	South Africa
 3401845	Conceição do Araguaia	-8.26441	-49.26982	27115	BRA	Brazil
 2519752	Castelló de la Plana	39.98567	-0.04935	180005	ESP	Spain
@@ -13086,7 +12687,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2716437	Eksjö	57.66643	14.97205	9676	SWE	Sweden
 7172886	Butte-Silver Bow (Balance)	45.90194	-112.65708	33525	USA	United States
 586523	Ganja	40.68278	46.36056	313300	AZE	Azerbaijan
-586523	Ganja	40.68278	46.36056	313300	AZE	Nagorno-Karabakh
 4715292	North Richland Hills	32.8343	-97.2289	63343	USA	United States
 2421535	Dubréka	9.79111	-13.52333	10363	GIN	Guinea
 4780837	Radford	37.13179	-80.57645	16408	USA	United States
@@ -13254,7 +12854,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2913433	Güstrow	53.7972	12.17337	31217	DEU	Germany
 3110044	Donostia / San Sebastián	43.31283	-1.97499	185357	ESP	Spain
 146970	Xankandi	39.8177	46.7528	53100	AZE	Azerbaijan
-146970	Xankandi	39.8177	46.7528	53100	AZE	Nagorno-Karabakh
 2651294	Devizes	51.35084	-1.99421	14699	GBR	United Kingdom
 256197	Paianía	37.95527	23.85443	14595	GRC	Greece
 2618528	Kolding	55.4904	9.47216	55363	DNK	Denmark
@@ -13291,8 +12890,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1799397	Ningbo	29.87819	121.54945	3491597	CHN	China, People's Republic of
 455910	Salacgrīva	57.75361	24.35806	3427	LVA	Latvia
 2159851	Liverpool	-33.9	150.93333	21317	AUS	Australia
-2159851	Liverpool	-33.9	150.93333	21317	AUS	Ashmore and Cartier Islands
-2159851	Liverpool	-33.9	150.93333	21317	AUS	Coral Sea Islands
 2979052	Saint-Julien-les-Villas	48.27127	4.09901	6542	FRA	France
 4682991	Conroe	30.31188	-95.45605	56207	USA	United States
 1864945	Atami	35.08834	139.05325	40687	JPN	Japan
@@ -13341,7 +12938,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3044681	Szentendre	47.66943	19.07561	23606	HUN	Hungary
 2260535	Brazzaville	-4.26613	15.28318	1284609	COG	Congo, (Congo  Brazzaville)
 587084	Baku	40.37767	49.89201	1116513	AZE	Azerbaijan
-587084	Baku	40.37767	49.89201	1116513	AZE	Nagorno-Karabakh
 3167117	Sarnico	45.67099	9.96152	6177	ITA	Italy
 3470674	Barra dos Coqueiros	-10.90889	-37.03861	28586	BRA	Brazil
 1013076	Colesberg	-30.71999	25.09718	12423	ZAF	South Africa
@@ -13390,8 +12986,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3175856	Grazzanise	41.0897	14.09878	5378	ITA	Italy
 3175860	Gravina in Puglia	40.81748	16.41915	42210	ITA	Italy
 2160053	Lithgow	-33.48247	150.13631	11298	AUS	Australia
-2160053	Lithgow	-33.48247	150.13631	11298	AUS	Ashmore and Cartier Islands
-2160053	Lithgow	-33.48247	150.13631	11298	AUS	Coral Sea Islands
 3110326	San Martín de Valdeiglesias	40.36185	-4.39831	6965	ESP	Spain
 3372472	Vila Franca do Campo	37.71667	-25.43333	5035	PRT	Portugal
 5109177	Binghamton	42.09869	-75.91797	47376	USA	United States
@@ -13475,14 +13069,11 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3176053	Giulianova	42.75381	13.9665	20490	ITA	Italy
 3077751	Chlumec nad Cidlinou	50.1544	15.46026	5292	CZE	Czech Republic
 587384	Agdzhabedy	40.05015	47.45937	34989	AZE	Azerbaijan
-587384	Agdzhabedy	40.05015	47.45937	34989	AZE	Nagorno-Karabakh
 2848251	Renchen	48.5885	8.01321	6969	DEU	Germany
 5600890	Middleton	43.70683	-116.62014	5524	USA	United States
 3176059	Giugliano in Campania	40.92849	14.20197	80269	ITA	Italy
 423549	Rumonge	-3.9736	29.4386	6074	BDI	Burundi
 2160258	Lidcombe	-33.86436	151.0397	14161	AUS	Australia
-2160258	Lidcombe	-33.86436	151.0397	14161	AUS	Ashmore and Cartier Islands
-2160258	Lidcombe	-33.86436	151.0397	14161	AUS	Coral Sea Islands
 2520709	Burriana	39.88901	-0.08499	34565	ESP	Spain
 2520712	Burjassot	39.50984	-0.41327	38433	ESP	Spain
 3012234	Jouars-Pontchartrain	48.78888	1.89898	5012	FRA	France
@@ -13517,8 +13108,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2512794	Pedro Muñoz	39.40285	-2.94664	7789	ESP	Spain
 358095	Diyarb Najm	30.75438	31.44016	51841	EGY	Egypt
 2160336	Leopold	-38.19001	144.46825	6120	AUS	Australia
-2160336	Leopold	-38.19001	144.46825	6120	AUS	Ashmore and Cartier Islands
-2160336	Leopold	-38.19001	144.46825	6120	AUS	Coral Sea Islands
 4257494	Fishers	39.95559	-86.01387	76794	USA	United States
 2422488	Camayenne	9.535	-13.68778	1871242	GIN	Guinea
 685785	Băileşti	44.01667	23.35	19599	ROU	Romania
@@ -13558,8 +13147,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3176219	Genoa	44.4264	8.91519	580223	ITA	Italy
 3077916	České Budějovice	48.97447	14.47434	96053	CZE	Czech Republic
 2160413	Leeton	-34.55105	146.40483	7299	AUS	Australia
-2160413	Leeton	-34.55105	146.40483	7299	AUS	Ashmore and Cartier Islands
-2160413	Leeton	-34.55105	146.40483	7299	AUS	Coral Sea Islands
 463835	Zelenodolsk	55.84376	48.51784	99600	RUS	Russia
 1701668	Manila	14.6042	120.9822	1600000	PHL	Philippines
 1832743	Yeoju	37.29583	127.63389	37490	KOR	Korea, South
@@ -13609,8 +13196,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 653185	Kerava	60.40338	25.105	31347	FIN	Finland
 4487042	Raleigh	35.7721	-78.63861	403892	USA	United States
 2160517	Launceston	-41.43876	147.13467	106153	AUS	Australia
-2160517	Launceston	-41.43876	147.13467	106153	AUS	Ashmore and Cartier Islands
-2160517	Launceston	-41.43876	147.13467	106153	AUS	Coral Sea Islands
 3176334	Gambettola	44.11748	12.33705	10034	ITA	Italy
 1832847	Yangju	37.83311	127.06169	179923	KOR	Korea, South
 718739	Kisvárda	48.21667	22.08333	18190	HUN	Hungary
@@ -13761,8 +13346,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5306611	Nogales	31.34038	-110.93425	20837	USA	United States
 653559	Kauniainen	60.21209	24.72756	8688	FIN	Finland
 2156927	Moree	-29.46278	149.84157	8203	AUS	Australia
-2156927	Moree	-29.46278	149.84157	8203	AUS	Ashmore and Cartier Islands
-2156927	Moree	-29.46278	149.84157	8203	AUS	Coral Sea Islands
 2524410	Lentini	37.28556	14.99737	24102	ITA	Italy
 2652417	Cookstown	54.64305	-6.74595	11081	GBR	United Kingdom
 4716805	Orange	30.09299	-93.73655	18595	USA	United States
@@ -13977,8 +13560,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3078833	Braník	50.03597	14.41235	18740	CZE	Czech Republic
 3078837	Brandýs nad Labem-Stará Boleslav	50.18709	14.66326	15398	CZE	Czech Republic
 2063030	Port Pirie	-33.19176	138.01746	13206	AUS	Australia
-2063030	Port Pirie	-33.19176	138.01746	13206	AUS	Ashmore and Cartier Islands
-2063030	Port Pirie	-33.19176	138.01746	13206	AUS	Coral Sea Islands
 3209911	Burg Hohenstein	50.19192	8.05732	6256	DEU	Germany
 2652857	Cleveleys	53.8775	-3.03987	15000	GBR	United Kingdom
 785082	Tetovo	42.00973	20.97155	72944	MKD	Macedonia
@@ -13992,8 +13573,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2849483	Regensburg	49.01513	12.10161	129151	DEU	Germany
 2806342	Wolmirstedt	52.24856	11.62945	10860	DEU	Germany
 2063055	Port Augusta West	-32.48611	137.75833	12133	AUS	Australia
-2063055	Port Augusta West	-32.48611	137.75833	12133	AUS	Ashmore and Cartier Islands
-2063055	Port Augusta West	-32.48611	137.75833	12133	AUS	Coral Sea Islands
 621266	Stowbtsy	53.4785	26.7434	15500	BLR	Belarus
 2652885	Cleethorpes	53.56047	-0.03225	32017	GBR	United Kingdom
 3617052	Rivas	11.43716	-85.82632	30293	NIC	Nicaragua
@@ -14006,8 +13585,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3373790	Holetown	13.18672	-59.63808	1350	BRB	Barbados
 654047	Karis	60.07178	23.66163	8853	FIN	Finland
 2161376	Kingaroy	-26.53994	151.8373	8573	AUS	Australia
-2161376	Kingaroy	-26.53994	151.8373	8573	AUS	Ashmore and Cartier Islands
-2161376	Kingaroy	-26.53994	151.8373	8573	AUS	Coral Sea Islands
 96994	Dihok	36.86709	42.98845	284000	IRQ	Iraq
 490213	Sosnovo	60.55145	30.21441	5923	RUS	Russia
 3570412	Le Robert	14.67751	-60.94228	23814	MTQ	Martinique
@@ -14016,8 +13593,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5143285	Warwick	41.25648	-74.35988	6731	USA	United States
 2875379	Ludwigsfelde	52.30322	13.25405	24164	DEU	Germany
 2063523	Perth	-31.95224	115.8614	1896548	AUS	Australia
-2063523	Perth	-31.95224	115.8614	1896548	AUS	Ashmore and Cartier Islands
-2063523	Perth	-31.95224	115.8614	1896548	AUS	Coral Sea Islands
 3570427	Le Lorrain	14.83292	-61.05667	8341	MTQ	Martinique
 3570428	Le Lamentin	14.608	-61.00933	39229	MTQ	Martinique
 2947837	Bleicherode	51.44026	10.57202	6456	DEU	Germany
@@ -14093,8 +13668,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3865474	Arias	-33.64411	-62.40272	6928	ARG	Argentina
 5188075	East Stroudsburg	40.99954	-75.18129	9840	USA	United States
 2161540	Kew	-37.80639	145.03086	23876	AUS	Australia
-2161540	Kew	-37.80639	145.03086	23876	AUS	Ashmore and Cartier Islands
-2161540	Kew	-37.80639	145.03086	23876	AUS	Coral Sea Islands
 2882439	Künzelsau	49.2818	9.68352	15070	DEU	Germany
 293768	Ramla	31.92923	34.86563	63860	ISR	Israel
 2521993	Alhama de Granada	37.00689	-3.98963	6080	ESP	Spain
@@ -14122,8 +13695,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 3177400	Empoli	43.71795	10.94758	34394	ITA	Italy
 293825	Qiryat Shemona	33.20733	35.57212	22035	ISR	Israel
 2161602	Kenthurst	-33.65527	151.00503	5250	AUS	Australia
-2161602	Kenthurst	-33.65527	151.00503	5250	AUS	Ashmore and Cartier Islands
-2161602	Kenthurst	-33.65527	151.00503	5250	AUS	Coral Sea Islands
 2653123	Chislehurst	51.41709	0.06858	20000	GBR	United Kingdom
 293831	Qiryat Moẕqin	32.83706	35.0776	39404	ISR	Israel
 3832778	Villa Constitución	-33.22778	-60.3297	44271	ARG	Argentina
@@ -14157,8 +13728,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2980933	Saint-Cyr-sur-Mer	43.18352	5.70914	12185	FRA	France
 472231	Volzhskiy	48.78583	44.77973	323293	RUS	Russia
 2157056	Moonee Ponds	-37.76667	144.91667	13532	AUS	Australia
-2157056	Moonee Ponds	-37.76667	144.91667	13532	AUS	Ashmore and Cartier Islands
-2157056	Moonee Ponds	-37.76667	144.91667	13532	AUS	Coral Sea Islands
 3177474	Dronero	44.46476	7.36242	5454	ITA	Italy
 2653192	Chichester	50.83673	-0.78003	28222	GBR	United Kingdom
 2620425	Herning	56.13932	8.97378	44763	DNK	Denmark
@@ -14167,7 +13736,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 5274644	Stevens Point	44.52358	-89.57456	26717	USA	United States
 2980885	Saint-Denis-en-Val	47.87321	1.96601	7632	FRA	France
 64536	Baidoa	3.11383	43.6498	129839	SOM	Somalia
-64536	Baidoa	3.11383	43.6498	129839	SOM	Somaliland
 2882588	Kulmbach	50.10068	11.45032	27565	DEU	Germany
 293918	Petaẖ Tiqwa	32.08707	34.88747	200000	ISR	Israel
 2718759	Bunkeflostrand	55.53333	12.95	6874	SWE	Sweden
@@ -14387,8 +13955,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1703417	Makati City	14.55027	121.03269	510383	PHL	Philippines
 1801722	Lüshun	38.8	121.26667	82345	CHN	China, People's Republic of
 611583	Tqvarch'eli	42.84035	41.68007	17847	GEO	Georgia
-611583	Tqvarch'eli	42.84035	41.68007	17847	GEO	Abkhazia
-611583	Tqvarch'eli	42.84035	41.68007	17847	GEO	South Ossetia
 5530921	Snyder	32.71789	-100.91762	11202	USA	United States
 5176830	Willard	41.05311	-82.72629	6236	USA	United States
 2326016	Onitsha	6.14978	6.78569	561066	NGA	Nigeria
@@ -14588,8 +14154,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 1802171	Kangding	30.05127	101.96033	100000	CHN	China, People's Republic of
 2654141	Buxton	53.25741	-1.90982	21300	GBR	United Kingdom
 2150615	Sale	-38.11095	147.06802	13186	AUS	Australia
-2150615	Sale	-38.11095	147.06802	13186	AUS	Ashmore and Cartier Islands
-2150615	Sale	-38.11095	147.06802	13186	AUS	Coral Sea Islands
 2282827	Oumé	6.38309	-5.41759	52070	CIV	Cote d'Ivoire (Ivory Coast)
 2523083	Siracusa	37.08415	15.27628	97472	ITA	Italy
 5373900	Modesto	37.6391	-120.99688	201165	USA	United States
@@ -14609,8 +14173,6 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2654179	Bushey	51.64316	-0.36053	17380	GBR	United Kingdom
 3080165	Zielona Góra	51.93548	15.50643	118433	POL	Poland
 2162662	Inverell	-29.77403	151.11166	8561	AUS	Australia
-2162662	Inverell	-29.77403	151.11166	8561	AUS	Ashmore and Cartier Islands
-2162662	Inverell	-29.77403	151.11166	8561	AUS	Coral Sea Islands
 688105	Yevpatoriya	45.20091	33.36655	106202	UKR	Ukraine
 2654186	Bury St Edmunds	52.2463	0.71111	38622	GBR	United Kingdom
 2654187	Bury	53.6	-2.3	61044	GBR	United Kingdom
@@ -14621,5 +14183,3 @@ geonameid	city_name	lat	lon	pop	ccode	cname
 2981879	Saint-Alban	43.6927	1.4102	5379	FRA	France
 2850808	Rain	48.69029	10.91611	8438	DEU	Germany
 2162683	Innisfail	-17.52209	146.03102	8262	AUS	Australia
-2162683	Innisfail	-17.52209	146.03102	8262	AUS	Ashmore and Cartier Islands
-2162683	Innisfail	-17.52209	146.03102	8262	AUS	Coral Sea Islands

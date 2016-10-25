@@ -3,48 +3,44 @@
 
 ## Running locally
 1. Install node dependencies
-
-```
-> npm install
-```
+  ```
+  > npm install
+  ```
 
 2. Make entry for pantheon-api in hosts file
+  ```
+  > nano /etc/hosts
 
-```
-> nano /etc/hosts
-
-10.1.10.129     pantheon-api.local
-```
+  10.1.10.129     pantheon-api.local
+  ```
 
 3. Run site
-
-```
-> npm run dev
-```
+  ```
+  > npm run dev
+  ```
 
 ## Running API locally
 1. Install postgresql && postgrest via Homebrew
+  ```
+  # Ensure brew is up to date
+  > brew update
 
-```
-# Ensure brew is up to date
-> brew update
+  # Check for any problems with brew's setup
+  > brew doctor
 
-# Check for any problems with brew's setup
-> brew doctor
-
-# Install the postgrest package
-> brew install postgrest postgresql
-```
+  # Install the postgrest package
+  > brew install postgrest postgresql
+  ```
 
 2. Initialize the DB
-```
-> createdb pantheon
-```
+  ```
+  > createdb pantheon
+  ```
 
 3. Copy data to local DB
-```
-> cat pantheon_db_dump_MM-DD-YYYY.sql | psql pantheon
-```
+  ```
+  > cat pantheon_db_dump_MM-DD-YYYY.sql | psql pantheon
+  ```
 
 4. Run postgrest and point to local copy of DB
 ```
@@ -54,24 +50,29 @@
 ## Import pantheon data from scratch
 
 1. Initialize the DB
-```
-> createdb pantheon
-```
+  ```
+  > createdb pantheon
+  ```
 
 2. Create tables via DB schema file
-```
-> psql pantheon < data/pantheon_schema.sql
-```
+  ```
+  > psql pantheon < data/pantheon_schema.sql
+  ```
 
 3. Run data ETL process (warning: need the following python libs)
-```
-> python data/import_to_db.py
-```
+  ```
+  > python data/import_to_db.py
+  ```
 
-3. Run post data insert SQL commands
-```
-> psql pantheon < data/post_insert_updates.sql
-```
+4. Add dates of sovereignty
+  ```
+  > python data/import_soverign_dates_to_db.py
+  ```
+
+5. Run post data insert SQL commands
+  ```
+  > psql pantheon < data/post_insert_updates.sql
+  ```
 
 
 ## Downloading images

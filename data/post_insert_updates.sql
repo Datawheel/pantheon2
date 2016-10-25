@@ -12,18 +12,18 @@ FROM (
 		id AS person,
 		dense_rank() OVER (PARTITION BY profession ORDER BY langs DESC) as profession_rank,
 		row_number() OVER (PARTITION BY profession ORDER BY langs DESC) as profession_rank_unique,
-		dense_rank() OVER (PARTITION BY birthyear ORDER BY langs DESC) as birthyear_rank,
-		row_number() OVER (PARTITION BY birthyear ORDER BY langs DESC) as birthyear_rank_unique,
-		dense_rank() OVER (PARTITION BY birthcountry ORDER BY langs DESC) as birthcountry_rank,
-		row_number() OVER (PARTITION BY birthcountry ORDER BY langs DESC) as birthcountry_rank_unique,
-		dense_rank() OVER (PARTITION BY birthplace ORDER BY langs DESC) as birthplace_rank,
-		row_number() OVER (PARTITION BY birthplace ORDER BY langs DESC) as birthplace_rank_unique,
-		dense_rank() OVER (PARTITION BY deathyear ORDER BY langs DESC WHERE deathyear is not null) as deathyear_rank,
-		row_number() OVER (PARTITION BY deathyear ORDER BY langs DESC WHERE deathyear is not null) as deathyear_rank_unique,
-		dense_rank() OVER (PARTITION BY deathcountry ORDER BY langs DESC) as deathcountry_rank,
-		row_number() OVER (PARTITION BY deathcountry ORDER BY langs DESC) as deathcountry_rank_unique,
-		dense_rank() OVER (PARTITION BY deathplace ORDER BY langs DESC) as deathplace_rank,
-		row_number() OVER (PARTITION BY deathplace ORDER BY langs DESC) as deathplace_rank_unique
+		CASE WHEN birthyear IS NOT NULL THEN dense_rank() OVER (PARTITION BY birthyear ORDER BY langs DESC) END as birthyear_rank,
+		CASE WHEN birthyear IS NOT NULL THEN row_number() OVER (PARTITION BY birthyear ORDER BY langs DESC) END as birthyear_rank_unique,
+		CASE WHEN birthcountry IS NOT NULL THEN dense_rank() OVER (PARTITION BY birthcountry ORDER BY langs DESC) END as birthcountry_rank,
+		CASE WHEN birthcountry IS NOT NULL THEN row_number() OVER (PARTITION BY birthcountry ORDER BY langs DESC) END as birthcountry_rank_unique,
+		CASE WHEN birthplace IS NOT NULL THEN dense_rank() OVER (PARTITION BY birthplace ORDER BY langs DESC) END as birthplace_rank,
+		CASE WHEN birthplace IS NOT NULL THEN row_number() OVER (PARTITION BY birthplace ORDER BY langs DESC) END as birthplace_rank_unique,
+		CASE WHEN deathyear IS NOT NULL THEN dense_rank() OVER (PARTITION BY deathyear ORDER BY langs DESC) END as deathyear_rank,
+		CASE WHEN deathyear IS NOT NULL THEN row_number() OVER (PARTITION BY deathyear ORDER BY langs DESC) END as deathyear_rank_unique,
+		CASE WHEN deathcountry IS NOT NULL THEN dense_rank() OVER (PARTITION BY deathcountry ORDER BY langs DESC) END as deathcountry_rank,
+		CASE WHEN deathcountry IS NOT NULL THEN row_number() OVER (PARTITION BY deathcountry ORDER BY langs DESC) END as deathcountry_rank_unique,
+		CASE WHEN deathplace IS NOT NULL THEN dense_rank() OVER (PARTITION BY deathplace ORDER BY langs DESC) END as deathplace_rank,
+		CASE WHEN deathplace IS NOT NULL THEN row_number() OVER (PARTITION BY deathplace ORDER BY langs DESC) END as deathplace_rank_unique
 	FROM
 		person
 ) AS subq
