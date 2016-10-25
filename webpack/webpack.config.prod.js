@@ -30,7 +30,7 @@ var commonLoaders = [
   },
   { test: /\.json$/, loader: 'json-loader' },
   {
-    test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+    test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ico)$/,
     loader: 'url',
     query: {
         name: '[hash].[ext]',
