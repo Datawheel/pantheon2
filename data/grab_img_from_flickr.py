@@ -1,5 +1,5 @@
 import csv, flickr, os, sys, urllib
-from db_connection import cursor
+from db_connection import cursor, conn
 from PIL import Image as pillow
 
 FLICKR_DIR = "./scapedFlickrIMGs"

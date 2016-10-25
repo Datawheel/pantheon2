@@ -22,7 +22,7 @@ class App extends Component {
     );
   }
 
-  componentWillMount(){
+  componentDidMount(){
     document.addEventListener("keydown", () => {
       // 's' key
       if(event.keyCode == 83){

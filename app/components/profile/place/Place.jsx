@@ -32,6 +32,7 @@ class Place extends Component {
   ]
 
   render() {
+    // return <div>testing...</div>
 
     const {placeProfile} = this.props;
     const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, professions, peopleBornHereAlive} = placeProfile;
@@ -60,7 +61,7 @@ class Place extends Component {
       .filter(p => p.deathyear !== null)
       .slice(0, priestleyMax);
 
-    const sections = [
+    let sections = [
       {title: "People", slug: "people", content: <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />},
       {
         title: "Professions",
@@ -136,7 +137,11 @@ class Place extends Component {
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
     ];
 
-    // return (<div>testing...</div>)
+    // catch for really small places...
+    if(peopleBornHere.concat(peopleDiedHere).length < 5){
+      sections = [sections[0]];
+    }
+
     return (
       <div>
         <Helmet
