@@ -20,8 +20,18 @@ const ProfessionTrends = ({ place, peopleBorn, peopleDied, professions }) => {
         return obj;
     },{});
 
-  if(!topOverall.length){
+  if(!topOverall.length && !topModern.length){
     return null;
+  }
+
+  if(!topModern.length){
+    return (
+      <div>
+        <p>
+          Throughout history the profession with the most memorable people from {place.name} has been {professionsLookup[topOverall[0].key].name}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />.
+        </p>
+      </div>
+    );
   }
 
   return (

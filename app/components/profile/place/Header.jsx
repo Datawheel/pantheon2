@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import styles from 'css/components/profile/header';
 import sparklineSvg from 'images/sparkline.svg';
 import placeholderImg from 'images/placeholder_place_hero.jpg';
+import { FORMATTERS } from "types";
 
 const Header = ({ place, country }) => {
   const placeImg = place.wiki_id && !place.img_link ? `/place/${country.id}.jpg` : `/place/${place.id}.jpg`;
@@ -19,7 +20,7 @@ const Header = ({ place, country }) => {
         <h2 className='profile-type'>Present Day</h2>
         <h1 className='profile-name'>{place.name}</h1>
         { place.name !== place.country_name ? <p className='date-subtitle'>{place.country_name}</p> : null}
-        <p className='date-subtitle'>9000 - Present</p>
+        <p className='date-subtitle'>{FORMATTERS.year(country.soverign_date)} - Present</p>
         <pre>
           <img className='sparkline' src={sparklineSvg} alt={`Sparkline here`} />
         </pre>
