@@ -27,8 +27,8 @@ if not place_lookup:
             geonameid = int(geonameid)
             ccode = ccode.lower()
 
-            if ccode == "na":
-                ccode = None
+            if ccode == "na" or ccode.strip() == "":
+                ccode, cname = None, None
             elif ccode not in place_lookup:
                 # lets add it to the db
                 cslug = cname.replace(" ", "_")
