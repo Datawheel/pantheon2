@@ -79,6 +79,11 @@
   > python data/import_creation_to_db.py
   ```
 
+7. Fix duplicate place & person name slugs
+  ```
+  > python data/fix_duplicate_slugs.py
+  ```
+
 
 ## Downloading images
 
