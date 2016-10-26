@@ -14,7 +14,7 @@ const Intro = ({ profession, professions }) => {
         <div className={'intro-text'}>
           <h3>
             <img src={iconProfW} />
-            What is the cultural export of {profession.name}?
+            What is the cultural export of {plural(profession.name)}?
           </h3>
           <p>
             {plural(profession.name)} { myIndex ? <span>rank {FORMATTERS.ordinal(myIndex+1)}</span> : <span>are the top ranked profession</span> } for producing culturally remembered individuals{ myIndex ? <span>, behind <AnchorList items={professions.slice(Math.max(0, myIndex-3), myIndex)} name={p => plural(p.name)} url={p => `/profile/profession/${p.slug}/`} /></span> : null }.

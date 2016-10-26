@@ -15,8 +15,7 @@ const Places = ({ people, profession }) => {
     .rollup(function(leaves) { return {num_people:leaves.length, birthplace:leaves[0].birthplace}; })
     .entries(people.filter(p => p.birthcountry))
     .sort(function (a, b) { return b.value.num_people-a.value.num_people });
-  console.log(placesBorn)
-  // return <div>People ranking here...</div>
+  
   return (
     <div>
       <p>

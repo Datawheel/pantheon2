@@ -42,6 +42,8 @@ class Person extends Component {
     const birthcountry = personProfile.person.birthcountry;
 
     const maxPageViews = Math.max(...personProfile.pageviews.map(d => d.num_pageviews));
+    const totalPageViews = personProfile.pageviews.reduce((sum, d) => sum + d.num_pageviews, 0);
+    console.log(totalPageViews)
     const totalLanguages = personProfile.creationdates.length;
     let languageCounter = 0, lMod = 0.95;
     const lineData = personProfile.creationdates
@@ -143,7 +145,7 @@ class Person extends Component {
         />
         <Header person={personProfile.person} pageviews={personProfile.pageviews} />
         <ProfileNav sections={sections} />
-        <Intro />
+        <Intro totalPageViews={totalPageViews} />
         {sections.map((section, key) =>
           <Section
             index={key}

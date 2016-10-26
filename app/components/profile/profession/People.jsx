@@ -15,9 +15,9 @@ const People = ({ people, profession }) => {
   return (
     <div>
       <p>
-        Between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}, there have been {people.length} globally memorable {profession.name}, with {FORMATTERS.share(shareAlive)} alive.
+        Between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}, there have been {FORMATTERS.commas(people.length)} globally memorable {plural(profession.name)}, with {FORMATTERS.share(shareAlive)} alive.
         The most globally memorable living {plural(profession.name)} are <AnchorList items={people.filter(p => p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
-        By contract, the most memorable deceased {plural(profession.name)} are <AnchorList items={people.filter(p => !p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
+        By contrast, the most memorable deceased {plural(profession.name)} are <AnchorList items={people.filter(p => !p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
       </p>
     </div>
   );

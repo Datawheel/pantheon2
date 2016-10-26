@@ -33,9 +33,7 @@ class Place extends Component {
   ]
 
   render() {
-    // return <div>testing...</div>
-
-    const {placeProfile} = this.props;
+    const {placeProfile, professionProfile} = this.props;
     const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, peopleBornHereAlive} = placeProfile;
     const {professions} = professionProfile;
 
@@ -173,7 +171,8 @@ class Place extends Component {
 
 function mapStateToProps(state) {
   return {
-    placeProfile: state.placeProfile
+    placeProfile: state.placeProfile,
+    professionProfile: state.professionProfile
   };
 }
 
