@@ -48,6 +48,7 @@
     "d3-time-format": "^2.0.2",
     "d3plus-plot": "^0.3.11",
     "d3plus-priestley": "^0.1.5",
+    "d3plus-text": "^0.9.7",
     "d3plus-treemap": "^0.5.17",
     "es6-promise": "^3.1.2",
     "express": "^4.13.4",

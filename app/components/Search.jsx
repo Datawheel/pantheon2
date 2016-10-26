@@ -4,6 +4,7 @@ import axios from 'axios';
 import {connect} from "react-redux";
 import { activateSearch } from 'actions/users';
 import styles from 'css/components/search';
+import { strip } from 'd3plus-text';
 
 polyfill();
 
@@ -21,29 +22,21 @@ class Search extends Component {
     if (userQuery.length < 3) return;
     if (userQuery.length === 0) this.setState({ professionResults:[], placeResults:[], personResults:[] });
 
-    let userQueryCleaned = userQuery.split(" ")
-    // if(userQueryCleaned.length > 1){
-    //   const lastItem = userQueryCleaned[userQueryCleaned.length-1];
-    //   userQueryCleaned[userQueryCleaned.length-1] = `${lastItem}:*`;
-    //   userQueryCleaned = userQueryCleaned.join("%26");
-    // }
-    // else {
-    //   userQueryCleaned = userQuery;
-    // }
+    let userQueryCleaned = userQuery.split(" ");
+    userQueryCleaned = userQueryCleaned.map(strip);
     const lastItem = userQueryCleaned[userQueryCleaned.length-1];
     userQueryCleaned[userQueryCleaned.length-1] = `${lastItem}:*`;
     userQueryCleaned = userQueryCleaned.join("%26");
 
-    const searchQuery = axios.get(`http://localhost:3100/search?document=@@.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`);
-
-    Promise.all([searchQuery])
+    axios.get(`http://localhost:3100/search?document=@@.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
       .then((queryResults) => {
-        const results = queryResults[0].data;
+        const results = queryResults.data;
         this.setState({ results });
       })
   }
 
   componentDidMount() {
+    console.log(strip)
     this._searchInput.focus();
   }
 
