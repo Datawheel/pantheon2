@@ -2,19 +2,18 @@ import React from "react";
 import Helmet from "react-helmet";
 import config from 'helmconfig.js';
 
-const Explore = ({children}) => {
+const Rankings = () => {
   return (
-    <div className='explore'>
+    <div className='rankings'>
       <Helmet
         htmlAttributes={{"lang": "en", "amp": undefined}}
-        title="Explore"
+        title="Rankings"
         meta={config.meta}
         link={config.link}
       />
-      {children ? !<h1 className='header'>Explore</h1> : null }
-      {children}
+      <h1 className='header'>Rankings</h1>
     </div>
   );
 };
 
-export default Explore;
+export default Rankings;
