@@ -58,7 +58,9 @@ const YearRanking = ({ person, ranking }) => {
           {ranking.birthyearPeers.map((peer) =>
             <li key={peer.id} className={ranking.me.birthyear_rank_unique === peer.birthyear_rank_unique ? 'rank-me' : null}>
               <div className={'rank-photo'}>
-                <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+                <a href={`/profile/person/${peer.slug}/`}>
+                  <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+                </a>
               </div>
               <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
               <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
@@ -78,7 +80,9 @@ const YearRanking = ({ person, ranking }) => {
               {ranking.deathyearPeers.map((peer) =>
                 <li key={peer.id} className={ranking.me.deathyear_rank_unique === peer.deathyear_rank_unique ? 'rank-me' : null}>
                   <div className={'rank-photo'}>
-                    <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+                    <a href={`/profile/person/${peer.slug}/`}>
+                      <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+                    </a>
                   </div>
                   <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
                   <p className={'rank-year'}>{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : 'Present'}</p>
