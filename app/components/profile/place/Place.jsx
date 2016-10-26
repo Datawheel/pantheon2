@@ -11,7 +11,8 @@ import Professions from "components/profile/place/Professions";
 import ProfessionTrends from "components/profile/place/ProfessionTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
-import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchProfessions, fetchPeopleBornHereAlive } from "actions/place";
+import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchPeopleBornHereAlive } from "actions/place";
+import { fetchAllProfessions } from "actions/profession";
 
 class Place extends Component {
 
@@ -25,7 +26,7 @@ class Place extends Component {
     fetchCountry,
     fetchPeopleBornHere,
     fetchPeopleDiedHere,
-    fetchProfessions,
+    fetchAllProfessions,
     fetchProfessionsBornHere,
     fetchProfessionsDiedHere,
     fetchPeopleBornHereAlive
@@ -35,7 +36,8 @@ class Place extends Component {
     // return <div>testing...</div>
 
     const {placeProfile} = this.props;
-    const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, professions, peopleBornHereAlive} = placeProfile;
+    const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, peopleBornHereAlive} = placeProfile;
+    const {professions} = professionProfile;
 
     const yearBuckets = 50;
 

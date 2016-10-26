@@ -87,15 +87,6 @@ export function fetchPeopleDiedHere(store) {
   };
 }
 
-export function fetchProfessions(store) {
-  const getProfessionsProm = makePlaceRequest('get', null, null, `/profession`);
-
-  return {
-    type: "GET_PROFESSIONS",
-    promise: getProfessionsProm
-  };
-}
-
 export function fetchProfessionsBornHere(store) {
   const getProfessionsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;

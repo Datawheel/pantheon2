@@ -61,18 +61,6 @@ const peopleDiedHere = (
   }
 }
 
-const professions = (
-  state = [],
-  action
-) => {
-  switch (action.type) {
-    case "GET_PROFESSIONS_SUCCESS":
-      return action.res.data
-    default:
-      return state;
-  }
-}
-
 const professionsHere = (
   state = [],
   action
@@ -127,7 +115,6 @@ const placeProfileReducer = combineReducers({
   country,
   peopleBornHere,
   peopleDiedHere,
-  professions,
   professionsBornHere,
   professionsDiedHere,
   peopleBornHereAlive

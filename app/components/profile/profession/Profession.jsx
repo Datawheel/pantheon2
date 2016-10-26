@@ -5,8 +5,9 @@ import config from "helmconfig.js";
 import Header from "components/profile/profession/Header";
 import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/profession/Intro";
-// import Section from "components/profile/Section";
-import { fetchProfession, fetchPeople } from "actions/profession";
+import People from "components/profile/profession/People";
+import Section from "components/profile/Section";
+import { fetchProfession, fetchPeople, fetchAllProfessions } from "actions/profession";
 
 class Profession extends Component {
 
@@ -16,14 +17,16 @@ class Profession extends Component {
 
   static need = [
     fetchProfession,
-    fetchPeople
+    fetchPeople,
+    fetchAllProfessions
   ]
 
   render() {
     const {professionProfile} = this.props;
-    const {profession, people} = professionProfile;
+    const {profession, professions, people} = professionProfile;
 
     const sections = [
+      {title: "People", slug: "people", content: <People profession={profession} people={people} />},
       {title: "Memorability Metrics", slug: "metrics"},
     ];
 
@@ -38,7 +41,18 @@ class Profession extends Component {
         />
         <Header profession={profession} people={people} />
         <ProfileNav sections={sections} />
-        <Intro profession={profession} />
+        <Intro profession={profession} professions={professions} />
+        {sections.map((section, key) =>
+          <Section
+            index={key}
+            key={key}
+            numSections={sections.length}
+            title={section.title}
+            slug={section.slug}>
+            {section.content ? section.content : null}
+            {section.viz && section.viz.length ? section.viz : null}
+          </Section>
+        )}
       </div>
     );
   }

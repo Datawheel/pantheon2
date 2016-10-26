@@ -19,10 +19,20 @@ export function fetchProfession(store) {
   };
 }
 
+export function fetchAllProfessions(store) {
+  const getProfessionsProm = makeProfessionRequest('get', null, null, `/profession?order=num_born.desc.nullslast`);
+
+  return {
+    type: "GET_PROFESSIONS",
+    promise: getProfessionsProm
+  };
+}
+
+
 export function fetchPeople(store) {
   const getPeopleProm = makeProfessionRequest('get', null, null, `/profession?slug=eq.${store["id"]}&select=id`).then(function(profIdRes) {
     const profId = profIdRes.data[0].id;
-    return makeProfessionRequest('get', null, null, `/person?profession=eq.${profId}&order=langs.desc&select=profession{*},birthplace{*},birthcountry{*},*`);
+    return makeProfessionRequest('get', null, null, `/person?profession=eq.${profId}&order=langs.desc&select=profession{*},birthplace{*},birthcountry{*},*&limit=100`);
   })
 
   return {
