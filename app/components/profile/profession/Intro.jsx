@@ -17,7 +17,7 @@ const Intro = ({ profession, professions }) => {
             What is the cultural export of {profession.name}?
           </h3>
           <p>
-            {profession.name} { myIndex ? <span>ranks {FORMATTERS.ordinal(myIndex+1)}</span> : <span>is the top ranked profession</span> } for producing culturally remembered individuals{ myIndex ? <span>, behind <AnchorList items={professions.slice(Math.max(0, myIndex-3), myIndex)} name={p => plural(p.name)} url={p => `/profile/profession/${p.slug}/`} /></span> : null }.
+            {plural(profession.name)} { myIndex ? <span>rank {FORMATTERS.ordinal(myIndex+1)}</span> : <span>are the top ranked profession</span> } for producing culturally remembered individuals{ myIndex ? <span>, behind <AnchorList items={professions.slice(Math.max(0, myIndex-3), myIndex)} name={p => plural(p.name)} url={p => `/profile/profession/${p.slug}/`} /></span> : null }.
             Pantheon aims to help us understand global cultural development by visualizing a dataset of "globally memorable people" through their professions, birth and resting places, and Wikipedia activity.
           </p>
         </div>

@@ -7,9 +7,8 @@ import { plural } from 'pluralize';
 const People = ({ people, profession }) => {
 
   const youngestBirthyear = Math.max.apply(Math, people.map(r => r.birthyear));
-  const oldestBirthyear = Math.min.apply(Math, people.map(r => r.birthyear));
+  const oldestBirthyear = Math.min.apply(Math, people.filter(p => p.birthyear).map(r => r.birthyear));
   const shareAlive = people.filter(p => p.alive).length / people.length;
-  console.log(youngestBirthyear, oldestBirthyear, shareAlive)
 
 
   // return <div>People ranking here...</div>
