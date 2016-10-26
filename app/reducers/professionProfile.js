@@ -13,8 +13,22 @@ const profession = (
   }
 }
 
+const people = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_PEOPLE_FOR_PROFESSION_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
+
+
 const professionProfileReducer = combineReducers({
-  profession
+  profession,
+  people
 });
 
 export default professionProfileReducer;

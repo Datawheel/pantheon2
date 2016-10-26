@@ -13,6 +13,26 @@ export function makeProfessionRequest(method, id, data, api = '/profession') {
 }
 
 export function fetchProfession(store) {
+  return {
+    type: "GET_PROFESSION",
+    promise: makeProfessionRequest('get', store["id"])
+  };
+}
+
+export function fetchPeople(store) {
+  const getPeopleProm = makeProfessionRequest('get', null, null, `/profession?slug=eq.${store["id"]}&select=id`).then(function(profIdRes) {
+    const profId = profIdRes.data[0].id;
+    return makeProfessionRequest('get', null, null, `/person?profession=eq.${profId}&order=langs.desc&select=profession{*},birthplace{*},birthcountry{*},*`);
+  })
+
+  return {
+    type: "GET_PEOPLE_FOR_PROFESSION",
+    promise: getPeopleProm
+  };
+}
+
+
+export function fetchProfessionLegacy(store) {
   const prom = makeProfessionRequest('get', store["id"]).then(function(profIdRes) {
     if(!profIdRes.data.length) {
       return makeProfessionRequest('get', null, null, `/profession?industry_slug=eq.${store["id"]}`).then(function(profIdRes) {

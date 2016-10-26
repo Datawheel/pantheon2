@@ -6,7 +6,7 @@ import Header from "components/profile/profession/Header";
 import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/profession/Intro";
 // import Section from "components/profile/Section";
-import { fetchProfession } from "actions/profession";
+import { fetchProfession, fetchPeople } from "actions/profession";
 
 class Profession extends Component {
 
@@ -16,11 +16,12 @@ class Profession extends Component {
 
   static need = [
     fetchProfession,
+    fetchPeople
   ]
 
   render() {
     const {professionProfile} = this.props;
-    const {profession} = professionProfile;
+    const {profession, people} = professionProfile;
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
@@ -35,7 +36,7 @@ class Profession extends Component {
           meta={config.meta.concat([ {property: 'og:title', content: profession.name} ])}
           link={config.link}
         />
-        <Header profession={profession} />
+        <Header profession={profession} people={people} />
         <ProfileNav sections={sections} />
         <Intro profession={profession} />
       </div>
