@@ -40,7 +40,7 @@ const CountryRanking = ({ person, ranking }) => {
   return (
     <div>
       <p>
-        Among people born in {person.birthcountry.name}, {person.name} ranks {ranking.me.birthcountry_rank_unique} out of {person.birthcountry.num_born}.&nbsp;
+        Among people born in {person.birthcountry.name}, {person.name} ranks <a>{ranking.me.birthcountry_rank}</a> out of {person.birthcountry.num_born}.&nbsp;
         { betterBirthPeers }
         { worseBirthPeers }
         { ranking.deathcountryPeers.length ?

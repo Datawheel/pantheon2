@@ -33,12 +33,12 @@ const Intro = ({ person }) => {
             }
           </h3>
           <p>
-            {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/profession/${person.profession.slug}`}>{person.profession.name}</a> born in <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> in <b>{FORMATTERS.year(person.birthyear.name)}</b>.&nbsp;
+            {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/profession/${person.profession.slug}`}>{person.profession.name}</a> born in <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> in <b>{FORMATTERS.year(person.birthyear.name)}</b>.
             {person.deathyear ?
-              `${person.gender ? "She" : "He"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }&nbsp;
-            At {age} years old, {person.gender ? "she" : "he"} has reached (total page views) page views on Wikipedia, hitting a peak of (max page views) in (max page view year).
+              `${person.gender ? " She" : " He"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
+            &nbsp;Since the start of Wikipedia, {person.gender ? "she" : "he"} has accumulated <a>(total page views)</a> page views, spanning <a>(# languages)</a> total different languages.
             By analyzing all "globally remembered people", Pantheon aims to understand cultural development through changes in professions, birth and death places, and Wikipedia activity.&nbsp;
-            <a href="/about/" className="deep-link">Read more about our research</a>
+            <a href="/about/" className="deep-link">Read about our methods</a>
           </p>
         </div>
       </div>

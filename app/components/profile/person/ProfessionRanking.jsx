@@ -23,7 +23,7 @@ const ProfessionRanking = ({ person, ranking }) => {
   return (
     <div>
       <p>
-        Among {person.profession.name}s, {person.name} ranks {ranking.me.rank_unique} out of {person.profession.num_born}.&nbsp;
+        Among {person.profession.name}s, {person.name} ranks <a>{ranking.me.profession_rank}</a> out of {person.profession.num_born}.&nbsp;
         { betterPeers }
         { worsePeers }
       </p>

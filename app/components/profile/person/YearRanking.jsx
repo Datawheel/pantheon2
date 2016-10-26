@@ -40,11 +40,11 @@ const YearRanking = ({ person, ranking }) => {
   return (
     <div>
       <p>
-        Among people born in {FORMATTERS.year(person.birthyear.name)}, {person.name} ranks {ranking.me.birthyear_rank_unique} out of {person.birthyear.num_born}.&nbsp;
+        Among people born in {FORMATTERS.year(person.birthyear.name)}, {person.name} ranks <a>{ranking.me.birthyear_rank}</a> out of {person.birthyear.num_born}.&nbsp;
         { betterBirthPeers }
         { worseBirthPeers }
         { ranking.deathyearPeers.length ?
-          <span>&nbsp;Among people deceased in {FORMATTERS.year(person.deathyear.name)}, {person.name} ranks {ranking.me.deathyear_rank_unique} out of {person.deathyear.num_died}.&nbsp;</span>
+          <span>&nbsp;Among people deceased in {FORMATTERS.year(person.deathyear.name)}, {person.name} ranks <a>{ranking.me.deathyear_rank}</a> out of {person.deathyear.num_died}.&nbsp;</span>
           : null}
         { betterDeathPeers }
         { worseDeathPeers }
