@@ -43,7 +43,6 @@ class Person extends Component {
 
     const maxPageViews = Math.max(...personProfile.pageviews.map(d => d.num_pageviews));
     const totalPageViews = personProfile.pageviews.reduce((sum, d) => sum + d.num_pageviews, 0);
-    console.log(totalPageViews)
     const totalLanguages = personProfile.creationdates.length;
     let languageCounter = 0, lMod = 0.95;
     const lineData = personProfile.creationdates

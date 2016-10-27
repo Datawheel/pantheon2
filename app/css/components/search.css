@@ -88,7 +88,7 @@
       display: flex;
       justify-content: space-between;
       width: 100%;
-      padding: 12px 0;
+      padding: 6px 0;
 
       & a {
         position: relative;
@@ -144,5 +144,15 @@
         background-size: contain;
       }
     }
+
+    & li.highlighted {
+      padding-left: 20px;
+      & a::before {
+        content: '';
+        background: url('../../images/tri-right-b.svg') no-repeat;
+        background-size: contain;
+      }
+    }
+
   }
 }

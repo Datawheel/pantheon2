@@ -35,9 +35,48 @@ class Search extends Component {
       })
   }
 
+  handleKeyDown(e) {
+    const DOWN_ARROW = 40;
+    const UP_ARROW = 38;
+    const ENTER = 13;
+    const highlighted = document.querySelector('.highlighted');
+
+    if(e.keyCode == ENTER){
+      if(highlighted){
+        window.location = highlighted.querySelector('a').href;
+      }
+    }
+
+    if(e.keyCode == DOWN_ARROW || e.keyCode == UP_ARROW){
+      if(!highlighted){
+        if(e.keyCode == DOWN_ARROW)
+          document.querySelector('.results-list > li:first-child').classList.add('highlighted');
+      } else {
+        const currentIndex = [].indexOf.call(document.querySelectorAll('.results-list > li'), highlighted);
+        //Highlight the next thing
+        if(e.keyCode == DOWN_ARROW && currentIndex < document.querySelectorAll('.results-list > li').length-1){
+          document.querySelectorAll('.results-list > li')[currentIndex+1].classList.add('highlighted');
+          highlighted.classList.remove('highlighted');
+        }
+        else if(e.keyCode == UP_ARROW) {
+          if(currentIndex > 0) {
+            document.querySelectorAll('.results-list > li')[currentIndex-1].classList.add('highlighted');
+          }
+          highlighted.classList.remove('highlighted');
+        }
+      }
+    }
+  }
+
   componentDidMount() {
-    console.log(strip)
     this._searchInput.focus();
+    console.log('DID MOUNT!');
+    window.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    console.log('unmounted!');
+    window.removeEventListener("keydown", this.handleKeyDown);
   }
 
   render() {
@@ -53,7 +92,7 @@ class Search extends Component {
           </div>
           <ul className={'results-list'}>
             {this.state.results.map((result) =>
-              <li key={`person_${result.slug}`} className={'result-person'}>
+              <li key={`person_${result.slug}`} className='result-person'>
                 <a href={`/profile/${result.profile_type}/${result.slug}`}>{result.name}</a>
                 <sub>
                   {result.primary_meta ? <span>{result.primary_meta}</span> : null}
