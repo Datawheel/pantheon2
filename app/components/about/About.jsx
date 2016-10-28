@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
-import styles from 'css/components/about';
+import styles from 'css/components/miscpage';
 
 const About = ({children}) => {
   return (
@@ -13,31 +13,31 @@ const About = ({children}) => {
         meta={config.meta}
         link={config.link}
       />
-      <nav className="about-nav" role="navigation">
+      <nav className="page-nav" role="navigation">
         <ul className='items'>
           <li className='item'>
-            <Link to="/about/vision" className='item' activeClassName='active'>Vision</Link>
+            <Link to="/about/vision" className='item-link' activeClassName='active'>Vision</Link>
           </li>
           <li className='item'>
-            <Link to="/about/methods" className='item' activeClassName='active'>Methods</Link>
+            <Link to="/about/methods" className='item-link' activeClassName='active'>Methods</Link>
           </li>
           <li className='item'>
-            <Link to="/about/team" className='item' activeClassName='active'>Team</Link>
+            <Link to="/about/team" className='item-link' activeClassName='active'>Team</Link>
           </li>
           <li className='item'>
-            <Link to="/about/publications" className='item' activeClassName='active'>Publications</Link>
+            <Link to="/about/publications" className='item-link' activeClassName='active'>Publications</Link>
           </li>
           <li className='item'>
-            <Link to="/about/data_sources" className='item' activeClassName='active'>Data Sources</Link>
+            <Link to="/about/data_sources" className='item-link' activeClassName='active'>Data Sources</Link>
           </li>
           <li className='item'>
-            <Link to="/about/resources" className='item' activeClassName='active'>Resources</Link>
+            <Link to="/about/resources" className='item-link' activeClassName='active'>Resources</Link>
           </li>
           <li className='item'>
-            <Link to="/about/references" className='item' activeClassName='active'>References</Link>
+            <Link to="/about/references" className='item-link' activeClassName='active'>References</Link>
           </li>
           <li className='item'>
-            <Link to="/about/contact" className='item' activeClassName='active'>Contact</Link>
+            <Link to="/about/contact" className='item-link' activeClassName='active'>Contact</Link>
           </li>
         </ul>
       </nav>
