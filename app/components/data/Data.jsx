@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import Helmet from "react-helmet";
 import config from 'helmconfig.js';
+import styles from 'css/components/data';
 
 const Data = ({children}) => {
   return (
@@ -12,8 +13,22 @@ const Data = ({children}) => {
         meta={config.meta}
         link={config.link}
       />
-      <h1 className='header'>Data</h1>
-
+      <nav className="data-nav" role="navigation">
+        <ul className='items'>
+          <li className='item'>
+            <Link to="/data/datasets" className='item' activeClassName='active'>Download</Link>
+          </li>
+          <li className='item'>
+            <Link to="/data/api" className='item' activeClassName='active'>API</Link>
+          </li>
+          <li className='item'>
+            <Link to="/data/permissions" className='item' activeClassName='active'>Permissions</Link>
+          </li>
+          <li className='item'>
+            <Link to="/data/faq" className='item' activeClassName='active'>FAQ</Link>
+          </li>
+        </ul>
+      </nav>
       {children}
     </div>
   );

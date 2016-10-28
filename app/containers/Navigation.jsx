@@ -56,10 +56,10 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           <li className='item'>
             <Link to="/data" className='item-link data' activeClassName='active'>Data</Link>
             <ul className={'sub-items'}>
-              <li><a href="/data/data" className='item-link'>Data</a></li>
-              <li><a href="/about/api" className='item-link'>API</a></li>
-              <li><a href="/about/permissions" className='item-link'>Permissions</a></li>
-              <li><a href="/about/faq" className='item-link'>FAQ</a></li>
+              <li><a href="/data/datasets" className='item-link'>Download</a></li>
+              <li><a href="/data/api" className='item-link'>API</a></li>
+              <li><a href="/data/permissions" className='item-link'>Permissions</a></li>
+              <li><a href="/data/faq" className='item-link'>FAQ</a></li>
             </ul>
           </li>
           <li className='search-btn'>
