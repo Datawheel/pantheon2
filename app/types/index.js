@@ -1,6 +1,7 @@
 export const NUM_RANKINGS = 12;
 export const NUM_RANKINGS_PRE = Math.floor(NUM_RANKINGS/2);
 export const NUM_RANKINGS_POST = Math.floor(NUM_RANKINGS/2);
+export const YEAR_BUCKETS = 50;
 
 export const DISMISS_MESSAGE = 'DISMISS_MESSAGE';
 

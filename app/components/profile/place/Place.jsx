@@ -13,6 +13,7 @@ import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
 import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchPeopleBornHereAlive } from "actions/place";
 import { fetchAllProfessions } from "actions/profession";
+import { YEAR_BUCKETS } from "types";
 
 class Place extends Component {
 
@@ -37,14 +38,12 @@ class Place extends Component {
     const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, peopleBornHereAlive} = placeProfile;
     const {professions} = professionProfile;
 
-    const yearBuckets = 50;
-
     const tmapBornData = peopleBornHere
       .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
     tmapBornData.forEach(d => {
-      d.bucketyear = Math.round(d.birthyear / yearBuckets) * yearBuckets;
+      d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const tmapDeathData = peopleDiedHere
@@ -52,7 +51,7 @@ class Place extends Component {
       .sort((a, b) => b.langs - a.langs);
 
     tmapDeathData.forEach(d => {
-      d.bucketyear = Math.round(d.deathyear / yearBuckets) * yearBuckets;
+      d.bucketyear = Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const priestleyMax = 25;
@@ -102,7 +101,7 @@ class Place extends Component {
                   groupBy: ["domain", "group", "name"],
                   time: "bucketyear",
                   x: "bucketyear",
-                  y: d => d.id instanceof Array ? d.id.length : 1,
+                  y: d => d.id instanceof Array ? d.id.length : 1
                 }} />,
             <Viz type="StackedArea"
                   title="Deaths Over Time"
@@ -113,7 +112,7 @@ class Place extends Component {
                     groupBy: ["domain", "group", "name"],
                     time: "bucketyear",
                     x: "bucketyear",
-                    y: d => d.id instanceof Array ? d.id.length : 1,
+                    y: d => d.id instanceof Array ? d.id.length : 1
                   }} />
         ]
       },
