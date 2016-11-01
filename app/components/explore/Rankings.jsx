@@ -34,19 +34,20 @@ class Rankings extends Component {
       render: ({value, row}) => <a href={`/profile/person/${row["slug"]}`}>{value}</a>
     },
     {
+      id: "profession.name",
       header: "Profession",
-      accessor: "profession.name",
+      accessor: d => d.profession ? d.profession.name : null,
       render: ({value, row}) => <a href={`/profile/profession/${row.profession.slug}`}>{value}</a>
     },
     {
       header: "Born",
       accessor: "birthyear",
-      render: ({value}) => <span>{FORMATTERS.year(value)}</span>
+      render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : null
     },
     {
       header: "Died",
       accessor: "deathyear",
-      render: ({value}) => <span>{FORMATTERS.year(value)}</span>
+      render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : null
     },
     {
       header: "Gender",
@@ -54,9 +55,10 @@ class Rankings extends Component {
       render: ({value}) => <span>{value ? "Female" : "Male"}</span>
     },
     {
+      id: "birthplace.name",
       header: "Birth Place",
-      accessor: "birthplace.name",
-      render: ({value, row}) => <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a>
+      accessor: d => d.birthplace ? d.birthplace.name : null,
+      render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : null
     },
     {header:'L', accessor:'langs'}];
 
@@ -78,6 +80,7 @@ class Rankings extends Component {
           loading={this.state.loading} // Display the loading overlay when we need it
           onChange={(instance) => {
             const offset = instance.page * resultsPerPage;
+            console.log(instance.sorting)
 
             let sort = '';
             if(instance.sorting.length){
@@ -101,10 +104,6 @@ class Rankings extends Component {
                 const totalPages = Math.ceil(totalResults / resultsPerPage);
                 const rows = res.data.map((d, i) => {
                   d.rank = (i + 1) + offset;
-                  d.profession = d.profession ? d.profession : '!';
-                  d.birthplace = d.birthplace ? d.birthplace : '!';
-                  d.birthyear = d.birthyear ? d.birthyear : 0;
-                  d.deathyear = d.deathyear ? d.deathyear : 0;
                   return d;
                 })
                 // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
