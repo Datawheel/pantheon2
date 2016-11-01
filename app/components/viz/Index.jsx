@@ -32,11 +32,11 @@ class Viz extends Component {
     const attrs = config.attrs ? config.attrs.reduce((obj, d) => {
       obj[d.id] = d;
       return obj;
-    }, {}) : {};
+    }, {}) : false;
     delete config.attrs;
 
     // Preps groupBy, using attrs if necessary.
-    config.groupBy = config.groupBy ? (config.groupBy instanceof Array ? config.groupBy : [config.groupBy]).map(function(g) {
+    config.groupBy = config.groupBy ? attrs ? (config.groupBy instanceof Array ? config.groupBy : [config.groupBy]).map(function(g) {
       return function(d) {
 
         let val;
@@ -48,7 +48,7 @@ class Viz extends Component {
         return val;
 
       }
-    }) : ["id"];
+    }) : config.groupBy : ["id"];
 
     config.data.forEach(d => {
       if (d.profession_id !== void 0) d.profession_id = `${d.profession_id}`;
@@ -66,7 +66,7 @@ class Viz extends Component {
       .shapeConfig({
         fill: d => {
           if (d.color) return d.color;
-          else if (d.profession_id !== void 0) {
+          else if (attrs && d.profession_id !== void 0) {
             let occ = d.profession_id.constructor === Array ? d.profession_id[0] : d.profession_id;
             return COLORS_DOMAIN[attrs[occ].domain_slug];
           }

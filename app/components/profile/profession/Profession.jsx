@@ -10,6 +10,8 @@ import Places from "components/profile/profession/Places";
 import RelatedProfessions from "components/profile/profession/RelatedProfessions";
 import Section from "components/profile/Section";
 import { fetchProfession, fetchPeople, fetchPeopleInDomain, fetchAllProfessions } from "actions/profession";
+import Viz from "components/viz/Index";
+import { YEAR_BUCKETS } from "types";
 
 class Profession extends Component {
 
@@ -28,14 +30,117 @@ class Profession extends Component {
     const {professionProfile} = this.props;
     const {profession, professions, people, peopleInDomain} = professionProfile;
 
+    const tmapBornData = people
+      .filter(p => p.birthyear !== null && p.birthcountry !== null)
+      .sort((a, b) => b.langs - a.langs);
+
+    tmapBornData.forEach(d => {
+      d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
+    });
+
+    const tmapDeathData = people
+      .filter(p => p.deathyear !== null && p.deathcountry !== null)
+      .sort((a, b) => b.langs - a.langs);
+
+    tmapDeathData.forEach(d => {
+      d.bucketyear = Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
+    });
+
+    const priestleyMax = 25;
+
+    const priestleyData = tmapBornData
+      .filter(p => p.deathyear !== null && p.deathcountry !== null)
+      .slice(0, priestleyMax);
+
     const sections = [
       {title: "People", slug: "people", content: <People profession={profession} people={people} />},
-      {title: "Related Professions", slug: "related", content: <RelatedProfessions profession={profession} professions={professions} />},
-      {title: "Places", slug: "places", content: <Places people={people} profession={profession} />},
-      {title: "Memorability Metrics", slug: "metrics"},
+      {
+        title: "Related Professions",
+        slug: "related",
+        content: <RelatedProfessions profession={profession} professions={professions} />
+        // viz: [
+        //   <Viz type="Treemap"
+        //     title={`Occupations Within ${profession.name} Profession`}
+        //     key="tmap1"
+        //     config={{
+        //       attrs: professions,
+        //       data: tmapBornData,
+        //       groupBy: ["domain", "group", "name"],
+        //       time: "birthyear"
+        //     }} />
+        // ]
+      },
+      {
+        title: "Places",
+        slug: "places",
+        content: <Places people={people} profession={profession} />,
+        viz: [
+          <Viz type="Treemap"
+            title={`Places of Birth for ${profession.name}`}
+            key="tmap_country1"
+            config={{
+              aggs: {birthcountry: arr => arr[0]},
+              data: tmapBornData,
+              groupBy: [d => d.birthcountry.country_name, "name"],
+              time: "birthyear"
+            }} />,
+          <Viz type="Treemap"
+            title={`Places of Death for ${profession.name}`}
+            key="tmap_country2"
+            config={{
+              aggs: {deathcountry: arr => arr[0]},
+              data: tmapDeathData,
+              groupBy: [d => d.deathcountry.country_name, "name"],
+              time: "deathyear"
+            }} />
+        ]
+      },
+      {
+        title: "Places Over Time",
+        slug: "places_trends",
+        viz: [
+          <Viz type="StackedArea"
+            title="Births Over Time"
+            key="tmap_country1"
+            config={{
+              aggs: {birthcountry: arr => arr[0]},
+              data: tmapBornData,
+              groupBy: [d => d.birthcountry.country_name, "name"],
+              time: "bucketyear",
+              x: "bucketyear",
+              y: d => d.id instanceof Array ? d.id.length : 1
+            }} />,
+          <Viz type="StackedArea"
+            title="Deaths Over Time"
+            key="tmap_country2"
+            config={{
+              aggs: {deathcountry: arr => arr[0]},
+              data: tmapDeathData,
+              groupBy: [d => d.deathcountry.country_name, "name"],
+              time: "bucketyear",
+              x: "bucketyear",
+              y: d => d.id instanceof Array ? d.id.length : 1
+            }} />
+        ]
+      },
+      {
+        title: "Overlapping Lives",
+        slug: "overlapping_lives",
+        viz: [
+          <Viz type="Priestley"
+            title={`Lifespans of the Top ${priestleyMax} ${profession.name}`}
+            key="priestley1"
+            config={{
+              data: priestleyData,
+              depth: 1,
+              end: "deathyear",
+              groupBy: [d => d.deathcountry.country_name, "name"],
+              start: "birthyear"
+            }} />
+        ]
+      }
     ];
 
-    // return (<div>testing profession...</div>)
     return (
       <div>
         <Helmet
