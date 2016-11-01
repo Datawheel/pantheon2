@@ -37,11 +37,23 @@ const people = (
   }
 }
 
+const peopleInDomain = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "GET_PEOPLE_FOR_DOMAIN_SUCCESS":
+      return action.res.data
+    default:
+      return state;
+  }
+}
 
 const professionProfileReducer = combineReducers({
   profession,
   professions,
-  people
+  people,
+  peopleInDomain
 });
 
 export default professionProfileReducer;

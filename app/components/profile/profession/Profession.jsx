@@ -9,7 +9,7 @@ import People from "components/profile/profession/People";
 import Places from "components/profile/profession/Places";
 import RelatedProfessions from "components/profile/profession/RelatedProfessions";
 import Section from "components/profile/Section";
-import { fetchProfession, fetchPeople, fetchAllProfessions } from "actions/profession";
+import { fetchProfession, fetchPeople, fetchPeopleInDomain, fetchAllProfessions } from "actions/profession";
 
 class Profession extends Component {
 
@@ -20,12 +20,13 @@ class Profession extends Component {
   static need = [
     fetchProfession,
     fetchPeople,
+    fetchPeopleInDomain,
     fetchAllProfessions
   ]
 
   render() {
     const {professionProfile} = this.props;
-    const {profession, professions, people} = professionProfile;
+    const {profession, professions, people, peopleInDomain} = professionProfile;
 
     const sections = [
       {title: "People", slug: "people", content: <People profession={profession} people={people} />},

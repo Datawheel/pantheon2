@@ -41,6 +41,21 @@ export function fetchPeople(store) {
   };
 }
 
+export function fetchPeopleInDomain(store) {
+  const getPeopleProm = makeProfessionRequest('get', null, null, `/profession?slug=eq.${store["id"]}&select=domain_slug`).then(function(profIdRes) {
+    const domainSlug = profIdRes.data[0].domain_slug;
+    return makeProfessionRequest('get', null, null, `/profession?domain_slug=eq.${domainSlug}&select=id`).then(function(domainIdRes) {
+      const profIds = domainIdRes.data.reduce((arr, obj) => arr.concat([obj.id]), []);
+      return makeProfessionRequest('get', null, null, `/person?profession=in.${profIds}&order=langs.desc&select=profession{*},birthplace{*},birthcountry{*},*`);
+    })
+  })
+
+  return {
+    type: "GET_PEOPLE_FOR_DOMAIN",
+    promise: getPeopleProm
+  };
+}
+
 
 export function fetchProfessionLegacy(store) {
   const prom = makeProfessionRequest('get', store["id"]).then(function(profIdRes) {
