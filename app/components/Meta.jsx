@@ -6,7 +6,7 @@ import config from 'helmconfig.js';
 
 // Remove stylesheets because we do not extract them into a css file
 // in development mode
-if (__DEVSERVER__) {
+if (process.env.NODE_DEV === "development") {
   config.link = config.link.filter(l => l.rel !== 'stylesheet');
 }
 
