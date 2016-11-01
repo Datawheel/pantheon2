@@ -46,7 +46,7 @@ export function fetchPeopleInDomain(store) {
     const domainSlug = profIdRes.data[0].domain_slug;
     return makeProfessionRequest('get', null, null, `/profession?domain_slug=eq.${domainSlug}&select=id`).then(function(domainIdRes) {
       const profIds = domainIdRes.data.reduce((arr, obj) => arr.concat([obj.id]), []);
-      return makeProfessionRequest('get', null, null, `/person?profession=in.${profIds}&order=langs.desc&select=profession{*},birthplace{*},birthcountry{*},*`);
+      return makeProfessionRequest('get', null, null, `/person?profession=in.${profIds}&order=langs.desc&select=profession{*},profession_id:profession,*`);
     })
   })
 

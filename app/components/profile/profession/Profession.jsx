@@ -30,6 +30,15 @@ class Profession extends Component {
     const {professionProfile} = this.props;
     const {profession, professions, people, peopleInDomain} = professionProfile;
 
+    const tmapDomainData = peopleInDomain
+      .filter(p => p.birthyear !== null && p.birthcountry !== null)
+      .sort((a, b) => b.langs - a.langs);
+
+    tmapDomainData.forEach(d => {
+      d.profession_name = d.profession.name;
+      d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
+    });
+
     const tmapBornData = people
       .filter(p => p.birthyear !== null && p.birthcountry !== null)
       .sort((a, b) => b.langs - a.langs);
@@ -57,18 +66,33 @@ class Profession extends Component {
       {
         title: "Related Professions",
         slug: "related",
-        content: <RelatedProfessions profession={profession} professions={professions} />
-        // viz: [
-        //   <Viz type="Treemap"
-        //     title={`Occupations Within ${profession.name} Profession`}
-        //     key="tmap1"
-        //     config={{
-        //       attrs: professions,
-        //       data: tmapBornData,
-        //       groupBy: ["domain", "group", "name"],
-        //       time: "birthyear"
-        //     }} />
-        // ]
+        content: <RelatedProfessions profession={profession} professions={professions} />,
+        viz: [
+          <Viz type="Treemap"
+            title={`Occupations Within ${profession.domain} Domain`}
+            key="tmap_domain"
+            config={{
+              attrs: professions,
+              data: tmapDomainData,
+              depth: 1,
+              groupBy: ["group", "profession_name"],
+              legend: false,
+              time: "birthyear"
+            }} />,
+          <Viz type="StackedArea"
+            title={`${profession.domain} Domain Over Time`}
+            key="stacked_domain"
+            config={{
+              attrs: professions,
+              data: tmapDomainData,
+              groupBy: "profession_name",
+              legend: false,
+              shapeConfig: {stroke: () => "#F4F4F1", strokeWidth: (d, i) => 1},
+              time: "bucketyear",
+              x: "bucketyear",
+              y: d => d.id instanceof Array ? d.id.length : 1
+            }} />
+        ]
       },
       {
         title: "Places",
@@ -101,7 +125,7 @@ class Profession extends Component {
         viz: [
           <Viz type="StackedArea"
             title="Births Over Time"
-            key="tmap_country1"
+            key="stacked_country1"
             config={{
               aggs: {birthcountry: arr => arr[0]},
               data: tmapBornData,
@@ -112,7 +136,7 @@ class Profession extends Component {
             }} />,
           <Viz type="StackedArea"
             title="Deaths Over Time"
-            key="tmap_country2"
+            key="stacked_country2"
             config={{
               aggs: {deathcountry: arr => arr[0]},
               data: tmapDeathData,
