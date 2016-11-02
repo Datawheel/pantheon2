@@ -79,7 +79,7 @@ class Profession extends Component {
               attrs: professions,
               data: tmapDomainData,
               depth: 1,
-              groupBy: ["group", "profession_name"],
+              groupBy: ["industry", "profession_name"],
               legend: false,
               time: "birthyear"
             }} />,

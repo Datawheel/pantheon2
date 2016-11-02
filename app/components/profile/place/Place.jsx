@@ -43,6 +43,7 @@ class Place extends Component {
       .sort((a, b) => b.langs - a.langs);
 
     tmapBornData.forEach(d => {
+      d.profession_name = d.profession.name;
       d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
@@ -51,6 +52,7 @@ class Place extends Component {
       .sort((a, b) => b.langs - a.langs);
 
     tmapDeathData.forEach(d => {
+      d.profession_name = d.profession.name;
       d.bucketyear = Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
@@ -73,7 +75,8 @@ class Place extends Component {
                   config={{
                     attrs: professions,
                     data: tmapBornData,
-                    groupBy: ["domain", "group", "name"],
+                    depth: 2,
+                    groupBy: ["domain", "industry", "profession_name"],
                     time: "birthyear"
                   }} />,
             <Viz type="Treemap"
@@ -82,7 +85,8 @@ class Place extends Component {
                   config={{
                     attrs: professions,
                     data: tmapDeathData,
-                    groupBy: ["domain", "group", "name"],
+                    depth: 2,
+                    groupBy: ["domain", "industry", "profession_name"],
                     time: "deathyear"
                   }} />
         ]
