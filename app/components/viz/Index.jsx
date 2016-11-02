@@ -1,7 +1,11 @@
 import React, {Component, PropTypes} from "react";
 
-import styles from 'css/components/viz/tooltip.css';
+import tooltipCSS from 'css/components/viz/tooltip.css';
+import vizCSS from 'css/components/viz/viz.css';
+
 import {default as axesStyle} from "css/components/viz/axes.js";
+import {default as legendStyle} from "css/components/viz/legend.js";
+import {default as shapeStyle} from "css/components/viz/shape.js";
 import {default as timelineStyle} from "css/components/viz/timeline.js";
 import {default as tooltipStyle} from "css/components/viz/tooltip.js";
 
@@ -60,11 +64,23 @@ class Viz extends Component {
       case "Treemap":
         config.sum = d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0;
         break;
+      case "Priestley":
+        if (!config.shapeConfig) config.shapeConfig = {};
+        config.shapeConfig.labelPadding = 2;
+        break;
+      default:
+        break;
     }
 
     // Draws the visualization!
     const viz = new types[type]()
       .aggs(uniques)
+      .depth(0)
+      .config(axesStyle)
+      .shapeConfig(shapeStyle)
+      .legendConfig(legendStyle)
+      .timelineConfig(timelineStyle)
+      .tooltipConfig(tooltipStyle)
       .shapeConfig({
         fill: d => {
           if (d.color) return d.color;
@@ -75,10 +91,6 @@ class Viz extends Component {
           return "#ccc";
         }
       })
-      .depth(0)
-      .config(axesStyle)
-      .timelineConfig(timelineStyle)
-      .tooltipConfig(tooltipStyle)
       .tooltipConfig({
         body: d => {
           if (!(d.name instanceof Array)) {
@@ -121,7 +133,7 @@ class Viz extends Component {
             <a href="#">Keep Exploring</a>
           </div>
         : null }
-        <svg ref="svg" style={{width: width || "100%", height: height || 500}}></svg>
+        <svg ref="svg" style={{width: width || "100%", height: height || 600}}></svg>
       </div>
     );
   }

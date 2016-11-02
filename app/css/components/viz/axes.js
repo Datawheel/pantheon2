@@ -1,6 +1,20 @@
 import { FORMATTERS } from "types";
 
 export default {
+  axisConfig: {
+    barConfig: {stroke: "#9E978D"},
+    gridConfig: {"stroke-width": 0},
+    shapeConfig: {
+      fill: "#9E978D",
+      fontColor: "#9E978D",
+      fontFamily: () => "Amiko",
+      fontSize: () => 10,
+      stroke: "#9E978D"
+    },
+    tickFormat: d => FORMATTERS.year(new Date(d).getFullYear()),
+    tickSize: 5,
+    title: false
+  },
   xConfig: {
     barConfig: {stroke: "#9E978D"},
     gridConfig: {"stroke-width": 0},
