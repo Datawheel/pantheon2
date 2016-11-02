@@ -32,7 +32,7 @@ export function fetchAllProfessions(store) {
 export function fetchPeople(store) {
   const getPeopleProm = makeProfessionRequest('get', null, null, `/profession?slug=eq.${store["id"]}&select=id`).then(function(profIdRes) {
     const profId = profIdRes.data[0].id;
-    return makeProfessionRequest('get', null, null, `/person?profession=eq.${profId}&order=langs.desc&select=birthplace{*},birthcountry{*},deathcountry{*},profession{*},profession_id:profession,*`);
+    return makeProfessionRequest('get', null, null, `/person?profession=eq.${profId}&order=langs.desc&select=birthplace{id,name,slug},birthcountry{id,continent,country_name,name},deathcountry{id,continent,country_name,name},profession{*},profession_id:profession,*`);
   })
 
   return {

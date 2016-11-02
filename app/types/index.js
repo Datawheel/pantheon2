@@ -46,6 +46,14 @@ export const COLORS_DOMAIN = {
   arts: "#D28629"
 };
 
+export const COLORS_CONTINENT = {
+  Africa: "#BB3B57",
+  Americas: "#67AF8C",
+  Asia: "#D28629",
+  Europe: "#5F0116",
+  Oceania: "#4C5ED7"
+}
+
 import {format} from "d3-format";
 import {timeFormat} from "d3-time-format";
 

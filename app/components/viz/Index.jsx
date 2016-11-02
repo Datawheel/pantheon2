@@ -13,7 +13,7 @@ const types = {LinePlot, Priestley, StackedArea, Treemap};
 import {COLORS_DOMAIN} from "types";
 
 
-const uniques = ["birthyear", "id"].reduce((obj, k) => {
+const uniques = ["birthyear", "deathyear", "id", "profession_id"].reduce((obj, k) => {
   obj[k] = a => {
     const v = Array.from(new Set(a));
     return v.length === 1 ? v[0] : v;

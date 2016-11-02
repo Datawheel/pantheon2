@@ -11,7 +11,7 @@ import RelatedProfessions from "components/profile/profession/RelatedProfessions
 import Section from "components/profile/Section";
 import { fetchProfession, fetchPeople, fetchPeopleInDomain, fetchAllProfessions } from "actions/profession";
 import Viz from "components/viz/Index";
-import { YEAR_BUCKETS } from "types";
+import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
 
 class Profession extends Component {
 
@@ -31,7 +31,7 @@ class Profession extends Component {
     const {profession, professions, people, peopleInDomain} = professionProfile;
 
     const tmapDomainData = peopleInDomain
-      .filter(p => p.birthyear !== null && p.birthcountry !== null)
+      .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
     tmapDomainData.forEach(d => {
@@ -40,18 +40,22 @@ class Profession extends Component {
     });
 
     const tmapBornData = people
-      .filter(p => p.birthyear !== null && p.birthcountry !== null)
+      .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
       .sort((a, b) => b.langs - a.langs);
 
     tmapBornData.forEach(d => {
+      d.borncountry = d.birthcountry.country_name;
+      d.borncontinent = d.birthcountry.continent;
       d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const tmapDeathData = people
-      .filter(p => p.deathyear !== null && p.deathcountry !== null)
+      .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country_name && p.deathcountry.continent)
       .sort((a, b) => b.langs - a.langs);
 
     tmapDeathData.forEach(d => {
+      d.diedcountry = d.deathcountry.country_name;
+      d.diedcontinent = d.deathcountry.continent;
       d.bucketyear = Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
@@ -103,18 +107,20 @@ class Profession extends Component {
             title={`Places of Birth for ${profession.name}`}
             key="tmap_country1"
             config={{
-              aggs: {birthcountry: arr => arr[0]},
               data: tmapBornData,
-              groupBy: [d => d.birthcountry.country_name, "name"],
+              depth: 1,
+              groupBy: ["borncontinent", "borncountry"],
+              shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               time: "birthyear"
             }} />,
           <Viz type="Treemap"
             title={`Places of Death for ${profession.name}`}
             key="tmap_country2"
             config={{
-              aggs: {deathcountry: arr => arr[0]},
               data: tmapDeathData,
-              groupBy: [d => d.deathcountry.country_name, "name"],
+              depth: 1,
+              groupBy: ["diedcontinent", "diedcountry"],
+              shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               time: "deathyear"
             }} />
         ]
@@ -127,9 +133,10 @@ class Profession extends Component {
             title="Births Over Time"
             key="stacked_country1"
             config={{
-              aggs: {birthcountry: arr => arr[0]},
               data: tmapBornData,
-              groupBy: [d => d.birthcountry.country_name, "name"],
+              depth: 1,
+              groupBy: ["borncontinent", "borncountry"],
+              shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               time: "bucketyear",
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
@@ -138,9 +145,10 @@ class Profession extends Component {
             title="Deaths Over Time"
             key="stacked_country2"
             config={{
-              aggs: {deathcountry: arr => arr[0]},
               data: tmapDeathData,
-              groupBy: [d => d.deathcountry.country_name, "name"],
+              depth: 1,
+              groupBy: ["diedcontinent", "diedcountry"],
+              shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               time: "bucketyear",
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
@@ -158,7 +166,8 @@ class Profession extends Component {
               data: priestleyData,
               depth: 1,
               end: "deathyear",
-              groupBy: [d => d.deathcountry.country_name, "name"],
+              groupBy: ["diedcontinent", "name"],
+              shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               start: "birthyear"
             }} />
         ]
