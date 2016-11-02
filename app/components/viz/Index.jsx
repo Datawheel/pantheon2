@@ -9,6 +9,8 @@ import {default as shapeStyle} from "css/components/viz/shape.js";
 import {default as timelineStyle} from "css/components/viz/timeline.js";
 import {default as tooltipStyle} from "css/components/viz/tooltip.js";
 
+import {strip} from "d3plus-text";
+
 import {LinePlot, StackedArea} from "d3plus-plot";
 import {Priestley} from "d3plus-priestley";
 import {Treemap} from "d3plus-treemap";
@@ -26,6 +28,13 @@ const uniques = ["birthyear", "deathyear", "id", "profession_id"].reduce((obj, k
 }, {});
 
 class Viz extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      layout: "none"
+    };
+  }
 
   componentDidMount() {
 
@@ -119,11 +128,17 @@ class Viz extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state) this.state.viz.render();
+    if (this.state.viz) this.state.viz.render();
+  }
+
+  handleLayout(e) {
+    const layout = e.currentTarget.dataset.value;
+    this.state.viz.stackOffset(layout);
+    this.setState({layout});
   }
 
   render() {
-    const {title} = this.props;
+    const {title, type} = this.props;
     const {height, width} = this.props.config;
     return (
       <div className="viz">
@@ -132,6 +147,13 @@ class Viz extends Component {
             <h3>{ title }</h3>
             <a href="#">Keep Exploring</a>
           </div>
+        : null }
+        { type === "StackedArea"
+          ? <div className="controls">
+              <span className="title">Y-Axis:</span>
+              <span onClick={this.handleLayout.bind(this)} data-value="none" className={`toggle ${this.state.layout === "none" ? "active" : ""}`}>Number of People</span>
+              <span onClick={this.handleLayout.bind(this)} data-value="expand" className={`toggle ${this.state.layout === "expand" ? "active" : ""}`}>Share</span>
+            </div>
         : null }
         <svg ref="svg" style={{width: width || "100%", height: height || 600}}></svg>
       </div>

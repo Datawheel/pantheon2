@@ -102,7 +102,8 @@ class Place extends Component {
                 config={{
                   attrs: professions,
                   data: tmapBornData,
-                  groupBy: ["domain", "group", "name"],
+                  depth: 1,
+                  groupBy: ["domain", "industry"],
                   time: "bucketyear",
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1
@@ -113,7 +114,8 @@ class Place extends Component {
                   config={{
                     attrs: professions,
                     data: tmapDeathData,
-                    groupBy: ["domain", "group", "name"],
+                    depth: 1,
+                    groupBy: ["domain", "industry"],
                     time: "bucketyear",
                     x: "bucketyear",
                     y: d => d.id instanceof Array ? d.id.length : 1

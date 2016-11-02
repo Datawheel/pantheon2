@@ -89,7 +89,8 @@ class Profession extends Component {
             config={{
               attrs: professions,
               data: tmapDomainData,
-              groupBy: "profession_name",
+              depth: 1,
+              groupBy: ["industry", "profession_name"],
               legend: false,
               shapeConfig: {stroke: () => "#F4F4F1", strokeWidth: (d, i) => 1},
               time: "bucketyear",
