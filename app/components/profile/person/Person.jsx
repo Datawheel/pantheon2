@@ -111,24 +111,6 @@ class Person extends Component {
                     timeline: false,
                     tooltipConfig: {
                       body: d => `<span class="center">${FORMATTERS.date(d.x)} - ${FORMATTERS.commas(d.langs || d.views)}</span>`
-                    },
-                    xConfig: {
-                      barConfig: {stroke: "#AFAAA4"},
-                      gridConfig: {"stroke-width": 0},
-                      shapeConfig: {
-                        fill: "#AFAAA4",
-                        fontColor: "#AFAAA4",
-                        fontFamily: () => "Amiko",
-                        fontSize: () => 10,
-                        stroke: "#AFAAA4"
-                      },
-                      title: false
-                    },
-                    yConfig: {
-                      barConfig: {"stroke-width": 0},
-                      labels: [],
-                      title: false,
-                      ticks: []
                     }
                   }} />
       }

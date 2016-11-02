@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from "react";
 
 import styles from 'css/components/viz/tooltip.css';
 import {default as tooltipStyle} from "css/components/viz/tooltip.js";
+import {default as axesStyle} from "css/components/viz/axes.js";
 
 import {LinePlot, StackedArea} from "d3plus-plot";
 import {Priestley} from "d3plus-priestley";
@@ -74,6 +75,7 @@ class Viz extends Component {
         }
       })
       .depth(0)
+      .config(axesStyle)
       .tooltipConfig(tooltipStyle)
       .tooltipConfig({
         body: d => {

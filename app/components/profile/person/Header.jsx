@@ -64,16 +64,13 @@ const Header = ({ pageviews, person }) => {
                  x: d => d.pageview_date,
                  xConfig: {
                    barConfig: {"stroke-width": 0},
-                   gridConfig: {"stroke-width": 0},
                    labels: sparkTicks,
                    shapeConfig: {
                      fill: "#4B4A48",
                      fontColor: "#4B4A48",
-                     fontFamily: () => "Amiko",
                      fontSize: () => 8,
                      stroke: "#4B4A48"
                    },
-                   tickFormat: d => new Date(d).getFullYear(),
                    ticks: sparkTicks,
                    tickSize: 0,
                    title: "PAGE VIEWS (PV)",
@@ -84,13 +81,7 @@ const Header = ({ pageviews, person }) => {
                      stroke: "#4B4A48"
                    }
                  },
-                 y: d => d.num_pageviews,
-                 yConfig: {
-                   barConfig: {"stroke-width": 0},
-                   labels: [],
-                   title: false,
-                   ticks: []
-                 }
+                 y: d => d.num_pageviews
                }} />
         </pre>
       </div>
