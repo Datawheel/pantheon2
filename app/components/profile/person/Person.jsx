@@ -10,6 +10,7 @@ import ProfessionRanking from "components/profile/person/ProfessionRanking";
 import YearRanking from "components/profile/person/YearRanking";
 import CountryRanking from "components/profile/person/CountryRanking";
 import Viz from "components/viz/Index";
+import NotFound from "components/NotFound";
 import { activateSearch } from "actions/users";
 import { fetchPerson, fetchProfessionRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
 import styles from 'css/components/profile/person';
@@ -37,6 +38,9 @@ class Person extends Component {
   ]
 
   render() {
+    if(this.props.personProfile.person.id === undefined) {
+      return <NotFound />;
+    }
     const {personProfile, activateSearch} = this.props;
     const profession = personProfile.person.profession;
     const birthcountry = personProfile.person.birthcountry;

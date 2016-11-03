@@ -32,6 +32,9 @@ import Api from 'components/data/Api';
 import Permissions from 'components/data/Permissions';
 import Faq from 'components/data/Faq';
 
+// custom 404 page
+import NotFound from 'components/NotFound';
+
 /*
  * @param {Redux Store}
  * We require store as an argument here because we wish to get
@@ -70,6 +73,10 @@ export default (store) => {
       const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}${randId}` : `${reqestedUrl}/${randId}`;
       replaceState({id:randId}, nextUrl)
     }
+    else {
+      // make sure it's legal
+      return NotFound;
+    }
   }
 
 
@@ -106,6 +113,8 @@ export default (store) => {
         <Route path="permissions" component={Permissions} />
         <Route path="faq" component={Faq} />
       </Route>
+
+      <Route path="*" component={NotFound} status={404} />
 
     </Route>
   );

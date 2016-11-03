@@ -11,6 +11,7 @@ import Professions from "components/profile/place/Professions";
 import ProfessionTrends from "components/profile/place/ProfessionTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
+import NotFound from "components/NotFound";
 import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchPeopleBornHereAlive } from "actions/place";
 import { fetchAllProfessions } from "actions/profession";
 import { YEAR_BUCKETS } from "types";
@@ -34,6 +35,9 @@ class Place extends Component {
   ]
 
   render() {
+    if(this.props.placeProfile.place.id === undefined) {
+      return <NotFound />;
+    }
     const {placeProfile, professionProfile} = this.props;
     const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, peopleBornHereAlive} = placeProfile;
     const {professions} = professionProfile;

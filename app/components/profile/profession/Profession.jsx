@@ -9,6 +9,7 @@ import People from "components/profile/profession/People";
 import Places from "components/profile/profession/Places";
 import RelatedProfessions from "components/profile/profession/RelatedProfessions";
 import Section from "components/profile/Section";
+import NotFound from "components/NotFound";
 import { fetchProfession, fetchPeople, fetchPeopleInDomain, fetchAllProfessions } from "actions/profession";
 import Viz from "components/viz/Index";
 import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
@@ -27,6 +28,9 @@ class Profession extends Component {
   ]
 
   render() {
+    if(this.props.professionProfile.profession.id === undefined) {
+      return <NotFound />;
+    }
     const {professionProfile} = this.props;
     const {profession, professions, people, peopleInDomain} = professionProfile;
 
