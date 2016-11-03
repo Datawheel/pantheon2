@@ -2,8 +2,11 @@
 import psycopg2, csv, sys, urllib2, unicodedata
 from db_connection import conn, cursor
 
-country_lookup = {"afago":"ao","afbdi":"bi","afben":"bj","afbfa":"bf","afbwa":"bw","afcaf":"cf","afciv":"ci","afcmr":"cm","afcod":"cd","afcog":"cg","afcom":"km","afcpv":"cv","afdji":"dj","afdza":"dz","afegy":"eg","aferi":"er","afesh":"eh","afeth":"et","afgab":"ga","afgha":"gh","afgin":"gn","afgmb":"gm","afgnb":"gw","afgnq":"gq","afken":"ke","aflbr":"lr","aflby":"ly","aflso":"ls","afmar":"ma","afmdg":"mg","afmli":"ml","afmoz":"mz","afmrt":"mr","afmus":"mu","afmwi":"mw","afmyt":"yt","afnam":"na","afner":"ne","afnga":"ng","afreu":"re","afrwa":"rw","afsdn":"sd","afsen":"sn","afshn":"sh","afsle":"sl","afsom":"so","afssd":"ss","afstp":"st","afswz":"sz","afsyc":"sc","aftcd":"td","aftgo":"tg","aftun":"tn","aftza":"tz","afuga":"ug","afzaf":"za","afzmb":"zm","afzwe":"zw","anata":"aq","anatf":"tf","anbvt":"bv","anhmd":"hm","ansgs":"gs","asafg":"af","asare":"ae","asarm":"am","asaze":"az","asbgd":"bd","asbhr":"bh","asbrn":"bn","asbtn":"bt","ascck":"cc","aschn":"cn","ascxr":"cx","ascyp":"cy","asgeo":"ge","ashkg":"hk","asidn":"id","asind":"in","asiot":"io","asirn":"ir","asirq":"iq","asisr":"il","asjor":"jo","asjpn":"jp","askaz":"kz","askgz":"kg","askhm":"kh","askor":"kr","askwt":"kw","aslao":"la","aslbn":"lb","aslka":"lk","asmac":"mo","asmdv":"mv","asmmr":"mm","asmng":"mn","asmys":"my","asnpl":"np","asomn":"om","aspak":"pk","asphl":"ph","asprk":"kp","aspse":"ps","asqat":"qa","assau":"sa","assgp":"sg","assyr":"sy","astha":"th","astjk":"tj","astkm":"tm","astls":"tl","astur":"tr","astwn":"tw","asuzb":"uz","asvnm":"vn","asyem":"ye","asymd":"yd","eualb":"al","euand":"ad","euaut":"at","eubel":"be","eubgr":"bg","eubih":"ba","eublr":"by","euche":"ch","eucze":"cz","eudeu":"de","eudnk":"dk","euesp":"es","euest":"ee","eufin":"fi","eufra":"fr","eufro":"fo","eugbr":"gb","eugib":"gi","eugrc":"gr","euhrv":"hr","euhun":"hu","euimn":"im","euirl":"ie","euisl":"is","euita":"it","euksv":"kv","eulie":"li","eultu":"lt","eulux":"lu","eulva":"lv","eumco":"mc","eumda":"md","eumkd":"mk","eumlt":"mt","eumne":"me","eunld":"nl","eunor":"no","eupol":"pl","euprt":"pt","eurou":"ro","eurus":"ru","eusjm":"sj","eusmr":"sm","eusrb":"rs","eusvk":"sk","eusvn":"si","euswe":"se","euukr":"ua","euvat":"va","naabw":"aw","naaia":"ai","naant":"an","naatg":"ag","nabes":"bq","nabhs":"bs","nablm":"bl","nablz":"bz","nabmu":"bm","nabrb":"bb","nacan":"ca","nacri":"cr","nacub":"cu","nacuw":"cw","nacym":"ky","nadma":"dm","nadom":"do","nagrd":"gd","nagrl":"gl","nagtm":"gt","nahnd":"hn","nahti":"ht","najam":"jm","nakna":"kn","nalca":"lc","namaf":"mf","namex":"mx","namsr":"ms","namtq":"mq","nanic":"ni","napan":"pa","napri":"pr","naslv":"sv","naspm":"pm","natca":"tc","natto":"tt","naumi":"um","nausa":"us","navct":"vc","navgb":"vg","navir":"vi","ocasm":"as","ocaus":"au","occok":"ck","ocfji":"fj","ocfsm":"fm","ocglp":"gp","ocgum":"gu","ockir":"ki","ocmhl":"mh","ocmnp":"mp","ocncl":"nc","ocnfk":"nf","ocniu":"nu","ocnru":"nr","ocnzl":"nz","ocpcn":"pn","ocplw":"pw","ocpng":"pg","ocpyf":"pf","ocslb":"sb","octkl":"tk","octon":"to","octuv":"tv","ocvut":"vu","ocwlf":"wf","ocwsm":"ws","saarg":"ar","sabol":"bo","sabra":"br","sachl":"cl","sacol":"co","saecu":"ec","saflk":"fk","saguf":"gf","saguy":"gy","saper":"pe","sapry":"py","sasur":"sr","saury":"uy","saven":"ve","xxwld":"1w"};
+country_lookup = {"xxata":"aq","nacuw":"cw","nablm":"bl","euggy":"gg","ockir":"ki","afssd":"ss","eujey":"je","afago":"ao","afbdi":"bi","afben":"bj","afbfa":"bf","afbwa":"bw","afcaf":"cf","afciv":"ci","afcmr":"cm","afcod":"cd","afcog":"cg","afcom":"km","afcpv":"cv","afdji":"dj","afdza":"dz","afegy":"eg","aferi":"er","afesh":"eh","afeth":"et","afgab":"ga","afgha":"gh","afgin":"gn","afgmb":"gm","afgnb":"gw","afgnq":"gq","afken":"ke","aflbr":"lr","aflby":"ly","aflso":"ls","afmar":"ma","afmdg":"mg","afmli":"ml","afmoz":"mz","afmrt":"mr","afmus":"mu","afmwi":"mw","afmyt":"yt","afnam":"na","afner":"ne","afnga":"ng","afreu":"re","afrwa":"rw","afsdn":"sd","afsen":"sn","afshn":"sh","afsle":"sl","afsom":"so","afssd":"ss","afstp":"st","afswz":"sz","afsyc":"sc","aftcd":"td","aftgo":"tg","aftun":"tn","aftza":"tz","afuga":"ug","afzaf":"za","afzmb":"zm","afzwe":"zw","anata":"aq","anatf":"tf","anbvt":"bv","anhmd":"hm","ansgs":"gs","asafg":"af","asare":"ae","asarm":"am","asaze":"az","asbgd":"bd","asbhr":"bh","asbrn":"bn","asbtn":"bt","ascck":"cc","aschn":"cn","ascxr":"cx","ascyp":"cy","asgeo":"ge","ashkg":"hk","asidn":"id","asind":"in","asiot":"io","asirn":"ir","asirq":"iq","asisr":"il","asjor":"jo","asjpn":"jp","askaz":"kz","askgz":"kg","askhm":"kh","askor":"kr","askwt":"kw","aslao":"la","aslbn":"lb","aslka":"lk","asmac":"mo","asmdv":"mv","asmmr":"mm","asmng":"mn","asmys":"my","asnpl":"np","asomn":"om","aspak":"pk","asphl":"ph","asprk":"kp","aspse":"ps","asqat":"qa","assau":"sa","assgp":"sg","assyr":"sy","astha":"th","astjk":"tj","astkm":"tm","astls":"tl","astur":"tr","astwn":"tw","asuzb":"uz","asvnm":"vn","asyem":"ye","asymd":"yd","eualb":"al","euand":"ad","euaut":"at","eubel":"be","eubgr":"bg","eubih":"ba","eublr":"by","euche":"ch","eucze":"cz","eudeu":"de","eudnk":"dk","euesp":"es","euest":"ee","eufin":"fi","eufra":"fr","eufro":"fo","eugbr":"gb","eugib":"gi","eugrc":"gr","euhrv":"hr","euhun":"hu","euimn":"im","euirl":"ie","euisl":"is","euita":"it","euksv":"kv","eulie":"li","eultu":"lt","eulux":"lu","eulva":"lv","eumco":"mc","eumda":"md","eumkd":"mk","eumlt":"mt","eumne":"me","eunld":"nl","eunor":"no","eupol":"pl","euprt":"pt","eurou":"ro","eurus":"ru","eusjm":"sj","eusmr":"sm","eusrb":"rs","eusvk":"sk","eusvn":"si","euswe":"se","euukr":"ua","euvat":"va","naabw":"aw","naaia":"ai","naant":"an","naatg":"ag","nabes":"bq","nabhs":"bs","nablm":"bl","nablz":"bz","nabmu":"bm","nabrb":"bb","nacan":"ca","nacri":"cr","nacub":"cu","nacuw":"cw","nacym":"ky","nadma":"dm","nadom":"do","nagrd":"gd","nagrl":"gl","nagtm":"gt","nahnd":"hn","nahti":"ht","najam":"jm","nakna":"kn","nalca":"lc","namaf":"mf","namex":"mx","namsr":"ms","namtq":"mq","nanic":"ni","napan":"pa","napri":"pr","naslv":"sv","naspm":"pm","natca":"tc","natto":"tt","naumi":"um","nausa":"us","navct":"vc","navgb":"vg","navir":"vi","ocasm":"as","ocaus":"au","occok":"ck","ocfji":"fj","ocfsm":"fm","ocglp":"gp","ocgum":"gu","ockir":"ki","ocmhl":"mh","ocmnp":"mp","ocncl":"nc","ocnfk":"nf","ocniu":"nu","ocnru":"nr","ocnzl":"nz","ocpcn":"pn","ocplw":"pw","ocpng":"pg","ocpyf":"pf","ocslb":"sb","octkl":"tk","octon":"to","octuv":"tv","ocvut":"vu","ocwlf":"wf","ocwsm":"ws","saarg":"ar","sabol":"bo","sabra":"br","sachl":"cl","sacol":"co","saecu":"ec","saflk":"fk","saguf":"gf","saguy":"gy","saper":"pe","sapry":"py","sasur":"sr","saury":"uy","saven":"ve","xxwld":"1w"};
 country_lookup = {v:k[2:] for k, v in country_lookup.items()}
+
+def slugify(s):
+    return s.lower().replace("&", "and").replace(" ", "_")
 
 def strip_accents(s):
     xtra_chars = {u",":"", u"ł":u'l', u"Ł":"L", u'ı':u'i', u'‘':u"", u'ø':u'o', u"Ø":"O", u"'":"", u"’":"", u"œ":"oe", u"ß":"ss", u"đ":"d", u"ð":"d", u"Ð":"D", u"æ":"ae", u"ṭ":"t", u"Ṭ":"T", u"Ħ":"H", u"ħ":"h"}
@@ -23,7 +26,7 @@ if not place_lookup:
         creader = csv.reader(cfile, delimiter='\t', quotechar='"')
         creader.next()
         for row in creader:
-            [geonameid, city_name, lat, lon, pop, ccode, cname] = row
+            [geonameid, city_name, lat, lon, pop, ccode, cname, region, continent, least_developed] = row
             geonameid = int(geonameid)
             ccode = ccode.lower()
 
@@ -34,8 +37,8 @@ if not place_lookup:
                 cslug = cname.replace(" ", "_")
                 cslug = strip_accents(cslug.decode('utf8'))
                 # cslug = urllib2.quote(cslug.encode('utf8'))
-                query = 'INSERT INTO place (slug, name, country_name, country_code) VALUES (%s, %s, %s, %s) RETURNING id;'
-                data = (cslug, cname, cname, ccode)
+                query = 'INSERT INTO place (slug, name, country_name, country_code, region, continent, is_country) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id;'
+                data = (cslug, cname, cname, ccode, region, continent, True)
 
                 cursor.execute(query, data)
                 res = cursor.fetchone()
@@ -43,13 +46,14 @@ if not place_lookup:
 
                 place_lookup[ccode] = last_inserted_id
 
-            lat, lon, pop = int(float(lat)), int(float(lon)), int(float(pop))
+            lat, lon, pop = float(lat), float(lon), int(float(pop))
+            lat_lon = "({},{})".format(lat, lon)
 
             city_slug = city_name.replace(" ", "_")
             city_slug = strip_accents(city_slug.decode('utf8'))
             # city_slug = urllib2.quote(city_slug.encode('utf8'))
-            query = 'INSERT INTO place (wiki_id, name, slug, country_name, country_code, lat, lon, pop) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;'
-            data = (geonameid, city_name, city_slug, cname, ccode, lat, lon, pop)
+            query = 'INSERT INTO place (wiki_id, name, slug, country_name, country_code, region, continent, lat_lon, pop) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;'
+            data = (geonameid, city_name, city_slug, cname, ccode, region, continent, lat_lon, pop)
 
             cursor.execute(query, data)
             res = cursor.fetchone()
@@ -61,9 +65,6 @@ print place_lookup.items()[:5]
 
 cursor.execute("SELECT name, id from profession")
 prof_lookup = {r[0].upper():r[1] for r in cursor.fetchall()}
-
-def slugify(s):
-    return s.lower().replace("&", "and").replace(" ", "_")
 
 if not prof_lookup:
     with open('data/classification.csv', 'rb') as cfile:
@@ -85,6 +86,8 @@ if not prof_lookup:
 print "First 5 occupations in DB:"
 print prof_lookup.items()[:5]
 
+missing_countries = []
+missing_places = []
 with open('data/Pantheon2.0_Oct25_2.csv', 'rb') as pfile:
     preader = csv.DictReader(pfile, delimiter=',', quotechar='"')
     print "Inserting people to DB..."
@@ -118,6 +121,16 @@ with open('data/Pantheon2.0_Oct25_2.csv', 'rb') as pfile:
 
         birthcountry_id, deathcountry_id = countries
 
+        if row["ccode"] != "NA" and not birthcountry_id and row["ccode"].lower() in country_lookup.keys():
+            missing_countries.append(row["ccode"])
+
+        # if row["ccode"] != "NA" and not birthcountry_id:
+        #     missing_countries.append(row["ccode"])
+        # if row["dccode"] != "NA" and not deathcountry_id:
+        #     missing_countries.append(row["dccode"])
+
+        # if row["geonameid"] != "NA" and not birthplace_id:
+        #     missing_places.append(row["geonameid"])
         # print birthplace_id, deathplace_id, birthcountry_id, deathcountry_id
 
         '''
@@ -209,3 +222,7 @@ with open('data/Pantheon2.0_Oct25_2.csv', 'rb') as pfile:
         cursor.execute(query, data)
         conn.commit()
         # raw_input('')
+
+print set(missing_countries)
+print "missing_places"
+print set(missing_places)

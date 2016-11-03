@@ -15,20 +15,22 @@ CREATE TABLE place
   wiki_id integer,
   name text NOT NULL,
   slug CHARACTER VARYING(255),
+  region CHARACTER VARYING(100),
   country_name CHARACTER VARYING(255),
   country_code CHARACTER VARYING(3),
-  lat real,
-  lon real,
+  continent CHARACTER VARYING(100),
+  is_country BOOLEAN NOT NULL DEFAULT FALSE,
+  lat_lon point,
   pop real,
+  soverign_date integer,
+  soverign_date_latest integer,
   num_born integer,
   num_died integer,
   img_link CHARACTER VARYING(255),
   img_author CHARACTER VARYING(255),
   img_meta CHARACTER VARYING(255),
   born_rank integer,
-  born_rank_unique integer,
-  soverign_date integer,
-  soverign_date_latest integer
+  born_rank_unique integer
 );
 
 CREATE TABLE year
@@ -120,7 +122,7 @@ CREATE TABLE pageview
   num_pageviews integer
 );
 
-CREATE EXTENSION unaccent;
+CREATE EXTENSION IF NOT EXISTS unaccent;
 CREATE TABLE search (
     id integer,
     name character varying(255),
