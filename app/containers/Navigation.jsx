@@ -36,9 +36,9 @@ const Navigation = ({ user, logOut, activateSearch }) => {
             </ul>
           </li>
           <li className='item home'>
-            <Link to="/" className='home' activeClassName='active'>
+            <a href="/" className='home'>
               <img className='logo' src={pantheonLogoSvg} alt={`Pantheon`} />
-            </Link>
+            </a>
           </li>
           <li className='item'>
             <Link to="/about/vision" className='item-link about' activeClassName='active'>About</Link>
