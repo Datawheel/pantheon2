@@ -1,4 +1,5 @@
 @import '../../../../node_modules/react-table/react-table.css';
+@import '../../../../node_modules/react-input-range/dist/react-input-range.css';
 
 .rankings {
   background: lightgray;

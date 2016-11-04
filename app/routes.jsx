@@ -23,7 +23,7 @@ import Contact from 'components/about/Contact';
 
 // explore componenets
 import Explore from 'components/explore/Explore';
-import Rankings from 'components/explore/Rankings';
+import Rankings from 'components/explore/rankings/Rankings';
 
 // data section components
 import Data from 'components/data/Data';

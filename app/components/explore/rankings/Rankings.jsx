@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react";
+import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import ReactTable from "react-table";
@@ -6,6 +7,7 @@ import styles from "css/components/explore/rankings";
 import { polyfill } from "es6-promise";
 import axios from "axios";
 import { FORMATTERS } from "types";
+import RankingControls from "components/explore/rankings/RankingControls";
 
 polyfill();
 
@@ -71,6 +73,7 @@ class Rankings extends Component {
           link={config.link}
         />
         <h1 className='header'>Rankings</h1>
+        <RankingControls />
         <ReactTable
           columns={columns}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
@@ -120,4 +123,10 @@ class Rankings extends Component {
   }
 };
 
-export default Rankings;
+function mapStateToProps(state) {
+  return {
+    rankingControls: state.rankingControls
+  };
+}
+
+export default connect(mapStateToProps)(Rankings);
