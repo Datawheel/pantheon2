@@ -23,6 +23,7 @@ class Rankings extends Component {
   }
 
   render() {
+    const {data} = this.props.rankings;
     const resultsPerPage = 20;
     const columns = [
     {
@@ -78,9 +79,9 @@ class Rankings extends Component {
           columns={columns}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pageSize={resultsPerPage}
-          data={this.state.data} // Set the rows to be displayed
+          data={data} // Set the rows to be displayed
           pages={this.state.pages} // Display the total number of pages
-          loading={this.state.loading} // Display the loading overlay when we need it
+          // loading={this.state.loading} // Display the loading overlay when we need it
           onChange={(instance) => {
             const offset = instance.page * resultsPerPage;
             console.log(instance.sorting)
@@ -100,22 +101,22 @@ class Rankings extends Component {
             }
 
             // axios.get('http://localhost:3100/person?limit=20&select=langs,name,birthplace{*},profession{*},gender,birthyear,deathyear&offset=0&birthplace.order=slug.asc&order=birthyear.desc.nullslast')
-            axios.get(`http://localhost:3100/person?limit=${resultsPerPage}&select=langs,name,slug,birthplace{*},profession{*},gender,birthyear,deathyear&offset=${offset}&${sort}`)
-              .then((res) => {
-                const contentRange = res.headers["content-range"];
-                const totalResults = parseInt(contentRange.split("/")[1]);
-                const totalPages = Math.ceil(totalResults / resultsPerPage);
-                const rows = res.data.map((d, i) => {
-                  d.rank = (i + 1) + offset;
-                  return d;
-                })
-                // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
-                this.setState({
-                  data: rows,
-                  pages: totalPages,
-                  loading: false
-                })
-              })
+            // axios.get(`http://localhost:3100/person?limit=${resultsPerPage}&select=langs,name,slug,birthplace{*},profession{*},gender,birthyear,deathyear&offset=${offset}&${sort}`)
+            //   .then((res) => {
+            //     const contentRange = res.headers["content-range"];
+            //     const totalResults = parseInt(contentRange.split("/")[1]);
+            //     const totalPages = Math.ceil(totalResults / resultsPerPage);
+            //     const rows = res.data.map((d, i) => {
+            //       d.rank = (i + 1) + offset;
+            //       return d;
+            //     })
+            //     // Now just get the rows of data to your React Table (and update anything else like total pages or loading)
+            //     this.setState({
+            //       data: rows,
+            //       pages: totalPages,
+            //       loading: false
+            //     })
+            //   })
           }}
         />
       </div>
@@ -125,7 +126,7 @@ class Rankings extends Component {
 
 function mapStateToProps(state) {
   return {
-    rankingControls: state.rankingControls
+    rankings: state.rankings
   };
 }
 

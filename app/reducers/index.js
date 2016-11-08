@@ -4,7 +4,7 @@ import personProfile from 'reducers/personProfile';
 import placeProfile from 'reducers/placeProfile';
 import professionProfile from 'reducers/professionProfile';
 import rank from 'reducers/rank';
-import rankingControls from 'reducers/rankingControls';
+import rankings from 'reducers/rankings';
 import { routerReducer as routing } from 'react-router-redux';
 
 const searchActive = (
@@ -32,7 +32,7 @@ const rootReducer = combineReducers({
   personProfile,
   placeProfile,
   professionProfile,
-  rankingControls,
+  rankings,
   routing
 });
 
