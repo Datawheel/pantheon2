@@ -136,18 +136,12 @@ class RankingControls extends Component {
   }
 
   render() {
-    const {type, years, country, place, domain, profession, data} = this.props.rankings;
+    const {type, years, country, place, domain, profession} = this.props.rankings;
     const {countries, places, domains, professions, tempSliderYears, tempInputYears} = this.state;
     const changeYearsRange = this.changeYearsRange.bind(this);
     const minYearKeyDown = this.minYearKeyDown.bind(this);
     const maxYearKeyDown = this.maxYearKeyDown.bind(this);
-    // const tempStartYear = this.state.tempStartYear;
     const tempEndYear = this.state.tempEndYear || years.max;
-    // const changeCountry = this.changeCountry.bind(this);
-    // const changePlace = this.changePlace.bind(this);
-    // const changeDomain = this.changeDomain.bind(this);
-    // const changeProfession = this.changeProfession.bind(this);
-    // FORMATTERS.year(
 
     return (
       <div className='ranking-controls'>

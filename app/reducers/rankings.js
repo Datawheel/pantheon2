@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { RANKINGS_RESULTS_PER_PAGE } from 'types';
 
 const type = (
   state = "person",
@@ -78,16 +79,25 @@ const profession = (
   }
 };
 
-const data = (
-  state = [],
+const results = (
+  state = {data:[], pages:0, page:0},
   action
 ) => {
-  console.log("action.type:", action.type)
   switch (action.type) {
     case "FETCH_RANKINGS_SUCCESS":
-      console.log("action--- ", action)
-      if (action.res) return action.res.data;
+      if (action.res) {
+        const contentRange = action.res.headers["content-range"];
+        const totalResults = parseInt(contentRange.split("/")[1]);
+        const totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
+        return {
+          data: action.res.data,
+          pages: totalPages,
+          page: state.page
+        }
+      }
       return state;
+    case "CHANGE_RANKING_PAGE":
+      return Object.assign({}, state, {page: action.data});
     // case types.CREATE_TOPIC_REQUEST:
     //   return [...state, topic(undefined, action)];
     // case types.CREATE_TOPIC_FAILURE:
@@ -109,7 +119,7 @@ const rankingsReducer = combineReducers({
   place,
   domain,
   profession,
-  data
+  results
 });
 
 export default rankingsReducer;

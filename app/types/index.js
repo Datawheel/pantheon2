@@ -35,6 +35,9 @@ export const LOGOUT_USER = 'LOGOUT_USER';
 export const LOGOUT_SUCCESS_USER = 'LOGOUT_SUCCESS_USER';
 export const LOGOUT_ERROR_USER = 'LOGOUT_ERROR_USER';
 
+// for rankings pages
+export const RANKINGS_RESULTS_PER_PAGE = 20;
+
 export const COLORS_DOMAIN = {
   sports: "#BB3B57",
   science_and_technology: "#0E5E5B",

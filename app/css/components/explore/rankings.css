@@ -5,6 +5,17 @@
   background: lightgray;
   padding: 60px 0 0 0;
 
-  & table {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  max-width: 1200px;
+
+  & .ranking-controls {
+    border: solid 1px black;
+    idth: 330px;
+    flex: 0 0 330px;
+  }
+
+  & .ranking-table {
   }
 }
