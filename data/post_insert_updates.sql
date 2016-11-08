@@ -33,6 +33,14 @@ UPDATE profession
 SET num_born=subq.num_born
 FROM (SELECT profession, count(*) AS num_born FROM person GROUP BY profession) AS subq
 WHERE profession.id=subq.profession;
+UPDATE profession
+SET num_born_women=subq.num_born_women
+FROM (SELECT profession, count(*) AS num_born_women FROM person WHERE gender IS TRUE GROUP BY profession) AS subq
+WHERE profession.id=subq.profession;
+UPDATE profession
+SET num_born_men=subq.num_born_men
+FROM (SELECT profession, count(*) AS num_born_men FROM person WHERE gender IS FALSE GROUP BY profession) AS subq
+WHERE profession.id=subq.profession;
 
 UPDATE place
 SET num_born=subq.num_born

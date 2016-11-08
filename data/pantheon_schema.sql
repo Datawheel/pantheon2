@@ -53,7 +53,9 @@ CREATE TABLE profession
   domain_slug CHARACTER VARYING(255),
   "group" CHARACTER VARYING(255),
   group_slug CHARACTER VARYING(255),
-  num_born integer
+  num_born integer,
+  num_born_men integer,
+  num_born_women integer
 );
 
 CREATE TABLE person

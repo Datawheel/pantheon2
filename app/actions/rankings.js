@@ -2,17 +2,82 @@
 import { polyfill } from 'es6-promise';
 import axios from 'axios';
 import { RANKINGS_RESULTS_PER_PAGE } from 'types';
+import {nest} from 'd3-collection';
 
 polyfill();
 
 function getNewData(dispatch, getState){
+  dispatch({ type: "FETCH_RANKINGS" });
   const { rankings } = getState();
-  const { years, country, place, domain, profession, results } = rankings;
+  const { type, years, country, place, domain, profession, results } = rankings;
+  // console.log("type--", type, type == "person")
   const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
   const countryFilter = country.id !== "all" ? `&birthcountry=eq.${country.id}` : '';
   const placeFilter = place !== "all" ? `&birthplace=eq.${place}` : '';
   const professionFilter = profession !== "all" ? `&profession=eq.${profession}` : domain.professions.length ? `&profession=in.${domain.professions.reduce((a, b)=> a.concat(b.id), [])}` : '';
-  return axios.get(`http://localhost:3100/person?select=*,birthplace{*},profession{*}&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}&birthyear=gte.${years.min}&birthyear=lte.${years.max}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`)
+
+  let rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}&birthyear=gte.${years.min}&birthyear=lte.${years.max}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`;
+  if (type == "profession") {
+    if(countryFilter) {
+      return axios.get(rankingUrl)
+        .then(res => {
+
+          const professions = nest()
+            .key(p => p.profession.slug)
+            .rollup(leaves => {
+              return {num_born: leaves.length,
+                name: leaves[0].profession.name,
+                industry: leaves[0].profession.industry,
+                domain: leaves[0].profession.domain,
+                num_born_men: leaves.filter(p => !p.gender).length,
+                num_born_women: leaves.filter(p => p.gender).length}
+            })
+            .entries(res.data.filter(p => p.profession))
+            .reduce((a, b) => a.concat([b.value]), [])
+            .sort((a, b) => b.num_born - a.num_born );
+          res.data = professions;
+
+          return dispatch({
+            res: res,
+            type: "FETCH_RANKINGS_SUCCESS"
+          });
+        })
+    }
+    rankingUrl = `http://localhost:3100/profession?order=num_born.desc`;
+  }
+  else if (type == "birthcountry") {
+    if(professionFilter) {
+      rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&birthyear=gte.${years.min}&birthyear=lte.${years.max}&order=langs.desc.nullslast${professionFilter}`;
+      return axios.get(rankingUrl)
+        .then(res => {
+
+          const places = nest()
+            .key(p => p.birthcountry.slug)
+            .rollup(leaves => {
+              return {num_born: leaves.length,
+                name: leaves[0].birthcountry.name,
+                slug: leaves[0].birthcountry.slug,
+                continent: leaves[0].birthcountry.continent}
+            })
+            .entries(res.data.filter(p => p.birthcountry))
+            .reduce((a, b) => a.concat([b.value]), [])
+            .sort((a, b) => b.num_born - a.num_born );
+          console.log(places)
+          res.data = places;
+
+          return dispatch({
+            res: res,
+            type: "FETCH_RANKINGS_SUCCESS"
+          });
+        })
+    }
+
+    rankingUrl = `http://localhost:3100/place?is_country=is.true&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+  }
+  else if (type == "birthplace") {
+    rankingUrl = `http://localhost:3100/place?is_country=is.false&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+  }
+  return axios.get(rankingUrl)
     .then(res => {
       return dispatch({
         res: res,
@@ -34,12 +99,10 @@ export function fetchRankingsFailure(data) {
 
 export function changeType(e) {
   const newType = e.target.value;
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    return dispatch({
-      type: "CHANGE_RANKING_TYPE",
-      data: newType
-    })
+    dispatch({ type: "CHANGE_RANKING_TYPE", data: newType });
+    return getNewData(dispatch, getState);
   }
 }
 
@@ -112,21 +175,3 @@ export function updateRankingsTable(instance) {
     return getNewData(dispatch, getState);
   }
 }
-
-// export function fetchRankings(text) {
-//   return (dispatch, getState) => {
-//     // console.log(text, dispatch)
-//     const { rankings } = getState();
-//     console.log('rankings', rankings)
-//     return axios.get(`http://localhost:3100/person?limit=10`)
-//       .then(res => {
-//         return dispatch({
-//           res: res,
-//           type: "FETCH_RANKINGS_SUCCESS"
-//         });
-//       })
-//       .catch(() => {
-//         return dispatch(fetchRankingsFailure({ id:999, error: 'Oops! Something went wrong and we couldn\'t fetch rankings'}));
-//       });
-//   }
-// }

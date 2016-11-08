@@ -15,9 +15,9 @@ class RankingControls extends Component {
     super(props);
     this.rankingType = [
       {id:"person", name:"Person"},
-      {id:"birthplace", name:"Birth Place"},
-      {id:"deathplace", name:"Death Place"},
       {id:"profession", name:"Profession"},
+      {id:"birthcountry", name:"Birth Country"},
+      {id:"birthplace", name:"Birth City"}
     ];
     this.state = {
       countries: [],
@@ -25,12 +25,12 @@ class RankingControls extends Component {
       domains: [],
       professions: [],
       tempSliderYears: {
-        min: -2000,
-        max: 1200
+        min: -4000,
+        max: 2000
       },
       tempInputYears: {
-        min: "2000 BC",
-        max: "1200"
+        min: "4000 BC",
+        max: "2000"
       },
     }
     this.changeType = this.props.changeType.bind(this);
@@ -168,15 +168,19 @@ class RankingControls extends Component {
           onChange={changeYearsRange}
         />
 
-        <h2>Locations:</h2>
-        <select value={country.id} onChange={this.changeCountry}>
-          <option value="all">All</option>
-          {countries.map(c =>
-            <option key={c.id} value={c.id} data-countrycode={c.country_code}>
-              {c.name}
-            </option>
-          )}
-        </select>
+        { !["birthcountry", "birthplace"].includes(type) ?
+          <div className="filter">
+            <h2>Locations:</h2>
+            <select value={country.id} onChange={this.changeCountry}>
+              <option value="all">All</option>
+              {countries.map(c =>
+                <option key={c.id} value={c.id} data-countrycode={c.country_code}>
+                  {c.name}
+                </option>
+              )}
+            </select>
+          </div>
+        : null }
 
         { country.places.length ?
         <select value={place} onChange={this.changePlace}>
@@ -189,15 +193,19 @@ class RankingControls extends Component {
         </select>
         : null }
 
-        <h2>Profession:</h2>
-        <select value={domain.id} onChange={this.changeDomain}>
-          <option value="all">All</option>
-          {domains.map(d =>
-            <option key={d.domain_slug} value={d.domain_slug} data-domainslug={d.domain_slug}>
-              {d.domain}
-            </option>
-          )}
-        </select>
+        { type !== "profession" ?
+          <div className="filter">
+            <h2>Profession:</h2>
+            <select value={domain.id} onChange={this.changeDomain}>
+              <option value="all">All</option>
+              {domains.map(d =>
+                <option key={d.domain_slug} value={d.domain_slug} data-domainslug={d.domain_slug}>
+                  {d.domain}
+                </option>
+              )}
+            </select>
+          </div>
+        : null }
 
         { domain.professions.length ?
         <select value={profession} onChange={this.changeProfession}>

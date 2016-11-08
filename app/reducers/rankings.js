@@ -14,7 +14,7 @@ const type = (
 };
 
 const years = (
-  state = {min: -2000, max:1200},
+  state = {min: -4000, max:2000},
   action
 ) => {
   switch (action.type) {
@@ -80,19 +80,23 @@ const profession = (
 };
 
 const results = (
-  state = {data:[], pages:0, page:0},
+  state = {data:[], pages:0, page:0, loading:false},
   action
 ) => {
   switch (action.type) {
+    case "FETCH_RANKINGS":
+      return Object.assign({}, state, {loading: true});
     case "FETCH_RANKINGS_SUCCESS":
       if (action.res) {
+        console.log('action.res.headers["content-range"]', action.res.headers["content-range"])
         const contentRange = action.res.headers["content-range"];
         const totalResults = parseInt(contentRange.split("/")[1]);
-        const totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
+        const totalPages = Math.ceil(totalResults / action.res.data.length);
         return {
           data: action.res.data,
           pages: totalPages,
-          page: state.page
+          page: state.page,
+          loading: false
         }
       }
       return state;

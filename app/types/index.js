@@ -63,6 +63,7 @@ import {timeFormat} from "d3-time-format";
 export const FORMATTERS = {
   commas: format(","),
   share: format(".2%"),
+  shareWhole: format(".0%"),
   date: timeFormat("%B %d, %Y"),
   year: (y) => y < 0 ? `${Math.abs(y)} BC` : y,
   ordinal: (n) => {
