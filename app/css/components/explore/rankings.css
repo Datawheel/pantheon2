@@ -1,5 +1,4 @@
 @import '../../../../node_modules/react-table/react-table.css';
-@import '../../../../node_modules/react-input-range/dist/react-input-range.css';
 @import '../../../../node_modules/rc-slider/assets/index.css';
 
 .rankings {
@@ -96,6 +95,10 @@
     & .rc-slider-dot-active {
       background-color: #36687F;
       border-color: #36687F;
+    }
+    & .rc-slider-mark-text {
+      color: #9E978D;
+      font-size: 10px;
     }
   }
 

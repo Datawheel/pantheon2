@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from "react";
 import {connect} from "react-redux";
-import InputRange from "react-input-range";
 import { FORMATTERS } from "types";
 import { polyfill } from "es6-promise";
 import axios from "axios";
@@ -64,72 +63,24 @@ class RankingControls extends Component {
     // let tempInputYears = this.state.tempInputYears;
     const tempYearStart = e.target.value;
     this.setState({tempYearStart});
-    if(e.type === "blur"){
-      const sanitizedYear = this.sanitizeYear(tempYearStart);
+    if(e.type === "blur" || (e.type === "keydown" && e.keyCode === ENTER_KEY_CODE)){
+      let sanitizedYear = this.sanitizeYear(tempYearStart);
+      sanitizedYear = Math.min(Math.max(sanitizedYear, -4000), years[1]);
       this.changeYears([sanitizedYear, years[1]]);
       this.setState({tempYearStart:null});
     }
-    //
-    // switch(e.type){
-    //   case "keydown":
-    //     if (e.keyCode === ENTER_KEY_CODE) {
-    //       let newYear = this.sanitizeYear(rawYear);
-    //       newYear = Math.min(Math.max(newYear, -2000), years.max);
-    //       this.changeYears({ min:newYear, max:years.max });
-    //       tempInputYears.min = FORMATTERS.year(newYear);
-    //       break;
-    //     }
-    //     tempInputYears.min = rawYear;
-    //     break;
-    //   case "blur":
-    //     let newYear = this.sanitizeYear(rawYear);
-    //     newYear = Math.min(Math.max(newYear, -2000), years.max);
-    //     this.changeYears({ min:newYear, max:years.max })
-    //     tempInputYears.min = FORMATTERS.year(newYear);
-    //     break;
-    //   default:
-    //     tempInputYears.min = rawYear;
-    // }
-    //
-    // this.setState({tempInputYears});
   }
 
   maxYearKeyDown(e){
     const {years} = this.props.rankings;
-    // let tempInputYears = this.state.tempInputYears;
     const tempYearEnd = e.target.value;
     this.setState({tempYearEnd});
-    if(e.type === "blur"){
-      const sanitizedYear = this.sanitizeYear(tempYearEnd);
+    if(e.type === "blur" || (e.type === "keydown" && e.keyCode === ENTER_KEY_CODE)){
+      let sanitizedYear = this.sanitizeYear(tempYearEnd);
+      sanitizedYear = Math.min(Math.max(sanitizedYear, years[0]), 2013);
       this.changeYears([years[0], sanitizedYear]);
       this.setState({tempYearEnd:null});
     }
-    // const {years} = this.props.rankings;
-    // let tempInputYears = this.state.tempInputYears;
-    // const rawYear = e.target.value;
-    //
-    // switch(e.type){
-    //   case "keydown":
-    //     if (e.keyCode === ENTER_KEY_CODE) {
-    //       let newYear = this.sanitizeYear(rawYear);
-    //       newYear = Math.min(Math.max(newYear, years.min), 2016);
-    //       this.changeYears({ min:years.min, max:newYear })
-    //       tempInputYears.max = FORMATTERS.year(newYear);
-    //       break;
-    //     }
-    //     tempInputYears.max = rawYear;
-    //     break;
-    //   case "blur":
-    //     let newYear = this.sanitizeYear(rawYear);
-    //     newYear = Math.min(Math.max(newYear, years.min), 2016);
-    //     this.changeYears({ min:years.min, max:newYear })
-    //     tempInputYears.max = FORMATTERS.year(newYear);
-    //     break;
-    //   default:
-    //     tempInputYears.max = rawYear;
-    // }
-    //
-    // this.setState({tempInputYears});
   }
 
   render() {
@@ -170,11 +121,11 @@ class RankingControls extends Component {
 
           <h3>Between:</h3>
           <div className="year-inputs">
-            <input type="text" id='startYear' value={tempYearStart ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
+            <input type="text" id='startYear' value={tempYearStart && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
             <span>and</span>
-            <input type="text" id='endYear' value={tempYearEnd ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
+            <input type="text" id='endYear' value={!tempYearStart && tempYearEnd ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
           </div>
-          <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={marks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onAfterChange={this.changeYears} defaultValue={years} />
+          <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={marks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onChange={(v) => {this.setState({tempYearStart:v[0], tempYearEnd:v[1]})}} onAfterChange={(v) => {this.setState({tempYearStart:null, tempYearEnd:null}); this.changeYears(v);}} value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years} defaultValue={years} />
 
           { !["birthcountry", "birthplace"].includes(type) ?
             <div className="filter">
