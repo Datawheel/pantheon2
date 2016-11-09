@@ -68,6 +68,7 @@
     "postcss-nesting": "^2.3.1",
     "postcss-reporter": "^1.4.1",
     "postcss-simple-vars": "^3.0.0",
+    "rc-slider": "^5.2.1",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
     "react-helmet": "^3.1.0",

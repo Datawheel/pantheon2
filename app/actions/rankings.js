@@ -9,14 +9,14 @@ polyfill();
 function getNewData(dispatch, getState){
   dispatch({ type: "FETCH_RANKINGS" });
   const { rankings } = getState();
-  const { type, years, country, place, domain, profession, results } = rankings;
+  const { type, yearType, years, country, place, domain, profession, results } = rankings;
   // console.log("type--", type, type == "person")
   const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
   const countryFilter = country.id !== "all" ? `&birthcountry=eq.${country.id}` : '';
   const placeFilter = place !== "all" ? `&birthplace=eq.${place}` : '';
   const professionFilter = profession !== "all" ? `&profession=eq.${profession}` : domain.professions.length ? `&profession=in.${domain.professions.reduce((a, b)=> a.concat(b.id), [])}` : '';
 
-  let rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}&birthyear=gte.${years.min}&birthyear=lte.${years.max}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`;
+  let rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`;
   if (type == "profession") {
     if(countryFilter) {
       return axios.get(rankingUrl)
@@ -47,7 +47,7 @@ function getNewData(dispatch, getState){
   }
   else if (type == "birthcountry") {
     if(professionFilter) {
-      rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&birthyear=gte.${years.min}&birthyear=lte.${years.max}&order=langs.desc.nullslast${professionFilter}`;
+      rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&${yearType}=gte.${years.min}&${yearType}=lte.${years.max}&order=langs.desc.nullslast${professionFilter}`;
       return axios.get(rankingUrl)
         .then(res => {
 
@@ -106,10 +106,21 @@ export function changeType(e) {
   }
 }
 
+export function changeYearType(e) {
+  e.preventDefault();
+  const newYearType = e.target.id;
+  console.log("newYearType---", newYearType)
+  return (dispatch, getState) => {
+    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
+    dispatch({ type: "CHANGE_RANKING_YEAR_TYPE", data: newYearType });
+    return getNewData(dispatch, getState);
+  }
+}
+
 export function changeYears(years) {
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    dispatch({ type: "CHANGE_RANKING_YEARS", data: years });
+    dispatch({ type: "CHANGE_RANKING_YEARS", data:years });
     return getNewData(dispatch, getState);
   }
 }

@@ -1,9 +1,12 @@
 @import '../../../../node_modules/react-table/react-table.css';
 @import '../../../../node_modules/react-input-range/dist/react-input-range.css';
+@import '../../../../node_modules/rc-slider/assets/index.css';
 
 .rankings {
   background: lightgray;
-  padding: 60px 0 0 0;
+  color: #82817F;
+  margin: auto;
+  padding: 80px 0 0 0;
 
   display: flex;
   justify-content: space-around;
@@ -11,9 +14,89 @@
   max-width: 1200px;
 
   & .ranking-controls {
-    border: solid 1px black;
-    idth: 330px;
     flex: 0 0 330px;
+    padding: 0 20px;
+    text-transform: uppercase;
+    width: 330px;
+
+    & h2 {
+      background: #4A4948;
+      color: #F4F4F1;
+      font-size: 16px;
+      margin: 0;
+      padding: 10px 5px;
+    }
+
+    & h3 {
+      color: #82817F;
+      font-size: 15px;
+      font-weight: normal;
+      text-transform: uppercase;
+    }
+
+    & .control-group {
+      border: solid 1px #82817F;
+      margin: 0 0 10px 0;
+      padding: 0 20px 10px 20px;
+    }
+
+    & ul.flat-options {
+      margin: 0;
+      padding: 0;
+
+      & li {
+        display: inline-block;
+        &:after {
+          content: "|";
+          padding: 0 7px;
+        }
+        &:last-child:after {
+          content: "";
+        }
+        & a {
+          color: inherit;
+          font-size: 15px;
+          text-decoration: none;
+          &.active {
+            border-bottom: solid 1px #36687F;
+            color: #363636;
+          }
+        }
+      }
+    }
+
+    & .year-inputs {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+
+      & input {
+        background: inherit;
+        border: solid 1px #82817F;
+        color: #36687F;
+        text-align: center;
+        width: 100px;
+      }
+      & span {
+        font-size: 12px;
+        margin: 5px 0;
+      }
+    }
+
+    & .rc-slider {
+      margin: 10px 0 20px 0;
+    }
+    & .rc-slider-track {
+      background-color: #36687F;
+    }
+    & .rc-slider-handle {
+      /*background-color: #36687F;*/
+      border-color: #36687F;
+    }
+    & .rc-slider-dot-active {
+      background-color: #36687F;
+      border-color: #36687F;
+    }
   }
 
   & .ranking-table {

@@ -13,8 +13,20 @@ const type = (
   }
 };
 
+const yearType = (
+  state = "birthyear",
+  action
+) => {
+  switch (action.type) {
+    case "CHANGE_RANKING_YEAR_TYPE":
+      return action.data;
+    default:
+      return state;
+  }
+};
+
 const years = (
-  state = {min: -4000, max:2000},
+  state = [-4000, 2000],
   action
 ) => {
   switch (action.type) {
@@ -102,15 +114,6 @@ const results = (
       return state;
     case "CHANGE_RANKING_PAGE":
       return Object.assign({}, state, {page: action.data});
-    // case types.CREATE_TOPIC_REQUEST:
-    //   return [...state, topic(undefined, action)];
-    // case types.CREATE_TOPIC_FAILURE:
-    //   return state.filter(t => t.id !== action.id);
-    // case types.DESTROY_TOPIC:
-    //   return state.filter(t => t.id !== action.id);
-    // case types.INCREMENT_COUNT:
-    // case types.DECREMENT_COUNT:
-    //   return state.map(t => topic(t, action));
     default:
       return state;
   }
@@ -118,6 +121,7 @@ const results = (
 
 const rankingsReducer = combineReducers({
   type,
+  yearType,
   years,
   country,
   place,
