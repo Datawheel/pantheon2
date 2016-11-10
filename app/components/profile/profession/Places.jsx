@@ -13,9 +13,9 @@ const Places = ({ people, profession }) => {
   const placesBorn = nest()
     .key(p => p.birthplace.id)
     .rollup(function(leaves) { return {num_people:leaves.length, birthplace:leaves[0].birthplace}; })
-    .entries(people.filter(p => p.birthcountry))
+    .entries(people.filter(p => p.birthplace))
     .sort(function (a, b) { return b.value.num_people-a.value.num_people });
-  
+
   return (
     <div>
       <p>
