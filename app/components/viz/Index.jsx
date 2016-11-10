@@ -41,8 +41,6 @@ class Viz extends Component {
 
   componentDidMount() {
 
-    // if (this.props.type !== "Treemap") return;
-
     // Grabs config from props.
     const {config, type} = this.props;
 
@@ -122,7 +120,7 @@ class Viz extends Component {
       })
       .tooltipConfig({
         body: d => {
-          if (!(d.name instanceof Array)) {
+          if (!(d.name instanceof Array) && viz.groupBy()[viz.depth()](d) === d.name) {
             const age = d.deathyear !== null
                       ? d.deathyear - d.birthyear
                       : new Date().getFullYear() - d.birthyear;
@@ -130,25 +128,30 @@ class Viz extends Component {
                  ? `<span class="center">${d.birthyear} - ${d.deathyear}, ${age} years old</span>`
                  : `<span class="center">Born ${d.birthyear}, ${age} years old</span>`;
           }
-          let txt = "<span class='sub'>Notable People</span>";
-          const names = d.name.slice(0, 3);
-          config.data.filter(d => names.includes(d.name)).slice(0, 3).forEach(n => {
+          const names = d.name instanceof Array ? d.name.slice(0, 3) : [d.name];
+          let txt = `<span class='sub'>Notable ${names.length === 1 ? "Person" : "People"}</span>`;
+          let people = config.data.filter(d => names.includes(d.name));
+          const peopleNames = people.map(d => d.name);
+          people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
             txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
           });
           return txt;
         }
       })
-      .config(config)
-      .select(this.refs.svg);
+      .select(this.refs.svg)
+      .config(config);
 
     setTimeout(() => {
-      this.setState({viz});
+      viz.render();
     }, 500);
 
   }
 
   componentDidUpdate() {
-    if (this.state.viz) this.state.viz.render();
+
+    const {viz} = this.state;
+    if (viz) viz.render()
+
   }
 
   handleLayout(e) {
