@@ -11,10 +11,11 @@ import {default as tooltipStyle} from "css/components/viz/tooltip.js";
 
 import {strip} from "d3plus-text";
 
+import {Geomap} from "d3plus-geomap";
 import {LinePlot, StackedArea} from "d3plus-plot";
 import {Priestley} from "d3plus-priestley";
 import {Treemap} from "d3plus-treemap";
-const types = {LinePlot, Priestley, StackedArea, Treemap};
+const types = {Geomap, LinePlot, Priestley, StackedArea, Treemap};
 
 import {COLORS_DOMAIN} from "types";
 
@@ -77,6 +78,22 @@ class Viz extends Component {
         if (!config.shapeConfig) config.shapeConfig = {};
         config.shapeConfig.labelPadding = 2;
         break;
+      case "Geomap":
+        config.ocean = false;
+        config.pointSizeMax = 35;
+        config.pointSizeMin = 8;
+        config.shapeConfig = {
+          fill: d => d.event.toLowerCase().indexOf("birth") > 0 ? "rgba(76, 94, 215, 0.4)" : "rgba(95, 1, 22, 0.4)",
+          stroke: () => "#4A4948",
+          strokeWidth: 1,
+          Path: {
+            fill: "transparent",
+            stroke: "#4A4948",
+            strokeWidth: 0.75
+          }
+        };
+        config.tiles = false;
+        config.zoom = false;
       default:
         break;
     }

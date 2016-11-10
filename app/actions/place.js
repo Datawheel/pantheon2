@@ -63,7 +63,7 @@ export function fetchPeopleBornHere(store) {
     const placeName = placeIdRes.data[0].name;
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "birthcountry" : "birthplace";
-    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=profession{*},profession_id:profession,*`);
+    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=birthplace{id,name,lat_lon},profession{*},profession_id:profession,*`);
   })
 
   return {
@@ -78,7 +78,7 @@ export function fetchPeopleDiedHere(store) {
     const placeName = placeIdRes.data[0].name;
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "deathcountry" : "deathplace";
-    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=profession{*},profession_id:profession,*`);
+    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=deathplace{id,name,lat_lon},profession{*},profession_id:profession,*`);
   })
 
   return {

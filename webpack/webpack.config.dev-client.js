@@ -20,6 +20,7 @@ var commonLoaders = [
     include: path.join(__dirname, '..', 'app'),
     exclude: path.join(__dirname, '..', 'node_modules')
   },
+  { test: /\.json$/, loader: 'json-loader' },
   {
     test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|ico)$/,
     loader: 'url',

@@ -48,6 +48,8 @@ class Place extends Component {
 
     tmapBornData.forEach(d => {
       d.profession_name = d.profession.name;
+      d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
+      d.place = d.birthplace;
       d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
@@ -57,7 +59,21 @@ class Place extends Component {
 
     tmapDeathData.forEach(d => {
       d.profession_name = d.profession.name;
+      d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
+      d.place = d.deathplace;
       d.bucketyear = Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
+    });
+
+    const geomapData = tmapBornData.filter(d => d.place && d.place.lat_lon)
+              .concat(tmapDeathData.filter(d => d.place && d.place.lat_lon));
+    geomapData.forEach(d => {
+      d.place_name = d.place.name;
+      d.place_coord = d.place.lat_lon;
+      if (!(d.place_coord instanceof Array)) d.place_coord = d.place_coord
+        .replace("(", "")
+        .replace(")", "")
+        .split(",").map(Number);
+      d.place_coord.reverse();
     });
 
     const priestleyMax = 25;
@@ -126,7 +142,21 @@ class Place extends Component {
                   }} />
         ]
       },
-      {title: "Cities", slug: "cities"},
+      {
+        title: "Cities",
+        slug: "cities",
+        viz: [<Viz type="Geomap"
+                  title={`Major Cities in ${place.name} for Births and Deaths of Cultural Celebrities`}
+                  key="geomap1"
+                  config={{
+                    // bounds: "484", // Mexico
+                    data: geomapData,
+                    depth: 1,
+                    groupBy: ["event", "place_name"],
+                    point: d => d.place_coord,
+                    pointSize: d => d.id instanceof Array ? d.id.length : 1
+                  }} />]
+      },
       {title: "Historical Places", slug: "historical_places"},
       {
         title: `Overlapping Lives`,
