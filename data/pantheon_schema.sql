@@ -18,6 +18,7 @@ CREATE TABLE place
   region CHARACTER VARYING(100),
   country_name CHARACTER VARYING(255),
   country_code CHARACTER VARYING(3),
+  country_num smallint,
   continent CHARACTER VARYING(100),
   is_country BOOLEAN NOT NULL DEFAULT FALSE,
   lat_lon point,

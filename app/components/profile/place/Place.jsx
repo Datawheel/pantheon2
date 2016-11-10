@@ -65,7 +65,9 @@ class Place extends Component {
     });
 
     const geomapData = tmapBornData.filter(d => d.place && d.place.lat_lon)
-              .concat(tmapDeathData.filter(d => d.place && d.place.lat_lon));
+              .concat(tmapDeathData.filter(d => d.place && d.place.lat_lon))
+              .sort((a, b) => b.langs - a.langs)
+              .slice(0, 100);
     geomapData.forEach(d => {
       d.place_name = d.place.name;
       d.place_coord = d.place.lat_lon;
@@ -149,7 +151,7 @@ class Place extends Component {
                   title={`Major Cities in ${place.name} for Births and Deaths of Cultural Celebrities`}
                   key="geomap1"
                   config={{
-                    // bounds: "484", // Mexico
+                    bounds: ""+country.country_num,
                     data: geomapData,
                     depth: 1,
                     groupBy: ["event", "place_name"],
