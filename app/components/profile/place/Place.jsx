@@ -16,6 +16,8 @@ import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPe
 import { fetchAllProfessions } from "actions/profession";
 import { YEAR_BUCKETS } from "types";
 
+import {extent} from "d3-array";
+
 class Place extends Component {
 
   constructor(props) {
@@ -46,22 +48,32 @@ class Place extends Component {
       .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
+    let birthyearSpan = extent(tmapBornData, d => d.birthyear);
+    birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
+
     tmapBornData.forEach(d => {
       d.profession_name = d.profession.name;
       d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
       d.place = d.birthplace;
-      d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
+      d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
+                   ? d.birthyear
+                   : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const tmapDeathData = peopleDiedHere
       .filter(p => p.deathyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
+    let deathyearSpan = extent(tmapBornData, d => d.birthyear);
+    deathyearSpan = deathyearSpan[1] - deathyearSpan[0];
+
     tmapDeathData.forEach(d => {
       d.profession_name = d.profession.name;
       d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
       d.place = d.deathplace;
-      d.bucketyear = Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
+      d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
+                   ? d.deathyear
+                   : Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const geomapData = tmapBornData.filter(d => d.place && d.place.lat_lon)

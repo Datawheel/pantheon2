@@ -14,6 +14,8 @@ import { fetchProfession, fetchPeople, fetchPeopleInDomain, fetchAllProfessions 
 import Viz from "components/viz/Index";
 import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
 
+import {extent} from "d3-array";
+
 class Profession extends Component {
 
   constructor(props) {
@@ -47,20 +49,30 @@ class Profession extends Component {
       .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
       .sort((a, b) => b.langs - a.langs);
 
+    let birthyearSpan = extent(tmapBornData, d => d.birthyear);
+    birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
+
     tmapBornData.forEach(d => {
       d.borncountry = d.birthcountry.country_name;
       d.borncontinent = d.birthcountry.continent;
-      d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
+      d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
+                   ? d.birthyear
+                   : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const tmapDeathData = people
       .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country_name && p.deathcountry.continent)
       .sort((a, b) => b.langs - a.langs);
 
+    let deathyearSpan = extent(tmapDeathData, d => d.deathyear);
+    deathyearSpan = deathyearSpan[1] - deathyearSpan[0];
+
     tmapDeathData.forEach(d => {
       d.diedcountry = d.deathcountry.country_name;
       d.diedcontinent = d.deathcountry.continent;
-      d.bucketyear = Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
+      d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
+                   ? d.deathyear
+                   : Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const priestleyMax = 25;
