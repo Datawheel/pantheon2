@@ -126,6 +126,8 @@ const results = (
       return state;
     case "CHANGE_RANKING_PAGE":
       return Object.assign({}, state, {page: action.data});
+    case "CHANGE_RANKING_PAGES":
+      return Object.assign({}, state, {pages: action.data});
     default:
       return state;
   }

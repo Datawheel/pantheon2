@@ -15,32 +15,32 @@ function getNewData(dispatch, getState){
   const countryFilter = country.id !== "all" ? `&birthcountry=eq.${country.id}` : '';
   const placeFilter = place !== "all" ? `&birthplace=eq.${place}` : '';
   const professionFilter = profession !== "all" ? `&profession=eq.${profession}` : domain.professions.length ? `&profession=in.${domain.professions.reduce((a, b)=> a.concat(b.id), [])}` : '';
+  const limitOffset = type === "person" ? `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}` : '';
 
-  let rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`;
+  let rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}${limitOffset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`;
   if (type == "profession") {
     if(countryFilter) {
       return axios.get(rankingUrl)
         .then(res => {
 
           const professions = nest()
-            .key(p => p.profession.slug)
+            .key(p => typeNesting === "profession" ? p.profession.slug : p.profession[`${typeNesting}_slug`])
             .rollup(leaves => {
               return {num_born: leaves.length,
                 name: leaves[0].profession.name,
                 industry: leaves[0].profession.industry,
                 domain: leaves[0].profession.domain,
-                num_born_men: leaves.filter(p => !p.gender).length,
                 num_born_women: leaves.filter(p => p.gender).length}
             })
             .entries(res.data.filter(p => p.profession))
             .reduce((a, b) => a.concat([b.value]), [])
             .sort((a, b) => b.num_born - a.num_born );
           res.data = professions;
-
-          return dispatch({
+          dispatch({
             res: res,
             type: "FETCH_RANKINGS_SUCCESS"
           });
+          return dispatch({ type: "CHANGE_RANKING_PAGES", data:1 });
         })
     }
     rankingUrl = `http://localhost:3100/profession?order=num_born.desc`;
@@ -51,8 +51,8 @@ function getNewData(dispatch, getState){
             .key(p => p[`${typeNesting}_slug`])
             .rollup(leaves => {
               return {num_born: leaves.reduce((a, b) => a + b.num_born, 0),
+                industry: leaves[0].industry,
                 domain: leaves[0].domain,
-                name: leaves[0][typeNesting],
                 num_born_women: leaves.reduce((a, b) => a + b.num_born_women, 0)}
             })
             .entries(res.data)

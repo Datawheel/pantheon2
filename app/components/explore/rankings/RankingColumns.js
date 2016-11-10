@@ -82,7 +82,7 @@ export const COLUMNS = {
       },
       {
         header:'Industry',
-        accessor:'name',
+        accessor:'industry',
       },
       {
         header:'Domain',
@@ -106,7 +106,7 @@ export const COLUMNS = {
       },
       {
         header:'Domain',
-        accessor:'name',
+        accessor:'domain',
       },
       {
         header:'People',

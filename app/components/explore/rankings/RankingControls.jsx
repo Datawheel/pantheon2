@@ -157,7 +157,7 @@ class RankingControls extends Component {
             </div>
           : null }
 
-          { country.places.length ?
+          { type !== "place" && country.places.length ?
           <select value={place} onChange={this.changePlace}>
             <option value="all">All</option>
             {country.places.map(p =>
@@ -182,7 +182,7 @@ class RankingControls extends Component {
             </div>
           : null }
 
-          { domain.professions.length ?
+          { type !== "profession" && domain.professions.length ?
           <select value={profession} onChange={this.changeProfession}>
             <option value="all">All</option>
             {domain.professions.map(p =>
