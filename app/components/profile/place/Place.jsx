@@ -151,7 +151,7 @@ class Place extends Component {
                   title={`Major Cities in ${place.name} for Births and Deaths of Cultural Celebrities`}
                   key="geomap1"
                   config={{
-                    bounds: ""+country.country_num,
+                    bounds: `${country.country_num}`,
                     data: geomapData,
                     depth: 1,
                     groupBy: ["event", "place_name"],

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 
-import tooltipCSS from 'css/components/viz/tooltip.css';
-import vizCSS from 'css/components/viz/viz.css';
+import tooltipCSS from "css/components/viz/tooltip.css";
+import vizCSS from "css/components/viz/viz.css";
 
 import {default as axesStyle} from "css/components/viz/axes.js";
 import {default as legendStyle} from "css/components/viz/legend.js";
@@ -16,6 +16,8 @@ import {LinePlot, StackedArea} from "d3plus-plot";
 import {Priestley} from "d3plus-priestley";
 import {Treemap} from "d3plus-treemap";
 const types = {Geomap, LinePlot, Priestley, StackedArea, Treemap};
+
+import {default as topojson} from "json/world-50m.json";
 
 import {COLORS_DOMAIN} from "types";
 
@@ -93,6 +95,7 @@ class Viz extends Component {
           }
         };
         config.tiles = false;
+        config.topojson = topojson;
         config.zoom = false;
       default:
         break;
