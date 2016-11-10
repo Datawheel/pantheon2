@@ -39,7 +39,15 @@
       padding: 0 20px 10px 20px;
     }
 
+    & .flat-options-w-title {
+      & h3 {
+        margin: 10px 5px 10px 0;
+        display: inline-block;
+      }
+    }
+
     & ul.flat-options {
+      display: inline-block;
       margin: 0;
       padding: 0;
 

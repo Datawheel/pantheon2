@@ -9,7 +9,7 @@ polyfill();
 function getNewData(dispatch, getState){
   dispatch({ type: "FETCH_RANKINGS" });
   const { rankings } = getState();
-  const { type, yearType, years, country, place, domain, profession, results } = rankings;
+  const { type, typeNesting, yearType, years, country, place, domain, profession, results } = rankings;
   // console.log("type--", type, type == "person")
   const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
   const countryFilter = country.id !== "all" ? `&birthcountry=eq.${country.id}` : '';
@@ -44,8 +44,30 @@ function getNewData(dispatch, getState){
         })
     }
     rankingUrl = `http://localhost:3100/profession?order=num_born.desc`;
+    if(["domain", "industry"].includes(typeNesting)){
+      return axios.get(rankingUrl)
+        .then(res => {
+          const professions = nest()
+            .key(p => p[`${typeNesting}_slug`])
+            .rollup(leaves => {
+              return {num_born: leaves.reduce((a, b) => a + b.num_born, 0),
+                domain: leaves[0].domain,
+                name: leaves[0][typeNesting],
+                num_born_women: leaves.reduce((a, b) => a + b.num_born_women, 0)}
+            })
+            .entries(res.data)
+            .reduce((a, b) => a.concat([b.value]), [])
+            .sort((a, b) => b.num_born - a.num_born );
+          res.data = professions;
+
+          return dispatch({
+            res: res,
+            type: "FETCH_RANKINGS_SUCCESS"
+          });
+        })
+    }
   }
-  else if (type == "birthcountry") {
+  else if (type == "place") {
     if(professionFilter) {
       rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&${yearType}=gte.${years.min}&${yearType}=lte.${years.max}&order=langs.desc.nullslast${professionFilter}`;
       return axios.get(rankingUrl)
@@ -71,12 +93,14 @@ function getNewData(dispatch, getState){
           });
         })
     }
+    if(typeNesting === "country"){
+      rankingUrl = `http://localhost:3100/place?is_country=is.true&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+    }
+    else {
+      rankingUrl = `http://localhost:3100/place?is_country=is.false&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+    }
+  }
 
-    rankingUrl = `http://localhost:3100/place?is_country=is.true&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
-  }
-  else if (type == "birthplace") {
-    rankingUrl = `http://localhost:3100/place?is_country=is.false&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
-  }
   return axios.get(rankingUrl)
     .then(res => {
       return dispatch({
@@ -102,6 +126,7 @@ export function changeType(e) {
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
     dispatch({ type: "CHANGE_RANKING_TYPE", data: newType });
+    dispatch({ type: "CHANGE_RANKING_TYPE_NESTING", data: newType });
     return getNewData(dispatch, getState);
   }
 }
@@ -109,10 +134,19 @@ export function changeType(e) {
 export function changeYearType(e) {
   e.preventDefault();
   const newYearType = e.target.id;
-  console.log("newYearType---", newYearType)
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
     dispatch({ type: "CHANGE_RANKING_YEAR_TYPE", data: newYearType });
+    return getNewData(dispatch, getState);
+  }
+}
+
+export function changeTypeNesting(e) {
+  e.preventDefault();
+  const newTypeNesting = e.target.id;
+  return (dispatch, getState) => {
+    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
+    dispatch({ type: "CHANGE_RANKING_TYPE_NESTING", data: newTypeNesting });
     return getNewData(dispatch, getState);
   }
 }

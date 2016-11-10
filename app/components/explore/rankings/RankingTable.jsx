@@ -16,7 +16,7 @@ class RankingTable extends Component {
   }
 
   render() {
-    const {results, type} = this.props.rankings;
+    const {results, type, typeNesting} = this.props.rankings;
     const {updateRankingsTable} = this.props;
     const pageSize = type === "profession" ? results.data.length : RANKINGS_RESULTS_PER_PAGE;
 
@@ -25,7 +25,7 @@ class RankingTable extends Component {
         <h2>Most Globally Remembered People</h2>
         <h3>4000 BC - 2013</h3>
         <ReactTable
-          columns={COLUMNS[type]}
+          columns={COLUMNS[type][typeNesting]}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pageSize={pageSize}
           data={results.data}

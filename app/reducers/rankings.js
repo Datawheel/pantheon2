@@ -2,11 +2,23 @@ import { combineReducers } from 'redux';
 import { RANKINGS_RESULTS_PER_PAGE } from 'types';
 
 const type = (
-  state = "person",
+  state = "profession",
   action
 ) => {
   switch (action.type) {
     case "CHANGE_RANKING_TYPE":
+      return action.data;
+    default:
+      return state;
+  }
+};
+
+const typeNesting = (
+  state = "profession",
+  action
+) => {
+  switch (action.type) {
+    case "CHANGE_RANKING_TYPE_NESTING":
       return action.data;
     default:
       return state;
@@ -121,6 +133,7 @@ const results = (
 
 const rankingsReducer = combineReducers({
   type,
+  typeNesting,
   yearType,
   years,
   country,

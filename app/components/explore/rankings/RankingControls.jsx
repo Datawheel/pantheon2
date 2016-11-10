@@ -3,9 +3,9 @@ import {connect} from "react-redux";
 import { FORMATTERS } from "types";
 import { polyfill } from "es6-promise";
 import axios from "axios";
-import { changeCountry, changePlace, changeDomain, changeProfession, changeType, changeYearType, changeYears, fetchRankings } from "actions/rankings";
-const ENTER_KEY_CODE = 13;
 import Rcslider from "rc-slider";
+import { changeCountry, changePlace, changeDomain, changeProfession, changeType, changeTypeNesting, changeYearType, changeYears, fetchRankings } from "actions/rankings";
+const ENTER_KEY_CODE = 13;
 
 polyfill();
 
@@ -14,10 +14,9 @@ class RankingControls extends Component {
   constructor(props) {
     super(props);
     this.rankingType = [
-      {id:"person", name:"Person"},
-      {id:"profession", name:"Profession"},
-      {id:"birthcountry", name:"Birth Country"},
-      {id:"birthplace", name:"Birth City"}
+      {id:"person", name:"People"},
+      {id:"profession", name:"Professions"},
+      {id:"place", name:"Place"},
     ];
     this.state = {
       countries: [],
@@ -26,6 +25,7 @@ class RankingControls extends Component {
       professions: [],
     }
     this.changeType = this.props.changeType.bind(this);
+    this.changeTypeNesting = this.props.changeTypeNesting.bind(this);
     this.changeYearType = this.props.changeYearType.bind(this);
     this.changeYears = this.props.changeYears;
     this.changeCountry = this.props.changeCountry.bind(this);
@@ -46,8 +46,6 @@ class RankingControls extends Component {
         })
         this.setState({domains: uniqueDomains})
       })
-    // const { fetchRankings } = this.props;
-    // fetchRankings('test text!!!')
   }
 
   sanitizeYear(yr) {
@@ -60,7 +58,6 @@ class RankingControls extends Component {
 
   minYearKeyDown(e){
     const {years} = this.props.rankings;
-    // let tempInputYears = this.state.tempInputYears;
     const tempYearStart = e.target.value;
     this.setState({tempYearStart});
     if(e.type === "blur" || (e.type === "keydown" && e.keyCode === ENTER_KEY_CODE)){
@@ -89,7 +86,7 @@ class RankingControls extends Component {
       0: <strong>0 AD</strong>,
       2013: '2013',
     };
-    const {type, years, country, place, domain, profession} = this.props.rankings;
+    const {type, typeNesting, yearType, years, country, place, domain, profession} = this.props.rankings;
     const {countries, places, domains, professions, tempYearStart, tempYearEnd} = this.state;
     const minYearKeyDown = this.minYearKeyDown.bind(this);
     const maxYearKeyDown = this.maxYearKeyDown.bind(this);
@@ -109,13 +106,32 @@ class RankingControls extends Component {
               </option>
             )}
           </select>
+          { type === "profession" ?
+          <div className="flat-options-w-title">
+            <h3>Level:</h3>
+            <ul className="flat-options">
+              <li><a href="#" id="profession" onClick={this.changeTypeNesting} className={typeNesting === "profession" ? "active" : null}>Prof</a></li>
+              <li><a href="#" id="industry" onClick={this.changeTypeNesting} className={typeNesting === "industry" ? "active" : null}>Ind</a></li>
+              <li><a href="#" id="domain" onClick={this.changeTypeNesting} className={typeNesting === "domain" ? "active" : null}>Dom</a></li>
+            </ul>
+          </div>
+          : null}
+          { type === "place" ?
+          <div className="flat-options-w-title">
+            <h3>Level:</h3>
+            <ul className="flat-options">
+              <li><a href="#" id="place" onClick={this.changeTypeNesting} className={typeNesting === "place" ? "active" : null}>Cities</a></li>
+              <li><a href="#" id="country" onClick={this.changeTypeNesting} className={typeNesting === "country" ? "active" : null}>Countries</a></li>
+            </ul>
+          </div>
+          : null}
         </section>
 
         <section className="control-group">
           <h3>Filter Rankings</h3>
           <ul className="flat-options">
-            <li><a href="#" id="birthyear" onClick={this.changeYearType} className="active">Births</a></li>
-            <li><a href="#" id="deathyear" onClick={this.changeYearType}>Deaths</a></li>
+            <li><a href="#" id="birthyear" onClick={this.changeYearType} className={yearType === "birthyear" ? "active" : null}>Births</a></li>
+            <li><a href="#" id="deathyear" onClick={this.changeYearType} className={yearType === "deathyear" ? "active" : null}>Deaths</a></li>
           </ul>
 
 
@@ -127,7 +143,7 @@ class RankingControls extends Component {
           </div>
           <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={marks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onChange={(v) => {this.setState({tempYearStart:v[0], tempYearEnd:v[1]})}} onAfterChange={(v) => {this.setState({tempYearStart:null, tempYearEnd:null}); this.changeYears(v);}} value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years} defaultValue={years} />
 
-          { !["birthcountry", "birthplace"].includes(type) ?
+          { type !== "place" ?
             <div className="filter">
               <h3>Locations:</h3>
               <select value={country.id} onChange={this.changeCountry}>
@@ -193,4 +209,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchRankings, changeType, changeYearType, changeYears, changeCountry, changePlace, changeDomain, changeProfession })(RankingControls);
+export default connect(mapStateToProps, { fetchRankings, changeType, changeTypeNesting, changeYearType, changeYears, changeCountry, changePlace, changeDomain, changeProfession })(RankingControls);
