@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { polyfill } from 'es6-promise';
-import axios from 'axios';
 import {connect} from "react-redux";
 import { activateSearch } from 'actions/users';
 import styles from 'css/components/search';
 import { strip } from 'd3plus-text';
+import apiClient from 'apiconfig';
 
 polyfill();
 
@@ -28,10 +28,14 @@ class Search extends Component {
     userQueryCleaned[userQueryCleaned.length-1] = `${lastItem}:*`;
     userQueryCleaned = userQueryCleaned.join("%26");
 
-    axios.get(`http://localhost:3100/search?document=@@.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
+    console.log("axios.defaults.baseURL--", apiClient.defaults.baseURL)
+
+    apiClient.get(`/search?document=@@.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
       .then((queryResults) => {
         const results = queryResults.data;
-        this.setState({ results });
+        if(results){
+          this.setState({ results });
+        }
       })
   }
 

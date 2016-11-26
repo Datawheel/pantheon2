@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createMemoryHistory, match, RouterContext } from 'react-router';
@@ -7,17 +6,6 @@ import createRoutes from 'routes';
 import configureStore from 'store/configureStore';
 import preRenderMiddleware from 'middlewares/preRenderMiddleware';
 import header from 'components/Meta';
-
-const clientConfig = {
-  host: process.env.HOSTNAME || 'pantheon-api.local',
-  port: process.env.PORT || '3100'
-};
-
-// configure baseURL for axios requests (for serverside API calls)
-// axios.defaults.baseURL = `http://${clientConfig.host}:${clientConfig.port}`;
-// axios.defaults.baseURL = `http://${clientConfig.host}`;
-axios.defaults.baseURL = "http://localhost:3100";
-console.log("API endpoint:", axios.defaults.baseURL)
 
 const analtyicsScript =
   typeof trackingID === "undefined" ? ``

@@ -1,8 +1,8 @@
 /* eslint consistent-return: 0, no-else-return: 0*/
 import { polyfill } from 'es6-promise';
-import axios from 'axios';
 import { RANKINGS_RESULTS_PER_PAGE } from 'types';
-import {nest} from 'd3-collection';
+import { nest } from 'd3-collection';
+import apiClient from 'apiconfig';
 
 polyfill();
 
@@ -17,10 +17,10 @@ function getNewData(dispatch, getState){
   const professionFilter = profession !== "all" ? `&profession=eq.${profession}` : domain.professions.length ? `&profession=in.${domain.professions.reduce((a, b)=> a.concat(b.id), [])}` : '';
   const limitOffset = type === "person" ? `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}` : '';
 
-  let rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}${limitOffset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`;
+  let rankingUrl = `/person?select=*,birthcountry{*},birthplace{*},profession{*}${limitOffset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`;
   if (type == "profession") {
     if(countryFilter) {
-      return axios.get(rankingUrl)
+      return apiClient.get(rankingUrl)
         .then(res => {
 
           const professions = nest()
@@ -43,9 +43,9 @@ function getNewData(dispatch, getState){
           return dispatch({ type: "CHANGE_RANKING_PAGES", data:1 });
         })
     }
-    rankingUrl = `http://localhost:3100/profession?order=num_born.desc`;
+    rankingUrl = `/profession?order=num_born.desc`;
     if(["domain", "industry"].includes(typeNesting)){
-      return axios.get(rankingUrl)
+      return apiClient.get(rankingUrl)
         .then(res => {
           const professions = nest()
             .key(p => p[`${typeNesting}_slug`])
@@ -69,8 +69,8 @@ function getNewData(dispatch, getState){
   }
   else if (type == "place") {
     if(professionFilter) {
-      rankingUrl = `http://localhost:3100/person?select=*,birthcountry{*},birthplace{*},profession{*}&${yearType}=gte.${years.min}&${yearType}=lte.${years.max}&order=langs.desc.nullslast${professionFilter}`;
-      return axios.get(rankingUrl)
+      rankingUrl = `/person?select=*,birthcountry{*},birthplace{*},profession{*}&${yearType}=gte.${years.min}&${yearType}=lte.${years.max}&order=langs.desc.nullslast${professionFilter}`;
+      return apiClient.get(rankingUrl)
         .then(res => {
 
           const places = nest()
@@ -94,14 +94,14 @@ function getNewData(dispatch, getState){
         })
     }
     if(typeNesting === "country"){
-      rankingUrl = `http://localhost:3100/place?is_country=is.true&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+      rankingUrl = `/place?is_country=is.true&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
     }
     else {
-      rankingUrl = `http://localhost:3100/place?is_country=is.false&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+      rankingUrl = `/place?is_country=is.false&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
     }
   }
 
-  return axios.get(rankingUrl)
+  return apiClient.get(rankingUrl)
     .then(res => {
       return dispatch({
         res: res,
@@ -164,7 +164,7 @@ export function changeCountry(e) {
   const countryCode = e.target.options[e.target.selectedIndex].dataset.countrycode;
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    return axios.get(`http://localhost:3100/place?is_country=is.false&country_code=eq.${countryCode}&order=name&select=id,name`)
+    return apiClient.get(`/place?is_country=is.false&country_code=eq.${countryCode}&order=name&select=id,name`)
       .then(res => {
         dispatch({
           type: "CHANGE_RANKING_COUNTRY",
@@ -190,7 +190,7 @@ export function changeDomain(e) {
   const domainSlug = e.target.value;
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    return axios.get(`http://localhost:3100/profession?domain_slug=eq.${domainSlug}&order=name&select=id,name`)
+    return apiClient.get(`/profession?domain_slug=eq.${domainSlug}&order=name&select=id,name`)
       .then(res => {
         dispatch({
           type: "CHANGE_RANKING_DOMAIN",

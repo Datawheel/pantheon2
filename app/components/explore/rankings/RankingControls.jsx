@@ -2,9 +2,10 @@ import React, { Component, PropTypes } from "react";
 import {connect} from "react-redux";
 import { FORMATTERS } from "types";
 import { polyfill } from "es6-promise";
-import axios from "axios";
 import Rcslider from "rc-slider";
 import { changeCountry, changePlace, changeDomain, changeProfession, changeType, changeTypeNesting, changeYearType, changeYears, fetchRankings } from "actions/rankings";
+import apiClient from 'apiconfig';
+
 const ENTER_KEY_CODE = 13;
 
 polyfill();
@@ -35,11 +36,11 @@ class RankingControls extends Component {
   }
 
   componentDidMount(){
-    axios.get("http://localhost:3100/place?is_country=is.true&order=name&select=id,name,country_code")
+    apiClient.get("/place?is_country=is.true&order=name&select=id,name,country_code")
       .then((res) => {
         this.setState({countries: res.data})
       })
-    axios.get("http://localhost:3100/profession?select=id,name,domain_slug,domain")
+    apiClient.get("/profession?select=id,name,domain_slug,domain")
       .then((res) => {
         const uniqueDomains = res.data.filter(function(item, pos) {
           return res.data.findIndex(d => d.domain_slug===item.domain_slug) === pos;
