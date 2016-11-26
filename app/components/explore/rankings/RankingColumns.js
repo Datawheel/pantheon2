@@ -7,7 +7,8 @@ export const COLUMNS = {
       {
         header:'Rank',
         accessor:'rank',
-        sortable: false
+        sortable: false,
+        render: ({index}) => <span>{index+1}</span>
       },
       {
         header:'Name',

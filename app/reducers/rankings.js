@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { RANKINGS_RESULTS_PER_PAGE } from 'types';
 
 const type = (
-  state = "profession",
+  state = "person",
   action
 ) => {
   switch (action.type) {
@@ -14,7 +14,7 @@ const type = (
 };
 
 const typeNesting = (
-  state = "profession",
+  state = "person",
   action
 ) => {
   switch (action.type) {
@@ -112,10 +112,12 @@ const results = (
       return Object.assign({}, state, {loading: true});
     case "FETCH_RANKINGS_SUCCESS":
       if (action.res) {
+        console.log('')
         console.log('action.res.headers["content-range"]', action.res.headers["content-range"])
+        console.log('')
         const contentRange = action.res.headers["content-range"];
         const totalResults = parseInt(contentRange.split("/")[1]);
-        const totalPages = Math.ceil(totalResults / action.res.data.length);
+        const totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
         return {
           data: action.res.data,
           pages: totalPages,

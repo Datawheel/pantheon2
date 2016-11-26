@@ -82,7 +82,7 @@ class RankingControls extends Component {
   }
 
   render() {
-    const marks = {
+    const timelineMarks = {
       '-4000': '4000 BC',
       0: <strong>0 AD</strong>,
       2013: '2013',
@@ -142,7 +142,7 @@ class RankingControls extends Component {
             <span>and</span>
             <input type="text" id='endYear' value={!tempYearStart && tempYearEnd ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
           </div>
-          <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={marks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onChange={(v) => {this.setState({tempYearStart:v[0], tempYearEnd:v[1]})}} onAfterChange={(v) => {this.setState({tempYearStart:null, tempYearEnd:null}); this.changeYears(v);}} value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years} defaultValue={years} />
+          <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={timelineMarks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onChange={(v) => {this.setState({tempYearStart:v[0], tempYearEnd:v[1]})}} onAfterChange={(v) => {this.setState({tempYearStart:null, tempYearEnd:null}); this.changeYears(v);}} value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years} defaultValue={years} />
 
           { type !== "place" ?
             <div className="filter">

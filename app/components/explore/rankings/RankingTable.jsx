@@ -6,6 +6,7 @@ import ReactTable from "react-table";
 import styles from "css/components/explore/rankings";
 import { RANKINGS_RESULTS_PER_PAGE } from "types";
 import RankingControls from "components/explore/rankings/RankingControls";
+import RankingPagination from "components/explore/rankings/RankingPagination";
 import { updateRankingsTable } from "actions/rankings";
 import { COLUMNS } from "components/explore/rankings/RankingColumns";
 
@@ -20,19 +21,27 @@ class RankingTable extends Component {
     const {updateRankingsTable} = this.props;
     const pageSize = type === "profession" ? results.data.length : RANKINGS_RESULTS_PER_PAGE;
 
+    let columns = COLUMNS[type][typeNesting];
+    const rankColumnRender = ({index}) => {
+      const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
+      return <span>{index+1+offset}</span>;
+    };
+    columns[0].render = rankColumnRender;
+
     return (
       <div className="ranking-table">
         <h2>Most Globally Remembered People</h2>
         <h3>4000 BC - 2013</h3>
         <ReactTable
-          columns={COLUMNS[type][typeNesting]}
-          manual // Forces table not to paginate or sort automatically, so we can handle it server-side
+          columns={columns}
           pageSize={pageSize}
           data={results.data}
+          showPagination={false}
           pages={results.pages}
           loading={results.loading}
           onChange={updateRankingsTable}
         />
+        <RankingPagination />
       </div>
     );
   }

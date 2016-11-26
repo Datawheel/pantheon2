@@ -212,11 +212,25 @@ export function changeProfession(e) {
   }
 }
 
-export function updateRankingsTable(instance) {
-  const {page, pageSize, pages, sorting} = instance;
-  // console.log(page, pageSize, pages, sorting)
+export function updateRankingsTable(state, instance) {
+  const {page, pageSize, pages, sorting} = state;
+  // console.log(" ----- page -------")
+  // console.log(page)
+  // console.log(" ------------")
+  // instance.setState({page: 0})
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data: page });
+    // dispatch({ type: "CHANGE_RANKING_PAGE", data: page });
+    return getNewData(dispatch, getState);
+  }
+}
+
+export function changePage(e) {
+  e.preventDefault();
+  const direction = e.target.innerText === "next" ? 1 : -1;
+  return (dispatch, getState) => {
+    const { rankings } = getState();
+    console.log("page:", rankings.results.page)
+    dispatch({ type: "CHANGE_RANKING_PAGE", data:rankings.results.page + direction });
     return getNewData(dispatch, getState);
   }
 }
