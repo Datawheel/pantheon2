@@ -2,7 +2,8 @@ import { combineReducers } from 'redux';
 import { RANKINGS_RESULTS_PER_PAGE } from 'types';
 
 const type = (
-  state = "person",
+  // state = "person",
+  state = "profession",
   action
 ) => {
   switch (action.type) {
@@ -14,7 +15,8 @@ const type = (
 };
 
 const typeNesting = (
-  state = "person",
+  // state = "person",
+  state = "profession",
   action
 ) => {
   switch (action.type) {

@@ -43,6 +43,7 @@ class Place extends Component {
     const {placeProfile, professionProfile} = this.props;
     const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, peopleBornHereAlive} = placeProfile;
     const {professions} = professionProfile;
+    console.log("professions!", professions)
 
     const tmapBornData = peopleBornHere
       .filter(p => p.birthyear !== null)

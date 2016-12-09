@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from "react";
 import {connect} from "react-redux";
 import ReactTable from "react-table";
 import styles from "css/components/explore/rankings";
+import Viz from "components/viz/Index";
+import { updateRankingsTable } from "actions/rankings";
+import { fetchAllProfessions } from "actions/profession";
 
 class VizShell extends Component {
 
@@ -9,13 +12,24 @@ class VizShell extends Component {
     super(props);
   }
 
+  static need = [
+    fetchAllProfessions
+  ]
+
+  componentDidMount(){
+    this.props.updateRankingsTable();
+  }
+
   render() {
+    const {results, type, typeNesting} = this.props.rankings;
+    if (results.loading)
+      return <div className="viz-shell">loading...</div>
+    const {professions} = this.props.professionProfile;
 
     return (
       <div className="viz-shell">
         <h2>Most Globally Remembered People</h2>
         <div>
-        viz will go here...
         </div>
       </div>
     );
@@ -24,8 +38,9 @@ class VizShell extends Component {
 
 function mapStateToProps(state) {
   return {
-    rankings: state.rankings
+    rankings: state.rankings,
+    professionProfile: state.professionProfile
   };
 }
 
-export default connect(mapStateToProps)(VizShell);
+export default connect(mapStateToProps, {updateRankingsTable})(VizShell);

@@ -213,7 +213,7 @@ export function changeProfession(e) {
 }
 
 export function updateRankingsTable(state, instance) {
-  const {page, pageSize, pages, sorting} = state;
+  // const {page, pageSize, pages, sorting} = state;
   // console.log(" ----- page -------")
   // console.log(page)
   // console.log(" ------------")

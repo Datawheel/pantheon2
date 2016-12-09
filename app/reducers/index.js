@@ -5,6 +5,7 @@ import placeProfile from 'reducers/placeProfile';
 import professionProfile from 'reducers/professionProfile';
 import rank from 'reducers/rank';
 import rankings from 'reducers/rankings';
+import explorer from 'reducers/explorer';
 import { routerReducer as routing } from 'react-router-redux';
 
 const searchActive = (
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   placeProfile,
   professionProfile,
   rankings,
+  explorer,
   routing
 });
 
