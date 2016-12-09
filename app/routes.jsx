@@ -23,6 +23,7 @@ import Contact from 'components/about/Contact';
 
 // explore componenets
 import Explore from 'components/explore/Explore';
+import Viz from 'components/explore/viz/Viz';
 import Rankings from 'components/explore/rankings/Rankings';
 
 // data section components
@@ -87,6 +88,7 @@ export default (store) => {
       <Route path="person(/:id)" component={Person} />
 
       <Route path="explore" component={Explore}>
+        <Route path="viz" component={Viz} />
         <Route path="rankings" component={Rankings} />
       </Route>
 

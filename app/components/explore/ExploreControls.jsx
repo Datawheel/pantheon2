@@ -10,7 +10,7 @@ const ENTER_KEY_CODE = 13;
 
 polyfill();
 
-class RankingControls extends Component {
+class ExploreControls extends Component {
 
   constructor(props) {
     super(props);
@@ -24,7 +24,9 @@ class RankingControls extends Component {
       places: [],
       domains: [],
       professions: [],
-    }
+      tempYearStart: null,
+      tempYearEnd: null
+    };
     this.changeType = this.props.changeType.bind(this);
     this.changeTypeNesting = this.props.changeTypeNesting.bind(this);
     this.changeYearType = this.props.changeYearType.bind(this);
@@ -138,9 +140,9 @@ class RankingControls extends Component {
 
           <h3>Between:</h3>
           <div className="year-inputs">
-            <input type="text" id='startYear' value={tempYearStart && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
+            <input type="text" id='startYear' value={tempYearStart!==null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
             <span>and</span>
-            <input type="text" id='endYear' value={!tempYearStart && tempYearEnd ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
+            <input type="text" id='endYear' value={!tempYearStart && tempYearEnd!==null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
           </div>
           <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={timelineMarks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onChange={(v) => {this.setState({tempYearStart:v[0], tempYearEnd:v[1]})}} onAfterChange={(v) => {this.setState({tempYearStart:null, tempYearEnd:null}); this.changeYears(v);}} value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years} defaultValue={years} />
 
@@ -200,7 +202,7 @@ class RankingControls extends Component {
   }
 };
 
-RankingControls.propTypes = {
+ExploreControls.propTypes = {
   dispatch: React.PropTypes.func
 };
 
@@ -210,4 +212,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchRankings, changeType, changeTypeNesting, changeYearType, changeYears, changeCountry, changePlace, changeDomain, changeProfession })(RankingControls);
+export default connect(mapStateToProps, { fetchRankings, changeType, changeTypeNesting, changeYearType, changeYears, changeCountry, changePlace, changeDomain, changeProfession })(ExploreControls);

@@ -42,7 +42,7 @@ export const COLUMNS = {
         accessor: d => d.birthplace ? d.birthplace.name : null,
         render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : null
       },
-      {header:'L', accessor:'langs'}
+      {header:'L', accessor:'langs', sort:'desc'}
     ]
   },
   profession: {
@@ -67,7 +67,8 @@ export const COLUMNS = {
       },
       {
         header:'People',
-        accessor:'num_born'
+        accessor:'num_born',
+        sort:'desc'
       },
       {
         header:'Women',
@@ -91,7 +92,8 @@ export const COLUMNS = {
       },
       {
         header:'People',
-        accessor:'num_born'
+        accessor:'num_born',
+        sort:'desc'
       },
       {
         header:'Women',
@@ -111,7 +113,8 @@ export const COLUMNS = {
       },
       {
         header:'People',
-        accessor:'num_born'
+        accessor:'num_born',
+        sort:'desc'
       },
       {
         header:'Women',

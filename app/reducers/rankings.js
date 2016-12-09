@@ -112,9 +112,7 @@ const results = (
       return Object.assign({}, state, {loading: true});
     case "FETCH_RANKINGS_SUCCESS":
       if (action.res) {
-        console.log('')
-        console.log('action.res.headers["content-range"]', action.res.headers["content-range"])
-        console.log('')
+        // console.log('action.res.headers["content-range"]', action.res.headers["content-range"])
         const contentRange = action.res.headers["content-range"];
         const totalResults = parseInt(contentRange.split("/")[1]);
         const totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);

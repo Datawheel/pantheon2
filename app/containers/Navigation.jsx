@@ -23,7 +23,7 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           <li className='item'>
             <Link to="/explore" className='item-link explore' activeClassName='active'>Explore</Link>
             <ul className={'sub-items'}>
-              <li><a href="/explore" className='item-link'>Data Explorer</a></li>
+              <li><a href="/explore/viz" className='item-link'>Viz Explorer</a></li>
               <li><a href="/explore/rankings" className='item-link'>Rankings</a></li>
             </ul>
           </li>

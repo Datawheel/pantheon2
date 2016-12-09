@@ -5,7 +5,6 @@ import config from "helmconfig.js";
 import ReactTable from "react-table";
 import styles from "css/components/explore/rankings";
 import { RANKINGS_RESULTS_PER_PAGE } from "types";
-import RankingControls from "components/explore/rankings/RankingControls";
 import RankingPagination from "components/explore/rankings/RankingPagination";
 import { updateRankingsTable } from "actions/rankings";
 import { COLUMNS } from "components/explore/rankings/RankingColumns";
