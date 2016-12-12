@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from "react";
-import {connect} from "react-redux";
-import { polyfill } from "es6-promise";
-import Rcslider from "rc-slider";
-import { changeCountry, changePlace, changeDomain, changeProfession, changeType, changeTypeNesting, changeYearType, changeYears, fetchRankings } from "actions/rankings";
+import { connect } from "react-redux";
+import { changePlace } from "actions/explorer";
 import YearControl from "components/explore/controls/YearControl";
-import apiClient from 'apiconfig';
+import PlaceControl from "components/explore/controls/PlaceControl";
 
 class VizControls extends Component {
 
@@ -12,14 +10,11 @@ class VizControls extends Component {
     super(props);
   }
 
-  componentDidMount(){
-  }
-
   render() {
-
     return (
       <div className='viz-controls'>
         <YearControl />
+        <PlaceControl />
       </div>
     );
   }
@@ -28,8 +23,8 @@ class VizControls extends Component {
 
 function mapStateToProps(state) {
   return {
-    rankings: state.rankings
+    explorer: state.explorer
   };
 }
 
-export default connect(mapStateToProps)(VizControls);
+export default connect(mapStateToProps, { changePlace })(VizControls);
