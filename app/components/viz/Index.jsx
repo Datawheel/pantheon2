@@ -12,9 +12,9 @@ import {default as tooltipStyle} from "css/components/viz/tooltip.js";
 import {strip} from "d3plus-text";
 
 import {Geomap} from "d3plus-geomap";
+import {Treemap} from "d3plus-hierarchy";
 import {LinePlot, StackedArea} from "d3plus-plot";
 import {Priestley} from "d3plus-priestley";
-import {Treemap} from "d3plus-treemap";
 const types = {Geomap, LinePlot, Priestley, StackedArea, Treemap};
 
 import {default as topojson} from "json/world-50m.json";
@@ -69,6 +69,8 @@ class Viz extends Component {
     config.data.forEach(d => {
       if (d.profession_id !== void 0) d.profession_id = `${d.profession_id}`;
     });
+
+    if (config.time) config.timeFilter = () => true;
 
     switch(this.props.type) {
       case "Treemap":
@@ -142,7 +144,7 @@ class Viz extends Component {
       .config(config);
 
     setTimeout(() => {
-      viz.render();
+      this.setState({viz});
     }, 500);
 
   }
@@ -150,7 +152,7 @@ class Viz extends Component {
   componentDidUpdate() {
 
     const {viz} = this.state;
-    if (viz) viz.render()
+    if (viz) viz.render();
 
   }
 
