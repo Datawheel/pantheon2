@@ -23,6 +23,12 @@ export function fetchAllCities(store) {
     promise: axios.get("http://localhost:3100/place?is_country=is.false&order=born_rank&select=id,name,country_code&limit=200")
   };
 }
+export function fetchAllPofessions(store) {
+  return {
+    type: "GET_PROFESSIONS",
+    promise: axios.get("http://localhost:3100/profession")
+  };
+}
 
 
 // -------------------------
@@ -63,5 +69,14 @@ export function changeCityInCountry(e) {
   const newPlace = e.target.value;
   return (dispatch, getState) => {
     return dispatch({ type: "CHANGE_EXPLORER_CITY_IN_COUNTRY", data:newPlace });
+  }
+}
+
+export function changeProfessions(e) {
+  const selectedProfession = e.target.value;
+  const newProfessions = e.target.options[e.target.selectedIndex].dataset.professions;
+  return (dispatch, getState) => {
+    dispatch({ type: "CHANGE_EXPLORER_PROFESSIONS", data:newProfessions });
+    return dispatch({ type: "CHANGE_EXPLORER_PROFESSION_SLUG", data:selectedProfession });
   }
 }

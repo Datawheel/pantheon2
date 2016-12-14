@@ -5,7 +5,7 @@ import config from 'helmconfig.js';
 import styles from "css/components/explore/rankings";
 import VizControls from "components/explore/viz/VizControls";
 import VizShell from "components/explore/viz/VizShell";
-import { fetchAllCountries, fetchAllCities } from "actions/explorer";
+import { fetchAllCountries, fetchAllCities, fetchAllPofessions } from "actions/explorer";
 
 class Viz extends Component {
 
@@ -15,7 +15,8 @@ class Viz extends Component {
 
   static need = [
     fetchAllCountries,
-    fetchAllCities
+    fetchAllCities,
+    fetchAllPofessions
   ]
 
   render() {

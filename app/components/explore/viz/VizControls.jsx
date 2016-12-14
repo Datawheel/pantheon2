@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { changePlace } from "actions/explorer";
 import YearControl from "components/explore/controls/YearControl";
 import PlaceControl from "components/explore/controls/PlaceControl";
+import ProfessionControl from "components/explore/controls/ProfessionControl";
 
 class VizControls extends Component {
 
@@ -15,6 +16,7 @@ class VizControls extends Component {
       <div className='viz-controls'>
         <YearControl />
         <PlaceControl />
+        <ProfessionControl />
       </div>
     );
   }
