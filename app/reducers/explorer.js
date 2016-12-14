@@ -14,6 +14,19 @@ const data = (
   }
 };
 
+const grouping = (
+  state = "professions",
+  action
+) => {
+  switch (action.type) {
+    case "CHANGE_EXPLORER_GROUPING":
+      return action.data;
+    default:
+      return state;
+  }
+};
+
+
 const years = (
   state = [-4000, 2000],
   action
@@ -90,6 +103,11 @@ const profession = (
 
       const occupations = data.map((occupation) => {
         return {
+          id:occupation.id,
+          domain_slug:occupation.domain_slug,
+          industry_slug:occupation.industry_slug,
+          domain:occupation.domain,
+          industry:occupation.industry,
           slug:occupation.slug,
           name:occupation.name,
           professions:occupation.id
@@ -110,6 +128,7 @@ const profession = (
 
 
 const explorerReducer = combineReducers({
+  grouping,
   data,
   years,
   place,

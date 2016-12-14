@@ -17,7 +17,7 @@ export function makePersonRequest(method, id, data, api = '/person') {
 export function fetchPerson(store) {
   const prom = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=profession{*},birthcountry{*},birthplace{*},birthyear{*},deathcountry{*},deathplace{*},deathyear{*},*`);
   return {
-    type: GET_PERSON,
+    type: "GET_PERSON",
     promise: prom
   };
 }

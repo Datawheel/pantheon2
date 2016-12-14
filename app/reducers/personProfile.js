@@ -6,7 +6,7 @@ const person = (
   action
 ) => {
   switch (action.type) {
-    case types.GET_PERSON_SUCCESS:
+    case "GET_PERSON_SUCCESS":
       return action.res.data[0]
     default:
       return state;

@@ -27,7 +27,7 @@ function getVizData(dispatch, getState){
     professionFilter = `&profession=in.${profession.selectedProfessions}`;
   }
 
-  let dataUrl = `/person?select=*,birthcountry{*},birthplace{*},profession{*}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${professionFilter}`;
+  let dataUrl = `/person?select=*,birthcountry{*},birthplace{*},profession{*},profession_id:profession&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${professionFilter}`;
   console.log("getVizData", dataUrl)
   return apiClient.get(dataUrl).then(res => {
     return dispatch({
@@ -63,6 +63,13 @@ export function fetchAllPofessions(store) {
 // -------------------------
 // Actions from controls
 // ---------------------------
+export function changeGrouping(e) {
+  const newGrouping = e.target.value;
+  return (dispatch, getState) => {
+    dispatch({ type: "CHANGE_EXPLORER_GROUPING", data:newGrouping });
+  }
+}
+
 export function changeYears(years) {
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });

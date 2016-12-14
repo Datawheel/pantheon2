@@ -8,20 +8,10 @@ class ProfessionControl extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      professionDepth: OCCUPATION_DEPTH
-    }
-  }
-
-  professionDepthChange(e) {
-    e.preventDefault();
-    const professionDepth = e.target.dataset.depth;
-    this.setState({ professionDepth });
   }
 
   render() {
     const {selectedDepth, selectedProfessionSlug, domains, industries, occupations} = this.props.explorer.profession;
-    const depthChange = this.professionDepthChange.bind(this);
     const changeProfessions = this.props.actions.changeProfessions.bind(this);
     const changeProfessionDepth = this.props.actions.changeProfessionDepth.bind(this);
 
