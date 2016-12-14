@@ -1,5 +1,18 @@
 import { combineReducers } from 'redux';
 import { nest } from 'd3-collection';
+import { COUNTRY_DEPTH, CITY_DEPTH, OCCUPATION_DEPTH, INDUSTRY_DEPTH, DOMAIN_DEPTH } from 'types';
+
+const data = (
+  state = [],
+  action
+) => {
+  switch (action.type) {
+    case "FETCH_EXPLORER_DATA_SUCCESS":
+      return action.data;
+    default:
+      return state;
+  }
+};
 
 const years = (
   state = [-4000, 2000],
@@ -14,10 +27,12 @@ const years = (
 };
 
 const place = (
-  state = {selectedCountry:"all", selectedCity:"all", selectedCityInCountry:"all", countries:[], cities:[], citiesInCountry:[]},
+  state = {selectedDepth:COUNTRY_DEPTH, selectedCountry:"all", selectedCity:"all", selectedCityInCountry:"all", countries:[], cities:[], citiesInCountry:[]},
   action
 ) => {
   switch (action.type) {
+    case "CHANGE_EXPLORER_PLACE_DEPTH":
+      return Object.assign({}, state, {selectedDepth: action.data});
     case "CHANGE_EXPLORER_COUNTRY":
       return Object.assign({}, state, {selectedCountry: action.data});
     case "CHANGE_EXPLORER_CITY_IN_COUNTRY":
@@ -36,10 +51,12 @@ const place = (
 };
 
 const profession = (
-  state = {selectedProfessionSlug:"all", selectedProfessions:[], domains:[], industries:[], occupations:[]},
+  state = {selectedDepth:OCCUPATION_DEPTH, selectedProfessionSlug:"all", selectedProfessions:"all", domains:[], industries:[], occupations:[]},
   action
 ) => {
   switch (action.type) {
+    case "CHANGE_EXPLORER_PROFESSION_DEPTH":
+      return Object.assign({}, state, {selectedDepth: action.data});
     case "CHANGE_EXPLORER_PROFESSIONS":
       return Object.assign({}, state, {selectedProfessions: action.data});
     case "CHANGE_EXPLORER_PROFESSION_SLUG":
@@ -53,7 +70,7 @@ const profession = (
           return {
             slug:leaves[0].domain_slug,
             name:leaves[0].domain,
-            professions:`${leaves.reduce((lOld, lNew) => lOld.concat([lNew.slug]),[])}`
+            professions:`${leaves.reduce((lOld, lNew) => lOld.concat([lNew.id]),[])}`
           };
         })
         .entries(data)
@@ -65,7 +82,7 @@ const profession = (
           return {
             slug:leaves[0].industry_slug,
             name:leaves[0].industry,
-            professions:`${leaves.reduce((lOld, lNew) => lOld.concat([lNew.slug]),[])}`
+            professions:`${leaves.reduce((lOld, lNew) => lOld.concat([lNew.id]),[])}`
           };
         })
         .entries(data)
@@ -75,7 +92,7 @@ const profession = (
         return {
           slug:occupation.slug,
           name:occupation.name,
-          professions:occupation.slug
+          professions:occupation.id
         };
       })
 
@@ -93,6 +110,7 @@ const profession = (
 
 
 const explorerReducer = combineReducers({
+  data,
   years,
   place,
   profession,

@@ -2,10 +2,39 @@
 import { polyfill } from 'es6-promise';
 import apiClient from 'apiconfig';
 import axios from 'axios';
+import { COUNTRY_DEPTH, CITY_DEPTH } from 'types';
 
 polyfill();
 
 function getVizData(dispatch, getState){
+  const { explorer } = getState();
+  const { place, profession, years } = explorer;
+  const yearType = "birthyear";
+
+  let placeFilter = "";
+  if(place.selectedDepth === COUNTRY_DEPTH && place.selectedCountry !== "all"){
+    placeFilter = `&birthcountry=eq.${place.selectedCountry}`;
+    if(place.selectedCityInCountry !== "all"){
+      placeFilter = `&birthplace=eq.${place.selectedCityInCountry}`;
+    }
+  }
+  if(place.selectedDepth === CITY_DEPTH && place.selectedCity !== "all"){
+    placeFilter = `&birthplace=eq.${place.selectedCity}`;
+  }
+
+  let professionFilter = "";
+  if(profession.selectedProfessions !== "all"){
+    professionFilter = `&profession=in.${profession.selectedProfessions}`;
+  }
+
+  let dataUrl = `/person?select=*,birthcountry{*},birthplace{*},profession{*}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${professionFilter}`;
+  console.log("getVizData", dataUrl)
+  return apiClient.get(dataUrl).then(res => {
+    return dispatch({
+      data: res.data,
+      type: "FETCH_EXPLORER_DATA_SUCCESS"
+    });
+  })
 }
 
 // -------------------------
@@ -37,8 +66,15 @@ export function fetchAllPofessions(store) {
 export function changeYears(years) {
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    return dispatch({ type: "CHANGE_EXPLORER_YEARS", data:years });
-    // return getVizData(dispatch, getState);
+    dispatch({ type: "CHANGE_EXPLORER_YEARS", data:years });
+    return getVizData(dispatch, getState);
+  }
+}
+
+export function changePlaceDepth(e) {
+  const newDepth = e.target.dataset.depth;
+  return (dispatch, getState) => {
+    return dispatch({ type: "CHANGE_EXPLORER_PLACE_DEPTH", data:newDepth });
   }
 }
 
@@ -46,14 +82,12 @@ export function changeCountry(e) {
   const countryId = e.target.value;
   const countryCode = e.target.options[e.target.selectedIndex].dataset.countrycode;
   return (dispatch, getState) => {
+    dispatch({ type: "CHANGE_EXPLORER_COUNTRY", data: countryId });
+    dispatch({ type: "CHANGE_EXPLORER_CITY_IN_COUNTRY", data: "all" });
     return apiClient.get(`/place?is_country=is.false&country_code=eq.${countryCode}&order=name&select=id,name`)
       .then(res => {
-        dispatch({
-          type: "CHANGE_EXPLORER_COUNTRY",
-          data: countryId
-        });
-        dispatch({ type: "CHANGE_EXPLORER_CITY_IN_COUNTRY", data: "all" });
-        return dispatch({ type: "GET_CITIES_IN_COUNTRY_SUCCESS", data: res.data });
+        dispatch({ type: "GET_CITIES_IN_COUNTRY_SUCCESS", data: res.data });
+        return getVizData(dispatch, getState);
       })
   }
 }
@@ -61,14 +95,23 @@ export function changeCountry(e) {
 export function changeCity(e) {
   const newPlace = e.target.value;
   return (dispatch, getState) => {
-    return dispatch({ type: "CHANGE_EXPLORER_CITY", data:newPlace });
+    dispatch({ type: "CHANGE_EXPLORER_CITY", data:newPlace });
+    return getVizData(dispatch, getState);
   }
 }
 
 export function changeCityInCountry(e) {
   const newPlace = e.target.value;
   return (dispatch, getState) => {
-    return dispatch({ type: "CHANGE_EXPLORER_CITY_IN_COUNTRY", data:newPlace });
+    dispatch({ type: "CHANGE_EXPLORER_CITY_IN_COUNTRY", data:newPlace });
+    return getVizData(dispatch, getState);
+  }
+}
+
+export function changeProfessionDepth(e) {
+  const newDepth = e.target.dataset.depth;
+  return (dispatch, getState) => {
+    return dispatch({ type: "CHANGE_EXPLORER_PROFESSION_DEPTH", data:newDepth });
   }
 }
 
@@ -77,6 +120,7 @@ export function changeProfessions(e) {
   const newProfessions = e.target.options[e.target.selectedIndex].dataset.professions;
   return (dispatch, getState) => {
     dispatch({ type: "CHANGE_EXPLORER_PROFESSIONS", data:newProfessions });
-    return dispatch({ type: "CHANGE_EXPLORER_PROFESSION_SLUG", data:selectedProfession });
+    dispatch({ type: "CHANGE_EXPLORER_PROFESSION_SLUG", data:selectedProfession });
+    return getVizData(dispatch, getState);
   }
 }

@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from "react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { changeCountry, changeCity, changeCityInCountry } from "actions/explorer";
+import { changeCountry, changeCity, changeCityInCountry, changePlaceDepth } from "actions/explorer";
 import apiClient from 'apiconfig';
-
-const COUNTRY_DEPTH = "COUNTRY";
-const CITY_DEPTH = "CITY";
+import { COUNTRY_DEPTH, CITY_DEPTH } from 'types';
 
 class PlaceControl extends Component {
 
@@ -23,12 +22,11 @@ class PlaceControl extends Component {
 
   render() {
 
-    const {selectedCountry, selectedCity, selectedCityInCountry, countries, cities, citiesInCountry} = this.props.explorer.place;
-    const changeCountry = this.props.changeCountry.bind(this);
-    const changeCity = this.props.changeCity.bind(this);
-    const changeCityInCountry = this.props.changeCityInCountry.bind(this);
-    const depthChange = this.placeDepthChange.bind(this);
-    const placeDepth = this.state.placeDepth;
+    const {selectedDepth, selectedCountry, selectedCity, selectedCityInCountry, countries, cities, citiesInCountry} = this.props.explorer.place;
+    const changeCountry = this.props.actions.changeCountry.bind(this);
+    const changeCity = this.props.actions.changeCity.bind(this);
+    const changeCityInCountry = this.props.actions.changeCityInCountry.bind(this);
+    const changePlaceDepth = this.props.actions.changePlaceDepth.bind(this);
 
     return (
       <div className="filter">
@@ -36,10 +34,10 @@ class PlaceControl extends Component {
 
         <h4>Within:</h4>
         <div>
-          <a href="#" data-depth={COUNTRY_DEPTH} onClick={depthChange}>Countries</a> | <a href="#" data-depth={CITY_DEPTH} onClick={depthChange}>Cities</a>
+          <a href="#" data-depth={COUNTRY_DEPTH} onClick={changePlaceDepth}>Countries</a> | <a href="#" data-depth={CITY_DEPTH} onClick={changePlaceDepth}>Cities</a>
         </div>
 
-        { placeDepth === COUNTRY_DEPTH ?
+        { selectedDepth === COUNTRY_DEPTH ?
           <div>
             <select value={selectedCountry} onChange={changeCountry}>
               <option value="all">All</option>
@@ -86,4 +84,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { changeCountry, changeCity, changeCityInCountry })(PlaceControl);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({changeCountry, changeCity, changeCityInCountry, changePlaceDepth}, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlaceControl);

@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from "react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { changeProfessions } from "actions/explorer";
-
-const OCCUPATION_DEPTH = "OCCUPATION";
-const INDUSTRY_DEPTH = "INDUSTRY";
-const DOMAIN_DEPTH = "DOMAIN";
+import { changeProfessions, changeProfessionDepth } from "actions/explorer";
+import { OCCUPATION_DEPTH, INDUSTRY_DEPTH, DOMAIN_DEPTH } from 'types';
 
 class ProfessionControl extends Component {
 
@@ -22,12 +20,13 @@ class ProfessionControl extends Component {
   }
 
   render() {
-    const {selectedProfessionSlug, domains, industries, occupations} = this.props.explorer.profession;
+    const {selectedDepth, selectedProfessionSlug, domains, industries, occupations} = this.props.explorer.profession;
     const depthChange = this.professionDepthChange.bind(this);
-    const changeProfessions = this.props.changeProfessions.bind(this);
-    const professionDepth = this.state.professionDepth;
+    const changeProfessions = this.props.actions.changeProfessions.bind(this);
+    const changeProfessionDepth = this.props.actions.changeProfessionDepth.bind(this);
+
     let professions = occupations;
-    switch (professionDepth) {
+    switch (selectedDepth) {
       case INDUSTRY_DEPTH:
         professions = industries;
         break;
@@ -44,7 +43,7 @@ class ProfessionControl extends Component {
 
         <h4>Within:</h4>
         <div>
-          <a href="#" data-depth={OCCUPATION_DEPTH} onClick={depthChange}>Occupations</a> | <a href="#" data-depth={INDUSTRY_DEPTH} onClick={depthChange}>Industries</a> | <a href="#" data-depth={DOMAIN_DEPTH} onClick={depthChange}>Domains</a>
+          <a href="#" data-depth={OCCUPATION_DEPTH} onClick={changeProfessionDepth}>Occupations</a> | <a href="#" data-depth={INDUSTRY_DEPTH} onClick={changeProfessionDepth}>Industries</a> | <a href="#" data-depth={DOMAIN_DEPTH} onClick={changeProfessionDepth}>Domains</a>
         </div>
 
         <select value={selectedProfessionSlug} onChange={changeProfessions}>
@@ -67,4 +66,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { changeProfessions })(ProfessionControl);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({changeProfessions, changeProfessionDepth}, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfessionControl);
