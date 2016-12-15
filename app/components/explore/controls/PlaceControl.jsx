@@ -14,10 +14,9 @@ class PlaceControl extends Component {
     }
   }
 
-  placeDepthChange(e) {
+  placeDepthClick(e) {
     e.preventDefault();
-    const placeDepth = e.target.dataset.depth;
-    this.setState({ placeDepth });
+    this.props.actions.changePlaceDepth(e.target.dataset.depth);
   }
 
   render() {
@@ -26,7 +25,7 @@ class PlaceControl extends Component {
     const changeCountry = this.props.actions.changeCountry.bind(this);
     const changeCity = this.props.actions.changeCity.bind(this);
     const changeCityInCountry = this.props.actions.changeCityInCountry.bind(this);
-    const changePlaceDepth = this.props.actions.changePlaceDepth.bind(this);
+    const placeDepthClick = this.placeDepthClick.bind(this);
 
     return (
       <div className="filter">
@@ -34,7 +33,7 @@ class PlaceControl extends Component {
 
         <h4>Within:</h4>
         <div>
-          <a href="#" data-depth={COUNTRY_DEPTH} onClick={changePlaceDepth}>Countries</a> | <a href="#" data-depth={CITY_DEPTH} onClick={changePlaceDepth}>Cities</a>
+          <a href="#" data-depth={COUNTRY_DEPTH} onClick={placeDepthClick}>Countries</a> | <a href="#" data-depth={CITY_DEPTH} onClick={placeDepthClick}>Cities</a>
         </div>
 
         { selectedDepth === COUNTRY_DEPTH ?

@@ -10,10 +10,15 @@ class ProfessionControl extends Component {
     super(props);
   }
 
+  professionDepthClick(e) {
+    e.preventDefault();
+    this.props.actions.changeProfessionDepth(e.target.dataset.depth);
+  }
+
   render() {
     const {selectedDepth, selectedProfessionSlug, domains, industries, occupations} = this.props.explorer.profession;
     const changeProfessions = this.props.actions.changeProfessions.bind(this);
-    const changeProfessionDepth = this.props.actions.changeProfessionDepth.bind(this);
+    const professionDepthClick = this.professionDepthClick.bind(this);
 
     let professions = occupations;
     switch (selectedDepth) {
@@ -33,11 +38,11 @@ class ProfessionControl extends Component {
 
         <h4>Within:</h4>
         <div>
-          <a href="#" data-depth={OCCUPATION_DEPTH} onClick={changeProfessionDepth}>Occupations</a> | <a href="#" data-depth={INDUSTRY_DEPTH} onClick={changeProfessionDepth}>Industries</a> | <a href="#" data-depth={DOMAIN_DEPTH} onClick={changeProfessionDepth}>Domains</a>
+          <a href="#" data-depth={OCCUPATION_DEPTH} onClick={professionDepthClick}>Occupations</a> | <a href="#" data-depth={INDUSTRY_DEPTH} onClick={professionDepthClick}>Industries</a> | <a href="#" data-depth={DOMAIN_DEPTH} onClick={professionDepthClick}>Domains</a>
         </div>
 
         <select value={selectedProfessionSlug} onChange={changeProfessions}>
-          <option value="all">All</option>
+          <option value="all" data-professions="all">All</option>
           {professions.map(p =>
             <option key={p.slug} value={p.slug} data-professions={p.professions}>
               {p.name}

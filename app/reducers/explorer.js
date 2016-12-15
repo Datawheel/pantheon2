@@ -74,7 +74,7 @@ const profession = (
       return Object.assign({}, state, {selectedProfessions: action.data});
     case "CHANGE_EXPLORER_PROFESSION_SLUG":
       return Object.assign({}, state, {selectedProfessionSlug: action.data});
-    case "GET_PROFESSIONS_SUCCESS":
+    case "GET_EXPLORER_PROFESSIONS_SUCCESS":
       const data = action.res.data;
 
       const domains = nest()

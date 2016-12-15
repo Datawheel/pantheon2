@@ -39,23 +39,31 @@ class VizShell extends Component {
       }
     }
     else if(grouping === "professions"){
+      const attrs = occupations.reduce((obj, d) => {
+        obj[d.id] = d;
+        return obj;
+      }, {})
       tmapData = data
-        .filter(p => p.birthyear !== null)
+        .filter(p => p.birthyear !== null && p.profession_id !== null)
         .map(d => {
-          d.profession_name = d.profession.name;
+          const o = attrs[d.profession_id];
+          if(o)
+            d.profession_name = o.name;
+          else {
+            console.log(d.profession_id, attrs)
+          }
           d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
           d.place = d.birthplace;
           return d
         })
       config = {
-        attrs: occupations,
+        attrs: attrs,
         data: tmapData,
         depth: 2,
         groupBy: ["domain", "industry", "profession_name"],
         time: "birthyear"
       }
     }
-    console.log("GROUPING CHANGED", occupations)
 
     return (
       <div className="viz-shell">

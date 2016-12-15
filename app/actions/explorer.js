@@ -7,6 +7,7 @@ import { COUNTRY_DEPTH, CITY_DEPTH } from 'types';
 polyfill();
 
 function getVizData(dispatch, getState){
+  dispatch({data: [], type: "FETCH_EXPLORER_DATA_SUCCESS"})
   const { explorer } = getState();
   const { place, profession, years } = explorer;
   const yearType = "birthyear";
@@ -27,7 +28,7 @@ function getVizData(dispatch, getState){
     professionFilter = `&profession=in.${profession.selectedProfessions}`;
   }
 
-  let dataUrl = `/person?select=*,birthcountry{*},birthplace{*},profession{*},profession_id:profession&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${professionFilter}`;
+  let dataUrl = `/person?select=slug,name,langs,id,birthyear,deathyear,birthcountry{id,country_name,continent},birthplace,profession_id:profession&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${professionFilter}`;
   console.log("getVizData", dataUrl)
   return apiClient.get(dataUrl).then(res => {
     return dispatch({
@@ -54,7 +55,7 @@ export function fetchAllCities(store) {
 }
 export function fetchAllPofessions(store) {
   return {
-    type: "GET_PROFESSIONS",
+    type: "GET_EXPLORER_PROFESSIONS",
     promise: axios.get("http://localhost:3100/profession")
   };
 }
@@ -70,16 +71,19 @@ export function changeGrouping(e) {
   }
 }
 
-export function changeYears(years) {
+export function changeYears(newYears) {
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    dispatch({ type: "CHANGE_EXPLORER_YEARS", data:years });
+    const { explorer } = getState();
+    const { years } = explorer;
+    if(JSON.stringify(years)===JSON.stringify(newYears)){
+      return;
+    }
+    dispatch({ type: "CHANGE_EXPLORER_YEARS", data:newYears });
     return getVizData(dispatch, getState);
   }
 }
 
-export function changePlaceDepth(e) {
-  const newDepth = e.target.dataset.depth;
+export function changePlaceDepth(newDepth) {
   return (dispatch, getState) => {
     return dispatch({ type: "CHANGE_EXPLORER_PLACE_DEPTH", data:newDepth });
   }
@@ -115,8 +119,7 @@ export function changeCityInCountry(e) {
   }
 }
 
-export function changeProfessionDepth(e) {
-  const newDepth = e.target.dataset.depth;
+export function changeProfessionDepth(newDepth) {
   return (dispatch, getState) => {
     return dispatch({ type: "CHANGE_EXPLORER_PROFESSION_DEPTH", data:newDepth });
   }

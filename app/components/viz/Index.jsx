@@ -87,11 +87,12 @@ class Viz extends Component {
       // Grabs config from props.
       const {config, type} = this.props;
 
-      // Preps attribute list from config, and removes it when done.
-      const attrs = config.attrs ? config.attrs.reduce((obj, d) => {
+      // Preps attribute list from config
+      let attrs = config.attrs || false;
+      attrs = Array.isArray(attrs) ? attrs.reduce((obj, d) => {
         obj[d.id] = d;
         return obj;
-      }, {}) : false;
+      }, {}) : attrs;
 
       // Preps groupBy, using attrs if necessary.
       const groupBy = config.groupBy ? attrs ? (config.groupBy instanceof Array ? config.groupBy : [config.groupBy]).map(function(g) {
