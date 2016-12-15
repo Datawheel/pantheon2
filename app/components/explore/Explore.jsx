@@ -4,7 +4,7 @@ import config from 'helmconfig.js';
 
 const Explore = ({children}) => {
   return (
-    <div className='explore'>
+    <div className='explore-container'>
       <Helmet
         htmlAttributes={{"lang": "en", "amp": undefined}}
         title="Explore"

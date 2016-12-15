@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import ReactTable from "react-table";
-import styles from "css/components/explore/rankings";
+import styles from "css/components/explore/explore";
 import { RANKINGS_RESULTS_PER_PAGE } from "types";
 import RankingPagination from "components/explore/rankings/RankingPagination";
 import { updateRankingsTable } from "actions/rankings";

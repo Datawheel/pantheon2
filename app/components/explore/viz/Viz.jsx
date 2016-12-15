@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from "react";
 import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from 'helmconfig.js';
-import styles from "css/components/explore/rankings";
+import styles from "css/components/explore/explore";
 import VizControls from "components/explore/viz/VizControls";
 import VizShell from "components/explore/viz/VizShell";
 import { fetchAllCountries, fetchAllCities, fetchAllPofessions } from "actions/explorer";
@@ -21,7 +21,7 @@ class Viz extends Component {
 
   render() {
     return (
-      <div className="rankings">
+      <div className="explore">
         <Helmet
           htmlAttributes={{"lang": "en", "amp": undefined}}
           title="Viz Explorer"

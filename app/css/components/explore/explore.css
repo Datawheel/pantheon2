@@ -1,7 +1,7 @@
 @import '../../../../node_modules/react-table/react-table.css';
 @import '../../../../node_modules/rc-slider/assets/index.css';
 
-.rankings {
+.explore {
   background: lightgray;
   color: #82817F;
   margin: auto;
@@ -12,7 +12,7 @@
   align-items: stretch;
   max-width: 1200px;
 
-  & .ranking-controls {
+  & .explore-controls {
     flex: 0 0 330px;
     padding: 0 20px;
     text-transform: uppercase;
@@ -111,5 +111,10 @@
   }
 
   & .ranking-table {
+  }
+
+  & .viz-shell {
+    border:solid green 1px;
+    flex: 1;
   }
 }

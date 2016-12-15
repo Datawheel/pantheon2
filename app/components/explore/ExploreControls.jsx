@@ -96,7 +96,7 @@ class ExploreControls extends Component {
     const tempEndYear = this.state.tempEndYear || years.max;
 
     return (
-      <div className='ranking-controls'>
+      <div className='explore-controls'>
 
         <h2>Rankings</h2>
 

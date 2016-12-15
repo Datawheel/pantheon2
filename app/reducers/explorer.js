@@ -115,6 +115,7 @@ const profession = (
       })
 
       return {
+        selectedDepth:OCCUPATION_DEPTH,
         selectedProfessionSlug: state.selectedProfessionSlug,
         selectedProfessions: state.selectedProfessions,
         domains,

@@ -19,6 +19,7 @@ class ProfessionControl extends Component {
     const {selectedDepth, selectedProfessionSlug, domains, industries, occupations} = this.props.explorer.profession;
     const changeProfessions = this.props.actions.changeProfessions.bind(this);
     const professionDepthClick = this.professionDepthClick.bind(this);
+    console.log("selectedDepth:", selectedDepth)
 
     let professions = occupations;
     switch (selectedDepth) {
@@ -34,11 +35,14 @@ class ProfessionControl extends Component {
 
     return (
       <div className="filter">
-        <h3>Professions:</h3>
 
-        <h4>Within:</h4>
-        <div>
-          <a href="#" data-depth={OCCUPATION_DEPTH} onClick={professionDepthClick}>Occupations</a> | <a href="#" data-depth={INDUSTRY_DEPTH} onClick={professionDepthClick}>Industries</a> | <a href="#" data-depth={DOMAIN_DEPTH} onClick={professionDepthClick}>Domains</a>
+        <div className="flat-options-w-title">
+          <h3>Profession:</h3>
+          <ul className="flat-options">
+            <li><a href="#" className={selectedDepth===OCCUPATION_DEPTH ? "active" : ""} data-depth={OCCUPATION_DEPTH} onClick={professionDepthClick}>Occupations</a></li>
+            <li><a href="#" className={selectedDepth===INDUSTRY_DEPTH ? "active" : ""} data-depth={INDUSTRY_DEPTH} onClick={professionDepthClick}>Industries</a></li>
+            <li><a href="#" className={selectedDepth===DOMAIN_DEPTH ? "active" : ""} data-depth={DOMAIN_DEPTH} onClick={professionDepthClick}>Domains</a></li>
+          </ul>
         </div>
 
         <select value={selectedProfessionSlug} onChange={changeProfessions}>

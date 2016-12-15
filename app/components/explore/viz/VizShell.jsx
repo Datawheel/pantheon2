@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from "react";
 import {connect} from "react-redux";
-import styles from "css/components/explore/rankings";
+import styles from "css/components/explore/explore";
 import Viz from "components/viz/Index";
 import { COLORS_CONTINENT } from "types";
 
@@ -19,7 +19,7 @@ class VizShell extends Component {
     let tmapData, config;
 
     if(!data.length){
-      return (<div>no data yet...</div>)
+      return (<div className="viz-shell">no data yet...</div>)
     }
 
     if(grouping === "places"){
@@ -69,13 +69,9 @@ class VizShell extends Component {
       <div className="viz-shell">
         <h2>Most Globally Remembered People</h2>
         <div>
-        viz will go here with ({data.length}) items...
-        </div>
-        <div>
-        <Viz type="Treemap"
-          title={`Places of Birth`}
-          key="tmap_1"
-          config={config} />,
+          <Viz type="Treemap"
+            key="tmap_1"
+            config={config} />,
         </div>
       </div>
     );

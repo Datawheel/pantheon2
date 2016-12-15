@@ -1,13 +1,13 @@
 import React from "react";
 import Helmet from "react-helmet";
 import config from 'helmconfig.js';
-import styles from "css/components/explore/rankings";
+import styles from "css/components/explore/explore";
 import ExploreControls from "components/explore/ExploreControls";
 import RankingTable from "components/explore/rankings/RankingTable";
 
 const Rankings = ({children}) => {
   return (
-    <div className="rankings">
+    <div className="explore">
       <Helmet
         htmlAttributes={{"lang": "en", "amp": undefined}}
         title="Rankings"
