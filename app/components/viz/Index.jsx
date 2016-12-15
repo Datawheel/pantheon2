@@ -41,65 +41,7 @@ class Viz extends Component {
 
   componentDidMount() {
 
-    // Grabs config from props.
-    const {config, type} = this.props;
-
-    // Preps attribute list from config, and removes it when done.
-    const attrs = config.attrs ? config.attrs.reduce((obj, d) => {
-      obj[d.id] = d;
-      return obj;
-    }, {}) : false;
-    delete config.attrs;
-
-    // Preps groupBy, using attrs if necessary.
-    config.groupBy = config.groupBy ? attrs ? (config.groupBy instanceof Array ? config.groupBy : [config.groupBy]).map(function(g) {
-      return function(d) {
-
-        let val;
-
-        if (d[g]) val = d[g];
-        else if (d.profession_id instanceof Array) val = attrs[d.profession_id[0]][g];
-        else val = attrs[d.profession_id][g];
-
-        return val;
-
-      }
-    }) : config.groupBy : ["id"];
-
-    config.data.forEach(d => {
-      if (d.profession_id !== void 0) d.profession_id = `${d.profession_id}`;
-    });
-
-    if (config.time) config.timeFilter = () => true;
-
-    switch(this.props.type) {
-      case "Treemap":
-        config.sum = d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0;
-        break;
-      case "Priestley":
-        if (!config.shapeConfig) config.shapeConfig = {};
-        config.shapeConfig.labelPadding = 2;
-        break;
-      case "Geomap":
-        config.ocean = false;
-        config.pointSizeMax = 35;
-        config.pointSizeMin = 8;
-        config.shapeConfig = {
-          fill: d => d.event.toLowerCase().indexOf("birth") > 0 ? "rgba(76, 94, 215, 0.4)" : "rgba(95, 1, 22, 0.4)",
-          stroke: () => "#4A4948",
-          strokeWidth: 1,
-          Path: {
-            fill: "transparent",
-            stroke: "#4A4948",
-            strokeWidth: 0.75
-          }
-        };
-        config.tiles = false;
-        config.topojson = topojson;
-        config.zoom = false;
-      default:
-        break;
-    }
+    const {type} = this.props;
 
     // Draws the visualization!
     const viz = new types[type]()
@@ -110,16 +52,6 @@ class Viz extends Component {
       .legendConfig(legendStyle)
       .timelineConfig(timelineStyle)
       .tooltipConfig(tooltipStyle)
-      .shapeConfig({
-        fill: d => {
-          if (d.color) return d.color;
-          else if (attrs && d.profession_id !== void 0) {
-            let occ = d.profession_id.constructor === Array ? d.profession_id[0] : d.profession_id;
-            return COLORS_DOMAIN[attrs[occ].domain_slug];
-          }
-          return "#ccc";
-        }
-      })
       .tooltipConfig({
         body: d => {
           if (!(d.name instanceof Array) && viz.groupBy()[viz.depth()](d) === d.name) {
@@ -132,7 +64,7 @@ class Viz extends Component {
           }
           const names = d.name instanceof Array ? d.name.slice(0, 3) : [d.name];
           let txt = `<span class='sub'>Notable ${names.length === 1 ? "Person" : "People"}</span>`;
-          let people = config.data.filter(d => names.includes(d.name));
+          let people = viz.data().filter(d => names.includes(d.name));
           const peopleNames = people.map(d => d.name);
           people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
             txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
@@ -140,19 +72,94 @@ class Viz extends Component {
           return txt;
         }
       })
-      .select(this.refs.svg)
-      .config(config);
+      .select(this.refs.svg);
 
-    setTimeout(() => {
-      this.setState({viz});
-    }, 500);
+    this.setState({viz});
 
   }
 
   componentDidUpdate() {
 
     const {viz} = this.state;
-    if (viz) viz.render();
+
+    if (viz) {
+
+      // Grabs config from props.
+      const {config, type} = this.props;
+
+      // Preps attribute list from config, and removes it when done.
+      const attrs = config.attrs ? config.attrs.reduce((obj, d) => {
+        obj[d.id] = d;
+        return obj;
+      }, {}) : false;
+
+      // Preps groupBy, using attrs if necessary.
+      const groupBy = config.groupBy ? attrs ? (config.groupBy instanceof Array ? config.groupBy : [config.groupBy]).map(function(g) {
+        return function(d) {
+
+          let val;
+
+          if (d[g]) val = d[g];
+          else if (d.profession_id instanceof Array) val = attrs[d.profession_id[0]][g];
+          else val = attrs[d.profession_id][g];
+
+          return val;
+
+        }
+      }) : config.groupBy : ["id"];
+
+      config.data.forEach(d => {
+        if (d.profession_id !== void 0) d.profession_id = `${d.profession_id}`;
+      });
+
+      if (config.time) config.timeFilter = () => true;
+
+      switch(type) {
+        case "Treemap":
+          config.sum = d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0;
+          break;
+        case "Priestley":
+          if (!config.shapeConfig) config.shapeConfig = {};
+          config.shapeConfig.labelPadding = 2;
+          break;
+        case "Geomap":
+          config.ocean = false;
+          config.pointSizeMax = 35;
+          config.pointSizeMin = 8;
+          config.shapeConfig = {
+            fill: d => d.event.toLowerCase().indexOf("birth") > 0
+                     ? "rgba(76, 94, 215, 0.4)"
+                     : "rgba(95, 1, 22, 0.4)",
+            stroke: () => "#4A4948",
+            strokeWidth: 1,
+            Path: {
+              fill: "transparent",
+              stroke: "#4A4948",
+              strokeWidth: 0.75
+            }
+          };
+          config.tiles = false;
+          config.topojson = topojson;
+          config.zoom = false;
+        default:
+          break;
+      }
+
+      viz
+        .shapeConfig({
+          fill: d => {
+            if (d.color) return d.color;
+            else if (attrs && d.profession_id !== void 0) {
+              let occ = d.profession_id.constructor === Array ? d.profession_id[0] : d.profession_id;
+              return COLORS_DOMAIN[attrs[occ].domain_slug];
+            }
+            return "#ccc";
+          }
+        })
+        .config(config)
+        .groupBy(groupBy)
+        .render();
+    }
 
   }
 
