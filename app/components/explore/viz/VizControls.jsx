@@ -17,8 +17,11 @@ class VizControls extends Component {
     const changeGrouping = this.props.changeGrouping.bind(this);
 
     return (
-      <div className='explore-controls'>
-        <h2>Data Explorer</h2>
+      <div className='explore-controls data-explorer'>
+        <div className='control-header'>
+          <h2 className='data-explorer'>Data Explorer</h2>
+          <i className='control-hide'></i>
+        </div>
         <section className="control-group">
           <h3>Showing individuals grouped by:</h3>
           <select value={grouping} onChange={changeGrouping}>

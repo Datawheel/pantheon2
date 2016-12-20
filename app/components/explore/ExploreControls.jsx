@@ -96,9 +96,12 @@ class ExploreControls extends Component {
     const tempEndYear = this.state.tempEndYear || years.max;
 
     return (
-      <div className='explore-controls'>
+      <div className='explore-controls rankings'>
 
-        <h2>Rankings</h2>
+        <div className='control-header'>
+          <h2 className='rankings'>Rankings</h2>
+          <i className='control-hide'></i>
+        </div>
 
         <section className="control-group">
           <h3>Show Top Ranked</h3>

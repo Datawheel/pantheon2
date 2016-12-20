@@ -29,8 +29,9 @@ class RankingTable extends Component {
 
     return (
       <div className="ranking-table">
-        <h2>Most Globally Remembered People</h2>
+        <h1>Most Globally Remembered People</h1>
         <h3>4000 BC - 2013</h3>
+        <RankingPagination />
         <ReactTable
           columns={columns}
           pageSize={pageSize}
