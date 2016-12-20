@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from "react";
+import React, {Component} from "react";
 import {connect} from "react-redux";
-import styles from "css/components/explore/explore";
+import "css/components/explore/explore";
 import Viz from "components/viz/Index";
-import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
+import {changeViz} from "actions/explorer";
+import {YEAR_BUCKETS} from "types";
 import {extent} from "d3-array";
 
 class VizShell extends Component {
@@ -11,20 +12,21 @@ class VizShell extends Component {
     super(props);
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    changeViz("StackedArea");
   }
 
   render() {
     const {data, grouping, profession, viz} = this.props.explorer;
-    const { occupations } = profession;
-    const { type, config } = viz;
-    let tmapData, attrs;
+    const {occupations} = profession;
+    const {type, config} = viz;
+    let attrs, tmapData;
 
-    if(!data.length){
-      return (<div className="viz-shell">no data yet (or loading...)</div>)
+    if (!data.length) {
+      return <div className="viz-shell">no data yet (or loading...)</div>;
     }
 
-    if(grouping === "places"){
+    if (grouping === "places") {
       let birthyearSpan = extent(data, d => d.birthyear);
       birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
 
@@ -36,27 +38,28 @@ class VizShell extends Component {
           d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
                        ? d.birthyear
                        : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
-          return d
-        })
+          return d;
+        });
     }
-    else if(grouping === "professions"){
+    else if (grouping === "professions") {
       attrs = occupations.reduce((obj, d) => {
         obj[d.id] = d;
         return obj;
-      }, {})
+      }, {});
       tmapData = data
         .filter(p => p.birthyear !== null && p.profession_id !== null)
         .map(d => {
           const o = attrs[d.profession_id];
-          if(o)
+          if (o) {
             d.profession_name = o.name;
+          }
           else {
-            console.log(d.profession_id, attrs)
+            console.log(d.profession_id, attrs);
           }
           d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
           d.place = d.birthplace;
-          return d
-        })
+          return d;
+        });
     }
 
     return (
@@ -65,12 +68,12 @@ class VizShell extends Component {
         <div>
           <Viz type={type}
             key={`explorer_viz_${type}`}
-            config={Object.assign(config, {data:tmapData, attrs})} />,
+            config={Object.assign(config, {data: tmapData, attrs})} />,
         </div>
       </div>
     );
   }
-};
+}
 
 function mapStateToProps(state) {
   return {

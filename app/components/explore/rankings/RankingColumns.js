@@ -1,18 +1,18 @@
 import React from "react";
-import { FORMATTERS } from "types";
+import {FORMATTERS} from "types";
 
 export const COLUMNS = {
   person: {
     person: [
       {
-        header:'Rank',
-        accessor:'rank',
+        header: "Rank",
+        accessor: "rank",
         sortable: false,
-        render: ({index}) => <span>{index+1}</span>
+        render: ({index}) => <span>{index + 1}</span>
       },
       {
-        header:'Name',
-        accessor:'name',
+        header: "Name",
+        accessor: "name",
         render: ({value, row}) => <a href={`/profile/person/${row["slug"]}`}>{value}</a>
       },
       {
@@ -42,139 +42,139 @@ export const COLUMNS = {
         accessor: d => d.birthplace ? d.birthplace.name : null,
         render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : null
       },
-      {header:'L', accessor:'langs', sort:'desc'}
+      {header: "L", accessor: "langs", sort: "desc"}
     ]
   },
   profession: {
     profession: [
       {
-        header:'Rank',
-        accessor:'num_born',
+        header: "Rank",
+        accessor: "num_born",
         render: ({index}) => <span>{index+1}</span>
       },
       {
-        header:'Profession',
-        accessor:'name',
+        header: "Profession",
+        accessor: "name",
         render: ({value, row}) => <a href={`/profile/profession/${row["slug"]}`}>{value}</a>
       },
       {
-        header:'Industry',
-        accessor:'industry'
+        header: "Industry",
+        accessor: "industry"
       },
       {
-        header:'Domain',
-        accessor:'domain'
+        header: "Domain",
+        accessor: "domain"
       },
       {
-        header:'People',
-        accessor:'num_born',
-        sort:'desc'
+        header: "People",
+        accessor: "num_born",
+        sort: "desc"
       },
       {
-        header:'Women',
-        accessor:'num_born_women',
+        header: "Women",
+        accessor: "num_born_women",
         render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
       }
     ],
     industry: [
       {
-        header:'Rank',
-        accessor:'num_born',
+        header: "Rank",
+        accessor: "num_born",
         render: ({index}) => <span>{index+1}</span>
       },
       {
-        header:'Industry',
-        accessor:'industry',
+        header: "Industry",
+        accessor: "industry"
       },
       {
-        header:'Domain',
-        accessor:'domain'
+        header: "Domain",
+        accessor: "domain"
       },
       {
-        header:'People',
-        accessor:'num_born',
-        sort:'desc'
+        header: "People",
+        accessor: "num_born",
+        sort: "desc"
       },
       {
-        header:'Women',
-        accessor:'num_born_women',
+        header: "Women",
+        accessor: "num_born_women",
         render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
-      },
+      }
     ],
     domain: [
       {
-        header:'Rank',
-        accessor:'num_born',
-        render: ({index}) => <span>{index+1}</span>
+        header: "Rank",
+        accessor: "num_born",
+        render: ({index}) => <span>{index + 1}</span>
       },
       {
-        header:'Domain',
-        accessor:'domain',
+        header: "Domain",
+        accessor: "domain"
       },
       {
-        header:'People',
-        accessor:'num_born',
-        sort:'desc'
+        header: "People",
+        accessor: "num_born",
+        sort: "desc"
       },
       {
-        header:'Women',
-        accessor:'num_born_women',
+        header: "Women",
+        accessor: "num_born_women",
         render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
-      },
+      }
     ]
   },
   place: {
     country: [
       {
-        header:'Rank',
-        accessor:'born_rank_unique',
+        header: "Rank",
+        accessor: "born_rank_unique",
         render: ({value, index}) => <span>{value ? value : index+1}</span>
       },
       {
-        header:'Country',
-        accessor:'name',
+        header: "Country",
+        accessor: "name",
         render: ({value, row}) => <a href={`/profile/place/${row["slug"]}`}>{value}</a>
       },
       {
-        header:'Continent',
-        accessor:'continent',
+        header: "Continent",
+        accessor: "continent"
       },
       {
-        header:'Born',
-        accessor:'num_born',
+        header: "Born",
+        accessor: "num_born"
       },
       {
-        header:'Died',
-        accessor:'num_died',
-      },
+        header: "Died",
+        accessor: "num_died"
+      }
     ],
     place: [
       {
-        header:'Rank',
-        accessor:'born_rank_unique',
+        header: "Rank",
+        accessor: "born_rank_unique",
         render: ({value, index}) => <span>{value ? value : index+1}</span>
       },
       {
-        header:'City',
-        accessor:'name',
+        header: "City",
+        accessor: "name",
         render: ({value, row}) => <a href={`/profile/place/${row["slug"]}`}>{value}</a>
       },
       {
-        header:'Country',
-        accessor:'country_name',
+        header: "Country",
+        accessor: "country_name"
       },
       {
-        header:'Region',
-        accessor:'region',
+        header: "Region",
+        accessor: "region"
       },
       {
-        header:'Born',
-        accessor:'num_born',
+        header: "Born",
+        accessor: "num_born"
       },
       {
-        header:'Died',
-        accessor:'num_died',
-      },
+        header: "Died",
+        accessor: "num_died",
+      }
     ]
   }
-}
+};

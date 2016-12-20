@@ -1,9 +1,8 @@
-import React, { Component, PropTypes } from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import { changeCountry, changeCity, changeCityInCountry, changePlaceDepth } from "actions/explorer";
-import apiClient from 'apiconfig';
-import { COUNTRY_DEPTH, CITY_DEPTH } from 'types';
+import React, {Component} from "react";
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+import {changeCountry, changeCity, changeCityInCountry, changePlaceDepth} from "actions/explorer";
+import {COUNTRY_DEPTH, CITY_DEPTH} from "types";
 
 class PlaceControl extends Component {
 
@@ -11,7 +10,7 @@ class PlaceControl extends Component {
     super(props);
     this.state = {
       placeDepth: COUNTRY_DEPTH
-    }
+    };
   }
 
   placeDepthClick(e) {
@@ -34,8 +33,8 @@ class PlaceControl extends Component {
         <div className="flat-options-w-title">
           <h3>Within:</h3>
           <ul className="flat-options">
-            <li><a href="#" className={selectedDepth===COUNTRY_DEPTH ? "active" : ""} data-depth={COUNTRY_DEPTH} onClick={placeDepthClick}>Countries</a></li>
-            <li><a href="#" className={selectedDepth===CITY_DEPTH ? "active" : ""} data-depth={CITY_DEPTH} onClick={placeDepthClick}>Cities</a></li>
+            <li><a href="#" className={selectedDepth === COUNTRY_DEPTH ? "active" : ""} data-depth={COUNTRY_DEPTH} onClick={placeDepthClick}>Countries</a></li>
+            <li><a href="#" className={selectedDepth === CITY_DEPTH ? "active" : ""} data-depth={CITY_DEPTH} onClick={placeDepthClick}>Cities</a></li>
           </ul>
         </div>
 
@@ -77,19 +76,19 @@ class PlaceControl extends Component {
       </div>
     );
   }
-};
+}
 
 
 function mapStateToProps(state) {
   return {
-    explorer: state.explorer,
+    explorer: state.explorer
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators({changeCountry, changeCity, changeCityInCountry, changePlaceDepth}, dispatch)
-  }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaceControl);

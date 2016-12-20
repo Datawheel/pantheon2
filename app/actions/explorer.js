@@ -135,8 +135,7 @@ export function changeProfessions(e) {
   }
 }
 
-export function changeViz(e) {
-  const newType = e.target.dataset.viz;
+export function changeViz(newType) {
   let config;
   return (dispatch, getState) => {
     const { explorer } = getState();
