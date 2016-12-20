@@ -9,9 +9,9 @@
   --fontHuge:                 28px;
 
   --heading {
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 48px;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--colorBlackhole);
   }
 
   --subHeading {

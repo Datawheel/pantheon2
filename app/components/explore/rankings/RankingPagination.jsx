@@ -16,9 +16,9 @@ class RankingPagination extends Component {
 
     return (
       <div className="ranking-pagination">
-        <a href="#" onClick={currentPage > 0 ? this.changePage : null}>previous</a>
-        page {results.page+1} of {results.pages}
-        <a href="#" onClick={currentPage < (totalNumPages-1) ? this.changePage : null}>next</a>
+        <a href="#" onClick={currentPage > 0 ? this.changePage : null}>Prev</a>
+        <span>page {results.page+1} of {results.pages}</span>
+        <a href="#" onClick={currentPage < (totalNumPages-1) ? this.changePage : null}>Next</a>
       </div>
     );
   }

@@ -6,31 +6,95 @@
 .ReactTable {
   & table {
     border: 0;
-
   }
+
+  & thead {
+    box-shadow: none;
+
+    & tr {
+      text-align: left;
+    }
+  }
+}
+
+.explore-container {
+  max-width: 950px;
+  margin: 90px auto 0;
 }
 
 .explore {
   color: var(--colorSlate);
-  margin: auto;
-  padding: 80px 0 0 0;
+  padding: 5px 0 60px;
   display: flex;
-  justify-content: space-around;
-  align-items: stretch;
-  max-width: 1200px;
+  justify-content: space-between;
+
+  & h1 {
+    @apply --heading;
+    font-family: var(--fontAmiko);
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: none;
+  }
 
   & h3 {
-    color: #82817F;
-    font-size: 15px;
-    font-weight: normal;
-    text-transform: uppercase;
+    @apply --searchResults;
+    margin: 5px 0;
+    color: var(--colorTan);
+    letter-spacing: 0.5px;
+  }
+
+  & .ranking-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
 
   & .explore-controls {
     flex: 0 0 208px;
-    padding: 0 20px;
-    text-transform: uppercase;
+    padding-right: 10px;
+    box-sizing: border-box;
     width: 208px;
+
+    & h3 {
+      margin: 0;
+      color: var(--colorStone);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    & h4 {
+      margin: 0;
+      font-size: 9px;
+      color: var(--colorSlate);
+      font-weight: 400;
+      letter-spacing: 0.8px;
+      line-height: 20px;
+      text-transform: uppercase;
+    }
+
+    & select {
+      width: 100%;
+      margin: 10px 0 7px;
+      padding: 8px 10px 4px;
+      appearance: none;
+      border: 1px solid var(--colorTan);
+      box-sizing: border-box;
+      border-radius: 0;
+      background-color: rgba(255,255,255,0);
+      background-repeat: no-repeat;
+      background-image: url('../../../images/tri-dd-down.svg');
+      background-position: 100% 50%;
+      background-size: 30px 7px;
+      cursor: pointer;
+
+      color: var(--colorCtrl);
+      font-family: var(--fontAmiko);
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 1;
+    }
   }
 
   & .control-header {
@@ -83,9 +147,14 @@
   }
 
   & .control-group {
-    border: solid 1px #82817F;
-    margin: 0 0 10px 0;
-    padding: 0 20px 10px 20px;
+    border: solid 1px var(--colorSand);
+    margin-bottom: 9px;
+    padding: 13px 11px;
+    box-sizing: border-box;
+
+    & h4 {
+
+    }
   }
 
   & .flat-options-w-title {
@@ -159,6 +228,9 @@
   }
 
   & .ranking-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   & .viz-shell {

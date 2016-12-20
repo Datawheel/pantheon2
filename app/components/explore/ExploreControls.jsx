@@ -134,7 +134,7 @@ class ExploreControls extends Component {
         </section>
 
         <section className="control-group">
-          <h3>Filter Rankings</h3>
+          <h4>Filter Rankings</h4>
           <ul className="flat-options">
             <li><a href="#" id="birthyear" onClick={this.changeYearType} className={yearType === "birthyear" ? "active" : null}>Births</a></li>
             <li><a href="#" id="deathyear" onClick={this.changeYearType} className={yearType === "deathyear" ? "active" : null}>Deaths</a></li>
