@@ -1,9 +1,9 @@
 export const NUM_RANKINGS = 12;
-export const NUM_RANKINGS_PRE = Math.floor(NUM_RANKINGS/2);
-export const NUM_RANKINGS_POST = Math.floor(NUM_RANKINGS/2);
+export const NUM_RANKINGS_PRE = Math.floor(NUM_RANKINGS / 2);
+export const NUM_RANKINGS_POST = Math.floor(NUM_RANKINGS / 2);
 export const YEAR_BUCKETS = 50;
 
-export const DISMISS_MESSAGE = 'DISMISS_MESSAGE';
+export const DISMISS_MESSAGE = "DISMISS_MESSAGE";
 
 export const COUNTRY_DEPTH = "COUNTRY";
 export const CITY_DEPTH = "CITY";
@@ -32,7 +32,7 @@ export const COLORS_CONTINENT = {
   Asia: "#D28629",
   Europe: "#5F0116",
   Oceania: "#4C5ED7"
-}
+};
 
 import {format} from "d3-format";
 import {timeFormat} from "d3-time-format";
@@ -42,9 +42,9 @@ export const FORMATTERS = {
   share: format(".2%"),
   shareWhole: format(".0%"),
   date: timeFormat("%B %d, %Y"),
-  year: (y) => y < 0 ? `${Math.abs(y)} BC` : y,
-  ordinal: (n) => {
-    if(n>3 && n<21) return `${n}th`; // thanks kennebec
+  year: y => y < 0 ? `${Math.abs(y)} BC` : y,
+  ordinal: n => {
+    if (n > 3 && n < 21) return `${n}th`; // thanks kennebec
     switch (n % 10) {
       case 1: return `${n}st`;
       case 2: return `${n}nd`;
@@ -52,4 +52,4 @@ export const FORMATTERS = {
       default: return `${n}th`;
     }
   }
-}
+};
