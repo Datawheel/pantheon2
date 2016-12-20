@@ -127,6 +127,19 @@ const profession = (
   }
 };
 
+const viz = (
+  state = {type:"StackedArea", config:{}},
+  action
+) => {
+  switch (action.type) {
+    case "CHANGE_EXPLORER_VIZ":
+      return Object.assign({}, state, {type: action.data});
+    case "CHANGE_EXPLORER_VIZ_CONFIG":
+      return Object.assign({}, state, {config: action.data});
+    default:
+      return state;
+  }
+};
 
 const explorerReducer = combineReducers({
   grouping,
@@ -134,6 +147,7 @@ const explorerReducer = combineReducers({
   years,
   place,
   profession,
+  viz,
 });
 
 export default explorerReducer;

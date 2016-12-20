@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from "react";
 import {connect} from "react-redux";
 import styles from "css/components/explore/explore";
 import Viz from "components/viz/Index";
-import { COLORS_CONTINENT } from "types";
+import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
+import {extent} from "d3-array";
 
 class VizShell extends Component {
 
@@ -14,32 +15,32 @@ class VizShell extends Component {
   }
 
   render() {
-    const {data, grouping, profession} = this.props.explorer;
+    const {data, grouping, profession, viz} = this.props.explorer;
     const { occupations } = profession;
-    let tmapData, config;
+    const { type, config } = viz;
+    let tmapData, attrs;
 
     if(!data.length){
-      return (<div className="viz-shell">no data yet...</div>)
+      return (<div className="viz-shell">no data yet (or loading...)</div>)
     }
 
     if(grouping === "places"){
+      let birthyearSpan = extent(data, d => d.birthyear);
+      birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
+
       tmapData = data
         .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
         .map(d => {
           d.borncountry = d.birthcountry.country_name;
           d.borncontinent = d.birthcountry.continent;
+          d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
+                       ? d.birthyear
+                       : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
           return d
         })
-      config = {
-        data: tmapData,
-        depth: 1,
-        groupBy: ["borncontinent", "borncountry"],
-        shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-        time: "birthyear"
-      }
     }
     else if(grouping === "professions"){
-      const attrs = occupations.reduce((obj, d) => {
+      attrs = occupations.reduce((obj, d) => {
         obj[d.id] = d;
         return obj;
       }, {})
@@ -56,22 +57,15 @@ class VizShell extends Component {
           d.place = d.birthplace;
           return d
         })
-      config = {
-        attrs: attrs,
-        data: tmapData,
-        depth: 2,
-        groupBy: ["domain", "industry", "profession_name"],
-        time: "birthyear"
-      }
     }
 
     return (
       <div className="viz-shell">
         <h2>Most Globally Remembered People</h2>
         <div>
-          <Viz type="Treemap"
-            key="tmap_1"
-            config={config} />,
+          <Viz type={type}
+            key={`explorer_viz_${type}`}
+            config={Object.assign(config, {data:tmapData, attrs})} />,
         </div>
       </div>
     );

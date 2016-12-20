@@ -4,6 +4,7 @@ import { changeGrouping } from "actions/explorer";
 import YearControl from "components/explore/controls/YearControl";
 import PlaceControl from "components/explore/controls/PlaceControl";
 import ProfessionControl from "components/explore/controls/ProfessionControl";
+import VizControl from "components/explore/controls/VizControl";
 
 class VizControls extends Component {
 
@@ -29,6 +30,7 @@ class VizControls extends Component {
           <YearControl />
           <PlaceControl />
           <ProfessionControl />
+          <VizControl />
         </section>
       </div>
     );

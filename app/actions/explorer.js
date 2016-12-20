@@ -2,7 +2,7 @@
 import { polyfill } from 'es6-promise';
 import apiClient from 'apiconfig';
 import axios from 'axios';
-import { COUNTRY_DEPTH, CITY_DEPTH } from 'types';
+import { COUNTRY_DEPTH, CITY_DEPTH, COLORS_CONTINENT } from 'types';
 
 polyfill();
 
@@ -132,5 +132,37 @@ export function changeProfessions(e) {
     dispatch({ type: "CHANGE_EXPLORER_PROFESSIONS", data:newProfessions });
     dispatch({ type: "CHANGE_EXPLORER_PROFESSION_SLUG", data:selectedProfession });
     return getVizData(dispatch, getState);
+  }
+}
+
+export function changeViz(e) {
+  const newType = e.target.dataset.viz;
+  let config;
+  return (dispatch, getState) => {
+    const { explorer } = getState();
+    if(explorer.grouping === "places"){
+      config = {
+        depth: 1,
+        groupBy: ["borncontinent", "borncountry"],
+        time: "birthyear",
+        shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
+      }
+      if(newType === "StackedArea"){
+        config = Object.assign(config, {
+          time: "bucketyear",
+          x: "bucketyear",
+          y: d => d.id instanceof Array ? d.id.length : 1
+        })
+      }
+    }
+    else if(explorer.grouping === "professions"){
+      config = {
+        depth: 2,
+        groupBy: ["domain", "industry", "profession_name"],
+        time: "birthyear"
+      }
+    }
+    dispatch({ type: "CHANGE_EXPLORER_VIZ", data:newType });
+    dispatch({ type: "CHANGE_EXPLORER_VIZ_CONFIG", data:config });
   }
 }
