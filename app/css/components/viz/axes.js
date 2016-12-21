@@ -1,4 +1,4 @@
-import { FORMATTERS } from "types";
+import {FORMATTERS} from "types";
 
 export default {
   axisConfig: {
