@@ -1,4 +1,4 @@
-import { FORMATTERS } from "types";
+import {FORMATTERS} from "types";
 
 export default {
   handleConfig: {
@@ -7,7 +7,10 @@ export default {
     ry: 6
   },
   handleSize: 12,
-  tickFormat: d => FORMATTERS.year(new Date(d).getFullYear()),
+  tickFormat: d => {
+    d = new Date(d);
+    return d.getMonth() ? false : FORMATTERS.year(d.getFullYear());
+  },
   selectionConfig: {
     "fill": "#718D9A",
     "fill-opacity": 1,
