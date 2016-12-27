@@ -1,18 +1,15 @@
 BEGIN;
 
 DROP TABLE IF EXISTS person CASCADE;
-DROP TABLE IF EXISTS profession CASCADE;
+DROP TABLE IF EXISTS occupation CASCADE;
 DROP TABLE IF EXISTS place CASCADE;
 DROP TABLE IF EXISTS year CASCADE;
-DROP TABLE IF EXISTS place_profession CASCADE;
-DROP TABLE IF EXISTS creation CASCADE;
-DROP TABLE IF EXISTS pageview CASCADE;
+DROP TABLE IF EXISTS indicators CASCADE;
 DROP TABLE IF EXISTS search CASCADE;
 
 CREATE TABLE place
 (
-  id serial PRIMARY KEY,
-  wiki_id integer,
+  id integer PRIMARY KEY,
   name text NOT NULL,
   slug CHARACTER VARYING(255),
   region CHARACTER VARYING(100),
@@ -31,7 +28,9 @@ CREATE TABLE place
   img_author CHARACTER VARYING(255),
   img_meta CHARACTER VARYING(255),
   born_rank integer,
-  born_rank_unique integer
+  born_rank_unique integer,
+  died_rank integer,
+  died_rank_unique integer
 );
 
 CREATE TABLE year
@@ -43,17 +42,17 @@ CREATE TABLE year
   num_died integer
 );
 
-CREATE TABLE profession
+CREATE TABLE occupation
 (
   id serial PRIMARY KEY,
-  slug CHARACTER VARYING(255) NOT NULL,
-  name CHARACTER VARYING(255) NOT NULL,
+  occupation CHARACTER VARYING(255) NOT NULL,
+  occupation_slug CHARACTER VARYING(255) NOT NULL,
   industry CHARACTER VARYING(255),
   industry_slug CHARACTER VARYING(255),
-  domain CHARACTER VARYING(255),
-  domain_slug CHARACTER VARYING(255),
   "group" CHARACTER VARYING(255),
   group_slug CHARACTER VARYING(255),
+  domain CHARACTER VARYING(255),
+  domain_slug CHARACTER VARYING(255),
   num_born integer,
   num_born_men integer,
   num_born_women integer
@@ -61,8 +60,7 @@ CREATE TABLE profession
 
 CREATE TABLE person
 (
-  id serial PRIMARY KEY,
-  wiki_id integer,
+  id integer PRIMARY KEY,
   name text NOT NULL,
   slug CHARACTER VARYING(255) NOT NULL,
   gender boolean,
@@ -91,9 +89,9 @@ CREATE TABLE person
   deathcountry_rank integer,
   deathcountry_rank_unique integer,
 
-  profession integer NOT NULL REFERENCES profession (id),
-  profession_rank integer,
-  profession_rank_unique integer,
+  occupation integer NOT NULL REFERENCES occupation (id),
+  occupation_rank integer,
+  occupation_rank_unique integer,
 
   occ_acc real,
   langs integer,
@@ -103,26 +101,20 @@ CREATE TABLE person
   youtube CHARACTER VARYING(100)
 );
 
-CREATE TABLE place_profession
-(
-  place integer REFERENCES place (id),
-  profession integer REFERENCES profession (id),
-  num_born integer,
-  num_died integer
-);
-
-CREATE TABLE creation
-(
-  person integer REFERENCES person (id),
-  lang CHARACTER VARYING(16) NOT NULL,
-  creation_date timestamp NOT NULL
-);
-
-CREATE TABLE pageview
+CREATE TABLE indicators
 (
   person integer REFERENCES person (id),
   pageview_date timestamp NOT NULL,
-  num_pageviews integer
+  num_pageviews integer,
+  num_langs integer,
+  l_nw real,
+  l_mw real,
+  r integer,
+  r_mr real,
+  c real,
+  c_n real,
+  s real,
+  s_n real
 );
 
 CREATE EXTENSION IF NOT EXISTS unaccent;
