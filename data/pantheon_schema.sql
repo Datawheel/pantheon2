@@ -95,7 +95,7 @@ CREATE TABLE person
 
   occ_acc real,
   langs integer,
-  langs_adopt integer,
+  hpi real,
   twitter CHARACTER VARYING(100),
   alive boolean,
   youtube CHARACTER VARYING(100)

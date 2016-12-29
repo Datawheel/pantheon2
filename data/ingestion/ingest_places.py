@@ -48,9 +48,7 @@ died = collapse(people, born=False)
 died_overlap = died[["id", "num_died"]]
 
 people = born.merge(died_overlap, how="left", on="id")
-print people.shape
 
-# print died.shape
 
 died["overlap"] = died.id.isin(born["id"])
 died = died[~died["overlap"]]
