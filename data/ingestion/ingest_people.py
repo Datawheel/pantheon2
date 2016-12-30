@@ -46,3 +46,8 @@ people["occupation"] = people["occupation"].replace(occupations)
 # print people.tail(10)
 # print people[people["id"]==435773]
 people.to_sql("person", engine, if_exists="append", index=False)
+
+
+# import pandas as pd
+# people = pd.read_csv("raw/people2.tsv", sep="\t", na_values="null", true_values="true", false_values="false")
+# people[people['bplace_geonameid']==2643743][['name', 'bplace_name', 'bplace_geonameid', 'l']].head(25)

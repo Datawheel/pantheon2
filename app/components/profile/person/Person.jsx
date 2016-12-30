@@ -41,6 +41,7 @@ class Person extends Component {
     if(this.props.personProfile.person.id === undefined) {
       return <NotFound />;
     }
+    return <div>testing...</div>
     const {personProfile, activateSearch} = this.props;
     const profession = personProfile.person.profession;
     const birthcountry = personProfile.person.birthcountry;
