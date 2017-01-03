@@ -4,13 +4,17 @@
 @import '../../common/typography';
 
 .ReactTable {
-  & table { border: 0; }
+  & table {
+    border-width: 1px 0 1px 0;
+    border-color: var(--colorSand);
+    border-style: solid;
+    padding-bottom: 7px;
+    margin: 7px 0;
+  }
 
   & thead {
     box-shadow: none;
-    border-color: var(--colorSand);
-    border-style: solid;
-    border-width: 1px 0;
+    border-bottom: 1px solid var(--colorSand);
 
     & th {
       background: transparent;
@@ -127,9 +131,9 @@ table {
     text-transform: none;
   }
 
-  & h3 {
+  & .ranking-table-date {
     @apply --searchResults;
-    margin: 5px 0;
+    margin: 5px 0 12px;
     color: var(--colorTan);
     letter-spacing: 0.5px;
   }
@@ -138,6 +142,39 @@ table {
     width: 100%;
     display: flex;
     justify-content: space-between;
+
+    & span {
+      @apply --smallCaps;
+    }
+
+    & a {
+      border-bottom: 1px solid transparent;
+      @apply --bodyLink;
+      @apply --smallCaps;
+
+      &:last-child::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        background: url('../../../images/tri-right-b.svg') no-repeat;
+        background-size: contain;
+        width: 7px;
+        height: 13px;
+        margin: 0 0 -3px 3px;
+      }
+
+      &:first-child::before {
+        content: '';
+        position: relative;
+        display: inline-block;
+        background: url('../../../images/tri-right-b.svg') no-repeat;
+        background-size: contain;
+        width: 7px;
+        height: 13px;
+        margin: 0 3px -3px 0;
+        transform: scaleX(-1);
+      }
+    }
   }
 
   & .explore-controls {
@@ -147,12 +184,8 @@ table {
     width: 208px;
 
     & h3 {
-      margin: 0;
-      color: var(--colorStone);
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0;
-      text-transform: uppercase;
+      @apply --exploreControlTitles;
+      margin: 20px 0 8px;
     }
 
     & h4 {
@@ -167,24 +200,52 @@ table {
 
     & select {
       width: 100%;
-      margin: 10px 0 7px;
-      padding: 8px 10px 4px;
-      appearance: none;
-      border: 1px solid var(--colorTan);
-      box-sizing: border-box;
-      border-radius: 0;
-      background-color: rgba(255,255,255,0);
-      background-repeat: no-repeat;
+      @apply --exploreControlInput;
       background-image: url('../../../images/tri-dd-down.svg');
       background-position: 100% 50%;
       background-size: 30px 7px;
       cursor: pointer;
 
-      color: var(--colorCtrl);
-      font-family: var(--fontAmiko);
-      font-weight: 600;
-      font-size: 13px;
-      line-height: 1;
+      &.add-control-input {
+        margin-top: 10px;
+      }
+    }
+
+    & .switch-explore-link {
+      border-bottom: 1px solid transparent;
+      @apply --bodyLink;
+      @apply --smallCaps;
+      position: relative;
+
+      &::before {
+        content: "";
+        position: relative;
+        display: inline-block;
+        background: url("../../../images/tri-right-b.svg") no-repeat;
+        background-size: contain;
+        width: 7px;
+        height: 13px;
+        margin: 0 3px -3px 0;
+        transform: scaleX(-1);
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        display: inline-block;
+        background: url("../../../images/globalNav/explore.svg") no-repeat;
+        background-size: contain;
+        top: -2px;
+        right: -18px;
+        width: 17px;
+        height: 17px;
+      }
+    }
+  }
+
+  & .key-group {
+    & h3 {
+      margin: 0 0 8px;
     }
   }
 
@@ -240,18 +301,14 @@ table {
   & .control-group {
     border: solid 1px var(--colorSand);
     margin-bottom: 9px;
-    padding: 13px 11px;
+    padding: 13px 11px 16px;
     box-sizing: border-box;
-
-    & h4 {
-
-    }
   }
 
   & .flat-options-w-title {
     & h3 {
-      margin: 10px 5px 10px 0;
       display: inline-block;
+      margin-right: 10px;
     }
   }
 
@@ -262,20 +319,26 @@ table {
 
     & li {
       display: inline-block;
+
       &:after {
         content: "|";
-        padding: 0 7px;
+        font-size: 11px;
+        padding: 0 4px;
       }
+
       &:last-child:after {
         content: "";
       }
+
       & a {
+        @apply --bodyLink;
+        @apply --exploreControlTitles;
         color: inherit;
-        font-size: 15px;
-        text-decoration: none;
+
         &.active {
-          border-bottom: solid 1px #36687F;
-          color: #363636;
+          color: var(--colorDark);
+          font-weight: 700;
+          border-bottom: 2px solid var(--colorCtrl);
         }
       }
     }
@@ -287,35 +350,53 @@ table {
     align-items: stretch;
 
     & input {
-      background: inherit;
-      border: solid 1px #82817F;
-      color: #36687F;
+      @apply --exploreControlInput;
       text-align: center;
-      width: 100px;
+      width: 70px;
     }
+
     & span {
-      font-size: 12px;
+      @apply --exploreControlTitles;
       margin: 5px 0;
     }
   }
 
   & .rc-slider {
-    margin: 10px 0 20px 0;
+    margin: 10px 0 30px 0;
+  }
+  & .rc-slider-rail {
+    background-color: var(--colorTan);
+    height: 2px;
+    margin: 1px 0;
   }
   & .rc-slider-track {
-    background-color: #36687F;
+    background-color: var(--colorCtrlShape);
+    height: 2px;
+    margin: 1px 0;
   }
   & .rc-slider-handle {
-    /*background-color: #36687F;*/
-    border-color: #36687F;
+    background-color: var(--colorCtrlShape);
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    margin-top: -2px;
+    border: 1px solid var(--colorCtrlShape);
+  }
+  & .rc-slider-dot {
+    border: 1px solid var(--colorTan);
   }
   & .rc-slider-dot-active {
-    background-color: #36687F;
-    border-color: #36687F;
+    background-color: var(--colorCtrlShape);
+    border: 1px solid var(--colorCtrlShape);
   }
   & .rc-slider-mark-text {
-    color: #9E978D;
-    font-size: 10px;
+    color: var(--colorTan);
+    font-size: 9px;
+    font-weight: 600;
+  }
+  & .rc-slider-mark {
+    left: 7%;
+    width: 90%;
   }
 
   & .ranking-table {

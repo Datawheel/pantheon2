@@ -30,7 +30,7 @@ class RankingTable extends Component {
     return (
       <div className="ranking-table">
         <h1>Most Globally Remembered People</h1>
-        <h3>4000 BC - 2013</h3>
+        <h3 className="ranking-table-date">4000 BC - 2013</h3>
         <RankingPagination />
         <ReactTable
           columns={columns}
