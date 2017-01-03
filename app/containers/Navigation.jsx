@@ -43,8 +43,8 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           <li className='item'>
             <Link to="/about/vision" className='item-link about' activeClassName='active'>About</Link>
             <ul className={'sub-items'}>
-              <li><a href="/about/team" className='item-link'>Team</a></li>
               <li><a href="/about/vision" className='item-link'>Vision</a></li>
+              <li><a href="/about/team" className='item-link'>Team</a></li>
               <li><a href="/about/publications" className='item-link'>Publications</a></li>
               <li><a href="/about/methods" className='item-link'>Methods</a></li>
               <li><a href="/about/data_sources" className='item-link'>Data Sources</a></li>
