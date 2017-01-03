@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react";
+import { Link } from "react-router";
 import {connect} from "react-redux";
 import { FORMATTERS } from "types";
 import { polyfill } from "es6-promise";
@@ -103,7 +104,7 @@ class ExploreControls extends Component {
           <i className='control-hide'></i>
         </div>
 
-        <section className="control-group">
+        <section className="control-group key-group">
           <h3>Show Top Ranked</h3>
           <select value={type} onChange={this.changeType}>
             {this.rankingType.map(rt =>
@@ -141,7 +142,7 @@ class ExploreControls extends Component {
           </ul>
 
 
-          <h3>Between:</h3>
+          <h3 className="year-label">Between:</h3>
           <div className="year-inputs">
             <input type="text" id='startYear' value={tempYearStart!==null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
             <span>and</span>
@@ -151,9 +152,9 @@ class ExploreControls extends Component {
 
           { type !== "place" ?
             <div className="filter">
-              <h3>Locations:</h3>
+              <h3 className="place-filter">Locations:</h3>
               <select value={country.id} onChange={this.changeCountry}>
-                <option value="all">All</option>
+                <option value="all">All Countries</option>
                 {countries.map(c =>
                   <option key={c.id} value={c.id} data-countrycode={c.country_code}>
                     {c.name}
@@ -164,8 +165,8 @@ class ExploreControls extends Component {
           : null }
 
           { type !== "place" && country.places.length ?
-          <select value={place} onChange={this.changePlace}>
-            <option value="all">All</option>
+          <select className="add-control-input" value={place} onChange={this.changePlace}>
+            <option value="all">All Cities</option>
             {country.places.map(p =>
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -176,9 +177,9 @@ class ExploreControls extends Component {
 
           { type !== "profession" ?
             <div className="filter">
-              <h3>Profession:</h3>
+              <h3 className="prof-filter">Profession:</h3>
               <select value={domain.id} onChange={this.changeDomain}>
-                <option value="all">All</option>
+                <option value="all">All Domains</option>
                 {domains.map(d =>
                   <option key={d.domain_slug} value={d.domain_slug} data-domainslug={d.domain_slug}>
                     {d.domain}
@@ -189,8 +190,8 @@ class ExploreControls extends Component {
           : null }
 
           { type !== "profession" && domain.professions.length ?
-          <select value={profession} onChange={this.changeProfession}>
-            <option value="all">All</option>
+          <select className="add-control-input" value={profession} onChange={this.changeProfession}>
+            <option value="all">All Occupations</option>
             {domain.professions.map(p =>
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -199,6 +200,7 @@ class ExploreControls extends Component {
           </select>
           : null }
         </section>
+        <Link to="/explore/viz" className="switch-explore-link">Back to Data Explorer</Link>
 
       </div>
     );
