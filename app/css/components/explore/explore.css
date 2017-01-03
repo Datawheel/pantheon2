@@ -210,36 +210,36 @@ table {
         margin-top: 10px;
       }
     }
+  }
 
-    & .switch-explore-link {
-      border-bottom: 1px solid transparent;
-      @apply --bodyLink;
-      @apply --smallCaps;
+  & .switch-explore-link {
+    border-bottom: 1px solid transparent;
+    @apply --bodyLink;
+    @apply --smallCaps;
+    position: relative;
+
+    &::before {
+      content: "";
       position: relative;
+      display: inline-block;
+      background: url("../../../images/tri-right-b.svg") no-repeat;
+      background-size: contain;
+      width: 7px;
+      height: 13px;
+      margin: 0 3px -4px 0;
+      transform: scaleX(-1);
+    }
 
-      &::before {
-        content: "";
-        position: relative;
-        display: inline-block;
-        background: url("../../../images/tri-right-b.svg") no-repeat;
-        background-size: contain;
-        width: 7px;
-        height: 13px;
-        margin: 0 3px -3px 0;
-        transform: scaleX(-1);
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        display: inline-block;
-        background: url("../../../images/globalNav/explore.svg") no-repeat;
-        background-size: contain;
-        top: -2px;
-        right: -18px;
-        width: 17px;
-        height: 17px;
-      }
+    &::after {
+      content: "";
+      position: absolute;
+      display: inline-block;
+      background: url("../../../images/globalNav/explore.svg") no-repeat;
+      background-size: contain;
+      top: -2px;
+      right: -20px;
+      width: 17px;
+      height: 17px;
     }
   }
 
@@ -338,7 +338,11 @@ table {
         &.active {
           color: var(--colorDark);
           font-weight: 700;
-          border-bottom: 2px solid var(--colorCtrl);
+          border-bottom: 2px solid var(--colorCtrlShape);
+          &:hover {
+            border-bottom: 2px solid var(--colorCtrlShape);
+            cursor: default;
+          }
         }
       }
     }
@@ -389,6 +393,10 @@ table {
     background-color: var(--colorCtrlShape);
     border: 1px solid var(--colorCtrlShape);
   }
+  & .rc-slider-dot:first-child {
+    width: 1px;
+    border-radius: 0;
+  }
   & .rc-slider-mark-text {
     color: var(--colorTan);
     font-size: 9px;
@@ -409,4 +417,18 @@ table {
     border:solid green 1px;
     flex: 1;
   }
+}
+
+.rc-slider-tooltip-placement-top .rc-slider-tooltip-arrow {
+  border-top-color: var(--colorCtrlShape);
+}
+
+.rc-slider-tooltip-inner {
+  @apply --exploreControlInput;
+  background-color: var(--colorEggshell);
+  padding: 7px 5px;
+  min-width: 24px;
+  height: 24px;
+  text-decoration: none;
+  box-shadow: none;
 }
