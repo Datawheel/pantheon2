@@ -17,9 +17,9 @@ class VizControls extends Component {
     const changeGrouping = this.props.changeGrouping.bind(this);
 
     return (
-      <div className='explore-controls data-explorer'>
+      <div className='explore-controls viz-explorer'>
         <div className='control-header'>
-          <h2 className='data-explorer'>Data Explorer</h2>
+          <h2 className='viz-explorer'>Visual Explorer</h2>
           <i className='control-hide'></i>
         </div>
         <section className="control-group">

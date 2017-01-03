@@ -200,7 +200,7 @@ class ExploreControls extends Component {
           </select>
           : null }
         </section>
-        <Link to="/explore/viz" className="switch-explore-link">Go to Viz Explorer</Link>
+        <Link to="/explore/viz" className="switch-explore-link">Go to Visual Explorer</Link>
 
       </div>
     );
