@@ -22,8 +22,8 @@ class VizControls extends Component {
           <h2 className='viz-explorer'>Visual Explorer</h2>
           <i className='control-hide'></i>
         </div>
-        <section className="control-group">
-          <h3>Showing individuals grouped by:</h3>
+        <section className="control-group key-group">
+          <h3>Show</h3>
           <select value={grouping} onChange={changeGrouping}>
             <option value="places">Places</option>
             <option value="professions">Professions</option>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-visual</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="EXPLORER---all-domains,-all-locations" transform="translate(-32.000000, -101.000000)" stroke-width="0.694444444" stroke="#F4F4F1">
+            <g id="Group-13">
+                <g id="PANEL" transform="translate(25.694444, 94.444444)">
+                    <g id="header">
+                        <g id="icon-visual" transform="translate(6.944444, 7.638889)">
+                            <ellipse id="Oval-2" cx="6.59722222" cy="6.43631436" rx="5.39772727" ry="5.26607539"></ellipse>
+                            <ellipse id="Oval-2-Copy" stroke-dasharray="0.6944444444444444" cx="6.59722222" cy="6.43631436" rx="2.3989899" ry="2.34047795"></ellipse>
+                            <ellipse id="Oval-2-Copy-2" cx="6.59722222" cy="6.43631436" rx="4.19823232" ry="4.09583641"></ellipse>
+                            <ellipse id="Oval-2-Copy-3" stroke-dasharray="0.6944444444444444,3.472222222222222" cx="6.59722222" cy="6.43631436" rx="6.59722222" ry="6.43631436"></ellipse>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

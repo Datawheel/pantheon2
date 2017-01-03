@@ -244,7 +244,7 @@ table {
   }
 
   & .key-group {
-    & h3 {
+    & > h3 {
       margin: 0 0 8px;
     }
   }
@@ -275,6 +275,18 @@ table {
           width: 16px;
           height: 9px;
           margin: 2px 0 0 -20px;
+        }
+      }
+
+      &.viz-explorer {
+        &::before {
+          content: '';
+          position: absolute;
+          background: url('../../../images/icon-explore.svg') no-repeat;
+          background-size: contain;
+          width: 17px;
+          height: 17px;
+          margin: -2px 0 0 -20px;
         }
       }
     }
@@ -308,7 +320,7 @@ table {
   & .flat-options-w-title {
     & h3 {
       display: inline-block;
-      margin-right: 10px;
+      margin: 20px 10px 0 0;
     }
   }
 
