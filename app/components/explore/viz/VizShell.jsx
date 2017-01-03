@@ -54,7 +54,7 @@ class VizShell extends Component {
             d.profession_name = o.name;
           }
           else {
-            console.log(d.profession_id, attrs);
+            // console.log(d.profession_id, attrs);
           }
           d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
           d.place = d.birthplace;
@@ -64,11 +64,11 @@ class VizShell extends Component {
 
     return (
       <div className="viz-shell">
-        <h2>Most Globally Remembered People</h2>
+        <h1>Most Globally Remembered People</h1>
         <div>
           <Viz type={type}
             key={`explorer_viz_${type}`}
-            config={Object.assign(config, {data: tmapData, attrs})} />,
+            config={Object.assign(config, {data: tmapData, attrs})} />
         </div>
       </div>
     );
