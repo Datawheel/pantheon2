@@ -35,13 +35,18 @@ people = people.merge(countries, how="left", left_on="deathcountry", right_on="p
 people = people.drop(["place_id", "place_id_death", "birthcountry", "deathcountry"], axis=1)
 people = people.rename(columns={"country_code":"birthcountry", "country_code_death":"deathcountry"})
 
-
 # need occupation IDs
 occupations = pd.read_sql("select id, occupation from occupation", engine, index_col="id")
 occupations["occupation"] = occupations["occupation"].str.upper()
 occupations = occupations["occupation"].to_dict()
 occupations = {v:k for k, v in occupations.items()}
 people["occupation"] = people["occupation"].replace(occupations)
+
+# calculate ranks...
+for rank_type in ["birthyear", "deathyear", "birthcountry", "deathcountry", \
+                    "birthplace", "deathplace", "occupation"]:
+    people["{}_rank".format(rank_type)] = people.groupby(rank_type)['langs'].rank(ascending=False, method="dense", na_option="bottom")
+    people["{}_rank_unique".format(rank_type)] = people.groupby(rank_type)['langs'].rank(ascending=False, method="first", na_option="bottom")
 
 # print people.tail(10)
 # print people[people["id"]==435773]
