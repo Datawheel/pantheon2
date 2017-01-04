@@ -1,18 +1,18 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import styles from 'css/components/profile/intro';
-import iconProfW from 'images/globalNav/profile-w.svg';
+import React, {Component, PropTypes} from "react";
+import {connect} from "react-redux";
+import styles from "css/components/profile/intro";
+import iconProfW from "images/globalNav/profile-w.svg";
 import PersonImage from "components/utils/PersonImage";
-import { FORMATTERS } from "types";
+import {FORMATTERS} from "types";
 
 import {COLORS_DOMAIN} from "types";
 
-const Intro = ({ person, totalPageViews }) => {
+const Intro = ({person, totalPageViews}) => {
 
   const age = person.deathyear !== null
             ? person.deathyear.id - person.birthyear.id
             : new Date().getFullYear() - person.birthyear.id,
-        backgroundColor = COLORS_DOMAIN[person.profession.domain_slug],
+        backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug],
         decoLines = 14;
 
   return (
@@ -33,11 +33,11 @@ const Intro = ({ person, totalPageViews }) => {
             }
           </h3>
           <p>
-            {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/profession/${person.profession.slug}`}>{person.profession.name}</a> born in <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> in <b>{FORMATTERS.year(person.birthyear.name)}</b>.
+            {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.slug}`}>{person.occupation.name}</a> born in <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> in <b>{FORMATTERS.year(person.birthyear.name)}</b>.
             {person.deathyear ?
               `${person.gender ? " She" : " He"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
             &nbsp;Since the start of Wikipedia, {person.gender ? "she" : "he"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
-            By analyzing all "globally remembered people", Pantheon aims to understand cultural development through changes in professions, birth and death places, and Wikipedia activity.&nbsp;
+            By analyzing all "globally remembered people", Pantheon aims to understand cultural development through changes in occupations, birth and death places, and Wikipedia activity.&nbsp;
             <a href="/about/" className="deep-link">Read about our methods</a>
           </p>
         </div>

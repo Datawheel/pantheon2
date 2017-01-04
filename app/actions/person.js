@@ -1,17 +1,17 @@
 /* eslint consistent-return: 0, no-else-return: 0*/
-import { polyfill } from 'es6-promise';
-import request from 'axios';
-import axios from 'axios';
-import { GET_PERSON, NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST } from 'types'
+import {polyfill} from "es6-promise";
+import request from "axios";
+import axios from "axios";
+import { GET_PERSON, NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST } from "types"
 
 polyfill();
 
-export function makePersonRequest(method, id, data, api = '/person') {
-  const requestedURL = api + (id ? ('?id=eq.' + id) : '');
+export function makePersonRequest(method, id, data, api = "/person") {
+  const requestedURL = api + (id ? ("?id=eq." + id) : "");
   // console.log(requestedURL)
   // return request[method](requestedURL, data);
-  console.log(`http://localhost:3100${requestedURL}`)
-  return axios.get(`http://localhost:3100${requestedURL}`)
+  console.log(`http://localhost:3100${requestedURL}`);
+  return axios.get(`http://localhost:3100${requestedURL}`);
 }
 
 export function fetchPerson(store) {
@@ -22,7 +22,7 @@ export function fetchPerson(store) {
   };
 }
 
-export function fetchProfessionRanks(store) {
+export function fetchOccupationRanks(store) {
   const getOccRank = makePersonRequest("get", null, null, `/person?slug=eq.${store.id}&select=id,occupation{*},occupation_rank,occupation_rank_unique,langs`);
   const getOccRankPeers = getOccRank.then(function(occRankRes) {
         const occRank = occRankRes.data[0];
@@ -35,19 +35,19 @@ export function fetchProfessionRanks(store) {
         }
         const apiURL = `/person?occupation=eq.${occId}&occupation_rank_unique=gte.${rankSub}&occupation_rank_unique=lte.${rankPlus}&order=occupation_rank_unique&select=occupation{*},birthcountry{*},langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`;
         // console.log("OccRank API:", apiURL)
-        return makePersonRequest('get', null, null, apiURL);
+        return makePersonRequest("get", null, null, apiURL);
     });
 
   const prom = Promise.all([getOccRank, getOccRankPeers])
 
   return {
-    type: "GET_PROFESSION_RANKS",
+    type: "GET_OCCUPATION_RANKS",
     promise: prom
   };
 }
 
 export function fetchCountryRanks(store) {
-  const getCountryRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id,birthcountry{*},deathcountry{*},birthcountry_rank,birthcountry_rank_unique,deathcountry_rank,deathcountry_rank_unique,langs`)
+  const getCountryRank = makePersonRequest("get", null, null, `/person?slug=eq.${store["id"]}&select=id,birthcountry{*},deathcountry{*},birthcountry_rank,birthcountry_rank_unique,deathcountry_rank,deathcountry_rank_unique,langs`)
 
   const getBCRankPeers = getCountryRank.then(function(bcRankRes) {
         const bcRank = bcRankRes.data[0];
@@ -55,7 +55,7 @@ export function fetchCountryRanks(store) {
         const rankSub = Math.max(1, parseInt(bcRank.birthcountry_rank_unique) - NUM_RANKINGS_PRE);
         const rankPlus = Math.max(NUM_RANKINGS, parseInt(bcRank.birthcountry_rank_unique) + NUM_RANKINGS_POST);
         const apiURL = `/person?birthcountry=eq.${bcId}&birthcountry_rank_unique=gte.${rankSub}&birthcountry_rank_unique=lte.${rankPlus}&order=birthcountry_rank_unique&select=birthcountry{*},langs,birthcountry_rank,birthcountry_rank_unique,slug,gender,name,id,birthyear,deathyear`;
-        return makePersonRequest('get', null, null, apiURL);
+        return makePersonRequest("get", null, null, apiURL);
     });
 
   const getDCRankPeers = getCountryRank.then(function(bcRankRes) {
@@ -70,7 +70,7 @@ export function fetchCountryRanks(store) {
         else {
           apiURL = `/person?deathcountry=eq.0`;
         }
-        return makePersonRequest('get', null, null, apiURL);
+        return makePersonRequest("get", null, null, apiURL);
     }).catch((e) => { console.log(e) });
 
 
@@ -83,7 +83,7 @@ export function fetchCountryRanks(store) {
 }
 
 export function fetchYearRanks(store) {
-  const getYearRank = makePersonRequest('get', null, null, `/person?slug=eq.${store["id"]}&select=id,birthyear{*},deathyear{*},birthyear_rank,birthyear_rank_unique,deathyear_rank,deathyear_rank_unique,langs`);
+  const getYearRank = makePersonRequest("get", null, null, `/person?slug=eq.${store["id"]}&select=id,birthyear{*},deathyear{*},birthyear_rank,birthyear_rank_unique,deathyear_rank,deathyear_rank_unique,langs`);
 
   const getBYRankPeers = getYearRank.then(function(byRankRes) {
         const byRank = byRankRes.data[0];
