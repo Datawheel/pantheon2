@@ -21,7 +21,7 @@ const Navigation = ({ user, logOut, activateSearch }) => {
       <nav className='navigation' role="navigation">
         <ul className='items'>
           <li className='item'>
-            <Link to="/explore" className='item-link explore' activeClassName='active'>Explore</Link>
+            <Link to="/explore/viz" className='item-link explore' activeClassName='active'>Explore</Link>
             <ul className={'sub-items'}>
               <li><a href="/explore/viz" className='item-link'>Visual Explorer</a></li>
               <li><a href="/explore/rankings" className='item-link'>Rankings</a></li>
