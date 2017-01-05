@@ -5,7 +5,7 @@ export const COLUMNS = {
   person: {
     person: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "rank",
         sortable: false,
         render: ({index}) => <span>{index + 1}</span>
@@ -48,7 +48,7 @@ export const COLUMNS = {
   profession: {
     profession: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "num_born",
         render: ({index}) => <span>{index+1}</span>
       },
@@ -78,7 +78,7 @@ export const COLUMNS = {
     ],
     industry: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "num_born",
         render: ({index}) => <span>{index+1}</span>
       },
@@ -103,7 +103,7 @@ export const COLUMNS = {
     ],
     domain: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "num_born",
         render: ({index}) => <span>{index + 1}</span>
       },
@@ -126,7 +126,7 @@ export const COLUMNS = {
   place: {
     country: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "born_rank_unique",
         render: ({value, index}) => <span>{value ? value : index+1}</span>
       },
@@ -150,7 +150,7 @@ export const COLUMNS = {
     ],
     place: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "born_rank_unique",
         render: ({value, index}) => <span>{value ? value : index+1}</span>
       },
