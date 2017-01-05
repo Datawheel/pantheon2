@@ -12,7 +12,7 @@ import ProfessionTrends from "components/profile/place/ProfessionTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
 import NotFound from "components/NotFound";
-import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchPeopleBornHereAlive } from "actions/place";
+import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchOccupationsBornHere, fetchOccupationsDiedHere, fetchPeopleBornHereAlive } from "actions/place";
 import { fetchAllProfessions } from "actions/profession";
 import { YEAR_BUCKETS } from "types";
 
@@ -31,8 +31,8 @@ class Place extends Component {
     fetchPeopleBornHere,
     fetchPeopleDiedHere,
     fetchAllProfessions,
-    fetchProfessionsBornHere,
-    fetchProfessionsDiedHere,
+    fetchOccupationsBornHere,
+    fetchOccupationsDiedHere,
     fetchPeopleBornHereAlive
   ]
 
@@ -40,10 +40,11 @@ class Place extends Component {
     if(this.props.placeProfile.place.id === undefined) {
       return <NotFound />;
     }
+    return <div>testing...</div>
     const {placeProfile, professionProfile} = this.props;
     const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, peopleBornHereAlive} = placeProfile;
     const {professions} = professionProfile;
-    console.log("professions!", professions)
+    // console.log("professions!", professions)
 
     const tmapBornData = peopleBornHere
       .filter(p => p.birthyear !== null)

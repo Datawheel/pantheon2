@@ -56,7 +56,7 @@ export default (store) => {
   function genRandId(path) {
     let candidates;
     if (path.includes("place")) {
-      candidates = ["India", "United_States", "France", "Italy", "Chile", "Brazil", "Bulgaria", "Rome", "Coimbra", "Albuquerque", "Oslo", "Thailand", "Indonesia", "Shanghai", "St._Louis", "Cote_dIvoire_(Ivory_Coast)", "Ljusdal", "Dallas", "Olias_del_Rey", "Tbilisi", "Philippines", "Sogndal"];
+      candidates = ["india", "united_states", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_divoire_(ivory_coast)", "ljusdal", "dallas", "olias_del_rey", "tbilisi", "philippines", "sogndal"];
     }
     else if (path.includes("profession")) {
       candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];

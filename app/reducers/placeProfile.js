@@ -61,36 +61,36 @@ const peopleDiedHere = (
   }
 }
 
-const professionsHere = (
+const occupationsHere = (
   state = [],
   action
 ) => {
   switch (action.type) {
-    case "GET_PROFESSIONS_HERE_SUCCESS":
+    case "GET_OCCUPATIONS_HERE_SUCCESS":
       return action.res.data
     default:
       return state;
   }
 }
 
-const professionsBornHere = (
+const occupationsBornHere = (
   state = [],
   action
 ) => {
   switch (action.type) {
-    case "GET_PROFESSIONS_BORN_HERE_SUCCESS":
+    case "GET_OCCUPATIONS_BORN_HERE_SUCCESS":
       return action.res.data
     default:
       return state;
   }
 }
 
-const professionsDiedHere = (
+const occupationsDiedHere = (
   state = [],
   action
 ) => {
   switch (action.type) {
-    case "GET_PROFESSIONS_DIED_HERE_SUCCESS":
+    case "GET_OCCUPATIONS_DIED_HERE_SUCCESS":
       return action.res.data
     default:
       return state;
@@ -115,8 +115,8 @@ const placeProfileReducer = combineReducers({
   country,
   peopleBornHere,
   peopleDiedHere,
-  professionsBornHere,
-  professionsDiedHere,
+  occupationsBornHere,
+  occupationsDiedHere,
   peopleBornHereAlive
 });
 
