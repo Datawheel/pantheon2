@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 
+import "css/components/explore/viz.css";
 import "css/components/viz/tooltip.css";
-import "css/components/viz/viz.css";
 
 import {default as axesStyle} from "css/components/viz/axes.js";
 import {default as legendStyle} from "css/components/viz/legend.js";

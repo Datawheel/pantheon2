@@ -23,7 +23,7 @@ class VizShell extends Component {
     let attrs, tmapData;
 
     if (!data.length) {
-      return <div className="viz-shell">no data yet (or loading...)</div>;
+      return <div className="explore-viz-container">no data yet (or loading...)</div>;
     }
 
     if (grouping === "places") {
@@ -63,9 +63,10 @@ class VizShell extends Component {
     }
 
     return (
-      <div className="viz-shell">
-        <h1>Most Globally Remembered People</h1>
-        <div>
+      <div className="explore-viz-container">
+        <h1>How have the professions of all globally remembered people changed over time?</h1>
+        <h3 className="explore-viz-date">4000 BC - 2013</h3>
+        <div className="viz-shell">
           <Viz type={type}
             key={`explorer_viz_${type}`}
             config={Object.assign(config, {data: tmapData, attrs})} />

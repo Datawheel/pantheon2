@@ -3,6 +3,7 @@
 @import '../../common/colors';
 @import '../../common/typography';
 
+/* override ReactTable styles*/
 .ReactTable {
   & table {
     border-width: 1px 0 1px 0;
@@ -88,33 +89,17 @@
   }
 }
 
-table {
-  & .-th-inner {
-    @apply --profileNav;
-    font-size: 9px;
-  }
-
-  & .-td-inner {
-    @apply --small;
-    font-size: 11px;
-
-    & a {
-      @apply --bodyLink;
-      font-size: 12px;
-      font-weight: 400;
-    }
-  }
-
-  & td, & th {
-    &:nth-child(2) {
-      text-align: left;
-    }
-  }
-}
-
+/* shared Ranking and Explore container styles*/
 .explore-container {
   max-width: 950px;
-  margin: 90px auto 0;
+  margin: 90px auto 5px;
+}
+
+.ranking-table-container, .explore-viz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
 }
 
 .explore {
@@ -124,128 +109,54 @@ table {
   justify-content: space-between;
 
   & h1 {
+    max-width: 520px;
+    text-align: center;
     @apply --heading;
     font-family: var(--fontAmiko);
-    line-height: 1;
     letter-spacing: 0;
     text-transform: none;
   }
 
-  & .ranking-table-date {
+  & h3 {
     @apply --searchResults;
     margin: 5px 0 12px;
     color: var(--colorTan);
     letter-spacing: 0.5px;
   }
+}
 
-  & .ranking-pagination {
+/* shared Control Panel styles*/
+.explore-controls {
+  flex: 0 0 208px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  width: 208px;
+
+  & h3 {
+    @apply --exploreControlTitles;
+    margin: 20px 0 8px;
+  }
+
+  & h4 {
+    margin: 0;
+    font-size: 9px;
+    color: var(--colorSlate);
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    line-height: 20px;
+    text-transform: uppercase;
+  }
+
+  & select {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    @apply --exploreControlInput;
+    background-image: url('../../../images/tri-dd-down.svg');
+    background-position: 100% 50%;
+    background-size: 30px 7px;
+    cursor: pointer;
 
-    & span {
-      @apply --smallCaps;
-    }
-
-    & a {
-      border-bottom: 1px solid transparent;
-      @apply --bodyLink;
-      @apply --smallCaps;
-
-      &:last-child::after {
-        content: '';
-        position: relative;
-        display: inline-block;
-        background: url('../../../images/tri-right-b.svg') no-repeat;
-        background-size: contain;
-        width: 7px;
-        height: 13px;
-        margin: 0 0 -3px 3px;
-      }
-
-      &:first-child::before {
-        content: '';
-        position: relative;
-        display: inline-block;
-        background: url('../../../images/tri-right-b.svg') no-repeat;
-        background-size: contain;
-        width: 7px;
-        height: 13px;
-        margin: 0 3px -3px 0;
-        transform: scaleX(-1);
-      }
-    }
-  }
-
-  & .explore-controls {
-    flex: 0 0 208px;
-    padding-right: 10px;
-    box-sizing: border-box;
-    width: 208px;
-
-    & h3 {
-      @apply --exploreControlTitles;
-      margin: 20px 0 8px;
-    }
-
-    & h4 {
-      margin: 0;
-      font-size: 9px;
-      color: var(--colorSlate);
-      font-weight: 400;
-      letter-spacing: 0.8px;
-      line-height: 20px;
-      text-transform: uppercase;
-    }
-
-    & select {
-      width: 100%;
-      @apply --exploreControlInput;
-      background-image: url('../../../images/tri-dd-down.svg');
-      background-position: 100% 50%;
-      background-size: 30px 7px;
-      cursor: pointer;
-
-      &.add-control-input {
-        margin-top: 10px;
-      }
-    }
-  }
-
-  & .switch-explore-link {
-    border-bottom: 1px solid transparent;
-    @apply --bodyLink;
-    @apply --smallCaps;
-    position: relative;
-
-    &::before {
-      content: "";
-      position: relative;
-      display: inline-block;
-      background: url("../../../images/tri-right-b.svg") no-repeat;
-      background-size: contain;
-      width: 7px;
-      height: 13px;
-      margin: 0 3px -4px 0;
-      transform: scaleX(-1);
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      display: inline-block;
-      background: url("../../../images/globalNav/explore.svg") no-repeat;
-      background-size: contain;
-      top: -2px;
-      right: -20px;
-      width: 17px;
-      height: 17px;
-    }
-  }
-
-  & .key-group {
-    & > h3 {
-      margin: 0 0 8px;
+    &.add-control-input {
+      margin-top: 10px;
     }
   }
 
@@ -310,17 +221,34 @@ table {
     }
   }
 
-  & .control-group {
-    border: solid 1px var(--colorSand);
-    margin-bottom: 9px;
-    padding: 13px 11px 16px;
-    box-sizing: border-box;
-  }
+  & .switch-explore-link {
+    border-bottom: 1px solid transparent;
+    @apply --bodyLink;
+    @apply --smallCaps;
+    position: relative;
 
-  & .flat-options-w-title {
-    & h3 {
+    &::before {
+      content: "";
+      position: relative;
       display: inline-block;
-      margin: 20px 10px 0 0;
+      background: url("../../../images/tri-right-b.svg") no-repeat;
+      background-size: contain;
+      width: 7px;
+      height: 13px;
+      margin: 0 3px -4px 0;
+      transform: scaleX(-1);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: inline-block;
+      background: url("../../../images/globalNav/explore.svg") no-repeat;
+      background-size: contain;
+      top: -2px;
+      right: -20px;
+      width: 17px;
+      height: 17px;
     }
   }
 
@@ -360,6 +288,26 @@ table {
     }
   }
 
+  & .flat-options-w-title {
+    & h3 {
+      display: inline-block;
+      margin: 20px 10px 0 0;
+    }
+  }
+
+  & .control-group {
+    border: solid 1px var(--colorSand);
+    margin-bottom: 9px;
+    padding: 13px 11px 16px;
+    box-sizing: border-box;
+  }
+
+  & .key-group {
+    & > h3 {
+      margin: 0 0 8px;
+    }
+  }
+
   & .year-inputs {
     display: flex;
     justify-content: space-between;
@@ -376,59 +324,56 @@ table {
       margin: 5px 0;
     }
   }
+}
 
-  & .rc-slider {
-    margin: 10px 0 30px 0;
-  }
-  & .rc-slider-rail {
-    background-color: var(--colorTan);
-    height: 2px;
-    margin: 1px 0;
-  }
-  & .rc-slider-track {
-    background-color: var(--colorCtrlShape);
-    height: 2px;
-    margin: 1px 0;
-  }
-  & .rc-slider-handle {
-    background-color: var(--colorCtrlShape);
-    width: 8px;
-    height: 8px;
-    margin-left: -4px;
-    margin-top: -2px;
-    border: 1px solid var(--colorCtrlShape);
-  }
-  & .rc-slider-dot {
-    border: 1px solid var(--colorTan);
-  }
-  & .rc-slider-dot-active {
-    background-color: var(--colorCtrlShape);
-    border: 1px solid var(--colorCtrlShape);
-  }
-  & .rc-slider-dot:first-child {
-    width: 1px;
-    border-radius: 0;
-  }
-  & .rc-slider-mark-text {
-    color: var(--colorTan);
-    font-size: 9px;
-    font-weight: 600;
-  }
-  & .rc-slider-mark {
-    left: 7%;
-    width: 90%;
-  }
+.rc-slider {
+  margin: 10px 0 30px 0;
+}
 
-  & .ranking-table {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.rc-slider-rail {
+  background-color: var(--colorTan);
+  height: 2px;
+  margin: 1px 0;
+}
 
-  & .viz-shell {
-    border:solid green 1px;
-    flex: 1;
-  }
+.rc-slider-track {
+  background-color: var(--colorCtrlShape);
+  height: 2px;
+  margin: 1px 0;
+}
+
+.rc-slider-handle {
+  background-color: var(--colorCtrlShape);
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  margin-top: -2px;
+  border: 1px solid var(--colorCtrlShape);
+}
+
+.rc-slider-dot {
+  border: 1px solid var(--colorTan);
+}
+
+.rc-slider-dot-active {
+  background-color: var(--colorCtrlShape);
+  border: 1px solid var(--colorCtrlShape);
+}
+
+.rc-slider-dot:first-child {
+  width: 1px;
+  border-radius: 0;
+}
+
+.rc-slider-mark-text {
+  color: var(--colorTan);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.rc-slider-mark {
+  left: 7%;
+  width: 90%;
 }
 
 .rc-slider-tooltip-placement-top .rc-slider-tooltip-arrow {

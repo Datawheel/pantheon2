@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from "react";
+
+import "css/components/explore/explore.css";
+import "css/components/explore/rankings.css";
+
 import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import ReactTable from "react-table";
-import styles from "css/components/explore/explore";
 import { RANKINGS_RESULTS_PER_PAGE } from "types";
 import RankingPagination from "components/explore/rankings/RankingPagination";
 import { updateRankingsTable } from "actions/rankings";
@@ -28,11 +31,12 @@ class RankingTable extends Component {
     columns[0].render = rankColumnRender;
 
     return (
-      <div className="ranking-table">
+      <div className="ranking-table-container">
         <h1>Most Globally Remembered People</h1>
         <h3 className="ranking-table-date">4000 BC - 2013</h3>
         <RankingPagination />
         <ReactTable
+          className="ranking-table"
           columns={columns}
           pageSize={pageSize}
           data={results.data}
