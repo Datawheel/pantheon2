@@ -33,25 +33,37 @@ class ProfessionControl extends Component {
     }
 
     return (
-      <div className="filter">
-
+      <div className="filter prof-control">
         <div className="flat-options-w-title">
-          <h3>Profession:</h3>
+          <h3>Prof:</h3>
           <ul className="flat-options">
-            <li><a href="#" className={selectedDepth === OCCUPATION_DEPTH ? "active" : ""} data-depth={OCCUPATION_DEPTH} onClick={professionDepthClick}>Occupations</a></li>
-            <li><a href="#" className={selectedDepth === INDUSTRY_DEPTH ? "active" : ""} data-depth={INDUSTRY_DEPTH} onClick={professionDepthClick}>Industries</a></li>
-            <li><a href="#" className={selectedDepth === DOMAIN_DEPTH ? "active" : ""} data-depth={DOMAIN_DEPTH} onClick={professionDepthClick}>Domains</a></li>
+            <li><a href="#" className={selectedDepth === DOMAIN_DEPTH ? "active" : ""} data-depth={DOMAIN_DEPTH} onClick={professionDepthClick}>Domain</a></li>
+            <li><a href="#" className={selectedDepth === OCCUPATION_DEPTH ? "active" : ""} data-depth={OCCUPATION_DEPTH} onClick={professionDepthClick}>Occupation</a></li>
           </ul>
         </div>
 
-        <select value={selectedProfessionSlug} onChange={changeProfessions}>
-          <option value="all" data-professions="all">All</option>
-          {professions.map(p =>
-            <option key={p.slug} value={p.slug} data-professions={p.professions}>
-              {p.name}
-            </option>
-          )}
-        </select>
+        { selectedDepth === OCCUPATION_DEPTH
+        ? <div>
+            <select value={selectedProfessionSlug} onChange={changeProfessions}>
+              <option value="all" data-professions="all">All Occupations</option>
+              {professions.map(p =>
+                <option key={p.slug} value={p.slug} data-professions={p.professions}>
+                  {p.name}
+                </option>
+              )}
+            </select>
+          </div>
+        : <div>
+            <select value={selectedProfessionSlug} onChange={changeProfessions}>
+              <option value="all" data-professions="all">All Domains</option>
+              {professions.map(p =>
+                <option key={p.slug} value={p.slug} data-professions={p.professions}>
+                  {p.name}
+                </option>
+              )}
+            </select>
+          </div>
+        }
       </div>
     );
   }

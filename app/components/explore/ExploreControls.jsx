@@ -141,18 +141,26 @@ class ExploreControls extends Component {
             <li><a href="#" id="deathyear" onClick={this.changeYearType} className={yearType === "deathyear" ? "active" : null}>Deaths</a></li>
           </ul>
 
-
-          <h3 className="year-label">Between:</h3>
-          <div className="year-inputs">
-            <input type="text" id='startYear' value={tempYearStart!==null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
-            <span>and</span>
-            <input type="text" id='endYear' value={!tempYearStart && tempYearEnd!==null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
+          <div className="year-control">
+            <h3 className="year-label">Between:</h3>
+            <div className="year-inputs">
+              <input type="text" id="startYear" value={tempYearStart!==null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
+              <span>and</span>
+              <input type="text" id="endYear" value={!tempYearStart && tempYearEnd!==null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
+            </div>
+            <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={timelineMarks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onChange={(v) => {this.setState({tempYearStart:v[0], tempYearEnd:v[1]})}} onAfterChange={(v) => {this.setState({tempYearStart:null, tempYearEnd:null}); this.changeYears(v);}} value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years} defaultValue={years} />
           </div>
-          <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={timelineMarks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onChange={(v) => {this.setState({tempYearStart:v[0], tempYearEnd:v[1]})}} onAfterChange={(v) => {this.setState({tempYearStart:null, tempYearEnd:null}); this.changeYears(v);}} value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years} defaultValue={years} />
 
           { type !== "place" ?
-            <div className="filter">
-              <h3 className="place-filter">Locations:</h3>
+            <div className="filter place-control">
+              <div className="flat-options-w-title">
+                <h3 className="place-filter">Place:</h3>
+                <ul className="flat-options">
+                  <li><a href="#" className="active">Country</a></li>
+                  <li><a href="#" className="">City</a></li>
+                </ul>
+              </div>
+
               <select value={country.id} onChange={this.changeCountry}>
                 <option value="all">All Countries</option>
                 {countries.map(c =>
@@ -176,8 +184,15 @@ class ExploreControls extends Component {
           : null }
 
           { type !== "profession" ?
-            <div className="filter">
-              <h3 className="prof-filter">Profession:</h3>
+            <div className="filter prof-control">
+              <div className="flat-options-w-title">
+                <h3 className="prof-filter">Prof:</h3>
+                <ul className="flat-options">
+                  <li><a href="#" className="active">Domain</a></li>
+                  <li><a href="#">Occupation</a></li>
+                </ul>
+              </div>
+
               <select value={domain.id} onChange={this.changeDomain}>
                 <option value="all">All Domains</option>
                 {domains.map(d =>

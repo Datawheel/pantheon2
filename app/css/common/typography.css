@@ -97,7 +97,7 @@
   --exploreControlTitles {
     color: var(--colorStone);
     font-size: 11px;
-    line-height: 11px;
+    line-height: 1.3;
     font-weight: 400;
     letter-spacing: 0;
     text-transform: uppercase;
