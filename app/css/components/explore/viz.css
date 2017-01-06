@@ -5,6 +5,10 @@
   width: 100%;
 }
 
+.ranking-table-min {
+  width: 130px;
+}
+
 .viz {
   margin: 40px 0;
 }
