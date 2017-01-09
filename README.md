@@ -29,7 +29,7 @@
   > brew doctor
 
   # Install the postgrest package
-  > brew install postgrest postgresql
+  > brew install postgresql gmp postgrest
   ```
 
 2. Initialize the DB
