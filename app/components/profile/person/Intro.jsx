@@ -23,7 +23,7 @@ const Intro = ({person, totalPageViews}) => {
         </div>
       </div>
       <div className="intro-content">
-        <PersonImage src={`/people/${person.wiki_id}.jpg`} alt={`Photo of ${person.name}`} />
+        <PersonImage src={`/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} />
         <div className="intro-text">
           <h3>
             <img src={iconProfW} />

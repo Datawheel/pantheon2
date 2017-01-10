@@ -20,7 +20,7 @@ const Header = ({pageviews, person}) => {
   ]);
 
   const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug],
-        backgroundImage = `url('/people/${person.wiki_id}.jpg')`;
+        backgroundImage = `url('/people/${person.id}.jpg')`;
 
   return (
     <header className="hero">

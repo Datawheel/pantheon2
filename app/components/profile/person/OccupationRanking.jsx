@@ -37,7 +37,7 @@ const OccupationRanking = ({person, ranking}) => {
             <li key={peer.id} className={ranking.me.occupation_rank_unique === peer.occupation_rank_unique ? "rank-me" : null}>
               <div className="rank-photo">
                 <a href={`/profile/person/${peer.slug}/`}>
-                  <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+                  <PersonImage src={`/people/${peer.id}.jpg`} alt={`Photo of ${peer.name}`} />
                 </a>
               </div>
               <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>

@@ -59,7 +59,7 @@ const CountryRanking = ({ person, ranking }) => {
             <li key={peer.id} className={ranking.me.birthcountry_rank_unique === peer.birthcountry_rank_unique ? 'rank-me' : null}>
               <div className={'rank-photo'}>
                 <a href={`/profile/person/${peer.slug}/`}>
-                  <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+                  <PersonImage src={`/people/${peer.id}.jpg`} alt={`Photo of ${peer.name}`} />
                 </a>
               </div>
               <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
@@ -81,7 +81,7 @@ const CountryRanking = ({ person, ranking }) => {
                 <li key={peer.id} className={ranking.me.deathcountry_rank_unique === peer.deathcountry_rank_unique ? 'rank-me' : null}>
                   <div className={'rank-photo'}>
                     <a href={`/profile/person/${peer.slug}/`}>
-                      <PersonImage src={`/people/${peer.wiki_id}.jpg`} alt={`Photo of ${peer.name}`} />
+                      <PersonImage src={`/people/${peer.id}.jpg`} alt={`Photo of ${peer.name}`} />
                     </a>
                   </div>
                   <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>

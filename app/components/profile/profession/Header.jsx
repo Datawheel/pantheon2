@@ -11,17 +11,17 @@ const Header = ({ profession, people }) => {
         <div className='bg-img-mask profession'>
           <div className='bg-img bg-img-t'>
             {people.slice(0, 4).map(p =>
-              <img key={p.id} src={`/people/${p.wiki_id}.jpg`} />
+              <img key={p.id} src={`/people/${p.id}.jpg`} />
             )}
           </div>
           <div className='bg-img bg-img-m'>
             {people.slice(5, 9).map(p =>
-              <img key={p.id} src={`/people/${p.wiki_id}.jpg`} />
+              <img key={p.id} src={`/people/${p.id}.jpg`} />
             )}
           </div>
           <div className='bg-img bg-img-b'>
             {people.slice(10, 14).map(p =>
-              <img key={p.id} src={`/people/${p.wiki_id}.jpg`} />
+              <img key={p.id} src={`/people/${p.id}.jpg`} />
             )}
           </div>
           <div className='bg-img-mask-after'></div>
