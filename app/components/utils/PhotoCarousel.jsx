@@ -10,7 +10,7 @@ const PhotoCarousel = ({ people }) => {
         <li key={person.id}>
           <div className={'rank-photo'}>
             <a href={`/profile/person/${person.slug}/`}>
-              <PersonImage src={`/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} color={COLORS_DOMAIN[person.profession.domain_slug]} />
+              <PersonImage src={`/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} color={COLORS_DOMAIN[person.occupation.domain_slug]} />
             </a>
           </div>
           <h2><a href={`/profile/person/${person.slug}/`}>{person.name}</a></h2>

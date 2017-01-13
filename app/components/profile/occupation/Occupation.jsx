@@ -2,46 +2,48 @@ import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
-import Header from "components/profile/profession/Header";
+import Header from "components/profile/occupation/Header";
 import ProfileNav from "components/profile/Nav";
-import Intro from "components/profile/profession/Intro";
-import People from "components/profile/profession/People";
-import Places from "components/profile/profession/Places";
-import RelatedProfessions from "components/profile/profession/RelatedProfessions";
+import Intro from "components/profile/occupation/Intro";
+import People from "components/profile/occupation/People";
+import Places from "components/profile/occupation/Places";
+import RelatedOccupations from "components/profile/occupation/RelatedOccupations";
 import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
-import { fetchProfession, fetchPeople, fetchPeopleInDomain, fetchAllProfessions } from "actions/profession";
+import { fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations } from "actions/occupation";
 import Viz from "components/viz/Index";
 import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
 
 import {extent} from "d3-array";
 
-class Profession extends Component {
+class Occupation extends Component {
 
   constructor(props) {
     super(props);
   }
 
   static need = [
-    fetchProfession,
+    fetchOccupation,
     fetchPeople,
     fetchPeopleInDomain,
-    fetchAllProfessions
+    fetchAllOccupations
   ]
 
   render() {
-    if(this.props.professionProfile.profession.id === undefined) {
+    if(this.props.occupationProfile.occupation.id === undefined) {
       return <NotFound />;
     }
-    const {professionProfile} = this.props;
-    const {profession, professions, people, peopleInDomain} = professionProfile;
+    const {occupationProfile} = this.props;
+    const {occupation, occupations, people, peopleInDomain} = occupationProfile;
+
+    // return <div>Loading...</div>
 
     const tmapDomainData = peopleInDomain
       .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
     tmapDomainData.forEach(d => {
-      d.profession_name = d.profession.name;
+      d.occupation_name = d.occupation.name;
       d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
@@ -82,31 +84,31 @@ class Profession extends Component {
       .slice(0, priestleyMax);
 
     const sections = [
-      {title: "People", slug: "people", content: <People profession={profession} people={people} />},
+      {title: "People", slug: "people", content: <People occupation={occupation} people={people} />},
       {
-        title: "Related Professions",
+        title: "Related Occupations",
         slug: "related",
-        content: <RelatedProfessions profession={profession} professions={professions} />,
+        content: <RelatedOccupations occupation={occupation} occupations={occupations} />,
         viz: [
           <Viz type="Treemap"
-            title={`Occupations Within ${profession.domain} Domain`}
+            title={`Occupations Within ${occupation.domain} Domain`}
             key="tmap_domain"
             config={{
-              attrs: professions,
+              attrs: occupations,
               data: tmapDomainData,
               depth: 1,
-              groupBy: ["industry", "profession_name"],
+              groupBy: ["industry", "occupation_name"],
               legend: false,
               time: "birthyear"
             }} />,
           <Viz type="StackedArea"
-            title={`${profession.domain} Domain Over Time`}
+            title={`${occupation.domain} Domain Over Time`}
             key="stacked_domain"
             config={{
-              attrs: professions,
+              attrs: occupations,
               data: tmapDomainData,
               depth: 1,
-              groupBy: ["industry", "profession_name"],
+              groupBy: ["industry", "occupation_name"],
               legend: false,
               shapeConfig: {stroke: () => "#F4F4F1", strokeWidth: (d, i) => 1},
               time: "bucketyear",
@@ -118,10 +120,10 @@ class Profession extends Component {
       {
         title: "Places",
         slug: "places",
-        content: <Places people={people} profession={profession} />,
+        content: <Places people={people} occupation={occupation} />,
         viz: [
           <Viz type="Treemap"
-            title={`Places of Birth for ${profession.name}`}
+            title={`Places of Birth for ${occupation.name}`}
             key="tmap_country1"
             config={{
               data: tmapBornData,
@@ -131,7 +133,7 @@ class Profession extends Component {
               time: "birthyear"
             }} />,
           <Viz type="Treemap"
-            title={`Places of Death for ${profession.name}`}
+            title={`Places of Death for ${occupation.name}`}
             key="tmap_country2"
             config={{
               data: tmapDeathData,
@@ -177,7 +179,7 @@ class Profession extends Component {
         slug: "overlapping_lives",
         viz: [
           <Viz type="Priestley"
-            title={`Lifespans of the Top ${priestleyMax} ${profession.name}`}
+            title={`Lifespans of the Top ${priestleyMax} ${occupation.name}`}
             key="priestley1"
             config={{
               data: priestleyData,
@@ -195,13 +197,13 @@ class Profession extends Component {
       <div>
         <Helmet
           htmlAttributes={{"lang": "en", "amp": undefined}}
-          title={profession.name}
-          meta={config.meta.concat([ {property: 'og:title', content: profession.name} ])}
+          title={occupation.name}
+          meta={config.meta.concat([ {property: 'og:title', content: occupation.name} ])}
           link={config.link}
         />
-        <Header profession={profession} people={people} />
+        <Header occupation={occupation} people={people} />
         <ProfileNav sections={sections} />
-        <Intro profession={profession} professions={professions} />
+        <Intro occupation={occupation} occupations={occupations} />
         {sections.map((section, key) =>
           <Section
             index={key}
@@ -220,8 +222,8 @@ class Profession extends Component {
 
 function mapStateToProps(state) {
   return {
-    professionProfile: state.professionProfile
+    occupationProfile: state.occupationProfile
   };
 }
 
-export default connect(mapStateToProps)(Profession);
+export default connect(mapStateToProps)(Occupation);

@@ -8,7 +8,7 @@ import Home from "containers/Home";
 import Profile from "components/profile/Profile";
 import Person from "components/profile/person/Person";
 import Place from "components/profile/place/Place";
-import Profession from "components/profile/profession/Profession";
+import Occupation from "components/profile/occupation/Occupation";
 
 // about components
 import About from "components/about/About";
@@ -58,7 +58,7 @@ export default (store) => {
     if (path.includes("place")) {
       candidates = ["india", "united_states", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_divoire_(ivory_coast)", "ljusdal", "dallas", "olias_del_rey", "tbilisi", "philippines", "sogndal"];
     }
-    else if (path.includes("profession")) {
+    else if (path.includes("occupation")) {
       candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
     }
     else if (path.includes("person")) {
@@ -106,7 +106,7 @@ export default (store) => {
       <Route path="profile" component={Profile}>
         <Route path="person(/:id)" component={Person} onEnter={checkForId} />
         <Route path="place(/:id)" component={Place} onEnter={checkForId} />
-        <Route path="profession(/:id)" component={Profession} onEnter={checkForId} />
+        <Route path="occupation(/:id)" component={Occupation} onEnter={checkForId} />
       </Route>
 
       <Route path="data" component={Data}>

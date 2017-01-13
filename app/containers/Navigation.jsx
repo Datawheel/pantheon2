@@ -32,7 +32,7 @@ const Navigation = ({ user, logOut, activateSearch }) => {
             <ul className={'sub-items'}>
               <li><a href="/profile/person" className='item-link'>People</a></li>
               <li><a href="/profile/place" className='item-link'>Places</a></li>
-              <li><a href="/profile/profession" className='item-link'>Professions</a></li>
+              <li><a href="/profile/occupation" className='item-link'>Occupations</a></li>
             </ul>
           </li>
           <li className='item home'>

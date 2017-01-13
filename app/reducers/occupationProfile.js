@@ -1,41 +1,40 @@
-import { combineReducers } from 'redux';
-import * as types from 'types';
+import {combineReducers} from "redux";
 
-const profession = (
+const occupation = (
   state = {},
   action
 ) => {
   switch (action.type) {
-    case "GET_PROFESSION_SUCCESS":
-      return action.res.data[0]
+    case "GET_OCCUPATION_SUCCESS":
+      return action.res.data[0];
     default:
       return state;
   }
-}
+};
 
-const professions = (
+const occupations = (
   state = [],
   action
 ) => {
   switch (action.type) {
-    case "GET_PROFESSIONS_SUCCESS":
-      return action.res.data
+    case "GET_OCCUPATIONS_SUCCESS":
+      return action.res.data;
     default:
       return state;
   }
-}
+};
 
 const people = (
   state = [],
   action
 ) => {
   switch (action.type) {
-    case "GET_PEOPLE_FOR_PROFESSION_SUCCESS":
-      return action.res.data
+    case "GET_PEOPLE_FOR_OCCUPATION_SUCCESS":
+      return action.res.data;
     default:
       return state;
   }
-}
+};
 
 const peopleInDomain = (
   state = [],
@@ -43,17 +42,17 @@ const peopleInDomain = (
 ) => {
   switch (action.type) {
     case "GET_PEOPLE_FOR_DOMAIN_SUCCESS":
-      return action.res.data
+      return action.res.data;
     default:
       return state;
   }
-}
+};
 
-const professionProfileReducer = combineReducers({
-  profession,
-  professions,
+const occupationProfileReducer = combineReducers({
+  occupation,
+  occupations,
   people,
   peopleInDomain
 });
 
-export default professionProfileReducer;
+export default occupationProfileReducer;
