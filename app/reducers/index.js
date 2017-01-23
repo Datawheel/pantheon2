@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import user from 'reducers/user';
 import personProfile from 'reducers/personProfile';
 import placeProfile from 'reducers/placeProfile';
-import professionProfile from 'reducers/professionProfile';
+import occupationProfile from 'reducers/occupationProfile';
 import rank from 'reducers/rank';
 import rankings from 'reducers/rankings';
 import explorer from 'reducers/explorer';
@@ -32,7 +32,7 @@ const rootReducer = combineReducers({
   user,
   personProfile,
   placeProfile,
-  professionProfile,
+  occupationProfile,
   rankings,
   explorer,
   routing

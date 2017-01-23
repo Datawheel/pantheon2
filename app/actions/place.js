@@ -63,7 +63,7 @@ export function fetchPeopleBornHere(store) {
     const placeName = placeIdRes.data[0].name;
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "birthcountry" : "birthplace";
-    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=birthplace{id,name,lat_lon},profession{*},profession_id:profession,*`);
+    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=birthplace{id,name,lat_lon},occupation{*},occupation_id:occupation,*`);
   })
 
   return {
@@ -78,7 +78,7 @@ export function fetchPeopleDiedHere(store) {
     const placeName = placeIdRes.data[0].name;
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "deathcountry" : "deathplace";
-    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=deathplace{id,name,lat_lon},profession{*},profession_id:profession,*`);
+    return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=deathplace{id,name,lat_lon},occupation{*},occupation_id:occupation,*`);
   })
 
   return {
@@ -87,27 +87,27 @@ export function fetchPeopleDiedHere(store) {
   };
 }
 
-export function fetchProfessionsBornHere(store) {
-  const getProfessionsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
+export function fetchOccupationsBornHere(store) {
+  const getOccupationsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/place_profession?place=eq.${placeId}&limit=5&order=num_born.desc.nullslast&select=profession{*},*`);
+    return makePlaceRequest('get', null, null, `/place_occupation?place=eq.${placeId}&limit=5&order=num_born.desc.nullslast&select=occupation{*},*`);
   })
 
   return {
-    type: "GET_PROFESSIONS_BORN_HERE",
-    promise: getProfessionsHereProm
+    type: "GET_OCCUPATIONS_BORN_HERE",
+    promise: getOccupationsHereProm
   };
 }
 
-export function fetchProfessionsDiedHere(store) {
-  const getProfessionsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
+export function fetchOccupationsDiedHere(store) {
+  const getOccupationsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
     const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/place_profession?place=eq.${placeId}&limit=5&order=num_died.desc.nullslast&select=profession{*},*`);
+    return makePlaceRequest('get', null, null, `/place_occupation?place=eq.${placeId}&limit=5&order=num_died.desc.nullslast&select=occupation{*},*`);
   })
 
   return {
-    type: "GET_PROFESSIONS_DIED_HERE",
-    promise: getProfessionsHereProm
+    type: "GET_OCCUPATIONS_DIED_HERE",
+    promise: getOccupationsHereProm
   };
 }
 

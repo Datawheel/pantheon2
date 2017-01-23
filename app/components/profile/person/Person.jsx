@@ -6,13 +6,13 @@ import ProfileNav from "components/profile/Nav";
 import Section from "components/profile/Section";
 import Header from "components/profile/person/Header";
 import Intro from "components/profile/person/Intro";
-import ProfessionRanking from "components/profile/person/ProfessionRanking";
+import OccupationRanking from "components/profile/person/OccupationRanking";
 import YearRanking from "components/profile/person/YearRanking";
 import CountryRanking from "components/profile/person/CountryRanking";
 import Viz from "components/viz/Index";
 import NotFound from "components/NotFound";
 import { activateSearch } from "actions/users";
-import { fetchPerson, fetchProfessionRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
+import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
 import styles from 'css/components/profile/person';
 
 import { FORMATTERS } from "types";
@@ -30,7 +30,7 @@ class Person extends Component {
 
   static need = [
     fetchPerson,
-    fetchProfessionRanks,
+    fetchOccupationRanks,
     fetchCountryRanks,
     fetchYearRanks,
     fetchPageviews,
@@ -41,8 +41,9 @@ class Person extends Component {
     if(this.props.personProfile.person.id === undefined) {
       return <NotFound />;
     }
+    // return <div>testing...</div>
     const {personProfile, activateSearch} = this.props;
-    const profession = personProfile.person.profession;
+    const occupation = personProfile.person.occupation;
     const birthcountry = personProfile.person.birthcountry;
 
     const maxPageViews = Math.max(...personProfile.pageviews.map(d => d.num_pageviews));
@@ -84,7 +85,7 @@ class Person extends Component {
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
-      {title: `Among ${profession.name}s`, slug: "profession_peers", content: <ProfessionRanking person={personProfile.person} ranking={personProfile.professionRank} />},
+      {title: `Among ${occupation.name}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
       {title: `In the Same Place`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
       {

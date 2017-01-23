@@ -89,6 +89,30 @@
   }
 }
 
+table {
+  & .-th-inner {
+    @apply --profileNav;
+    font-size: 9px;
+  }
+
+  & .-td-inner {
+    @apply --small;
+    font-size: 11px;
+
+    & a {
+      @apply --bodyLink;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+
+  & td, & th {
+    &:nth-child(2) {
+      text-align: left;
+    }
+  }
+}
+
 /* shared Ranking and Explore container styles*/
 .explore-container {
   max-width: 950px;
@@ -117,7 +141,7 @@
     text-transform: none;
   }
 
-  & h3 {
+  & .ranking-table-date {
     @apply --searchResults;
     margin: 5px 0 12px;
     color: var(--colorTan);
@@ -131,33 +155,114 @@
   padding-right: 10px;
   box-sizing: border-box;
   width: 208px;
+  & .ranking-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    & span {
+      @apply --smallCaps;
+    }
+
+    & a {
+      border-bottom: 1px solid transparent;
+      @apply --bodyLink;
+      @apply --smallCaps;
+
+      &:last-child::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        background: url('../../../images/tri-right-b.svg') no-repeat;
+        background-size: contain;
+        width: 7px;
+        height: 13px;
+        margin: 0 0 -3px 3px;
+      }
+
+      &:first-child::before {
+        content: '';
+        position: relative;
+        display: inline-block;
+        background: url('../../../images/tri-right-b.svg') no-repeat;
+        background-size: contain;
+        width: 7px;
+        height: 13px;
+        margin: 0 3px -3px 0;
+        transform: scaleX(-1);
+      }
+    }
+  }
 
   & h3 {
     @apply --exploreControlTitles;
     margin: 20px 0 0;
   }
 
-  & h4 {
-    margin: 0;
-    font-size: 9px;
-    color: var(--colorSlate);
-    font-weight: 400;
-    letter-spacing: 0.8px;
-    line-height: 20px;
-    text-transform: uppercase;
+
+    & h3 {
+      @apply --exploreControlTitles;
+      margin: 20px 0 8px;
+    }
+
+    & h4 {
+      margin: 0;
+      font-size: 9px;
+      color: var(--colorSlate);
+      font-weight: 400;
+      letter-spacing: 0.8px;
+      line-height: 20px;
+      text-transform: uppercase;
+    }
+
+    & select {
+      width: 100%;
+      @apply --exploreControlInput;
+      background-image: url('../../../images/tri-dd-down.svg');
+      background-position: 100% 50%;
+      background-size: 30px 7px;
+      cursor: pointer;
+
+      &.add-control-input {
+        margin-top: 10px;
+      }
+    }
   }
 
-  & select {
-    width: 100%;
-    @apply --exploreControlInput;
-    background-image: url('../../../images/tri-dd-down.svg');
-    background-position: 100% 50%;
-    background-size: 30px 7px;
-    cursor: pointer;
-    margin-top: 6px;
+  & .switch-explore-link {
+    border-bottom: 1px solid transparent;
+    @apply --bodyLink;
+    @apply --smallCaps;
+    position: relative;
 
-    &.add-control-input {
-      margin-top: 10px;
+    &::before {
+      content: "";
+      position: relative;
+      display: inline-block;
+      background: url("../../../images/tri-right-b.svg") no-repeat;
+      background-size: contain;
+      width: 7px;
+      height: 13px;
+      margin: 0 3px -4px 0;
+      transform: scaleX(-1);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: inline-block;
+      background: url("../../../images/globalNav/explore.svg") no-repeat;
+      background-size: contain;
+      top: -2px;
+      right: -20px;
+      width: 17px;
+      height: 17px;
+    }
+  }
+
+  & .key-group {
+    & > h3 {
+      margin: 0 0 8px;
     }
   }
 
@@ -332,6 +437,10 @@
     & > h3 {
       margin: 0 0 8px;
     }
+    & input {
+      @apply --exploreControlInput;
+      text-align: center;
+      width: 70px;
   }
 
   & .flat-group {

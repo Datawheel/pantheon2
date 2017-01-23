@@ -7,14 +7,15 @@ import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/place/Intro";
 import Section from "components/profile/Section";
 import PeopleRanking from "components/profile/place/PeopleRanking";
-import Professions from "components/profile/place/Professions";
-import ProfessionTrends from "components/profile/place/ProfessionTrends";
+import Occupations from "components/profile/place/Occupations";
+import OccupationTrends from "components/profile/place/OccupationTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
 import NotFound from "components/NotFound";
-import { fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchProfessionsBornHere, fetchProfessionsDiedHere, fetchPeopleBornHereAlive } from "actions/place";
-import { fetchAllProfessions } from "actions/profession";
-import { YEAR_BUCKETS } from "types";
+import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere,
+          fetchOccupationsBornHere, fetchOccupationsDiedHere, fetchPeopleBornHereAlive} from "actions/place";
+import {fetchAllOccupations} from "actions/occupation";
+import {YEAR_BUCKETS} from "types";
 
 import {extent} from "d3-array";
 
@@ -30,9 +31,9 @@ class Place extends Component {
     fetchCountry,
     fetchPeopleBornHere,
     fetchPeopleDiedHere,
-    fetchAllProfessions,
-    fetchProfessionsBornHere,
-    fetchProfessionsDiedHere,
+    fetchAllOccupations,
+    fetchOccupationsBornHere,
+    fetchOccupationsDiedHere,
     fetchPeopleBornHereAlive
   ]
 
@@ -40,10 +41,11 @@ class Place extends Component {
     if(this.props.placeProfile.place.id === undefined) {
       return <NotFound />;
     }
-    const {placeProfile, professionProfile} = this.props;
-    const {place, country, placeRanks, peopleBornHere, peopleDiedHere, professionsBornHere, professionsDiedHere, peopleBornHereAlive} = placeProfile;
-    const {professions} = professionProfile;
-    console.log("professions!", professions)
+    const {placeProfile, occupationProfile} = this.props;
+    const {place, country, placeRanks, peopleBornHere, peopleDiedHere, occupationsBornHere, occupationsDiedHere, peopleBornHereAlive} = placeProfile;
+    const {occupations} = occupationProfile;
+
+    // return <div>testing...</div>
 
     const tmapBornData = peopleBornHere
       .filter(p => p.birthyear !== null)
@@ -53,7 +55,7 @@ class Place extends Component {
     birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
 
     tmapBornData.forEach(d => {
-      d.profession_name = d.profession.name;
+      d.occupation_name = d.occupation.name;
       d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
       d.place = d.birthplace;
       d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
@@ -69,7 +71,7 @@ class Place extends Component {
     deathyearSpan = deathyearSpan[1] - deathyearSpan[0];
 
     tmapDeathData.forEach(d => {
-      d.profession_name = d.profession.name;
+      d.occupation_name = d.occupation.name;
       d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
       d.place = d.deathplace;
       d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
@@ -100,42 +102,42 @@ class Place extends Component {
     let sections = [
       {title: "People", slug: "people", content: <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />},
       {
-        title: "Professions",
-        slug: "professions",
-        content: <Professions place={place} professionsBorn={professionsBornHere} professionsDied={professionsDiedHere} />,
+        title: "Occupations",
+        slug: "occupations",
+        content: <Occupations place={place} occupationsBorn={occupationsBornHere} occupationsDied={occupationsDiedHere} />,
         viz: [
             <Viz type="Treemap"
-                  title={`Professions of People Born in ${place.name}`}
+                  title={`Occupations of People Born in ${place.name}`}
                   key="tmap1"
                   config={{
-                    attrs: professions,
+                    attrs: occupations,
                     data: tmapBornData,
                     depth: 2,
-                    groupBy: ["domain", "industry", "profession_name"],
+                    groupBy: ["domain", "industry", "occupation_name"],
                     time: "birthyear"
                   }} />,
             <Viz type="Treemap"
-                  title={`Professions of People Deceased in ${place.name}`}
+                  title={`Occupations of People Deceased in ${place.name}`}
                   key="tmap2"
                   config={{
-                    attrs: professions,
+                    attrs: occupations,
                     data: tmapDeathData,
                     depth: 2,
-                    groupBy: ["domain", "industry", "profession_name"],
+                    groupBy: ["domain", "industry", "occupation_name"],
                     time: "deathyear"
                   }} />
         ]
       },
       {
-        title: "Profession Trends",
-        slug: "profession_trends",
-        content: <ProfessionTrends place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} professions={professions} />,
+        title: "Occupation Trends",
+        slug: "occupation_trends",
+        content: <OccupationTrends place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} />,
         viz: [
           <Viz type="StackedArea"
                 title="Births Over Time"
                 key="stacked1"
                 config={{
-                  attrs: professions,
+                  attrs: occupations,
                   data: tmapBornData,
                   depth: 1,
                   groupBy: ["domain", "industry"],
@@ -147,7 +149,7 @@ class Place extends Component {
                   title="Deaths Over Time"
                   key="stacked2"
                   config={{
-                    attrs: professions,
+                    attrs: occupations,
                     data: tmapDeathData,
                     depth: 1,
                     groupBy: ["domain", "industry"],
@@ -180,7 +182,7 @@ class Place extends Component {
                   title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
                   key="priestley1"
                   config={{
-                    attrs: professions,
+                    attrs: occupations,
                     data: priestleyData,
                     depth: 1,
                     end: "deathyear",
@@ -226,7 +228,7 @@ class Place extends Component {
 function mapStateToProps(state) {
   return {
     placeProfile: state.placeProfile,
-    professionProfile: state.professionProfile
+    occupationProfile: state.occupationProfile
   };
 }
 

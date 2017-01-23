@@ -13,12 +13,12 @@ const person = (
   }
 }
 
-const professionRank = (
+const occupationRank = (
   state = {me:{}, peers:[]},
   action
 ) => {
   switch (action.type) {
-    case "GET_PROFESSION_RANKS_SUCCESS":
+    case "GET_OCCUPATION_RANKS_SUCCESS":
       return {me:action.res[0].data[0], peers:action.res[1].data}
     default:
       return state;
@@ -81,7 +81,7 @@ const creationdates = (
 
 const personProfileReducer = combineReducers({
   person,
-  professionRank,
+  occupationRank,
   countryRank,
   yearRank,
   pageviews,

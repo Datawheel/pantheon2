@@ -1,40 +1,40 @@
-import React from 'react';
-import { Route, IndexRoute, IndexRedirect, Redirect } from 'react-router';
+import React from "react";
+import {Route, IndexRoute, IndexRedirect, Redirect} from "react-router";
 
-import App from 'containers/App';
-import Home from 'containers/Home';
+import App from "containers/App";
+import Home from "containers/Home";
 
 // profile components
-import Profile from 'components/profile/Profile';
-import Person from 'components/profile/person/Person';
-import Place from 'components/profile/place/Place';
-import Profession from 'components/profile/profession/Profession';
+import Profile from "components/profile/Profile";
+import Person from "components/profile/person/Person";
+import Place from "components/profile/place/Place";
+import Occupation from "components/profile/occupation/Occupation";
 
 // about components
-import About from 'components/about/About';
-import Vision from 'components/about/Vision';
-import Methods from 'components/about/Methods';
-import Team from 'components/about/Team';
-import Publications from 'components/about/Publications';
-import DataSources from 'components/about/DataSources';
-import Resources from 'components/about/Resources';
-import References from 'components/about/References';
-import Contact from 'components/about/Contact';
+import About from "components/about/About";
+import Vision from "components/about/Vision";
+import Methods from "components/about/Methods";
+import Team from "components/about/Team";
+import Publications from "components/about/Publications";
+import DataSources from "components/about/DataSources";
+import Resources from "components/about/Resources";
+import References from "components/about/References";
+import Contact from "components/about/Contact";
 
 // explore componenets
-import Explore from 'components/explore/Explore';
-import Viz from 'components/explore/viz/Viz';
-import Rankings from 'components/explore/rankings/Rankings';
+import Explore from "components/explore/Explore";
+import Viz from "components/explore/viz/Viz";
+import Rankings from "components/explore/rankings/Rankings";
 
 // data section components
-import Data from 'components/data/Data';
-import Datasets from 'components/data/Datasets';
-import Api from 'components/data/Api';
-import Permissions from 'components/data/Permissions';
-import Faq from 'components/data/Faq';
+import Data from "components/data/Data";
+import Datasets from "components/data/Datasets";
+import Api from "components/data/Api";
+import Permissions from "components/data/Permissions";
+import Faq from "components/data/Faq";
 
 // custom 404 page
-import NotFound from 'components/NotFound';
+import NotFound from "components/NotFound";
 
 /*
  * @param {Redux Store}
@@ -46,8 +46,8 @@ export default (store) => {
     const { user: { authenticated }} = store.getState();
     if (!authenticated) {
       replace({
-        pathname: '/login',
-        state: { nextPathname: nextState.location.pathname }
+        pathname: "/login",
+        state: {nextPathname: nextState.location.pathname}
       });
     }
     callback();
@@ -55,16 +55,16 @@ export default (store) => {
 
   function genRandId(path) {
     let candidates;
-    if(path.includes("place")){
-      candidates = ["India", "United_States", "France", "Italy", "Chile", "Brazil", "Bulgaria", "Rome", "Coimbra", "Albuquerque", "Oslo", "Thailand", "Indonesia", "Shanghai", "St._Louis", "Cote_dIvoire_(Ivory_Coast)", "Ljusdal", "Dallas", "Olias_del_Rey", "Tbilisi", "Philippines", "Sogndal"];
+    if (path.includes("place")) {
+      candidates = ["india", "united_states", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_divoire_(ivory_coast)", "ljusdal", "dallas", "olias_del_rey", "tbilisi", "philippines", "sogndal"];
     }
-    else if(path.includes("profession")){
+    else if (path.includes("occupation")) {
       candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
     }
-    else if(path.includes("person")){
-      candidates = ["Joseph_Cook", "Pope_Paschal_II", "Nick_Drake", "Lewis_Carroll", "Eddie_Irvine", "Manfred_King_of_Sicily", "Julius_Caesar", "John_L._Hall", "Jenny_Lind", "Henri_Nestle", "Raif_Badawi", "Emma_Shapplin"];
+    else if (path.includes("person")) {
+      candidates = ["joseph_cook", "pope_paschal_ii", "nick_drake", "lewis_carroll", "eddie_irvine", "manfred_king_of_sicily", "julius_caesar", "john_l._hall", "jenny_lind", "henri_nestle", "raif_badawi", "emma_shapplin"];
     }
-    return candidates[Math.floor(Math.random()*candidates.length)];
+    return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
   function checkForId(nextState, replaceState) {
@@ -72,7 +72,7 @@ export default (store) => {
       const reqestedUrl = nextState.location.pathname;
       const randId = genRandId(reqestedUrl);
       const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}${randId}` : `${reqestedUrl}/${randId}`;
-      replaceState({id:randId}, nextUrl)
+      replaceState({id: randId}, nextUrl);
     }
     else {
       // make sure it's legal
@@ -106,7 +106,7 @@ export default (store) => {
       <Route path="profile" component={Profile}>
         <Route path="person(/:id)" component={Person} onEnter={checkForId} />
         <Route path="place(/:id)" component={Place} onEnter={checkForId} />
-        <Route path="profession(/:id)" component={Profession} onEnter={checkForId} />
+        <Route path="occupation(/:id)" component={Occupation} onEnter={checkForId} />
       </Route>
 
       <Route path="data" component={Data}>

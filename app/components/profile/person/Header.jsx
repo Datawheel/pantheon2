@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
-import styles from 'css/components/profile/header';
+import React, {Component, PropTypes} from "react";
+import styles from "css/components/profile/header";
 import Viz from "components/viz/Index";
 
 import {COLORS_DOMAIN, FORMATTERS} from "types";
 
-const Header = ({ pageviews, person }) => {
+const Header = ({pageviews, person}) => {
 
   const viewData = pageviews.map(d => {
     d.pageview_date = new Date(d.pageview_date);
@@ -19,22 +19,22 @@ const Header = ({ pageviews, person }) => {
     Object.assign({}, circleData[1], {shape: "Circle", person: "circle"})
   ]);
 
-  const backgroundColor = COLORS_DOMAIN[person.profession.domain_slug],
-        backgroundImage = `url('/people/${person.wiki_id}.jpg')`;
+  const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug],
+        backgroundImage = `url('/people/${person.id}.jpg')`;
 
   return (
-    <header className='hero'>
-      <div className='bg-container'>
-        <div className='bg-img-mask person' style={{backgroundColor}}>
-          <div className='bg-img bg-img-l' style={{backgroundColor, backgroundImage}}></div>
-          <div className='bg-img bg-img-r' style={{backgroundColor, backgroundImage}}></div>
+    <header className="hero">
+      <div className="bg-container">
+        <div className="bg-img-mask person" style={{backgroundColor}}>
+          <div className="bg-img bg-img-l" style={{backgroundColor, backgroundImage}}></div>
+          <div className="bg-img bg-img-r" style={{backgroundColor, backgroundImage}}></div>
         </div>
       </div>
-      <div className='info'>
-        <p className='top-desc'>The Cultural Memory of</p>
-        <h2 className='profile-type'>{person.profession.name}</h2>
-        <h1 className='profile-name'>{person.name}</h1>
-        <p className='date-subtitle'>{FORMATTERS.year(person.birthyear.name)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear.name)}` : "Present"}</p>
+      <div className="info">
+        <p className="top-desc">The Cultural Memory of</p>
+        <h2 className="profile-type">{person.occupation.name}</h2>
+        <h1 className="profile-name">{person.name}</h1>
+        <p className="date-subtitle">{FORMATTERS.year(person.birthyear.name)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear.name)}` : "Present"}</p>
         <pre>
           <Viz type="LinePlot"
                config={{
@@ -87,7 +87,7 @@ const Header = ({ pageviews, person }) => {
       </div>
     </header>
   );
-}
+};
 
 Header.propTypes = {
   person: PropTypes.object
