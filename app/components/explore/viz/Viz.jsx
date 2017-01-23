@@ -5,9 +5,8 @@ import config from 'helmconfig.js';
 import styles from "css/components/explore/explore";
 import VizControls from "components/explore/viz/VizControls";
 import VizShell from "components/explore/viz/VizShell";
-import RankingTable from "components/explore/rankings/RankingTableMin";
+import ViewControls from "components/explore/viz/ViewControls";
 import { fetchAllCountries, fetchAllCities, fetchAllPofessions } from "actions/explorer";
-import VizControl from "components/explore/controls/VizControl";
 
 class Viz extends Component {
 
@@ -31,9 +30,8 @@ class Viz extends Component {
           link={config.link}
         />
         <VizControls />
-        <VizControl />
         <VizShell />
-        <RankingTable />
+        <ViewControls />
       </div>
     );
   }

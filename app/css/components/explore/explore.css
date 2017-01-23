@@ -310,10 +310,33 @@
     box-sizing: border-box;
   }
 
+  & .share-group {
+    & li {
+      &::after {
+        content: "";
+        padding: 0;
+      }
+      &::before {
+        content: "";
+        padding-left: 16px;
+      }
+
+      & a:hover {
+        border-bottom: 0;
+        opacity: 0.5;
+      }
+    }
+  }
+
   & .key-group {
     & > h3 {
       margin: 0 0 8px;
     }
+  }
+
+  & .flat-group {
+    display: flex;
+    justify-content: space-between;
   }
 
   & .year-inputs {
