@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from "react";
 import {connect} from "react-redux";
-import RankingTable from "components/explore/rankings/RankingTableMin";
+import RankingTableMin from "components/explore/rankings/RankingTableMin";
 import VizControl from "components/explore/controls/VizControl";
 
 class ViewControls extends Component {
@@ -13,7 +13,7 @@ class ViewControls extends Component {
     return (
       <div className="view-controls">
         <VizControl />
-        <RankingTable />
+        <RankingTableMin />
       </div>
     );
   }

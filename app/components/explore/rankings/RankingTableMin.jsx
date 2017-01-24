@@ -8,11 +8,10 @@ import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import ReactTable from "react-table";
 import { RANKINGS_RESULTS_PER_PAGE } from "types";
-import RankingPagination from "components/explore/rankings/RankingPagination";
 import { updateRankingsTable } from "actions/rankings";
 import { COLUMNS } from "components/explore/rankings/RankingColumns";
 
-class RankingTable extends Component {
+class RankingTableMin extends Component {
 
   constructor(props) {
     super(props);
@@ -31,21 +30,16 @@ class RankingTable extends Component {
     columns[0].render = rankColumnRender;
 
     return (
-      <div className="ranking-table-min">
-        <h1>Most Globally Remembered People</h1>
-        <h3 className="ranking-table-date">4000 BC - 2013</h3>
-        <RankingPagination />
+      <div className="control-group ranking-table-min">
         <ReactTable
           className="ranking-table"
           columns={columns}
           pageSize={pageSize}
           data={results.data}
           showPagination={false}
-          pages={results.pages}
           loading={results.loading}
           onChange={updateRankingsTable}
         />
-        <RankingPagination />
       </div>
     );
   }
@@ -57,4 +51,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {updateRankingsTable})(RankingTable);
+export default connect(mapStateToProps, {updateRankingsTable})(RankingTableMin);
