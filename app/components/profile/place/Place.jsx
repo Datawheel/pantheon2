@@ -12,8 +12,7 @@ import OccupationTrends from "components/profile/place/OccupationTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
 import Viz from "components/viz/Index";
 import NotFound from "components/NotFound";
-import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere,
-          fetchOccupationsBornHere, fetchOccupationsDiedHere, fetchPeopleBornHereAlive} from "actions/place";
+import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchPeopleBornHereAlive} from "actions/place";
 import {fetchAllOccupations} from "actions/occupation";
 import {YEAR_BUCKETS} from "types";
 
@@ -32,8 +31,6 @@ class Place extends Component {
     fetchPeopleBornHere,
     fetchPeopleDiedHere,
     fetchAllOccupations,
-    fetchOccupationsBornHere,
-    fetchOccupationsDiedHere,
     fetchPeopleBornHereAlive
   ]
 
@@ -104,7 +101,7 @@ class Place extends Component {
       {
         title: "Occupations",
         slug: "occupations",
-        content: <Occupations place={place} occupationsBorn={occupationsBornHere} occupationsDied={occupationsDiedHere} />,
+        content: <Occupations place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />,
         viz: [
             <Viz type="Treemap"
                   title={`Occupations of People Born in ${place.name}`}

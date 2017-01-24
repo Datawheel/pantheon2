@@ -1,18 +1,17 @@
 /* eslint consistent-return: 0, no-else-return: 0*/
-import { polyfill } from 'es6-promise';
+import {polyfill} from 'es6-promise';
 import request from 'axios';
 import axios from 'axios';
-import * as types from 'types';
-import { NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST } from 'types'
+import {NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST} from 'types';
 
 polyfill();
 
-export function makePlaceRequest(method, id, data, api = '/place') {
-  const requestedURL = api + (id ? ('?id=eq.' + id) : '');
+export function makePlaceRequest(method, id, data, api = "/place") {
+  const requestedURL = api + (id ? ("?id=eq." + id) : "");
   // console.log(requestedURL)
   // return request[method](requestedURL, data);}}
-  console.log(`http://localhost:3100${requestedURL}`)
-  return axios.get(`http://localhost:3100${requestedURL}`)
+  console.log(`http://localhost:3100${requestedURL}`);
+  return axios.get(`http://localhost:3100${requestedURL}`);
 }
 
 export function fetchPlace(store) {
@@ -27,7 +26,7 @@ export function fetchCountry(store) {
   const getPlaceProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=country_code`).then(function(placeIdRes) {
     const placeCountryCode = placeIdRes.data[0].country_code;
     return makePlaceRequest('get', null, null, `/place?country_code=eq.${placeCountryCode}&wiki_id=is.null`);
-  })
+  });
 
   return {
     type: "GET_COUNTRY",
@@ -49,7 +48,7 @@ export function fetchPlaceRanks(store) {
       return makePlaceRequest('get', null, null, apiURL);
   });
 
-  const prom = Promise.all([getPlaceRank, getPlaceRankPeers])
+  const prom = Promise.all([getPlaceRank, getPlaceRankPeers]);
 
   return {
     type: "GET_PLACE_RANKS",
@@ -64,7 +63,7 @@ export function fetchPeopleBornHere(store) {
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "birthcountry" : "birthplace";
     return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=birthplace{id,name,lat_lon},occupation{*},occupation_id:occupation,*`);
-  })
+  });
 
   return {
     type: "GET_PEOPLE_BORN",
@@ -79,35 +78,11 @@ export function fetchPeopleDiedHere(store) {
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "deathcountry" : "deathplace";
     return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=deathplace{id,name,lat_lon},occupation{*},occupation_id:occupation,*`);
-  })
+  });
 
   return {
     type: "GET_PEOPLE_DIED",
     promise: getPeopleProm
-  };
-}
-
-export function fetchOccupationsBornHere(store) {
-  const getOccupationsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
-    const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/place_occupation?place=eq.${placeId}&limit=5&order=num_born.desc.nullslast&select=occupation{*},*`);
-  })
-
-  return {
-    type: "GET_OCCUPATIONS_BORN_HERE",
-    promise: getOccupationsHereProm
-  };
-}
-
-export function fetchOccupationsDiedHere(store) {
-  const getOccupationsHereProm = makePlaceRequest('get', null, null, `/place?slug=eq.${store["id"]}&select=id`).then(function(placeIdRes) {
-    const placeId = placeIdRes.data[0].id;
-    return makePlaceRequest('get', null, null, `/place_occupation?place=eq.${placeId}&limit=5&order=num_died.desc.nullslast&select=occupation{*},*`);
-  })
-
-  return {
-    type: "GET_OCCUPATIONS_DIED_HERE",
-    promise: getOccupationsHereProm
   };
 }
 
@@ -118,7 +93,7 @@ export function fetchPeopleBornHereAlive(store) {
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "birthcountry" : "birthplace";
     return makePlaceRequest('get', null, null, `/person?${placeColumn}=eq.${placeId}&limit=3&order=langs.desc&alive=is.true`);
-  })
+  });
 
   return {
     type: "GET_PEOPLE_BORN_ALIVE",
