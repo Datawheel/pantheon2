@@ -5,6 +5,10 @@
 
 /* override ReactTable styles*/
 .ReactTable {
+  & .-loading {
+    background: transparent;
+  }
+
   & table {
     border-width: 1px 0 1px 0;
     border-color: var(--colorSand);
@@ -89,30 +93,6 @@
   }
 }
 
-table {
-  & .-th-inner {
-    @apply --profileNav;
-    font-size: 9px;
-  }
-
-  & .-td-inner {
-    @apply --small;
-    font-size: 11px;
-
-    & a {
-      @apply --bodyLink;
-      font-size: 12px;
-      font-weight: 400;
-    }
-  }
-
-  & td, & th {
-    &:nth-child(2) {
-      text-align: left;
-    }
-  }
-}
-
 /* shared Ranking and Explore container styles*/
 .explore-container {
   max-width: 950px;
@@ -141,7 +121,7 @@ table {
     text-transform: none;
   }
 
-  & .ranking-table-date {
+  & h3 {
     @apply --searchResults;
     margin: 5px 0 12px;
     color: var(--colorTan);
@@ -155,114 +135,33 @@ table {
   padding-right: 10px;
   box-sizing: border-box;
   width: 208px;
-  & .ranking-pagination {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-
-    & span {
-      @apply --smallCaps;
-    }
-
-    & a {
-      border-bottom: 1px solid transparent;
-      @apply --bodyLink;
-      @apply --smallCaps;
-
-      &:last-child::after {
-        content: '';
-        position: relative;
-        display: inline-block;
-        background: url('../../../images/tri-right-b.svg') no-repeat;
-        background-size: contain;
-        width: 7px;
-        height: 13px;
-        margin: 0 0 -3px 3px;
-      }
-
-      &:first-child::before {
-        content: '';
-        position: relative;
-        display: inline-block;
-        background: url('../../../images/tri-right-b.svg') no-repeat;
-        background-size: contain;
-        width: 7px;
-        height: 13px;
-        margin: 0 3px -3px 0;
-        transform: scaleX(-1);
-      }
-    }
-  }
 
   & h3 {
     @apply --exploreControlTitles;
     margin: 20px 0 0;
   }
 
-
-    & h3 {
-      @apply --exploreControlTitles;
-      margin: 20px 0 8px;
-    }
-
-    & h4 {
-      margin: 0;
-      font-size: 9px;
-      color: var(--colorSlate);
-      font-weight: 400;
-      letter-spacing: 0.8px;
-      line-height: 20px;
-      text-transform: uppercase;
-    }
-
-    & select {
-      width: 100%;
-      @apply --exploreControlInput;
-      background-image: url('../../../images/tri-dd-down.svg');
-      background-position: 100% 50%;
-      background-size: 30px 7px;
-      cursor: pointer;
-
-      &.add-control-input {
-        margin-top: 10px;
-      }
-    }
+  & h4 {
+    margin: 0;
+    font-size: 9px;
+    color: var(--colorSlate);
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    line-height: 20px;
+    text-transform: uppercase;
   }
 
-  & .switch-explore-link {
-    border-bottom: 1px solid transparent;
-    @apply --bodyLink;
-    @apply --smallCaps;
-    position: relative;
+  & select {
+    width: 100%;
+    @apply --exploreControlInput;
+    background-image: url('../../../images/tri-dd-down.svg');
+    background-position: 100% 50%;
+    background-size: 30px 7px;
+    cursor: pointer;
+    margin-top: 6px;
 
-    &::before {
-      content: "";
-      position: relative;
-      display: inline-block;
-      background: url("../../../images/tri-right-b.svg") no-repeat;
-      background-size: contain;
-      width: 7px;
-      height: 13px;
-      margin: 0 3px -4px 0;
-      transform: scaleX(-1);
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      display: inline-block;
-      background: url("../../../images/globalNav/explore.svg") no-repeat;
-      background-size: contain;
-      top: -2px;
-      right: -20px;
-      width: 17px;
-      height: 17px;
-    }
-  }
-
-  & .key-group {
-    & > h3 {
-      margin: 0 0 8px;
+    &.add-control-input {
+      margin-top: 10px;
     }
   }
 
@@ -437,10 +336,6 @@ table {
     & > h3 {
       margin: 0 0 8px;
     }
-    & input {
-      @apply --exploreControlInput;
-      text-align: center;
-      width: 70px;
   }
 
   & .flat-group {
@@ -467,6 +362,156 @@ table {
   }
 }
 
+.view-controls {
+  flex: 0 0 124px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  width: 124px;
+
+  & h3 {
+    @apply --exploreControlTitles;
+    margin: 20px 0 0;
+  }
+
+  & h4 {
+    margin: 0;
+    font-size: 9px;
+    color: var(--colorSlate);
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    line-height: 20px;
+    text-transform: uppercase;
+  }
+
+  & select {
+    width: 100%;
+    @apply --exploreControlInput;
+    background-image: url('../../../images/tri-dd-down.svg');
+    background-position: 100% 50%;
+    background-size: 30px 7px;
+    cursor: pointer;
+    margin-top: 6px;
+
+    &.add-control-input {
+      margin-top: 10px;
+    }
+  }
+
+  & .control-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 11px 5px 6px 30px;
+    box-sizing: border-box;
+    background-color: var(--colorSlate);
+
+    & h2 {
+      position: relative;
+      margin: 0;
+      color: var(--colorEggshell);
+      font-size: 12px;
+      letter-spacing: 0.7px;
+      font-weight: 400;
+
+      &.rankings {
+        &::before {
+          content: '';
+          position: absolute;
+          background: url('../../../images/icon-rankings.svg') no-repeat;
+          background-size: contain;
+          width: 16px;
+          height: 9px;
+          margin: 2px 0 0 -20px;
+        }
+      }
+    }
+  }
+
+  & .options {
+    & li {
+      & a {
+        @apply --bodyLink;
+        @apply --exploreControlTitles;
+        color: inherit;
+
+        &.active {
+          color: var(--colorDark);
+          font-weight: 700;
+          border-bottom: 2px solid var(--colorCtrlShape);
+          &:hover {
+            border-bottom: 2px solid var(--colorCtrlShape);
+            cursor: default;
+          }
+        }
+      }
+    }
+  }
+
+  & .list-options {
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    & li {
+      list-style-type: none;
+    }
+  }
+
+  & .flat-options {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+
+    & li {
+      display: inline-block;
+
+      &:after {
+        content: "|";
+        font-size: 11px;
+        padding: 0 4px;
+      }
+
+      &:last-child:after {
+        content: "";
+      }
+    }
+  }
+
+  & .flat-options-w-title {
+    display: flex;
+
+    & ul {
+      display: flex;
+      margin: 15px 0 0 0;
+    }
+
+    & h3 {
+      display: inline-block;
+      margin: 20px 6px 0 0;
+    }
+  }
+
+  & .control-group {
+    border: solid 1px var(--colorSand);
+    margin-bottom: 9px;
+    padding: 13px 11px 18px;
+    box-sizing: border-box;
+  }
+
+  & .key-group {
+    & > h3 {
+      margin: 0 0 8px;
+    }
+  }
+
+  & .flat-group {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+/* override Timeline styles */
 .rc-slider {
   margin: 8px 0 30px 0;
 }

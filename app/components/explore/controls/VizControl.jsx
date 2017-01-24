@@ -24,15 +24,10 @@ class VizControl extends Component {
     ];
 
     return (
-      <div className="filter">
-        <div className="explore-controls viz-explorer">
-          <div className="control-header">
-            <h2 className="viz-explorer">View As</h2>
-            <i className="control-hide"></i>
-          </div>
-        </div>
-        <section className="control-group flat-options-w-title">
-          <ul className="flat-options">
+      <div>
+        <section className="control-group key-group">
+          <h3>View As</h3>
+          <ul className="options list-options">
           {allVizTypes.map(v =>
             <li key={v.id}><a href="#" data-viz={v.id} className={type === v.id ? "active" : ""} onClick={changeVizClick}>{v.name}</a></li>
           )}

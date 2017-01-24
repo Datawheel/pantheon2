@@ -20,10 +20,10 @@ class VizControls extends Component {
     const changeGrouping = this.props.changeGrouping.bind(this);
 
     return (
-      <div className='explore-controls viz-explorer'>
-        <div className='control-header'>
-          <h2 className='viz-explorer'>Visual Explorer</h2>
-          <i className='control-hide'></i>
+      <div className="explore-controls viz-explorer">
+        <div className="control-header">
+          <h2 className="viz-explorer">Visual Explorer</h2>
+          <i className="control-hide"></i>
         </div>
         <section className="control-group key-group">
           <h3>Show People Grouped By</h3>
@@ -33,8 +33,8 @@ class VizControls extends Component {
           </select>
         </section>
         <section className="control-group">
-          <h4>Filter Data by:</h4>
-          <ul className="flat-options">
+          <h4>Filter Data by</h4>
+          <ul className="options flat-options">
             <li><a href="#" id="birthyear" className="active birthyear">Births</a></li>
             <li><a href="#" id="deathyear" className="deathyear">Deaths</a></li>
           </ul>
@@ -43,9 +43,12 @@ class VizControls extends Component {
           <PlaceControl />
           <OccupationControl />
         </section>
-        <section className="control-group flat-group">
+        <section className="control-group advanced-options">
+          <h4>Advanced Options</h4>
+        </section>
+        <section className="control-group flat-group share-group">
           <h4>Share</h4>
-          <ul className="flat-options">
+          <ul className="options flat-options">
             <li><Link to="#" className="em"><img src={emIconSvg} alt={`Email this visualization`}/></Link></li>
             <li><Link to="#" className="fb"><img src={fbIconSvg} alt={`Share this visualization on Facebook`}/></Link></li>
             <li><Link to="#" className="tw"><img src={twIconSvg} alt={`Share this visualization on Twitter`}/></Link></li>
