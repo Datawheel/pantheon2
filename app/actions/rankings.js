@@ -1,75 +1,75 @@
 /* eslint consistent-return: 0, no-else-return: 0*/
-import { polyfill } from 'es6-promise';
-import { RANKINGS_RESULTS_PER_PAGE } from 'types';
-import { nest } from 'd3-collection';
-import apiClient from 'apiconfig';
+import {polyfill} from "es6-promise";
+import {RANKINGS_RESULTS_PER_PAGE} from "types";
+import {nest} from "d3-collection";
+import apiClient from "apiconfig";
 
 polyfill();
 
 function getNewData(dispatch, getState){
-  dispatch({ type: "FETCH_RANKINGS" });
-  const { rankings } = getState();
-  const { type, typeNesting, yearType, years, country, place, domain, profession, results } = rankings;
+  dispatch({ type: "FETCH_RANKINGS"});
+  const {rankings} = getState();
+  const {type, typeNesting, yearType, years, country, place, domain, occupation, results} = rankings;
   // console.log("type--", type, type == "person")
   const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
-  const countryFilter = country.id !== "all" ? `&birthcountry=eq.${country.id}` : '';
-  const placeFilter = place !== "all" ? `&birthplace=eq.${place}` : '';
-  const professionFilter = profession !== "all" ? `&profession=eq.${profession}` : domain.professions.length ? `&profession=in.${domain.professions.reduce((a, b)=> a.concat(b.id), [])}` : '';
-  const limitOffset = type === "person" ? `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}` : '';
+  const countryFilter = country.id !== "all" ? `&birthcountry=eq.${country.id}` : "";
+  const placeFilter = place !== "all" ? `&birthplace=eq.${place}` : "";
+  const occupationFilter = occupation !== "all" ? `&occupation=eq.${occupation}` : domain.occupations.length ? `&occupation=in.${occupation.occupations.reduce((a, b)=> a.concat(b.id), [])}` : "";
+  const limitOffset = type === "person" ? `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}` : "";
 
-  let rankingUrl = `/person?select=*,birthcountry{*},birthplace{*},profession{*}${limitOffset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}&order=langs.desc.nullslast${countryFilter}${placeFilter}${professionFilter}`;
-  if (type == "profession") {
-    if(countryFilter) {
+  let rankingUrl = `/person?select=*,birthcountry{*},birthplace{*},occupation{*}${limitOffset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}&order=langs.desc.nullslast${countryFilter}${placeFilter}${occupationFilter}`;
+  if (type === "occupation") {
+    if (countryFilter) {
       return apiClient.get(rankingUrl)
         .then(res => {
 
-          const professions = nest()
-            .key(p => typeNesting === "profession" ? p.profession.slug : p.profession[`${typeNesting}_slug`])
+          const occupations = nest()
+            .key(p => typeNesting === "occupation" ? p.occupation.occupation_slug : p.occupation[`${typeNesting}_slug`])
             .rollup(leaves => {
               return {num_born: leaves.length,
-                name: leaves[0].profession.name,
-                industry: leaves[0].profession.industry,
-                domain: leaves[0].profession.domain,
-                num_born_women: leaves.filter(p => p.gender).length}
+                name: leaves[0].occupations.occupation_name,
+                industry: leaves[0].occupation.industry,
+                domain: leaves[0].occupation.domain,
+                num_born_women: leaves.filter(p => p.gender).length};
             })
-            .entries(res.data.filter(p => p.profession))
+            .entries(res.data.filter(p => p.occupation))
             .reduce((a, b) => a.concat([b.value]), [])
-            .sort((a, b) => b.num_born - a.num_born );
-          res.data = professions;
+            .sort((a, b) => b.num_born - a.num_born);
+          res.data = occupations;
           dispatch({
-            res: res,
+            res,
             type: "FETCH_RANKINGS_SUCCESS"
           });
-          return dispatch({ type: "CHANGE_RANKING_PAGES", data:1 });
-        })
+          return dispatch({type: "CHANGE_RANKING_PAGES", data: 1});
+        });
     }
-    rankingUrl = `/profession?order=num_born.desc`;
-    if(["domain", "industry"].includes(typeNesting)){
+    rankingUrl = "/occupation?order=num_born.desc";
+    if (["domain", "industry"].includes(typeNesting)) {
       return apiClient.get(rankingUrl)
         .then(res => {
-          const professions = nest()
+          const occupations = nest()
             .key(p => p[`${typeNesting}_slug`])
             .rollup(leaves => {
               return {num_born: leaves.reduce((a, b) => a + b.num_born, 0),
                 industry: leaves[0].industry,
                 domain: leaves[0].domain,
-                num_born_women: leaves.reduce((a, b) => a + b.num_born_women, 0)}
+                num_born_women: leaves.reduce((a, b) => a + b.num_born_women, 0)};
             })
             .entries(res.data)
             .reduce((a, b) => a.concat([b.value]), [])
-            .sort((a, b) => b.num_born - a.num_born );
-          res.data = professions;
+            .sort((a, b) => b.num_born - a.num_born);
+          res.data = occupations;
 
           return dispatch({
-            res: res,
+            res,
             type: "FETCH_RANKINGS_SUCCESS"
           });
-        })
+        });
     }
   }
-  else if (type == "place") {
-    if(professionFilter) {
-      rankingUrl = `/person?select=*,birthcountry{*},birthplace{*},profession{*}&${yearType}=gte.${years.min}&${yearType}=lte.${years.max}&order=langs.desc.nullslast${professionFilter}`;
+  else if (type === "place") {
+    if (occupationFilter) {
+      rankingUrl = `/person?select=*,birthcountry{*},birthplace{*},occupation{*}&${yearType}=gte.${years.min}&${yearType}=lte.${years.max}&order=langs.desc.nullslast${occupationFilter}`;
       return apiClient.get(rankingUrl)
         .then(res => {
 
@@ -79,21 +79,21 @@ function getNewData(dispatch, getState){
               return {num_born: leaves.length,
                 name: leaves[0].birthcountry.name,
                 slug: leaves[0].birthcountry.slug,
-                continent: leaves[0].birthcountry.continent}
+                continent: leaves[0].birthcountry.continent};
             })
             .entries(res.data.filter(p => p.birthcountry))
             .reduce((a, b) => a.concat([b.value]), [])
             .sort((a, b) => b.num_born - a.num_born );
-          console.log(places)
+          console.log(places);
           res.data = places;
 
           return dispatch({
-            res: res,
+            res,
             type: "FETCH_RANKINGS_SUCCESS"
           });
-        })
+        });
     }
-    if(typeNesting === "country"){
+    if (typeNesting === "country") {
       rankingUrl = `/place?is_country=is.true&order=born_rank_unique&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
     }
     else {
@@ -104,12 +104,12 @@ function getNewData(dispatch, getState){
   return apiClient.get(rankingUrl)
     .then(res => {
       return dispatch({
-        res: res,
+        res,
         type: "FETCH_RANKINGS_SUCCESS"
       });
     })
     .catch(() => {
-      return dispatch(fetchRankingsFailure({ id:999, error: 'Oops! Something went wrong and we couldn\'t fetch rankings'}));
+      return dispatch(fetchRankingsFailure({id: 999, error: "Oops! Something went wrong and we couldn't fetch rankings"}));
     });
 }
 
@@ -124,95 +124,95 @@ export function fetchRankingsFailure(data) {
 export function changeType(e) {
   const newType = e.target.value;
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    dispatch({ type: "CHANGE_RANKING_TYPE", data: newType });
-    dispatch({ type: "CHANGE_RANKING_TYPE_NESTING", data: newType });
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
+    dispatch({type: "CHANGE_RANKING_TYPE", data: newType});
+    dispatch({type: "CHANGE_RANKING_TYPE_NESTING", data: newType});
     return getNewData(dispatch, getState);
-  }
+  };
 }
 
 export function changeYearType(e) {
   e.preventDefault();
   const newYearType = e.target.id;
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    dispatch({ type: "CHANGE_RANKING_YEAR_TYPE", data: newYearType });
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
+    dispatch({type: "CHANGE_RANKING_YEAR_TYPE", data: newYearType});
     return getNewData(dispatch, getState);
-  }
+  };
 }
 
 export function changeTypeNesting(e) {
   e.preventDefault();
   const newTypeNesting = e.target.id;
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    dispatch({ type: "CHANGE_RANKING_TYPE_NESTING", data: newTypeNesting });
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
+    dispatch({type: "CHANGE_RANKING_TYPE_NESTING", data: newTypeNesting});
     return getNewData(dispatch, getState);
-  }
+  };
 }
 
 export function changeYears(years) {
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    dispatch({ type: "CHANGE_RANKING_YEARS", data:years });
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
+    dispatch({type: "CHANGE_RANKING_YEARS", data: years});
     return getNewData(dispatch, getState);
-  }
+  };
 }
 
 export function changeCountry(e) {
   const countryId = e.target.value;
   const countryCode = e.target.options[e.target.selectedIndex].dataset.countrycode;
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     return apiClient.get(`/place?is_country=is.false&country_code=eq.${countryCode}&order=name&select=id,name`)
       .then(res => {
         dispatch({
           type: "CHANGE_RANKING_COUNTRY",
           data: countryId,
-          res: res
+          res
         });
-        dispatch({ type: "CHANGE_RANKING_PLACE", data: 'all' });
+        dispatch({type: "CHANGE_RANKING_PLACE", data: "all"});
         return getNewData(dispatch, getState);
-      })
-  }
+      });
+  };
 }
 
 export function changePlace(e) {
   const placeId = e.target.value;
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    dispatch({ type: "CHANGE_RANKING_PLACE", data: placeId });
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
+    dispatch({type: "CHANGE_RANKING_PLACE", data: placeId});
     return getNewData(dispatch, getState);
-  }
+  };
 }
 
 export function changeDomain(e) {
   const domainSlug = e.target.value;
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    return apiClient.get(`/profession?domain_slug=eq.${domainSlug}&order=name&select=id,name`)
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
+    return apiClient.get(`/occupation?domain_slug=eq.${domainSlug}&order=occupation_name&select=id,occupation_name`)
       .then(res => {
         dispatch({
           type: "CHANGE_RANKING_DOMAIN",
           data: domainSlug,
-          res: res
+          res
         });
-        dispatch({ type: "CHANGE_RANKING_PROFESSION", data: 'all' });
+        dispatch({type: "CHANGE_RANKING_OCCUPATION", data: "all"});
         return getNewData(dispatch, getState);
-      })
-  }
+      });
+  };
 }
 
-export function changeProfession(e) {
-  const professionId = e.target.value;
+export function changeOccupation(e) {
+  const occupationId = e.target.value;
   return (dispatch, getState) => {
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:0 });
-    dispatch({ type: "CHANGE_RANKING_PROFESSION", data: professionId });
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
+    dispatch({type: "CHANGE_RANKING_OCCUPATION", data: occupationId});
     return getNewData(dispatch, getState);
-  }
+  };
 }
 
-export function updateRankingsTable(state, instance) {
+export function updateRankingsTable() {
   // const {page, pageSize, pages, sorting} = state;
   // console.log(" ----- page -------")
   // console.log(page)
@@ -221,16 +221,16 @@ export function updateRankingsTable(state, instance) {
   return (dispatch, getState) => {
     // dispatch({ type: "CHANGE_RANKING_PAGE", data: page });
     return getNewData(dispatch, getState);
-  }
+  };
 }
 
 export function changePage(e) {
   e.preventDefault();
-  const direction = e.target.innerText === "next" ? 1 : -1;
+  const direction = e.target.innerText.toLowerCase() === "next" ? 1 : -1;
   return (dispatch, getState) => {
-    const { rankings } = getState();
-    console.log("page:", rankings.results.page)
-    dispatch({ type: "CHANGE_RANKING_PAGE", data:rankings.results.page + direction });
+    const {rankings} = getState();
+    console.log("page:", rankings.results.page);
+    dispatch({type: "CHANGE_RANKING_PAGE", data: rankings.results.page + direction});
     return getNewData(dispatch, getState);
-  }
+  };
 }

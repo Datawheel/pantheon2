@@ -1,9 +1,9 @@
-import { combineReducers } from 'redux';
-import { RANKINGS_RESULTS_PER_PAGE } from 'types';
+import {combineReducers} from "redux";
+import {RANKINGS_RESULTS_PER_PAGE} from "types";
 
 const type = (
-  // state = "person",
-  state = "profession",
+  state = "person",
+  // state = "occupation",
   action
 ) => {
   switch (action.type) {
@@ -15,8 +15,8 @@ const type = (
 };
 
 const typeNesting = (
-  // state = "person",
-  state = "profession",
+  state = "person",
+  // state = "occupation",
   action
 ) => {
   switch (action.type) {
@@ -52,7 +52,7 @@ const years = (
 };
 
 const country = (
-  state = {id: 'all', places:[]},
+  state = {id: "all", places: []},
   action
 ) => {
   switch (action.type) {
@@ -60,14 +60,14 @@ const country = (
       return {
         id: action.data,
         places: action.res.data
-      }
+      };
     default:
       return state;
   }
 };
 
 const place = (
-  state = 'all',
+  state = "all",
   action
 ) => {
   switch (action.type) {
@@ -79,26 +79,26 @@ const place = (
 };
 
 const domain = (
-  state = {id: 'all', professions:[]},
+  state = {id: "all", occupations: []},
   action
 ) => {
   switch (action.type) {
     case "CHANGE_RANKING_DOMAIN":
       return {
         id: action.data,
-        professions: action.res.data
-      }
+        occupations: action.res.data
+      };
     default:
       return state;
   }
 };
 
-const profession = (
-  state = 'all',
+const occupation = (
+  state = "all",
   action
 ) => {
   switch (action.type) {
-    case "CHANGE_RANKING_PROFESSION":
+    case "CHANGE_RANKING_OCCUPATION":
       return action.data;
     default:
       return state;
@@ -106,7 +106,7 @@ const profession = (
 };
 
 const results = (
-  state = {data:[], pages:0, page:0, loading:false},
+  state = {data: [], pages: 0, page: 0, loading: false},
   action
 ) => {
   switch (action.type) {
@@ -123,7 +123,7 @@ const results = (
           pages: totalPages,
           page: state.page,
           loading: false
-        }
+        };
       }
       return state;
     case "CHANGE_RANKING_PAGE":
@@ -143,7 +143,7 @@ const rankingsReducer = combineReducers({
   country,
   place,
   domain,
-  profession,
+  occupation,
   results
 });
 

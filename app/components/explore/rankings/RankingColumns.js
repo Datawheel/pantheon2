@@ -16,10 +16,10 @@ export const COLUMNS = {
         render: ({value, row}) => <a href={`/profile/person/${row["slug"]}`}>{value}</a>
       },
       {
-        id: "profession.name",
-        header: "Profession",
-        accessor: d => d.profession ? d.profession.name : null,
-        render: ({value, row}) => <a href={`/profile/profession/${row.profession.slug}`}>{value}</a>
+        id: "occupation.occupation",
+        header: "Occupation",
+        accessor: d => d.occupation ? d.occupation.occupation : null,
+        render: ({value, row}) => <a href={`/profile/occupation/${row.occupation.occupation_slug}`}>{value}</a>
       },
       {
         header: "Born",
@@ -45,17 +45,17 @@ export const COLUMNS = {
       {header: "L", accessor: "langs", sort: "desc"}
     ]
   },
-  profession: {
-    profession: [
+  occupation: {
+    occupation: [
       {
         header: "Rank",
         accessor: "num_born",
         render: ({index}) => <span>{index+1}</span>
       },
       {
-        header: "Profession",
-        accessor: "name",
-        render: ({value, row}) => <a href={`/profile/profession/${row["slug"]}`}>{value}</a>
+        header: "Occupation",
+        accessor: "occupation",
+        render: ({value, row}) => <a href={`/profile/occupation/${row["occupation_slug"]}`}>{value}</a>
       },
       {
         header: "Industry",

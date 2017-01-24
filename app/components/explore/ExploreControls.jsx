@@ -1,11 +1,12 @@
-import React, { Component, PropTypes } from "react";
-import { Link } from "react-router";
+import React, {Component} from "react";
+import {Link} from "react-router";
 import {connect} from "react-redux";
-import { FORMATTERS } from "types";
-import { polyfill } from "es6-promise";
+import {FORMATTERS} from "types";
+import {polyfill} from "es6-promise";
 import Rcslider from "rc-slider";
-import { changeCountry, changePlace, changeDomain, changeProfession, changeType, changeTypeNesting, changeYearType, changeYears, fetchRankings } from "actions/rankings";
-import apiClient from 'apiconfig';
+import {changeCountry, changePlace, changeDomain, changeOccupation, changeType,
+          changeTypeNesting, changeYearType, changeYears, fetchRankings} from "actions/rankings";
+import apiClient from "apiconfig";
 
 const ENTER_KEY_CODE = 13;
 
@@ -16,15 +17,15 @@ class ExploreControls extends Component {
   constructor(props) {
     super(props);
     this.rankingType = [
-      {id:"person", name:"People"},
-      {id:"profession", name:"Professions"},
-      {id:"place", name:"Place"},
+      {id: "person", name: "People"},
+      {id: "occupation", name: "Occupations"},
+      {id: "place", name: "Place"}
     ];
     this.state = {
       countries: [],
       places: [],
       domains: [],
-      professions: [],
+      occupations: [],
       tempYearStart: null,
       tempYearEnd: null
     };
@@ -35,26 +36,26 @@ class ExploreControls extends Component {
     this.changeCountry = this.props.changeCountry.bind(this);
     this.changePlace = this.props.changePlace.bind(this);
     this.changeDomain = this.props.changeDomain.bind(this);
-    this.changeProfession = this.props.changeProfession.bind(this);
+    this.changeOccupation = this.props.changeOccupation.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     apiClient.get("/place?is_country=is.true&order=name&select=id,name,country_code")
-      .then((res) => {
-        this.setState({countries: res.data})
-      })
-    apiClient.get("/profession?select=id,name,domain_slug,domain")
-      .then((res) => {
+      .then(res => {
+        this.setState({countries: res.data});
+      });
+    apiClient.get("/occupation?select=id,occupation,domain_slug,domain")
+      .then(res => {
         const uniqueDomains = res.data.filter(function(item, pos) {
-          return res.data.findIndex(d => d.domain_slug===item.domain_slug) === pos;
-        })
-        this.setState({domains: uniqueDomains})
-      })
+          return res.data.findIndex(d => d.domain_slug === item.domain_slug) === pos;
+        });
+        this.setState({domains: uniqueDomains});
+      });
   }
 
   sanitizeYear(yr) {
     const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
-    if(yr.replace(".", "").toLowerCase().includes("bc") || parseInt(yr) < 0){
+    if (yr.replace(".", "").toLowerCase().includes("bc") || parseInt(yr) < 0) {
       return yearAsNumber * -1;
     }
     return yearAsNumber;
@@ -90,18 +91,18 @@ class ExploreControls extends Component {
       0: <strong>0 AD</strong>,
       2013: '2013',
     };
-    const {type, typeNesting, yearType, years, country, place, domain, profession} = this.props.rankings;
-    const {countries, places, domains, professions, tempYearStart, tempYearEnd} = this.state;
+    const {type, typeNesting, yearType, years, country, place, domain, occupation} = this.props.rankings;
+    const {countries, places, domains, occupations, tempYearStart, tempYearEnd} = this.state;
     const minYearKeyDown = this.minYearKeyDown.bind(this);
     const maxYearKeyDown = this.maxYearKeyDown.bind(this);
     const tempEndYear = this.state.tempEndYear || years.max;
 
     return (
-      <div className='explore-controls rankings'>
+      <div className="explore-controls rankings">
 
-        <div className='control-header'>
-          <h2 className='rankings'>Rankings</h2>
-          <i className='control-hide'></i>
+        <div className="control-header">
+          <h2 className="rankings">Rankings</h2>
+          <i className="control-hide"></i>
         </div>
 
         <section className="control-group key-group">
@@ -113,11 +114,11 @@ class ExploreControls extends Component {
               </option>
             )}
           </select>
-          { type === "profession" ?
+          { type === "occupation" ?
           <div className="flat-options-w-title">
             <h3>Level:</h3>
             <ul className="flat-options">
-              <li><a href="#" id="profession" onClick={this.changeTypeNesting} className={typeNesting === "profession" ? "active" : null}>Prof</a></li>
+              <li><a href="#" id="occupation" onClick={this.changeTypeNesting} className={typeNesting === "occupation" ? "active" : null}>Occ</a></li>
               <li><a href="#" id="industry" onClick={this.changeTypeNesting} className={typeNesting === "industry" ? "active" : null}>Ind</a></li>
               <li><a href="#" id="domain" onClick={this.changeTypeNesting} className={typeNesting === "domain" ? "active" : null}>Dom</a></li>
             </ul>
@@ -175,9 +176,9 @@ class ExploreControls extends Component {
           </select>
           : null }
 
-          { type !== "profession" ?
+          { type !== "occupation" ?
             <div className="filter">
-              <h3 className="prof-filter">Profession:</h3>
+              <h3 className="prof-filter">Occupation:</h3>
               <select value={domain.id} onChange={this.changeDomain}>
                 <option value="all">All Domains</option>
                 {domains.map(d =>
@@ -189,10 +190,10 @@ class ExploreControls extends Component {
             </div>
           : null }
 
-          { type !== "profession" && domain.professions.length ?
-          <select className="add-control-input" value={profession} onChange={this.changeProfession}>
+          { type !== "occupation" && domain.occupations.length ?
+          <select className="add-control-input" value={occupation} onChange={this.changeOccupation}>
             <option value="all">All Occupations</option>
-            {domain.professions.map(p =>
+            {domain.occupations.map(p =>
               <option key={p.id} value={p.id}>
                 {p.name}
               </option>
@@ -205,7 +206,7 @@ class ExploreControls extends Component {
       </div>
     );
   }
-};
+}
 
 ExploreControls.propTypes = {
   dispatch: React.PropTypes.func
@@ -217,4 +218,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchRankings, changeType, changeTypeNesting, changeYearType, changeYears, changeCountry, changePlace, changeDomain, changeProfession })(ExploreControls);
+export default connect(mapStateToProps, {fetchRankings, changeType, changeTypeNesting, changeYearType, changeYears, changeCountry, changePlace, changeDomain, changeOccupation})(ExploreControls);
