@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux';
-import { nest } from 'd3-collection';
-import { COUNTRY_DEPTH, CITY_DEPTH, OCCUPATION_DEPTH, INDUSTRY_DEPTH, DOMAIN_DEPTH } from 'types';
+import {combineReducers} from "redux";
+import {nest} from "d3-collection";
+import {COUNTRY_DEPTH, OCCUPATION_DEPTH} from "types";
 
 const data = (
   state = [],
@@ -15,7 +15,7 @@ const data = (
 };
 
 const grouping = (
-  state = "professions",
+  state = "occupations",
   action
 ) => {
   switch (action.type) {
@@ -40,7 +40,7 @@ const years = (
 };
 
 const place = (
-  state = {selectedDepth:COUNTRY_DEPTH, selectedCountry:"all", selectedCity:"all", selectedCityInCountry:"all", countries:[], cities:[], citiesInCountry:[]},
+  state = {selectedDepth: COUNTRY_DEPTH, selectedCountry: "all", selectedCity: "all", selectedCityInCountry: "all", countries: [], cities: [], citiesInCountry: []},
   action
 ) => {
   switch (action.type) {
@@ -63,27 +63,27 @@ const place = (
   }
 };
 
-const profession = (
-  state = {selectedDepth:OCCUPATION_DEPTH, selectedProfessionSlug:"all", selectedProfessions:"all", domains:[], industries:[], occupations:[]},
+const occupation = (
+  state = {selectedDepth: OCCUPATION_DEPTH, selectedOccupationSlug: "all", selectedOccupations: "all", domains: [], industries: [], occupations: []},
   action
 ) => {
   switch (action.type) {
-    case "CHANGE_EXPLORER_PROFESSION_DEPTH":
+    case "CHANGE_EXPLORER_OCCUPATION_DEPTH":
       return Object.assign({}, state, {selectedDepth: action.data});
-    case "CHANGE_EXPLORER_PROFESSIONS":
-      return Object.assign({}, state, {selectedProfessions: action.data});
-    case "CHANGE_EXPLORER_PROFESSION_SLUG":
-      return Object.assign({}, state, {selectedProfessionSlug: action.data});
-    case "GET_EXPLORER_PROFESSIONS_SUCCESS":
+    case "CHANGE_EXPLORER_OCCUPATIONS":
+      return Object.assign({}, state, {selectedOccupations: action.data});
+    case "CHANGE_EXPLORER_OCCUPATION_SLUG":
+      return Object.assign({}, state, {selectedOccupationSlug: action.data});
+    case "GET_EXPLORER_OCCUPATIONS_SUCCESS":
       const data = action.res.data;
 
       const domains = nest()
         .key(d => d.domain_slug)
-        .rollup((leaves) => {
+        .rollup(leaves => {
           return {
-            slug:leaves[0].domain_slug,
-            name:leaves[0].domain,
-            professions:`${leaves.reduce((lOld, lNew) => lOld.concat([lNew.id]),[])}`
+            slug: leaves[0].domain_slug,
+            name: leaves[0].domain,
+            occupations: `${leaves.reduce((lOld, lNew) => lOld.concat([lNew.id]),[])}`
           };
         })
         .entries(data)
@@ -91,33 +91,33 @@ const profession = (
 
       const industries = nest()
         .key(d => d.industry_slug)
-        .rollup((leaves) => {
+        .rollup(leaves => {
           return {
-            slug:leaves[0].industry_slug,
-            name:leaves[0].industry,
-            professions:`${leaves.reduce((lOld, lNew) => lOld.concat([lNew.id]),[])}`
+            slug: leaves[0].industry_slug,
+            name: leaves[0].industry,
+            occupations: `${leaves.reduce((lOld, lNew) => lOld.concat([lNew.id]), [])}`
           };
         })
         .entries(data)
         .map(d => d.value);
 
-      const occupations = data.map((occupation) => {
+      const occupations = data.map(occupation => {
         return {
-          id:occupation.id,
-          domain_slug:occupation.domain_slug,
-          industry_slug:occupation.industry_slug,
-          domain:occupation.domain,
-          industry:occupation.industry,
-          slug:occupation.slug,
-          name:occupation.name,
-          professions:occupation.id
+          id: occupation.id,
+          domain_slug: occupation.domain_slug,
+          industry_slug: occupation.industry_slug,
+          domain: occupation.domain,
+          industry: occupation.industry,
+          slug: occupation.occupation_slug,
+          name: occupation.occupation_name,
+          occupations: occupation.id
         };
       })
 
       return {
-        selectedDepth:OCCUPATION_DEPTH,
-        selectedProfessionSlug: state.selectedProfessionSlug,
-        selectedProfessions: state.selectedProfessions,
+        selectedDepth: OCCUPATION_DEPTH,
+        selectedOccupationSlug: state.selectedOccupationSlug,
+        selectedOccupations: state.selectedOccupations,
         domains,
         industries,
         occupations
@@ -128,7 +128,7 @@ const profession = (
 };
 
 const viz = (
-  state = {type:"StackedArea", config:{}},
+  state = {type: "StackedArea", config: {}},
   action
 ) => {
   switch (action.type) {
@@ -146,8 +146,8 @@ const explorerReducer = combineReducers({
   data,
   years,
   place,
-  profession,
-  viz,
+  occupation,
+  viz
 });
 
 export default explorerReducer;

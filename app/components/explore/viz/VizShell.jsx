@@ -17,8 +17,8 @@ class VizShell extends Component {
   }
 
   render() {
-    const {data, grouping, profession, viz} = this.props.explorer;
-    const {occupations} = profession;
+    const {data, grouping, occupation, viz} = this.props.explorer;
+    const {occupations} = occupation;
     const {type, config} = viz;
     let attrs, tmapData;
 
@@ -41,17 +41,17 @@ class VizShell extends Component {
           return d;
         });
     }
-    else if (grouping === "professions") {
+    else if (grouping === "occupations") {
       attrs = occupations.reduce((obj, d) => {
         obj[d.id] = d;
         return obj;
       }, {});
       tmapData = data
-        .filter(p => p.birthyear !== null && p.profession_id !== null)
+        .filter(p => p.birthyear !== null && p.occupation_id !== null)
         .map(d => {
-          const o = attrs[d.profession_id];
+          const o = attrs[d.occupation_id];
           if (o) {
-            d.profession_name = o.name;
+            d.occupation_name = o.name;
           }
           else {
             // console.log(d.profession_id, attrs);
@@ -64,7 +64,7 @@ class VizShell extends Component {
 
     return (
       <div className="explore-viz-container">
-        <h1>How have the professions of all globally remembered people changed over time?</h1>
+        <h1>How have the occupations of all globally remembered people changed over time?</h1>
         <h3 className="explore-viz-date">4000 BC - 2013</h3>
         <div className="viz-shell">
           <Viz type={type}

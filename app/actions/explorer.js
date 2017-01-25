@@ -53,7 +53,7 @@ export function fetchAllCities() {
     promise: axios.get("http://localhost:3100/place?is_country=is.false&order=born_rank&select=id,name,country_code&limit=200")
   };
 }
-export function fetchAllPofessions() {
+export function fetchAllOccupations() {
   return {
     type: "GET_EXPLORER_OCCUPATIONS",
     promise: axios.get("http://localhost:3100/occupation")

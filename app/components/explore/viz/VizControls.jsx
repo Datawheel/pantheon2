@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { changeGrouping } from "actions/explorer";
 import YearControl from "components/explore/controls/YearControl";
 import PlaceControl from "components/explore/controls/PlaceControl";
-import ProfessionControl from "components/explore/controls/ProfessionControl";
+import OccupationControl from "components/explore/controls/OccupationControl";
 import emIconSvg from "images/icon-email.svg";
 import fbIconSvg from "images/icon-facebook.svg";
 import twIconSvg from "images/icon-twitter.svg";
@@ -41,7 +41,7 @@ class VizControls extends Component {
 
           <YearControl />
           <PlaceControl />
-          <ProfessionControl />
+          <OccupationControl />
         </section>
         <section className="control-group flat-group">
           <h4>Share</h4>
