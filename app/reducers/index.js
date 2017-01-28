@@ -1,12 +1,12 @@
-import { combineReducers } from 'redux';
-import user from 'reducers/user';
-import personProfile from 'reducers/personProfile';
-import placeProfile from 'reducers/placeProfile';
-import occupationProfile from 'reducers/occupationProfile';
-import rank from 'reducers/rank';
-import rankings from 'reducers/rankings';
-import explorer from 'reducers/explorer';
-import { routerReducer as routing } from 'react-router-redux';
+import {combineReducers} from "redux";
+import user from "reducers/user";
+import personProfile from "reducers/personProfile";
+import placeProfile from "reducers/placeProfile";
+import occupationProfile from "reducers/occupationProfile";
+import rank from "reducers/rank";
+import rankings from "reducers/rankings";
+import explorer from "reducers/explorer";
+import {routerReducer as routing} from "react-router-redux";
 
 const searchActive = (
   state = false,
