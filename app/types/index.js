@@ -42,7 +42,7 @@ export const FORMATTERS = {
   share: format(".2%"),
   shareWhole: format(".0%"),
   date: timeFormat("%B %d, %Y"),
-  year: y => y < 0 ? `${Math.abs(y)} BC` : y,
+  year: y => y < 0 ? `${Math.abs(y)} BC` : Math.round(y),
   ordinal: n => {
     if (n > 3 && n < 21) return `${n}th`; // thanks kennebec
     switch (n % 10) {
