@@ -1,74 +1,84 @@
 # -*- coding: utf-8 -*-
-import sys
+import sys, unicodedata, string
 import pandas as pd
-import numpy as np
 from db_connection import get_engine
 
-def slugify(series):
-    return series.str.lower().str.replace("&", "and").str.replace(" ", "_")
+# Turn a Unicode string to plain ASCII, thanks to http://stackoverflow.com/a/518232/2809427
+all_letters = string.ascii_letters + " .,;'"
+def unicodeToAscii(s):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn'
+        and c in all_letters
+    )
 
-places = pd.read_csv("cities.tsv", sep="\t", na_values="null", usecols=("ccode", "cname"))
-places = places.drop_duplicates(keep="first")
+'''
+cities.tsv
+geonameid,city_name,lat,lon,pop,ccode,cname,region,continent,least_developed,metroid
+'''
+countries = pd.read_csv("cities.tsv", sep="\t", na_values="null", usecols=("geonameid", "city_name", "ccode", "cname", "region", "continent"))
+countries = countries[(countries.city_name=="unknown") | (countries.ccode.isnull())]
+countries["is_country"] = True
+countries["name"] = countries["cname"]
+countries["country_name"] = countries["name"]
+countries["id"] = countries["geonameid"]
+countries["slug"] = countries["name"].str.lower().str.replace("&", "and").str.replace(" ", "_")
+countries["country_code"] = countries["ccode"].str.lower()
+countries = countries.drop(["ccode", "cname", "city_name", "geonameid"], axis=1)
+# special edge case for ocean/antarctica
+countries.loc[47653,('name','country_name','slug')] = ("Antarctica", "Antarctica", "antarctica")
+countries.loc[47654,('name','country_name','slug')] = ("Ocean", "Ocean", "ocean")
 
-def collapse(people, born=True):
-    if born:
-        people = people.drop(["dplace_name", "dplace_lat", "dplace_lon", "dplace_geonameid"], axis=1)
-        # people['lat_lon'] = tuple(zip(people.bplace_lat, people.bplace_lon))
-        people['lat_lon'] = people.bplace_lat.map(str) + ", " + people.bplace_lon.map(str)
-        people = people.rename(columns={"bplace_geonameid":"id", "bplace_name":"name"})
-        num_people_key = "num_born"
-    else:
-        people = people.drop(["bplace_name", "bplace_lat", "bplace_lon", "bplace_geonameid"], axis=1)
-        # people['lat_lon'] = tuple(zip(people.dplace_lat, people.dplace_lon))
-        people['lat_lon'] = people.dplace_lat.map(str) + ", " + people.dplace_lon.map(str)
-        people = people.rename(columns={"dplace_geonameid":"id", "dplace_name":"name"})
-        num_people_key = "num_died"
-
-    people = people.groupby("id").agg({ \
-            "curid": "count", \
-            "name": "first", \
-            "lat_lon": "first", \
-            "region": "first", \
-            "continent": "first", \
-            "name_common": "first" \
-        }).reset_index()
-    people = people.merge(places, how="left", left_on="name_common", right_on="cname")
-    people = people.rename(columns={"curid":num_people_key, "ccode":"country_code", "name_common":"country_name"})
-    people["is_country"] = False
-    people["slug"] = slugify(people["name"])
-    people["country_code"] = slugify(people["country_code"])
-
-    return people
-
-people = pd.read_csv("raw/people2.tsv", sep="\t", na_values="null", true_values="true", false_values="false")
-people = people.drop(["hpi", "l", "name", "occupation", "prob_ratio", "gender", "twitter", "alive", "wd_id", "deathyear", "birthyear", "dplace_curid", "bplace_curid", "least_developed", "geacron_name"], axis=1)
-born = collapse(people)
-died = collapse(people, born=False)
-
-died_overlap = died[["id", "num_died"]]
-
-people = born.merge(died_overlap, how="left", on="id")
+places = pd.read_csv("cities.tsv", sep="\t", na_values="null", encoding="utf-8")
+# exclude countries
+places = places[(places.city_name!="unknown")&(places.city_name!="Antarctica")&(places.city_name!="Ocean")]
+places['lat_lon'] = places.lat.map(str) + ", " + places.lon.map(str)
+places = places.drop(["least_developed", "metroid", "lat", "lon"], axis=1)
+places = places.rename(columns={"geonameid":"id", "ccode":"country_code", "cname":"country_name", "city_name":"name"})
+places["country_code"] = places["country_code"].str.lower()
+places["is_country"] = False
+places["slug"] = places["name"].map(unicodeToAscii).str.lower().str.replace("&", "and").str.replace(" ", "_")
 
 
-died["overlap"] = died.id.isin(born["id"])
-died = died[~died["overlap"]]
-died = died.drop(["overlap"], axis=1)
-died["num_born"] = np.nan
+people = pd.read_csv("raw/people.tsv", sep="\t", na_values="null", usecols=("curid", "bplace_geonameid", "dplace_geonameid"))
 
-people = pd.concat([people, died])
+births = people.merge(pd.concat([places, countries]), how="left", left_on="bplace_geonameid", right_on="id")
+# print births[births.country_code.isnull()].head()
+# births.loc[lambda df: df.is_country, ()]
+# print births.head()
+# print countries[countries.id==3389629]
+# countries.to_csv('test.csv')
+birth_countries = births["country_name"].value_counts()
+countries = countries.merge(birth_countries.to_frame(), how="left", left_on="country_name", right_index=True)
+countries = countries.rename(columns={"country_name_x":"country_name", "country_name_y":"num_born"})
 
-print died.shape
-print people.shape
-people = people.drop(["cname"], axis=1)
+deaths = people.merge(pd.concat([places, countries]), how="left", left_on="dplace_geonameid", right_on="id")
+death_countries = deaths["country_name"].value_counts()
+countries = countries.merge(death_countries.to_frame(), how="left", left_on="country_name", right_index=True)
+countries = countries.rename(columns={"country_name_x":"country_name", "country_name_y":"num_died"})
 
+countries["born_rank"] = countries["num_born"].rank(ascending=False, method="dense", na_option="bottom")
+countries["born_rank_unique"] = countries["num_born"].rank(ascending=False, method="first", na_option="bottom")
+countries["died_rank"] = countries["num_died"].rank(ascending=False, method="dense", na_option="bottom")
+countries["died_rank_unique"] = countries["num_died"].rank(ascending=False, method="first", na_option="bottom")
 
+births_by_city = people.merge(pd.concat([places, countries]), how="left", left_on="bplace_geonameid", right_on="id")
+births_by_city = births_by_city.loc[lambda df: ~df.is_country, :]
+births_by_city = births_by_city.bplace_geonameid.value_counts()
 
+deaths_by_city = people[~people.dplace_geonameid.isnull()].merge(pd.concat([places, countries]), how="left", left_on="dplace_geonameid", right_on="id")
+deaths_by_city = deaths_by_city.loc[lambda df: ~df.is_country, :]
+deaths_by_city = deaths_by_city.dplace_geonameid.value_counts()
 
-people["born_rank"] = people["num_born"].rank(ascending=False, method="dense", na_option="bottom")
-people["born_rank_unique"] = people["num_born"].rank(ascending=False, method="first", na_option="bottom")
-people["died_rank"] = people["num_died"].rank(ascending=False, method="dense", na_option="bottom")
-people["died_rank_unique"] = people["num_died"].rank(ascending=False, method="first", na_option="bottom")
+places = places.merge(births_by_city.to_frame(), how="left", left_on="id", right_index=True)
+places = places.merge(deaths_by_city.to_frame(), how="left", left_on="id", right_index=True)
+places = places.rename(columns={"bplace_geonameid":"num_born", "dplace_geonameid":"num_died"})
 
-print people.tail(10)
+places["born_rank"] = places["num_born"].rank(ascending=False, method="dense", na_option="bottom")
+places["born_rank_unique"] = places["num_born"].rank(ascending=False, method="first", na_option="bottom")
+places["died_rank"] = places["num_died"].rank(ascending=False, method="dense", na_option="bottom")
+places["died_rank_unique"] = places["num_died"].rank(ascending=False, method="first", na_option="bottom")
 
-# people.to_sql("place", get_engine(), if_exists="append", index=False)
+# add to DB
+countries.to_sql("place", get_engine(), if_exists="append", index=False)
+places.to_sql("place", get_engine(), if_exists="append", index=False)

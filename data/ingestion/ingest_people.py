@@ -1,30 +1,25 @@
 # -*- coding: utf-8 -*-
-import sys, unicodedata
+import sys, unicodedata, string
 import pandas as pd
 from db_connection import get_engine
 engine = get_engine()
 
-def strip_accents(s):
-    s = s.decode('utf8')
-    xtra_chars = {u",":"", u"ł":u'l', u"Ł":u"L", u'ı':u'i', u'‘':u"", u'ø':u'o', u"Ø":"O", u"'":"", u"’":"", u"œ":"oe", u"ß":"ss", u"đ":"d", u"ð":"d", u"Ð":"D", u"æ":"ae", u"ṭ":"t", u"Ṭ":"T", u"Ħ":"H", u"ħ":"h", u"ī":"i"}
-    for k, v in xtra_chars.iteritems():
-        # pass
-        try:
-            s = s.replace(k, v)
-        except:
-            print s
-            sys.exit()
-    return ''.join(c for c in unicodedata.normalize('NFD', s)
-                  if unicodedata.category(c) != 'Mn')
+# Turn a Unicode string to plain ASCII, thanks to http://stackoverflow.com/a/518232/2809427
+all_letters = string.ascii_letters + " .,;'"
+def unicodeToAscii(s):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn'
+        and c in all_letters
+    )
 
-
-people = pd.read_csv("raw/people2.tsv", sep="\t", na_values="null", true_values="true", false_values="false")
+people = pd.read_csv("raw/people.tsv", sep="\t", na_values="null", true_values="true", false_values="false", encoding="utf-8")
 people = people.rename(columns={"curid":"id", "bplace_geonameid":"birthplace", "dplace_geonameid":"deathplace", "l":"langs"})
 people = people.drop(["bplace_lat", "bplace_lon", "bplace_name", "bplace_curid", "geacron_name", \
                         "dplace_lat", "dplace_lon", "dplace_name", "dplace_curid", "wd_id", "prob_ratio", \
                         "name_common","region","continent","least_developed"], axis=1)
-people["slug"] = people["name"].str.lower().str.replace(" ", "_")
-people["slug"] = people["slug"].apply(strip_accents)
+people["slug"] = people["name"].apply(unicodeToAscii)
+people["slug"] = people["slug"].str.lower().str.replace(" ", "_")
 
 # need birth & death country
 countries = pd.read_sql("select p1.id as place_id, p2.id as country_code from place p1, place p2 where p1.is_country is false and p2.is_country is true and p1.country_code = p2.country_code", engine)
@@ -42,6 +37,18 @@ occupations = occupations["occupation"].to_dict()
 occupations = {v:k for k, v in occupations.items()}
 people["occupation"] = people["occupation"].replace(occupations)
 
+# print people.tail(10)
+# print people[people["id"]==435773]
+
+places = pd.read_sql("select id as place_id, is_country from place", engine)
+people = people.merge(places, how="left", left_on="birthplace", right_on="place_id")
+people.loc[lambda df: df.is_country, ("birthplace",)] = None
+people = people.drop(["place_id", "is_country"], axis=1)
+
+people = people.merge(places, how="left", left_on="deathplace", right_on="place_id")
+people.loc[lambda df: df.is_country & ~df.deathplace.isnull(), ("deathplace",)] = None
+people = people.drop(["place_id", "is_country"], axis=1)
+
 # calculate ranks...
 for rank_type in ["birthyear", "deathyear", "birthcountry", "deathcountry", \
                     "birthplace", "deathplace", "occupation"]:
@@ -49,10 +56,4 @@ for rank_type in ["birthyear", "deathyear", "birthcountry", "deathcountry", \
     people["{}_rank_unique".format(rank_type)] = people.groupby(rank_type)['langs'].rank(ascending=False, method="first", na_option="bottom")
 
 # print people.tail(10)
-# print people[people["id"]==435773]
 people.to_sql("person", engine, if_exists="append", index=False)
-
-
-# import pandas as pd
-# people = pd.read_csv("raw/people2.tsv", sep="\t", na_values="null", true_values="true", false_values="false")
-# people[people['bplace_geonameid']==2643743][['name', 'bplace_name', 'bplace_geonameid', 'l']].head(25)

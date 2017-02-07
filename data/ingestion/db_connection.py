@@ -17,14 +17,3 @@ def get_cursor():
         password=os.getenv("PANTHEON_DBPW", "pantheon")
     )
     return conn.cursor()
-
-'''
-creating a new user:
-CREATE USER pantheonuser WITH PASSWORD 'pantheonpw';
-
-granting all privledges:
-GRANT ALL PRIVILEGES ON DATABASE pantheon TO pantheonuser;
-
-granting all privledges on all tables:
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO pantheonuser;
-'''
