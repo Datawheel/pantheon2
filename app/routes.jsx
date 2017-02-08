@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, IndexRoute, IndexRedirect, Redirect} from "react-router";
+import {Route, IndexRoute} from "react-router";
 
 import App from "containers/App";
 import Home from "containers/Home";
@@ -41,17 +41,7 @@ import NotFound from "components/NotFound";
  * We require store as an argument here because we wish to get
  * state from the store after it has been authenticated.
  */
-export default (store) => {
-  const requireAuth = (nextState, replace, callback) => {
-    const { user: { authenticated }} = store.getState();
-    if (!authenticated) {
-      replace({
-        pathname: "/login",
-        state: {nextPathname: nextState.location.pathname}
-      });
-    }
-    callback();
-  };
+export default function checkId() {
 
   function genRandId(path) {
     let candidates;
@@ -67,12 +57,12 @@ export default (store) => {
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
-  function checkForId(nextState, replaceState) {
+  function checkForId(nextState, replace) {
     if (!nextState.params.id) {
       const reqestedUrl = nextState.location.pathname;
       const randId = genRandId(reqestedUrl);
       const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}${randId}` : `${reqestedUrl}/${randId}`;
-      replaceState({id: randId}, nextUrl);
+      return replace({pathname: nextUrl});
     }
     else {
       // make sure it's legal
@@ -120,6 +110,4 @@ export default (store) => {
 
     </Route>
   );
-};
-
-// <Route path="profile/:name/" component={Profile} />
+}
