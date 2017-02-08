@@ -9,11 +9,11 @@ import Intro from "components/profile/person/Intro";
 import OccupationRanking from "components/profile/person/OccupationRanking";
 import YearRanking from "components/profile/person/YearRanking";
 import CountryRanking from "components/profile/person/CountryRanking";
-import Viz from "components/viz/Index";
 import NotFound from "components/NotFound";
 import { activateSearch } from "actions/users";
 import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
 import styles from 'css/components/profile/person';
+import {LinePlot} from "d3plus-react";
 
 import { FORMATTERS } from "types";
 
@@ -91,12 +91,13 @@ class Person extends Component {
       {
         title: personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife",
         slug: "afterlife",
-        viz: <Viz type="LinePlot"
-                  title={`${personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife"} of ${personProfile.person.name}`}
+        viz: <LinePlot
                   config={{
                     aggs: {
                       langs: a => Math.max(...a)
                     },
+                    height: 600,
+                    title: "Title here...",
                     data: lineData,
                     legendConfig: {
                       shapeConfig: {
@@ -140,7 +141,7 @@ class Person extends Component {
             title={section.title}
             slug={section.slug}>
             {section.content ? section.content : null}
-            {section.viz ? section.viz : null}
+            {section.viz ? <div className="viz">{section.viz}</div> : null}
           </Section>
         )}
       </div>
