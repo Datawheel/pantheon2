@@ -57,8 +57,8 @@ const Header = ({pageviews, person}) => {
                  time: d => d.pageview_date,
                  timeline: false,
                  tooltipConfig: {
-                   "body": d => `<span class="center">${FORMATTERS.date(d.pageview_date)} - ${FORMATTERS.commas(d.num_pageviews)}</span>`,
-                   "title": "Page Views (PV)"
+                   body: d => `<span class="center">${FORMATTERS.date(d.pageview_date)} - ${FORMATTERS.commas(d.num_pageviews)}</span>`,
+                   title: "Page Views (PV)"
                  },
                  width: 275,
                  x: d => d.pageview_date,

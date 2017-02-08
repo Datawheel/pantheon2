@@ -14,16 +14,16 @@ const OccupationRanking = ({person, ranking}) => {
       worsePeers = null;
 
   if (ranking.betterPeers.length) {
-    betterPeers = <span>Before { person.gender ? "her" : "him" } are <AnchorList items={ranking.betterPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />. </span>
+    betterPeers = <span>Before { person.gender ? "him" : "her" } are <AnchorList items={ranking.betterPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />. </span>;
   }
   if (ranking.worsePeers.length) {
-    worsePeers = <span>After { person.gender ? "her" : "him" } are <AnchorList items={ranking.worsePeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={(d) => `/profile/person/${d.slug}/`} />.</span>
+    worsePeers = <span>After { person.gender ? "him" : "her" } are <AnchorList items={ranking.worsePeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />.</span>;
   }
 
   return (
     <div>
       <p>
-        Among {person.occupation.name}s, {person.name} ranks <a>{ranking.me.occupation_rank}</a> out of {person.occupation.num_born}.&nbsp;
+        Among {person.occupation.occupation}s, {person.name} ranks <a>{ranking.me.occupation_rank}</a> out of {person.occupation.num_born}.&nbsp;
         { betterPeers }
         { worsePeers }
       </p>

@@ -85,7 +85,7 @@ class Person extends Component {
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
-      {title: `Among ${occupation.name}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
+      {title: `Among ${occupation.occupation}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
       {title: `In the Same Place`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
       {

@@ -35,8 +35,8 @@ const Intro = ({person, totalPageViews}) => {
           <p>
             {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.slug}`}>{person.occupation.name}</a> born in <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> in <b>{FORMATTERS.year(person.birthyear.name)}</b>.
             {person.deathyear ?
-              `${person.gender ? " She" : " He"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
-            &nbsp;Since the start of Wikipedia, {person.gender ? "she" : "he"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
+              `${person.gender ? " He" : " She"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
+            &nbsp;Since the start of Wikipedia, {person.gender ? "he" : "she"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
             By analyzing all "globally remembered people", Pantheon aims to understand cultural development through changes in occupations, birth and death places, and Wikipedia activity.&nbsp;
             <a href="/about/" className="deep-link">Read about our methods</a>
           </p>
