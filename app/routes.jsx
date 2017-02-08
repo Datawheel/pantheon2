@@ -46,13 +46,13 @@ export default function checkId() {
   function genRandId(path) {
     let candidates;
     if (path.includes("place")) {
-      candidates = ["india", "united_states", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_divoire_(ivory_coast)", "ljusdal", "dallas", "olias_del_rey", "tbilisi", "philippines", "sogndal"];
+      candidates = ["india", "united_states", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_d'ivoire_(ivory_coast)", "ljusdal", "dallas", "olias_del_rey", "tbilisi", "philippines", "sogndal"];
     }
     else if (path.includes("occupation")) {
       candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
     }
     else if (path.includes("person")) {
-      candidates = ["joseph_cook", "pope_paschal_ii", "nick_drake", "lewis_carroll", "eddie_irvine", "manfred_king_of_sicily", "julius_caesar", "john_l._hall", "jenny_lind", "henri_nestle", "raif_badawi", "emma_shapplin"];
+      candidates = ["joseph_cook", "pope_paschal_ii", "nick_drake", "lewis_carroll", "eddie_irvine", "manfred,_king_of_sicily", "julius_caesar", "john_l._hall", "jenny_lind", "henri_nestle", "raif_badawi", "emma_shapplin"];
     }
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
