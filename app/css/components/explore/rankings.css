@@ -2,12 +2,12 @@
 @import '../../common/typography';
 
 .ranking-table {
-  & .-th-inner {
+  & .rt-th {
     @apply --profileNav;
     font-size: 9px;
   }
 
-  & .-td-inner {
+  & .rt-td {
     @apply --small;
     font-size: 11px;
 
@@ -18,7 +18,7 @@
     }
   }
 
-  & td, & th {
+  & .rt-td, & .rt-th {
     &:nth-child(2) {
       text-align: left;
     }

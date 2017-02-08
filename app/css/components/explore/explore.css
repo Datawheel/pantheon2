@@ -9,7 +9,7 @@
     background: transparent;
   }
 
-  & table {
+  & .rt-table {
     border-width: 1px 0 1px 0;
     border-color: var(--colorSand);
     border-style: solid;
@@ -17,76 +17,72 @@
     margin: 7px 0;
   }
 
-  & thead {
+  & .rt-thead {
     box-shadow: none;
     border-bottom: 1px solid var(--colorSand);
 
-    & th {
+    & .rt-th {
       background: transparent;
       border-right: 0px;
       font-weight: 700;
     }
 
-    & tr {
+    & .rt-tr {
       text-align: right;
     }
 
-    & .-th-inner {
+    & .rt-th {
       padding: 10px 5px 5px;
     }
 
-    & th.-sort-desc, & th.-sort-asc {
+    & .rt-th.-cursor-pointer, & .rt-th.-cursor-pointer {
       box-shadow: none;
     }
 
-    & th.-sort-desc {
-      & .-th-inner {
-        &::after {
-          content: '';
-          position: relative;
-          display: inline-block;
-          height: 5px;
-          width: 10px;
-          margin: 0 0 1px 2px;
-          background: url('../../../images/tri-down.svg') no-repeat;
-          background-size: contain;
-          opacity: 0.8;
-        }
+    & .rt-th.-sort-desc {
+      &::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        height: 5px;
+        width: 10px;
+        margin: 0 0 1px 2px;
+        background: url('../../../images/tri-down.svg') no-repeat;
+        background-size: contain;
+        opacity: 0.8;
       }
     }
 
-    & th.-sort-asc {
-      & .-th-inner {
-        &::after {
-          content: '';
-          position: relative;
-          display: inline-block;
-          height: 5px;
-          width: 10px;
-          margin: 0 0 1px 2px;
-          background: url('../../../images/tri-down.svg') no-repeat;
-          background-size: contain;
-          opacity: 0.8;
-          transform: rotate(180deg);
-        }
+    & .rt-th.-sort-asc {
+      &::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        height: 5px;
+        width: 10px;
+        margin: 0 0 1px 2px;
+        background: url('../../../images/tri-down.svg') no-repeat;
+        background-size: contain;
+        opacity: 0.8;
+        transform: rotate(180deg);
       }
     }
   }
 
-  & tbody {
-    & tr {
+  & .rt-tbody {
+    & .rt-tr {
       border-bottom: 0px;
 
-      &:first-child td {
+      &:first-child .rt-td {
         box-shadow: none;
       }
     }
 
-    & .-td-inner {
+    & .rt-td {
       padding: 3px 5px 0;
     }
 
-    & td {
+    & .rt-td {
       border-right: 0px;
       text-align: right;
     }
