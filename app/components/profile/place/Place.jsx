@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from "react";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import Header from "components/profile/place/Header";
@@ -15,6 +15,7 @@ import NotFound from "components/NotFound";
 import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchPeopleBornHereAlive} from "actions/place";
 import {fetchAllOccupations} from "actions/occupation";
 import {YEAR_BUCKETS} from "types";
+import {Treemap, StackedArea} from "d3plus-react";
 
 import {extent} from "d3-array";
 
@@ -96,6 +97,23 @@ class Place extends Component {
       .filter(p => p.deathyear !== null)
       .slice(0, priestleyMax);
 
+    const attrs = occupations.reduce((obj, d) => {
+      obj[d.id] = d;
+      return obj;
+    }, {});
+    function gbHelper(g) {
+      return (d) => {
+        let val;
+
+        if (d[g]) val = d[g];
+        else if (d.occupation_id instanceof Array) val = attrs[d.occupation_id[0]][g];
+        else val = attrs[d.occupation_id][g];
+
+        return val;
+      }
+
+    };
+
     let sections = [
       {title: "People", slug: "people", content: <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />},
       {
@@ -103,25 +121,27 @@ class Place extends Component {
         slug: "occupations",
         content: <Occupations place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />,
         viz: [
-            <Viz type="Treemap"
-                  title={`Occupations of People Born in ${place.name}`}
+            <Treemap
                   key="tmap1"
                   config={{
+                    title: `Occupations of People Born in ${place.name}`,
                     attrs: occupations,
                     data: tmapBornData,
                     depth: 2,
-                    groupBy: ["domain", "industry", "occupation_name"],
-                    time: "birthyear"
+                    groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
+                    time: "birthyear",
+                    sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
                   }} />,
-            <Viz type="Treemap"
-                  title={`Occupations of People Deceased in ${place.name}`}
+            <Treemap
                   key="tmap2"
                   config={{
+                    title: `Occupations of People Deceased in ${place.name}`,
                     attrs: occupations,
                     data: tmapDeathData,
                     depth: 2,
-                    groupBy: ["domain", "industry", "occupation_name"],
-                    time: "deathyear"
+                    groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
+                    time: "deathyear",
+                    sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
                   }} />
         ]
       },
@@ -130,65 +150,64 @@ class Place extends Component {
         slug: "occupation_trends",
         content: <OccupationTrends place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} />,
         viz: [
-          <Viz type="StackedArea"
-                title="Births Over Time"
+          <StackedArea
                 key="stacked1"
                 config={{
-                  attrs: occupations,
+                  title: "Births Over Time",
                   data: tmapBornData,
                   depth: 1,
-                  groupBy: ["domain", "industry"],
+                  groupBy: ["domain", "industry"].map(gbHelper),
                   time: "bucketyear",
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1
                 }} />,
-            <Viz type="StackedArea"
-                  title="Deaths Over Time"
+            <StackedArea
                   key="stacked2"
                   config={{
-                    attrs: occupations,
+                    title: "Deaths Over Time",
                     data: tmapDeathData,
                     depth: 1,
-                    groupBy: ["domain", "industry"],
+                    groupBy: ["domain", "industry"].map(gbHelper),
                     time: "bucketyear",
                     x: "bucketyear",
                     y: d => d.id instanceof Array ? d.id.length : 1
                   }} />
         ]
       },
-      {
-        title: "Cities",
-        slug: "cities",
-        viz: [<Viz type="Geomap"
-                  title={`Major Cities in ${place.name} for Births and Deaths of Cultural Celebrities`}
-                  key="geomap1"
-                  config={{
-                    bounds: `${country.country_num}`,
-                    data: geomapData,
-                    depth: 1,
-                    groupBy: ["event", "place_name"],
-                    point: d => d.place_coord,
-                    pointSize: d => d.id instanceof Array ? d.id.length : 1
-                  }} />]
-      },
-      {title: "Historical Places", slug: "historical_places"},
-      {
-        title: `Overlapping Lives`,
-        slug: "overlapping_lives",
-        viz: [<Viz type="Priestley"
-                  title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
-                  key="priestley1"
-                  config={{
-                    attrs: occupations,
-                    data: priestleyData,
-                    depth: 1,
-                    end: "deathyear",
-                    groupBy: ["domain", "name"],
-                    start: "birthyear"
-                  }} />]
-      },
-      {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
-    ];
+    ]
+    //   {
+    //     title: "Cities",
+    //     slug: "cities",
+    //     viz: [<Viz type="Geomap"
+    //               title={`Major Cities in ${place.name} for Births and Deaths of Cultural Celebrities`}
+    //               key="geomap1"
+    //               config={{
+    //                 bounds: `${country.country_num}`,
+    //                 data: geomapData,
+    //                 depth: 1,
+    //                 groupBy: ["event", "place_name"],
+    //                 point: d => d.place_coord,
+    //                 pointSize: d => d.id instanceof Array ? d.id.length : 1
+    //               }} />]
+    //   },
+    //   {title: "Historical Places", slug: "historical_places"},
+    //   {
+    //     title: `Overlapping Lives`,
+    //     slug: "overlapping_lives",
+    //     viz: [<Viz type="Priestley"
+    //               title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
+    //               key="priestley1"
+    //               config={{
+    //                 attrs: occupations,
+    //                 data: priestleyData,
+    //                 depth: 1,
+    //                 end: "deathyear",
+    //                 groupBy: ["domain", "name"],
+    //                 start: "birthyear"
+    //               }} />]
+    //   },
+    //   {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
+    // ];
 
     // catch for really small places...
     if(peopleBornHere.concat(peopleDiedHere).length < 5){
