@@ -101,16 +101,13 @@ function getNewData(dispatch, getState){
     }
   }
 
-  return apiClient.get(rankingUrl)
-    .then(res => {
-      return dispatch({
-        res,
-        type: "FETCH_RANKINGS_SUCCESS"
-      });
-    })
-    .catch(() => {
-      return dispatch(fetchRankingsFailure({id: 999, error: "Oops! Something went wrong and we couldn't fetch rankings"}));
-    });
+  return apiClient.get(rankingUrl, {headers: {Prefer: "count=exact"}})
+    .then(res =>
+      dispatch({res, type: "FETCH_RANKINGS_SUCCESS"})
+    )
+    .catch(() =>
+      dispatch(fetchRankingsFailure({id: 999, error: "Oops! Something went wrong and we couldn't fetch rankings"}))
+    );
 }
 
 export function fetchRankingsFailure(data) {
