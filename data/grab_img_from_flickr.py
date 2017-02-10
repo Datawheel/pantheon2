@@ -1,6 +1,9 @@
 import csv, flickr, os, sys, urllib
-from db_connection import cursor, conn
+from ingestion.db_connection import get_conn
 from PIL import Image as pillow
+
+conn = get_conn()
+cursor = conn.cursor()
 
 FLICKR_DIR = "./scapedFlickrIMGs"
 attrs = ("place",)
@@ -38,12 +41,13 @@ def read_csv():
         os.makedirs(imgdir)
 
     for row in input_file:
-        print row["name"]
         uid = row["id"]
 
         # Check if there even is an image in this row...
-        if "image_link" not in row: continue
-        if not row["image_link"]: continue
+        if "img_link" not in row: continue
+        if not row["img_link"]: continue
+        # if row["is_country"] == "TRUE": continue
+        print row["name"]
 
         # Next check if it's already in the DB
         q = 'SELECT id from {} where id=%s AND img_link IS NOT NULL;'.format(attr_type)
@@ -51,7 +55,7 @@ def read_csv():
         if cursor.fetchone(): continue
 
         # OK, we have a link and it's not in the DB... carry on
-        image = row["image_link"]
+        image = row["img_link"]
         pid = image.split("/")[-1]
         photo = flickr.Photo(pid)
         try:
@@ -60,7 +64,7 @@ def read_csv():
             removedImages.append(uid)
             continue
 
-        image = {"id": uid, "url": image, "license": photo._Photo__license, "meta":row["image_meta"]}
+        image = {"id": uid, "url": image, "license": photo._Photo__license, "meta":row["img_meta"]}
 
         if image["license"] in ("0",):
             badImages.append(image)
@@ -87,8 +91,8 @@ def read_csv():
         query = 'UPDATE {} SET img_link=%s, img_author=%s WHERE id=%s;'.format(attr_type)
         data = (image["url"], image["author"], uid)
 
-        cursor.execute(query, data)
-        conn.commit()
+        # cursor.execute(query, data)
+        # conn.commit()
 
 
     print "{} new images have been processed.".format(len(goodImages))

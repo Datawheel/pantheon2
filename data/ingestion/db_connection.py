@@ -9,11 +9,14 @@ def get_engine():
         os.getenv("PANTHEON_DBNAME", "pantheon"),
     ))
 
-def get_cursor():
-    conn = psycopg2.connect(
+def get_conn():
+    return psycopg2.connect(
         database=os.getenv("PANTHEON_DBNAME", "pantheon"),
         user=os.getenv("PANTHEON_DBUSER", "pantheonuser"),
         host=os.getenv("PANTHEON_DBHOST", "localhost"),
         password=os.getenv("PANTHEON_DBPW", "pantheon")
     )
+
+def get_cursor():
+    conn = get_conn()
     return conn.cursor()
