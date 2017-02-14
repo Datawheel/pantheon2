@@ -54,6 +54,7 @@ class Place extends Component {
 
     tmapBornData.forEach(d => {
       d.occupation_name = d.occupation.occupation;
+      d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
       d.place = d.birthplace;
       d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
@@ -74,6 +75,7 @@ class Place extends Component {
       d.industry = d.occupation.industry;
       d.domain = d.occupation.domain;
       d.occupation_name = d.occupation.occupation;
+      d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
       d.place = d.deathplace;
       d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
@@ -111,22 +113,8 @@ class Place extends Component {
         let val;
 
         if (d[g]) val = d[g];
-        else if (d.occupation_id instanceof Array) {
-          if(!attrs[d.occupation_id[0]]){
-            console.log("NOT FOUND!", d.occupation_id)
-          }
-          val = attrs[d.occupation_id[0]][g];
-        }
-        else {
-          if(!attrs[d.occupation_id]){
-            console.log("NOT FOUND!", d.occupation_id)
-            console.log(d)
-            console.log('--')
-          }
-          else {
-            val = attrs[d.occupation_id][g]
-          }
-        };
+        else if (d.occupation_id instanceof Array) val = attrs[d.occupation_id[0]][g];
+        else val = attrs[d.occupation_id][g];
 
         return val;
       }
