@@ -13,6 +13,7 @@ import NotFound from "components/NotFound";
 import { fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations } from "actions/occupation";
 import Viz from "components/viz/Index";
 import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
+import {Priestley, StackedArea, Treemap} from "d3plus-react";
 
 import {extent} from "d3-array";
 
@@ -43,7 +44,10 @@ class Occupation extends Component {
       .sort((a, b) => b.langs - a.langs);
 
     tmapDomainData.forEach(d => {
-      d.occupation_name = d.occupation.name;
+      d.industry = d.occupation.industry;
+      d.domain = d.occupation.domain;
+      d.occupation_id = `${d.occupation_id}`;
+      d.occupation_name = d.occupation.occupation;
       d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
@@ -83,6 +87,24 @@ class Occupation extends Component {
       .filter(p => p.deathyear !== null && p.deathcountry !== null)
       .slice(0, priestleyMax);
 
+    const attrs = occupations.reduce((obj, d) => {
+      obj[d.id] = d;
+      return obj;
+    }, {});
+
+    function gbHelper(g) {
+      return (d) => {
+        let val;
+
+        if (d[g]) val = d[g];
+        else if (d.occupation_id instanceof Array) val = attrs[d.occupation_id[0]][g];
+        else val = attrs[d.occupation_id][g];
+
+        return val;
+      }
+
+    };
+
     const sections = [
       {title: "People", slug: "people", content: <People occupation={occupation} people={people} />},
       {
@@ -90,25 +112,26 @@ class Occupation extends Component {
         slug: "related",
         content: <RelatedOccupations occupation={occupation} occupations={occupations} />,
         viz: [
-          <Viz type="Treemap"
-            title={`Occupations Within ${occupation.domain} Domain`}
+          <Treemap
             key="tmap_domain"
             config={{
+              title: `Occupations Within ${occupation.domain} Domain`,
               attrs: occupations,
               data: tmapDomainData,
               depth: 1,
-              groupBy: ["industry", "occupation_name"],
+              groupBy: ["industry", "occupation_name"].map(gbHelper),
               legend: false,
-              time: "birthyear"
+              time: "birthyear",
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
-          <Viz type="StackedArea"
-            title={`${occupation.domain} Domain Over Time`}
+          <StackedArea
             key="stacked_domain"
             config={{
+              title:`${occupation.domain} Domain Over Time`,
               attrs: occupations,
               data: tmapDomainData,
               depth: 1,
-              groupBy: ["industry", "occupation_name"],
+              groupBy: ["industry", "occupation_name"].map(gbHelper),
               legend: false,
               shapeConfig: {stroke: () => "#F4F4F1", strokeWidth: (d, i) => 1},
               time: "bucketyear",
@@ -122,25 +145,27 @@ class Occupation extends Component {
         slug: "places",
         content: <Places people={people} occupation={occupation} />,
         viz: [
-          <Viz type="Treemap"
-            title={`Places of Birth for ${occupation.name}`}
+          <Treemap
             key="tmap_country1"
             config={{
+              title: `Places of Birth for ${occupation.occupation}`,
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-              time: "birthyear"
+              time: "birthyear",
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
-          <Viz type="Treemap"
-            title={`Places of Death for ${occupation.name}`}
+          <Treemap
             key="tmap_country2"
             config={{
+              title: `Places of Death for ${occupation.occupation}`,
               data: tmapDeathData,
               depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              time: "deathyear"
+              time: "deathyear",
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
         ]
       },
@@ -148,10 +173,10 @@ class Occupation extends Component {
         title: "Places Over Time",
         slug: "places_trends",
         viz: [
-          <Viz type="StackedArea"
-            title="Births Over Time"
+          <StackedArea
             key="stacked_country1"
             config={{
+              title: "Births Over Time",
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
@@ -160,10 +185,10 @@ class Occupation extends Component {
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />,
-          <Viz type="StackedArea"
-            title="Deaths Over Time"
+          <StackedArea
             key="stacked_country2"
             config={{
+              title: "Deaths Over Time",
               data: tmapDeathData,
               depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
@@ -178,10 +203,10 @@ class Occupation extends Component {
         title: "Overlapping Lives",
         slug: "overlapping_lives",
         viz: [
-          <Viz type="Priestley"
-            title={`Lifespans of the Top ${priestleyMax} ${occupation.name}`}
+          <Priestley
             key="priestley1"
             config={{
+              title: `Lifespans of the Top ${priestleyMax} ${occupation.name}`,
               data: priestleyData,
               depth: 1,
               end: "deathyear",
