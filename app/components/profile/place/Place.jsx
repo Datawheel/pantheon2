@@ -15,7 +15,8 @@ import NotFound from "components/NotFound";
 import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchPeopleBornHereAlive} from "actions/place";
 import {fetchAllOccupations} from "actions/occupation";
 import {YEAR_BUCKETS} from "types";
-import {Treemap, StackedArea} from "d3plus-react";
+import {Geomap, Treemap, StackedArea} from "d3plus-react";
+import {default as topojson} from "json/world-50m.json";
 
 import {extent} from "d3-array";
 
@@ -168,53 +169,69 @@ class Place extends Component {
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1
                 }} />,
+          <StackedArea
+                key="stacked2"
+                config={{
+                  title: "Deaths Over Time",
+                  data: tmapDeathData,
+                  depth: 1,
+                  groupBy: ["domain", "industry"].map(gbHelper),
+                  time: "bucketyear",
+                  x: "bucketyear",
+                  y: d => d.id instanceof Array ? d.id.length : 1
+                }} />
         ]
       },
+      {
+        title: "Cities",
+        slug: "cities",
+        viz: [<Geomap
+                  key="geomap1"
+                  config={{
+                    title: `Major Cities in ${place.name} for Births and Deaths of Cultural Celebrities`,
+                    bounds: `${country.country_num}`,
+                    data: geomapData,
+                    depth: 1,
+                    groupBy: ["event", "place_name"],
+                    point: d => d.place_coord,
+                    pointSize: d => d.id instanceof Array ? d.id.length : 1
+                  }} />]
+      },
+      {
+        title: `Overlapping Lives`,
+        slug: "overlapping_lives",
+        viz: [<Viz type="Priestley"
+                  title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
+                  key="priestley1"
+                  config={{
+                    data: priestleyData,
+                    depth: 1,
+                    end: "deathyear",
+                    groupBy: ["domain", "name"],
+                    start: "birthyear",
+                    ocean: false,
+                    pointSizeMax: 35,
+                    pointSizeMin: 8,
+                    tiles: false,
+                    topojson: topojson,
+                    zoom: false,
+                    shapeConfig: {
+                      fill: d => d.event.toLowerCase().indexOf("birth") > 0
+                               ? "rgba(76, 94, 215, 0.4)"
+                               : "rgba(95, 1, 22, 0.4)",
+                      stroke: () => "#4A4948",
+                      strokeWidth: 1,
+                      Path: {
+                        fill: "transparent",
+                        stroke: "#4A4948",
+                        strokeWidth: 0.75
+                      }
+                    }
+                  }} />]
+      },
+      {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
     ]
-    // <StackedArea
-    //       key="stacked2"
-    //       config={{
-    //         title: "Deaths Over Time",
-    //         data: tmapDeathData,
-    //         depth: 1,
-    //         groupBy: ["domain", "industry"].map(gbHelper),
-    //         time: "bucketyear",
-    //         x: "bucketyear",
-    //         y: d => d.id instanceof Array ? d.id.length : 1
-    //       }} />
-    //   {
-    //     title: "Cities",
-    //     slug: "cities",
-    //     viz: [<Viz type="Geomap"
-    //               title={`Major Cities in ${place.name} for Births and Deaths of Cultural Celebrities`}
-    //               key="geomap1"
-    //               config={{
-    //                 bounds: `${country.country_num}`,
-    //                 data: geomapData,
-    //                 depth: 1,
-    //                 groupBy: ["event", "place_name"],
-    //                 point: d => d.place_coord,
-    //                 pointSize: d => d.id instanceof Array ? d.id.length : 1
-    //               }} />]
-    //   },
-    //   {title: "Historical Places", slug: "historical_places"},
-    //   {
-    //     title: `Overlapping Lives`,
-    //     slug: "overlapping_lives",
-    //     viz: [<Viz type="Priestley"
-    //               title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
-    //               key="priestley1"
-    //               config={{
-    //                 attrs: occupations,
-    //                 data: priestleyData,
-    //                 depth: 1,
-    //                 end: "deathyear",
-    //                 groupBy: ["domain", "name"],
-    //                 start: "birthyear"
-    //               }} />]
-    //   },
-    //   {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
-    // ];
+    // {title: "Historical Places", slug: "historical_places"},
 
     // catch for really small places...
     if(peopleBornHere.concat(peopleDiedHere).length < 5){
