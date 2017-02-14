@@ -24,7 +24,7 @@ export function fetchPlace(store) {
 export function fetchCountry(store) {
   const getPlaceProm = makePlaceRequest("get", null, null, `/place?slug=eq.${store.id}&select=country_code`).then(placeIdRes => {
     const placeCountryCode = placeIdRes.data[0].country_code;
-    return makePlaceRequest("get", null, null, `/place?country_code=eq.${placeCountryCode}&wiki_id=is.null`);
+    return makePlaceRequest("get", null, null, `/place?country_code=eq.${placeCountryCode}&is_country=is.true`);
   });
 
   return {
@@ -39,7 +39,7 @@ export function fetchPlaceRanks(store) {
     const placeRankData = placeRankRes.data[0];
     const placeRank = placeRankData.born_rank_unique;
     const isCountry = placeRankData.name === placeRankData.country_name ? true : false;
-    const sumlevelFilter = isCountry ? "wiki_id=is.null" : "wiki_id=isnot.null";
+    const sumlevelFilter = isCountry ? "is_country=is.true" : "is_country=is.false";
     const rankSub = Math.max(1, parseInt(placeRank, 10) - NUM_RANKINGS_PRE);
     const rankPlus = Math.max(NUM_RANKINGS, parseInt(placeRank, 10) + NUM_RANKINGS_POST);
     const apiURL = `/place?born_rank_unique=gte.${rankSub}&born_rank_unique=lte.${rankPlus}&order=born_rank_unique&${sumlevelFilter}`;

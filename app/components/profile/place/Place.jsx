@@ -53,13 +53,15 @@ class Place extends Component {
     birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
 
     tmapBornData.forEach(d => {
-      d.occupation_name = d.occupation.name;
+      d.occupation_name = d.occupation.occupation;
       d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
       d.place = d.birthplace;
       d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
                    ? d.birthyear
                    : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
+
+    // console.log("tmapBornData", tmapBornData)
 
     const tmapDeathData = peopleDiedHere
       .filter(p => p.deathyear !== null)
@@ -69,7 +71,9 @@ class Place extends Component {
     deathyearSpan = deathyearSpan[1] - deathyearSpan[0];
 
     tmapDeathData.forEach(d => {
-      d.occupation_name = d.occupation.name;
+      d.industry = d.occupation.industry;
+      d.domain = d.occupation.domain;
+      d.occupation_name = d.occupation.occupation;
       d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
       d.place = d.deathplace;
       d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
@@ -101,13 +105,28 @@ class Place extends Component {
       obj[d.id] = d;
       return obj;
     }, {});
+
     function gbHelper(g) {
       return (d) => {
         let val;
 
         if (d[g]) val = d[g];
-        else if (d.occupation_id instanceof Array) val = attrs[d.occupation_id[0]][g];
-        else val = attrs[d.occupation_id][g];
+        else if (d.occupation_id instanceof Array) {
+          if(!attrs[d.occupation_id[0]]){
+            console.log("NOT FOUND!", d.occupation_id)
+          }
+          val = attrs[d.occupation_id[0]][g];
+        }
+        else {
+          if(!attrs[d.occupation_id]){
+            console.log("NOT FOUND!", d.occupation_id)
+            console.log(d)
+            console.log('--')
+          }
+          else {
+            val = attrs[d.occupation_id][g]
+          }
+        };
 
         return val;
       }
@@ -161,20 +180,20 @@ class Place extends Component {
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1
                 }} />,
-            <StackedArea
-                  key="stacked2"
-                  config={{
-                    title: "Deaths Over Time",
-                    data: tmapDeathData,
-                    depth: 1,
-                    groupBy: ["domain", "industry"].map(gbHelper),
-                    time: "bucketyear",
-                    x: "bucketyear",
-                    y: d => d.id instanceof Array ? d.id.length : 1
-                  }} />
         ]
       },
     ]
+    // <StackedArea
+    //       key="stacked2"
+    //       config={{
+    //         title: "Deaths Over Time",
+    //         data: tmapDeathData,
+    //         depth: 1,
+    //         groupBy: ["domain", "industry"].map(gbHelper),
+    //         time: "bucketyear",
+    //         x: "bucketyear",
+    //         y: d => d.id instanceof Array ? d.id.length : 1
+    //       }} />
     //   {
     //     title: "Cities",
     //     slug: "cities",
