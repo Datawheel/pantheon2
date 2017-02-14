@@ -15,7 +15,7 @@ import NotFound from "components/NotFound";
 import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchPeopleBornHereAlive} from "actions/place";
 import {fetchAllOccupations} from "actions/occupation";
 import {YEAR_BUCKETS} from "types";
-import {Geomap, Treemap, StackedArea} from "d3plus-react";
+import {Geomap, Priestley, Treemap, StackedArea} from "d3plus-react";
 import {default as topojson} from "json/world-50m.json";
 
 import {extent} from "d3-array";
@@ -193,28 +193,11 @@ class Place extends Component {
                     data: geomapData,
                     depth: 1,
                     groupBy: ["event", "place_name"],
-                    point: d => d.place_coord,
-                    pointSize: d => d.id instanceof Array ? d.id.length : 1
-                  }} />]
-      },
-      {
-        title: `Overlapping Lives`,
-        slug: "overlapping_lives",
-        viz: [<Viz type="Priestley"
-                  title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
-                  key="priestley1"
-                  config={{
-                    data: priestleyData,
-                    depth: 1,
-                    end: "deathyear",
-                    groupBy: ["domain", "name"],
-                    start: "birthyear",
                     ocean: false,
+                    point: d => d.place_coord,
+                    pointSize: d => d.id instanceof Array ? d.id.length : 1,
                     pointSizeMax: 35,
                     pointSizeMin: 8,
-                    tiles: false,
-                    topojson: topojson,
-                    zoom: false,
                     shapeConfig: {
                       fill: d => d.event.toLowerCase().indexOf("birth") > 0
                                ? "rgba(76, 94, 215, 0.4)"
@@ -226,6 +209,26 @@ class Place extends Component {
                         stroke: "#4A4948",
                         strokeWidth: 0.75
                       }
+                    },
+                    tiles: false,
+                    topojson: topojson,
+                    zoom: false
+                  }} />]
+      },
+      {
+        title: `Overlapping Lives`,
+        slug: "overlapping_lives",
+        viz: [<Priestley
+                  title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
+                  key="priestley1"
+                  config={{
+                    data: priestleyData,
+                    depth: 1,
+                    end: "deathyear",
+                    groupBy: ["domain", "name"],
+                    start: "birthyear",
+                    shapeConfig: {
+                      labelPadding: 2
                     }
                   }} />]
       },
