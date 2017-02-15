@@ -7,9 +7,14 @@ import apiClient from "apiconfig";
 polyfill();
 
 function getNewData(dispatch, getState){
-  dispatch({ type: "FETCH_RANKINGS"});
+  dispatch({type: "FETCH_RANKINGS"});
   const {rankings} = getState();
-  const {type, typeNesting, yearType, years, country, place, domain, occupation, results} = rankings;
+  const {country, domain, occupation, place, results, sorting, type, typeNesting, yearType, years} = rankings;
+  let sortingFilter = "&order=langs.desc.nullslast";
+  if (sorting) {
+    console.log(sorting)
+    sortingFilter = `&order=${sorting.id}.${sorting.direction}.nullslast`;
+  }
   // console.log("type--", type, type == "person")
   const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
   const countryFilter = country.id !== "all" ? `&birthcountry=eq.${country.id}` : "";
@@ -17,7 +22,7 @@ function getNewData(dispatch, getState){
   const occupationFilter = occupation !== "all" ? `&occupation=eq.${occupation}` : domain.occupations.length ? `&occupation=in.${occupation.occupations.reduce((a, b)=> a.concat(b.id), [])}` : "";
   const limitOffset = type === "person" ? `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}` : "";
 
-  let rankingUrl = `/person?select=*,birthcountry{*},birthplace{*},occupation{*}${limitOffset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}&order=langs.desc.nullslast${countryFilter}${placeFilter}${occupationFilter}`;
+  let rankingUrl = `/person?select=*,birthcountry{*},birthplace{*},occupation{*}${limitOffset}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${sortingFilter}${countryFilter}${placeFilter}${occupationFilter}`;
   if (type === "occupation") {
     if (countryFilter) {
       return apiClient.get(rankingUrl)
@@ -217,6 +222,23 @@ export function updateRankingsTable() {
   // instance.setState({page: 0})
   return (dispatch, getState) => {
     // dispatch({ type: "CHANGE_RANKING_PAGE", data: page });
+    return getNewData(dispatch, getState);
+  };
+}
+
+export function sortRankingsTable(column) {
+  return (dispatch, getState) => {
+    const {rankings} = getState();
+    let newSort = {id: column.id, direction: "desc"};
+    if (rankings.sorting) {
+      if(rankings.sorting.direction === "desc"){
+        newSort = {id: column.id, direction: "asc"};
+      }
+      else {
+        newSort = null;
+      }
+    }
+    dispatch({type: "CHANGE_SORTING", data: newSort});
     return getNewData(dispatch, getState);
   };
 }

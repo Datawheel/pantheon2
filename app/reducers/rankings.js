@@ -105,6 +105,18 @@ const occupation = (
   }
 };
 
+const sorting = (
+  state = null,
+  action
+) => {
+  switch (action.type) {
+    case "CHANGE_SORTING":
+      return action.data;
+    default:
+      return state;
+  }
+};
+
 const results = (
   state = {data: [], pages: 0, page: 0, loading: false},
   action
@@ -136,15 +148,16 @@ const results = (
 };
 
 const rankingsReducer = combineReducers({
+  country,
+  domain,
+  occupation,
+  place,
+  results,
+  sorting,
   type,
   typeNesting,
   yearType,
-  years,
-  country,
-  place,
-  domain,
-  occupation,
-  results
+  years
 });
 
 export default rankingsReducer;

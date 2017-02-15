@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 import styles from "css/components/explore/explore";
 import {RANKINGS_RESULTS_PER_PAGE} from "types";
 import RankingPagination from "components/explore/rankings/RankingPagination";
-import {updateRankingsTable} from "actions/rankings";
+import {sortRankingsTable, updateRankingsTable} from "actions/rankings";
 import {COLUMNS} from "components/explore/rankings/RankingColumns";
 
 class RankingTable extends Component {
@@ -14,16 +14,34 @@ class RankingTable extends Component {
   }
 
   render() {
-    const {results, type, typeNesting} = this.props.rankings;
-    const {updateRankingsTable} = this.props;
+    const {results, type, typeNesting, sorting} = this.props.rankings;
+    const {sortRankingsTable, updateRankingsTable} = this.props;
     const pageSize = type === "occupation" ? results.data.length : RANKINGS_RESULTS_PER_PAGE;
 
-    const columns = COLUMNS[type][typeNesting];
+    let columns = COLUMNS[type][typeNesting];
     const rankColumnRender = ({index}) => {
       const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
       return <span>{index + 1 + offset}</span>;
     };
     columns[0].render = rankColumnRender;
+
+    if (!results.loading) {
+      columns = columns.map(c => {
+        c.sort = null;
+        delete c.sort;
+        if (sorting) {
+          if (c.id === sorting.id || c.accessor === sorting.id) {
+            c.sort = "desc";
+          }
+        }
+        else {
+          if (c.accessor === "langs") {
+            c.sort = "desc";
+          }
+        }
+        return c;
+      })
+    }
 
     return (
       <div className="ranking-table-container">
@@ -39,6 +57,7 @@ class RankingTable extends Component {
           pages={results.pages}
           loading={results.loading}
           onChange={updateRankingsTable}
+          onSortingChange={sortRankingsTable}
         />
         <RankingPagination />
       </div>
@@ -52,4 +71,13 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {updateRankingsTable})(RankingTable);
+const mapDispatchToProps = dispatch => ({
+  sortRankingsTable: column => {
+    dispatch(sortRankingsTable(column));
+  },
+  updateRankingsTable: () => {
+    dispatch(updateRankingsTable());
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RankingTable);
