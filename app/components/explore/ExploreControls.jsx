@@ -19,7 +19,7 @@ class ExploreControls extends Component {
     this.rankingType = [
       {id: "person", name: "People"},
       {id: "occupation", name: "Occupations"},
-      {id: "place", name: "Place"}
+      {id: "place", name: "Places"}
     ];
     this.state = {
       countries: [],

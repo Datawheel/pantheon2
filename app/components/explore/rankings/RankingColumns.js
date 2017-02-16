@@ -24,12 +24,12 @@ export const COLUMNS = {
       {
         header: "Born",
         accessor: "birthyear",
-        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : null
+        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"Unknown"}</span>
       },
       {
         header: "Died",
         accessor: "deathyear",
-        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : null
+        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"--"}</span>
       },
       {
         header: "Gender",
@@ -40,7 +40,7 @@ export const COLUMNS = {
         id: "birthplace.name",
         header: "Birth Place",
         accessor: d => d.birthplace ? d.birthplace.name : null,
-        render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : null
+        render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : <span>{"Unknown"}</span>
       },
       {header: "L", accessor: "langs", sort: "desc"}
     ]
