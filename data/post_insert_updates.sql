@@ -189,16 +189,16 @@ AND person.occupation=occupation.id;
 
 INSERT INTO search (id, name, slug, weight, document, profile_type)
 select
-profession.id,
-profession.name,
-profession.slug,
-profession.num_born as weight,
-setweight(to_tsvector(unaccent(profession.name)), 'A') ||
-setweight(to_tsvector(unaccent(profession.industry)), 'C') ||
-setweight(to_tsvector(unaccent(profession.group)), 'D') ||
-setweight(to_tsvector(unaccent(profession.domain)), 'D') as document,
-'profession' as profile_type
-from profession;
+occupation.id,
+occupation.occupation,
+occupation.occupation_slug,
+occupation.num_born as weight,
+setweight(to_tsvector(unaccent(occupation.occupation)), 'A') ||
+setweight(to_tsvector(unaccent(occupation.industry)), 'C') ||
+setweight(to_tsvector(unaccent(occupation.group)), 'D') ||
+setweight(to_tsvector(unaccent(occupation.domain)), 'D') as document,
+'occupation' as profile_type
+from occupation;
 
 INSERT INTO search (id, name, slug, weight, primary_meta, document, profile_type)
 SELECT
@@ -212,7 +212,7 @@ setweight(to_tsvector(unaccent(place.country_name)), 'C') ||
 setweight(to_tsvector(place.country_code), 'D') as document,
 'place' as profile_type
 from place
-where wiki_id is not null;
+where is_country is false;
 
 INSERT INTO search (id, name, slug, weight, document, profile_type)
 SELECT
@@ -224,4 +224,4 @@ setweight(to_tsvector(unaccent(place.name)), 'A') ||
 setweight(to_tsvector(place.country_code), 'B') as document,
 'place' as profile_type
 from place
-where wiki_id is null;
+where is_country is true;
