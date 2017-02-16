@@ -176,16 +176,16 @@ person.id,
 person.name,
 person.slug,
 person.langs as weight,
-profession.name as primary_meta,
+occupation.occupation as primary_meta,
 country.name as secondary_meta,
 setweight(to_tsvector(unaccent(person.name)), 'A') ||
-setweight(to_tsvector(unaccent(profession.name)), 'D') ||
+setweight(to_tsvector(unaccent(occupation.occupation)), 'D') ||
 setweight(to_tsvector(unaccent(place.name)), 'D') as document,
 'person' as profile_type
-from person, place, profession, place as country
+from person, place, occupation, place as country
 where person.birthplace=place.id
 AND person.birthcountry=country.id
-AND person.profession=profession.id;
+AND person.occupation=occupation.id;
 
 INSERT INTO search (id, name, slug, weight, document, profile_type)
 select
