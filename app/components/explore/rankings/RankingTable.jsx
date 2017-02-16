@@ -49,7 +49,7 @@ class RankingTable extends Component {
         <h3 className="ranking-table-date">4000 BC - 2013</h3>
         <RankingPagination />
         <ReactTable
-          className="ranking-table"
+          className="ranking-table -highlight"
           columns={columns}
           pageSize={pageSize}
           data={results.data}
