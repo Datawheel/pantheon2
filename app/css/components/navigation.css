@@ -92,8 +92,8 @@
     &.explore::before {
       background: url('../../images/globalNav/explore.svg') no-repeat;
       background-size: contain;
-      left: -20px;
-      top: -3px;
+      left: -21px;
+      top: -4px;
       width: 18px;
       height: 18px;
     }
@@ -101,28 +101,28 @@
     &.profiles::before {
       background: url('../../images/globalNav/profile.svg') no-repeat;
       background-size: contain;
-      left: -18px;
-      top: -4px;
-      width: 19px;
-      height: 19px;
+      left: -19px;
+      top: -6px;
+      width: 18px;
+      height: 18px;
     }
 
     &.about::before {
       background: url('../../images/globalNav/about.svg') no-repeat;
       background-size: contain;
       left: -20px;
-      top: -2px;
-      width: 16px;
-      height: 16px;
+      top: -3px;
+      width: 15px;
+      height: 15px;
     }
 
     &.data::before {
       background: url('../../images/globalNav/data.svg') no-repeat;
       background-size: contain;
       left: -19px;
-      top: -2px;
-      width: 16px;
-      height: 16px;
+      top: -4px;
+      width: 15px;
+      height: 15px;
     }
   }
 
