@@ -6,6 +6,7 @@ import classNames from "classnames/bind";
 import styles from "css/components/navigation";
 import pantheonLogoSvg from "images/logo.svg";
 import searchSvg from "images/icon-search.svg";
+import menuSvg from "images/icon-menu.svg";
 
 const toggleSubNav = (e) => {
   const itemChildren = e.target.childNodes;
@@ -20,6 +21,11 @@ const Navigation = ({ user, logOut, activateSearch }) => {
     return (
       <nav className="navigation" role="navigation">
         <ul className="items">
+          <li className="menu-btn">
+            <span>
+              <img src={menuSvg} alt={`Open Menu`} />
+            </span>
+          </li>
           <li className="item">
             <Link to="/explore/viz" className="item-link explore" activeClassName="active">Explore</Link>
             <ul className={"sub-items"}>
