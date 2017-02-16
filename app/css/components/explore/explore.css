@@ -5,8 +5,34 @@
 
 /* override ReactTable styles*/
 .ReactTable {
+  border: 0;
+
+  &.-highlight {
+    & .rt-tbody .rt-tr:not(.-padRow):hover {
+      background: var(--colorLint);
+
+      & a {
+        color: var(--colorCtrl);
+        border-bottom-color: var(--colorCtrlShape);
+      }
+    }
+  }
+
   & .-loading {
     background: transparent;
+
+    & > div {
+      @apply --smallCaps;
+      color: var(--colorSand);
+    }
+  }
+
+  & .rt-noData {
+    @apply --smallCaps;
+    background: transparent;
+    color: var(--colorSlate);
+    padding: 0;
+    top: 25%;
   }
 
   & .rt-table {
@@ -21,18 +47,23 @@
     box-shadow: none;
     border-bottom: 1px solid var(--colorSand);
 
+    &.-header {
+      box-shadow: none;
+    }
+
     & .rt-th {
       background: transparent;
       border-right: 0px;
+      box-shadow: none;
+      @apply --profileNav;
+      color: var(--colorSlate);
+      font-size: 9px;
       font-weight: 700;
+      padding: 12px 5px 7px;
     }
 
     & .rt-tr {
       text-align: right;
-    }
-
-    & .rt-th {
-      padding: 10px 5px 5px;
     }
 
     & .rt-th.-cursor-pointer, & .rt-th.-cursor-pointer {
@@ -70,6 +101,10 @@
   }
 
   & .rt-tbody {
+    & .rt-tr-group {
+      border-bottom: 0px;
+    }
+
     & .rt-tr {
       border-bottom: 0px;
 
@@ -79,7 +114,7 @@
     }
 
     & .rt-td {
-      padding: 3px 5px 0;
+      padding: 6px 5px 2px;
     }
 
     & .rt-td {
@@ -119,7 +154,7 @@
 
   & h3 {
     @apply --searchResults;
-    margin: 5px 0 12px;
+    margin: 3px 0 12px;
     color: var(--colorTan);
     letter-spacing: 0.5px;
   }
