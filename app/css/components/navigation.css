@@ -69,9 +69,8 @@
 .navigation {
   z-index: 98;
 
-  /* temporary */
   @media (max-width: 750px) {
-    display: none;
+    /*display: none;*/
   }
 
   & .items {
@@ -249,7 +248,7 @@
   min-height: 100vh;
 
   @media (max-width: 750px) {
-    display: block;
+    /*display: block;*/
   }
 
   & .logo-container {

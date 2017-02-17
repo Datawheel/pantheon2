@@ -6,7 +6,12 @@
     & .items {
       max-width: 590px;
 
-      & .item.home {
+      @media (min-width: 751px) and (max-width: 990px) {
+        margin: 0 auto;
+        max-width: 590px;
+      }
+
+      & .item.home-link {
         display: none;
       }
 
