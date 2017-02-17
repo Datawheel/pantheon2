@@ -1,0 +1,87 @@
+@import '../../common/colors';
+@import '../../common/typography';
+
+.profile-footer {
+  @apply --themeDark;
+  padding: 50px 20px;
+  position: relative;
+
+  & .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  & .footer-title {
+    @apply --profileVizTitle;
+    color: var(--colorEggshell);
+    max-width: 200px;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px;
+  }
+
+  & .footer-carousel-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  & .footer-carousel-item {
+    display: inline-block;
+    width: 145px;
+    margin: 10px 20px;
+  }
+
+  & .footer-carousel-item-photo {
+    display: block;
+    width: 145px;
+    height: 145px;
+    overflow: hidden;
+    position: relative;
+    margin: auto;
+    box-sizing: border-box;
+    border: 1px solid var(--colorMatza);
+
+    & img {
+      width: 105%;
+      margin-top: -7%;
+      margin-left: -2.5%;
+    }
+  }
+
+  & .footer-carousel-item-title {
+    margin: 13px 0 0;
+    padding: 0;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+
+    & a {
+      text-decoration: none;
+      outline: none;
+      color: var(--colorEggshell);
+      @apply --bodyLink;
+    }
+  }
+
+  & p {
+    max-width: 100%;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.01em;
+    text-transform: capitalize;
+    margin: 0;
+  }
+}
