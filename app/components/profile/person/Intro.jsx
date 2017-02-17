@@ -37,7 +37,7 @@ const Intro = ({person, totalPageViews}) => {
             {person.deathyear ?
               `${person.gender ? " He" : " She"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
             &nbsp;Since the start of Wikipedia, {person.gender ? "he" : "she"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
-            By analyzing all "globally remembered people", Pantheon aims to understand cultural development through changes in occupations, birth and death places, and Wikipedia activity.&nbsp;
+            By analyzing all "globally remembered people," Pantheon aims to understand cultural development through changes in occupations, birth and death places, and Wikipedia activity.&nbsp;
             <a href="/about/" className="deep-link">Read about our methods</a>
           </p>
         </div>
