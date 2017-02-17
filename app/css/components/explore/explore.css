@@ -128,8 +128,6 @@
 .explore-container {
   max-width: 950px;
   margin: 90px auto 5px;
-  border: 1px solid salmon;
-  overflow: hidden;
   box-sizing: border-box;
 }
 

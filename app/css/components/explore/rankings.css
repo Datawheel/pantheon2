@@ -2,6 +2,8 @@
 @import '../../common/typography';
 
 .ranking-table {
+  max-width: 742px;
+
   & .rt-th {}
 
   & .rt-td {
