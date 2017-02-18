@@ -21,6 +21,20 @@ const Home = () => {
         </div>
       </div>
       <div className="home-body">
+        <div className="home-blog-post">
+          <h3>Leonardo Da Vinci</h3>
+          <span>01/30/17</span>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut accumsan est et ipsum vestibulum, vel hendrerit ex consectetur. Integer gravida ultrices dolor, in tincidunt dolor ultricies at. Sed sollicitudin tempor risus, quis suscipit sapien dignissim quis. Aenean eleifend porttitor magna, vel fermentum ex porttitor in. Praesent a cursus ante. Sed tempor fermentum mattis. Cras ac dui arcu. Duis ex metus, pharetra pretium purus sit amet, imperdiet semper leo. Ut sodales porta condimentum. Praesent tristique lobortis augue ut viverra.
+          </p>
+        </div>
+        <div className="home-blog-post">
+          <h3>Frida Kahlo</h3>
+          <span>01/14/17</span>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut accumsan est et ipsum vestibulum, vel hendrerit ex consectetur. Integer gravida ultrices dolor, in tincidunt dolor ultricies at. Sed sollicitudin tempor risus, quis suscipit sapien dignissim quis. Aenean eleifend porttitor magna, vel fermentum ex porttitor in. Praesent a cursus ante. Sed tempor fermentum mattis. Cras ac dui arcu. Duis ex metus, pharetra pretium purus sit amet, imperdiet semper leo. Ut sodales porta condimentum. Praesent tristique lobortis augue ut viverra.
+          </p>
+        </div>
         <div className="placeholder-home-img"></div>
         <div className="floating-content l-1">
           <div className="box"></div>

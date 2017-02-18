@@ -98,6 +98,18 @@
     background-color: var(--colorEggshell);
   }
 
+  & .home-blog-post {
+    max-width: 649px;
+    margin: 0 auto 60px;
+    padding: 20px;
+    border: 1px solid var(--colorCardboard);
+
+    & span {
+      color: var(--colorTan);
+      font-style: italic;
+    }
+  }
+
   & .home-body {
     margin-bottom: 60px;
 
@@ -107,6 +119,13 @@
       height: 100%;
       left: 0;
       right: 0;
+
+      & .box {
+        display: block;
+        position: absolute;
+        bottom: -145px;
+        animation: float 20s ease-in 10s infinite;
+      }
 
       &.l-1 {
         & .box {
@@ -119,19 +138,19 @@
           }
           &:nth-child(1) {
             left: 240px;
-            animation: float 40s ease-in 20s infinite;
+            animation: float 40s ease-in 1s infinite;
           }
           &:nth-child(2) {
             left: 480px;
-            animation: float 28s ease-in 14s infinite;
+            animation: float 28s ease-in 0s infinite;
           }
           &:nth-child(3) {
             left: 640px;
-            animation: float 36s ease-in 18s infinite;
+            animation: float 36s ease-in 2s infinite;
           }
           &:last-child {
             right: -60px;
-            animation: float 32s ease-in 16s infinite;
+            animation: float 32s ease-in 3s infinite;
           }
         }
       }
@@ -144,15 +163,15 @@
 
           &:first-child {
             left: 30px;
-            animation: float 14s ease-in 7s infinite;
+            animation: float 14s ease-in 0s infinite;
           }
           &:nth-child(1) {
             left: 700px;
-            animation: float 20s ease-in 10s infinite;
+            animation: float 20s ease-in 4s infinite;
           }
           &:nth-child(2) {
             left: 160px;
-            animation: float 18s ease-in 9s infinite;
+            animation: float 18s ease-in 2s infinite;
           }
           &:nth-child(3) {
             left: 340px;
@@ -160,16 +179,9 @@
           }
           &:last-child {
             right: 30px;
-            animation: float 22s ease-in 11s infinite;
+            animation: float 22s ease-in 3s infinite;
           }
         }
-      }
-
-      & .box {
-        display: block;
-        position: absolute;
-        bottom: 0;
-        animation: float 20s ease-in 10s infinite;
       }
     }
   }
