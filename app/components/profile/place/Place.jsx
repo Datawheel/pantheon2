@@ -125,6 +125,30 @@ class Place extends Component {
       }
     };
 
+    const groupTooltip = {
+      body: d => {
+        const names = d.name instanceof Array ? d.name.slice(0, 3) : [d.name];
+        let txt = `<span class='sub'>Notable ${names.length === 1 ? "Person" : "People"}</span>`;
+        const people = tmapBornData.concat(tmapDeathData).filter(d => names.includes(d.name));
+        const peopleNames = people.map(d => d.name);
+        people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
+          txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
+        });
+        return txt;
+      }
+    };
+
+    const peopleTooltip = {
+      body: d => {
+        const age = d.deathyear !== null
+                  ? d.deathyear - d.birthyear
+                  : new Date().getFullYear() - d.birthyear;
+        return d.deathyear !== null
+             ? `<span class="center">${d.birthyear} - ${d.deathyear}, ${age} years old</span>`
+             : `<span class="center">Born ${d.birthyear}, ${age} years old</span>`;
+      }
+    };
+
     let sections = [
       {title: "People", slug: "people", content: <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />},
       {
@@ -142,6 +166,7 @@ class Place extends Component {
               groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
               shapeConfig,
               time: "birthyear",
+              tooltipConfig: groupTooltip,
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
           <Treemap
@@ -154,6 +179,7 @@ class Place extends Component {
               groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
               shapeConfig,
               time: "deathyear",
+              tooltipConfig: groupTooltip,
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
         ]
@@ -172,6 +198,7 @@ class Place extends Component {
                   groupBy: ["domain", "industry"].map(gbHelper),
                   shapeConfig,
                   time: "bucketyear",
+                  tooltipConfig: groupTooltip,
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1
                 }} />,
@@ -184,6 +211,7 @@ class Place extends Component {
                   groupBy: ["domain", "industry"].map(gbHelper),
                   shapeConfig,
                   time: "bucketyear",
+                  tooltipConfig: groupTooltip,
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1
                 }} />
@@ -218,6 +246,7 @@ class Place extends Component {
                       }
                     },
                     tiles: false,
+                    tooltipConfig: groupTooltip,
                     topojson,
                     zoom: false
                   }} />]
@@ -236,7 +265,8 @@ class Place extends Component {
                     start: "birthyear",
                     shapeConfig: Object.assign({}, shapeConfig, {
                       labelPadding: 2
-                    })
+                    }),
+                    tooltipConfig: peopleTooltip,
                   }} />]
       },
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
