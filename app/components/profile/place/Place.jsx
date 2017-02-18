@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from "react";
+import React, {Component} from "react";
 import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
@@ -10,7 +10,6 @@ import PeopleRanking from "components/profile/place/PeopleRanking";
 import Occupations from "components/profile/place/Occupations";
 import OccupationTrends from "components/profile/place/OccupationTrends";
 import LivingPeople from "components/profile/place/LivingPeople";
-import Viz from "components/viz/Index";
 import NotFound from "components/NotFound";
 import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchPeopleBornHereAlive} from "actions/place";
 import {fetchAllOccupations} from "actions/occupation";
@@ -26,18 +25,8 @@ class Place extends Component {
     super(props);
   }
 
-  static need = [
-    fetchPlace,
-    fetchPlaceRanks,
-    fetchCountry,
-    fetchPeopleBornHere,
-    fetchPeopleDiedHere,
-    fetchAllOccupations,
-    fetchPeopleBornHereAlive
-  ]
-
   render() {
-    if(this.props.placeProfile.place.id === undefined) {
+    if (this.props.placeProfile.place.id === undefined) {
       return <NotFound />;
     }
     const {placeProfile, occupationProfile} = this.props;
@@ -91,10 +80,12 @@ class Place extends Component {
     geomapData.forEach(d => {
       d.place_name = d.place.name;
       d.place_coord = d.place.lat_lon;
-      if (!(d.place_coord instanceof Array)) d.place_coord = d.place_coord
-        .replace("(", "")
-        .replace(")", "")
-        .split(",").map(Number);
+      if (!(d.place_coord instanceof Array)) {
+        d.place_coord = d.place_coord
+          .replace("(", "")
+          .replace(")", "")
+          .split(",").map(Number);
+      }
       d.place_coord.reverse();
     });
 
@@ -110,7 +101,8 @@ class Place extends Component {
     }, {});
 
     function gbHelper(g) {
-      return (d) => {
+
+      return d => {
         let val;
 
         if (d[g]) val = d[g];
@@ -118,9 +110,9 @@ class Place extends Component {
         else val = attrs[d.occupation_id][g];
 
         return val;
-      }
+      };
 
-    };
+    }
 
     let sections = [
       {title: "People", slug: "people", content: <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />},
@@ -129,28 +121,28 @@ class Place extends Component {
         slug: "occupations",
         content: <Occupations place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />,
         viz: [
-            <Treemap
-                  key="tmap1"
-                  config={{
-                    title: `Occupations of People Born in ${place.name}`,
-                    attrs: occupations,
-                    data: tmapBornData,
-                    depth: 2,
-                    groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
-                    time: "birthyear",
-                    sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
-                  }} />,
-            <Treemap
-                  key="tmap2"
-                  config={{
-                    title: `Occupations of People Deceased in ${place.name}`,
-                    attrs: occupations,
-                    data: tmapDeathData,
-                    depth: 2,
-                    groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
-                    time: "deathyear",
-                    sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
-                  }} />
+          <Treemap
+            key="tmap1"
+            config={{
+              title: `Occupations of People Born in ${place.name}`,
+              attrs: occupations,
+              data: tmapBornData,
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
+              time: "birthyear",
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+            }} />,
+          <Treemap
+            key="tmap2"
+            config={{
+              title: `Occupations of People Deceased in ${place.name}`,
+              attrs: occupations,
+              data: tmapDeathData,
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
+              time: "deathyear",
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+            }} />
         ]
       },
       {
@@ -211,12 +203,12 @@ class Place extends Component {
                       }
                     },
                     tiles: false,
-                    topojson: topojson,
+                    topojson,
                     zoom: false
                   }} />]
       },
       {
-        title: `Overlapping Lives`,
+        title: "Overlapping Lives",
         slug: "overlapping_lives",
         viz: [<Priestley
                   title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
@@ -233,20 +225,20 @@ class Place extends Component {
                   }} />]
       },
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
-    ]
+    ];
     // {title: "Historical Places", slug: "historical_places"},
 
     // catch for really small places...
-    if(peopleBornHere.concat(peopleDiedHere).length < 5){
+    if (peopleBornHere.concat(peopleDiedHere).length < 5) {
       sections = [sections[0]];
     }
 
     return (
       <div>
         <Helmet
-          htmlAttributes={{"lang": "en", "amp": undefined}}
+          htmlAttributes={{lang: "en", amp: undefined}}
           title={place.name}
-          meta={config.meta.concat([ {property: 'og:title', content: place.name} ])}
+          meta={config.meta.concat([{property: "og:title", content: place.name}])}
           link={config.link}
         />
         <Header place={place} country={country} />
@@ -266,7 +258,17 @@ class Place extends Component {
       </div>
     );
   }
-};
+}
+
+Place.need = [
+  fetchPlace,
+  fetchPlaceRanks,
+  fetchCountry,
+  fetchPeopleBornHere,
+  fetchPeopleDiedHere,
+  fetchAllOccupations,
+  fetchPeopleBornHereAlive
+];
 
 function mapStateToProps(state) {
   return {
