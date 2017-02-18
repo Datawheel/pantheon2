@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from "react";
-import { connect } from "react-redux";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import Header from "components/profile/occupation/Header";
@@ -10,9 +10,8 @@ import Places from "components/profile/occupation/Places";
 import RelatedOccupations from "components/profile/occupation/RelatedOccupations";
 import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
-import { fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations } from "actions/occupation";
-import Viz from "components/viz/Index";
-import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
+import {fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations} from "actions/occupation";
+import {COLORS_CONTINENT, YEAR_BUCKETS} from "types";
 import {Priestley, StackedArea, Treemap} from "d3plus-react";
 
 import {extent} from "d3-array";
@@ -23,15 +22,8 @@ class Occupation extends Component {
     super(props);
   }
 
-  static need = [
-    fetchOccupation,
-    fetchPeople,
-    fetchPeopleInDomain,
-    fetchAllOccupations
-  ]
-
   render() {
-    if(this.props.occupationProfile.occupation.id === undefined) {
+    if (this.props.occupationProfile.occupation.id === undefined) {
       return <NotFound />;
     }
     const {occupationProfile} = this.props;
@@ -93,7 +85,8 @@ class Occupation extends Component {
     }, {});
 
     function gbHelper(g) {
-      return (d) => {
+
+      return d => {
         let val;
 
         if (d[g]) val = d[g];
@@ -101,9 +94,9 @@ class Occupation extends Component {
         else val = attrs[d.occupation_id][g];
 
         return val;
-      }
+      };
 
-    };
+    }
 
     const sections = [
       {title: "People", slug: "people", content: <People occupation={occupation} people={people} />},
@@ -127,13 +120,13 @@ class Occupation extends Component {
           <StackedArea
             key="stacked_domain"
             config={{
-              title:`${occupation.domain} Domain Over Time`,
+              title: `${occupation.domain} Domain Over Time`,
               attrs: occupations,
               data: tmapDomainData,
               depth: 1,
               groupBy: ["industry", "occupation_name"].map(gbHelper),
               legend: false,
-              shapeConfig: {stroke: () => "#F4F4F1", strokeWidth: (d, i) => 1},
+              shapeConfig: {stroke: () => "#F4F4F1", strokeWidth: () => 1},
               time: "bucketyear",
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
@@ -221,9 +214,9 @@ class Occupation extends Component {
     return (
       <div>
         <Helmet
-          htmlAttributes={{"lang": "en", "amp": undefined}}
+          htmlAttributes={{lang: "en", amp: undefined}}
           title={occupation.name}
-          meta={config.meta.concat([ {property: 'og:title', content: occupation.name} ])}
+          meta={config.meta.concat([{property: "og:title", content: occupation.name}])}
           link={config.link}
         />
         <Header occupation={occupation} people={people} />
@@ -243,7 +236,14 @@ class Occupation extends Component {
       </div>
     );
   }
-};
+}
+
+Occupation.need = [
+  fetchOccupation,
+  fetchPeople,
+  fetchPeopleInDomain,
+  fetchAllOccupations
+];
 
 function mapStateToProps(state) {
   return {
