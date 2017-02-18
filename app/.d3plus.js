@@ -1,4 +1,5 @@
 import {FORMATTERS} from "types";
+import {default as topojson} from "json/world-50m.json";
 
 function uniques(a) {
   const v = Array.from(new Set(a));
@@ -6,8 +7,6 @@ function uniques(a) {
 }
 
 export default {
-  timeFilter: () => true,
-  height: 600,
 
   aggs: {
     birthyear: uniques,
@@ -31,6 +30,10 @@ export default {
     title: false
   },
 
+  depth: 0,
+
+  height: 600,
+
   legendConfig: {
     shapeConfig: {
       fontColor: "#4B4A48",
@@ -43,11 +46,21 @@ export default {
     }
   },
 
+  ocean: false,
+  point: d => d.place_coord,
+  pointSize: d => d.id instanceof Array ? d.id.length : 1,
+  pointSizeMax: 35,
+  pointSizeMin: 8,
+
   shapeConfig: {
     fontColor: ["#fff", "rgba(255, 255, 255, 0.45)"],
     fontFamily: () => "Amiko",
     textAnchor: "start"
   },
+
+  sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
+  tiles: false,
+  timeFilter: () => true,
 
   timelineConfig: {
     handleConfig: {
@@ -74,6 +87,8 @@ export default {
       stroke: "#9E978D"
     }
   },
+
+  topojson,
 
   tooltipConfig: {
     background: "#f4f4f1",
@@ -121,5 +136,8 @@ export default {
     labels: [],
     ticks: [],
     title: false
-  }
+  },
+
+  zoom: false
+
 };

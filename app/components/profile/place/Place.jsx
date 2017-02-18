@@ -15,7 +15,6 @@ import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeo
 import {fetchAllOccupations} from "actions/occupation";
 import {COLORS_DOMAIN, YEAR_BUCKETS} from "types";
 import {Geomap, Priestley, Treemap, StackedArea} from "d3plus-react";
-import {default as topojson} from "json/world-50m.json";
 
 import {extent} from "d3-array";
 
@@ -166,8 +165,7 @@ class Place extends Component {
               groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
               shapeConfig,
               time: "birthyear",
-              tooltipConfig: groupTooltip,
-              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+              tooltipConfig: groupTooltip
             }} />,
           <Treemap
             key="tmap2"
@@ -179,8 +177,7 @@ class Place extends Component {
               groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
               shapeConfig,
               time: "deathyear",
-              tooltipConfig: groupTooltip,
-              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+              tooltipConfig: groupTooltip
             }} />
         ]
       },
@@ -224,15 +221,10 @@ class Place extends Component {
                   key="geomap1"
                   config={{
                     title: `Major Cities in ${place.name} for Births and Deaths of Cultural Celebrities`,
-                    bounds: `${country.country_num}`,
                     data: geomapData,
                     depth: 1,
+                    fitFilter: `${country.country_num}`,
                     groupBy: ["event", "place_name"],
-                    ocean: false,
-                    point: d => d.place_coord,
-                    pointSize: d => d.id instanceof Array ? d.id.length : 1,
-                    pointSizeMax: 35,
-                    pointSizeMin: 8,
                     shapeConfig: {
                       fill: d => d.event.toLowerCase().indexOf("birth") > 0
                                ? "rgba(76, 94, 215, 0.4)"
@@ -245,10 +237,7 @@ class Place extends Component {
                         strokeWidth: 0.75
                       }
                     },
-                    tiles: false,
-                    tooltipConfig: groupTooltip,
-                    topojson,
-                    zoom: false
+                    tooltipConfig: groupTooltip
                   }} />]
       },
       {
@@ -266,7 +255,7 @@ class Place extends Component {
                     shapeConfig: Object.assign({}, shapeConfig, {
                       labelPadding: 2
                     }),
-                    tooltipConfig: peopleTooltip,
+                    tooltipConfig: peopleTooltip
                   }} />]
       },
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}
