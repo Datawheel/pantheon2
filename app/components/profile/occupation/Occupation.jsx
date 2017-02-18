@@ -11,7 +11,7 @@ import RelatedOccupations from "components/profile/occupation/RelatedOccupations
 import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
 import {fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations} from "actions/occupation";
-import {COLORS_CONTINENT, YEAR_BUCKETS} from "types";
+import {COLORS_CONTINENT, COLORS_DOMAIN, YEAR_BUCKETS} from "types";
 import {Priestley, StackedArea, Treemap} from "d3plus-react";
 
 import {extent} from "d3-array";
@@ -98,6 +98,41 @@ class Occupation extends Component {
 
     }
 
+    const shapeConfig = {
+      fill: d => {
+        if (d.color) return d.color;
+        else if (d.occupation_id !== void 0) {
+          const occ = d.occupation_id.constructor === Array ? d.occupation_id[0] : d.occupation_id;
+          return COLORS_DOMAIN[attrs[occ].domain_slug];
+        }
+        return "#ccc";
+      }
+    };
+
+    const groupTooltip = {
+      body: d => {
+        const names = d.name instanceof Array ? d.name.slice(0, 3) : [d.name];
+        let txt = `<span class='sub'>Notable ${names.length === 1 ? "Person" : "People"}</span>`;
+        const people = tmapDomainData.concat(tmapBornData).concat(tmapDeathData).filter(d => names.includes(d.name));
+        const peopleNames = people.map(d => d.name);
+        people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
+          txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
+        });
+        return txt;
+      }
+    };
+
+    const peopleTooltip = {
+      body: d => {
+        const age = d.deathyear !== null
+                  ? d.deathyear - d.birthyear
+                  : new Date().getFullYear() - d.birthyear;
+        return d.deathyear !== null
+             ? `<span class="center">${d.birthyear} - ${d.deathyear}, ${age} years old</span>`
+             : `<span class="center">Born ${d.birthyear}, ${age} years old</span>`;
+      }
+    };
+
     const sections = [
       {title: "People", slug: "people", content: <People occupation={occupation} people={people} />},
       {
@@ -114,7 +149,9 @@ class Occupation extends Component {
               depth: 1,
               groupBy: ["industry", "occupation_name"].map(gbHelper),
               legend: false,
+              shapeConfig,
               time: "birthyear",
+              tooltipConfig: groupTooltip,
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
           <StackedArea
@@ -126,8 +163,12 @@ class Occupation extends Component {
               depth: 1,
               groupBy: ["industry", "occupation_name"].map(gbHelper),
               legend: false,
-              shapeConfig: {stroke: () => "#F4F4F1", strokeWidth: () => 1},
+              shapeConfig: Object.assign({}, shapeConfig, {
+                stroke: () => "#F4F4F1",
+                strokeWidth: () => 1
+              }),
               time: "bucketyear",
+              tooltipConfig: groupTooltip,
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />
@@ -147,6 +188,7 @@ class Occupation extends Component {
               groupBy: ["borncontinent", "borncountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               time: "birthyear",
+              tooltipConfig: groupTooltip,
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
           <Treemap
@@ -158,6 +200,7 @@ class Occupation extends Component {
               groupBy: ["diedcontinent", "diedcountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               time: "deathyear",
+              tooltipConfig: groupTooltip,
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
         ]
@@ -175,6 +218,7 @@ class Occupation extends Component {
               groupBy: ["borncontinent", "borncountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               time: "bucketyear",
+              tooltipConfig: groupTooltip,
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />,
@@ -187,6 +231,7 @@ class Occupation extends Component {
               groupBy: ["diedcontinent", "diedcountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               time: "bucketyear",
+              tooltipConfig: groupTooltip,
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />
@@ -199,13 +244,14 @@ class Occupation extends Component {
           <Priestley
             key="priestley1"
             config={{
-              title: `Lifespans of the Top ${priestleyMax} ${occupation.name}`,
+              title: `Lifespans of the Top ${priestleyMax} ${occupation.occupation}`,
               data: priestleyData,
               depth: 1,
               end: "deathyear",
               groupBy: ["diedcontinent", "name"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              start: "birthyear"
+              start: "birthyear",
+              tooltipConfig: peopleTooltip
             }} />
         ]
       }
@@ -215,8 +261,8 @@ class Occupation extends Component {
       <div>
         <Helmet
           htmlAttributes={{lang: "en", amp: undefined}}
-          title={occupation.name}
-          meta={config.meta.concat([{property: "og:title", content: occupation.name}])}
+          title={occupation.occupation}
+          meta={config.meta.concat([{property: "og:title", content: occupation.occupation}])}
           link={config.link}
         />
         <Header occupation={occupation} people={people} />
