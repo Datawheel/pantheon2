@@ -13,7 +13,7 @@ import LivingPeople from "components/profile/place/LivingPeople";
 import NotFound from "components/NotFound";
 import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchPeopleBornHereAlive} from "actions/place";
 import {fetchAllOccupations} from "actions/occupation";
-import {YEAR_BUCKETS} from "types";
+import {COLORS_DOMAIN, YEAR_BUCKETS} from "types";
 import {Geomap, Priestley, Treemap, StackedArea} from "d3plus-react";
 import {default as topojson} from "json/world-50m.json";
 
@@ -114,6 +114,17 @@ class Place extends Component {
 
     }
 
+    const shapeConfig = {
+      fill: d => {
+        if (d.color) return d.color;
+        else if (d.occupation_id !== void 0) {
+          const occ = d.occupation_id.constructor === Array ? d.occupation_id[0] : d.occupation_id;
+          return COLORS_DOMAIN[attrs[occ].domain_slug];
+        }
+        return "#ccc";
+      }
+    };
+
     let sections = [
       {title: "People", slug: "people", content: <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />},
       {
@@ -129,6 +140,7 @@ class Place extends Component {
               data: tmapBornData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
+              shapeConfig,
               time: "birthyear",
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
@@ -140,6 +152,7 @@ class Place extends Component {
               data: tmapDeathData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(gbHelper),
+              shapeConfig,
               time: "deathyear",
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
@@ -157,6 +170,7 @@ class Place extends Component {
                   data: tmapBornData,
                   depth: 1,
                   groupBy: ["domain", "industry"].map(gbHelper),
+                  shapeConfig,
                   time: "bucketyear",
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1
@@ -168,6 +182,7 @@ class Place extends Component {
                   data: tmapDeathData,
                   depth: 1,
                   groupBy: ["domain", "industry"].map(gbHelper),
+                  shapeConfig,
                   time: "bucketyear",
                   x: "bucketyear",
                   y: d => d.id instanceof Array ? d.id.length : 1
@@ -217,11 +232,11 @@ class Place extends Component {
                     data: priestleyData,
                     depth: 1,
                     end: "deathyear",
-                    groupBy: ["domain", "name"],
+                    groupBy: ["domain", "name"].map(gbHelper),
                     start: "birthyear",
-                    shapeConfig: {
+                    shapeConfig: Object.assign({}, shapeConfig, {
                       labelPadding: 2
-                    }
+                    })
                   }} />]
       },
       {title: "Living People", slug: "living_people", content: <LivingPeople place={place} data={peopleBornHereAlive} />}

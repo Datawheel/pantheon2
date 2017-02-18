@@ -8,7 +8,7 @@ function uniques(a) {
 export default {
   timeFilter: () => true,
   height: 600,
-  
+
   aggs: {
     birthyear: uniques,
     deathyear: uniques,
