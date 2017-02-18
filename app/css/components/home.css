@@ -6,6 +6,12 @@
     & .items {
       max-width: 590px;
 
+      & .item {
+        flex: 0 1 auto;
+        padding: 8px;
+        min-width: auto;
+      }
+
       @media (min-width: 751px) and (max-width: 990px) {
         margin: 0 auto;
         max-width: 590px;
@@ -81,7 +87,7 @@
   }
 
   & .placeholder-home-img {
-    height: 1344px;
+    height: 1000px;
     width: 98%;
     max-width: 650px;
     margin: 0 auto;
@@ -91,4 +97,85 @@
     background-blend-mode: multiply;
     background-color: var(--colorEggshell);
   }
+
+  & .home-body {
+    margin-bottom: 60px;
+
+    & .floating-content {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      left: 0;
+      right: 0;
+
+      &.l-1 {
+        & .box {
+          width: 145px;
+          height: 145px;
+          border: 1px solid var(--colorCardboard);
+
+          &:first-child {
+            left: -20px;
+          }
+          &:nth-child(1) {
+            left: 240px;
+            animation: float 40s ease-in 20s infinite;
+          }
+          &:nth-child(2) {
+            left: 480px;
+            animation: float 28s ease-in 14s infinite;
+          }
+          &:nth-child(3) {
+            left: 640px;
+            animation: float 36s ease-in 18s infinite;
+          }
+          &:last-child {
+            right: -60px;
+            animation: float 32s ease-in 16s infinite;
+          }
+        }
+      }
+
+      &.l-2 {
+        & .box {
+          width: 75px;
+          height: 75px;
+          border: 1px solid var(--colorLint);
+
+          &:first-child {
+            left: 30px;
+            animation: float 14s ease-in 7s infinite;
+          }
+          &:nth-child(1) {
+            left: 700px;
+            animation: float 20s ease-in 10s infinite;
+          }
+          &:nth-child(2) {
+            left: 160px;
+            animation: float 18s ease-in 9s infinite;
+          }
+          &:nth-child(3) {
+            left: 340px;
+            animation: float 16s ease-in 8s infinite;
+          }
+          &:last-child {
+            right: 30px;
+            animation: float 22s ease-in 11s infinite;
+          }
+        }
+      }
+
+      & .box {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        animation: float 20s ease-in 10s infinite;
+      }
+    }
+  }
+}
+
+@keyframes float {
+  from {bottom: -150px;}
+  to {bottom: 1000px;}
 }

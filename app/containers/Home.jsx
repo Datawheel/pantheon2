@@ -1,8 +1,8 @@
-import React from 'react';
-import styles from 'css/components/home';
-import searchSvg from 'images/icon-search.svg';
-import pantheonLogoSvg from 'images/logo.svg';
-import placeholderHome from 'images/placeholder_home.png';
+import React from "react";
+import styles from "css/components/home";
+import searchSvg from "images/icon-search.svg";
+import pantheonLogoSvg from "images/logo.svg";
+import placeholderHome from "images/placeholder_home.png";
 
 /*
  * Note: This is kept as a container-level component,
@@ -11,17 +11,32 @@ import placeholderHome from 'images/placeholder_home.png';
  */
 const Home = () => {
   return (
-    <div className='home-container'>
-      <div className='home-head'>
+    <div className="home-container">
+      <div className="home-head">
         <h1><img src={pantheonLogoSvg} alt={`Pantheon`} /></h1>
         <h3>Mapping Cultural Memory</h3>
-        <div className='home-search'>
+        <div className="home-search">
           <img src={searchSvg} alt={`Search`} />
-          <input type={'text'} placeholder={'Napoleon, fine arts, Syria'} />
+          <input type={"text"} placeholder={"Napoleon, fine arts, Syria"} />
         </div>
       </div>
-      <div className='home-body'>
-        <div className='placeholder-home-img'></div>
+      <div className="home-body">
+        <div className="placeholder-home-img"></div>
+        <div className="floating-content l-1">
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+        </div>
+
+        <div className="floating-content l-2">
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+        </div>
       </div>
     </div>
   );
