@@ -1,6 +1,6 @@
-import React, {Component, PropTypes} from "react";
-import styles from "css/components/profile/header";
-import Viz from "components/viz/Index";
+import React, {PropTypes} from "react";
+import "css/components/profile/header";
+import {LinePlot} from "d3plus-react";
 
 import {COLORS_DOMAIN, FORMATTERS} from "types";
 
@@ -36,53 +36,53 @@ const Header = ({pageviews, person}) => {
         <h1 className="profile-name">{person.name}</h1>
         <p className="date-subtitle">{FORMATTERS.year(person.birthyear.name)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear.name)}` : "Present"}</p>
         <pre>
-          <Viz type="LinePlot"
-               config={{
-                 data: sparkData,
-                 height: 100,
-                 groupBy: "person",
-                 legend: false,
-                 shape: d => d.shape || "Line",
+          <LinePlot
+             config={{
+               data: sparkData,
+               height: 100,
+               groupBy: "person",
+               legend: false,
+               shape: d => d.shape || "Line",
+               shapeConfig: {
+                 Circle: {
+                   fill: "#4B4A48",
+                   r: () => 3.5
+                 },
+                 Line: {
+                   fill: "none",
+                   stroke: "#4B4A48",
+                   strokeWidth: 1
+                 }
+               },
+               time: d => d.pageview_date,
+               timeline: false,
+               tooltipConfig: {
+                 body: d => `<span class="center">${FORMATTERS.date(d.pageview_date)} - ${FORMATTERS.commas(d.num_pageviews)}</span>`,
+                 title: "Page Views (PV)"
+               },
+               width: 275,
+               x: d => d.pageview_date,
+               xConfig: {
+                 barConfig: {"stroke-width": 0},
+                 labels: sparkTicks,
                  shapeConfig: {
-                   Circle: {
-                     fill: "#4B4A48",
-                     r: () => 3.5
-                   },
-                   Line: {
-                     fill: "none",
-                     stroke: "#4B4A48",
-                     strokeWidth: 1
-                   }
+                   fill: "#4B4A48",
+                   fontColor: "#4B4A48",
+                   fontSize: () => 8,
+                   stroke: "#4B4A48"
                  },
-                 time: d => d.pageview_date,
-                 timeline: false,
-                 tooltipConfig: {
-                   body: d => `<span class="center">${FORMATTERS.date(d.pageview_date)} - ${FORMATTERS.commas(d.num_pageviews)}</span>`,
-                   title: "Page Views (PV)"
-                 },
-                 width: 275,
-                 x: d => d.pageview_date,
-                 xConfig: {
-                   barConfig: {"stroke-width": 0},
-                   labels: sparkTicks,
-                   shapeConfig: {
-                     fill: "#4B4A48",
-                     fontColor: "#4B4A48",
-                     fontSize: () => 8,
-                     stroke: "#4B4A48"
-                   },
-                   ticks: sparkTicks,
-                   tickSize: 0,
-                   title: "PAGE VIEWS (PV)",
-                   titleConfig: {
-                     fontColor: "#4B4A48",
-                     fontFamily: () => "Amiko",
-                     fontSize: () => 10,
-                     stroke: "#4B4A48"
-                   }
-                 },
-                 y: d => d.num_pageviews
-               }} />
+                 ticks: sparkTicks,
+                 tickSize: 0,
+                 title: "PAGE VIEWS (PV)",
+                 titleConfig: {
+                   fontColor: "#4B4A48",
+                   fontFamily: () => "Amiko",
+                   fontSize: () => 10,
+                   stroke: "#4B4A48"
+                 }
+               },
+               y: d => d.num_pageviews
+             }} />
         </pre>
       </div>
     </header>
