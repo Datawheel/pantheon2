@@ -88,6 +88,13 @@ export default {
     }
   },
 
+  titleConfig: {
+    fontColor: "#000",
+    fontFamily: "Amiko",
+    fontSize: 17,
+    fontWeight: 400
+  },
+
   topojson,
 
   tooltipConfig: {
