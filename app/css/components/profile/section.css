@@ -2,8 +2,9 @@
 @import '../../common/typography';
 
 .profile-section {
-  max-width: 1200px;
+  max-width: 950px;
   margin: 70px auto;
+  overflow: visible;
 
   &:not(:last-child) {
   }

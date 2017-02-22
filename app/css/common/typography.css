@@ -127,6 +127,15 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  --calloutText {
+    color: var(--colorTan);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.8px;
+    -webkit-font-smoothing: antialiased;
+  }
+
   --profileSectionTitle {
     font-size: 17px;
     font-weight: 400;

@@ -6,6 +6,7 @@ import ProfileNav from "components/profile/Nav";
 import Section from "components/profile/Section";
 import Header from "components/profile/person/Header";
 import Intro from "components/profile/person/Intro";
+import MemMetrics from "components/profile/person/MemMetrics";
 import OccupationRanking from "components/profile/person/OccupationRanking";
 import YearRanking from "components/profile/person/YearRanking";
 import CountryRanking from "components/profile/person/CountryRanking";
@@ -75,7 +76,7 @@ class Person extends Component {
     }
 
     const sections = [
-      {title: "Memorability Metrics", slug: "metrics"},
+      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics />},
       {
         title: personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife",
         slug: "afterlife",
