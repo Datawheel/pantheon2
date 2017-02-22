@@ -173,6 +173,9 @@ h1 {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   margin: 13px auto 0;
+  & a {
+    color: inherit;
+  }
 }
 
 .sparkline {
