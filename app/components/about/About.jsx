@@ -34,9 +34,6 @@ const About = ({children}) => {
             <Link to="/about/resources" className="item-link" activeClassName="active">Resources</Link>
           </li>
           <li className="item">
-            <Link to="/about/references" className="item-link" activeClassName="active">References</Link>
-          </li>
-          <li className="item">
             <Link to="/about/contact" className="item-link" activeClassName="active">Contact</Link>
           </li>
         </ul>

@@ -18,7 +18,6 @@ import Team from "components/about/Team";
 import Publications from "components/about/Publications";
 import DataSources from "components/about/DataSources";
 import Resources from "components/about/Resources";
-import References from "components/about/References";
 import Contact from "components/about/Contact";
 
 // explore componenets

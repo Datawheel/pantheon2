@@ -57,7 +57,6 @@ const Navigation = ({ user, logOut, activateSearch }) => {
                 <li><a href="/about/methods" className="item-link">Methods</a></li>
                 <li><a href="/about/data_sources" className="item-link">Data Sources</a></li>
                 <li><a href="/about/resources" className="item-link">Resources</a></li>
-                <li><a href="/about/references" className="item-link">References</a></li>
                 <li><a href="/about/contact" className="item-link">Contact</a></li>
               </ul>
             </li>
