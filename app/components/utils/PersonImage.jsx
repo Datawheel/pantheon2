@@ -1,39 +1,36 @@
 import React, {Component, PropTypes} from "react";
-import defaultImage from "images/icon-person.svg";
-
 import styles from 'css/components/utils/personImage';
 
 class PersonImage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {missing: false};
-  }
-
-  componentDidMount() {
-    if (!this.refs.img.naturalHeight) this.error();
-  }
-
-  error() {
-    this.setState({missing: true});
+    this.state = {};
+    this.fallback = () => {
+      if (this.props.fallbackSrc) {
+        this.setState({failed: true});
+      }
+    };
   }
 
   render() {
-    const {alt, color, src} = this.props;
-    const {missing} = this.state;
-    if (missing) return <div className="missing-image" style={{backgroundColor: color, backgroundImage: `url("${defaultImage}")`}}></div>;
-    return <img ref="img" src={src} alt={alt} onError={ this.error.bind(this) } />;
+    if (this.state.failed) {
+      return <img src={this.props.fallbackSrc} />;
+    }
+    else {
+      return <img src={this.props.src} onError={this.fallback} />;
+    }
   }
 
-};
+}
 
 PersonImage.propTypes = {
-  alt: PropTypes.string,
+  fallbackSrc: PropTypes.string,
   src: PropTypes.string.isRequired
 };
 
 PersonImage.defaultProps = {
-  alt: ""
+  fallbackSrc: ""
 };
 
 export default PersonImage;
