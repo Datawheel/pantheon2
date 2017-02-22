@@ -76,9 +76,6 @@ class Person extends Component {
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics"},
-      {title: `Among ${occupation.occupation}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
-      {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
-      {title: "In the Same Place", slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
       {
         title: personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife",
         slug: "afterlife",
@@ -110,7 +107,10 @@ class Person extends Component {
                       body: d => `<span class="center">${FORMATTERS.date(d.x)} - ${FORMATTERS.commas(d.langs || d.views)}</span>`
                     }
                   }} />
-      }
+      },
+      {title: `Among ${occupation.occupation}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
+      {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
+      {title: "In the Same Place", slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />}
     ];
 
     return (
