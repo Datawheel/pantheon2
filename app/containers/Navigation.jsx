@@ -113,7 +113,6 @@ const Navigation = ({ user, logOut, activateSearch }) => {
                 <li><a href="/about/methods">Methods</a></li>
                 <li><a href="/about/data_sources">Data Sources</a></li>
                 <li><a href="/about/resources">Resources</a></li>
-                <li><a href="/about/references">References</a></li>
                 <li><a href="/about/contact">Contact</a></li>
               </ul>
             </li>

@@ -88,7 +88,6 @@ export default function checkId() {
         <Route path="publications" component={Publications} />
         <Route path="data_sources" component={DataSources} />
         <Route path="resources" component={Resources} />
-        <Route path="references" component={References} />
         <Route path="contact" component={Contact} />
       </Route>
 
