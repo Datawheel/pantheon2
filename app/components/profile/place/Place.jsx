@@ -267,6 +267,11 @@ class Place extends Component {
       sections = [sections[0]];
     }
 
+    // only show maps for countries not cities
+    if (!place.is_country) {
+      sections = sections.filter(s => s.slug !== "cities");
+    }
+
     return (
       <div>
         <Helmet
