@@ -13,8 +13,31 @@
   }
 
   & .section-head {
-    & > * {
-      display: inline-block;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    & .section-title, & .section-actions {
+      & > * {
+        display: inline-block;
+      }
+    }
+
+    & .section-actions {
+      & a {
+        padding: 2px 3px;
+        margin: 0 6px;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+
+      & img {
+        height: 20px;
+      }
     }
 
     & h4 {
