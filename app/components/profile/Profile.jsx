@@ -49,7 +49,7 @@ const Profile = ({children}) => {
 
       <footer className="profile-footer">
         <div className="footer-container">
-          <h4 className="footer-title">Keep Exploring</h4>
+          <h4 className="footer-title">Related Profiles</h4>
           <ul className="footer-carousel-container">
             <li className="footer-carousel-item">
               <div className="footer-carousel-item-photo">

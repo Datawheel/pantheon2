@@ -84,7 +84,7 @@
   & .rank-title {
     text-align: center;
     margin: 0 auto;
-    padding: 10px 0 15px;
+    padding: 20px 0 25px;
 
     & h3 {
       @apply --profileVizTitle;
