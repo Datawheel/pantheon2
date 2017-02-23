@@ -6,6 +6,10 @@
   margin: 70px auto;
   overflow: visible;
 
+  & + .profile-section {
+    margin-top: 90px;
+  }
+
   &:not(:last-child) {
   }
 
@@ -68,7 +72,7 @@
 
     & p {
       @apply --bodyText;
-      max-width: 60%;
+      max-width: 62%;
     }
 
     & a {
@@ -180,7 +184,7 @@
   }
 
   & .viz {
-    margin: 25px 0 50px;
+    margin: 30px 0 60px;
   }
 
 }
