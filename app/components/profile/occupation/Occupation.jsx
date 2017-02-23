@@ -7,6 +7,7 @@ import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/occupation/Intro";
 import People from "components/profile/occupation/People";
 import Places from "components/profile/occupation/Places";
+import PlacesTime from "components/profile/occupation/PlacesTime";
 import RelatedOccupations from "components/profile/occupation/RelatedOccupations";
 import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
@@ -143,7 +144,7 @@ class Occupation extends Component {
           <Treemap
             key="tmap_country1"
             config={{
-              title: `Places of Birth for ${occupation.occupation}`,
+              title: `Birth Places for ${occupation.occupation}`,
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
@@ -155,7 +156,7 @@ class Occupation extends Component {
           <Treemap
             key="tmap_country2"
             config={{
-              title: `Places of Death for ${occupation.occupation}`,
+              title: `Death Places for ${occupation.occupation}`,
               data: tmapDeathData,
               depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
@@ -169,11 +170,12 @@ class Occupation extends Component {
       {
         title: "Places Over Time",
         slug: "places_trends",
+        content: <PlacesTime people={people} occupation={occupation} />,
         viz: [
           <StackedArea
             key="stacked_country1"
             config={{
-              title: "Births Over Time",
+              title: `Birth Places of ${occupation.occupation}s Over Time`,
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
@@ -186,7 +188,7 @@ class Occupation extends Component {
           <StackedArea
             key="stacked_country2"
             config={{
-              title: "Deaths Over Time",
+              title: `Death Places of ${occupation.occupation}s Over Time`,
               data: tmapDeathData,
               depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
@@ -205,7 +207,7 @@ class Occupation extends Component {
           <Priestley
             key="priestley1"
             config={{
-              title: `Lifespans of the Top ${priestleyMax} ${occupation.occupation}`,
+              title: `Lifespans of the Top ${priestleyMax} ${occupation.occupation}s`,
               data: priestleyData,
               depth: 1,
               end: "deathyear",
