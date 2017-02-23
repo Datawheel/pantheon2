@@ -16,6 +16,7 @@ const PhotoCarousel = ({people}) => {
             </div>
             <h2><a href={`/profile/person/${person.slug}/`}>{person.name}</a></h2>
             <p className="rank-year">{FORMATTERS.year(person.birthyear)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear)}` : "Present"}</p>
+            <p className="rank-year"><strong>HPI:</strong> {FORMATTERS.decimal(person.hpi)}</p>
           </li>
         )}
       </ul>

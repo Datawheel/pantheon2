@@ -39,6 +39,7 @@ import {timeFormat} from "d3-time-format";
 
 export const FORMATTERS = {
   commas: format(","),
+  decimal: format(".2f"),
   share: format(".2%"),
   shareWhole: format(".0%"),
   date: timeFormat("%B %d, %Y"),

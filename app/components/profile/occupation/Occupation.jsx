@@ -136,45 +136,6 @@ class Occupation extends Component {
     const sections = [
       {title: "People", slug: "people", content: <People occupation={occupation} people={people} />},
       {
-        title: "Related Occupations",
-        slug: "related",
-        content: <RelatedOccupations occupation={occupation} occupations={occupations} />,
-        viz: [
-          <Treemap
-            key="tmap_domain"
-            config={{
-              title: `Occupations Within ${occupation.domain} Domain`,
-              attrs: occupations,
-              data: tmapDomainData,
-              depth: 1,
-              groupBy: ["industry", "occupation_name"].map(gbHelper),
-              legend: false,
-              shapeConfig,
-              time: "birthyear",
-              tooltipConfig: groupTooltip,
-              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
-            }} />,
-          <StackedArea
-            key="stacked_domain"
-            config={{
-              title: `${occupation.domain} Domain Over Time`,
-              attrs: occupations,
-              data: tmapDomainData,
-              depth: 1,
-              groupBy: ["industry", "occupation_name"].map(gbHelper),
-              legend: false,
-              shapeConfig: Object.assign({}, shapeConfig, {
-                stroke: () => "#F4F4F1",
-                strokeWidth: () => 1
-              }),
-              time: "bucketyear",
-              tooltipConfig: groupTooltip,
-              x: "bucketyear",
-              y: d => d.id instanceof Array ? d.id.length : 1
-            }} />
-        ]
-      },
-      {
         title: "Places",
         slug: "places",
         content: <Places people={people} occupation={occupation} />,
@@ -252,6 +213,45 @@ class Occupation extends Component {
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               start: "birthyear",
               tooltipConfig: peopleTooltip
+            }} />
+        ]
+      },
+      {
+        title: "Related Occupations",
+        slug: "related",
+        content: <RelatedOccupations occupation={occupation} occupations={occupations} />,
+        viz: [
+          <Treemap
+            key="tmap_domain"
+            config={{
+              title: `Occupations Within ${occupation.domain} Domain`,
+              attrs: occupations,
+              data: tmapDomainData,
+              depth: 1,
+              groupBy: ["industry", "occupation_name"].map(gbHelper),
+              legend: false,
+              shapeConfig,
+              time: "birthyear",
+              tooltipConfig: groupTooltip,
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+            }} />,
+          <StackedArea
+            key="stacked_domain"
+            config={{
+              title: `${occupation.domain} Domain Over Time`,
+              attrs: occupations,
+              data: tmapDomainData,
+              depth: 1,
+              groupBy: ["industry", "occupation_name"].map(gbHelper),
+              legend: false,
+              shapeConfig: Object.assign({}, shapeConfig, {
+                stroke: () => "#F4F4F1",
+                strokeWidth: () => 1
+              }),
+              time: "bucketyear",
+              tooltipConfig: groupTooltip,
+              x: "bucketyear",
+              y: d => d.id instanceof Array ? d.id.length : 1
             }} />
         ]
       }
