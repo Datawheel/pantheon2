@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {activateSearch} from "actions/users";
 import Navigation from "containers/Navigation";
 import Search from "components/Search";
-import d3plus from "types/d3plus";
+import d3plus from "viz/d3plus";
 import "css/main";
 
 class App extends Component {

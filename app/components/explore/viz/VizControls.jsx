@@ -16,7 +16,7 @@ class VizControls extends Component {
   }
 
   render() {
-    const { grouping } = this.props.explorer;
+    const {grouping} = this.props.explorer;
     const changeGrouping = this.props.changeGrouping.bind(this);
 
     return (

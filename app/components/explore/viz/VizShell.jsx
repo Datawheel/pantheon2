@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import "css/components/explore/explore";
-import Viz from "components/viz/Index";
+import {Viz} from "d3plus-react";
 import {changeViz} from "actions/explorer";
 import {YEAR_BUCKETS} from "types";
 import {extent} from "d3-array";
@@ -67,9 +67,7 @@ class VizShell extends Component {
         <h1>How have the occupations of all globally remembered people changed over time?</h1>
         <h3 className="explore-viz-date">4000 BC - 2013</h3>
         <div className="viz-shell">
-          <Viz type={type}
-            key={`explorer_viz_${type}`}
-            config={Object.assign(config, {data: tmapData, attrs})} />
+          <Viz type={type} config={Object.assign(config, {data: tmapData, attrs})} />
         </div>
       </div>
     );
