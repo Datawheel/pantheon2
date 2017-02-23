@@ -27,8 +27,6 @@ const Places = ({ people, occupation }) => {
       .entries(people.filter(p => p.deathplace))
       .sort(function (a, b) { return b.value.num_people-a.value.num_people });
 
-    console.log(people.filter(p => p.deathplace));
-
   return (
     <div>
       <p>
