@@ -28,7 +28,7 @@ const OccupationRanking = ({person, ranking}) => {
         { worsePeers }
       </p>
       <div className="rank-title">
-        <h3>Top Global {person.occupation.name}s</h3>
+        <h3>Top Global {person.occupation.occupation}s</h3>
         <a href="#">Go to all Rankings</a>
       </div>
       <div className="rank-carousel">
