@@ -1,7 +1,5 @@
 import {COLORS_DOMAIN} from "types";
 
-
-
 export function groupBy(attrs) {
 
   return g => d => {
