@@ -76,7 +76,7 @@ class Person extends Component {
     }
 
     const sections = [
-      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics />},
+      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageviews={personProfile.pageviews} person={personProfile.person} />},
       {
         title: personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife",
         slug: "afterlife",

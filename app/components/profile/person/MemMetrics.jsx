@@ -1,15 +1,20 @@
-import React, {Component, PropTypes} from 'react';
+import React from "react";
+import {FORMATTERS} from "types";
 
-const MemMetrics = () => {
+const MemMetrics = ({pageviews, person}) => {
+  const totalPageviews = pageviews
+                          .filter(pv => pv.num_pageviews)
+                          .map(pv => pv.num_pageviews)
+                          .reduce((total, newVal) => total + newVal, 0);
 
   return (
     <div className="metrics-container">
       <div className="metric-vid">
-        <a href="" className="press-play"><i></i></a>
+        {person.youtube ? <iframe width="560" height="315" src="https://www.youtube.com/embed/vw40NMa_0RM" frameBorder="0" allowFullScreen></iframe> : <a href="" className="press-play"><i></i></a>}
       </div>
       <ul className="metrics-list">
         <li className="metric">
-          <h4>27.4 M</h4>
+          <h4>{FORMATTERS.bigNum(totalPageviews)}</h4>
           <p>Page Views (PV)</p>
         </li>
         <li className="metric">
@@ -17,7 +22,7 @@ const MemMetrics = () => {
           <p>English Page Views (PVE)</p>
         </li>
         <li className="metric">
-          <h4>64</h4>
+          <h4>{person.langs}</h4>
           <p>Different Languages (L)</p>
         </li>
         <li className="metric">
