@@ -8,6 +8,7 @@ import Intro from "components/profile/occupation/Intro";
 import People from "components/profile/occupation/People";
 import Places from "components/profile/occupation/Places";
 import PlacesTime from "components/profile/occupation/PlacesTime";
+import OverlappingLives from "components/profile/occupation/OverlappingLives";
 import RelatedOccupations from "components/profile/occupation/RelatedOccupations";
 import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
@@ -203,6 +204,7 @@ class Occupation extends Component {
       {
         title: "Overlapping Lives",
         slug: "overlapping_lives",
+        content: <OverlappingLives people={people} occupation={occupation} />,
         viz: [
           <Priestley
             key="priestley1"
@@ -226,7 +228,7 @@ class Occupation extends Component {
           <Treemap
             key="tmap_domain"
             config={{
-              title: `Occupations Within ${occupation.domain} Domain`,
+              title: `Occupations Within the ${occupation.domain} Domain`,
               attrs: occupations,
               data: tmapDomainData,
               depth: 1,
