@@ -8,6 +8,12 @@
   --fontLarge:                21px;
   --fontHuge:                 28px;
 
+  --pageTitle {
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
   --heading {
     font-size: 18px;
     font-weight: 400;

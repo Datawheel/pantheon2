@@ -1,20 +1,84 @@
 @import '../common/typography';
 
-/*.header {
-  @apply --heading;
-  text-align: center;
-  position:relative;
-  top: 200px;
+.error-banner {
+  height: 150%;
+  background-size: 50%;
+  background-repeat: repeat;
+  background-position: 0 0;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 0;
+
+  @media (max-width: 768px) {
+    background-size: contain;
+  }
+
+  & img {
+    width: 100%;
+  }
 }
 
-.description { @apply --normal; }
-.contribute { @apply --small; }
+.error-container {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  height: 100vh;
 
-.rankPeers {
-  background: #eee;
-  margin: 20px 0;
-  padding: 10px;
-}*/
+  & .error-msg {
+    @apply --pageTitle;
+    color: var(--colorEggshell);
+    margin: 54px auto 0;
+    padding: 100px 0 80px;
+    text-align: center;
+  }
+
+  & .footer-title {
+    max-width: 500px;
+    margin: 0 30px 30px;
+
+    & a {
+      @apply --bodyLink;
+    }
+  }
+
+  & .page {
+    & p {
+      color: var(--colorSand);
+    }
+
+    & .error-photo {
+      background-color: var(--colorSlate);
+    }
+  }
+}
+
+.error-photo {
+  &.newton {
+    background-image: url("../../images/misc/error/14627.jpg");
+  }
+  &.federer {
+    background-image: url("../../images/misc/error/262376.jpg");
+  }
+  &.disney {
+    background-image: url("../../images/misc/error/32917.jpg");
+  }
+  &.vangogh {
+    background-image: url("../../images/misc/error/32603.jpg");
+  }
+  &.dagama {
+    background-image: url("../../images/misc/error/45080.jpg");
+  }
+  &.laozi {
+    background-image: url("../../images/misc/error/65119.jpg");
+  }
+  &.agnez {
+    background-image: url("../../images/misc/error/14611137.jpg");
+  }
+  &.curie {
+    background-image: url("../../images/misc/error/20408.jpg");
+  }
+}
 
 .data, .about {
   max-width: 950px;
