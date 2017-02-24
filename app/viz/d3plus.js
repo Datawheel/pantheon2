@@ -12,18 +12,25 @@ export default {
     birthyear: uniques,
     deathyear: uniques,
     id: uniques,
+    langs: a => Math.max(...a),
     occupation_id: uniques
   },
 
   axisConfig: {
-    barConfig: {stroke: "#9E978D"},
-    gridConfig: {"stroke-width": 0},
+    barConfig: {
+      "stroke": "#D6D6D0",
+      "stroke-width": 1
+    },
+    gridConfig: {
+      "stroke": "#D6D6D0",
+      "stroke-width": 1
+    },
     shapeConfig: {
-      fill: "#9E978D",
+      fill: "#D6D6D0",
       fontColor: "#9E978D",
       fontFamily: () => "Amiko",
       fontSize: () => 10,
-      stroke: "#9E978D"
+      stroke: "#D6D6D0"
     },
     tickFormat: d => FORMATTERS.year(new Date(d).getFullYear()),
     tickSize: 5,
@@ -31,7 +38,6 @@ export default {
   },
 
   depth: 0,
-
   height: 600,
 
   legendConfig: {
@@ -123,14 +129,19 @@ export default {
   },
 
   xConfig: {
-    barConfig: {stroke: "#9E978D"},
-    gridConfig: {"stroke-width": 0},
+    barConfig: {
+      "stroke": "#D6D6D0",
+      "stroke-width": 1
+    },
+    gridConfig: {
+      "stroke-width": 0
+    },
     shapeConfig: {
-      fill: "#9E978D",
+      fill: "#D6D6D0",
       fontColor: "#9E978D",
       fontFamily: () => "Amiko",
       fontSize: () => 10,
-      stroke: "#9E978D"
+      stroke: "#D6D6D0"
     },
     tickFormat: d => FORMATTERS.year(new Date(d).getFullYear()),
     tickSize: 5,
@@ -138,11 +149,28 @@ export default {
   },
 
   yConfig: {
-    barConfig: {"stroke-width": 0},
-    gridConfig: {"stroke-width": 0},
-    labels: [],
-    ticks: [],
-    title: false
+    barConfig: {
+      "stroke": "#9E978D",
+      "stroke-width": 0
+    },
+    gridConfig: {
+      stroke: "#D6D6D0"
+    },
+    shapeConfig: {
+      fill: "#D6D6D0",
+      fontColor: "#9E978D",
+      fontFamily: () => "Amiko",
+      fontSize: () => 10,
+      stroke: "#D6D6D0"
+    },
+    tickFormat: d => d % 1 ? "" : FORMATTERS.commas(d),
+    tickSize: 5,
+    title: "Number of People",
+    titleConfig: {
+      fontColor: "#9E978D",
+      fontFamily: () => "Amiko",
+      fontSize: () => 12
+    }
   },
 
   zoom: false

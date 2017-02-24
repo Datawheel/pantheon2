@@ -70,31 +70,29 @@ class Person extends Component {
         title: personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife",
         slug: "afterlife",
         viz: <LinePlot
-                  config={{
-                    aggs: {
-                      langs: a => Math.max(...a)
-                    },
-                    height: 600,
-                    title: "Title here...",
-                    data: lineData,
-                    time: d => d.x,
-                    shapeConfig: {
-                      fill: d => d.color,
-                      Line: {
-                        fill: "none",
-                        stroke: d => d.color,
-                        strokeWidth: 1
-                      }
-                    },
-                    timeline: false,
-                    tooltipConfig: {
-                      body: d => {
-                        let date = d.x instanceof Array ? extent(d.x) : [d.x];
-                        date = date.length > 1 ? date.map(FORMATTERS.dateShort) : date.map(FORMATTERS.date);
-                        return `<span class="center">${date.join(" to ")} - ${FORMATTERS.commas(d.langs || d.views)}</span>`;
-                      }
-                    }
-                  }} />
+              config={{
+                height: 600,
+                title: "Title here...",
+                data: lineData,
+                shapeConfig: {
+                  fill: d => d.color,
+                  Line: {
+                    fill: "none",
+                    stroke: d => d.color,
+                    strokeWidth: 1
+                  }
+                },
+                time: d => d.x,
+                timeline: false,
+                tooltipConfig: {
+                  body: d => {
+                    let date = d.x instanceof Array ? extent(d.x) : [d.x];
+                    date = date.length > 1 ? date.map(FORMATTERS.dateShort) : date.map(FORMATTERS.date);
+                    return `<span class="center">${date.join(" to ")} - ${FORMATTERS.commas(d.langs || d.views)}</span>`;
+                  }
+                },
+                yConfig: {tickFormat: () => "", title: false}
+              }} />
       },
       {title: `Among ${occupation.occupation}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
