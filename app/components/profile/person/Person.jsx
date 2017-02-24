@@ -16,6 +16,7 @@ import {activateSearch} from "actions/users";
 import {fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates} from "actions/person";
 import "css/components/profile/person";
 import {LinePlot} from "d3plus-react";
+import {extent} from "d3-array";
 
 import {FORMATTERS} from "types";
 
@@ -87,7 +88,11 @@ class Person extends Component {
                     },
                     timeline: false,
                     tooltipConfig: {
-                      body: d => `<span class="center">${FORMATTERS.date(d.x)} - ${FORMATTERS.commas(d.langs || d.views)}</span>`
+                      body: d => {
+                        let date = d.x instanceof Array ? extent(d.x) : [d.x];
+                        date = date.length > 1 ? date.map(FORMATTERS.dateShort) : date.map(FORMATTERS.date);
+                        return `<span class="center">${date.join(" to ")} - ${FORMATTERS.commas(d.langs || d.views)}</span>`;
+                      }
                     }
                   }} />
       },
