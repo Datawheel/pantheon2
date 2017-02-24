@@ -4,6 +4,7 @@ import config from "helmconfig.js";
 import {connect} from "react-redux";
 import {activateSearch} from "actions/users";
 import superGif from "images/misc/super.gif";
+import searchSvg from "images/icon-search-w.svg";
 
 const NotFound = ({activateSearch}) => {
 
@@ -23,7 +24,7 @@ const NotFound = ({activateSearch}) => {
         <h2 className="error-msg">{messages[rand]}, page not found.</h2>
         <div className="profile-footer">
           <div className="footer-container">
-            <h4 className="footer-title">You can try a new <a onClick={ activateSearch }>Search</a> or these Pages instead:</h4>
+            <h4 className="footer-title">You can try a new <a onClick={ activateSearch }><img src={searchSvg} alt="Search" />Search</a> or these Pages instead:</h4>
             <ul className="footer-carousel-container">
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
@@ -78,6 +79,17 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
+                  <a href="/profile/occupation/racing_driver" className="error-photo sports"></a>
+                </div>
+                <h4 className="footer-carousel-item-title">
+                  <a href="/profile/occupation/racing_driver">Racing Driver</a>
+                </h4>
+                <p>Occupation Rank 16</p>
+                <p>665 Individuals</p>
+                <p>Sports Domain</p>
+              </li>
+              <li className="footer-carousel-item">
+                <div className="footer-carousel-item-photo">
                   <a href="/profile/person/agnez_mo" className="error-photo agnez"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
@@ -109,6 +121,17 @@ const NotFound = ({activateSearch}) => {
                 <p>Netherlands</p>
                 <p>Rank 20</p>
               </li>
+              <li className="footer-carousel-item">
+                <div className="footer-carousel-item-photo">
+                  <a href="/profile/occupation/fashion_designer" className="error-photo arts"></a>
+                </div>
+                <h4 className="footer-carousel-item-title">
+                  <a href="/profile/occupation/fashion_designer">Fashion Designer</a>
+                </h4>
+                <p>Occupation Rank 70</p>
+                <p>35 Individuals</p>
+                <p>Arts Domain</p>
+              </li>
               <li className="footer-carousel-item page">
                 <div className="footer-carousel-item-photo">
                   <a href="/explore/viz" className="error-photo"></a>
@@ -128,6 +151,17 @@ const NotFound = ({activateSearch}) => {
                 <p>Explorer</p>
                 <p>Portugal</p>
                 <p>Rank 99</p>
+              </li>
+              <li className="footer-carousel-item">
+                <div className="footer-carousel-item-photo">
+                  <a href="/profile/occupation/celebrity" className="error-photo publicfigure"></a>
+                </div>
+                <h4 className="footer-carousel-item-title">
+                  <a href="/profile/occupation/celebrity">Celebrity</a>
+                </h4>
+                <p>Occupation Rank 40</p>
+                <p>142 Individuals</p>
+                <p>Public Figure Domain</p>
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">

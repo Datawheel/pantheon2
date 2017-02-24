@@ -40,6 +40,11 @@
     & a {
       @apply --bodyLink;
     }
+
+    & img {
+      width: 16px;
+      margin: 0 4px -2px 4px;
+    }
   }
 
   & .page {
@@ -77,6 +82,16 @@
   }
   &.curie {
     background-image: url("../../images/misc/error/20408.jpg");
+  }
+
+  &.sports {
+    background-color: var(--colorSports);
+  }
+  &.arts {
+    background-color: var(--colorArts);
+  }
+  &.publicfigure {
+    background-color: var(--colorPublicFigure)
   }
 }
 
