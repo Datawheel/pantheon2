@@ -32,7 +32,7 @@ const Header = ({pageviews, person}) => {
       </div>
       <div className="info">
         <p className="top-desc">The Cultural Memory of</p>
-        <h2 className="profile-type">{person.occupation.name}</h2>
+        <h2 className="profile-type">{person.occupation.occupation}</h2>
         <h1 className="profile-name">{person.name}</h1>
         <p className="date-subtitle">{FORMATTERS.year(person.birthyear.name)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear.name)}` : "Present"}</p>
         <pre>
