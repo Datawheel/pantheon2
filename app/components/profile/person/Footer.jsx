@@ -5,8 +5,6 @@ const Footer = ({person, ranking}) => {
   const aboveMe = ranking.peers[me + 1];
   const belowMe = ranking.peers[me - 1];
 
-  console.log(aboveMe, belowMe)
-
   return (
     <footer className="profile-footer">
       <div className="footer-container">

@@ -10,7 +10,7 @@ function getNewData(dispatch, getState){
   dispatch({type: "FETCH_RANKINGS"});
   const {rankings} = getState();
   const {country, domain, occupation, place, results, sorting, type, typeNesting, yearType, years} = rankings;
-  let sortingFilter = "&order=langs.desc.nullslast";
+  let sortingFilter = "&order=hpi.desc.nullslast";
   if (sorting) {
     console.log(sorting)
     sortingFilter = `&order=${sorting.id}.${sorting.direction}.nullslast`;
