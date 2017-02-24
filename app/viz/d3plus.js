@@ -10,9 +10,11 @@ export default {
 
   aggs: {
     birthyear: uniques,
+    bucketyear: uniques,
     deathyear: uniques,
     id: uniques,
     langs: a => Math.max(...a),
+    logyear: uniques,
     occupation_id: uniques
   },
 
@@ -45,7 +47,7 @@ export default {
       fontColor: "#4B4A48",
       fontFamily: () => "Amiko",
       fontResize: false,
-      fontSize: () => 14,
+      fontSize: () => 13,
       height: () => 18,
       labelPadding: 0,
       width: () => 18
