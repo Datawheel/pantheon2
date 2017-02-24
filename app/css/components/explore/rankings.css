@@ -2,7 +2,7 @@
 @import '../../common/typography';
 
 .ranking-table {
-  max-width: 742px;
+  width: 100%;
 
   & .rt-th {}
 
@@ -19,7 +19,7 @@
   }
 
   & .rt-td, & .rt-th {
-    &:nth-child(2) {
+    &:nth-child(1), &:nth-child(2) {
       text-align: left;
     }
   }

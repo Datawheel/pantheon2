@@ -8,7 +8,8 @@ export const COLUMNS = {
         header: "#",
         accessor: "rank",
         sortable: false,
-        render: ({index}) => <span>{index + 1}</span>
+        render: ({index}) => <span>{index + 1}</span>,
+        minWidth: 30
       },
       {
         header: "Name",
@@ -24,17 +25,20 @@ export const COLUMNS = {
       {
         header: "Born",
         accessor: "birthyear",
-        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"Unknown"}</span>
+        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"Unknown"}</span>,
+        minWidth: 45
       },
       {
         header: "Died",
         accessor: "deathyear",
-        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"--"}</span>
+        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"--"}</span>,
+        minWidth: 45
       },
       {
         header: "Gender",
         accessor: "gender",
-        render: ({value}) => <span>{value ? "Female" : "Male"}</span>
+        render: ({value}) => <span>{value ? "Male" : "Female"}</span>,
+        minWidth: 50
       },
       {
         id: "birthplace.name",
@@ -42,7 +46,8 @@ export const COLUMNS = {
         accessor: d => d.birthplace ? d.birthplace.name : null,
         render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : <span>{"Unknown"}</span>
       },
-      {header: "L", accessor: "langs", sort: "desc"}
+      {header: "L", accessor: "langs", minWidth: 35},
+      {header: "HPI", accessor: "hpi", sort: "desc", maxWidth: 80}
     ]
   },
   occupation: {
@@ -50,7 +55,8 @@ export const COLUMNS = {
       {
         header: "#",
         accessor: "num_born",
-        render: ({index}) => <span>{index+1}</span>
+        render: ({index}) => <span>{index+1}</span>,
+        maxWidth: 35
       },
       {
         header: "Occupation",
@@ -68,7 +74,8 @@ export const COLUMNS = {
       {
         header: "People",
         accessor: "num_born",
-        sort: "desc"
+        sort: "desc",
+        minWidth: 55
       },
       {
         header: "Women",
@@ -152,7 +159,8 @@ export const COLUMNS = {
       {
         header: "#",
         accessor: "born_rank_unique",
-        render: ({value, index}) => <span>{value ? value : index+1}</span>
+        render: ({value, index}) => <span>{value ? value : index+1}</span>,
+        maxWidth: 35
       },
       {
         header: "City",
@@ -169,11 +177,14 @@ export const COLUMNS = {
       },
       {
         header: "Born",
-        accessor: "num_born"
+        accessor: "num_born",
+        maxWidth: 45,
+        sort: "desc"
       },
       {
         header: "Died",
         accessor: "num_died",
+        maxWidth: 45
       }
     ]
   }

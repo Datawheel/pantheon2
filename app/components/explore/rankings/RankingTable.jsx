@@ -13,7 +13,7 @@ class RankingTable extends Component {
     super(props);
   }
 
-  render() {
+  render() { 
     const {results, type, typeNesting, sorting} = this.props.rankings;
     const {sortRankingsTable, updateRankingsTable} = this.props;
     const pageSize = type === "occupation" ? results.data.length : RANKINGS_RESULTS_PER_PAGE;
