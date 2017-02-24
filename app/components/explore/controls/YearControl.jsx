@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {FORMATTERS} from "types";
-import Rcslider from "rc-slider";
+import {Range} from "rc-slider";
 import {changeYears} from "actions/explorer";
 
 const ENTER_KEY_CODE = 13;
@@ -19,7 +19,7 @@ class YearControl extends Component {
 
   sanitizeYear(yr) {
     const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
-    if (yr.replace(".", "").toLowerCase().includes("bc") || parseInt(yr) < 0) {
+    if (yr.replace(".", "").toLowerCase().includes("bc") || parseInt(yr, 10) < 0) {
       return yearAsNumber * -1;
     }
     return yearAsNumber;
@@ -47,8 +47,8 @@ class YearControl extends Component {
   render() {
     const timelineMarks = {
       "-4000": "4000 BC",
-      0: <strong>0 AD</strong>,
-      2013: "2013"
+      "0": <strong>0 AD</strong>,
+      "2013": "2013"
     };
     const {years} = this.props.explorer;
     const {tempYearStart, tempYearEnd} = this.state;
@@ -62,8 +62,7 @@ class YearControl extends Component {
           <span>and</span>
           <input type="text" id="endYear" value={!tempYearStart && tempYearEnd !== null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={yearChange} onKeyDown={yearChange} onBlur={yearChange} />
         </div>
-        <Rcslider
-          range
+        <Range
           pushable={1}
           min={-4000}
           max={2013}

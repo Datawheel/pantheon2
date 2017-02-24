@@ -2,8 +2,13 @@
 @import '../../common/typography';
 
 .profile-section {
-  max-width: 1200px;
+  max-width: 950px;
   margin: 70px auto;
+  overflow: visible;
+
+  & + .profile-section {
+    margin-top: 90px;
+  }
 
   &:not(:last-child) {
   }
@@ -13,8 +18,31 @@
   }
 
   & .section-head {
-    & > * {
-      display: inline-block;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    & .section-title, & .section-actions {
+      & > * {
+        display: inline-block;
+      }
+    }
+
+    & .section-actions {
+      & a {
+        padding: 2px 3px;
+        margin: 0 6px;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+
+      & img {
+        height: 20px;
+      }
     }
 
     & h4 {
@@ -44,7 +72,7 @@
 
     & p {
       @apply --bodyText;
-      max-width: 60%;
+      max-width: 62%;
     }
 
     & a {
@@ -60,7 +88,7 @@
   & .rank-title {
     text-align: center;
     margin: 0 auto;
-    padding: 10px 0 15px;
+    padding: 20px 0 25px;
 
     & h3 {
       @apply --profileVizTitle;
@@ -154,4 +182,9 @@
       }
     }
   }
+
+  & .viz {
+    margin: 30px 0 60px;
+  }
+
 }

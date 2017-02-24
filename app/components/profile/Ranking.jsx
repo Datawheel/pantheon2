@@ -33,8 +33,8 @@ const Ranking = ({ person, rankings, type }) => {
       <div key={i}>
         <p>
         Among {type !== "profession" ? "people born in" : null} {type === "birthyear" ? person[type].name : person[type].name}, {person.name} ranks {ranking.me.rank_unique} out of {person[type].num_born}.&nbsp;
-        { ranking.betterPeers.length ? `Before ${person.gender ? "her" : "him"} are:` : null } { ranking.betterPeers.length ? <PeerList peers={ranking.betterPeers} /> : null }{ ranking.betterPeers.length ? ". " : null }
-        { ranking.worsePeers.length ? `After ${person.gender ? "her" : "him"} are:` : null } { ranking.worsePeers.length ? <PeerList peers={ranking.worsePeers} /> : null }{ ranking.worsePeers.length ? "." : null }
+        { ranking.betterPeers.length ? `Before ${person.gender ? "him" : "her"} are:` : null } { ranking.betterPeers.length ? <PeerList peers={ranking.betterPeers} /> : null }{ ranking.betterPeers.length ? ". " : null }
+        { ranking.worsePeers.length ? `After ${person.gender ? "him" : "her"} are:` : null } { ranking.worsePeers.length ? <PeerList peers={ranking.worsePeers} /> : null }{ ranking.worsePeers.length ? "." : null }
         </p>
         <div>
           {ranking.peers.map((peer) =>

@@ -5,7 +5,7 @@ export const COLUMNS = {
   person: {
     person: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "rank",
         sortable: false,
         render: ({index}) => <span>{index + 1}</span>
@@ -24,12 +24,12 @@ export const COLUMNS = {
       {
         header: "Born",
         accessor: "birthyear",
-        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : null
+        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"Unknown"}</span>
       },
       {
         header: "Died",
         accessor: "deathyear",
-        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : null
+        render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"--"}</span>
       },
       {
         header: "Gender",
@@ -40,7 +40,7 @@ export const COLUMNS = {
         id: "birthplace.name",
         header: "Birth Place",
         accessor: d => d.birthplace ? d.birthplace.name : null,
-        render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : null
+        render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : <span>{"Unknown"}</span>
       },
       {header: "L", accessor: "langs", sort: "desc"}
     ]
@@ -48,7 +48,7 @@ export const COLUMNS = {
   occupation: {
     occupation: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "num_born",
         render: ({index}) => <span>{index+1}</span>
       },
@@ -78,7 +78,7 @@ export const COLUMNS = {
     ],
     industry: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "num_born",
         render: ({index}) => <span>{index+1}</span>
       },
@@ -103,7 +103,7 @@ export const COLUMNS = {
     ],
     domain: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "num_born",
         render: ({index}) => <span>{index + 1}</span>
       },
@@ -126,7 +126,7 @@ export const COLUMNS = {
   place: {
     country: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "born_rank_unique",
         render: ({value, index}) => <span>{value ? value : index+1}</span>
       },
@@ -150,7 +150,7 @@ export const COLUMNS = {
     ],
     place: [
       {
-        header: "Rank",
+        header: "#",
         accessor: "born_rank_unique",
         render: ({value, index}) => <span>{value ? value : index+1}</span>
       },

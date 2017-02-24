@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from "react";
-import { connect } from "react-redux";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import Header from "components/profile/occupation/Header";
@@ -7,12 +7,15 @@ import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/occupation/Intro";
 import People from "components/profile/occupation/People";
 import Places from "components/profile/occupation/Places";
+import PlacesTime from "components/profile/occupation/PlacesTime";
+import OverlappingLives from "components/profile/occupation/OverlappingLives";
 import RelatedOccupations from "components/profile/occupation/RelatedOccupations";
 import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
-import { fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations } from "actions/occupation";
-import Viz from "components/viz/Index";
-import { COLORS_CONTINENT, YEAR_BUCKETS } from "types";
+import {fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations} from "actions/occupation";
+import {COLORS_CONTINENT, YEAR_BUCKETS} from "types";
+import {Priestley, StackedArea, Treemap} from "d3plus-react";
+import {groupBy, groupTooltip, peopleTooltip, shapeConfig} from "viz/helpers";
 
 import {extent} from "d3-array";
 
@@ -22,15 +25,8 @@ class Occupation extends Component {
     super(props);
   }
 
-  static need = [
-    fetchOccupation,
-    fetchPeople,
-    fetchPeopleInDomain,
-    fetchAllOccupations
-  ]
-
   render() {
-    if(this.props.occupationProfile.occupation.id === undefined) {
+    if (this.props.occupationProfile.occupation.id === undefined) {
       return <NotFound />;
     }
     const {occupationProfile} = this.props;
@@ -43,7 +39,10 @@ class Occupation extends Component {
       .sort((a, b) => b.langs - a.langs);
 
     tmapDomainData.forEach(d => {
-      d.occupation_name = d.occupation.name;
+      d.industry = d.occupation.industry;
+      d.domain = d.occupation.domain;
+      d.occupation_id = `${d.occupation_id}`;
+      d.occupation_name = d.occupation.occupation;
       d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
@@ -83,92 +82,72 @@ class Occupation extends Component {
       .filter(p => p.deathyear !== null && p.deathcountry !== null)
       .slice(0, priestleyMax);
 
+    const attrs = occupations.reduce((obj, d) => {
+      obj[d.id] = d;
+      return obj;
+    }, {});
+
     const sections = [
       {title: "People", slug: "people", content: <People occupation={occupation} people={people} />},
-      {
-        title: "Related Occupations",
-        slug: "related",
-        content: <RelatedOccupations occupation={occupation} occupations={occupations} />,
-        viz: [
-          <Viz type="Treemap"
-            title={`Occupations Within ${occupation.domain} Domain`}
-            key="tmap_domain"
-            config={{
-              attrs: occupations,
-              data: tmapDomainData,
-              depth: 1,
-              groupBy: ["industry", "occupation_name"],
-              legend: false,
-              time: "birthyear"
-            }} />,
-          <Viz type="StackedArea"
-            title={`${occupation.domain} Domain Over Time`}
-            key="stacked_domain"
-            config={{
-              attrs: occupations,
-              data: tmapDomainData,
-              depth: 1,
-              groupBy: ["industry", "occupation_name"],
-              legend: false,
-              shapeConfig: {stroke: () => "#F4F4F1", strokeWidth: (d, i) => 1},
-              time: "bucketyear",
-              x: "bucketyear",
-              y: d => d.id instanceof Array ? d.id.length : 1
-            }} />
-        ]
-      },
       {
         title: "Places",
         slug: "places",
         content: <Places people={people} occupation={occupation} />,
         viz: [
-          <Viz type="Treemap"
-            title={`Places of Birth for ${occupation.name}`}
+          <Treemap
             key="tmap_country1"
             config={{
+              title: `Birth Places for ${occupation.occupation}`,
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-              time: "birthyear"
+              time: "birthyear",
+              tooltipConfig: groupTooltip(tmapBornData),
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
-          <Viz type="Treemap"
-            title={`Places of Death for ${occupation.name}`}
+          <Treemap
             key="tmap_country2"
             config={{
+              title: `Death Places for ${occupation.occupation}`,
               data: tmapDeathData,
               depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              time: "deathyear"
+              time: "deathyear",
+              tooltipConfig: groupTooltip(tmapDeathData),
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
         ]
       },
       {
         title: "Places Over Time",
         slug: "places_trends",
+        content: <PlacesTime people={people} occupation={occupation} />,
         viz: [
-          <Viz type="StackedArea"
-            title="Births Over Time"
+          <StackedArea
             key="stacked_country1"
             config={{
+              title: `Birth Places of ${occupation.occupation}s Over Time`,
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               time: "bucketyear",
+              tooltipConfig: groupTooltip(tmapBornData),
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />,
-          <Viz type="StackedArea"
-            title="Deaths Over Time"
+          <StackedArea
             key="stacked_country2"
             config={{
+              title: `Death Places of ${occupation.occupation}s Over Time`,
               data: tmapDeathData,
               depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               time: "bucketyear",
+              tooltipConfig: groupTooltip(tmapDeathData),
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />
@@ -177,17 +156,58 @@ class Occupation extends Component {
       {
         title: "Overlapping Lives",
         slug: "overlapping_lives",
+        content: <OverlappingLives people={people} occupation={occupation} />,
         viz: [
-          <Viz type="Priestley"
-            title={`Lifespans of the Top ${priestleyMax} ${occupation.name}`}
+          <Priestley
             key="priestley1"
             config={{
+              title: `Lifespans of the Top ${priestleyMax} ${occupation.occupation}s`,
               data: priestleyData,
               depth: 1,
               end: "deathyear",
               groupBy: ["diedcontinent", "name"],
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              start: "birthyear"
+              start: "birthyear",
+              tooltipConfig: peopleTooltip
+            }} />
+        ]
+      },
+      {
+        title: "Related Occupations",
+        slug: "related",
+        content: <RelatedOccupations occupation={occupation} occupations={occupations} />,
+        viz: [
+          <Treemap
+            key="tmap_domain"
+            config={{
+              title: `Occupations Within the ${occupation.domain} Domain`,
+              attrs: occupations,
+              data: tmapDomainData,
+              depth: 1,
+              groupBy: ["industry", "occupation_name"].map(groupBy(attrs)),
+              legend: false,
+              shapeConfig: shapeConfig(attrs),
+              time: "birthyear",
+              tooltipConfig: groupTooltip(tmapDomainData),
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+            }} />,
+          <StackedArea
+            key="stacked_domain"
+            config={{
+              title: `${occupation.domain} Domain Over Time`,
+              attrs: occupations,
+              data: tmapDomainData,
+              depth: 1,
+              groupBy: ["industry", "occupation_name"].map(groupBy(attrs)),
+              legend: false,
+              shapeConfig: Object.assign({}, shapeConfig(attrs), {
+                stroke: () => "#F4F4F1",
+                strokeWidth: () => 1
+              }),
+              time: "bucketyear",
+              tooltipConfig: groupTooltip(tmapDomainData),
+              x: "bucketyear",
+              y: d => d.id instanceof Array ? d.id.length : 1
             }} />
         ]
       }
@@ -196,9 +216,9 @@ class Occupation extends Component {
     return (
       <div>
         <Helmet
-          htmlAttributes={{"lang": "en", "amp": undefined}}
-          title={occupation.name}
-          meta={config.meta.concat([ {property: 'og:title', content: occupation.name} ])}
+          htmlAttributes={{lang: "en", amp: undefined}}
+          title={occupation.occupation}
+          meta={config.meta.concat([{property: "og:title", content: occupation.occupation}])}
           link={config.link}
         />
         <Header occupation={occupation} people={people} />
@@ -218,7 +238,14 @@ class Occupation extends Component {
       </div>
     );
   }
-};
+}
+
+Occupation.need = [
+  fetchOccupation,
+  fetchPeople,
+  fetchPeopleInDomain,
+  fetchAllOccupations
+];
 
 function mapStateToProps(state) {
   return {

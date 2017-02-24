@@ -9,7 +9,6 @@ const Publications = () => {
       <p>Yu, A.Z., Ronen, S., Hu, K., Lu, T. and Hidalgo, C.A., 2016. Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific data, 3.</p>
       <p>Ronen, S., Gonçalves, B., Hu, K.Z., Vespignani, A., Pinker, S. and Hidalgo, C.A., 2014. Links that speak: The global language network and its association with global fame. Proceedings of the National Academy of Sciences, 111(52), pp.E5616-E5622.</p>
 
-      <p>Yu, A. Z., Ronen, S., Hu, K., Lu, T., and Hidalgo, C. A. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. <i>Scientific Data</i> 2:150075. doi: 10.1038/sdata.2015.75.</p>
       <h2>Magazines</h2>
       <p>Cesar A. Hidalgo and Ali Almossawi. <a href="http://www.scientificamerican.com/article/the-data-visualization-revolution/">"The Data-Visualization Revolution."</a> <i>Scientific American.</i> March 2014.</p>
       <p>Hidalgo, C. A. <a href="https://www.technologyreview.com/s/525461/the-last-20-inches-datas-treacherous-journey-from-the-screen-to-the-mind/">"The Last 20 Inches: Data’s Treacherous Journey from the Screen to the Mind."</a> <i>MIT Technology Review.</i> March 2014.</p>

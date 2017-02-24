@@ -19,7 +19,7 @@ class ExploreControls extends Component {
     this.rankingType = [
       {id: "person", name: "People"},
       {id: "occupation", name: "Occupations"},
-      {id: "place", name: "Place"}
+      {id: "place", name: "Places"}
     ];
     this.state = {
       countries: [],
@@ -117,7 +117,7 @@ class ExploreControls extends Component {
           { type === "occupation" ?
           <div className="flat-options-w-title">
             <h3>Level:</h3>
-            <ul className="flat-options">
+            <ul className="options flat-options">
               <li><a href="#" id="occupation" onClick={this.changeTypeNesting} className={typeNesting === "occupation" ? "active" : null}>Occ</a></li>
               <li><a href="#" id="industry" onClick={this.changeTypeNesting} className={typeNesting === "industry" ? "active" : null}>Ind</a></li>
               <li><a href="#" id="domain" onClick={this.changeTypeNesting} className={typeNesting === "domain" ? "active" : null}>Dom</a></li>
@@ -127,7 +127,7 @@ class ExploreControls extends Component {
           { type === "place" ?
           <div className="flat-options-w-title">
             <h3>Level:</h3>
-            <ul className="flat-options">
+            <ul className="options flat-options">
               <li><a href="#" id="place" onClick={this.changeTypeNesting} className={typeNesting === "place" ? "active" : null}>Cities</a></li>
               <li><a href="#" id="country" onClick={this.changeTypeNesting} className={typeNesting === "country" ? "active" : null}>Countries</a></li>
             </ul>
@@ -137,23 +137,28 @@ class ExploreControls extends Component {
 
         <section className="control-group">
           <h4>Filter Rankings</h4>
-          <ul className="flat-options">
+          <ul className="options flat-options">
             <li><a href="#" id="birthyear" onClick={this.changeYearType} className={yearType === "birthyear" ? "active" : null}>Births</a></li>
             <li><a href="#" id="deathyear" onClick={this.changeYearType} className={yearType === "deathyear" ? "active" : null}>Deaths</a></li>
           </ul>
 
-
           <h3 className="year-label">Between:</h3>
           <div className="year-inputs">
-            <input type="text" id='startYear' value={tempYearStart!==null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
+            <input type="text" id="startYear" value={tempYearStart!==null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={minYearKeyDown} onKeyDown={minYearKeyDown} onBlur={minYearKeyDown} />
             <span>and</span>
-            <input type="text" id='endYear' value={!tempYearStart && tempYearEnd!==null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
+            <input type="text" id="endYear" value={!tempYearStart && tempYearEnd!==null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={maxYearKeyDown} onKeyDown={maxYearKeyDown} onBlur={maxYearKeyDown} />
           </div>
-          <Rcslider range pushable={1} min={-4000} max={2013} step={1} marks={timelineMarks} tipFormatter={(v) => FORMATTERS.year(v)} allowCross={false} onChange={(v) => {this.setState({tempYearStart:v[0], tempYearEnd:v[1]})}} onAfterChange={(v) => {this.setState({tempYearStart:null, tempYearEnd:null}); this.changeYears(v);}} value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years} defaultValue={years} />
 
           { type !== "place" ?
-            <div className="filter">
-              <h3 className="place-filter">Locations:</h3>
+            <div className="filter place-control">
+              <div className="flat-options-w-title">
+                <h3 className="place-filter">Place:</h3>
+                <ul className="options flat-options">
+                  <li><a href="#" className="active">Country</a></li>
+                  <li><a href="#" className="">City</a></li>
+                </ul>
+              </div>
+
               <select value={country.id} onChange={this.changeCountry}>
                 <option value="all">All Countries</option>
                 {countries.map(c =>
@@ -177,8 +182,15 @@ class ExploreControls extends Component {
           : null }
 
           { type !== "occupation" ?
-            <div className="filter">
-              <h3 className="prof-filter">Occupation:</h3>
+            <div className="filter prof-control">
+              <div className="flat-options-w-title">
+                <h3 className="prof-filter">Occ:</h3>
+                <ul className="options flat-options">
+                  <li><a href="#" className="active">Domain</a></li>
+                  <li><a href="#">Occupation</a></li>
+                </ul>
+              </div>
+
               <select value={domain.id} onChange={this.changeDomain}>
                 <option value="all">All Domains</option>
                 {domains.map(d =>
@@ -191,14 +203,14 @@ class ExploreControls extends Component {
           : null }
 
           { type !== "occupation" && domain.occupations.length ?
-          <select className="add-control-input" value={occupation} onChange={this.changeOccupation}>
-            <option value="all">All Occupations</option>
-            {domain.occupations.map(p =>
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            )}
-          </select>
+            <select className="add-control-input" value={occupation} onChange={this.changeOccupation}>
+              <option value="all">All Occupations</option>
+              {domain.occupations.map(p =>
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              )}
+            </select>
           : null }
         </section>
         <Link to="/explore/viz" className="switch-explore-link">Go to Visual Explorer</Link>

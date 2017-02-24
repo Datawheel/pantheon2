@@ -30,4 +30,89 @@
       left: -45px;
     }
   }
+
+  & .metrics-container {
+    display: flex;
+    flex-direction: row;
+
+    @media (max-width: 970px) {
+      flex-direction: column;
+      align-items: center;
+
+      & .metric-vid {
+        margin-bottom: 40px;
+      }
+    }
+  }
+
+  & .metric-vid {
+    border: 1px solid var(--colorTan);
+    display: inline-block;
+    height: 250px;
+    width: 600px;
+    margin-right: 20px;
+    position: relative;
+
+    & .press-play {
+      border-radius: 50%;
+      border: 1px solid var(--colorTan);
+      width: 60px;
+      height: 60px;
+      display: block;
+      position: relative;
+      top: 35%;
+      left: 41%;
+
+      & i {
+        display: block;
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 11px;
+        left: 20px;
+        border-top: 18px solid transparent;
+        border-bottom: 18px solid transparent;
+        border-left: 23px solid var(--colorSand);
+      }
+
+      &:hover {
+        border: 1px solid var(--colorCtrl);
+
+        & i {
+          border-left-color: var(--colorCtrlShape);
+        }
+      }
+
+    }
+  }
+
+  & .metrics-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 30px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    & .metric {
+      min-width: 135px;
+      flex: 1;
+
+      & + .metric {
+        margin-bottom: 30px;
+      }
+    }
+
+    & h4 {
+      @apply --calloutText;
+      margin: 0;
+    }
+
+    & p {
+      @apply --smallCaps;
+      line-height: 1.5;
+      margin-top: 5px;
+    }
+  }
 }

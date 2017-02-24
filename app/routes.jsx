@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, IndexRoute, IndexRedirect, Redirect} from "react-router";
+import {Route, IndexRoute} from "react-router";
 
 import App from "containers/App";
 import Home from "containers/Home";
@@ -18,7 +18,6 @@ import Team from "components/about/Team";
 import Publications from "components/about/Publications";
 import DataSources from "components/about/DataSources";
 import Resources from "components/about/Resources";
-import References from "components/about/References";
 import Contact from "components/about/Contact";
 
 // explore componenets
@@ -41,38 +40,28 @@ import NotFound from "components/NotFound";
  * We require store as an argument here because we wish to get
  * state from the store after it has been authenticated.
  */
-export default (store) => {
-  const requireAuth = (nextState, replace, callback) => {
-    const { user: { authenticated }} = store.getState();
-    if (!authenticated) {
-      replace({
-        pathname: "/login",
-        state: {nextPathname: nextState.location.pathname}
-      });
-    }
-    callback();
-  };
+export default function checkId() {
 
   function genRandId(path) {
     let candidates;
     if (path.includes("place")) {
-      candidates = ["india", "united_states", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_divoire_(ivory_coast)", "ljusdal", "dallas", "olias_del_rey", "tbilisi", "philippines", "sogndal"];
+      candidates = ["india", "united_kingdom", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_d'ivoire_(ivory_coast)", "ljusdal", "dallas", "olias_del_rey", "philippines", "sogndal"];
     }
     else if (path.includes("occupation")) {
-      candidates = ["game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
+      candidates = ["architect", "social_activist", "politician", "pilot", "physicist", "biologist", "astronomer", "athlete", "basketball_player", "baseball_player", "chef", "celebrity", "game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
     }
     else if (path.includes("person")) {
-      candidates = ["joseph_cook", "pope_paschal_ii", "nick_drake", "lewis_carroll", "eddie_irvine", "manfred_king_of_sicily", "julius_caesar", "john_l._hall", "jenny_lind", "henri_nestle", "raif_badawi", "emma_shapplin"];
+      candidates = ["joseph_cook", "pope_paschal_ii", "nick_drake", "lewis_carroll", "eddie_irvine", "manfred,_king_of_sicily", "julius_caesar", "john_l._hall", "jenny_lind", "henri_nestle", "raif_badawi", "emma_shapplin"];
     }
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
-  function checkForId(nextState, replaceState) {
+  function checkForId(nextState, replace) {
     if (!nextState.params.id) {
       const reqestedUrl = nextState.location.pathname;
       const randId = genRandId(reqestedUrl);
       const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}${randId}` : `${reqestedUrl}/${randId}`;
-      replaceState({id: randId}, nextUrl);
+      return replace({pathname: nextUrl});
     }
     else {
       // make sure it's legal
@@ -99,7 +88,6 @@ export default (store) => {
         <Route path="publications" component={Publications} />
         <Route path="data_sources" component={DataSources} />
         <Route path="resources" component={Resources} />
-        <Route path="references" component={References} />
         <Route path="contact" component={Contact} />
       </Route>
 
@@ -120,6 +108,4 @@ export default (store) => {
 
     </Route>
   );
-};
-
-// <Route path="profile/:name/" component={Profile} />
+}

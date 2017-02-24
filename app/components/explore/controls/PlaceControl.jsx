@@ -27,21 +27,19 @@ class PlaceControl extends Component {
     const placeDepthClick = this.placeDepthClick.bind(this);
 
     return (
-      <div className="filter">
-        <h3>Places:</h3>
-
+      <div className="filter place-control">
         <div className="flat-options-w-title">
-          <h3>Within:</h3>
-          <ul className="flat-options">
-            <li><a href="#" className={selectedDepth === COUNTRY_DEPTH ? "active" : ""} data-depth={COUNTRY_DEPTH} onClick={placeDepthClick}>Countries</a></li>
-            <li><a href="#" className={selectedDepth === CITY_DEPTH ? "active" : ""} data-depth={CITY_DEPTH} onClick={placeDepthClick}>Cities</a></li>
+          <h3>Place:</h3>
+          <ul className="options flat-options">
+            <li><a href="#" className={selectedDepth === COUNTRY_DEPTH ? "active" : ""} data-depth={COUNTRY_DEPTH} onClick={placeDepthClick}>Country</a></li>
+            <li><a href="#" className={selectedDepth === CITY_DEPTH ? "active" : ""} data-depth={CITY_DEPTH} onClick={placeDepthClick}>City</a></li>
           </ul>
         </div>
 
-        { selectedDepth === COUNTRY_DEPTH ?
-          <div>
+        { selectedDepth === COUNTRY_DEPTH
+        ? <div>
             <select value={selectedCountry} onChange={changeCountry}>
-              <option value="all">All</option>
+              <option value="all">All Countries</option>
               {countries.map(c =>
                 <option key={c.id} value={c.id} data-countrycode={c.country_code}>
                   {c.name}
@@ -49,9 +47,9 @@ class PlaceControl extends Component {
               )}
             </select>
 
-            { citiesInCountry.length ?
-            <select value={selectedCityInCountry} onChange={changeCityInCountry}>
-              <option value="all">All</option>
+            { citiesInCountry.length
+            ? <select value={selectedCityInCountry} onChange={changeCityInCountry}>
+              <option value="all">All Cities</option>
               {citiesInCountry.map(p =>
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -61,10 +59,9 @@ class PlaceControl extends Component {
             : null }
 
           </div>
-        :
-          <div>
+        : <div>
             <select value={selectedCity} onChange={changeCity}>
-              <option value="all">All</option>
+              <option value="all">All Cities</option>
               {cities.map(c =>
                 <option key={c.id} value={c.id}>
                   {c.name}

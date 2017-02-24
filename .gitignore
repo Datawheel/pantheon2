@@ -26,3 +26,4 @@ node_modules
 img/
 
 *.pyc
+postgrest.conf

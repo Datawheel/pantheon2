@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from "react";
 import styles from "css/components/profile/header";
 import sparklineSvg from "images/sparkline.svg";
 import placeholderImg from "images/placeholder_prof_hero.jpg";
+import {COLORS_DOMAIN} from "types";
 
 const Header = ({ occupation, people }) => {
 
@@ -14,17 +15,12 @@ const Header = ({ occupation, people }) => {
               <img key={p.id} src={`/people/${p.id}.jpg`} />
             )}
           </div>
-          <div className="bg-img bg-img-m">
+          <div className="bg-img bg-img-b">
             {people.slice(5, 9).map(p =>
               <img key={p.id} src={`/people/${p.id}.jpg`} />
             )}
           </div>
-          <div className="bg-img bg-img-b">
-            {people.slice(10, 14).map(p =>
-              <img key={p.id} src={`/people/${p.id}.jpg`} />
-            )}
-          </div>
-          <div className="bg-img-mask-after"></div>
+          <div style={{backgroundColor: COLORS_DOMAIN[occupation.domain_slug]}} className="bg-img-mask-after"></div>
         </div>
       </div>
       <div className="info">

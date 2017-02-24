@@ -1,21 +1,22 @@
-import React, { Component, PropTypes } from "react";
-import { connect } from "react-redux";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import ProfileNav from "components/profile/Nav";
 import Section from "components/profile/Section";
 import Header from "components/profile/person/Header";
 import Intro from "components/profile/person/Intro";
+import MemMetrics from "components/profile/person/MemMetrics";
 import OccupationRanking from "components/profile/person/OccupationRanking";
 import YearRanking from "components/profile/person/YearRanking";
 import CountryRanking from "components/profile/person/CountryRanking";
-import Viz from "components/viz/Index";
 import NotFound from "components/NotFound";
-import { activateSearch } from "actions/users";
-import { fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates } from "actions/person";
-import styles from 'css/components/profile/person';
+import {activateSearch} from "actions/users";
+import {fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates} from "actions/person";
+import "css/components/profile/person";
+import {LinePlot} from "d3plus-react";
 
-import { FORMATTERS } from "types";
+import {FORMATTERS} from "types";
 
 class Person extends Component {
 
@@ -28,28 +29,19 @@ class Person extends Component {
     super(props);
   }
 
-  static need = [
-    fetchPerson,
-    fetchOccupationRanks,
-    fetchCountryRanks,
-    fetchYearRanks,
-    fetchPageviews,
-    fetchCreationdates
-  ]
-
   render() {
-    if(this.props.personProfile.person.id === undefined) {
+    if (this.props.personProfile.person.id === undefined) {
       return <NotFound />;
     }
     // return <div>testing...</div>
-    const {personProfile, activateSearch} = this.props;
+    const {personProfile} = this.props;
     const occupation = personProfile.person.occupation;
-    const birthcountry = personProfile.person.birthcountry;
 
     const maxPageViews = Math.max(...personProfile.pageviews.map(d => d.num_pageviews));
     const totalPageViews = personProfile.pageviews.reduce((sum, d) => sum + d.num_pageviews, 0);
     const totalLanguages = personProfile.creationdates.length;
-    let languageCounter = 0, lMod = 0.95;
+    let languageCounter = 0;
+    const lMod = 0.95;
     const lineData = personProfile.creationdates
       .sort((a, b) => new Date(a.creation_date) - new Date(b.creation_date))
       .map(d => {
@@ -59,8 +51,8 @@ class Person extends Component {
           id: "LANGUAGES (L)",
           langs: languageCounter,
           x: new Date(d.creation_date),
-          y: (languageCounter / totalLanguages) * lMod
-        }
+          y: languageCounter / totalLanguages * lMod
+        };
       })
       .concat(personProfile.pageviews.map(d => ({
         color: "#4C5ED7",
@@ -80,23 +72,21 @@ class Person extends Component {
         id: "LANGUAGES (L)",
         x: latestPageView,
         y: 1 * lMod
-      })
+      });
     }
 
     const sections = [
-      {title: "Memorability Metrics", slug: "metrics"},
-      {title: `Among ${occupation.name}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
-      {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
-      {title: `In the Same Place`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />},
+      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageviews={personProfile.pageviews} person={personProfile.person} />},
       {
         title: personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife",
         slug: "afterlife",
-        viz: <Viz type="LinePlot"
-                  title={`${personProfile.person.alive ? "Global Culture Career" : "Digital Afterlife"} of ${personProfile.person.name}`}
+        viz: <LinePlot
                   config={{
                     aggs: {
                       langs: a => Math.max(...a)
                     },
+                    height: 600,
+                    title: "Title here...",
                     data: lineData,
                     legendConfig: {
                       shapeConfig: {
@@ -118,15 +108,18 @@ class Person extends Component {
                       body: d => `<span class="center">${FORMATTERS.date(d.x)} - ${FORMATTERS.commas(d.langs || d.views)}</span>`
                     }
                   }} />
-      }
+      },
+      {title: `Among ${occupation.occupation}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
+      {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
+      {title: "In the Same Place", slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />}
     ];
 
     return (
-      <div className='person'>
+      <div className="person">
         <Helmet
-          htmlAttributes={{"lang": "en", "amp": undefined}}
+          htmlAttributes={{lang: "en", amp: undefined}}
           title={personProfile.person.name}
-          meta={config.meta.concat([ {property: 'og:title', content: personProfile.person.name} ])}
+          meta={config.meta.concat([{property: "og:title", content: personProfile.person.name}])}
           link={config.link}
         />
         <Header person={personProfile.person} pageviews={personProfile.pageviews} />
@@ -140,17 +133,22 @@ class Person extends Component {
             title={section.title}
             slug={section.slug}>
             {section.content ? section.content : null}
-            {section.viz ? section.viz : null}
+            {section.viz ? <div className="viz">{section.viz}</div> : null}
           </Section>
         )}
       </div>
-    )
+    );
   }
-};
+}
 
-// Person.propTypes = {
-//   topics: PropTypes.array.isRequired
-// };
+Person.need = [
+  fetchPerson,
+  fetchOccupationRanks,
+  fetchCountryRanks,
+  fetchYearRanks,
+  fetchPageviews,
+  fetchCreationdates
+];
 
 function mapStateToProps(state) {
   return {
@@ -158,4 +156,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { activateSearch })(Person);
+export default connect(mapStateToProps, {activateSearch})(Person);

@@ -1,8 +1,8 @@
-import React from 'react';
-import styles from 'css/components/home';
-import searchSvg from 'images/icon-search.svg';
-import pantheonLogoSvg from 'images/logo.svg';
-import placeholderHome from 'images/placeholder_home.png';
+import React from "react";
+import styles from "css/components/home";
+import searchSvg from "images/icon-search.svg";
+import pantheonLogoSvg from "images/logo.svg";
+import placeholderHome from "images/placeholder_home.png";
 
 /*
  * Note: This is kept as a container-level component,
@@ -11,17 +11,46 @@ import placeholderHome from 'images/placeholder_home.png';
  */
 const Home = () => {
   return (
-    <div className='home-container'>
-      <div className='home-head'>
+    <div className="home-container">
+      <div className="home-head">
         <h1><img src={pantheonLogoSvg} alt={`Pantheon`} /></h1>
         <h3>Mapping Cultural Memory</h3>
-        <div className='home-search'>
+        <div className="home-search">
           <img src={searchSvg} alt={`Search`} />
-          <input type={'text'} placeholder={'Napoleon, fine arts, Syria'} />
+          <input type={"text"} placeholder={"Napoleon, fine arts, Syria"} />
         </div>
       </div>
-      <div className='home-body'>
-        <div className='placeholder-home-img'></div>
+      <div className="home-body">
+        <div className="home-blog-post">
+          <h3>Leonardo Da Vinci</h3>
+          <span>01/30/17</span>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut accumsan est et ipsum vestibulum, vel hendrerit ex consectetur. Integer gravida ultrices dolor, in tincidunt dolor ultricies at. Sed sollicitudin tempor risus, quis suscipit sapien dignissim quis. Aenean eleifend porttitor magna, vel fermentum ex porttitor in. Praesent a cursus ante. Sed tempor fermentum mattis. Cras ac dui arcu. Duis ex metus, pharetra pretium purus sit amet, imperdiet semper leo. Ut sodales porta condimentum. Praesent tristique lobortis augue ut viverra.
+          </p>
+        </div>
+        <div className="home-blog-post">
+          <h3>Frida Kahlo</h3>
+          <span>01/14/17</span>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut accumsan est et ipsum vestibulum, vel hendrerit ex consectetur. Integer gravida ultrices dolor, in tincidunt dolor ultricies at. Sed sollicitudin tempor risus, quis suscipit sapien dignissim quis. Aenean eleifend porttitor magna, vel fermentum ex porttitor in. Praesent a cursus ante. Sed tempor fermentum mattis. Cras ac dui arcu. Duis ex metus, pharetra pretium purus sit amet, imperdiet semper leo. Ut sodales porta condimentum. Praesent tristique lobortis augue ut viverra.
+          </p>
+        </div>
+        <div className="placeholder-home-img"></div>
+        <div className="floating-content l-1">
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+        </div>
+
+        <div className="floating-content l-2">
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+          <div className="box"></div>
+        </div>
       </div>
     </div>
   );

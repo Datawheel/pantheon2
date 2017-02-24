@@ -3,8 +3,39 @@
 @import '../../common/colors';
 @import '../../common/typography';
 
+/* override ReactTable styles*/
 .ReactTable {
-  & table {
+  border: 0;
+
+  &.-highlight {
+    & .rt-tbody .rt-tr:not(.-padRow):hover {
+      background: var(--colorLint);
+
+      & a {
+        color: var(--colorCtrl);
+        border-bottom-color: var(--colorCtrlShape);
+      }
+    }
+  }
+
+  & .-loading {
+    background: transparent;
+
+    & > div {
+      @apply --smallCaps;
+      color: var(--colorSand);
+    }
+  }
+
+  & .rt-noData {
+    @apply --smallCaps;
+    background: transparent;
+    color: var(--colorSlate);
+    padding: 0;
+    top: 25%;
+  }
+
+  & .rt-table {
     border-width: 1px 0 1px 0;
     border-color: var(--colorSand);
     border-style: solid;
@@ -12,109 +43,99 @@
     margin: 7px 0;
   }
 
-  & thead {
+  & .rt-thead {
     box-shadow: none;
     border-bottom: 1px solid var(--colorSand);
 
-    & th {
-      background: transparent;
-      border-right: 0px;
-      font-weight: 700;
-    }
-
-    & tr {
-      text-align: right;
-    }
-
-    & .-th-inner {
-      padding: 10px 5px 5px;
-    }
-
-    & th.-sort-desc, & th.-sort-asc {
+    &.-header {
       box-shadow: none;
     }
 
-    & th.-sort-desc {
-      & .-th-inner {
-        &::after {
-          content: '';
-          position: relative;
-          display: inline-block;
-          height: 5px;
-          width: 10px;
-          margin: 0 0 1px 2px;
-          background: url('../../../images/tri-down.svg') no-repeat;
-          background-size: contain;
-          opacity: 0.8;
-        }
+    & .rt-th {
+      background: transparent;
+      border-right: 0px;
+      box-shadow: none;
+      @apply --profileNav;
+      color: var(--colorSlate);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 12px 5px 7px;
+    }
+
+    & .rt-tr {
+      text-align: right;
+    }
+
+    & .rt-th.-cursor-pointer, & .rt-th.-cursor-pointer {
+      box-shadow: none;
+    }
+
+    & .rt-th.-sort-desc {
+      &::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        height: 5px;
+        width: 10px;
+        margin: 0 0 1px 2px;
+        background: url('../../../images/tri-down.svg') no-repeat;
+        background-size: contain;
+        opacity: 0.8;
       }
     }
 
-    & th.-sort-asc {
-      & .-th-inner {
-        &::after {
-          content: '';
-          position: relative;
-          display: inline-block;
-          height: 5px;
-          width: 10px;
-          margin: 0 0 1px 2px;
-          background: url('../../../images/tri-down.svg') no-repeat;
-          background-size: contain;
-          opacity: 0.8;
-          transform: rotate(180deg);
-        }
+    & .rt-th.-sort-asc {
+      &::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        height: 5px;
+        width: 10px;
+        margin: 0 0 1px 2px;
+        background: url('../../../images/tri-down.svg') no-repeat;
+        background-size: contain;
+        opacity: 0.8;
+        transform: rotate(180deg);
       }
     }
   }
 
-  & tbody {
-    & tr {
+  & .rt-tbody {
+    & .rt-tr-group {
+      border-bottom: 0px;
+    }
+
+    & .rt-tr {
       border-bottom: 0px;
 
-      &:first-child td {
+      &:first-child .rt-td {
         box-shadow: none;
       }
     }
 
-    & .-td-inner {
-      padding: 3px 5px 0;
+    & .rt-td {
+      padding: 6px 5px 2px;
     }
 
-    & td {
+    & .rt-td {
       border-right: 0px;
       text-align: right;
     }
   }
 }
 
-table {
-  & .-th-inner {
-    @apply --profileNav;
-    font-size: 9px;
-  }
-
-  & .-td-inner {
-    @apply --small;
-    font-size: 11px;
-
-    & a {
-      @apply --bodyLink;
-      font-size: 12px;
-      font-weight: 400;
-    }
-  }
-
-  & td, & th {
-    &:nth-child(2) {
-      text-align: left;
-    }
-  }
-}
-
+/* shared Ranking and Explore container styles*/
 .explore-container {
   max-width: 950px;
-  margin: 90px auto 0;
+  margin: 90px auto 5px;
+  box-sizing: border-box;
+}
+
+.ranking-table-container, .explore-viz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
 }
 
 .explore {
@@ -124,128 +145,55 @@ table {
   justify-content: space-between;
 
   & h1 {
+    max-width: 520px;
+    text-align: center;
     @apply --heading;
     font-family: var(--fontAmiko);
-    line-height: 1;
     letter-spacing: 0;
     text-transform: none;
   }
 
-  & .ranking-table-date {
+  & h3 {
     @apply --searchResults;
-    margin: 5px 0 12px;
+    margin: 3px 0 12px;
     color: var(--colorTan);
     letter-spacing: 0.5px;
   }
+}
 
-  & .ranking-pagination {
+/* shared Control Panel styles*/
+.explore-controls {
+  flex: 0 0 208px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  width: 208px;
+
+  & h3 {
+    @apply --exploreControlTitles;
+    margin: 20px 0 0;
+  }
+
+  & h4 {
+    margin: 0;
+    font-size: 9px;
+    color: var(--colorSlate);
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    line-height: 20px;
+    text-transform: uppercase;
+  }
+
+  & select {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    @apply --exploreControlInput;
+    background-image: url('../../../images/tri-dd-down.svg');
+    background-position: 100% 50%;
+    background-size: 30px 7px;
+    cursor: pointer;
+    margin-top: 6px;
 
-    & span {
-      @apply --smallCaps;
-    }
-
-    & a {
-      border-bottom: 1px solid transparent;
-      @apply --bodyLink;
-      @apply --smallCaps;
-
-      &:last-child::after {
-        content: '';
-        position: relative;
-        display: inline-block;
-        background: url('../../../images/tri-right-b.svg') no-repeat;
-        background-size: contain;
-        width: 7px;
-        height: 13px;
-        margin: 0 0 -3px 3px;
-      }
-
-      &:first-child::before {
-        content: '';
-        position: relative;
-        display: inline-block;
-        background: url('../../../images/tri-right-b.svg') no-repeat;
-        background-size: contain;
-        width: 7px;
-        height: 13px;
-        margin: 0 3px -3px 0;
-        transform: scaleX(-1);
-      }
-    }
-  }
-
-  & .explore-controls {
-    flex: 0 0 208px;
-    padding-right: 10px;
-    box-sizing: border-box;
-    width: 208px;
-
-    & h3 {
-      @apply --exploreControlTitles;
-      margin: 20px 0 8px;
-    }
-
-    & h4 {
-      margin: 0;
-      font-size: 9px;
-      color: var(--colorSlate);
-      font-weight: 400;
-      letter-spacing: 0.8px;
-      line-height: 20px;
-      text-transform: uppercase;
-    }
-
-    & select {
-      width: 100%;
-      @apply --exploreControlInput;
-      background-image: url('../../../images/tri-dd-down.svg');
-      background-position: 100% 50%;
-      background-size: 30px 7px;
-      cursor: pointer;
-
-      &.add-control-input {
-        margin-top: 10px;
-      }
-    }
-  }
-
-  & .switch-explore-link {
-    border-bottom: 1px solid transparent;
-    @apply --bodyLink;
-    @apply --smallCaps;
-    position: relative;
-
-    &::before {
-      content: "";
-      position: relative;
-      display: inline-block;
-      background: url("../../../images/tri-right-b.svg") no-repeat;
-      background-size: contain;
-      width: 7px;
-      height: 13px;
-      margin: 0 3px -4px 0;
-      transform: scaleX(-1);
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      display: inline-block;
-      background: url("../../../images/globalNav/explore.svg") no-repeat;
-      background-size: contain;
-      top: -2px;
-      right: -20px;
-      width: 17px;
-      height: 17px;
-    }
-  }
-
-  & .key-group {
-    & > h3 {
-      margin: 0 0 8px;
+    &.add-control-input {
+      margin-top: 10px;
     }
   }
 
@@ -310,17 +258,34 @@ table {
     }
   }
 
-  & .control-group {
-    border: solid 1px var(--colorSand);
-    margin-bottom: 9px;
-    padding: 13px 11px 16px;
-    box-sizing: border-box;
-  }
+  & .switch-explore-link {
+    border-bottom: 1px solid transparent;
+    @apply --bodyLink;
+    @apply --smallCaps;
+    position: relative;
 
-  & .flat-options-w-title {
-    & h3 {
+    &::before {
+      content: "";
+      position: relative;
       display: inline-block;
-      margin: 20px 10px 0 0;
+      background: url("../../../images/tri-right-b.svg") no-repeat;
+      background-size: contain;
+      width: 7px;
+      height: 13px;
+      margin: 0 3px -4px 0;
+      transform: scaleX(-1);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: inline-block;
+      background: url("../../../images/globalNav/explore.svg") no-repeat;
+      background-size: contain;
+      top: -2px;
+      right: -20px;
+      width: 17px;
+      height: 17px;
     }
   }
 
@@ -360,10 +325,61 @@ table {
     }
   }
 
+  & .flat-options-w-title {
+    display: flex;
+
+    & ul {
+      display: flex;
+      margin: 15px 0 0 0;
+    }
+
+    & h3 {
+      display: inline-block;
+      margin: 20px 6px 0 0;
+    }
+  }
+
+  & .control-group {
+    border: solid 1px var(--colorSand);
+    margin-bottom: 9px;
+    padding: 13px 11px 18px;
+    box-sizing: border-box;
+  }
+
+  & .share-group {
+    & li {
+      &::after {
+        content: "";
+        padding: 0;
+      }
+      &::before {
+        content: "";
+        padding-left: 16px;
+      }
+
+      & a:hover {
+        border-bottom: 0;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  & .key-group {
+    & > h3 {
+      margin: 0 0 8px;
+    }
+  }
+
+  & .flat-group {
+    display: flex;
+    justify-content: space-between;
+  }
+
   & .year-inputs {
     display: flex;
     justify-content: space-between;
     align-items: stretch;
+    margin-top: 6px;
 
     & input {
       @apply --exploreControlInput;
@@ -373,62 +389,209 @@ table {
 
     & span {
       @apply --exploreControlTitles;
-      margin: 5px 0;
+      margin: auto;
+    }
+  }
+}
+
+.view-controls {
+  flex: 0 0 124px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  width: 124px;
+
+  & h3 {
+    @apply --exploreControlTitles;
+    margin: 20px 0 0;
+  }
+
+  & h4 {
+    margin: 0;
+    font-size: 9px;
+    color: var(--colorSlate);
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    line-height: 20px;
+    text-transform: uppercase;
+  }
+
+  & select {
+    width: 100%;
+    @apply --exploreControlInput;
+    background-image: url('../../../images/tri-dd-down.svg');
+    background-position: 100% 50%;
+    background-size: 30px 7px;
+    cursor: pointer;
+    margin-top: 6px;
+
+    &.add-control-input {
+      margin-top: 10px;
     }
   }
 
-  & .rc-slider {
-    margin: 10px 0 30px 0;
-  }
-  & .rc-slider-rail {
-    background-color: var(--colorTan);
-    height: 2px;
-    margin: 1px 0;
-  }
-  & .rc-slider-track {
-    background-color: var(--colorCtrlShape);
-    height: 2px;
-    margin: 1px 0;
-  }
-  & .rc-slider-handle {
-    background-color: var(--colorCtrlShape);
-    width: 8px;
-    height: 8px;
-    margin-left: -4px;
-    margin-top: -2px;
-    border: 1px solid var(--colorCtrlShape);
-  }
-  & .rc-slider-dot {
-    border: 1px solid var(--colorTan);
-  }
-  & .rc-slider-dot-active {
-    background-color: var(--colorCtrlShape);
-    border: 1px solid var(--colorCtrlShape);
-  }
-  & .rc-slider-dot:first-child {
-    width: 1px;
-    border-radius: 0;
-  }
-  & .rc-slider-mark-text {
-    color: var(--colorTan);
-    font-size: 9px;
-    font-weight: 600;
-  }
-  & .rc-slider-mark {
-    left: 7%;
-    width: 90%;
-  }
-
-  & .ranking-table {
+  & .control-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
+    margin: 0;
+    padding: 11px 5px 6px 30px;
+    box-sizing: border-box;
+    background-color: var(--colorSlate);
+
+    & h2 {
+      position: relative;
+      margin: 0;
+      color: var(--colorEggshell);
+      font-size: 12px;
+      letter-spacing: 0.7px;
+      font-weight: 400;
+
+      &.rankings {
+        &::before {
+          content: '';
+          position: absolute;
+          background: url('../../../images/icon-rankings.svg') no-repeat;
+          background-size: contain;
+          width: 16px;
+          height: 9px;
+          margin: 2px 0 0 -20px;
+        }
+      }
+    }
   }
 
-  & .viz-shell {
-    border:solid green 1px;
-    flex: 1;
+  & .options {
+    & li {
+      & a {
+        @apply --bodyLink;
+        @apply --exploreControlTitles;
+        color: inherit;
+
+        &.active {
+          color: var(--colorDark);
+          font-weight: 700;
+          border-bottom: 2px solid var(--colorCtrlShape);
+          &:hover {
+            border-bottom: 2px solid var(--colorCtrlShape);
+            cursor: default;
+          }
+        }
+      }
+    }
   }
+
+  & .list-options {
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    & li {
+      list-style-type: none;
+    }
+  }
+
+  & .flat-options {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+
+    & li {
+      display: inline-block;
+
+      &:after {
+        content: "|";
+        font-size: 11px;
+        padding: 0 4px;
+      }
+
+      &:last-child:after {
+        content: "";
+      }
+    }
+  }
+
+  & .flat-options-w-title {
+    display: flex;
+
+    & ul {
+      display: flex;
+      margin: 15px 0 0 0;
+    }
+
+    & h3 {
+      display: inline-block;
+      margin: 20px 6px 0 0;
+    }
+  }
+
+  & .control-group {
+    border: solid 1px var(--colorSand);
+    margin-bottom: 9px;
+    padding: 13px 11px 18px;
+    box-sizing: border-box;
+  }
+
+  & .key-group {
+    & > h3 {
+      margin: 0 0 8px;
+    }
+  }
+
+  & .flat-group {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+/* override Timeline styles */
+.rc-slider {
+  margin: 8px 0 30px 0;
+}
+
+.rc-slider-rail {
+  background-color: var(--colorTan);
+  height: 2px;
+  margin: 1px 0;
+}
+
+.rc-slider-track {
+  background-color: var(--colorCtrlShape);
+  height: 2px;
+  margin: 1px 0;
+}
+
+.rc-slider-handle {
+  background-color: var(--colorCtrlShape);
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  margin-top: -2px;
+  border: 1px solid var(--colorCtrlShape);
+}
+
+.rc-slider-dot {
+  border: 1px solid var(--colorTan);
+}
+
+.rc-slider-dot-active {
+  background-color: var(--colorCtrlShape);
+  border: 1px solid var(--colorCtrlShape);
+}
+
+.rc-slider-dot:first-child {
+  width: 1px;
+  border-radius: 0;
+}
+
+.rc-slider-mark-text {
+  color: var(--colorTan);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.rc-slider-mark {
+  left: 7%;
+  width: 90%;
 }
 
 .rc-slider-tooltip-placement-top .rc-slider-tooltip-arrow {
