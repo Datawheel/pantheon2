@@ -16,7 +16,7 @@ import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeo
 import {fetchAllOccupations} from "actions/occupation";
 import {YEAR_BUCKETS} from "types";
 import {Geomap, Priestley, Treemap, StackedArea} from "d3plus-react";
-import {groupBy, groupTooltip, peopleTooltip, shapeConfig} from "viz/helpers";
+import {groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 
 import {extent} from "d3-array";
 
@@ -115,9 +115,10 @@ class Place extends Component {
               data: tmapBornData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+              on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
               time: "birthyear",
-              tooltipConfig: groupTooltip(tmapBornData)
+              tooltipConfig: groupTooltip(tmapBornData, d => d.occupation.occupation_slug)
             }} />,
           <Treemap
             key="tmap2"
@@ -126,9 +127,10 @@ class Place extends Component {
               data: tmapDeathData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+              on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
               time: "deathyear",
-              tooltipConfig: groupTooltip(tmapDeathData)
+              tooltipConfig: groupTooltip(tmapDeathData, d => d.occupation.occupation_slug)
             }} />
         ]
       },
@@ -176,6 +178,7 @@ class Place extends Component {
                     depth: 1,
                     fitFilter: `${country.country_num}`,
                     groupBy: ["event", "place_name"],
+                    on: on("place", d => d.place.slug),
                     shapeConfig: {
                       fill: d => d.event.toLowerCase().indexOf("birth") > 0
                                ? "rgba(76, 94, 215, 0.4)"
@@ -188,7 +191,7 @@ class Place extends Component {
                         strokeWidth: 0.75
                       }
                     },
-                    tooltipConfig: groupTooltip(geomapData)
+                    tooltipConfig: groupTooltip(geomapData, d => d.place.slug)
                   }} />]
       },
       {
@@ -202,6 +205,7 @@ class Place extends Component {
                     depth: 1,
                     end: "deathyear",
                     groupBy: ["domain", "name"].map(groupBy(attrs)),
+                    on: on("person", d => d.slug),
                     start: "birthyear",
                     shapeConfig: Object.assign({}, shapeConfig(attrs), {
                       labelPadding: 2

@@ -14,7 +14,7 @@ export function groupBy(attrs) {
 
 }
 
-export function groupTooltip(data) {
+export function groupTooltip(data, accessor = () => []) {
   return {
     body: d => {
       const names = d.name instanceof Array ? d.name.slice(0, 3) : [d.name];
@@ -25,6 +25,19 @@ export function groupTooltip(data) {
         txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
       });
       return txt;
+    },
+    footer: d => {
+      const id = accessor(d);
+      return id instanceof Array ? "Click to Highlight" : "Click to View Profile";
+    }
+  };
+}
+
+export function on(category, accessor) {
+  return  {
+    "click.shape": d => {
+      const id = accessor(d);
+      if (!(id instanceof Array)) window.location.href = `/profile/${category}/${id}`;
     }
   };
 }
@@ -37,7 +50,8 @@ export const peopleTooltip = {
     return d.deathyear !== null
          ? `<span class="center">${d.birthyear} - ${d.deathyear}, ${age} years old</span>`
          : `<span class="center">Born ${d.birthyear}, ${age} years old</span>`;
-  }
+  },
+  footer: d => d.name instanceof Array ? "Click to Highlight" : "Click to View Profile"
 };
 
 export function shapeConfig(attrs) {

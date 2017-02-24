@@ -16,7 +16,7 @@ import NotFound from "components/NotFound";
 import {fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations} from "actions/occupation";
 import {COLORS_CONTINENT, YEAR_BUCKETS} from "types";
 import {Priestley, StackedArea, Treemap} from "d3plus-react";
-import {groupBy, groupTooltip, peopleTooltip, shapeConfig} from "viz/helpers";
+import {groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 
 import {extent} from "d3-array";
 
@@ -102,9 +102,10 @@ class Occupation extends Component {
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
+              on: on("place", d => d.birthcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               time: "birthyear",
-              tooltipConfig: groupTooltip(tmapBornData),
+              tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
           <Treemap
@@ -114,9 +115,10 @@ class Occupation extends Component {
               data: tmapDeathData,
               depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
+              on: on("place", d => d.deathcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               time: "deathyear",
-              tooltipConfig: groupTooltip(tmapDeathData),
+              tooltipConfig: groupTooltip(tmapBornData, d => d.deathcountry.slug),
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
         ]
@@ -133,9 +135,10 @@ class Occupation extends Component {
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
+              on: on("place", d => d.birthcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               time: "bucketyear",
-              tooltipConfig: groupTooltip(tmapBornData),
+              tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />,
@@ -146,9 +149,10 @@ class Occupation extends Component {
               data: tmapDeathData,
               depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
+              on: on("place", d => d.deathcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               time: "bucketyear",
-              tooltipConfig: groupTooltip(tmapDeathData),
+              tooltipConfig: groupTooltip(tmapDeathData, d => d.deathcountry.slug),
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />
@@ -167,6 +171,7 @@ class Occupation extends Component {
               depth: 1,
               end: "deathyear",
               groupBy: ["diedcontinent", "name"],
+              on: on("person", d => d.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
               start: "birthyear",
               tooltipConfig: peopleTooltip
@@ -187,9 +192,10 @@ class Occupation extends Component {
               depth: 1,
               groupBy: ["industry", "occupation_name"].map(groupBy(attrs)),
               legend: false,
+              on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
               time: "birthyear",
-              tooltipConfig: groupTooltip(tmapDomainData),
+              tooltipConfig: groupTooltip(tmapDomainData, d => d.occupation.occupation_slug),
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />,
           <StackedArea
@@ -201,12 +207,13 @@ class Occupation extends Component {
               depth: 1,
               groupBy: ["industry", "occupation_name"].map(groupBy(attrs)),
               legend: false,
+              on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: Object.assign({}, shapeConfig(attrs), {
                 stroke: () => "#F4F4F1",
                 strokeWidth: () => 1
               }),
               time: "bucketyear",
-              tooltipConfig: groupTooltip(tmapDomainData),
+              tooltipConfig: groupTooltip(tmapDomainData, d => d.occupation.occupation_slug),
               x: "bucketyear",
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />

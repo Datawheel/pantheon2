@@ -31,7 +31,7 @@ export function fetchAllOccupations(store) {
 export function fetchPeople(store) {
   const getPeopleProm = makeOccupationRequest('get', null, null, `/occupation?occupation_slug=eq.${store.id}&select=id`).then(function(profIdRes) {
     const profId = profIdRes.data[0].id;
-    return makeOccupationRequest("get", null, null, `/person?occupation=eq.${profId}&order=hpi.desc.nullslast&select=birthplace{id,name,slug},birthcountry{id,continent,country_name,name},deathcountry{id,continent,country_name,name},deathplace{id,name,slug},occupation{*},occupation_id:occupation,*`);
+    return makeOccupationRequest("get", null, null, `/person?occupation=eq.${profId}&order=hpi.desc.nullslast&select=birthplace{id,name,slug},birthcountry{id,continent,country_name,name,slug},deathcountry{id,continent,country_name,name,slug},deathplace{id,name,slug},occupation{*},occupation_id:occupation,*`);
   });
 
   return {
