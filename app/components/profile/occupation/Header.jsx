@@ -3,6 +3,7 @@ import styles from "css/components/profile/header";
 import sparklineSvg from "images/sparkline.svg";
 import placeholderImg from "images/placeholder_prof_hero.jpg";
 import {COLORS_DOMAIN} from "types";
+import {plural} from "pluralize";
 
 const Header = ({ occupation, people }) => {
 
@@ -26,7 +27,7 @@ const Header = ({ occupation, people }) => {
       <div className="info">
         <p className="top-desc">Cultural Production of</p>
         <h2 className="profile-type">Occupation</h2>
-        <h1 className="profile-name">{occupation.occupation}</h1>
+        <h1 className="profile-name">{plural(occupation.occupation)}</h1>
         <pre>
           <img className="sparkline" src={sparklineSvg} alt={"Sparkline here"} />
         </pre>
