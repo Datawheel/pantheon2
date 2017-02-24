@@ -9,7 +9,7 @@ const Data = ({children}) => {
     <div className="data">
       <Helmet
         htmlAttributes={{"lang": "en", "amp": undefined}}
-        title="Data"
+        title="Data - Pantheon"
         meta={config.meta}
         link={config.link}
       />

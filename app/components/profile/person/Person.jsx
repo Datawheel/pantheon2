@@ -119,7 +119,7 @@ class Person extends Component {
       <div className="person">
         <Helmet
           htmlAttributes={{lang: "en", amp: undefined}}
-          title={personProfile.person.name}
+          title={`${personProfile.person.name} - Pantheon`}
           meta={config.meta.concat([{property: "og:title", content: personProfile.person.name}])}
           link={config.link}
         />

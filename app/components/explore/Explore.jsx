@@ -7,7 +7,7 @@ const Explore = ({children}) => {
     <div className="explore-container">
       <Helmet
         htmlAttributes={{lang: "en", amp: undefined}}
-        title="Explore"
+        title="Explore Pantheon"
         meta={config.meta}
         link={config.link}
       />

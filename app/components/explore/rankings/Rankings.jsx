@@ -10,7 +10,7 @@ const Rankings = () => {
     <div className="explore">
       <Helmet
         htmlAttributes={{lang: "en", amp: undefined}}
-        title="Rankings"
+        title="Rankings - Pantheon"
         meta={config.meta}
         link={config.link}
       />

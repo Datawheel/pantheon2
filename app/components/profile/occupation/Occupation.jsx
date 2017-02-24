@@ -218,7 +218,7 @@ class Occupation extends Component {
       <div>
         <Helmet
           htmlAttributes={{lang: "en", amp: undefined}}
-          title={occupation.occupation}
+          title={`${occupation.occupation} - Pantheon`}
           meta={config.meta.concat([{property: "og:title", content: occupation.occupation}])}
           link={config.link}
         />

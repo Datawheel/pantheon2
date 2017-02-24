@@ -227,7 +227,7 @@ class Place extends Component {
       <div>
         <Helmet
           htmlAttributes={{lang: "en", amp: undefined}}
-          title={place.name}
+          title={`${place.name} - Pantheon`}
           meta={config.meta.concat([{property: "og:title", content: place.name}])}
           link={config.link}
         />

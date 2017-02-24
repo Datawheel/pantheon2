@@ -25,7 +25,7 @@ class Viz extends Component {
       <div className="explore">
         <Helmet
           htmlAttributes={{"lang": "en", "amp": undefined}}
-          title="Visual Explorer"
+          title="Visual Explorer - Pantheon"
           meta={config.meta}
           link={config.link}
         />
