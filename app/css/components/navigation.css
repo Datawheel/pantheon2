@@ -224,6 +224,7 @@
   }
 
   & .nav-btn {
+    cursor: pointer;
     display: none;
 
     & img {
