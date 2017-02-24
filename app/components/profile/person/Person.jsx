@@ -89,15 +89,9 @@ class Person extends Component {
                     height: 600,
                     title: "Title here...",
                     data: lineData,
-                    legendConfig: {
-                      shapeConfig: {
-                        fontColor: "#363636",
-                        fontFamily: () => "Amiko",
-                        fontSize: () => 12
-                      }
-                    },
                     time: d => d.x,
                     shapeConfig: {
+                      fill: d => d.color,
                       Line: {
                         fill: "none",
                         stroke: d => d.color,
