@@ -1,16 +1,23 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
-import sparklineSvg from "images/sparkline.svg";
 import {COLORS_DOMAIN} from "types";
 import {plural} from "pluralize";
+import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 
 const Header = ({occupation, people}) => {
 
-  const dates = people.map(d => new Date(`${d.birthyear}`)).sort((a, b) => a - b);
-  const sparkTicks = [new Date(Math.min(...dates)), new Date(Math.max(...dates))];
-  let count = 1;
-  const dateAndPeopleCount = dates.map(y => ({year: y, count: count++}));
+  const yearAndCount = nest()
+    .key(p => p.bucketyear)
+    .rollup(leaves => ({count: leaves.length, bucketyear: leaves[0].bucketyear}))
+    .entries(people.filter(p => p.bucketyear))
+    .sort((a, b) => a.value.bucketyear - b.value.bucketyear)
+    .map(d => Object.assign({}, d.value, {id: "line", txt: `${d.value.count} birth(s) between ${d.value.bucketyear - 49} and ${d.value.bucketyear}`}));
+
+  const sparkData = yearAndCount.concat([
+    Object.assign({}, yearAndCount[0], {shape: "Circle", id: "circle"}),
+    Object.assign({}, yearAndCount[yearAndCount.length - 1], {shape: "Circle", id: "circle"})
+  ]);
 
   return (
     <header className="hero">
@@ -34,49 +41,54 @@ const Header = ({occupation, people}) => {
         <h2 className="profile-type">Occupation</h2>
         <h1 className="profile-name">{plural(occupation.occupation)}</h1>
         <pre>
-          <LinePlot
-             config={{
-               data: dateAndPeopleCount,
-               height: 100,
-               groupBy: "person",
-               legend: false,
-               shape: d => d.shape || "Line",
-               shapeConfig: {
-                 Circle: {
-                   fill: "#4B4A48",
-                   r: () => 3.5
-                 },
-                 Line: {
-                   fill: "none",
-                   stroke: "#4B4A48",
-                   strokeWidth: 1
-                 }
+        <LinePlot
+           config={{
+             data: sparkData,
+             height: 100,
+             groupBy: "id",
+             legend: false,
+             shape: d => d.shape || "Line",
+             shapeConfig: {
+               Circle: {
+                 fill: "#4B4A48",
+                 r: () => 3.5
                },
-               time: d => d.year,
-               timeline: false,
-               width: 275,
-               x: d => d.year,
-               xConfig: {
-                 barConfig: {"stroke-width": 0},
-                 labels: sparkTicks,
-                 shapeConfig: {
-                   fill: "#4B4A48",
-                   fontColor: "#4B4A48",
-                   fontSize: () => 8,
-                   stroke: "#4B4A48"
-                 },
-                 ticks: sparkTicks,
-                 tickSize: 0,
-                 title: "PAGE VIEWS (PV)",
-                 titleConfig: {
-                   fontColor: "#4B4A48",
-                   fontFamily: () => "Amiko",
-                   fontSize: () => 10,
-                   stroke: "#4B4A48"
-                 }
-               },
-               y: d => d.count
-             }} />
+               Line: {
+                 fill: "none",
+                 stroke: "#4B4A48",
+                 strokeWidth: 1
+               }
+             },
+             time: d => d.bucketyear,
+             timeline: false,
+             tooltipConfig: {
+               body: d => d.txt,
+               title: "Individuals Born"
+             },
+             width: 275,
+             x: d => d.bucketyear,
+            //  xConfig: {
+            //    barConfig: {"stroke-width": 0},
+            //    labels: sparkTicks,
+            //    shapeConfig: {
+            //      fill: "#4B4A48",
+            //      fontColor: "#4B4A48",
+            //      fontSize: () => 8,
+            //      stroke: "#4B4A48"
+            //    },
+            //    ticks: sparkTicks,
+            //    tickSize: 0,
+            //    title: "Count",
+            //    titleConfig: {
+            //      fontColor: "#4B4A48",
+            //      fontFamily: () => "Amiko",
+            //      fontSize: () => 10,
+            //      stroke: "#4B4A48"
+            //    }
+            //  },
+             y: d => d.count,
+             yConfig: {labels: [], ticks: [], title: false}
+           }} />
         </pre>
       </div>
     </header>

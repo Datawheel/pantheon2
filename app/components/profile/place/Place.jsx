@@ -34,8 +34,6 @@ class Place extends Component {
     const {place, country, placeRanks, peopleBornHere, peopleDiedHere, occupationsBornHere, occupationsDiedHere, peopleBornHereAlive} = placeProfile;
     const {occupations} = occupationProfile;
 
-    // return <div>testing...</div>
-
     const tmapBornData = peopleBornHere
       .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);
@@ -52,8 +50,6 @@ class Place extends Component {
                    ? d.birthyear
                    : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
-
-    // console.log("tmapBornData", tmapBornData)
 
     const tmapDeathData = peopleDiedHere
       .filter(p => p.deathyear !== null)
@@ -235,7 +231,7 @@ class Place extends Component {
           meta={config.meta.concat([{property: "og:title", content: place.name}])}
           link={config.link}
         />
-        <Header place={place} country={country} />
+        <Header place={place} country={country} people={peopleBornHere} />
         <ProfileNav sections={sections} />
         <Intro place={place} placeRanks={placeRanks} />
         {sections.map((section, key) =>
