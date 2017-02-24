@@ -10,7 +10,7 @@ const MemMetrics = ({pageviews, person}) => {
   return (
     <div className="metrics-container">
       <div className="metric-vid">
-        {person.youtube ? <iframe width="560" height="315" src="https://www.youtube.com/embed/vw40NMa_0RM" frameBorder="0" allowFullScreen></iframe> : <a href="" className="press-play"><i></i></a>}
+        {person.youtube ? <iframe width="560" height="315" src={`https://www.youtube.com/embed/${person.youtube}`} frameBorder="0" allowFullScreen></iframe> : <a href="" className="press-play"><i></i></a>}
       </div>
       <ul className="metrics-list">
         <li className="metric">
