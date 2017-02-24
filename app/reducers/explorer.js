@@ -109,7 +109,7 @@ const occupation = (
           domain: occupation.domain,
           industry: occupation.industry,
           slug: occupation.occupation_slug,
-          name: occupation.occupation_name,
+          name: occupation.occupation,
           occupations: occupation.id
         };
       })

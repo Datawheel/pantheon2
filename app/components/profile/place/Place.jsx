@@ -111,7 +111,6 @@ class Place extends Component {
             key="tmap1"
             config={{
               title: `Occupations of People Born in ${place.name}`,
-              attrs: occupations,
               data: tmapBornData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
@@ -123,7 +122,6 @@ class Place extends Component {
             key="tmap2"
             config={{
               title: `Occupations of People Deceased in ${place.name}`,
-              attrs: occupations,
               data: tmapDeathData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
