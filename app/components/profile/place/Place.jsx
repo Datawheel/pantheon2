@@ -6,6 +6,7 @@ import Header from "components/profile/place/Header";
 import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/place/Intro";
 import Section from "components/profile/Section";
+import Footer from "components/profile/place/Footer";
 import PeopleRanking from "components/profile/place/PeopleRanking";
 import Occupations from "components/profile/place/Occupations";
 import OccupationTrends from "components/profile/place/OccupationTrends";
@@ -244,6 +245,7 @@ class Place extends Component {
             {section.viz && section.viz.length ? section.viz : null}
           </Section>
         )}
+        <Footer />
       </div>
     );
   }

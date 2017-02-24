@@ -6,6 +6,7 @@ import ProfileNav from "components/profile/Nav";
 import Section from "components/profile/Section";
 import Header from "components/profile/person/Header";
 import Intro from "components/profile/person/Intro";
+import Footer from "components/profile/person/Footer";
 import MemMetrics from "components/profile/person/MemMetrics";
 import OccupationRanking from "components/profile/person/OccupationRanking";
 import YearRanking from "components/profile/person/YearRanking";
@@ -136,6 +137,7 @@ class Person extends Component {
             {section.viz ? <div className="viz">{section.viz}</div> : null}
           </Section>
         )}
+        <Footer person={personProfile.person} ranking={personProfile.occupationRank} />
       </div>
     );
   }

@@ -5,6 +5,7 @@ import config from "helmconfig.js";
 import Header from "components/profile/occupation/Header";
 import ProfileNav from "components/profile/Nav";
 import Intro from "components/profile/occupation/Intro";
+import Footer from "components/profile/occupation/Footer";
 import People from "components/profile/occupation/People";
 import Places from "components/profile/occupation/Places";
 import PlacesTime from "components/profile/occupation/PlacesTime";
@@ -235,6 +236,7 @@ class Occupation extends Component {
             {section.viz && section.viz.length ? section.viz : null}
           </Section>
         )}
+        <Footer />
       </div>
     );
   }

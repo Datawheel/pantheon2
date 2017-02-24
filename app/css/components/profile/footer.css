@@ -52,10 +52,12 @@
     box-sizing: border-box;
     border: 1px solid var(--colorMatza);
 
-    & img {
-      width: 105%;
-      margin-top: -7%;
-      margin-left: -2.5%;
+    & a {
+      background-size: cover;
+      background-position: 25% 50%;
+      width: 100%;
+      height: 100%;
+      display: block;
     }
   }
 
