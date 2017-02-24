@@ -2,7 +2,6 @@ import React from "react";
 import styles from "css/components/home";
 import searchSvg from "images/icon-search.svg";
 import pantheonLogoSvg from "images/logo.svg";
-import placeholderHome from "images/placeholder_home.png";
 
 /*
  * Note: This is kept as a container-level component,
@@ -13,29 +12,42 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-head">
-        <h1><img src={pantheonLogoSvg} alt={`Pantheon`} /></h1>
+        <h1><img src={pantheonLogoSvg} alt="Pantheon" /></h1>
         <h3>Mapping Cultural Memory</h3>
         <div className="home-search">
-          <img src={searchSvg} alt={`Search`} />
+          <img src={searchSvg} alt="Search" />
           <input type={"text"} placeholder={"Napoleon, fine arts, Syria"} />
         </div>
       </div>
       <div className="home-body">
         <div className="home-blog-post">
-          <h3>Leonardo Da Vinci</h3>
-          <span>01/30/17</span>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut accumsan est et ipsum vestibulum, vel hendrerit ex consectetur. Integer gravida ultrices dolor, in tincidunt dolor ultricies at. Sed sollicitudin tempor risus, quis suscipit sapien dignissim quis. Aenean eleifend porttitor magna, vel fermentum ex porttitor in. Praesent a cursus ante. Sed tempor fermentum mattis. Cras ac dui arcu. Duis ex metus, pharetra pretium purus sit amet, imperdiet semper leo. Ut sodales porta condimentum. Praesent tristique lobortis augue ut viverra.
-          </p>
+          <p><strong>Pantheon</strong> is a data research project celebrating the cultural information that endows our species with these fantastic capacities. The goal is to explore our global cultural heritage and the process of cultural development. To begin exploring the Pantheon dataset, choose a <strong>Communication Era</strong>:</p>
         </div>
-        <div className="home-blog-post">
-          <h3>Frida Kahlo</h3>
-          <span>01/14/17</span>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut accumsan est et ipsum vestibulum, vel hendrerit ex consectetur. Integer gravida ultrices dolor, in tincidunt dolor ultricies at. Sed sollicitudin tempor risus, quis suscipit sapien dignissim quis. Aenean eleifend porttitor magna, vel fermentum ex porttitor in. Praesent a cursus ante. Sed tempor fermentum mattis. Cras ac dui arcu. Duis ex metus, pharetra pretium purus sit amet, imperdiet semper leo. Ut sodales porta condimentum. Praesent tristique lobortis augue ut viverra.
-          </p>
+
+        <div className="timeline-container">
+          <div className="stacked-viz"></div>
+          <div className="era smartphone">
+            <div className="era-img"></div>
+            <p><a href="#">Smartphone Era</a></p>
+          </div>
+          <div className="era television">
+            <div className="era-img"></div>
+            <p><a href="#">Television Era</a></p>
+          </div>
+          <div className="era film-radio">
+            <div className="era-img"></div>
+            <p><a href="#">Film & Radio Era</a></p>
+          </div>
+          <div className="era printing">
+            <div className="era-img"></div>
+            <p><a href="#">Printing Era</a></p>
+          </div>
+          <div className="era scribal">
+            <div className="era-img"></div>
+            <p><a href="#">Scribal Era</a></p>
+          </div>
         </div>
-        <div className="placeholder-home-img"></div>
+
         <div className="floating-content l-1">
           <div className="box"></div>
           <div className="box"></div>

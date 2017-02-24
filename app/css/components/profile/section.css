@@ -72,7 +72,8 @@
 
     & p {
       @apply --bodyText;
-      max-width: 62%;
+      width: 62%;
+      min-width: 335px;
     }
 
     & a {
