@@ -38,43 +38,30 @@ class Person extends Component {
     const {personProfile} = this.props;
     const occupation = personProfile.person.occupation;
 
-    const maxPageViews = Math.max(...personProfile.pageviews.map(d => d.num_pageviews));
+    const maxPageViews = Math.max(...personProfile.pageviews.map(d => d.num_pageviews || 0));
     const totalPageViews = personProfile.pageviews.reduce((sum, d) => sum + d.num_pageviews, 0);
-    const totalLanguages = personProfile.creationdates.length;
-    let languageCounter = 0;
+    const totalLanguages = Math.max(...personProfile.pageviews.map(d => d.num_langs || 0));
     const lMod = 0.95;
-    const lineData = personProfile.creationdates
-      .sort((a, b) => new Date(a.creation_date) - new Date(b.creation_date))
-      .map(d => {
-        languageCounter++;
-        return {
+
+    const lineData = personProfile.pageviews
+      .sort((a, b) => new Date(a.pageview_date) - new Date(b.pageview_date))
+      .reduce((arr, d) => {
+        arr.push({
           color: "#67AF8C",
           id: "LANGUAGES (L)",
-          langs: languageCounter,
-          x: new Date(d.creation_date),
-          y: languageCounter / totalLanguages * lMod
-        };
-      })
-      .concat(personProfile.pageviews.map(d => ({
-        color: "#4C5ED7",
-        id: "PAGE VIEWS (PV)",
-        views: d.num_pageviews,
-        x: new Date(d.pageview_date),
-        y: d.num_pageviews / maxPageViews
-      })));
-
-    const latestLanguage = Math.max(...personProfile.creationdates.map(d => new Date(d.creation_date))),
-          latestPageView = Math.max(...personProfile.pageviews.map(d => new Date(d.pageview_date)));
-
-    if (latestPageView > latestLanguage) {
-      lineData.push({
-        color: "#67AF8C",
-        langs: languageCounter,
-        id: "LANGUAGES (L)",
-        x: latestPageView,
-        y: 1 * lMod
-      });
-    }
+          langs: d.num_langs || 0,
+          x: new Date(d.pageview_date),
+          y: (d.num_langs || 0) / totalLanguages * lMod
+        });
+        arr.push({
+          color: "#4C5ED7",
+          id: "PAGE VIEWS (PV)",
+          views: d.num_pageviews || 0,
+          x: new Date(d.pageview_date),
+          y: d.num_pageviews / maxPageViews
+        });
+        return arr;
+      }, []);
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageviews={personProfile.pageviews} person={personProfile.person} />},
