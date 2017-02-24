@@ -1,4 +1,15 @@
 import {COLORS_DOMAIN} from "types";
+import {scaleLinear, scaleLog} from "d3-scale";
+
+const domain = [1, 100], maxYear = 2016, minYear = -3500;
+const yearMap = scaleLinear().domain([maxYear, minYear]).range(domain);
+const logMap = scaleLog().domain(domain).rangeRound([50, 1]);
+
+function bucketScale(val) {
+  return logMap(yearMap(val));
+}
+bucketScale.invert = val => Math.round(yearMap.invert(logMap.invert(new Date(val).getFullYear())));
+export {bucketScale};
 
 export function groupBy(attrs) {
 

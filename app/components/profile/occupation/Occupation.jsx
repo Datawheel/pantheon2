@@ -14,9 +14,9 @@ import RelatedOccupations from "components/profile/occupation/RelatedOccupations
 import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
 import {fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations} from "actions/occupation";
-import {COLORS_CONTINENT, YEAR_BUCKETS} from "types";
+import {COLORS_CONTINENT, FORMATTERS, YEAR_BUCKETS} from "types";
 import {Priestley, StackedArea, Treemap} from "d3plus-react";
-import {groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 
 import {extent} from "d3-array";
 
@@ -44,6 +44,7 @@ class Occupation extends Component {
       d.domain = d.occupation.domain;
       d.occupation_id = `${d.occupation_id}`;
       d.occupation_name = d.occupation.occupation;
+      d.logyear = bucketScale(d.birthyear);
       d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
@@ -57,6 +58,9 @@ class Occupation extends Component {
     tmapBornData.forEach(d => {
       d.borncountry = d.birthcountry.country_name;
       d.borncontinent = d.birthcountry.continent;
+      d.logyear = birthyearSpan < YEAR_BUCKETS * 2
+                ? d.birthyear
+                : bucketScale(d.birthyear);
       d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
                    ? d.birthyear
                    : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
@@ -72,6 +76,9 @@ class Occupation extends Component {
     tmapDeathData.forEach(d => {
       d.diedcountry = d.deathcountry.country_name;
       d.diedcontinent = d.deathcountry.continent;
+      d.logyear = deathyearSpan < YEAR_BUCKETS * 2
+                ? d.deathyear
+                : bucketScale(d.deathyear);
       d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
                    ? d.deathyear
                    : Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
@@ -137,9 +144,13 @@ class Occupation extends Component {
               groupBy: ["borncontinent", "borncountry"],
               on: on("place", d => d.birthcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-              time: "bucketyear",
+              time: "logyear",
+              timeline: false,
               tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
-              x: "bucketyear",
+              x: "logyear",
+              xConfig: {
+                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
+              },
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />,
           <StackedArea
@@ -151,9 +162,13 @@ class Occupation extends Component {
               groupBy: ["diedcontinent", "diedcountry"],
               on: on("place", d => d.deathcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              time: "bucketyear",
+              time: "logyear",
+              timeline: false,
               tooltipConfig: groupTooltip(tmapDeathData, d => d.deathcountry.slug),
-              x: "bucketyear",
+              x: "logyear",
+              xConfig: {
+                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
+              },
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />
         ]
@@ -212,9 +227,13 @@ class Occupation extends Component {
                 stroke: () => "#F4F4F1",
                 strokeWidth: () => 1
               }),
-              time: "bucketyear",
+              time: "logyear",
+              timeline: false,
               tooltipConfig: groupTooltip(tmapDomainData, d => d.occupation.occupation_slug),
-              x: "bucketyear",
+              x: "logyear",
+              xConfig: {
+                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
+              },
               y: d => d.id instanceof Array ? d.id.length : 1
             }} />
         ]

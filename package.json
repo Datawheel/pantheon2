@@ -46,6 +46,7 @@
     "d3-array": "^1.0.1",
     "d3-collection": "^1.0.1",
     "d3-format": "^1.0.2",
+    "d3-scale": "^1.0.4",
     "d3-time-format": "^2.0.2",
     "d3plus-react": "^0.2.2",
     "d3plus-text": "^0.9.11",

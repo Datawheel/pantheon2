@@ -14,9 +14,9 @@ import LivingPeople from "components/profile/place/LivingPeople";
 import NotFound from "components/NotFound";
 import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchPeopleBornHereAlive} from "actions/place";
 import {fetchAllOccupations} from "actions/occupation";
-import {YEAR_BUCKETS} from "types";
+import {FORMATTERS, YEAR_BUCKETS} from "types";
 import {Geomap, Priestley, Treemap, StackedArea} from "d3plus-react";
-import {groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 
 import {extent} from "d3-array";
 
@@ -46,6 +46,9 @@ class Place extends Component {
       d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
       d.place = d.birthplace;
+      d.logyear = birthyearSpan < YEAR_BUCKETS * 2
+                ? d.birthyear
+                : bucketScale(d.birthyear);
       d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
                    ? d.birthyear
                    : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
@@ -65,6 +68,9 @@ class Place extends Component {
       d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
       d.place = d.deathplace;
+      d.logyear = deathyearSpan < YEAR_BUCKETS * 2
+                ? d.deathyear
+                : bucketScale(d.deathyear);
       d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
                    ? d.deathyear
                    : Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
@@ -140,12 +146,15 @@ class Place extends Component {
                 config={{
                   title: "Births Over Time",
                   data: tmapBornData,
-                  depth: 1,
-                  groupBy: ["domain", "industry"].map(groupBy(attrs)),
+                  groupBy: ["domain"].map(groupBy(attrs)),
                   shapeConfig: shapeConfig(attrs),
-                  time: "bucketyear",
+                  time: "logyear",
+                  timeline: false,
                   tooltipConfig: groupTooltip(tmapBornData),
-                  x: "bucketyear",
+                  x: "logyear",
+                  xConfig: {
+                    tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
+                  },
                   y: d => d.id instanceof Array ? d.id.length : 1
                 }} />,
           <StackedArea
@@ -153,12 +162,15 @@ class Place extends Component {
                 config={{
                   title: "Deaths Over Time",
                   data: tmapDeathData,
-                  depth: 1,
-                  groupBy: ["domain", "industry"].map(groupBy(attrs)),
+                  groupBy: ["domain"].map(groupBy(attrs)),
                   shapeConfig: shapeConfig(attrs),
-                  time: "bucketyear",
+                  time: "logyear",
+                  timeline: false,
                   tooltipConfig: groupTooltip(tmapDeathData),
-                  x: "bucketyear",
+                  x: "logyear",
+                  xConfig: {
+                    tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
+                  },
                   y: d => d.id instanceof Array ? d.id.length : 1
                 }} />
         ]
