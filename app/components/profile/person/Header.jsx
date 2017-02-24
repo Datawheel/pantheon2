@@ -81,7 +81,8 @@ const Header = ({pageviews, person}) => {
                    stroke: "#4B4A48"
                  }
                },
-               y: d => d.num_pageviews
+               y: d => d.num_pageviews,
+               yConfig: {labels: [], ticks: [], title: false}
              }} />
         </pre>
       </div>
