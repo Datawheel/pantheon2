@@ -31,3 +31,14 @@ body {
 }
 
 */
+
+a {
+  text-decoration: none;
+  outline: none;
+}
+
+.items, .sub-items {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

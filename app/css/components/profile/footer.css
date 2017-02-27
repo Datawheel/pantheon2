@@ -16,7 +16,7 @@
   }
 
   & .footer-title {
-    @apply --profileVizTitle;
+    @apply --sectionTitle;
     color: var(--colorEggshell);
     max-width: 200px;
     display: block;

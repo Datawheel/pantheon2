@@ -10,8 +10,7 @@ import horizSt from "images/home/stacked_viz_horiz.png";
  *  i.e. We should keep this as the container that does the data-fetching
  *  and dispatching of actions if you decide to have any sub-components.
  */
-const Home = () => {
-  return (
+const Home = () =>
     <div className="home-container">
       <div className="home-head">
         <h1><img src={pantheonLogoSvg} alt="Pantheon" /></h1>
@@ -33,7 +32,6 @@ const Home = () => {
         </div>
 
         <div className="ia">
-          <h3>What makes up Pantheon?</h3>
           <img src={iaPng} alt="IA Placeholder" />
         </div>
 
@@ -80,7 +78,6 @@ const Home = () => {
         <div className="flying-plane"></div>
       </div>
     </div>
-  );
-};
+  ;
 
 export default Home;

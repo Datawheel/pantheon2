@@ -147,9 +147,8 @@
   & h1 {
     max-width: 520px;
     text-align: center;
-    @apply --heading;
-    font-family: var(--fontAmiko);
-    letter-spacing: 0;
+    @apply --sectionTitle;
+    color: var(--colorBlackhole);
     text-transform: none;
   }
 

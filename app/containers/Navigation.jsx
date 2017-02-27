@@ -1,7 +1,7 @@
-import React, { PropTypes } from "react";
-import { Link } from "react-router";
-import { connect } from "react-redux";
-import { logOut, activateSearch } from "actions/users";
+import React, {PropTypes} from "react";
+import {Link} from "react-router";
+import {connect} from "react-redux";
+import {logOut, activateSearch} from "actions/users";
 import classNames from "classnames/bind";
 import styles from "css/components/navigation";
 import pantheonLogoSvg from "images/logo.svg";
@@ -11,21 +11,23 @@ import closeSvg from "images/icon-close.svg";
 
 const toggleSubNav = (e) => {
   const itemChildren = e.target.childNodes;
-  itemChildren.forEach((child)=>{
-    if(child.nodeType === 1 && child.tagName === "UL") {
+  itemChildren.forEach(child => {
+    if (child.nodeType === 1 && child.tagName === "UL") {
       child.style.display = "block";
     }
-  })
-}
+  });
+};
 
-const Navigation = ({ user, logOut, activateSearch }) => {
-    return (
+const Navigation = ({user, logOut, activateSearch}) => {
+  return (
       <nav>
         <div className="navigation global-nav" role="navigation">
           <ul className="items">
-            <li className="nav-btn" onClick={() => { document.querySelector(".m-navigation").style.display = "block"; }}>
+            <li className="nav-btn" onClick={() => {
+              document.querySelector(".m-navigation").style.display = "block";
+            }}>
               <span>
-                <img src={navSvg} alt={`Open navigation.`} />
+                <img src={navSvg} alt="Open navigation." />
               </span>
             </li>
             <li className="item">
@@ -46,7 +48,7 @@ const Navigation = ({ user, logOut, activateSearch }) => {
             </li>
             <li className="item home-link">
               <a href="/" className="home">
-                <img className="logo" src={pantheonLogoSvg} alt={`Pantheon`} />
+                <img className="logo" src={pantheonLogoSvg} alt="Pantheon" />
               </a>
             </li>
             <li className="item">
@@ -72,7 +74,7 @@ const Navigation = ({ user, logOut, activateSearch }) => {
             </li>
             <li className="search-btn">
               <span onClick={ activateSearch }>
-                <img src={searchSvg} alt={`Search`} />
+                <img src={searchSvg} alt="Search" />
               </span>
             </li>
           </ul>
@@ -80,10 +82,12 @@ const Navigation = ({ user, logOut, activateSearch }) => {
         <div className="m-navigation global-nav">
           <div className="logo-container">
             <a href="/" className="home">
-              <img className="logo" src={pantheonLogoSvg} alt={`Pantheon`} />
+              <img className="logo" src={pantheonLogoSvg} alt="Pantheon" />
             </a>
-            <span className="close-btn" onClick={() => { document.querySelector(".m-navigation").style.display = "none"; }}>
-              <img src={closeSvg} alt={`Close navigation.`} />
+            <span className="close-btn" onClick={() => {
+              document.querySelector(".m-navigation").style.display = "none";
+            }}>
+              <img src={closeSvg} alt="Close navigation." />
             </span>
           </div>
           <ul className="items">
@@ -130,7 +134,7 @@ const Navigation = ({ user, logOut, activateSearch }) => {
           </ul>
         </div>
       </nav>
-    );
+  );
 };
 
 Navigation.propTypes = {
@@ -145,4 +149,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { logOut, activateSearch })(Navigation);
+export default connect(mapStateToProps, {logOut, activateSearch})(Navigation);
