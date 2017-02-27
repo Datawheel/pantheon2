@@ -42,6 +42,22 @@ CREATE TABLE year
   num_died integer
 );
 
+CREATE TABLE era
+(
+  id serial PRIMARY KEY,
+  name CHARACTER VARYING(255) NOT NULL,
+  slug CHARACTER VARYING(255),
+  description text NOT NULL,
+  start_year integer NOT NULL,
+  end_year integer NOT NULL
+);
+INSERT INTO "public"."era"("name", "slug", "description", "start_year", "end_year") VALUES('Before 1450', 'pre-1450', 'The Pre 1450 Era is defined by...', 0, 1449) RETURNING "id", "name", "slug", "description", "start_year", "end_year";
+INSERT INTO "public"."era"("name", "slug", "description", "start_year", "end_year") VALUES('1450 - 1699', '1450-1699', 'The 1450 - 1699 Era is defined by...', 1450, 1699) RETURNING "id", "name", "slug", "description", "start_year", "end_year";
+INSERT INTO "public"."era"("name", "slug", "description", "start_year", "end_year") VALUES('1700 - 1899', '1700-1899', 'The 1700 - 1899 Era is defined by...', 1700, 1899) RETURNING "id", "name", "slug", "description", "start_year", "end_year";
+INSERT INTO "public"."era"("name", "slug", "description", "start_year", "end_year") VALUES('1900 - 1949', '1900-1949', 'The 1900 - 1949 Era is defined by...', 1900, 1949) RETURNING "id", "name", "slug", "description", "start_year", "end_year";
+INSERT INTO "public"."era"("name", "slug", "description", "start_year", "end_year") VALUES('1950 - Present', '1950-present', 'The 1950 - Present daty Era is defined by...', 1950, 2016) RETURNING "id", "name", "slug", "description", "start_year", "end_year";
+
+
 CREATE TABLE occupation
 (
   id serial PRIMARY KEY,
