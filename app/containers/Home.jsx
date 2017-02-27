@@ -2,6 +2,8 @@ import React from "react";
 import styles from "css/components/home";
 import searchSvg from "images/icon-search.svg";
 import pantheonLogoSvg from "images/logo.svg";
+import iaPng from "images/home/ia_placeholder.png";
+import horizSt from "images/home/stacked_viz_horiz.png";
 
 /*
  * Note: This is kept as a container-level component,
@@ -20,8 +22,19 @@ const Home = () => {
         </div>
       </div>
       <div className="home-body">
-        <div className="home-blog-post">
-          <p><strong>Pantheon</strong> is a data research project celebrating the cultural information that endows our species with these fantastic capacities. The goal is to explore our global cultural heritage and the process of cultural development. To begin exploring the Pantheon dataset, choose a <strong>Communication Era</strong>:</p>
+        <div className="post">
+          <p><strong>Pantheon</strong> is a data research project celebrating the cultural information that endows our species with these fantastic capacities. The goal is to explore our global cultural heritage and the process of cultural development. To begin exploring, choose a <strong>Communication Technology Era</strong>:</p>
+        </div>
+
+        <div className="post legend"></div>
+
+        <div className="horiz-stacked">
+          <img src={horizSt} alt="stacked placeholder" />
+        </div>
+
+        <div className="ia">
+          <h3>What makes up Pantheon?</h3>
+          <img src={iaPng} alt="IA Placeholder" />
         </div>
 
         <div className="timeline-container">
@@ -63,6 +76,8 @@ const Home = () => {
           <div className="box"></div>
           <div className="box"></div>
         </div>
+
+        <div className="flying-plane"></div>
       </div>
     </div>
   );

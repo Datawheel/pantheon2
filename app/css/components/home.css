@@ -99,7 +99,7 @@
     z-index: 2;
   }
 
-  & .home-blog-post {
+  & .post {
     @apply --bodyText;
     width: 62%;
     min-width: 335px;
@@ -112,13 +112,25 @@
       color: var(--colorTan);
       font-style: italic;
     }
+
+    &.legend {
+      height: 56px;
+      max-width: 590px;
+      width: 100%;
+      background-image: url("../../images/home/legend.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: 50% 0;
+      background-blend-mode: multiply;
+      background-color: var(--colorEggshell);
+    }
   }
 
   & .timeline-container {
     /*border: 1px solid red;*/
-    height: 1344px;
+    height: 1281px;
     width: 98%;
-    max-width: 889px;
+    max-width: 840px;
     margin: 0 auto;
     position: relative;
 
@@ -126,8 +138,8 @@
       position: absolute;
       right: 0;
       top: 0;
-      width: 59%;
-      max-width: 518px;
+      width: 58.5%;
+      max-width: 490px;
       height: 100%;
       /*border: 1px solid cyan;*/
       margin: 0;
@@ -189,6 +201,7 @@
 
         & .era-img {
           background-image: url("../../images/home/smartphone.png");
+          width: 60px;
         }
         & p {
           left: 52px;
@@ -197,11 +210,12 @@
       }
 
       &.television {
-        top: 150px;
+        top: 10.95%;
 
         & .era-img {
           margin-left: 100px;
           background-image: url("../../images/home/tv.png");
+          width: 76px;
         }
         & p {
           left: 182px;
@@ -210,11 +224,12 @@
       }
 
       &.film-radio {
-        top: 230px;
+        top: 17.11%;
 
         & .era-img {
           margin-left: 25px;
           background-image: url("../../images/home/film.png");
+          width: 50px;
         }
         & p {
           left: 78px;
@@ -223,11 +238,12 @@
       }
 
       &.printing {
-        top: 441px;
+        top: 33.82%;
 
         & .era-img {
           margin-left: 25px;
           background-image: url("../../images/home/printing.png");
+          width: 77px;
         }
         & p {
           left: 105px;
@@ -236,11 +252,12 @@
       }
 
       &.scribal {
-        top: 714px;
+        top: 53.11%;
 
         & .era-img {
           margin-left: 75px;
           background-image: url("../../images/home/scribal.png");
+          width: 65px;
         }
         & p {
           left: 140px;
@@ -248,6 +265,12 @@
         }
       }
     }
+  }
+
+  & .horiz-stacked {
+    width: 100%;
+    max-width: 1027px;
+    margin: 0px auto 100px;
   }
 
   & .home-body {
@@ -259,14 +282,14 @@
       height: 100%;
       left: 0;
       right: 0;
-      z-index: 0;
+      z-index: -2;
 
       & .box {
         display: block;
         position: absolute;
         bottom: -145px;
         animation: float 20s ease-in 10s infinite;
-        z-index: -1;
+        z-index: -2;
       }
 
       &.l-1 {
@@ -327,9 +350,44 @@
       }
     }
   }
+
+  & .ia {
+    @apply --themeDark;
+    width: 100%;
+    padding: 30px 0 45px;
+    text-align: center;
+    margin-bottom: 60px;
+
+    & img {
+      max-width: 950px;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  & .flying-plane {
+    width: 100px;
+    height: 50px;
+    background-image: url("../../images/home/plane.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 100% 0%;
+    background-blend-mode: multiply;
+    background-color: var(--colorEggshell);
+    z-index: -1;
+    position: absolute;
+    top: 20px;
+    left: -120px;
+    animation: fly 20s linear 1s infinite;
+  }
 }
 
 @keyframes float {
   from {bottom: -150px;}
   to {bottom: 1000px;}
+}
+
+@keyframes fly {
+  from {left: -120px; top: 20px;}
+  to {left: 102vw; top: 110px;}
 }
