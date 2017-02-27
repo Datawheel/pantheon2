@@ -3,6 +3,7 @@ import user from "reducers/user";
 import personProfile from "reducers/personProfile";
 import placeProfile from "reducers/placeProfile";
 import occupationProfile from "reducers/occupationProfile";
+import eraProfile from "reducers/eraProfile";
 import rank from "reducers/rank";
 import rankings from "reducers/rankings";
 import explorer from "reducers/explorer";
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   personProfile,
   placeProfile,
   occupationProfile,
+  eraProfile,
   rankings,
   explorer,
   routing

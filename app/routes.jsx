@@ -9,6 +9,7 @@ import Profile from "components/profile/Profile";
 import Person from "components/profile/person/Person";
 import Place from "components/profile/place/Place";
 import Occupation from "components/profile/occupation/Occupation";
+import Era from "components/profile/era/Era";
 
 // about components
 import About from "components/about/About";
@@ -53,6 +54,9 @@ export default function checkId() {
     else if (path.includes("person")) {
       candidates = ["joseph_cook", "pope_paschal_ii", "nick_drake", "lewis_carroll", "eddie_irvine", "manfred,_king_of_sicily", "julius_caesar", "john_l._hall", "jenny_lind", "henri_nestle", "raif_badawi", "emma_shapplin", "beyonce", "jim_morrison"];
     }
+    else if (path.includes("/era")) {
+      candidates = ["pre-1450", "1450-1699", "1700-1899", "1900-1949", "1950-present"];
+    }
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
@@ -95,6 +99,7 @@ export default function checkId() {
         <Route path="person(/:id)" component={Person} onEnter={checkForId} />
         <Route path="place(/:id)" component={Place} onEnter={checkForId} />
         <Route path="occupation(/:id)" component={Occupation} onEnter={checkForId} />
+        <Route path="era(/:id)" component={Era} onEnter={checkForId} />
       </Route>
 
       <Route path="data" component={Data}>

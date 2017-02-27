@@ -41,6 +41,7 @@ const Navigation = ({ user, logOut, activateSearch }) => {
                 <li><a href="/profile/person" className="item-link">People</a></li>
                 <li><a href="/profile/place" className="item-link">Places</a></li>
                 <li><a href="/profile/occupation" className="item-link">Occupations</a></li>
+                <li><a href="/profile/era" className="item-link">Eras</a></li>
               </ul>
             </li>
             <li className="item home-link">
