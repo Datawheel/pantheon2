@@ -163,5 +163,8 @@ export function changeViz(newType) {
     }
     dispatch({type: "CHANGE_EXPLORER_VIZ", data: newType});
     dispatch({type: "CHANGE_EXPLORER_VIZ_CONFIG", data: config});
+    if (!explorer.data.length) {
+      return getVizData(dispatch, getState);
+    }
   };
 }

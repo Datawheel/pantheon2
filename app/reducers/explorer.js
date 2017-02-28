@@ -15,7 +15,7 @@ const data = (
 };
 
 const grouping = (
-  state = "occupations",
+  state = "places",
   action
 ) => {
   switch (action.type) {
@@ -28,7 +28,7 @@ const grouping = (
 
 
 const years = (
-  state = [-4000, 2000],
+  state = [1900, 2000],
   action
 ) => {
   switch (action.type) {
