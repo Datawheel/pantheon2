@@ -19,9 +19,12 @@ class Era extends Component {
     const {era} = this.props.eraProfile;
 
     const sections = [
-      {title: "People", slug: "people", content: null},
+      {title: "Most Remembered", slug: "people", content: null},
+      {title: "Occupations", slug: "occupations", content: null},
+      {title: "Occupations Over Time", slug: "occupations_over_time", content: null},
       {title: "Places", slug: "places", content: null},
-      {title: "Occupations", slug: "occupations", content: null}
+      {title: "Places Over Time", slug: "places_over_time", content: null},
+      {title: "Overlapping Lives", slug: "overlapping_lives", content: null}
     ];
 
     return (
@@ -33,6 +36,7 @@ class Era extends Component {
           link={config.link}
         />
         <Header era={era} />
+        <Intro era={era} />
         <ProfileNav sections={sections} />
         {sections.map((section, key) =>
           <Section

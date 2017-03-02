@@ -16,7 +16,7 @@ const Intro = ({person, totalPageViews}) => {
         decoLines = 14;
 
   return (
-    <section className="intro-section">
+    <section className="intro-section person">
       <div className="intro-deco">
         <div className="deco-lines">
           { Array(decoLines).fill().map((d, i) => <span key={i} className="deco-line" style={{backgroundColor}}></span>) }
@@ -27,15 +27,15 @@ const Intro = ({person, totalPageViews}) => {
         <div className="intro-text">
           <h3>
             <img src={iconProfW} />
-            {person.deathyear ?
-            `In Cultural Memory of ${person.name}` :
-            `The Global Cultural Production of ${person.name}`
+            {person.deathyear
+            ? `In Cultural Memory of ${person.name}`
+            : `The Global Cultural Production of ${person.name}`
             }
           </h3>
           <p>
             {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a> born in <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> in <b>{FORMATTERS.year(person.birthyear.name)}</b>.
-            {person.deathyear ?
-              `${person.gender ? " He" : " She"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
+            {person.deathyear
+              ? `${person.gender ? " He" : " She"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
             &nbsp;Since the start of Wikipedia, {person.gender ? "he" : "she"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
             By analyzing all "globally remembered people," Pantheon aims to understand cultural development through changes in occupations, birth and death places, and Wikipedia activity.&nbsp;
             <a href="/about/" className="deep-link">Read about our methods</a>
@@ -44,7 +44,7 @@ const Intro = ({person, totalPageViews}) => {
       </div>
     </section>
   );
-}
+};
 
 Intro.propTypes = {
   person: PropTypes.object
