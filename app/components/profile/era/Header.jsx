@@ -3,9 +3,7 @@ import "css/components/profile/header";
 import placeholderBg from "images/profile/test_film.jpg";
 import placeholderViz from "images/profile/placeholder_era_viz.png";
 
-const Header = ({era}) => {
-
-  return (
+const Header = ({era}) =>
     <header className="hero">
       <div className="bg-container">
         <div className="bg-img-mask era">
@@ -22,8 +20,7 @@ const Header = ({era}) => {
         </pre>
       </div>
     </header>
-  );
-};
+  ;
 
 Header.propTypes = {
   era: PropTypes.object
