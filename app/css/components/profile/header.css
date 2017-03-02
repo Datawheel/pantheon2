@@ -56,6 +56,18 @@ header {
   z-index: -1;
   overflow: hidden;
 
+  &.era {
+    background-color: var(--colorEggshell);
+    filter: blur(2px);
+
+    & .bg-img {
+      background-position: 60% 50%;
+      background-size: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
   &.person {
     filter: blur(6px) saturate(120%) contrast(130%);
 
@@ -130,7 +142,8 @@ header {
   border: solid 1px var(--colorStone);
   margin: 0 auto;
   padding: 32px;
-  width: 430px;
+  width: 85%;
+  max-width: 450px;
   box-sizing: border-box;
   z-index: 9;
 }
@@ -142,14 +155,15 @@ header {
   letter-spacing: 1px;
   text-transform: uppercase;
   -webkit-font-smoothing: antialiased;
-  margin: 0 auto 20px;
+  margin: 0 auto 14px;
 }
 
 h1 {
   font-family: var(--fontTitle);
-  font-size: 34px;
+  font-size: 33px;
   font-weight: 400;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+  line-height: 1;
   color: var(--colorDark);
   -webkit-font-smoothing: antialiased;
   margin: 0;
@@ -160,10 +174,10 @@ h1 {
   color: var(--colorDark);
   font-size: 14px;
   font-weight: 400;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   -webkit-font-smoothing: antialiased;
-  margin: 0 auto 8px;
+  margin: 0 auto 10px;
 }
 
 .date-subtitle {
@@ -172,12 +186,12 @@ h1 {
   letter-spacing: 1px;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
-  margin: 13px auto 0;
+  margin: 14px auto 0;
   & a {
     color: inherit;
   }
 }
 
 .sparkline {
-  width: 272px;
+  width: 312px;
 }

@@ -1,25 +1,24 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
-import placeholderImg from "images/placeholder_place_hero.jpg";
+import placeholderBg from "images/profile/test_film.jpg";
+import placeholderViz from "images/profile/placeholder_era_viz.png";
 
 const Header = ({era}) => {
-  const backgroundColor = "#343434",
-        backgroundImage = placeholderImg;
 
   return (
     <header className="hero">
       <div className="bg-container">
-        <div className="bg-img-mask person" style={{backgroundColor}}>
-          <div className="bg-img bg-img-l" style={{backgroundColor, backgroundImage}}></div>
-          <div className="bg-img bg-img-r" style={{backgroundColor, backgroundImage}}></div>
+        <div className="bg-img-mask era">
+          <div className="bg-img" style={{backgroundImage: `url(${placeholderBg})`}}></div>
         </div>
       </div>
       <div className="info">
         <p className="top-desc">Cultural Production of</p>
-        <h2 className="profile-type">Era</h2>
-        <h1 className="profile-name">{era.name}</h1>
+        <h2 className="profile-type">Time Period</h2>
+        <h1 className="profile-name">Film & Radio Era</h1>
+        <h2 className="date-subtitle">{era.name}</h2>
         <pre>
-        line plot here...
+          <img className="sparkline" src={placeholderViz} alt="placeholder era viz" />
         </pre>
       </div>
     </header>
