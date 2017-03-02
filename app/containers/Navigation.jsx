@@ -5,9 +5,9 @@ import {logOut, activateSearch} from "actions/users";
 import classNames from "classnames/bind";
 import styles from "css/components/navigation";
 import pantheonLogoSvg from "images/logo.svg";
-import searchSvg from "images/icon-search.svg";
-import navSvg from "images/icon-nav.svg";
-import closeSvg from "images/icon-close.svg";
+import searchSvg from "images/icons/icon-search.svg";
+import navSvg from "images/icons/icon-nav.svg";
+import closeSvg from "images/icons/icon-close.svg";
 
 const toggleSubNav = (e) => {
   const itemChildren = e.target.childNodes;

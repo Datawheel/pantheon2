@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "css/components/home";
-import searchSvg from "images/icon-search.svg";
+import searchSvg from "images/icons/icon-search.svg";
 import pantheonLogoSvg from "images/logo.svg";
 import iaPng from "images/home/ia_placeholder.png";
 import horizSt from "images/home/stacked_viz_horiz.png";

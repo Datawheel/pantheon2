@@ -1,6 +1,6 @@
 import React from "react";
 import PersonImage from "components/utils/PersonImage";
-import defaultImage from "images/icon-person.svg";
+import defaultImage from "images/icons/icon-person.svg";
 import {COLORS_DOMAIN, FORMATTERS} from "types";
 
 const PhotoCarousel = ({people}) => {

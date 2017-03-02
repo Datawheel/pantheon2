@@ -4,7 +4,7 @@ import config from "helmconfig.js";
 import {connect} from "react-redux";
 import {activateSearch} from "actions/users";
 import superGif from "images/misc/super.gif";
-import searchSvg from "images/icon-search-w.svg";
+import searchSvg from "images/icons/icon-search-w.svg";
 
 const NotFound = ({activateSearch}) => {
 

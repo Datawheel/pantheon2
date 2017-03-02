@@ -54,7 +54,7 @@
     &::before {
       content: "";
       position: absolute;
-      background: url('../../images/icon-search.svg') no-repeat;
+      background: url('../../images/icons/icon-search.svg') no-repeat;
       background-size: contain;
       width: 34px;
       height: 34px;
@@ -122,7 +122,7 @@
     & .result-profession {
       & a::before {
         content: '';
-        background: url('../../images/icon-prof.svg') no-repeat;
+        background: url('../../images/icons/icon-prof.svg') no-repeat;
         background-size: contain;
       }
     }
@@ -131,7 +131,7 @@
 
       & a::before {
         content: '';
-        background: url('../../images/icon-person.svg') no-repeat;
+        background: url('../../images/icons/icon-person.svg') no-repeat;
         background-size: contain;
       }
     }
@@ -140,7 +140,7 @@
 
       & a::before {
         content: '';
-        background: url('../../images/icon-place.svg') no-repeat;
+        background: url('../../images/icons/icon-place.svg') no-repeat;
         background-size: contain;
       }
     }

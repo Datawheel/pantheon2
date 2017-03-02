@@ -1,13 +1,13 @@
-import React, { Component, PropTypes } from "react";
-import { Link } from 'react-router';
-import { connect } from "react-redux";
-import { changeGrouping } from "actions/explorer";
+import React, {Component, PropTypes } from "react";
+import {Link} from "react-router";
+import {connect} from "react-redux";
+import {changeGrouping} from "actions/explorer";
 import YearControl from "components/explore/controls/YearControl";
 import PlaceControl from "components/explore/controls/PlaceControl";
 import OccupationControl from "components/explore/controls/OccupationControl";
-import emIconSvg from "images/icon-email.svg";
-import fbIconSvg from "images/icon-facebook.svg";
-import twIconSvg from "images/icon-twitter.svg";
+import emIconSvg from "images/icons/icon-email.svg";
+import fbIconSvg from "images/icons/icon-facebook.svg";
+import twIconSvg from "images/icons/icon-twitter.svg";
 
 class VizControls extends Component {
 

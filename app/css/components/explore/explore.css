@@ -217,7 +217,7 @@
         &::before {
           content: '';
           position: absolute;
-          background: url('../../../images/icon-rankings.svg') no-repeat;
+          background: url('../../../images/icons/icon-rankings.svg') no-repeat;
           background-size: contain;
           width: 16px;
           height: 9px;
@@ -229,7 +229,7 @@
         &::before {
           content: '';
           position: absolute;
-          background: url('../../../images/icon-explore.svg') no-repeat;
+          background: url('../../../images/icons/icon-explore.svg') no-repeat;
           background-size: contain;
           width: 17px;
           height: 17px;
@@ -240,7 +240,7 @@
 
     & .control-hide {
       background-repeat: no-repeat;
-      background-image: url('../../../images/icon-hide.svg');
+      background-image: url('../../../images/icons/icon-hide.svg');
       background-position: 50%;
       background-size: contain;
       width: 19px;
@@ -248,10 +248,10 @@
       cursor: pointer;
 
       &:hover {
-        background-image: url('../../../images/icon-hide-h.svg');
+        background-image: url('../../../images/icons/icon-hide-h.svg');
       }
       &:active {
-        background-image: url('../../../images/icon-show.svg');
+        background-image: url('../../../images/icons/icon-show.svg');
         margin-bottom: -8px;
       }
     }
@@ -449,7 +449,7 @@
         &::before {
           content: '';
           position: absolute;
-          background: url('../../../images/icon-rankings.svg') no-repeat;
+          background: url('../../../images/icons/icon-rankings.svg') no-repeat;
           background-size: contain;
           width: 16px;
           height: 9px;

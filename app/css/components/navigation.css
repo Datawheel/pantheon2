@@ -44,7 +44,7 @@
     }
 
     &.search-link::before {
-      background: url('../../images/icon-search.svg') no-repeat;
+      background: url('../../images/icons/icon-search.svg') no-repeat;
       background-size: contain;
     }
 

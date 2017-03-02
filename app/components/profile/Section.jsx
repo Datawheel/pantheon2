@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import styles from "css/components/profile/section";
-import downloadSvg from "images/icon-download.svg";
-import shareSvg from "images/icon-share.svg";
+import downloadSvg from "images/icons/icon-download.svg";
+import shareSvg from "images/icons/icon-share.svg";
 
 const Section = ({children, index, numSections, slug, title}) => {
   return (
@@ -11,13 +11,13 @@ const Section = ({children, index, numSections, slug, title}) => {
           <a name={slug}><h4>{title}</h4></a>
           <span className="section-nav">
             {[...Array(numSections)].map((x, i) =>
-              i === index ? <span key={i} className="icon-circle active"></span> : <span key={i} className="icon-circle"></span>
+              i === index ? <span key={i} className="icons/icon-circle active"></span> : <span key={i} className="icon-circle"></span>
             )}
           </span>
         </div>
         <div className="section-actions">
-          <a className="section-share"><img src={shareSvg} alt={`Share this visualization`} /></a>
-          <a className="section-download"><img src={downloadSvg} alt={`Download this visualization`} /></a>
+          <a className="section-share"><img src={shareSvg} alt="Share this visualization" /></a>
+          <a className="section-download"><img src={downloadSvg} alt="Download this visualization" /></a>
         </div>
       </div>
       <div className="section-body">
