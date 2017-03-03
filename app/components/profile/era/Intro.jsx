@@ -1,4 +1,5 @@
 import React from "react";
+import HelpText from "components/utils/HelpText";
 import styles from "css/components/profile/intro";
 import iconProfW from "images/globalNav/profile-w.svg";
 
@@ -11,7 +12,7 @@ const Intro = ({era}) =>
             What was the cultural production of the Radio & Film Era?
           </h3>
           <p>
-            The Radio & Film Era occured roughly between {era.name} and is defined by the rapid adoption of a new <strong>communication technology</strong>. The most globally remembered individuals born in this time period are <a href="">Che Guevara (AR)</a>, <a href="">Martin Luther King, Jr. (US)</a>, and <a href="#">Elvis Presley (US)</a>. This Era was preceded by the <a href="#">Newspaper Era</a> and followed by the <a href="#">Television Era</a>.
+            The Radio & Film Era occured roughly between {era.name} and is defined by the rapid adoption of a new <HelpText text="communication technology" />. The most globally remembered individuals born in this time period are <a href="">Che Guevara (AR)</a>, <a href="">Martin Luther King, Jr. (US)</a>, and <a href="#">Elvis Presley (US)</a>. This Era was preceded by the <a href="#">Newspaper Era</a> and followed by the <a href="#">Television Era</a>.
             Pantheon aims to help us understand global cultural development by visualizing a dataset of "globally memorable people" through their professions, birth and resting places, and Wikipedia activity.&nbsp;
             <a href="/about/" className="deep-link">Read about our methods</a>
           </p>

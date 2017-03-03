@@ -1,0 +1,28 @@
+@import '../../common/colors';
+@import '../../common/typography';
+
+.help-text {
+  font-weight: 700;
+  cursor: help;
+  display: inline-block;
+
+  &:hover {
+    color: var(--colorCtrlBright);
+
+    &::after {
+      background-color: var(--colorCtrl);
+    }
+  }
+
+  &::after {
+    content:"";
+    vertical-align: middle;
+    display: inline-block;
+    background-image: url("../../../images/icons/icon-help.svg");
+    background-repeat: no-repeat;
+    height: 14px;
+    width: 14px;
+    margin: 0 2px 0 5px;
+    background-size: contain;
+  }
+}
