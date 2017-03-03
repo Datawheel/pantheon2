@@ -13,6 +13,8 @@ export {bucketScale};
 
 export function groupBy(attrs) {
 
+  if (!attrs) return g => g;
+
   return g => d => {
     let val;
 
