@@ -108,6 +108,11 @@
     padding: 0;
     z-index: 1;
 
+    & a {
+      @apply --bodyLink;
+      font-weight: 400;
+    }
+
     & span {
       color: var(--colorTan);
       font-style: italic;
