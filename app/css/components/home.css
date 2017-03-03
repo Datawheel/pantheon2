@@ -117,53 +117,42 @@
       color: var(--colorTan);
       font-style: italic;
     }
+  }
 
-    &.legend {
-      height: 56px;
-      max-width: 590px;
-      width: 100%;
-      background-image: url("../../images/home/legend.png");
-      background-repeat: no-repeat;
-      background-size: contain;
-      background-position: 50% 0;
-      background-blend-mode: multiply;
-      background-color: var(--colorEggshell);
-    }
+  & .viz-container {
+    position: relative;
+    width: 100%;
+    margin: 0px auto 100px;
   }
 
   & .timeline-container {
-    /*border: 1px solid red;*/
-    height: 1281px;
-    width: 98%;
-    max-width: 840px;
-    margin: 0 auto;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0 20px;
 
-    & .stacked-viz {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 58.5%;
-      max-width: 490px;
+    & .items {
+      position: relative;
       height: 100%;
-      /*border: 1px solid cyan;*/
-      margin: 0;
-      background-image: url("../../images/home/stacked_placeholder.png");
-      background-repeat: no-repeat;
-      background-size: contain;
-      background-position: 100% 0%;
-      background-blend-mode: multiply;
-      background-color: var(--colorEggshell);
-      z-index: 2;
+      width: 100%;
     }
 
     & .era {
       position: absolute;
-      width: 48.5%;
-      max-width: 430px;
-      /*border: 1px solid cornflowerblue;*/
-      overflow: hidden;
+      bottom: 75px;
+      height: 80.5%;
       z-index: 3;
+
+      &::after {
+        content: "";
+        border-right: 1px solid var(--colorMatza);
+        position: absolute;
+        margin: 60px 14px 0;
+        height: 100%;
+        right: 0;
+        top: 0;
+      }
 
       & p {
         position: relative;
@@ -180,18 +169,17 @@
           }
         }
 
-        &::after {
+        /*&::after {
           content: "";
           border-bottom: 1px solid var(--colorSand);
           position: absolute;
           margin: 14px 0;
           min-width: 430px;
           left: 0;
-        }
+        }*/
       }
 
       & .era-img {
-        /*border: 1px solid salmon;*/
         background-size: contain;
         background-position: 0% 0%;
         background-blend-mode: multiply;
@@ -201,8 +189,9 @@
         max-width: 100px;
       }
 
-      &.smartphone {
-        top: 0;
+      &.computer {
+        right: 0;
+        height: 580px;
 
         & .era-img {
           background-image: url("../../images/home/smartphone.png");
@@ -215,7 +204,7 @@
       }
 
       &.television {
-        top: 10.95%;
+        right: 12.95%;
 
         & .era-img {
           margin-left: 100px;
@@ -229,7 +218,8 @@
       }
 
       &.film-radio {
-        top: 17.11%;
+        right: 21.11%;
+        height: 330px;
 
         & .era-img {
           margin-left: 25px;
@@ -242,8 +232,24 @@
         }
       }
 
+      &.newspaper {
+        right: 33.82%;
+        height: 400px;
+
+        & .era-img {
+          margin-left: 25px;
+          background-image: url("../../images/home/printing.png");
+          width: 77px;
+        }
+        & p {
+          left: 105px;
+          top: -60px;
+        }
+      }
+
       &.printing {
-        top: 33.82%;
+        right: 45.82%;
+        height: 250px;
 
         & .era-img {
           margin-left: 25px;
@@ -257,7 +263,8 @@
       }
 
       &.scribal {
-        top: 53.11%;
+        right: 69.11%;
+        height: 300px;
 
         & .era-img {
           margin-left: 75px;
@@ -384,6 +391,13 @@
     top: 20px;
     left: -120px;
     animation: fly 20s linear 1s infinite;
+  }
+
+  & .legend-title {
+    text-align: center;
+    margin: 0 auto 5px;
+    @apply --smallCaps;
+    font-weight: 700;
   }
 }
 
