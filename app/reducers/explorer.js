@@ -40,7 +40,7 @@ const years = (
 };
 
 const place = (
-  state = {selectedDepth: COUNTRY_DEPTH, selectedCountry: "all", selectedCity: "all", selectedCityInCountry: "all", countries: [], cities: [], citiesInCountry: []},
+  state = {selectedDepth: COUNTRY_DEPTH, selectedCountry: "all", selectedCountryStr: "all", selectedCity: "all", selectedCityInCountry: "all", countries: [], cities: [], citiesInCountry: []},
   action
 ) => {
   switch (action.type) {
@@ -48,6 +48,8 @@ const place = (
       return Object.assign({}, state, {selectedDepth: action.data});
     case "CHANGE_EXPLORER_COUNTRY":
       return Object.assign({}, state, {selectedCountry: action.data});
+    case "CHANGE_EXPLORER_COUNTRY_STR":
+      return Object.assign({}, state, {selectedCountryStr: action.data});
     case "CHANGE_EXPLORER_CITY_IN_COUNTRY":
       return Object.assign({}, state, {selectedCityInCountry: action.data});
     case "CHANGE_EXPLORER_CITY":

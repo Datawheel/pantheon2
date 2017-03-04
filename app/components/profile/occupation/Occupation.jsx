@@ -33,8 +33,6 @@ class Occupation extends Component {
     const {occupationProfile} = this.props;
     const {occupation, occupations, people, peopleInDomain} = occupationProfile;
 
-    // return <div>Loading...</div>
-
     const tmapDomainData = peopleInDomain
       .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);

@@ -1,8 +1,7 @@
-import React, { Component, PropTypes } from "react";
-import {connect} from "react-redux";
+import React, {Component} from "react";
 import Helmet from "react-helmet";
-import config from 'helmconfig.js';
-import styles from "css/components/explore/explore";
+import config from "helmconfig.js";
+import "css/components/explore/explore";
 import VizControls from "components/explore/viz/VizControls";
 import VizShell from "components/explore/viz/VizShell";
 import ViewControls from "components/explore/viz/ViewControls";
@@ -14,28 +13,27 @@ class Viz extends Component {
     super(props);
   }
 
-  static need = [
-    fetchAllCountries,
-    fetchAllCities,
-    fetchAllOccupations
-  ]
-
   render() {
     return (
       <div className="explore">
         <Helmet
-          htmlAttributes={{"lang": "en", "amp": undefined}}
+          htmlAttributes={{lang: "en", amp: undefined}}
           title="Visual Explorer - Pantheon"
           meta={config.meta}
           link={config.link}
         />
         <VizControls />
-        <VizShell />
+        <VizShell queryParams={this.props.location.query} />
         <ViewControls />
       </div>
     );
   }
+}
 
-};
+Viz.need = [
+  fetchAllCountries,
+  fetchAllCities,
+  fetchAllOccupations
+];
 
 export default Viz;

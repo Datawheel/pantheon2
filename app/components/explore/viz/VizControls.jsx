@@ -1,4 +1,4 @@
-import React, {Component, PropTypes } from "react";
+import React, {Component} from "react";
 import {Link} from "react-router";
 import {connect} from "react-redux";
 import {changeGrouping} from "actions/explorer";
@@ -29,7 +29,7 @@ class VizControls extends Component {
           <h3>Show People Grouped By</h3>
           <select value={grouping} onChange={changeGrouping}>
             <option value="places">Places</option>
-            <option value="professions">Professions</option>
+            <option value="occupations">Occupations</option>
           </select>
         </section>
         <section className="control-group">
@@ -49,9 +49,9 @@ class VizControls extends Component {
         <section className="control-group flat-group share-group">
           <h4>Share</h4>
           <ul className="options flat-options">
-            <li><Link to="#" className="em"><img src={emIconSvg} alt={`Email this visualization`}/></Link></li>
-            <li><Link to="#" className="fb"><img src={fbIconSvg} alt={`Share this visualization on Facebook`}/></Link></li>
-            <li><Link to="#" className="tw"><img src={twIconSvg} alt={`Share this visualization on Twitter`}/></Link></li>
+            <li><Link to="#" className="em"><img src={emIconSvg} alt="Email this visualization"/></Link></li>
+            <li><Link to="#" className="fb"><img src={fbIconSvg} alt="Share this visualization on Facebook"/></Link></li>
+            <li><Link to="#" className="tw"><img src={twIconSvg} alt="Share this visualization on Twitter"/></Link></li>
           </ul>
         </section>
       </div>
@@ -60,10 +60,15 @@ class VizControls extends Component {
 }
 
 
-function mapStateToProps(state) {
-  return {
-    explorer: state.explorer
-  };
-}
+const mapStateToProps = state => ({
+  explorer: state.explorer
+});
 
-export default connect(mapStateToProps, { changeGrouping })(VizControls);
+const mapDispatchToProps = dispatch => ({
+  changeGrouping: e => {
+    const grouping = e.target.value;
+    dispatch(changeGrouping(grouping));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(VizControls);

@@ -13,18 +13,13 @@ class PlaceControl extends Component {
     };
   }
 
-  placeDepthClick(e) {
-    e.preventDefault();
-    this.props.actions.changePlaceDepth(e.target.dataset.depth);
-  }
-
   render() {
 
     const {selectedDepth, selectedCountry, selectedCity, selectedCityInCountry, countries, cities, citiesInCountry} = this.props.explorer.place;
-    const changeCountry = this.props.actions.changeCountry.bind(this);
-    const changeCity = this.props.actions.changeCity.bind(this);
-    const changeCityInCountry = this.props.actions.changeCityInCountry.bind(this);
-    const placeDepthClick = this.placeDepthClick.bind(this);
+    const changeCountry = this.props.changeCountry.bind(this);
+    const changeCity = this.props.changeCity.bind(this);
+    const changeCityInCountry = this.props.changeCityInCountry.bind(this);
+    const placeDepthClick = this.props.changePlaceDepth.bind(this);
 
     return (
       <div className="filter place-control">
@@ -76,16 +71,33 @@ class PlaceControl extends Component {
 }
 
 
-function mapStateToProps(state) {
-  return {
-    explorer: state.explorer
-  };
-}
+const mapStateToProps = state => ({
+  explorer: state.explorer
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({changeCountry, changeCity, changeCityInCountry, changePlaceDepth}, dispatch)
-  };
-}
+// function mapDispatchToProps(dispatch) {
+  // return {
+  //   actions: bindActionCreators({changeCountry, changeCity, changeCityInCountry, changePlaceDepth}, dispatch)
+  // };
+// }
+const mapDispatchToProps = dispatch => ({
+  changeCountry: e => {
+    const countryId = e.target.value;
+    const countryCode = e.target.options[e.target.selectedIndex].dataset.countrycode;
+    dispatch(changeCountry(countryCode, countryId, true));
+  },
+  changeCity: e => {
+    const newPlace = e.target.value;
+    dispatch(changeCity(newPlace));
+  },
+  changeCityInCountry: e => {
+    const newPlace = e.target.value;
+    dispatch(changeCityInCountry(newPlace));
+  },
+  changePlaceDepth: e => {
+    const depth = e.target.dataset.depth;
+    dispatch(changePlaceDepth(depth));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaceControl);

@@ -12,12 +12,12 @@ class OccupationControl extends Component {
 
   occupationDepthClick(e) {
     e.preventDefault();
-    this.props.actions.changeOccupationDepth(e.target.dataset.depth);
+    this.props.changeOccupationDepth(e.target.dataset.depth);
   }
 
   render() {
     const {selectedDepth, selectedOccupationSlug, domains, industries, occupations} = this.props.explorer.occupation;
-    const changeOccupations = this.props.actions.changeOccupations.bind(this);
+    const changeOccupations = this.props.changeOccupations.bind(this);
     const occupationDepthClick = this.occupationDepthClick.bind(this);
 
     let occupationsDepth = occupations;
@@ -76,10 +76,15 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({changeOccupations, changeOccupationDepth}, dispatch)
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  changeOccupations: e => {
+    const selectedOccupation = e.target.value;
+    const occupationList = e.target.options[e.target.selectedIndex].dataset.occupations;
+    dispatch(changeOccupations(selectedOccupation, occupationList, true));
+  },
+  changeOccupationDepth: depth => {
+    dispatch(changeOccupationDepth(depth));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(OccupationControl);
