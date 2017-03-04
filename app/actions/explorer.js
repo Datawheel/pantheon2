@@ -106,9 +106,7 @@ export function changeYears(newYears, triggerUpdate = true) {
 }
 
 export function changePlaceDepth(newDepth) {
-  return dispatch => (
-    return dispatch({type: "CHANGE_EXPLORER_PLACE_DEPTH", data: newDepth});
-  );
+  return dispatch => dispatch({type: "CHANGE_EXPLORER_PLACE_DEPTH", data: newDepth});
 }
 
 export function changeCountry(countryStrCode, countryNumCode, triggerUpdate = true) {
@@ -118,7 +116,7 @@ export function changeCountry(countryStrCode, countryNumCode, triggerUpdate = tr
     dispatch({type: "CHANGE_EXPLORER_CITY_IN_COUNTRY", data: "all"});
     return apiClient.get(`/place?is_country=is.false&country_code=eq.${countryStrCode}&order=name&select=id,name`)
       .then(res => {
-        dispatch({ type: "GET_CITIES_IN_COUNTRY_SUCCESS", data: res.data});
+        dispatch({type: "GET_CITIES_IN_COUNTRY_SUCCESS", data: res.data});
         if (triggerUpdate) return getVizData(dispatch, getState);
       });
   };
@@ -139,9 +137,7 @@ export function changeCityInCountry(newPlace) {
 }
 
 export function changeOccupationDepth(newDepth) {
-  return (dispatch) => {
-    return dispatch({type: "CHANGE_EXPLORER_OCCUPATION_DEPTH", data: newDepth});
-  };
+  return dispatch => dispatch({type: "CHANGE_EXPLORER_OCCUPATION_DEPTH", data: newDepth});
 }
 
 export function changeOccupations(selectedOccupation, occupationList, triggerUpdate = true) {
