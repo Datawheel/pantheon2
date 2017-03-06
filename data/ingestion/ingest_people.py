@@ -13,10 +13,10 @@ def unicodeToAscii(s):
         and c in all_letters
     )
 
-people = pd.read_csv("raw/people.tsv", sep="\t", na_values="null", true_values="true", false_values="false", encoding="utf-8")
+people = pd.read_csv("raw/people_20170228.tsv", sep="\t", na_values="null", true_values="true", false_values="false", encoding="utf-8")
 people = people.rename(columns={"curid":"id", "bplace_geonameid":"birthplace", "dplace_geonameid":"deathplace", "l":"langs"})
-people = people.drop(["bplace_lat", "bplace_lon", "bplace_name", "bplace_curid", "geacron_name", \
-                        "dplace_lat", "dplace_lon", "dplace_name", "dplace_curid", "wd_id", "prob_ratio", \
+people = people.drop(["bplace_lat", "bplace_lon", "bplace_name", "geacron_name", \
+                        "dplace_lat", "dplace_lon", "dplace_name", "wd_id", "prob_ratio", \
                         "name_common","region","continent","least_developed"], axis=1)
 people["slug"] = people["name"].apply(unicodeToAscii)
 people["slug"] = people["slug"].str.lower().str.replace(" ", "_")
@@ -42,6 +42,10 @@ people["occupation"] = people["occupation"].replace(occupations)
 
 places = pd.read_sql("select id as place_id, is_country from place", engine)
 people = people.merge(places, how="left", left_on="birthplace", right_on="place_id")
+# print people.dtypes
+# print people.loc[0,:]
+# print people.is_country.value_counts()
+people.loc[lambda df: df.is_country.isnull(), ("is_country",)] = False
 people.loc[lambda df: df.is_country, ("birthplace",)] = None
 people = people.drop(["place_id", "is_country"], axis=1)
 

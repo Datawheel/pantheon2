@@ -6,7 +6,7 @@ from db_connection import get_engine
 def slugify(series):
     return series.str.lower().str.replace("&", "and").str.replace(" ", "_")
 
-people = pd.read_csv("raw/people.tsv", sep="\t", na_values="null", true_values="true", false_values="false")
+people = pd.read_csv("raw/people_20170228.tsv", sep="\t", na_values="null", true_values="true", false_values="false")
 occupations = pd.read_csv("raw/classification.csv", sep=",", na_values="null", true_values="true", false_values="false")
 people = people.merge(occupations, how="left", on="occupation", suffixes=('_people', '_occ'))
 born_in_occupation = people.groupby("occupation").size()

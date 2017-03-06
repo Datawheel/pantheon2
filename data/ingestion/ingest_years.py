@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 from db_connection import get_engine
 
-people = pd.read_csv("raw/people.tsv", sep="\t", na_values="null", true_values="true", false_values="false",usecols=("birthyear", "deathyear"))
+people = pd.read_csv("raw/people_20170228.tsv", sep="\t", na_values="null", true_values="true", false_values="false",usecols=("birthyear", "deathyear"))
 births = people.groupby("birthyear").size()
 deaths = people.groupby("deathyear").size()
 years = pd.concat([births, deaths], axis=1)
