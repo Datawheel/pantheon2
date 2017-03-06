@@ -7,7 +7,8 @@ import Section from "components/profile/Section";
 import Header from "components/profile/era/Header";
 import Intro from "components/profile/era/Intro";
 import Footer from "components/profile/era/Footer";
-import {fetchEra} from "actions/era";
+import PeopleRanking from "components/profile/era/PeopleRanking";
+import {fetchEra, fetchEras, fetchPeopleBornInEra, fetchPeopleDiedInEra} from "actions/era";
 
 class Era extends Component {
 
@@ -16,10 +17,10 @@ class Era extends Component {
   }
 
   render() {
-    const {era} = this.props.eraProfile;
+    const {era, eras, peopleBornInEra, peopleDiedInEra} = this.props.eraProfile;
 
     const sections = [
-      {title: "Most Remembered", slug: "people", content: null},
+      {title: "Most Remembered", slug: "people", content: <PeopleRanking era={era} peopleBorn={peopleBornInEra} peopleDied={peopleDiedInEra} />},
       {title: "Occupations", slug: "occupations", content: null},
       {title: "Occupations Over Time", slug: "occupations_over_time", content: null},
       {title: "Places", slug: "places", content: null},
@@ -36,7 +37,7 @@ class Era extends Component {
           link={config.link}
         />
         <Header era={era} />
-        <Intro era={era} />
+        <Intro era={era} eras={eras} peopleBorn={peopleBornInEra.slice(0, 3)} />
         <ProfileNav sections={sections} />
         {sections.map((section, key) =>
           <Section
@@ -57,7 +58,10 @@ class Era extends Component {
 }
 
 Era.need = [
-  fetchEra
+  fetchEra,
+  fetchEras,
+  fetchPeopleBornInEra,
+  fetchPeopleDiedInEra
 ];
 
 function mapStateToProps(state) {

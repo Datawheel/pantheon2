@@ -121,10 +121,12 @@
     background-color: var(--colorDark);
     box-sizing: border-box;
 
-    &.tick {
+    &:not(:last-child):after {
+      content: "";
+      position: relative;
       flex: 1;
-      top: 14px;
-      padding: 0 5px;
+      top: 10px;
+      padding: 0 10px;
       border-top: 1px dashed var(--colorMatza);
     }
   }

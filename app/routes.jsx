@@ -55,7 +55,7 @@ export default function checkId() {
       candidates = ["joseph_cook", "pope_paschal_ii", "nick_drake", "lewis_carroll", "eddie_irvine", "manfred,_king_of_sicily", "julius_caesar", "john_l._hall", "jenny_lind", "henri_nestle", "raif_badawi", "emma_shapplin", "beyonce", "jim_morrison"];
     }
     else if (path.includes("/era")) {
-      candidates = ["pre-1450", "1450-1699", "1700-1899", "1900-1949", "1950-present"];
+      candidates = ["scribal", "printing", "newspaper", "radio_and_film", "television", "personal_computer"];
     }
     return candidates[Math.floor(Math.random() * candidates.length)];
   }

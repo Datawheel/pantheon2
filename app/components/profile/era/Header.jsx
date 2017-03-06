@@ -2,6 +2,7 @@ import React, {PropTypes} from "react";
 import "css/components/profile/header";
 import placeholderBg from "images/profile/test_film.jpg";
 import placeholderViz from "images/profile/placeholder_era_viz.png";
+import {FORMATTERS} from "types";
 
 const Header = ({era}) =>
     <header className="hero">
@@ -13,8 +14,8 @@ const Header = ({era}) =>
       <div className="info">
         <p className="top-desc">Cultural Production of</p>
         <h2 className="profile-type">Time Period</h2>
-        <h1 className="profile-name">Film & Radio Era</h1>
-        <h2 className="date-subtitle">{era.name}</h2>
+        <h1 className="profile-name">{era.name}</h1>
+        <h2 className="date-subtitle">{FORMATTERS.year(era.start_year)} - {FORMATTERS.year(era.end_year)}</h2>
         <pre>
           <img className="sparkline" src={placeholderViz} alt="placeholder era viz" />
         </pre>

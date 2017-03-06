@@ -105,10 +105,11 @@ export default function render(req, res) {
           </html>
         `);
       })
-      .catch((err) => {
-        res.status(500).json(err);
+      .catch(err => {
+        res.status(500).send({error: err.toString(), stackTrace: err.stack.toString()});
       });
-    } else {
+    }
+    else {
       res.sendStatus(404);
     }
   });
