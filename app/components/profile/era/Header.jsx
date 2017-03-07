@@ -1,6 +1,5 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
-import placeholderBg from "images/profile/test_film.jpg";
 import placeholderViz from "images/profile/placeholder_era_viz.png";
 import {FORMATTERS} from "types";
 
@@ -8,7 +7,7 @@ const Header = ({era}) =>
     <header className="hero">
       <div className="bg-container">
         <div className="bg-img-mask era">
-          <div className="bg-img" style={{backgroundImage: `url(${placeholderBg})`}}></div>
+          <div className="bg-img" style={{backgroundImage: `url(/era/${era.id}.jpg)`}}></div>
         </div>
       </div>
       <div className="info">
