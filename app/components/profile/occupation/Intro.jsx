@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from "react";
 import AnchorList from "components/utils/AnchorList";
 import styles from "css/components/profile/intro";
 import iconProfW from "images/globalNav/profile-w.svg";
-import { plural } from "pluralize";
+import {plural} from "pluralize";
 import { FORMATTERS } from "types";
 
 const Intro = ({ occupation, occupations }) => {

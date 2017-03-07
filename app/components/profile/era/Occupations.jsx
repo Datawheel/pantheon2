@@ -1,9 +1,9 @@
 import React from "react";
 import {nest} from "d3-collection";
-import AnchorList from "components/utils/AnchorList";
 import {plural} from "pluralize";
+import AnchorList from "components/utils/AnchorList";
 
-const Occupations = ({place, peopleBorn, peopleDied}) => {
+const Occupations = ({era, peopleBorn, peopleDied}) => {
   const occupationsBorn = nest()
     .key(d => d.occupation.id)
     .rollup(leaves => ({num_born: leaves.length, occupation: leaves[0].occupation}))
@@ -20,7 +20,7 @@ const Occupations = ({place, peopleBorn, peopleDied}) => {
   return (
     <div>
       <p>
-        Most individuals born in {place.name} were&nbsp;
+        Most individuals born in the {era.name} were&nbsp;
         <AnchorList items={occupationsBorn.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_born})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />,&nbsp;
         while most who died were&nbsp;
         <AnchorList items={occupationsDied.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_died})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />.
