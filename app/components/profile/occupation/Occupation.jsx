@@ -14,6 +14,7 @@ import RelatedOccupations from "components/profile/occupation/RelatedOccupations
 import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
 import {fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations} from "actions/occupation";
+import {fetchEras} from "actions/era";
 import {COLORS_CONTINENT, FORMATTERS, YEAR_BUCKETS} from "types";
 import {Priestley, StackedArea, Treemap} from "d3plus-react";
 import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
@@ -30,8 +31,8 @@ class Occupation extends Component {
     if (this.props.occupationProfile.occupation.id === undefined) {
       return <NotFound />;
     }
-    const {occupationProfile} = this.props;
-    const {occupation, occupations, people, peopleInDomain} = occupationProfile;
+    const {occupation, occupations, people, peopleInDomain} = this.props.occupationProfile;
+    const eras = this.props.eras;
 
     const tmapDomainData = peopleInDomain
       .filter(p => p.birthyear !== null)
@@ -131,7 +132,7 @@ class Occupation extends Component {
       {
         title: "Places Over Time",
         slug: "places_trends",
-        content: <PlacesTime people={people} occupation={occupation} />,
+        content: <PlacesTime eras={eras} people={people} occupation={occupation} />,
         viz: [
           <StackedArea
             key="stacked_country1"
@@ -270,12 +271,14 @@ Occupation.need = [
   fetchOccupation,
   fetchPeople,
   fetchPeopleInDomain,
-  fetchAllOccupations
+  fetchAllOccupations,
+  fetchEras
 ];
 
 function mapStateToProps(state) {
   return {
-    occupationProfile: state.occupationProfile
+    occupationProfile: state.occupationProfile,
+    eras: state.eraProfile.eras
   };
 }
 

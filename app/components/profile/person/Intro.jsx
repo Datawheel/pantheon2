@@ -1,6 +1,6 @@
-import React, {Component, PropTypes} from "react";
+import React, {PropTypes} from "react";
 import {connect} from "react-redux";
-import styles from "css/components/profile/intro";
+import "css/components/profile/intro";
 import iconProfW from "images/globalNav/profile-w.svg";
 import PersonImage from "components/utils/PersonImage";
 import {FORMATTERS} from "types";

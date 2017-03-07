@@ -1,25 +1,35 @@
-import React, {Component} from "react";
+import React from "react";
 import {nest} from "d3-collection";
-import AnchorList from "components/utils/AnchorList";
 import {plural} from "pluralize";
 import {FORMATTERS} from "types";
 
-const PlacesTime = ({ people, occupation }) => {
-  const countriesBorn = nest()
-    .key(p => p.birthcountry.id)
-    .rollup(function(leaves) { return {num_people:leaves.length, birthcountry:leaves[0].birthcountry}; })
-    .entries(people.filter(p => p.birthcountry))
-    .sort(function (a, b) { return b.value.num_people-a.value.num_people });
-
-  const oldestBirthyear = Math.min(...people.filter(p => p.birthyear).map(r => r.birthyear));
+const PlacesTime = ({eras, people, occupation}) => {
+  people = people
+            .filter(p => p.birthyear)
+            .sort((a, b) => b.birthyear - a.birthyear);
+  people.forEach(p => {
+    const thisEra = eras.filter(e => p.birthyear >= e.start_year && p.birthyear <= e.end_year);
+    p.era = thisEra.length ? thisEra[0].id : null;
+  });
+  const oldestPerson = people[people.length - 1];
+  const oldestPlace = oldestPerson.birthplace;
+  const youngestPerson = people[1];
+  const youngestPlace = youngestPerson.birthplace;
+  const peopleByEra = nest()
+    .key(p => p.era)
+    .entries(people.filter(p => p.era))
+    .sort((a, b) => b.values.length - a.values.length);
+  const eraWithMostPeople = eras.filter(e => e.id.toString() === peopleByEra[0].key)[0];
 
   return (
     <div>
       <p>
-        The first globally memorable {occupation.occupation} in Pantheon was born in <a href="#">_(oldestBirthPlace)_</a> in {FORMATTERS.year(oldestBirthyear)}, making {plural(occupation.occupation)} the _(number)th_ oldest occupation. The concentration of {plural(occupation.occupation)} was largest during the <a href="#">_(Scribal Era)_</a>, which lasted between _(start year)_ to _(end year)_.
+        The first globally memorable {occupation.occupation} in Pantheon, <a href={`/profile/person/${oldestPerson.slug}`}>{oldestPerson.name}</a> was born in {oldestPlace ? <span><a href={`/profile/place/${oldestPlace.slug}`}>{oldestPlace.name}</a>, <a href={`/profile/place/${oldestPerson.birthcountry.slug}`}>{oldestPerson.birthcountry.name}</a></span> : null} in {FORMATTERS.year(oldestPerson.birthyear)}&nbsp;
+        whereas the most recent globally memorable {occupation.occupation}, <a href={`/profile/person/${youngestPerson.slug}`}>{youngestPerson.name}</a> was born in {youngestPlace ? <span><a href={`/profile/place/${youngestPlace.slug}`}>{youngestPlace.name}</a>, <a href={`/profile/place/${youngestPerson.birthcountry.slug}`}>{youngestPerson.birthcountry.name}</a></span> : null} in {FORMATTERS.year(youngestPerson.birthyear)}.&nbsp;
+        The concentration of {plural(occupation.occupation)} was largest during the <a href={`/profile/era/${eraWithMostPeople.slug}`}>{eraWithMostPeople.name}</a>, which lasted from {FORMATTERS.year(eraWithMostPeople.start_year)} to {FORMATTERS.year(eraWithMostPeople.end_year)}.
       </p>
     </div>
   );
-}
+};
 
 export default PlacesTime;
