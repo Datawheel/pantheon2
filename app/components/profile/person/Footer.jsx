@@ -42,26 +42,29 @@ const Footer = ({person, ranking}) => {
             </li>
           : null }
 
-          <li className="footer-carousel-item">
-            <div className="footer-carousel-item-photo">
-              <a href={`/profile/place/${person.birthplace.slug}`} style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}>
-              </a>
-            </div>
-            <h4 className="footer-carousel-item-title">
-              <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>
-            </h4>
-            <p>{person.birthplace.num_born} Individuals</p>
-          </li>
+          { person.birthplace ? <li className="footer-carousel-item">
+              <div className="footer-carousel-item-photo">
+                <a href={`/profile/place/${person.birthplace.slug}`} style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}>
+                </a>
+              </div>
+              <h4 className="footer-carousel-item-title">
+                <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>
+              </h4>
+              <p>{person.birthplace.num_born} Individuals</p>
+            </li>
+          : null }
 
-          <li className="footer-carousel-item">
-            <div className="footer-carousel-item-photo" style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}>
-              <a href={`/profile/place/${person.birthcountry.slug}`} style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}></a>
-            </div>
-            <h4 className="footer-carousel-item-title">
-              <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>
-            </h4>
-            <p>{person.birthcountry.num_born} Individuals</p>
-          </li>
+          { person.birthcountry ? <li className="footer-carousel-item">
+              <div className="footer-carousel-item-photo" style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}>
+                <a href={`/profile/place/${person.birthcountry.slug}`} style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}></a>
+              </div>
+              <h4 className="footer-carousel-item-title">
+                <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>
+              </h4>
+              <p>{person.birthcountry.num_born} Individuals</p>
+            </li>
+          : null }
+
         </ul>
       </div>
     </footer>

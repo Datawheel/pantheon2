@@ -95,9 +95,12 @@ class Person extends Component {
               }} />
       },
       {title: `Among ${occupation.occupation}s`, slug: "occupation_peers", content: <OccupationRanking person={personProfile.person} ranking={personProfile.occupationRank} />},
-      {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />},
-      {title: "In the Same Place", slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />}
+      {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={personProfile.person} ranking={personProfile.yearRank} />}
     ];
+
+    if (personProfile.person.birthcountry) {
+      sections.push({title: "In the Same Place", slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />});
+    }
 
     return (
       <div className="person">
