@@ -2,6 +2,7 @@
 @import '../common/colors';
 
 .home {
+
   & .navigation {
     & .items {
       max-width: 590px;
@@ -116,6 +117,9 @@
     margin: -200px auto 100px;
   }
 
+  & .viz {
+  }
+
   & .legend-title {
     text-align: center;
     margin: 0 auto 5px;
@@ -128,7 +132,7 @@
     bottom: 0;
     height: 100%;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 16px 70px 65px;
 
     & .items {
       position: relative;
@@ -138,7 +142,7 @@
 
     & .era {
       position: absolute;
-      bottom: 130px;
+      bottom: 60px;
       height: 80.5%;
       z-index: 3;
 
@@ -179,8 +183,8 @@
       }
 
       &.computer {
-        right: 0;
-        height: 580px;
+        right: 1.28%;
+        height: 380px;
 
         & .era-img {
           background-image: url("../../images/home/smartphone.png");
@@ -193,7 +197,8 @@
       }
 
       &.television {
-        right: 12.95%;
+        right: 11.5%;
+        height: 500px;
 
         & .era-img {
           margin-left: 100px;
@@ -207,8 +212,8 @@
       }
 
       &.film-radio {
-        right: 21.11%;
-        height: 330px;
+        right: 21.20%;
+        height: 300px;
 
         & .era-img {
           margin-left: 25px;
@@ -222,7 +227,7 @@
       }
 
       &.newspaper {
-        right: 33.82%;
+        right: 40.25%;
         height: 150px;
 
         & .era-img {
@@ -237,7 +242,7 @@
       }
 
       &.printing {
-        right: 45.82%;
+        right: 51.28%;
         height: 250px;
 
         & .era-img {
@@ -252,7 +257,7 @@
       }
 
       &.scribal {
-        right: 69.11%;
+        right: 82.51%;
         height: 80px;
 
         & .era-img {
@@ -271,6 +276,8 @@
   & .floating-content {
     position: absolute;
     top: 0;
+    width: 100vw;
+    overflow-x: hidden;
     height: 100%;
     left: 0;
     right: 0;
