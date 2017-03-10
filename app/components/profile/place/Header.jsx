@@ -1,6 +1,5 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
-import placeholderImg from "images/placeholder_place_hero.jpg";
 import {FORMATTERS} from "types";
 import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
