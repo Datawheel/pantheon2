@@ -76,10 +76,8 @@ class Home extends Component {
         </div>
         <div className="home-body">
           <div className="post">
-            <p><strong>Pantheon</strong> is an <a href="https://www.media.mit.edu/projects/pantheon-new/overview/" target="_blank">MIT Media Lab</a> research project celebrating the development of collective learning that endows our species with fantastic capacities. This site visualizes data on over 47,000 of the most globally memorable individuals around the world. We invite you to explore and engage with to our research. To begin, you can choose a <strong>Communication Technology Era</strong> to see its profile:</p>
+            <p><strong>Pantheon</strong> is an <a href="https://www.media.mit.edu/projects/pantheon-new/overview/" target="_blank">MIT Media Lab</a> research project celebrating the development of collective learning that endows our species with fantastic capacities. This site visualizes data on over 47,000 of the most globally memorable individuals around the world. We invite you to explore and engage with our research. To begin, choose a <strong>Communication Technology Era</strong> to see its profile:</p>
           </div>
-
-          <h4 className="legend-title">Domains:</h4>
 
           <div className="viz-container">
             <StackedArea
@@ -97,10 +95,10 @@ class Home extends Component {
                     width: () => 11
                   }
                 },
-                legendPosition: "top",
-                shapeConfig: shapeConfig(attrs),
+                legendPosition: "bottom",
+                shapeConfig: Object.assign({Area: {label: false}}, shapeConfig(attrs)),
                 time: "logyear",
-                timeline: true,
+                timeline: false,
                 tooltipConfig: groupTooltip(stackedData),
                 x: "logyear",
                 xConfig: {
@@ -118,30 +116,32 @@ class Home extends Component {
               <ul className="items">
                 <li className="item era computer">
                   <div className="era-img"></div>
-                  <p><a href="#">Computer Era</a></p>
+                  <p><a href="/profile/era/personal_computer" target="_blank">Computer</a></p>
                 </li>
                 <li className="item era television">
                   <div className="era-img"></div>
-                  <p><a href="#">Television Era</a></p>
+                  <p><a href="/profile/era/television" target="_blank">Television</a></p>
                 </li>
                 <li className="item era film-radio">
                   <div className="era-img"></div>
-                  <p><a href="#">Film & Radio Era</a></p>
+                  <p><a href="/profile/era/radio_and_film" target="_blank">Film & Radio</a></p>
                 </li>
                 <li className="item era newspaper">
                   <div className="era-img"></div>
-                  <p><a href="#">Newspaper Era</a></p>
+                  <p><a href="/profile/era/newspaper" target="_blank">Newspaper</a></p>
                 </li>
                 <li className="item era printing">
                   <div className="era-img"></div>
-                  <p><a href="#">Printing Era</a></p>
+                  <p><a href="/profile/era/printing" target="_blank">Printing</a></p>
                 </li>
                 <li className="item era scribal">
                   <div className="era-img"></div>
-                  <p><a href="#">Scribal Era</a></p>
+                  <p><a href="/profile/era/scribal" target="_blank">Scribal</a></p>
                 </li>
               </ul>
             </div>
+
+            <h4 className="legend-title">Domains</h4>
           </div>
 
           <div className="ia">
