@@ -16,10 +16,10 @@ class RankingTable extends Component {
 
   render() {
     const {explore} = this.props;
-    const {rankings, show} = explore;
+    const {data, rankings, show} = explore;
     // console.log(show)
     // return (<div>rankingtable</div>)
-    const {data, pages, page, loading, sorting} = rankings;
+    const {pages, page, loading, sorting} = rankings;
     // const {results, type, typeNesting, sorting} = this.props.rankings;
     // const {data} = this.props.explore;
     const {sortRankingsTable, getNewData} = this.props;
@@ -87,9 +87,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateRankingsTable());
   },
   getNewData: () => {
-    dispatch((dispatch, getState) => {
-      return getNewData(dispatch, getState);
-    });
+    dispatch((dispatch, getState) => getNewData(dispatch, getState));
   }
 });
 

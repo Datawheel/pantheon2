@@ -2,7 +2,8 @@
 import {polyfill} from "es6-promise";
 import apiClient from "apiconfig";
 import axios from "axios";
-import {COLORS_CONTINENT, COUNTRY_DEPTH, CITY_DEPTH, OCCUPATION_DEPTH, DOMAIN_DEPTH, SANITIZERS} from "types";
+import {COLORS_CONTINENT, COUNTRY_DEPTH, CITY_DEPTH, DOMAIN_DEPTH, OCCUPATION_DEPTH,
+          RANKINGS_RESULTS_PER_PAGE, SANITIZERS} from "types";
 import {nest} from "d3-collection";
 
 polyfill();
@@ -52,20 +53,30 @@ function setUrl(exploreState) {
 export function getNewData(dispatch, getState) {
   dispatch({data: [], type: "FETCH_EXPLORE_DATA_SUCCESS"});
   const {explore} = getState();
-  const {place, occupation, years} = explore;
+  const {page, place, occupation, rankings, years} = explore;
   const yearType = "birthyear";
+  let apiHeaders = null;
 
   setUrl(explore);
+
+  let selectFields = "name,langs,id,birthyear,birthcountry{id,country_name,continent},birthplace,occupation_id:occupation";
+  let limitOffset = "";
+  if (page === "rankings") {
+    apiHeaders = {Prefer: "count=exact"};
+    selectFields = "name,slug,occupation{id,occupation,occupation_slug},birthyear,deathyear,gender,birthplace{id,name,slug},langs,hpi,id";
+    const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
+    limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+  }
 
   let placeFilter = "";
   if (place.selectedDepth === COUNTRY_DEPTH && place.selectedCountry !== "all") {
     placeFilter = `&birthcountry=eq.${place.selectedCountry}`;
-    if (place.selectedCityInCountry !== "all") {
-      placeFilter = `&birthplace=eq.${place.selectedCityInCountry}`;
+    if (place.selectedPlaceInCountry !== "all") {
+      placeFilter = `&birthplace=eq.${place.selectedPlaceInCountry}`;
     }
   }
-  if (place.selectedDepth === CITY_DEPTH && place.selectedCity !== "all") {
-    placeFilter = `&birthplace=eq.${place.selectedCity}`;
+  if (place.selectedDepth === CITY_DEPTH && place.selectedPlace !== "all") {
+    placeFilter = `&birthplace=eq.${place.selectedPlace}`;
   }
 
   let occupationFilter = "";
@@ -73,14 +84,23 @@ export function getNewData(dispatch, getState) {
     occupationFilter = `&occupation=in.${occupation.selectedOccupations}`;
   }
 
-  const dataUrl = `/person?select=slug,name,langs,id,birthyear,deathyear,birthcountry{id,country_name,continent},birthplace,occupation_id:occupation&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}`;
+  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${limitOffset}`;
   console.log("getNewData", dataUrl);
-  // return apiClient.get(dataUrl).then(res => {
-  //   return dispatch({
-  //     data: res.data,
-  //     type: "FETCH_EXPLORER_DATA_SUCCESS"
-  //   });
-  // });
+  return apiClient.get(dataUrl, {headers: apiHeaders}).then(res => {
+    if (page === "rankings") {
+      const contentRange = res.headers["content-range"];
+      const totalResults = parseInt(contentRange.split("/")[1], 10);
+      const totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
+      dispatch({
+        type: "CHANGE_RANKINGS_PAGES",
+        pages: totalPages
+      });
+    }
+    return dispatch({
+      data: res.data,
+      type: "FETCH_EXPLORE_DATA_SUCCESS"
+    });
+  });
 }
 
 // -------------------------
@@ -203,6 +223,9 @@ export function initExplore(params, location) {
 // -------------------------
 // Actions from controls
 // ---------------------------
+export function setExplorePage(page) {
+  return dispatch => dispatch({type: "SET_EXPLORE_PAGE", page});
+}
 export function changeShowType(type) {
   return (dispatch, getState) => {
     dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
@@ -229,6 +252,7 @@ export function changeGrouping(newGrouping) {
 
 export function changeYears(newYears, triggerUpdate = true) {
   return (dispatch, getState) => {
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     const {explore} = getState();
     const {years} = explore;
     if (JSON.stringify(years) === JSON.stringify(newYears)) {
@@ -248,6 +272,7 @@ export function changePlaceDepth(depth) {
 
 export function changeCountry(countryStrCode, countryNumCode, triggerUpdate = true) {
   return (dispatch, getState) => {
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     dispatch({
       type: "CHANGE_EXPLORE_COUNTRY",
       countryId: countryNumCode,
@@ -263,6 +288,7 @@ export function changeCountry(countryStrCode, countryNumCode, triggerUpdate = tr
 
 export function changePlace(placeId, placeSlug) {
   return (dispatch, getState) => {
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     dispatch({
       type: "CHANGE_EXPLORE_PLACE",
       placeId,
@@ -274,6 +300,7 @@ export function changePlace(placeId, placeSlug) {
 
 export function changePlaceInCountry(placeId, placeSlug) {
   return (dispatch, getState) => {
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     dispatch({
       type: "CHANGE_EXPLORE_PLACE_IN_COUNTRY",
       placeId,
@@ -291,10 +318,8 @@ export function changeOccupationDepth(newDepth) {
 }
 
 export function changeOccupations(selectedOccupation, occupationList, triggerUpdate = true) {
-  // const selectedOccupation = e.target.value;
-  // const newOccupations = e.target.options[e.target.selectedIndex].dataset.occupations;
-  console.log("selectedOccupation, occupationList", selectedOccupation, occupationList);
   return (dispatch, getState) => {
+    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     dispatch({type: "CHANGE_EXPLORER_OCCUPATIONS", data: occupationList});
     dispatch({type: "CHANGE_EXPLORER_OCCUPATION_SLUG", data: selectedOccupation});
     if (triggerUpdate) return getNewData(dispatch, getState);
@@ -334,5 +359,17 @@ export function changeViz(vizType) {
     if (!explore.data.length) {
       return getNewData(dispatch, getState);
     }
+  };
+}
+
+// -------------------------
+// Actions specific to Rankings
+// ---------------------------
+export function changePage(direction) {
+  return (dispatch, getState) => {
+    const {explore} = getState();
+    console.log("page:", explore.rankings.page);
+    dispatch({type: "CHANGE_RANKING_PAGE", data: explore.rankings.page + direction});
+    return getNewData(dispatch, getState);
   };
 }

@@ -141,14 +141,3 @@ export function sortRankingsTable(column) {
     return getNewData(dispatch, getState);
   };
 }
-
-export function changePage(e) {
-  e.preventDefault();
-  const direction = e.target.innerText.toLowerCase() === "next" ? 1 : -1;
-  return (dispatch, getState) => {
-    const {rankings} = getState();
-    console.log("page:", rankings.results.page);
-    dispatch({type: "CHANGE_RANKING_PAGE", data: rankings.results.page + direction});
-    return getNewData(dispatch, getState);
-  };
-}

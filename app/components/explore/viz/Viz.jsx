@@ -1,16 +1,21 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import "css/components/explore/explore";
 import Controls from "components/explore/controls/Index";
 import VizShell from "components/explore/viz/VizShell";
 import ViewControls from "components/explore/viz/ViewControls";
-import {initExplore, initExplorePlace, initExploreOccupation} from "actions/explore";
+import {initExplore, initExplorePlace, initExploreOccupation, setExplorePage} from "actions/explore";
 
 class Viz extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentWillMount() {
+    setExplorePage("viz");
   }
 
   render() {
@@ -22,7 +27,7 @@ class Viz extends Component {
           meta={config.meta}
           link={config.link}
         />
-        <Controls page="viz" />
+        <Controls />
         <VizShell />
         <ViewControls />
       </div>
@@ -36,5 +41,4 @@ Viz.need = [
   initExploreOccupation
 ];
 
-
-export default Viz;
+export default connect(null, {setExplorePage})(Viz);

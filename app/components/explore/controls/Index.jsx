@@ -16,7 +16,7 @@ class Controls extends Component {
   }
 
   render() {
-    const {page} = this.props;
+    const {page} = this.props.explore;
 
     return (
       <div className="explore-controls viz-explorer">

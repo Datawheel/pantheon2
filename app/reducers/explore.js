@@ -1,6 +1,10 @@
 import {combineReducers} from "redux";
-import {nest} from "d3-collection";
-import {COUNTRY_DEPTH, OCCUPATION_DEPTH} from "types";
+import {COUNTRY_DEPTH, OCCUPATION_DEPTH, RANKINGS_RESULTS_PER_PAGE} from "types";
+
+const page = (state = "viz", action) => {
+  if (action.type ===  "SET_EXPLORE_PAGE") return action.page;
+  return state;
+};
 
 const data = (
   state = [],
@@ -162,11 +166,13 @@ const rankings = (
   switch (action.type) {
     case "FETCH_RANKINGS":
       return Object.assign({}, state, {loading: true});
+    case "CHANGE_RANKINGS_PAGES":
+      return Object.assign({}, state, {loading: false, pages: action.pages});
     case "FETCH_RANKINGS_SUCCESS":
       if (action.res) {
         // console.log('action.res.headers["content-range"]', action.res.headers["content-range"])
         const contentRange = action.res.headers["content-range"];
-        const totalResults = parseInt(contentRange.split("/")[1]);
+        const totalResults = parseInt(contentRange.split("/")[1], 10);
         const totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
         return {
           data: action.res.data,
@@ -189,6 +195,7 @@ const exploreReducer = combineReducers({
   data,
   grouping,
   occupation,
+  page,
   place,
   rankings,
   show,

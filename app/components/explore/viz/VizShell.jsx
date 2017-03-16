@@ -18,8 +18,8 @@ class VizShell extends Component {
   }
 
   render() {
-    return (<div>vizShell</div>)
-    const {data, grouping, occupation, viz, years} = this.props.explorer;
+    // return (<div>vizShell</div>)
+    const {data, show, occupation, viz, years} = this.props.explore;
     const {occupations} = occupation;
     const {type, config} = viz;
     let attrs, vizData, vizShapeConfig;
@@ -28,7 +28,7 @@ class VizShell extends Component {
       return <div className="explore-viz-container">no data yet (or loading...)</div>;
     }
 
-    if (grouping === "places") {
+    if (show.type === "places") {
       let birthyearSpan = extent(data, d => d.birthyear);
       birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
 
@@ -44,7 +44,7 @@ class VizShell extends Component {
         });
       vizShapeConfig = {fill: d => COLORS_CONTINENT[d.borncontinent]};
     }
-    else if (grouping === "occupations") {
+    else if (show.type === "occupations") {
       attrs = occupations.reduce((obj, d) => {
         obj[d.id] = d;
         return obj;
@@ -72,7 +72,7 @@ class VizShell extends Component {
 
     return (
       <div className="explore-viz-container">
-        <h1>How have the {grouping} of all globally remembered people changed over time?</h1>
+        <h1>How have the {show.type} of all globally remembered people changed over time?</h1>
         <h3 className="explore-viz-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
         <div className="viz-shell">
           <Viz type={type} config={Object.assign(

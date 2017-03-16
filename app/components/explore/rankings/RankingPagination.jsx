@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {changePage} from "actions/rankings";
+import {changePage} from "actions/explore";
 
 class RankingPagination extends Component {
 
@@ -30,4 +30,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {changePage})(RankingPagination);
+const mapDispatchToProps = dispatch => ({
+  changePage: e => {
+    e.preventDefault();
+    const direction = e.target.innerText.toLowerCase() === "next" ? 1 : -1;
+    dispatch(changePage(direction));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RankingPagination);

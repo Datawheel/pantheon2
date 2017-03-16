@@ -1,15 +1,20 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import "css/components/explore/explore";
 import Controls from "components/explore/controls/Index";
 import RankingTable from "components/explore/rankings/RankingTable";
-import {initExplore, initExplorePlace, initExploreOccupation} from "actions/explore";
+import {initExplore, initExplorePlace, initExploreOccupation, setExplorePage} from "actions/explore";
 
-export default class Rankings extends Component {
+class Rankings extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentWillMount() {
+    this.props.setExplorePage("rankings");
   }
 
   render() {
@@ -33,3 +38,5 @@ Rankings.need = [
   initExplorePlace,
   initExploreOccupation
 ];
+
+export default connect(null, {setExplorePage})(Rankings);
