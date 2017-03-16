@@ -1,6 +1,6 @@
 /* eslint consistent-return: 0, no-else-return: 0*/
 import {polyfill} from "es6-promise";
-import {RANKINGS_RESULTS_PER_PAGE} from "types";
+import {COUNTRY_DEPTH, CITY_DEPTH, RANKINGS_RESULTS_PER_PAGE} from "types";
 import {nest} from "d3-collection";
 import apiClient from "apiconfig";
 
@@ -15,7 +15,9 @@ function getNewData(dispatch, getState){
     console.log(sorting)
     sortingFilter = `&order=${sorting.id}.${sorting.direction}.nullslast`;
   }
-  // console.log("type--", type, type == "person")
+
+  setUrl(rankings);
+
   const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
   const countryFilter = country.id !== "all" ? `&birthcountry=eq.${country.id}` : "";
   const placeFilter = place !== "all" ? `&birthplace=eq.${place}` : "";
@@ -120,109 +122,6 @@ export function fetchRankingsFailure(data) {
     type: "FETCH_RANKINGS_FAILURE",
     id: data.id,
     error: data.error
-  };
-}
-
-export function changeType(e) {
-  const newType = e.target.value;
-  return (dispatch, getState) => {
-    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
-    dispatch({type: "CHANGE_RANKING_TYPE", data: newType});
-    dispatch({type: "CHANGE_RANKING_TYPE_NESTING", data: newType});
-    return getNewData(dispatch, getState);
-  };
-}
-
-export function changeYearType(e) {
-  e.preventDefault();
-  const newYearType = e.target.id;
-  return (dispatch, getState) => {
-    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
-    dispatch({type: "CHANGE_RANKING_YEAR_TYPE", data: newYearType});
-    return getNewData(dispatch, getState);
-  };
-}
-
-export function changeTypeNesting(e) {
-  e.preventDefault();
-  const newTypeNesting = e.target.id;
-  return (dispatch, getState) => {
-    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
-    dispatch({type: "CHANGE_RANKING_TYPE_NESTING", data: newTypeNesting});
-    return getNewData(dispatch, getState);
-  };
-}
-
-export function changeYears(years) {
-  return (dispatch, getState) => {
-    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
-    dispatch({type: "CHANGE_RANKING_YEARS", data: years});
-    return getNewData(dispatch, getState);
-  };
-}
-
-export function changeCountry(e) {
-  const countryId = e.target.value;
-  const countryCode = e.target.options[e.target.selectedIndex].dataset.countrycode;
-  return (dispatch, getState) => {
-    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
-    return apiClient.get(`/place?is_country=is.false&country_code=eq.${countryCode}&order=name&select=id,name`)
-      .then(res => {
-        dispatch({
-          type: "CHANGE_RANKING_COUNTRY",
-          data: countryId,
-          res
-        });
-        dispatch({type: "CHANGE_RANKING_PLACE", data: "all"});
-        return getNewData(dispatch, getState);
-      });
-  };
-}
-
-export function changePlace(e) {
-  const placeId = e.target.value;
-  return (dispatch, getState) => {
-    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
-    dispatch({type: "CHANGE_RANKING_PLACE", data: placeId});
-    return getNewData(dispatch, getState);
-  };
-}
-
-export function changeDomain(e) {
-  const domainSlug = e.target.value;
-  return (dispatch, getState) => {
-    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
-    return apiClient.get(`/occupation?domain_slug=eq.${domainSlug}&order=occupation_name&select=id,occupation_name`)
-      .then(res => {
-        dispatch({
-          type: "CHANGE_RANKING_DOMAIN",
-          data: domainSlug,
-          res
-        });
-        dispatch({type: "CHANGE_RANKING_OCCUPATION", data: "all"});
-        return getNewData(dispatch, getState);
-      });
-  };
-}
-
-export function changeOccupation(e) {
-  const occupationId = e.target.value;
-  return (dispatch, getState) => {
-    dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
-    dispatch({type: "CHANGE_RANKING_OCCUPATION", data: occupationId});
-    return getNewData(dispatch, getState);
-  };
-}
-
-export function updateRankingsTable() {
-  // const {page, pageSize, pages, sorting} = state;
-  // console.log(" ----- page -------")
-  // console.log(page)
-  // console.log(" ------------")
-  // instance.setState({page: 0})
-  return (dispatch, getState) => {
-    // dispatch({ type: "CHANGE_RANKING_PAGE", data: page });
-    return getNewData(dispatch, getState);
   };
 }
 

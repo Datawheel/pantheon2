@@ -12,6 +12,11 @@ class ViewControls extends Component {
   render() {
     return (
       <div className="view-controls">
+        right side controls here...
+      </div>
+    );
+    return (
+      <div className="view-controls">
         <VizControl />
         <RankingTableMin />
       </div>

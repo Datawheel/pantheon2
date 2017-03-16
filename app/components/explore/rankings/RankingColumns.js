@@ -2,8 +2,8 @@ import React from "react";
 import {FORMATTERS} from "types";
 
 export const COLUMNS = {
-  person: {
-    person: [
+  people: {
+    people: [
       {
         header: "#",
         accessor: "rank",
@@ -50,8 +50,8 @@ export const COLUMNS = {
       {header: "HPI", accessor: "hpi", sort: "desc", maxWidth: 80}
     ]
   },
-  occupation: {
-    occupation: [
+  occupations: {
+    occupations: [
       {
         header: "#",
         accessor: "num_born",
@@ -83,7 +83,7 @@ export const COLUMNS = {
         render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
       }
     ],
-    industry: [
+    industries: [
       {
         header: "#",
         accessor: "num_born",
@@ -108,7 +108,7 @@ export const COLUMNS = {
         render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
       }
     ],
-    domain: [
+    domains: [
       {
         header: "#",
         accessor: "num_born",
@@ -130,8 +130,8 @@ export const COLUMNS = {
       }
     ]
   },
-  place: {
-    country: [
+  places: {
+    countries: [
       {
         header: "#",
         accessor: "born_rank_unique",
@@ -155,7 +155,7 @@ export const COLUMNS = {
         accessor: "num_died"
       }
     ],
-    place: [
+    places: [
       {
         header: "#",
         accessor: "born_rank_unique",

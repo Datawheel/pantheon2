@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { polyfill } from 'es6-promise';
 import {connect} from "react-redux";
-import { activateSearch } from 'actions/users';
+import {activateSearch} from 'actions/nav';
 import styles from 'css/components/search';
 import { strip } from 'd3plus-text';
 import apiClient from 'apiconfig';

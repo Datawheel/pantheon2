@@ -1,7 +1,6 @@
 import React, {Component} from "react";
-import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {changeOccupations, changeOccupationDepth} from "actions/explorer";
+import {changeOccupations, changeOccupationDepth} from "actions/explore";
 import {OCCUPATION_DEPTH, INDUSTRY_DEPTH, DOMAIN_DEPTH} from "types";
 
 class OccupationControl extends Component {
@@ -16,7 +15,7 @@ class OccupationControl extends Component {
   }
 
   render() {
-    const {selectedDepth, selectedOccupationSlug, domains, industries, occupations} = this.props.explorer.occupation;
+    const {selectedDepth, selectedOccupationSlug, domains, industries, occupations} = this.props.explore.occupation;
     const changeOccupations = this.props.changeOccupations.bind(this);
     const occupationDepthClick = this.occupationDepthClick.bind(this);
 
@@ -72,14 +71,14 @@ class OccupationControl extends Component {
 
 function mapStateToProps(state) {
   return {
-    explorer: state.explorer
+    explore: state.explore
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  changeOccupations: e => {
-    const selectedOccupation = e.target.value;
-    const occupationList = e.target.options[e.target.selectedIndex].dataset.occupations;
+  changeOccupations: (eventOrOccupationName, occupationId) => {
+    const selectedOccupation = eventOrOccupationName.target ? eventOrOccupationName.target.value : eventOrOccupationName;
+    const occupationList = occupationId || eventOrOccupationName.target.options[eventOrOccupationName.target.selectedIndex].dataset.occupations;
     dispatch(changeOccupations(selectedOccupation, occupationList, true));
   },
   changeOccupationDepth: depth => {

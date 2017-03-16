@@ -1,12 +1,10 @@
 import {combineReducers} from "redux";
-import user from "reducers/user";
 import personProfile from "reducers/personProfile";
 import placeProfile from "reducers/placeProfile";
 import occupationProfile from "reducers/occupationProfile";
 import eraProfile from "reducers/eraProfile";
 import rank from "reducers/rank";
-import rankings from "reducers/rankings";
-import explorer from "reducers/explorer";
+import explore from "reducers/explore";
 import {routerReducer as routing} from "react-router-redux";
 
 const searchActive = (
@@ -28,15 +26,13 @@ const search = combineReducers({
 // Combine reducers with routeReducer which keeps track of
 // router state
 const rootReducer = combineReducers({
-  search,
-  rank,
-  user,
+  eraProfile,
+  explore,
+  occupationProfile,
   personProfile,
   placeProfile,
-  occupationProfile,
-  eraProfile,
-  rankings,
-  explorer,
+  rank,
+  search,
   routing
 });
 

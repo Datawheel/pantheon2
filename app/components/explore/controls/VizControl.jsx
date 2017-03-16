@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {changeViz} from "actions/explorer";
+import {changeViz} from "actions/explore";
 
 class VizControl extends Component {
 
@@ -42,7 +42,7 @@ class VizControl extends Component {
 
 function mapStateToProps(state) {
   return {
-    explorer: state.explorer
+    explore: state.explore
   };
 }
 

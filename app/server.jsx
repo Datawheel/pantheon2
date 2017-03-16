@@ -41,9 +41,7 @@ const trackingID  = "'UA-########-#'";
  */
 export default function render(req, res) {
   const history = createMemoryHistory();
-  const store = configureStore({
-    user: {}
-  }, history);
+  const store = configureStore({}, history);
   const routes = createRoutes(store);
 
   /*
@@ -78,7 +76,8 @@ export default function render(req, res) {
       preRenderMiddleware(
         store.dispatch,
         props.components,
-        props.params
+        props.params,
+        props.location
       )
       .then(() => {
         const initialState = store.getState();

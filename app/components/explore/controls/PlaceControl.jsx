@@ -1,7 +1,6 @@
 import React, {Component} from "react";
-import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {changeCountry, changeCity, changeCityInCountry, changePlaceDepth} from "actions/explorer";
+import {changeCountry, changePlace, changePlaceInCountry, changePlaceDepth} from "actions/explore";
 import {COUNTRY_DEPTH, CITY_DEPTH} from "types";
 
 class PlaceControl extends Component {
@@ -13,12 +12,28 @@ class PlaceControl extends Component {
     };
   }
 
+  // componentWillMount() {
+  //   const {city, country} = this.props;
+  //   if (country) {
+  //     const [countryCode, countryId] = country;
+  //     this.props.changeCountry(countryCode, countryId);
+  //     if (city) {
+  //       this.props.changePlaceInCountry(city);
+  //     }
+  //     this.props.changePlaceDepth(COUNTRY_DEPTH);
+  //   }
+  //   else if (city) {
+  //     this.props.changePlace(city);
+  //     this.props.changePlaceDepth(CITY_DEPTH);
+  //   }
+  // }
+
   render() {
 
-    const {selectedDepth, selectedCountry, selectedCity, selectedCityInCountry, countries, cities, citiesInCountry} = this.props.explorer.place;
+    const {selectedDepth, selectedCountry, selectedPlace, selectedPlaceInCountry, countries, places, placesInCountry} = this.props.explore.place;
     const changeCountry = this.props.changeCountry.bind(this);
-    const changeCity = this.props.changeCity.bind(this);
-    const changeCityInCountry = this.props.changeCityInCountry.bind(this);
+    const changePlace = this.props.changePlace.bind(this);
+    const changePlaceInCountry = this.props.changePlaceInCountry.bind(this);
     const placeDepthClick = this.props.changePlaceDepth.bind(this);
 
     return (
@@ -42,11 +57,11 @@ class PlaceControl extends Component {
               )}
             </select>
 
-            { citiesInCountry.length
-            ? <select value={selectedCityInCountry} onChange={changeCityInCountry}>
+            { placesInCountry.length
+            ? <select value={selectedPlaceInCountry} onChange={changePlaceInCountry}>
               <option value="all">All Cities</option>
-              {citiesInCountry.map(p =>
-                <option key={p.id} value={p.id}>
+              {placesInCountry.map(p =>
+                <option key={p.id} value={p.id} data-slug={p.slug}>
                   {p.name}
                 </option>
               )}
@@ -55,10 +70,10 @@ class PlaceControl extends Component {
 
           </div>
         : <div>
-            <select value={selectedCity} onChange={changeCity}>
+            <select value={selectedPlace} onChange={changePlace}>
               <option value="all">All Cities</option>
-              {cities.map(c =>
-                <option key={c.id} value={c.id}>
+              {places.map(c =>
+                <option key={c.id} value={c.id} data-slug={c.slug}>
                   {c.name}
                 </option>
               )}
@@ -72,29 +87,32 @@ class PlaceControl extends Component {
 
 
 const mapStateToProps = state => ({
-  explorer: state.explorer
+  explore: state.explore
 });
 
 // function mapDispatchToProps(dispatch) {
   // return {
-  //   actions: bindActionCreators({changeCountry, changeCity, changeCityInCountry, changePlaceDepth}, dispatch)
+  //   actions: bindActionCreators({changeCountry, changePlace, changePlaceInCountry, changePlaceDepth}, dispatch)
   // };
 // }
 const mapDispatchToProps = dispatch => ({
-  changeCountry: e => {
-    const countryId = e.target.value;
-    const countryCode = e.target.options[e.target.selectedIndex].dataset.countrycode;
+  changeCountry: (eventOrCountryCode, countryId) => {
+    const countryCode = eventOrCountryCode.target ? eventOrCountryCode.target.options[eventOrCountryCode.target.selectedIndex].dataset.countrycode : eventOrCountryCode;
+    countryId = eventOrCountryCode.target ? eventOrCountryCode.target.value : countryId;
     dispatch(changeCountry(countryCode, countryId, true));
   },
-  changeCity: e => {
-    const newPlace = e.target.value;
-    dispatch(changeCity(newPlace));
+  changePlace: e => {
+    const placeId = e.target.value;
+    const placeSlug = e.target.options[e.target.selectedIndex].dataset.slug;
+    dispatch(changePlace(placeId, placeSlug));
   },
-  changeCityInCountry: e => {
-    const newPlace = e.target.value;
-    dispatch(changeCityInCountry(newPlace));
+  changePlaceInCountry: e => {
+    const placeId = e.target.value;
+    const placeSlug = e.target.options[e.target.selectedIndex].dataset.slug;
+    dispatch(changePlaceInCountry(placeId, placeSlug));
   },
   changePlaceDepth: e => {
+    e.preventDefault();
     const depth = e.target.dataset.depth;
     dispatch(changePlaceDepth(depth));
   }

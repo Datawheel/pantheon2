@@ -12,7 +12,7 @@ import OccupationRanking from "components/profile/person/OccupationRanking";
 import YearRanking from "components/profile/person/YearRanking";
 import CountryRanking from "components/profile/person/CountryRanking";
 import NotFound from "components/NotFound";
-import {activateSearch} from "actions/users";
+import {activateSearch} from "actions/nav";
 import {fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates} from "actions/person";
 import "css/components/profile/person";
 import {LinePlot} from "d3plus-react";

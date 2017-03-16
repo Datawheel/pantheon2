@@ -1,9 +1,8 @@
 import React, {PropTypes} from "react";
 import {Link} from "react-router";
 import {connect} from "react-redux";
-import {logOut, activateSearch} from "actions/users";
-import classNames from "classnames/bind";
-import styles from "css/components/navigation";
+import {logOut, activateSearch} from "actions/nav";
+import "css/components/navigation";
 import pantheonLogoSvg from "images/logo.svg";
 import searchSvg from "images/icons/icon-search.svg";
 import navSvg from "images/icons/icon-nav.svg";
@@ -18,7 +17,7 @@ const toggleSubNav = (e) => {
   });
 };
 
-const Navigation = ({user, logOut, activateSearch}) => {
+const Navigation = ({logOut, activateSearch}) => {
   return (
       <nav>
         <div className="navigation global-nav" role="navigation">
@@ -138,15 +137,12 @@ const Navigation = ({user, logOut, activateSearch}) => {
 };
 
 Navigation.propTypes = {
-  user: PropTypes.object,
   logOut: PropTypes.func.isRequired,
   activateSearch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-  return {
-    user: state.user
-  };
+  return {};
 }
 
 export default connect(mapStateToProps, {logOut, activateSearch})(Navigation);

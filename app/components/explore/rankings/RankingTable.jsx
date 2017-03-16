@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import ReactTable from "react-table";
-import styles from "css/components/explore/explore";
+import "css/components/explore/explore";
 import {RANKINGS_RESULTS_PER_PAGE} from "types";
 import RankingPagination from "components/explore/rankings/RankingPagination";
 import {sortRankingsTable, updateRankingsTable} from "actions/rankings";
+import {getNewData} from "actions/explore";
 import {COLUMNS} from "components/explore/rankings/RankingColumns";
 
 class RankingTable extends Component {
@@ -14,18 +15,25 @@ class RankingTable extends Component {
   }
 
   render() {
-    const {results, type, typeNesting, sorting} = this.props.rankings;
-    const {sortRankingsTable, updateRankingsTable} = this.props;
-    const pageSize = type === "occupation" ? results.data.length : RANKINGS_RESULTS_PER_PAGE;
+    const {explore} = this.props;
+    const {rankings, show} = explore;
+    // console.log(show)
+    // return (<div>rankingtable</div>)
+    const {data, pages, page, loading, sorting} = rankings;
+    // const {results, type, typeNesting, sorting} = this.props.rankings;
+    // const {data} = this.props.explore;
+    const {sortRankingsTable, getNewData} = this.props;
+    const pageSize = RANKINGS_RESULTS_PER_PAGE;
+    const showDepth = show.depth || show.type;
 
-    let columns = COLUMNS[type][typeNesting];
+    let columns = COLUMNS[show.type][showDepth];
     const rankColumnRender = ({index}) => {
-      const offset = results.page * RANKINGS_RESULTS_PER_PAGE;
+      const offset = page * RANKINGS_RESULTS_PER_PAGE;
       return <span>{index + 1 + offset}</span>;
     };
     columns[0].render = rankColumnRender;
 
-    if (!results.loading) {
+    if (!loading) {
       columns = columns.map(c => {
         c.sort = null;
         delete c.sort;
@@ -52,11 +60,11 @@ class RankingTable extends Component {
           className="ranking-table -highlight"
           columns={columns}
           pageSize={pageSize}
-          data={results.data}
+          data={data}
           showPagination={false}
-          pages={results.pages}
-          loading={results.loading}
-          onChange={updateRankingsTable}
+          pages={pages}
+          loading={loading}
+          onChange={getNewData}
           onSortingChange={sortRankingsTable}
         />
         <RankingPagination />
@@ -67,7 +75,7 @@ class RankingTable extends Component {
 
 function mapStateToProps(state) {
   return {
-    rankings: state.rankings
+    explore: state.explore
   };
 }
 
@@ -77,6 +85,11 @@ const mapDispatchToProps = dispatch => ({
   },
   updateRankingsTable: () => {
     dispatch(updateRankingsTable());
+  },
+  getNewData: () => {
+    dispatch((dispatch, getState) => {
+      return getNewData(dispatch, getState);
+    });
   }
 });
 

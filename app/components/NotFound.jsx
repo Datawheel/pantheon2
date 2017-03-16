@@ -2,7 +2,7 @@ import React, {PropTypes} from "react";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import {connect} from "react-redux";
-import {activateSearch} from "actions/users";
+import {activateSearch} from "actions/nav";
 import superGif from "images/misc/super.gif";
 import searchSvg from "images/icons/icon-search-w.svg";
 
@@ -183,14 +183,11 @@ const NotFound = ({activateSearch}) => {
 };
 
 NotFound.propTypes = {
-  user: PropTypes.object,
   activateSearch: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state) {
-  return {
-    user: state.user
-  };
+function mapStateToProps() {
+  return {};
 }
 
 export default connect(mapStateToProps, {activateSearch})(NotFound);

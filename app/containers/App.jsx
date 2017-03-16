@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import {connect} from "react-redux";
-import {activateSearch} from "actions/users";
+import {activateSearch} from "actions/nav";
 import Navigation from "containers/Navigation";
 import Footer from "containers/Footer";
 import Search from "components/Search";

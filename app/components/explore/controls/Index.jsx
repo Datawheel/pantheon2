@@ -1,37 +1,32 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {connect} from "react-redux";
-import {changeGrouping} from "actions/explorer";
 import YearControl from "components/explore/controls/YearControl";
 import PlaceControl from "components/explore/controls/PlaceControl";
 import OccupationControl from "components/explore/controls/OccupationControl";
+import ShowControl from "components/explore/controls/ShowControl";
 import emIconSvg from "images/icons/icon-email.svg";
 import fbIconSvg from "images/icons/icon-facebook.svg";
 import twIconSvg from "images/icons/icon-twitter.svg";
 
-class VizControls extends Component {
+class Controls extends Component {
 
   constructor(props) {
     super(props);
   }
 
   render() {
-    const {grouping} = this.props.explorer;
-    const changeGrouping = this.props.changeGrouping.bind(this);
+    const {page} = this.props;
 
     return (
       <div className="explore-controls viz-explorer">
         <div className="control-header">
-          <h2 className="viz-explorer">Visual Explorer</h2>
+          <h2 className="viz-explorer">{page === "rankings" ? "Rankings" : "Visual Explorer"}</h2>
           <i className="control-hide"></i>
         </div>
-        <section className="control-group key-group">
-          <h3>Show People Grouped By</h3>
-          <select value={grouping} onChange={changeGrouping}>
-            <option value="places">Places</option>
-            <option value="occupations">Occupations</option>
-          </select>
-        </section>
+
+        <ShowControl page={page} />
+
         <section className="control-group">
           <h4>Filter Data by</h4>
           <ul className="options flat-options">
@@ -61,14 +56,14 @@ class VizControls extends Component {
 
 
 const mapStateToProps = state => ({
-  explorer: state.explorer
+  explore: state.explore
 });
 
-const mapDispatchToProps = dispatch => ({
-  changeGrouping: e => {
-    const grouping = e.target.value;
-    dispatch(changeGrouping(grouping));
-  }
-});
+// const mapDispatchToProps = dispatch => ({
+//   changeGrouping: e => {
+//     const grouping = e.target.value;
+//     dispatch(changeGrouping(grouping));
+//   }
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(VizControls);
+export default connect(mapStateToProps)(Controls);

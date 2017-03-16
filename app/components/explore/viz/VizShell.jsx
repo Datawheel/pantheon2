@@ -2,8 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import "css/components/explore/explore";
 import {Viz} from "d3plus-react";
-import {changeCity, changeCityInCountry, changeCountry, changeGrouping, changeOccupations,
-  changeOccupationDepth, changePlaceDepth, changeViz, changeYears} from "actions/explorer";
+import {changeViz} from "actions/explore";
 import {COLORS_CONTINENT, COUNTRY_DEPTH, CITY_DEPTH, OCCUPATION_DEPTH, DOMAIN_DEPTH, FORMATTERS, YEAR_BUCKETS} from "types";
 import {extent} from "d3-array";
 import {groupBy, groupTooltip, peopleTooltip, shapeConfig} from "viz/helpers";
@@ -14,82 +13,12 @@ class VizShell extends Component {
     super(props);
   }
 
-  sanitizeYear(yr) {
-    const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
-    if (yr.replace(".", "").toLowerCase().includes("bc") || parseInt(yr, 10) < 0) {
-      return yearAsNumber * -1;
-    }
-    return yearAsNumber;
-  }
-
-  sanitizeQueryYears(yearStr) {
-    if (!yearStr || !yearStr.includes(",")) return [1990, 2015];
-    let yearArr = [this.sanitizeYear(yearStr.split(",")[0]),
-                    this.sanitizeYear(yearStr.split(",")[1])];
-    return yearArr;
-  }
-
-  sanitizeQueryViz(vizStr) {
-    if (["Treemap", "StackedArea"].indexOf(vizStr) === -1) return "Treemap";
-    return vizStr;
-  }
-
-  sanitizeQueryGrouping(groupingStr) {
-    if (["places", "occupations"].indexOf(groupingStr) === -1) return "places";
-    return groupingStr;
-  }
-
-  sanitizeQueryCountry(countryStr) {
-    if (!countryStr || !countryStr.includes("|")) return null;
-    return countryStr.split("|");
-  }
-
-  sanitizeQueryCity(cityStr) {
-    if (!cityStr) return null;
-    return cityStr;
-  }
-
-  sanitizeQueryOccupation(occupationStr) {
-    if (!occupationStr || !occupationStr.includes("|")) return null;
-    return occupationStr.split("|");
-  }
-
   componentDidMount() {
-    let {city, country, grouping, occupation, viz, years} = this.props.queryParams;
-    years = this.sanitizeQueryYears(years);
-    if (years) {
-      this.props.changeYears(years);
-    }
-    country = this.sanitizeQueryCountry(country);
-    city = this.sanitizeQueryCity(city);
-    if (country) {
-      this.props.changeCountry(country);
-      if (city) {
-        this.props.changeCityInCountry(city);
-      }
-      this.props.changePlaceDepth(COUNTRY_DEPTH);
-    }
-    else if (city) {
-      this.props.changeCity(city);
-      this.props.changePlaceDepth(CITY_DEPTH);
-    }
-    occupation = this.sanitizeQueryOccupation(occupation);
-    if (occupation) {
-      if (occupation[1].includes(",")) {
-        this.props.changeOccupationDepth(DOMAIN_DEPTH);
-      }
-      else {
-        this.props.changeOccupationDepth(OCCUPATION_DEPTH);
-      }
-      this.props.changeOccupation(occupation);
-    }
-    grouping = this.sanitizeQueryGrouping(grouping);
-    this.props.changeGrouping(grouping);
-    viz = this.sanitizeQueryViz(viz);
-    this.props.changeViz(viz);
+    this.props.changeViz("Treemap");
   }
 
   render() {
+    return (<div>vizShell</div>)
     const {data, grouping, occupation, viz, years} = this.props.explorer;
     const {occupations} = occupation;
     const {type, config} = viz;
@@ -165,37 +94,13 @@ class VizShell extends Component {
 
 function mapStateToProps(state) {
   return {
-    explorer: state.explorer
+    explore: state.explore
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  changeCountry: countryArr => {
-    dispatch(changeCountry(countryArr[0], countryArr[1], false));
-  },
-  changeGrouping: grouping => {
-    dispatch(changeGrouping(grouping));
-  },
-  changeOccupation: occArr => {
-    dispatch(changeOccupations(occArr[0], occArr[1], false));
-  },
-  changeCity: city => {
-    dispatch(changePlaceDepth(city));
-  },
-  changeCityInCountry: city => {
-    dispatch(changeCityInCountry(city));
-  },
-  changeOccupationDepth: depth => {
-    dispatch(changeOccupationDepth(depth));
-  },
-  changePlaceDepth: depth => {
-    dispatch(changePlaceDepth(depth));
-  },
-  changeViz: type => {
-    dispatch(changeViz(type));
-  },
-  changeYears: years => {
-    dispatch(changeYears(years, false));
+  changeViz: vizType => {
+    dispatch(changeViz(vizType));
   }
 });
 

@@ -2,10 +2,10 @@ import React, {Component} from "react";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import "css/components/explore/explore";
-import VizControls from "components/explore/viz/VizControls";
+import Controls from "components/explore/controls/Index";
 import VizShell from "components/explore/viz/VizShell";
 import ViewControls from "components/explore/viz/ViewControls";
-import {fetchAllCountries, fetchAllCities, fetchAllOccupations} from "actions/explorer";
+import {initExplore, initExplorePlace, initExploreOccupation} from "actions/explore";
 
 class Viz extends Component {
 
@@ -22,8 +22,8 @@ class Viz extends Component {
           meta={config.meta}
           link={config.link}
         />
-        <VizControls />
-        <VizShell queryParams={this.props.location.query} />
+        <Controls page="viz" />
+        <VizShell />
         <ViewControls />
       </div>
     );
@@ -31,9 +31,10 @@ class Viz extends Component {
 }
 
 Viz.need = [
-  fetchAllCountries,
-  fetchAllCities,
-  fetchAllOccupations
+  initExplore,
+  initExplorePlace,
+  initExploreOccupation
 ];
+
 
 export default Viz;

@@ -3,7 +3,7 @@
     "watch": [
       "/app/pages",
       "app/actions",
-      "/app/reducers/",
+      "app/reducers/",
       "app/server.jsx",
       "app/routes.jsx",
       "app/helmconfig.js",

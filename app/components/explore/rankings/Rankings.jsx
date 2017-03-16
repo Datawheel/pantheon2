@@ -1,23 +1,35 @@
-import React from "react";
+import React, {Component} from "react";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import "css/components/explore/explore";
-import ExploreControls from "components/explore/ExploreControls";
+import Controls from "components/explore/controls/Index";
 import RankingTable from "components/explore/rankings/RankingTable";
+import {initExplore, initExplorePlace, initExploreOccupation} from "actions/explore";
 
-const Rankings = () => {
-  return (
-    <div className="explore">
-      <Helmet
-        htmlAttributes={{lang: "en", amp: undefined}}
-        title="Rankings - Pantheon"
-        meta={config.meta}
-        link={config.link}
-      />
-      <ExploreControls />
-      <RankingTable />
-    </div>
-  );
-};
+export default class Rankings extends Component {
 
-export default Rankings;
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="explore">
+        <Helmet
+          htmlAttributes={{lang: "en", amp: undefined}}
+          title="Rankings - Pantheon"
+          meta={config.meta}
+          link={config.link}
+        />
+        <Controls page="rankings" />
+        <RankingTable />
+      </div>
+    );
+  }
+}
+
+Rankings.need = [
+  initExplore,
+  initExplorePlace,
+  initExploreOccupation
+];

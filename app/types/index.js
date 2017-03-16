@@ -56,3 +56,33 @@ export const FORMATTERS = {
     }
   }
 };
+
+function sanitizeYear(yr) {
+  const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
+  if (yr.replace(".", "").toLowerCase().includes("bc") || parseInt(yr, 10) < 0) {
+    return yearAsNumber * -1;
+  }
+  return yearAsNumber;
+}
+
+export const SANITIZERS = {
+  show: (showStr, pathname) => {
+    let types = ["people", "occupations", "places"];
+    const depths = ["people", "occupations", "industries", "domains", "places", "countries"];
+    let type = showStr;
+    let depth;
+    if (type && type.includes("|")) {
+      [type, depth] = type.split("|");
+    }
+    if (pathname.includes("/viz")) {
+      types = ["occupations", "places"];
+    }
+    type = types.includes(type) ? type : types[0];
+    depth = depths.includes(depth) ? depth : null;
+    return {type, depth};
+  },
+  years: yearStr => {
+    if (!yearStr || !yearStr.includes(",")) return [1900, 2015];
+    return [sanitizeYear(yearStr.split(",")[0]), sanitizeYear(yearStr.split(",")[1])];
+  }
+};

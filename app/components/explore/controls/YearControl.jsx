@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {FORMATTERS} from "types";
 import {Range} from "rc-slider";
-import {changeYears} from "actions/explorer";
+import {changeYears} from "actions/explore";
 
 const ENTER_KEY_CODE = 13;
 
@@ -26,7 +26,7 @@ class YearControl extends Component {
   }
 
   yearChange(e) {
-    const {years} = this.props.explorer;
+    const {years} = this.props.explore;
     const tempYear = e.target.value;
     const tempYearKey = e.target.id.includes("end") ? "tempYearEnd" : "tempYearStart";
     this.setState({[tempYearKey]: tempYear});
@@ -44,13 +44,20 @@ class YearControl extends Component {
     }
   }
 
+  // componentWillMount() {
+  //   const {years} = this.props;
+  //   if (years) {
+  //     this.changeYears(years, false);
+  //   }
+  // }
+
   render() {
     const timelineMarks = {
       "-4000": "4000 BC",
       "0": <strong>0 AD</strong>,
       "2013": "2013"
     };
-    const {years} = this.props.explorer;
+    const {years} = this.props.explore;
     const {tempYearStart, tempYearEnd} = this.state;
     const yearChange = this.yearChange.bind(this);
 
@@ -81,7 +88,7 @@ class YearControl extends Component {
 
 function mapStateToProps(state) {
   return {
-    explorer: state.explorer
+    explore: state.explore
   };
 }
 

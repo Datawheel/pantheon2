@@ -10,14 +10,14 @@ class RankingPagination extends Component {
   }
 
   render() {
-    const {results} = this.props.rankings;
-    const currentPage = results.page;
-    const totalNumPages = results.pages;
+    const {rankings} = this.props;
+    const currentPage = rankings.page;
+    const totalNumPages = rankings.pages;
 
     return (
       <div className="ranking-pagination">
         <a href="#" onClick={currentPage > 0 ? this.changePage : null}>Prev</a>
-        <span>page {results.page + 1} of {results.pages}</span>
+        <span>page {rankings.page + 1} of {rankings.pages}</span>
         <a href="#" onClick={currentPage < (totalNumPages - 1) ? this.changePage : null}>Next</a>
       </div>
     );
@@ -26,7 +26,7 @@ class RankingPagination extends Component {
 
 function mapStateToProps(state) {
   return {
-    rankings: state.rankings
+    rankings: state.explore.rankings
   };
 }
 
