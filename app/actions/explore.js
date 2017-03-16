@@ -329,10 +329,11 @@ export function changeOccupations(selectedOccupation, occupationList, triggerUpd
 // -------------------------
 // Actions specific to Viz
 // ---------------------------
-export function changeViz(vizType) {
-  let config;
+export function changeViz(vizType, triggerUpdate = true) {
   return (dispatch, getState) => {
+    let config;
     const {explore} = getState();
+    vizType = vizType || explore.viz.type;
     if (explore.show.type === "places") {
       config = {
         depth: 1,
@@ -356,7 +357,7 @@ export function changeViz(vizType) {
       };
     }
     dispatch({type: "CHANGE_EXPLORE_VIZ", vizConfig: config, vizType});
-    if (!explore.data.length) {
+    if (!explore.data.length && triggerUpdate) {
       return getNewData(dispatch, getState);
     }
   };

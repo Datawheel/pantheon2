@@ -18,7 +18,6 @@ class VizShell extends Component {
   }
 
   render() {
-    // return (<div>vizShell</div>)
     const {data, show, occupation, viz, years} = this.props.explore;
     const {occupations} = occupation;
     const {type, config} = viz;

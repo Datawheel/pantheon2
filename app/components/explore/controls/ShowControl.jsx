@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {changeShowType, changeShowDepth} from "actions/explore";
+import {changeShowType, changeShowDepth, changeViz} from "actions/explore";
 
 class ShowControl extends Component {
 
@@ -67,6 +67,7 @@ const mapDispatchToProps = dispatch => ({
   changeShowType: e => {
     const showType = e.target.value;
     dispatch(changeShowType(showType));
+    dispatch(changeViz(null, false));
   },
   changeShowDepth: e => {
     e.preventDefault();
