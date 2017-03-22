@@ -62,8 +62,8 @@ class YearControl extends Component {
     const yearChange = this.yearChange.bind(this);
 
     return (
-      <div className="year-control">
-        <h3>Between:</h3>
+      <div className="year-control filter">
+        <h4>Between</h4>
         <div className="year-inputs">
           <input type="text" id="startYear" value={tempYearStart !== null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={yearChange} onKeyDown={yearChange} onBlur={yearChange} />
           <span>and</span>

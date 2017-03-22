@@ -38,9 +38,9 @@ class PlaceControl extends Component {
 
     return (
       <div className="filter place-control">
-        <div className="flat-options-w-title">
-          <h3>Place:</h3>
-          <ul className="options flat-options">
+        <div className="">
+          <h3>Located in</h3>
+          <ul className="items options flat-options">
             <li><a href="#" className={selectedDepth === COUNTRY_DEPTH ? "active" : ""} data-depth={COUNTRY_DEPTH} onClick={placeDepthClick}>Country</a></li>
             <li><a href="#" className={selectedDepth === CITY_DEPTH ? "active" : ""} data-depth={CITY_DEPTH} onClick={placeDepthClick}>City</a></li>
           </ul>

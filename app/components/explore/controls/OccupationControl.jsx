@@ -33,9 +33,9 @@ class OccupationControl extends Component {
 
     return (
       <div className="filter prof-control">
-        <div className="flat-options-w-title">
-          <h3>Prof:</h3>
-          <ul className="options flat-options">
+        <div className="">
+          <h3>Working in</h3>
+          <ul className="items options flat-options">
             <li><a href="#" className={selectedDepth === DOMAIN_DEPTH ? "active" : ""} data-depth={DOMAIN_DEPTH} onClick={occupationDepthClick}>Domain</a></li>
             <li><a href="#" className={selectedDepth === OCCUPATION_DEPTH ? "active" : ""} data-depth={OCCUPATION_DEPTH} onClick={occupationDepthClick}>Occupation</a></li>
           </ul>

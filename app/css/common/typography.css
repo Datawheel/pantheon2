@@ -110,6 +110,17 @@
     text-transform: uppercase;
   }
 
+  --exploreControlActiveLink {
+    color: var(--colorDark);
+    font-weight: 700;
+    border-bottom: 2px solid var(--colorCtrlShape);
+  }
+
+  --exploreControlActiveLinkHover {
+    border-bottom: 2px solid var(--colorCtrlShape);
+    cursor: default;
+  }
+
   --exploreControlInput {
     padding: 8px 5px 4px;
     appearance: none;

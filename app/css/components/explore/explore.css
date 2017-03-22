@@ -169,7 +169,7 @@
 
   & h3 {
     @apply --exploreControlTitles;
-    margin: 20px 0 0;
+    margin: 0 0 2px;
   }
 
   & h4 {
@@ -194,6 +194,10 @@
     &.add-control-input {
       margin-top: 10px;
     }
+  }
+
+  & .filter + .filter {
+    margin: 20px 0 0;
   }
 
   & .control-header {
@@ -288,10 +292,55 @@
     }
   }
 
+  & .options {
+    padding-left: 5px;
+
+    & a {
+      @apply --bodyLink;
+      @apply --exploreControlTitles;
+      color: inherit;
+
+      &.active {
+        @apply --exploreControlActiveLink;
+
+        &:hover {
+          @apply --exploreControlActiveLinkHover;
+        }
+      }
+    }
+  }
+
+  & .viztype-options {
+    & a {
+      margin-left: 20px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 14px;
+        height: 14px;
+        margin: 2px 0 0 -20px;
+      }
+
+      &.treemap::before {
+        background-image: url('../../../images/viztypes/treemap.svg');
+      }
+      &.stacked::before {
+        background-image: url('../../../images/viztypes/stacked.svg');
+      }
+      &.line::before {
+        background-image: url('../../../images/viztypes/line.svg');
+      }
+      &.map::before {
+        background-image: url('../../../images/viztypes/map.svg');
+      }
+    }
+  }
+
   & .flat-options {
     display: inline-block;
-    margin: 0;
-    padding: 0;
 
     & li {
       display: inline-block;
@@ -305,22 +354,6 @@
       &:last-child:after {
         content: "";
       }
-
-      & a {
-        @apply --bodyLink;
-        @apply --exploreControlTitles;
-        color: inherit;
-
-        &.active {
-          color: var(--colorDark);
-          font-weight: 700;
-          border-bottom: 2px solid var(--colorCtrlShape);
-          &:hover {
-            border-bottom: 2px solid var(--colorCtrlShape);
-            cursor: default;
-          }
-        }
-      }
     }
   }
 
@@ -329,19 +362,27 @@
 
     & ul {
       display: flex;
-      margin: 15px 0 0 0;
+      margin: 0;
     }
 
     & h3 {
       display: inline-block;
-      margin: 20px 6px 0 0;
+      margin: 0 6px 0 0;
+    }
+  }
+
+  & .subfilter {
+    margin-top: 10px;
+
+    & .options {
+      padding-left: 0;
     }
   }
 
   & .control-group {
     border: solid 1px var(--colorSand);
     margin-bottom: 9px;
-    padding: 13px 11px 18px;
+    padding: 16px 11px 16px;
     box-sizing: border-box;
   }
 
@@ -356,16 +397,14 @@
         padding-left: 16px;
       }
 
-      & a:hover {
-        border-bottom: 0;
-        opacity: 0.5;
-      }
-    }
-  }
+      & a {
+        vertical-align: text-bottom;
 
-  & .key-group {
-    & > h3 {
-      margin: 0 0 8px;
+        &:hover {
+          border-bottom: 0;
+          opacity: 0.5;
+        }
+      }
     }
   }
 
@@ -530,12 +569,6 @@
     box-sizing: border-box;
   }
 
-  & .key-group {
-    & > h3 {
-      margin: 0 0 8px;
-    }
-  }
-
   & .flat-group {
     display: flex;
     justify-content: space-between;
@@ -544,7 +577,7 @@
 
 /* override Timeline styles */
 .rc-slider {
-  margin: 8px 0 30px 0;
+  margin: 8px 0 35px 0;
 }
 
 .rc-slider-rail {

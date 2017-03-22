@@ -27,7 +27,7 @@ class VizControl extends Component {
       <div>
         <section className="control-group key-group">
           <h3>View As</h3>
-          <ul className="options list-options">
+          <ul className="items list-options">
           {allVizTypes.map(v =>
             <li key={v.id}><a href="#" data-viz={v.id} className={type === v.id ? "active" : ""} onClick={changeVizClick}>{v.name}</a></li>
           )}
