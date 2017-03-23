@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import "css/components/explore/explore";
-import {Viz} from "d3plus-react";
+import {StackedArea, Treemap, Viz} from "d3plus-react";
 import {changeViz} from "actions/explore";
-import {COLORS_CONTINENT, COUNTRY_DEPTH, CITY_DEPTH, OCCUPATION_DEPTH, DOMAIN_DEPTH, FORMATTERS, YEAR_BUCKETS} from "types";
+import {COLORS_CONTINENT, COUNTRY_DEPTH, PLACE_DEPTH, OCCUPATION_DEPTH, DOMAIN_DEPTH, FORMATTERS, YEAR_BUCKETS} from "types";
 import {extent} from "d3-array";
-import {groupBy, groupTooltip, peopleTooltip, shapeConfig} from "viz/helpers";
+import {bucketScale, groupBy, groupTooltip, peopleTooltip, shapeConfig} from "viz/helpers";
 
 class VizShell extends Component {
 
@@ -44,10 +44,13 @@ class VizShell extends Component {
       vizShapeConfig = {fill: d => COLORS_CONTINENT[d.borncontinent]};
     }
     else if (show.type === "occupations") {
+      let birthyearSpan = extent(data, d => d.birthyear);
+      birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
       attrs = occupations.reduce((obj, d) => {
         obj[d.id] = d;
         return obj;
       }, {});
+
       vizData = data
         .filter(p => p.birthyear !== null && p.occupation_id !== null)
         .map(d => {
@@ -62,19 +65,24 @@ class VizShell extends Component {
           else {
             console.log(d.profession_id, attrs);
           }
-          d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
+          d.event = "OCCUPATIONS OF FAMOUS PEOPLE";
           d.place = d.birthplace;
+          d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
+                       ? d.birthyear
+                       : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
           return d;
         });
       vizShapeConfig = shapeConfig(attrs);
     }
+
+    const MyViz = type === "StackedArea" ? StackedArea : Treemap;
 
     return (
       <div className="explore-viz-container">
         <h1>How have the {show.type} of all globally remembered people changed over time?</h1>
         <h3 className="explore-viz-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
         <div className="viz-shell">
-          <Viz type={type} config={Object.assign(
+          <MyViz config={Object.assign(
             {
               shapeConfig: vizShapeConfig
             },

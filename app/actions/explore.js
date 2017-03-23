@@ -355,6 +355,13 @@ export function changeViz(vizType, triggerUpdate = true) {
         groupBy: ["domain", "industry", "occupation_name"],
         time: "birthyear"
       };
+      if (vizType === "StackedArea") {
+        config = Object.assign(config, {
+          time: "bucketyear",
+          x: "bucketyear",
+          y: d => d.id instanceof Array ? d.id.length : 1
+        });
+      }
     }
     dispatch({type: "CHANGE_EXPLORE_VIZ", vizConfig: config, vizType});
     if (!explore.data.length && triggerUpdate) {

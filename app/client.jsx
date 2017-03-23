@@ -30,9 +30,9 @@ function onUpdate() {
     return;
   }
 
-  const { components, params } = this.state;
-
-  preRenderMiddleware(store.dispatch, components, params);
+  // const { components, params } = this.state;
+  //
+  // preRenderMiddleware(store.dispatch, components, params);
 }
 
 // require.context("../images/", true, /^\.\/.*\.(jpg|png|svg)/);
