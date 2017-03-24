@@ -48,7 +48,7 @@ class RankingTable extends Component {
           }
         }
         return c;
-      })
+      });
     }
 
     return (

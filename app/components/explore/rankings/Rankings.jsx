@@ -7,6 +7,7 @@ import "css/components/explore/rankings";
 import Controls from "components/explore/controls/Index";
 import RankingTable from "components/explore/rankings/RankingTable";
 import {initExplore, initExplorePlace, initExploreOccupation, setExplorePage} from "actions/explore";
+import {FORMATTERS} from "types";
 
 class Rankings extends Component {
 
@@ -19,6 +20,9 @@ class Rankings extends Component {
   }
 
   render() {
+    const {show, years} = this.props.explore;
+    console.log(show);
+
     return (
       <div className="rankings">
         <Helmet
@@ -28,8 +32,8 @@ class Rankings extends Component {
           link={config.link}
         />
         <div className="explore-head">
-          <h1 className="explore-title">Most Globally Remembered People</h1>
-          <h3 className="explore-date">4000 BC - 2013</h3>
+          <h1 className="explore-title">Most Globally Remembered {show.type}</h1>
+          <h3 className="explore-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
         </div>
         <div className="explore-body">
           <Controls page="rankings" />
@@ -46,4 +50,10 @@ Rankings.need = [
   initExploreOccupation
 ];
 
-export default connect(null, {setExplorePage})(Rankings);
+function mapStateToProps(state) {
+  return {
+    explore: state.explore
+  };
+}
+
+export default connect(mapStateToProps, {setExplorePage})(Rankings);

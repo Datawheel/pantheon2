@@ -171,8 +171,8 @@
   max-width: 1024px;
   margin: 0 auto;
 
-  & .explore-controls {
-
+  & .explore-title {
+    text-transform: capitalize;
   }
 }
 
