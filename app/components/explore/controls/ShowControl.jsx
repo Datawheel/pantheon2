@@ -25,13 +25,13 @@ class ShowControl extends Component {
     return (
       <div className="filter">
         <h3>Of People grouped by</h3>
-        <select value={type || ""} onChange={this.changeShowType}>
+        <ul className="items options flat-options">
           {rankingTypes.map(rt =>
-            <option key={rt.id} value={rt.id}>
-              {rt.name}
-            </option>
+            <li key={rt.id} value={rt.id}>
+              <a href="#" data-id={rt.id} onClick={this.changeShowType} className={!type || type === rt.id  ? "active" : null}>{rt.name}</a>
+            </li>
           )}
-        </select>
+        </ul>
         { type === "occupations" && page === "rankings"
         ? <div className="options subfilter flat-options-w-title">
           <ul className="items options flat-options">
@@ -63,7 +63,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({
   changeShowType: e => {
-    const showType = e.target.value;
+    const showType = e.target.dataset.id;
+    e.preventDefault();
     dispatch(changeShowType(showType));
     dispatch(changeViz(null, false));
   },
