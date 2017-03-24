@@ -25,7 +25,7 @@ class VizShell extends Component {
     let attrs, vizData, vizShapeConfig;
 
     if (!data.length) {
-      return <div className="explore-viz-container">no data yet (or loading...)</div>;
+      return <div className="explore-viz-container">Loading data</div>;
     }
 
     if (show.type === "places") {
@@ -88,7 +88,19 @@ class VizShell extends Component {
             config,
             {
               data: vizData,
+              timeline: false,
               groupBy: config.groupBy.map(groupBy(attrs)),
+              legendConfig: {
+                shapeConfig: {
+                  fontColor: "#4B4A48",
+                  fontFamily: () => "Amiko",
+                  fontResize: false,
+                  fontSize: () => 14,
+                  height: () => 13,
+                  labelPadding: 0,
+                  width: () => 13
+                }
+              },
               tooltipConfig: type === "Priestley" ? peopleTooltip : groupTooltip(vizData)
             }
           )} />
