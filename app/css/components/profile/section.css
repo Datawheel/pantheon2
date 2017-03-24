@@ -2,7 +2,7 @@
 @import '../../common/typography';
 
 .profile-section {
-  max-width: 950px;
+  max-width: 1024px;
   margin: 70px auto;
   overflow: visible;
 

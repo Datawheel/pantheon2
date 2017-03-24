@@ -126,8 +126,32 @@
 
 /* shared Ranking and Explore container styles*/
 .explore-container {
-  max-width: 950px;
+  width: 100%;
   margin: 90px auto 5px;
+  box-sizing: border-box;
+}
+
+.explore-title {
+  width: 55%;
+  min-width: 352px;
+  margin: 0 auto;
+  text-align: center;
+  @apply --sectionTitle;
+  color: var(--colorBlackhole);
+  text-transform: none;
+}
+
+.explore-date {
+  @apply --searchResults;
+  margin-top: 3px;
+  color: var(--colorTan);
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.explore, .rankings {
+  color: var(--colorSlate);
+  padding: 5px 24px 60px;
   box-sizing: border-box;
 }
 
@@ -138,26 +162,21 @@
   flex: 1;
 }
 
-.explore {
-  color: var(--colorSlate);
-  padding: 5px 0 60px;
+.explore-head {
+  margin-bottom: 25px;
+}
+
+.rankings {
+  max-width: 1024px;
+  margin: 0 auto;
+
+  & .explore-controls {
+
+  }
+}
+
+.explore-body {
   display: flex;
-  justify-content: space-between;
-
-  & h1 {
-    max-width: 520px;
-    text-align: center;
-    @apply --sectionTitle;
-    color: var(--colorBlackhole);
-    text-transform: none;
-  }
-
-  & h3 {
-    @apply --searchResults;
-    margin: 3px 0 12px;
-    color: var(--colorTan);
-    letter-spacing: 0.5px;
-  }
 }
 
 /* shared Control Panel styles*/

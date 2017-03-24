@@ -3,43 +3,14 @@
 
 .viz-shell {
   width: 100%;
-}
-
-.ranking-table-min {
-  /*width: 130px;*/
+  height: 100%;
 }
 
 .viz {
+  height: 100%;
   margin: 0;
 }
 
-.controls {
-  color: var(--colorStone);
-  font-size: 15px;
-  margin-bottom: 10px;
-  text-align: center;
-  text-transform: uppercase;
-
-  & .toggle {
-    color: var(--colorDark);
-    cursor: pointer;
-    letter-spacing: 0.36px;
-    margin: 0 10px;
-    position: relative;
-
-    &:not(:last-child):after {
-      color: var(--colorStone);
-      content: "|";
-      font-weight: normal;
-      position: absolute;
-      right: -13px;
-      top: 0;
-    }
-
-    &.active {
-      border-bottom: 2px solid #718D9A;
-      cursor: default;
-      font-weight: bold;
-    }
-  }
+svg {
+  min-height: 750px;
 }
