@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import "css/components/explore/explore";
+import "css/components/explore/rankings";
 import Controls from "components/explore/controls/Index";
 import RankingTable from "components/explore/rankings/RankingTable";
 import {initExplore, initExplorePlace, initExploreOccupation, setExplorePage} from "actions/explore";
