@@ -89,7 +89,7 @@ class Home extends Component {
                     fontColor: "#4B4A48",
                     fontFamily: () => "Amiko",
                     fontResize: false,
-                    fontSize: () => 9,
+                    fontSize: () => 12,
                     height: () => 11,
                     labelPadding: 0,
                     width: () => 11

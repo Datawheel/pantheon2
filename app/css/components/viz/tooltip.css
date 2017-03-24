@@ -3,7 +3,7 @@
 
 .d3plus-tooltip {
   border: 1px solid var(--colorMatza) !important;
-  font-family: var(--fontAmiko);
+  font-family: var(--fontBody);
   z-index: 100;
 
   & .d3plus-tooltip-body {

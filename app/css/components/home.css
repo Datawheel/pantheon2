@@ -46,9 +46,7 @@
     }
 
     & h3 {
-      @apply --smallCaps;
-      font-size: 14px;
-      letter-spacing: 2.2px;
+      @apply --priLabel;
       margin: 5px auto 25px;
     }
   }
@@ -104,27 +102,21 @@
       @apply --bodyLink;
       font-weight: 400;
     }
-
-    & span {
-      color: var(--colorTan);
-      font-style: italic;
-    }
   }
 
   & .viz-container {
     position: relative;
     width: 100%;
     margin: -200px auto 100px;
-  }
-
-  & .viz {
+    box-sizing: border-box;
+    padding: 0 48px 0 24px;
+    z-index: -1;
   }
 
   & .legend-title {
     text-align: center;
-    margin: 0 auto 5px;
-    @apply --smallCaps;
-    font-weight: 700;
+    margin: 10px auto 0;
+    @apply --boldSmallCaps;
   }
 
   & .timeline-container {
@@ -132,7 +124,10 @@
     bottom: 0;
     height: 100%;
     width: 100%;
-    padding: 0 16px 70px 65px;
+    padding-left: 65px;
+    padding-right: 91px;
+    padding-bottom: 70px;
+    box-sizing: border-box;
 
     & .items {
       position: relative;

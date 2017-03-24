@@ -9,7 +9,7 @@
   width: 100%;
 
   & .item-link {
-    @apply --globalNav;
+    @apply --boldSmallCaps;
     color: var(--colorDark);
     position: relative;
 
@@ -330,7 +330,7 @@
       padding: 22px 0;
 
       & a {
-        @apply --globalNav;
+        @apply --boldSmallCaps;
         color: var(--colorDark);
         margin-left: 60px;
         font-size: 18px;
@@ -383,7 +383,7 @@
     align-items: flex-start;
 
     & .item > .item-link {
-      @apply --globalNav;
+      @apply --boldSmallCaps;
       &:hover {
         opacity: 0.7;
       }

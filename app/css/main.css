@@ -10,7 +10,8 @@
 
 body {
   margin: 0;
-  font-family: var(--fontAmiko);
+  font-size: 87.5%;
+  font-family: var(--fontBody);
   @apply --themeLight;
   -webkit-font-smoothing: antialiased;
 }
@@ -19,17 +20,6 @@ body {
   height: 100%;
   font-weight: normal;
 }
-
-/* Add your global styles below... */
-
-/* ex:
-
-:global {
-  & .red { color: red; }
-  & .blue { color: blue; }
-}
-
-*/
 
 a {
   text-decoration: none;

@@ -3,10 +3,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Marcellus');
 
-:root {
-  --fontTitle: 'Marcellus', Times, serif;
-}
-
 header {
   position: relative;
   width: 100%;
@@ -149,43 +145,22 @@ header {
 }
 
 .top-desc {
-  color: var(--colorTan);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  -webkit-font-smoothing: antialiased;
+  @apply --contextLabel;
   margin: 0 auto 14px;
 }
 
 h1 {
-  font-family: var(--fontTitle);
-  font-size: 33px;
-  font-weight: 400;
-  letter-spacing: 1px;
-  line-height: 1;
-  color: var(--colorDark);
-  -webkit-font-smoothing: antialiased;
+  @apply --priTitle;
   margin: 0;
-  text-transform: uppercase;
 }
 
 .profile-type {
-  color: var(--colorDark);
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  -webkit-font-smoothing: antialiased;
+  @apply --priLabel;
   margin: 0 auto 10px;
 }
 
 .date-subtitle {
-  color: var(--colorTan);
-  font-size: 14px;
-  letter-spacing: 1px;
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
+  @apply --secLabel;
   margin: 14px auto 0;
   & a {
     color: inherit;
