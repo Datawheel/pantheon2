@@ -22,7 +22,7 @@ class Controls extends Component {
     return (
       <div className="explore-controls viz-explorer">
         <div className="control-header">
-          <h2 className="viz-explorer">{page === "rankings" ? "Rankings" : "Visual Explorer"}</h2>
+          <h2 className="viz-explorer">{page === "rankings" ? "Rankings" : "Explorer"}</h2>
           <i className="control-hide"></i>
         </div>
 
