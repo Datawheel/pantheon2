@@ -23,13 +23,13 @@ export const COLUMNS = {
         render: ({value, row}) => <a href={`/profile/occupation/${row.occupation.occupation_slug}`}>{value}</a>
       },
       {
-        header: "Born",
+        header: "Birth",
         accessor: "birthyear",
         render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"Unknown"}</span>,
         minWidth: 45
       },
       {
-        header: "Died",
+        header: "Death",
         accessor: "deathyear",
         render: ({value, row}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"--"}</span>,
         minWidth: 45
@@ -56,7 +56,7 @@ export const COLUMNS = {
         header: "#",
         accessor: "num_born",
         render: ({index}) => <span>{index+1}</span>,
-        maxWidth: 35
+        minWidth: 30
       },
       {
         header: "Occupation",
@@ -78,8 +78,9 @@ export const COLUMNS = {
         minWidth: 55
       },
       {
-        header: "Women",
+        header: "% Women",
         accessor: "num_born_women",
+        minWidth: 72,
         render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
       }
     ],
@@ -87,6 +88,7 @@ export const COLUMNS = {
       {
         header: "#",
         accessor: "num_born",
+        minWidth: 30,
         render: ({index}) => <span>{index+1}</span>
       },
       {
@@ -103,8 +105,9 @@ export const COLUMNS = {
         sort: "desc"
       },
       {
-        header: "Women",
+        header: "% Women",
         accessor: "num_born_women",
+        minWidth: 72,
         render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
       }
     ],
@@ -124,8 +127,9 @@ export const COLUMNS = {
         sort: "desc"
       },
       {
-        header: "Women",
+        header: "% Women",
         accessor: "num_born_women",
+        minWidth: 72,
         render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
       }
     ]
@@ -147,20 +151,22 @@ export const COLUMNS = {
         accessor: "continent"
       },
       {
-        header: "Born",
-        accessor: "num_born"
+        header: "Births",
+        accessor: "num_born",
+        minWidth: 60
       },
       {
-        header: "Died",
-        accessor: "num_died"
+        header: "Deaths",
+        accessor: "num_died",
+        minWidth: 60
       }
     ],
     places: [
       {
         header: "#",
         accessor: "born_rank_unique",
-        render: ({value, index}) => <span>{value ? value : index+1}</span>,
-        maxWidth: 35
+        minWidth: 35,
+        render: ({value, index}) => <span>{value ? value : index+1}</span>
       },
       {
         header: "City",
@@ -176,15 +182,15 @@ export const COLUMNS = {
         accessor: "region"
       },
       {
-        header: "Born",
+        header: "Births",
         accessor: "num_born",
-        maxWidth: 45,
+        minWidth: 60,
         sort: "desc"
       },
       {
-        header: "Died",
+        header: "Deaths",
         accessor: "num_died",
-        maxWidth: 45
+        minWidth: 60
       }
     ]
   }

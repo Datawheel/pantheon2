@@ -21,7 +21,6 @@ class Rankings extends Component {
 
   render() {
     const {show, years} = this.props.explore;
-    console.log(show);
 
     return (
       <div className="rankings">
