@@ -22,7 +22,7 @@ class VizControl extends Component {
       {id: "Treemap", name: "Tree Map"},
       {id: "StackedArea", name: "Stacked"},
       {id: "LineChart", name: "Line Chart"},
-      {id: "Map", name: "Map"},
+      {id: "Map", name: "Map"}
     ];
 
     return (

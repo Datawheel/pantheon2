@@ -42,10 +42,10 @@ class Controls extends Component {
           </div>
 
           <div className="filter">
-            <h3>Filtered by years of</h3>
+            <h3>Filtered by</h3>
             <ul className="items options flat-options filter">
-              <li><a href="#" id="birthyear" className="active birthyear">Birth</a></li>
-              <li><a href="#" id="deathyear" className="deathyear">Death</a></li>
+              <li><a href="#" id="birthyear" className="active birthyear">Births</a></li>
+              <li><a href="#" id="deathyear" className="deathyear">Deaths</a></li>
             </ul>
           </div>
 

@@ -32,8 +32,8 @@ class ShowControl extends Component {
             </option>
           )}
         </select>
-        { type === "occupations" && page === "rankings" ?
-        <div className="options subfilter flat-options-w-title">
+        { type === "occupations" && page === "rankings"
+        ? <div className="options subfilter flat-options-w-title">
           <ul className="items options flat-options">
             <li><a href="#" id="occupations" onClick={this.changeShowDepth} className={!depth || depth === "occupations"  ? "active" : null}>Occu</a></li>
             <li><a href="#" id="industries" onClick={this.changeShowDepth} className={depth === "industries" ? "active" : null}>Industry</a></li>
@@ -41,11 +41,11 @@ class ShowControl extends Component {
           </ul>
         </div>
         : null}
-        { type === "places" && page === "rankings" ?
-        <div className="options subfilter flat-options-w-title">
+        { type === "places" && page === "rankings"
+        ? <div className="options subfilter flat-options-w-title">
           <ul className="items options flat-options">
-            <li><a href="#" id="places" onClick={this.changeShowDepth} className={!depth || depth === "places" ? "active" : null}>Cities</a></li>
-            <li><a href="#" id="countries" onClick={this.changeShowDepth} className={depth === "countries" ? "active" : null}>Countries</a></li>
+            <li><a href="#" id="places" onClick={this.changeShowDepth} className={!depth || depth === "places" ? "active" : null}>City</a></li>
+            <li><a href="#" id="countries" onClick={this.changeShowDepth} className={depth === "countries" ? "active" : null}>Country</a></li>
           </ul>
         </div>
         : null}
