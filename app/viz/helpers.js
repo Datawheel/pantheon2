@@ -19,8 +19,17 @@ export function groupBy(attrs) {
     let val;
 
     if (d[g]) val = d[g];
-    else if (d.occupation_id instanceof Array) val = attrs[d.occupation_id[0]][g];
-    else val = attrs[d.occupation_id][g];
+    else if (d.occupation_id instanceof Array) {
+      let id = d.occupation_id[0];
+      if (id instanceof Array) id = id[0];
+      val = attrs[id][g];
+    }
+    else {
+
+
+      if (!attrs[d.occupation_id]) console.log(d.occupation_id, attrs[d.occupation_id]);
+      val = attrs[d.occupation_id][g];
+    }
 
     return val;
   };
@@ -72,7 +81,8 @@ export function shapeConfig(attrs) {
     fill: d => {
       if (d.color) return d.color;
       else if (d.occupation_id !== void 0) {
-        const occ = d.occupation_id.constructor === Array ? d.occupation_id[0] : d.occupation_id;
+        let occ = d.occupation_id.constructor === Array ? d.occupation_id[0] : d.occupation_id;
+        if (occ instanceof Array) occ = occ[0];
         return COLORS_DOMAIN[attrs[occ].domain_slug];
       }
       return "#ccc";
