@@ -5,6 +5,7 @@ import YearControl from "components/explore/controls/YearControl";
 import PlaceControl from "components/explore/controls/PlaceControl";
 import OccupationControl from "components/explore/controls/OccupationControl";
 import ShowControl from "components/explore/controls/ShowControl";
+import VizControl from "components/explore/controls/VizControl";
 import emIconSvg from "images/icons/icon-email.svg";
 import fbIconSvg from "images/icons/icon-facebook.svg";
 import twIconSvg from "images/icons/icon-twitter.svg";
@@ -25,7 +26,10 @@ class Controls extends Component {
           <i className="control-hide"></i>
         </div>
 
-        <ShowControl page={page} />
+        <section className="control-group">
+          {page === "viz" ? <VizControl /> : null}
+          <ShowControl page={page} />
+        </section>
 
         <section className="control-group">
           <div className="filter">

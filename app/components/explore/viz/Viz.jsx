@@ -5,7 +5,6 @@ import config from "helmconfig.js";
 import "css/components/explore/explore";
 import Controls from "components/explore/controls/Index";
 import VizShell from "components/explore/viz/VizShell";
-import ViewControls from "components/explore/viz/ViewControls";
 import {initExplore, initExplorePlace, initExploreOccupation, setExplorePage} from "actions/explore";
 
 class Viz extends Component {
@@ -29,7 +28,6 @@ class Viz extends Component {
         />
         <Controls />
         <VizShell />
-        <ViewControls />
       </div>
     );
   }

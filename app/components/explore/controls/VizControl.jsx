@@ -16,25 +16,24 @@ class VizControl extends Component {
 
   render() {
 
-    const {type} = this.props.explorer.viz;
+    const {type} = this.props.explore.viz;
     const changeVizClick = this.changeVizClick.bind(this);
     const allVizTypes = [
       {id: "Treemap", name: "Tree Map"},
-      {id: "StackedArea", name: "Stacked"}
+      {id: "StackedArea", name: "Stacked"},
+      {id: "LineChart", name: "Line Chart"},
+      {id: "Map", name: "Map"},
     ];
 
     return (
-      <div>
-        <section className="control-group key-group">
-          <h3>View As</h3>
-          <ul className="items list-options">
-          {allVizTypes.map(v =>
-            <li key={v.id}><a href="#" data-viz={v.id} className={type === v.id ? "active" : ""} onClick={changeVizClick}>{v.name}</a></li>
-          )}
-          </ul>
-        </section>
-
-      </div>
+    <div className="filter">
+      <h3>Make a</h3>
+      <ul className="items options viztype-options">
+        {allVizTypes.map(v =>
+          <li key={v.id}><h4><a href="#" data-viz={v.id} className={type === v.id ? `active ${v.id.toLowerCase()}` : v.id.toLowerCase()} onClick={changeVizClick}>{v.name}</a></h4></li>
+        )}
+      </ul>
+    </div>
     );
   }
 }

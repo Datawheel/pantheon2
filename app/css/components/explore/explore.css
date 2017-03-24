@@ -327,10 +327,10 @@
       &.treemap::before {
         background-image: url('../../../images/viztypes/treemap.svg');
       }
-      &.stacked::before {
+      &.stackedarea::before {
         background-image: url('../../../images/viztypes/stacked.svg');
       }
-      &.line::before {
+      &.linechart::before {
         background-image: url('../../../images/viztypes/line.svg');
       }
       &.map::before {
