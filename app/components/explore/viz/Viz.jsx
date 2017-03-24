@@ -6,6 +6,7 @@ import "css/components/explore/explore";
 import Controls from "components/explore/controls/Index";
 import VizShell from "components/explore/viz/VizShell";
 import {initExplore, initExplorePlace, initExploreOccupation, setExplorePage} from "actions/explore";
+import {FORMATTERS} from "types";
 
 class Viz extends Component {
 
@@ -18,6 +19,8 @@ class Viz extends Component {
   }
 
   render() {
+    const {show, years} = this.props.explore;
+
     return (
       <div className="explore">
         <Helmet
@@ -26,11 +29,23 @@ class Viz extends Component {
           meta={config.meta}
           link={config.link}
         />
-        <Controls />
-        <VizShell />
+        <div className="explore-head">
+          <h1 className="explore-title">How have the {show.type} of all globally remembered people changed over time?</h1>
+          <h3 className="explore-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
+        </div>
+        <div className="explore-body">
+          <Controls />
+          <VizShell />
+        </div>
       </div>
     );
   }
+}
+
+function mapStateToProps(state) {
+  return {
+    explore: state.explore
+  };
 }
 
 Viz.need = [
@@ -39,4 +54,4 @@ Viz.need = [
   initExploreOccupation
 ];
 
-export default connect(null, {setExplorePage})(Viz);
+export default connect(mapStateToProps, {setExplorePage})(Viz);

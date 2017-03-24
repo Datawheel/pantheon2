@@ -53,8 +53,6 @@ class RankingTable extends Component {
 
     return (
       <div className="ranking-table-container">
-        <h1>Most Globally Remembered People</h1>
-        <h3 className="ranking-table-date">4000 BC - 2013</h3>
         <RankingPagination />
         <ReactTable
           className="ranking-table -highlight"

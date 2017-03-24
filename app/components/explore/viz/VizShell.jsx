@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import "css/components/explore/explore";
+import "css/components/explore/viz";
 import {StackedArea, Treemap, Viz} from "d3plus-react";
 import {changeViz} from "actions/explore";
 import {COLORS_CONTINENT, COUNTRY_DEPTH, PLACE_DEPTH, OCCUPATION_DEPTH, DOMAIN_DEPTH, FORMATTERS, YEAR_BUCKETS} from "types";
@@ -79,8 +80,6 @@ class VizShell extends Component {
 
     return (
       <div className="explore-viz-container">
-        <h1>How have the {show.type} of all globally remembered people changed over time?</h1>
-        <h3 className="explore-viz-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
         <div className="viz-shell">
           <MyViz config={Object.assign(
             {

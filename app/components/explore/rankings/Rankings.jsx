@@ -20,15 +20,21 @@ class Rankings extends Component {
 
   render() {
     return (
-      <div className="explore">
+      <div className="rankings">
         <Helmet
           htmlAttributes={{lang: "en", amp: undefined}}
           title="Rankings - Pantheon"
           meta={config.meta}
           link={config.link}
         />
-        <Controls page="rankings" />
-        <RankingTable />
+        <div className="explore-head">
+          <h1 className="explore-title">Most Globally Remembered People</h1>
+          <h3 className="explore-date">4000 BC - 2013</h3>
+        </div>
+        <div className="explore-body">
+          <Controls page="rankings" />
+          <RankingTable />
+        </div>
       </div>
     );
   }
