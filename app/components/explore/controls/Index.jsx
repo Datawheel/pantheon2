@@ -53,8 +53,22 @@ class Controls extends Component {
           <PlaceControl />
           <OccupationControl />
         </section>
-        <section className="control-group advanced-options">
+        <section className="control-group advanced-group">
           <h3>Advanced Options</h3>
+          <div className="flat-options">
+            <ul className="items options flat-options filter">
+              <li><a href="#" id="hpimetric" className="active hpimetric">HPI</a></li>
+              <li><a href="#" id="lmetric" className="lmetric">L</a></li>
+            </ul>
+            <span>></span>
+            <select>
+              <option>10</option>
+              <option selected>15</option>
+              <option>20</option>
+              <option>25</option>
+              <option>30</option>
+            </select>
+          </div>
         </section>
         <section className="control-group flat-group share-group">
           <h3>Share</h3>

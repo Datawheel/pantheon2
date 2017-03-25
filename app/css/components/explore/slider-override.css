@@ -1,0 +1,72 @@
+@import '../../../../node_modules/rc-slider/assets/index.css';
+@import '../../common/colors';
+@import '../../common/typography';
+@import '../../common/input';
+
+.explore-controls {
+
+  & .rc-slider {
+    margin: 8px 0 35px 0;
+  }
+
+  & .rc-slider-rail {
+    background-color: var(--colorTan);
+    height: 2px;
+    margin: 1px 0;
+  }
+
+  & .rc-slider-track {
+    background-color: var(--colorCtrlShape);
+    height: 2px;
+    margin: 1px 0;
+  }
+
+  & .rc-slider-handle {
+    background-color: var(--colorCtrlShape);
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    margin-top: -2px;
+    border: 1px solid var(--colorCtrlShape);
+  }
+
+  & .rc-slider-dot {
+    border: 1px solid var(--colorTan);
+  }
+
+  & .rc-slider-dot-active {
+    background-color: var(--colorCtrlShape);
+    border: 1px solid var(--colorCtrlShape);
+  }
+
+  & .rc-slider-dot:first-child {
+    width: 1px;
+    border-radius: 0;
+  }
+
+  & .rc-slider-mark-text {
+    color: var(--colorTan);
+    font-size: 9px;
+    font-weight: 600;
+  }
+
+  & .rc-slider-mark {
+    left: 7%;
+    width: 90%;
+  }
+
+  & .rc-slider-tooltip-placement-top .rc-slider-tooltip-arrow {
+    border-top-color: var(--colorCtrlShape);
+  }
+
+  & .rc-slider-tooltip-inner {
+    @apply --exploreControlInputText;
+    @apply --panelInput;
+    background-color: var(--colorEggshell);
+    padding: 7px 5px;
+    min-width: 24px;
+    height: 24px;
+    text-decoration: none;
+    box-shadow: none;
+  }
+}

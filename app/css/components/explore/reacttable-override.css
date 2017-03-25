@@ -1,0 +1,125 @@
+@import '../../../../node_modules/react-table/react-table.css';
+@import '../../common/colors';
+@import '../../common/typography';
+
+/* override ReactTable styles*/
+.ReactTable {
+  border: 0;
+
+  &.-highlight {
+    & .rt-tbody .rt-tr:not(.-padRow):hover {
+      background: var(--colorLint);
+
+      & a {
+        color: var(--colorCtrl);
+        border-bottom-color: var(--colorCtrlShape);
+      }
+    }
+  }
+
+  & .-loading {
+    background: transparent;
+
+    & > div {
+      @apply --smallCaps;
+      color: var(--colorSand);
+    }
+  }
+
+  & .rt-noData {
+    @apply --smallCaps;
+    background: transparent;
+    color: var(--colorSlate);
+    padding: 0;
+    top: 25%;
+  }
+
+  & .rt-table {
+    border-width: 1px 0 1px 0;
+    border-color: var(--colorSand);
+    border-style: solid;
+    box-sizing: border-box;
+    padding-bottom: 5px;
+    margin: 0;
+  }
+
+  & .rt-thead {
+    box-shadow: none;
+    border-bottom: 1px solid var(--colorSand);
+
+    &.-header {
+      box-shadow: none;
+    }
+
+    & .rt-th {
+      background: transparent;
+      border-right: 0px;
+      box-shadow: none;
+      @apply --profileNav;
+      color: var(--colorSlate);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 12px 5px 7px;
+    }
+
+    & .rt-tr {
+      text-align: right;
+    }
+
+    & .rt-th.-cursor-pointer, & .rt-th.-cursor-pointer {
+      box-shadow: none;
+    }
+
+    & .rt-th.-sort-desc {
+      &::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        height: 5px;
+        width: 10px;
+        margin: 0 0 1px 2px;
+        background: url('../../../images/tri-down.svg') no-repeat;
+        background-size: contain;
+        opacity: 0.8;
+      }
+    }
+
+    & .rt-th.-sort-asc {
+      &::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        height: 5px;
+        width: 10px;
+        margin: 0 0 1px 2px;
+        background: url('../../../images/tri-down.svg') no-repeat;
+        background-size: contain;
+        opacity: 0.8;
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  & .rt-tbody {
+    & .rt-tr-group {
+      border-bottom: 0px;
+    }
+
+    & .rt-tr {
+      border-bottom: 0px;
+
+      &:first-child .rt-td {
+        box-shadow: none;
+      }
+    }
+
+    & .rt-td {
+      padding: 9px 5px 7px;
+    }
+
+    & .rt-td {
+      border-right: 0px;
+      text-align: right;
+    }
+  }
+}
