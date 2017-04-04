@@ -123,27 +123,27 @@ class Home extends Component {
                 <ul className="items">
                   <li className="item era computer">
                     <div className="era-img"></div>
-                    <p><a href="/profile/era/personal_computer" target="_blank">Computer</a></p>
+                    <p><a href="/profile/era/personal_computer">Computer</a></p>
                   </li>
                   <li className="item era television">
                     <div className="era-img"></div>
-                    <p><a href="/profile/era/television" target="_blank">Television</a></p>
+                    <p><a href="/profile/era/television">Television</a></p>
                   </li>
                   <li className="item era film-radio">
                     <div className="era-img"></div>
-                    <p><a href="/profile/era/radio_and_film" target="_blank">Film & Radio</a></p>
+                    <p><a href="/profile/era/radio_and_film">Film & Radio</a></p>
                   </li>
                   <li className="item era newspaper">
                     <div className="era-img"></div>
-                    <p><a href="/profile/era/newspaper" target="_blank">Newspaper</a></p>
+                    <p><a href="/profile/era/newspaper">Newspaper</a></p>
                   </li>
                   <li className="item era printing">
                     <div className="era-img"></div>
-                    <p><a href="/profile/era/printing" target="_blank">Printing</a></p>
+                    <p><a href="/profile/era/printing">Printing</a></p>
                   </li>
                   <li className="item era scribal">
                     <div className="era-img"></div>
-                    <p><a href="/profile/era/scribal" target="_blank">Scribal</a></p>
+                    <p><a href="/profile/era/scribal">Scribal</a></p>
                   </li>
                 </ul>
               </div>
