@@ -40,7 +40,7 @@ export function groupTooltip(data, accessor = () => []) {
   return {
     body: d => {
       const names = d.name instanceof Array ? d.name.slice(0, 3) : [d.name];
-      let txt = `<span class='sub'>Notable ${names.length === 1 ? "Person" : "People"}</span>`;
+      let txt = `<span class='sub'>Top Ranked ${names.length === 1 ? "Person" : "People"}</span>`;
       const people = data.filter(d => names.includes(d.name));
       const peopleNames = people.map(d => d.name);
       people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
