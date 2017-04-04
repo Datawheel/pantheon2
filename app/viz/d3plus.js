@@ -124,6 +124,7 @@ export default {
       "font-size": "11px",
       "font-weight": 400,
       "letter-spacing": "1px",
+      "max-width": "225px",
       "padding": "8px 7px 7px",
       "text-transform": "uppercase"
     },
