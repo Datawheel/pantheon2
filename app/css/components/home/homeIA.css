@@ -18,6 +18,10 @@
 
   & p {
     @apply --bodyText;
+
+    & span {
+      font-weight: 700;
+    }
   }
 
   & a {
@@ -25,7 +29,16 @@
   }
 
   & .deep-link {
-    @apply --deepLink;
+    &::after {
+      content: '';
+      position: relative;
+      display: inline-block;
+      height: 8px;
+      width: 6px;
+      margin: 0 0 0 3px;
+      background: url('../../../images/tri-right.svg') no-repeat;
+      background-size: contain;
+    }
   }
 
   & ul {
@@ -41,6 +54,76 @@
   & h2 {
     @apply --smallCaps;
     font-size: 1em;
+    margin: 0 0 5px;
+    position: relative;
+
+    &.viz-explorer {
+      &::before {
+        content: '';
+        position: absolute;
+        background: url('../../../images/icons/icon-explore.svg') no-repeat;
+        background-size: contain;
+        width: 17px;
+        height: 17px;
+        margin: -2px 0 0 -20px;
+      }
+    }
+
+    &.ranks {
+      &::before {
+        content: '';
+        position: absolute;
+        background: url('../../../images/icons/icon-rankings.svg') no-repeat;
+        background-size: contain;
+        width: 18px;
+        height: 10px;
+        margin: 3px 0 -2px -22px;
+      }
+    }
+
+    &.profiles {
+      &::before {
+        content: '';
+        position: absolute;
+        background: url('../../../images/globalNav/profile-w.svg') no-repeat;
+        background-size: contain;
+        width: 17px;
+        height: 17px;
+        margin: -1px 0 0 -19px;
+      }
+    }
+  }
+
+  & .ia-top {
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 80px;
+
+    & .ia-top-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      width: 58.59375%;
+      max-width: 600px;
+      height: 300px;
+      background-image: url('../../../images/home/ia-frame.svg');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: 50% 30px;
+      overflow: visible;
+      z-index: 0;
+    }
+
+    & .ia-p-type {
+      z-index: 1;
+    }
+
+    & li {
+      flex: 1;
+    }
   }
 
   & .ia-p-types {

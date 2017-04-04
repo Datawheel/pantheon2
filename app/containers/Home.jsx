@@ -6,7 +6,6 @@ import HomeGrid from "components/home/HomeGrid";
 import HomeIA from "components/home/HomeIA";
 import searchSvg from "images/icons/icon-search.svg";
 import pantheonLogoSvg from "images/logo.svg";
-import iaPng from "images/home/ia_placeholder.png";
 import {StackedArea} from "d3plus-react";
 import {bucketScale, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
 import {FORMATTERS, YEAR_BUCKETS} from "types";

@@ -77,7 +77,16 @@
   }
 
   & .deep-link {
-    @apply --deepLink;
+    &::after {
+      content: '';
+      position: relative;
+      display: inline-block;
+      height: 8px;
+      width: 6px;
+      margin: 0 0 0 3px;
+      background: url('../../../images/tri-right.svg') no-repeat;
+      background-size: contain;
+    }
   }
 
   & h3 {
