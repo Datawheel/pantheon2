@@ -2,6 +2,7 @@
 @import 'common/colors';
 @import 'common/layout';
 @import 'common/typography';
+@import 'components/viz/tooltip';
 
 @import url('https://fonts.googleapis.com/css?family=Amiko:400,600,700');
 

@@ -1,4 +1,5 @@
 import {COLORS_DOMAIN} from "types";
+import {min, max} from "d3-array";
 import {scaleLinear, scaleLog} from "d3-scale";
 
 const domain = [1, 100], maxYear = 2016, minYear = -3500;
@@ -66,12 +67,15 @@ export function on(category, accessor) {
 
 export const peopleTooltip = {
   body: d => {
-    const age = d.deathyear !== null
-              ? d.deathyear - d.birthyear
-              : new Date().getFullYear() - d.birthyear;
-    return d.deathyear !== null
-         ? `<span class="center">${d.birthyear} - ${d.deathyear}, ${age} years old</span>`
-         : `<span class="center">Born ${d.birthyear}, ${age} years old</span>`;
+    const birthyear = d.birthyear instanceof Array ? min(d.birthyear) : d.birthyear;
+    const deathyear = d.deathyear instanceof Array ? max(d.deathyear) : d.deathyear;
+    const suffix = d.birthyear instanceof Array ? " span" : "s old";
+    const age = deathyear !== null
+              ? deathyear - birthyear
+              : new Date().getFullYear() - birthyear;
+    return deathyear !== null
+         ? `<span class="bold">${birthyear} - ${deathyear}</span>${age} year${suffix}</span>`
+         : `<span class="bold">Born ${birthyear}</span>${age} year${suffix}</span>`;
   },
   footer: d => d.name instanceof Array ? "" : "Click to View Profile"
 };
