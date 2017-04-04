@@ -344,20 +344,6 @@
     }
   }
 
-  & .ia {
-    @apply --themeDark;
-    width: 100%;
-    padding: 30px 0 45px;
-    text-align: center;
-    margin-bottom: 60px;
-
-    & img {
-      max-width: 1024px;
-      display: block;
-      margin: 0 auto;
-    }
-  }
-
   & .flying-plane {
     width: 100px;
     height: 50px;

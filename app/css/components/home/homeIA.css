@@ -1,0 +1,51 @@
+@import '../../common/typography';
+@import '../../common/colors';
+
+.ia {
+  @apply --themeDark;
+  width: 100%;
+  padding: 30px 0 45px;
+  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & h3 {
+    @apply --profileVizTitle;
+    color: var(--colorEggshell);
+  }
+
+  & p {
+    @apply --bodyText;
+  }
+
+  & a {
+    @apply --bodyLink;
+  }
+
+  & .deep-link {
+    @apply --deepLink;
+  }
+
+  & ul {
+    width: 100%;
+    max-width: 1024px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0 auto;
+    list-style-type: none;
+  }
+
+  & h2 {
+    @apply --smallCaps;
+    font-size: 1em;
+  }
+
+  & .ia-p-types {
+    & li {
+      max-width: 200px;
+    }
+  }
+}

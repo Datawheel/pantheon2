@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import apiClient from "apiconfig";
 import axios from "axios";
 import "css/components/home";
+import HomeGrid from "components/home/HomeGrid";
+import HomeIA from "components/home/HomeIA";
 import searchSvg from "images/icons/icon-search.svg";
 import pantheonLogoSvg from "images/logo.svg";
 import iaPng from "images/home/ia_placeholder.png";
@@ -80,73 +82,76 @@ class Home extends Component {
           </div>
 
           <div className="viz-container">
-            <StackedArea
-              config={{
-                data: stackedData,
-                groupBy: ["domain"].map(groupBy(attrs)),
-                legendConfig: {
-                  shapeConfig: {
-                    fontColor: "#4B4A48",
-                    fontFamily: () => "Amiko",
-                    fontResize: false,
-                    fontSize: () => 12,
-                    height: () => 11,
-                    labelPadding: 0,
-                    width: () => 11
+          { !stackedData
+            ? <div>Loading...</div>
+            : <div>
+              <StackedArea
+                config={{
+                  data: stackedData,
+                  groupBy: ["domain"].map(groupBy(attrs)),
+                  legendConfig: {
+                    shapeConfig: {
+                      fontColor: "#4B4A48",
+                      fontFamily: () => "Amiko",
+                      fontResize: false,
+                      fontSize: () => 12,
+                      height: () => 11,
+                      labelPadding: 0,
+                      width: () => 11
+                    }
+                  },
+                  legendPosition: "bottom",
+                  shapeConfig: Object.assign({Area: {label: false}}, shapeConfig(attrs)),
+                  time: "logyear",
+                  timeline: false,
+                  tooltipConfig: groupTooltip(stackedData),
+                  x: "logyear",
+                  xConfig: {
+                    tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
+                  },
+                  y: d => d.id instanceof Array ? d.id.length : 1,
+                  yConfig: {
+                    gridConfig: {
+                      "stroke-width": 0
+                    }
                   }
-                },
-                legendPosition: "bottom",
-                shapeConfig: Object.assign({Area: {label: false}}, shapeConfig(attrs)),
-                time: "logyear",
-                timeline: false,
-                tooltipConfig: groupTooltip(stackedData),
-                x: "logyear",
-                xConfig: {
-                  tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-                },
-                y: d => d.id instanceof Array ? d.id.length : 1,
-                yConfig: {
-                  gridConfig: {
-                    "stroke-width": 0
-                  }
-                }
-              }} />
-
-            <div className="timeline-container">
-              <ul className="items">
-                <li className="item era computer">
-                  <div className="era-img"></div>
-                  <p><a href="/profile/era/personal_computer" target="_blank">Computer</a></p>
-                </li>
-                <li className="item era television">
-                  <div className="era-img"></div>
-                  <p><a href="/profile/era/television" target="_blank">Television</a></p>
-                </li>
-                <li className="item era film-radio">
-                  <div className="era-img"></div>
-                  <p><a href="/profile/era/radio_and_film" target="_blank">Film & Radio</a></p>
-                </li>
-                <li className="item era newspaper">
-                  <div className="era-img"></div>
-                  <p><a href="/profile/era/newspaper" target="_blank">Newspaper</a></p>
-                </li>
-                <li className="item era printing">
-                  <div className="era-img"></div>
-                  <p><a href="/profile/era/printing" target="_blank">Printing</a></p>
-                </li>
-                <li className="item era scribal">
-                  <div className="era-img"></div>
-                  <p><a href="/profile/era/scribal" target="_blank">Scribal</a></p>
-                </li>
-              </ul>
+                }} />
+              <div className="timeline-container">
+                <ul className="items">
+                  <li className="item era computer">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/personal_computer" target="_blank">Computer</a></p>
+                  </li>
+                  <li className="item era television">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/television" target="_blank">Television</a></p>
+                  </li>
+                  <li className="item era film-radio">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/radio_and_film" target="_blank">Film & Radio</a></p>
+                  </li>
+                  <li className="item era newspaper">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/newspaper" target="_blank">Newspaper</a></p>
+                  </li>
+                  <li className="item era printing">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/printing" target="_blank">Printing</a></p>
+                  </li>
+                  <li className="item era scribal">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/scribal" target="_blank">Scribal</a></p>
+                  </li>
+                </ul>
+              </div>
+              <h4 className="legend-title">Domains</h4>
             </div>
-
-            <h4 className="legend-title">Domains</h4>
+          }
           </div>
 
-          <div className="ia">
-            <img src={iaPng} alt="IA Placeholder" />
-          </div>
+          <HomeIA />
+
+          <HomeGrid />
 
           <div className="floating-content l-1">
             <div className="box"></div>
