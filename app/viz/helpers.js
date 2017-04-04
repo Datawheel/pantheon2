@@ -50,7 +50,7 @@ export function groupTooltip(data, accessor = () => []) {
     },
     footer: d => {
       const id = accessor(d);
-      return id instanceof Array ? "Click to Highlight" : "Click to View Profile";
+      return id instanceof Array ? "" : "Click to View Profile";
     }
   };
 }
