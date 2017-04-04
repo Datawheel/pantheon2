@@ -79,7 +79,7 @@ class Person extends Component {
                   Line: {
                     fill: "none",
                     stroke: d => d.color,
-                    strokeWidth: 3
+                    strokeWidth: 2
                   }
                 },
                 time: d => d.x,
@@ -89,7 +89,8 @@ class Person extends Component {
                     let date = d.x instanceof Array ? extent(d.x) : [d.x];
                     date = date.length > 1 ? date.map(FORMATTERS.dateShort) : date.map(FORMATTERS.date);
                     return `<span class="center">${date.join(" to ")} - ${FORMATTERS.commas(d.langs || d.views)}</span>`;
-                  }
+                  },
+                  footer: ""
                 },
                 yConfig: {tickFormat: () => "", title: false}
               }} />
