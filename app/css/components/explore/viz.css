@@ -5,12 +5,8 @@
   width: 100%;
   height: 100%;
 
-  .viz {
+  & .viz-shell {
     height: 100%;
-    margin: 0;
   }
 
-  svg {
-    height: 750px !important;
-  }
 }

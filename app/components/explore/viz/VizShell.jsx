@@ -88,6 +88,7 @@ class VizShell extends Component {
             config,
             {
               data: vizData,
+              height: false,
               timeline: false,
               groupBy: config.groupBy.map(groupBy(attrs)),
               legendConfig: {
