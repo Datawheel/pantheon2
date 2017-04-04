@@ -130,6 +130,7 @@
     padding-right: 91px;
     padding-bottom: 70px;
     box-sizing: border-box;
+    pointer-events: none;
 
     & .items {
       position: relative;
@@ -162,6 +163,7 @@
         & a {
           @apply --bodyLink;
           font-weight: 400;
+          pointer-events: all;
           &:hover {
             border-bottom: 0 !important;
             opacity: 0.6;
