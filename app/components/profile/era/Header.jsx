@@ -15,9 +15,6 @@ const Header = ({era}) =>
         <h2 className="profile-type">Time Period</h2>
         <h1 className="profile-name">{era.name}</h1>
         <h2 className="date-subtitle">{FORMATTERS.year(era.start_year)} - {FORMATTERS.year(era.end_year)}</h2>
-        <pre>
-          <img className="sparkline" src={placeholderViz} alt="placeholder era viz" />
-        </pre>
       </div>
     </header>
   ;
