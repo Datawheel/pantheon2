@@ -80,7 +80,7 @@ const Header = ({pageviews, person}) => {
                  },
                  ticks: sparkTicks,
                  tickSize: 0,
-                 title: "PAGE VIEWS (PV)",
+                 title: "WIKIPEDIA PAGE VIEWS (PV)",
                  titleConfig: {
                    fontColor: "#4B4A48",
                    fontFamily: () => "Amiko",
