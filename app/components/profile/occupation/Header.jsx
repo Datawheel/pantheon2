@@ -47,8 +47,15 @@ const Header = ({occupation, people}) => {
              height: 100,
              groupBy: "id",
              legend: false,
+             on: {
+               "click.shape": () => {},
+               "mouseenter.shape": () => {},
+               "mousemove.shape": () => {},
+               "mouseleave.shape": () => {}
+             },
              shape: d => d.shape || "Line",
              shapeConfig: {
+               hoverOpacity: 1,
                Circle: {
                  fill: "#4B4A48",
                  r: () => 3.5
