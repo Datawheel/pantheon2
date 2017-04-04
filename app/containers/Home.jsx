@@ -93,10 +93,12 @@ class Home extends Component {
                   groupBy: ["domain"].map(groupBy(attrs)),
                   legendConfig: {
                     shapeConfig: {
-                      fontColor: "#4B4A48",
-                      fontFamily: () => "Amiko",
-                      fontResize: false,
-                      fontSize: () => 12,
+                      labelConfig: {
+                        fontColor: "#4B4A48",
+                        fontFamily: () => "Amiko",
+                        fontResize: false,
+                        fontSize: () => 12
+                      },
                       height: () => 11,
                       labelPadding: 0,
                       width: () => 11

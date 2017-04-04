@@ -29,9 +29,11 @@ export default {
     },
     shapeConfig: {
       fill: "#D6D6D0",
-      fontColor: "#9E978D",
-      fontFamily: () => "Amiko",
-      fontSize: () => 10,
+      labelConfig: {
+        fontColor: "#9E978D",
+        fontFamily: () => "Amiko",
+        fontSize: () => 10
+      },
       stroke: "#D6D6D0"
     },
     tickFormat: d => FORMATTERS.year(new Date(d).getFullYear()),
@@ -44,10 +46,12 @@ export default {
 
   legendConfig: {
     shapeConfig: {
-      fontColor: "#4B4A48",
-      fontFamily: () => "Amiko",
-      fontResize: false,
-      fontSize: () => 13,
+      labelConfig: {
+        fontColor: "#4B4A48",
+        fontFamily: () => "Amiko",
+        fontResize: false,
+        fontSize: () => 13
+      },
       height: () => 18,
       labelPadding: 0,
       width: () => 18
@@ -61,9 +65,11 @@ export default {
   pointSizeMin: 8,
 
   shapeConfig: {
-    fontColor: ["#fff", "rgba(255, 255, 255, 0.45)"],
-    fontFamily: () => "Amiko",
-    textAnchor: "start"
+    labelConfig: {
+      fontColor: (d, i) => ["#fff", "rgba(255, 255, 255, 0.45)"][d.l],
+      fontFamily: () => "Amiko",
+      textAnchor: "start"
+    }
   },
 
   sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
@@ -141,9 +147,11 @@ export default {
     },
     shapeConfig: {
       fill: "#D6D6D0",
-      fontColor: "#9E978D",
-      fontFamily: () => "Amiko",
-      fontSize: () => 10,
+      labelConfig: {
+        fontColor: "#9E978D",
+        fontFamily: () => "Amiko",
+        fontSize: () => 10
+      },
       stroke: "#D6D6D0"
     },
     tickFormat: d => FORMATTERS.year(new Date(d).getFullYear()),
@@ -161,9 +169,11 @@ export default {
     },
     shapeConfig: {
       fill: "#D6D6D0",
-      fontColor: "#9E978D",
-      fontFamily: () => "Amiko",
-      fontSize: () => 10,
+      labelConfig: {
+        fontColor: "#9E978D",
+        fontFamily: () => "Amiko",
+        fontSize: () => 10
+      },
       stroke: "#D6D6D0"
     },
     tickFormat: d => d % 1 ? "" : FORMATTERS.commas(d),

@@ -93,10 +93,12 @@ class VizShell extends Component {
               groupBy: config.groupBy.map(groupBy(attrs)),
               legendConfig: {
                 shapeConfig: {
-                  fontColor: "#4B4A48",
-                  fontFamily: () => "Amiko",
-                  fontResize: false,
-                  fontSize: () => 14,
+                  labelConfig: {
+                    fontColor: "#4B4A48",
+                    fontFamily: () => "Amiko",
+                    fontResize: false,
+                    fontSize: () => 14
+                  },
                   height: () => 13,
                   labelPadding: 0,
                   width: () => 13
