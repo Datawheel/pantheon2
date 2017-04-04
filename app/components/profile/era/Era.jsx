@@ -173,6 +173,7 @@ class Era extends Component {
                     title: `Major Cities in ${era.name} for Births and Deaths of Cultural Celebrities`,
                     data: geomapData,
                     depth: 1,
+                    fitFilter: d => ["152", "643"].includes(d.id),
                     groupBy: ["event", "place_name"],
                     on: on("place", d => d.place.slug),
                     shapeConfig: {
