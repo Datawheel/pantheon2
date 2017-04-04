@@ -68,6 +68,9 @@ class Home extends Component {
 
     return (
       <div className="home-container">
+
+        <div className="flying-plane"></div>
+
         <div className="home-head">
           <h1><img src={pantheonLogoSvg} alt="Pantheon" /></h1>
           <h3>Mapping Cultural Memory</h3>
@@ -169,7 +172,6 @@ class Home extends Component {
             <div className="box"></div>
           </div>
 
-          <div className="flying-plane"></div>
         </div>
       </div>
     );
