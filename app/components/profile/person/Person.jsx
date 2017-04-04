@@ -88,7 +88,7 @@ class Person extends Component {
                   body: d => {
                     let date = d.x instanceof Array ? extent(d.x) : [d.x];
                     date = date.length > 1 ? date.map(FORMATTERS.dateShort) : date.map(FORMATTERS.date);
-                    return `<span class="center">${date.join(" to ")} - ${FORMATTERS.commas(d.langs || d.views)}</span>`;
+                    return `<span class="large">${FORMATTERS.commas(d.langs || d.views)}</span><br />${date.join(" to ")}`;
                   },
                   footer: ""
                 },

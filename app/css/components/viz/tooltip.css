@@ -39,6 +39,15 @@
       margin-right: 5px;
     }
 
+    & .large {
+      color: var(--colorSlate);
+      display: block;
+      margin-top: 3px;
+      margin-bottom: -7px;
+      @apply --sectionTitle;
+      font-size: 18px;
+    }
+
   }
 
 }
