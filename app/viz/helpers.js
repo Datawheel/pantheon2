@@ -73,7 +73,7 @@ export const peopleTooltip = {
          ? `<span class="center">${d.birthyear} - ${d.deathyear}, ${age} years old</span>`
          : `<span class="center">Born ${d.birthyear}, ${age} years old</span>`;
   },
-  footer: d => d.name instanceof Array ? "Click to Highlight" : "Click to View Profile"
+  footer: d => d.name instanceof Array ? "" : "Click to View Profile"
 };
 
 export function shapeConfig(attrs) {
