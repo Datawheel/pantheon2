@@ -58,6 +58,14 @@
       width: 100%;
       height: 100%;
       display: block;
+
+      & img {
+        width: 103%;
+        height: 104%;
+        left: -2%;
+        position: relative;
+        top: -2%;
+      }
     }
   }
 

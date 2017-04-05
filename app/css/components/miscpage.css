@@ -58,32 +58,32 @@
   }
 }
 
-.error-photo {
-  &.newton {
-    background-image: url("../../images/misc/error/14627.jpg");
-  }
-  &.federer {
-    background-image: url("../../images/misc/error/262376.jpg");
-  }
-  &.disney {
-    background-image: url("../../images/misc/error/32917.jpg");
-  }
-  &.vangogh {
-    background-image: url("../../images/misc/error/32603.jpg");
-  }
-  &.dagama {
-    background-image: url("../../images/misc/error/45080.jpg");
-  }
-  &.laozi {
-    background-image: url("../../images/misc/error/65119.jpg");
-  }
-  &.agnez {
-    background-image: url("../../images/misc/error/14611137.jpg");
-  }
-  &.curie {
-    background-image: url("../../images/misc/error/20408.jpg");
-  }
+.newton {
+  background-image: url("../../images/misc/error/14627.jpg");
+}
+.federer {
+  background-image: url("../../images/misc/error/262376.jpg");
+}
+.disney {
+  background-image: url("../../images/misc/error/32917.jpg");
+}
+.vangogh {
+  background-image: url("../../images/misc/error/32603.jpg");
+}
+.dagama {
+  background-image: url("../../images/misc/error/45080.jpg");
+}
+.laozi {
+  background-image: url("../../images/misc/error/65119.jpg");
+}
+.agnez {
+  background-image: url("../../images/misc/error/14611137.jpg");
+}
+.curie {
+  background-image: url("../../images/misc/error/20408.jpg");
+}
 
+.error-photo {
   &.sports {
     background-color: var(--colorSports);
   }
