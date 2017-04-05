@@ -48,10 +48,11 @@
   & .metric-vid {
     border: 1px solid var(--colorTan);
     display: inline-block;
-    height: 250px;
-    width: 600px;
+    height: 315px;
+    width: 560px;
     margin-right: 20px;
     position: relative;
+    flex: 0 0 auto;
 
     & .press-play {
       border-radius: 50%;
@@ -113,6 +114,7 @@
       @apply --smallCaps;
       line-height: 1.5;
       margin-top: 5px;
+      min-width: auto;
     }
   }
 }
