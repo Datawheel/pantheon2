@@ -32,7 +32,7 @@ const Header = ({country, people, place}) => {
         <h2 className="profile-type">Present Day</h2>
         <h1 className="profile-name">{place.name}</h1>
         { place.name !== place.country_name ? <p className="date-subtitle"><a href={`/profile/place/${country.slug}`}>{place.country_name}</a></p> : null}
-        <p className="date-subtitle">{FORMATTERS.year(country.soverign_date)} - Present</p>
+        <p className="date-subtitle">{ FORMATTERS.year(country.soverign_date) === 0 ? "1AD" : FORMATTERS.year(country.soverign_date) } - Present</p>
         <pre>
           <LinePlot
              config={{
