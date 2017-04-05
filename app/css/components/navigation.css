@@ -409,6 +409,7 @@
       & img {
         max-width: 80px;
         max-height: 40px;
+        height: 40px;
         margin: 0 5px 0 10px;
       }
     }

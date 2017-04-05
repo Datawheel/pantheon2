@@ -1,8 +1,8 @@
 import React from "react";
 import {Link} from "react-router";
-import styles from "css/components/navigation";
+import "css/components/navigation";
 import mlLogo from "images/globalFooter/ml_logo.png";
-import mcLogo from "images/globalFooter/macro_connections.jpg";
+import mcLogo from "images/globalFooter/CL_logo.svg";
 import ccLogo from "images/globalFooter/cc.png";
 import fb from "images/globalFooter/facebook.svg";
 import tw from "images/globalFooter/twitter.svg";
