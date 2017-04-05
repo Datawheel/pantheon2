@@ -20,6 +20,23 @@
     }
   }
 
+  & .grid-title {
+    max-width: 500px;
+    margin: 0 auto 50px;
+    @apply --sectionTitle;
+    display: block;
+    text-align: center;
+
+    & a {
+      @apply --bodyLink;
+    }
+
+    & img {
+      width: 16px;
+      margin: 0 4px -2px 4px;
+    }
+  }
+
   & .grid-box {
     flex: 1;
     height: 200px;

@@ -4,8 +4,7 @@ import axios from "axios";
 import "css/components/home";
 import HomeGrid from "components/home/HomeGrid";
 import HomeIA from "components/home/HomeIA";
-import searchSvg from "images/icons/icon-search.svg";
-import pantheonLogoSvg from "images/logo.svg";
+import HomeHead from "components/home/HomeHead";
 import {StackedArea} from "d3plus-react";
 import {bucketScale, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
 import {FORMATTERS, YEAR_BUCKETS} from "types";
@@ -70,14 +69,8 @@ class Home extends Component {
 
         <div className="flying-plane"></div>
 
-        <div className="home-head">
-          <h1><img src={pantheonLogoSvg} alt="Pantheon" /></h1>
-          <h3>Mapping Cultural Memory</h3>
-          <div className="home-search">
-            <img src={searchSvg} alt="Search" />
-            <input type={"text"} placeholder={"Napoleon, fine arts, Syria"} />
-          </div>
-        </div>
+        <HomeHead />
+
         <div className="home-body">
           <div className="post">
             <p><strong>Pantheon</strong> is an <a href="https://www.media.mit.edu/projects/pantheon-new/overview/" target="_blank">MIT Media Lab</a> research project celebrating the development of collective learning that endows our species with fantastic capacities. This site visualizes data on over 47,000 of the most globally memorable individuals around the world. We invite you to explore and engage with our research. To begin, choose a <strong>Communication Technology Era</strong> to see its profile:</p>

@@ -25,12 +25,12 @@ const HomeIA = () => {
       <ul className="items ia-p-types">
         <li className="item ia-p-type">
           <h2>People</h2>
-          <p>Pantheon contains data on over <span>11,000 individuals</span> whom have been classified as “historically memorable”.&nbsp;
+          <p>Pantheon contains data on over <span>11,000 individuals</span> whom have been classified as “historically memorable.”&nbsp;
           <a href="/profile/person/" className="deep-link">View a person</a></p>
         </li>
         <li className="item ia-p-type">
           <h2>Places</h2>
-          <p>We have scraped locations for every place of <span>birth</span> and <span>death</span> for every individuals, present-day and across time.&nbsp;
+          <p>We have scraped locations for every place of <span>birth</span> and <span>death</span> for every individual, present-day and across time.&nbsp;
           <a href="/profile/place/" className="deep-link">View a place</a></p>
         </li>
         <li className="item ia-p-type">

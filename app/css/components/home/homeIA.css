@@ -117,10 +117,6 @@
       z-index: 0;
     }
 
-    & .ia-p-type {
-      z-index: 1;
-    }
-
     & li {
       flex: 1;
     }
@@ -129,6 +125,10 @@
   & .ia-p-types {
     & li {
       max-width: 200px;
+
+      &.ia-p-type {
+        z-index: 1;
+      }
     }
   }
 }
