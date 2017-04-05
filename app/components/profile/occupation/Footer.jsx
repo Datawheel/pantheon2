@@ -13,7 +13,7 @@ const Footer = () => {
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
               <a href="#">
-                <img src={testProf} alt={`Related profile link`} />
+                <img src={testProf} alt="Related profile link" />
               </a>
             </div>
             <h4 className="footer-carousel-item-title">
@@ -24,7 +24,7 @@ const Footer = () => {
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
               <a href="#">
-                <img src={testProf} alt={`Related profile link`} />
+                <img src={testProf} alt="Related profile link" />
               </a>
             </div>
             <h4 className="footer-carousel-item-title">
@@ -35,7 +35,7 @@ const Footer = () => {
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
               <a href="#">
-                <img src={testProf} alt={`Related profile link`} />
+                <img src={testProf} alt="Related profile link" />
               </a>
             </div>
             <h4 className="footer-carousel-item-title">
@@ -46,7 +46,7 @@ const Footer = () => {
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
               <a href="#">
-                <img src={testProf} alt={`Related profile link`} />
+                <img src={testProf} alt="Related profile link" />
               </a>
             </div>
             <h4 className="footer-carousel-item-title">
@@ -57,7 +57,7 @@ const Footer = () => {
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
               <a href="#">
-                <img src={testProf} alt={`Related profile link`} />
+                <img src={testProf} alt="Related profile link" />
               </a>
             </div>
             <h4 className="footer-carousel-item-title">
@@ -68,7 +68,7 @@ const Footer = () => {
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
               <a href="#">
-                <img src={testProf} alt={`Related profile link`} />
+                <img src={testProf} alt="Related profile link" />
               </a>
             </div>
             <h4 className="footer-carousel-item-title">
@@ -80,6 +80,6 @@ const Footer = () => {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;
