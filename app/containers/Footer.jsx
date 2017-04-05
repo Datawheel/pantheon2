@@ -58,7 +58,7 @@ const Footer = () =>
           <ul className="items authors">
             <li>
               <a href="http://macroconnections.media.mit.edu/">
-              <img src={mcLogo} alt="Macro Connections website" />
+              <img src={mcLogo} alt="Collective Learning website" />
               </a>
             </li>
             <li>

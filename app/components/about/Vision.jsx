@@ -1,20 +1,20 @@
-import React from 'react';
+import React from "react";
 
-const Vision = () => {
-  return (
+const Vision = () =>
     <div>
+      <p>
+        Pantheon is a project that aims to create a data driven view of history based on the biographies of the people that have been important enough to be recorded as part of our cultural memory. This visualization tool is part of a much larger project that contemplates the compilation, analysis, and visualization of data to understand historical process by identifying global trends and patterns that might be hidden in narrative descriptions of history. Dive in, visualize, and enjoy.
+      </p>
       <h1>Vision</h1>
-      <p>Last November more than 126 million people went to the polls to cast a ballot for the candidate of their choosing. After the results were in, a lot of people that had supported the loosing candidate began to wonder if they could have done anything to prevent the result. What if someone goes back in time and prevents Donald Trump’s family from immigrating into the United States?</p>
-      <p>There is an underlying assumption that most people have when thinking about the course of history, and that is expressed in these kind of concerns. The assumption is that ‘great people’ are the drivers of history, and therefore Donald Trump was the primary driver of the election’s outcome. What if Donald Trump was born in Germany instead of the United States? After all, his grandfather immigrated from Kallstadt. Would we be facing a similar social-political situation? Or would Germany be dealing with president-elect Donald Trump?</p>
-      <p>In the 19th century the predominant view was that of Thomas Carlyle, who held the view that history is shaped by the deeds of great men. In Carlyle’s view, the main reason why the United States elected a Republican president with a racial rhetoric is that Donald Trump was there to be that candidate. The opposing view is that of Herbert Spencer, who held the idea that great men are the reflection of their time, not the drivers of history. In Spencer’s view, if Donald Trump was born in Germany, we would likely have another candidate defeating the democrats, with a similar rhetoric than that of Trump’s. </p>
-      <p>The question of which theory is correct still remains open because finding counterfactuals for both views is complicated. Independent of the view we take on historical characters, the fact that we can use them to study history, remains unchanged. Under Carlyle’s view, historical figures teach us about history because it was their ideas and deeds that shaped the course of our society. Under Spencer’s view, historical figures teach us about history because they are a reflection of the time they lived in, and thus by looking at who these people were and what they did, we are effectively looking at a finger print of the time they lived in. </p>
-      <p>Pantheon is a project that aims to create a data driven view of history based on the people that have been important enough to be remembered by history. This visualization tool is part of a much larger project that contemplates the compilation, analysis, and visualization of data to understand historical process by identifying global trends and patterns that might be hidden in narrative descriptions of history. Dive in, visualize, and enjoy.</p>
+      <p>Pantheon is a project by the MIT Media Lab Macro Connection's group that makes available data on memorable biographies through thousands of interactive visualizations. The Pantheon dataset aims to provide a quantitative understanding of our species collective memory. Because of the changing nature of our historical records, Pantheon will always be—by construction—an incomplete resource. This incompleteness, however, is the fuel that drives our team to continue compiling, refining, analyzing, and visualizing new sources of data.</p>
+      <p>Even though Albert Einstein is long gone, physicist use his ideas almost every day. Whenever someone writes the gravitational field equation, or talks about a photon, they are building on top of Einstein’s ideas, and as long as these ideas are passed on, the ghost of Albert Einstein will still be around. In fact, our world is full of ghosts. Newton lives in his theories, Elvis lives in his songs, Picasso lives in his paintings, etc. The goal of Pantheon is to capture these ghosts, and through them, quantify the information that has been able to break the barriers of space, time, and language.</p>
+      <p>What was the most “creative” city in 1400? How has that “creativity” evolved in the past 500 years? What is the role of media? How does memorability correlate with accomplishment? Who was the first physicist? All of these are questions that can be potentially addressed using Pantheon.</p>
+      <p>Pantheon is a live dataset that we are continuously expanding. We appreciate any comments and suggestions you might have to help us improve the value of this resource. You can direct your questions, comments and suggestions to <a href="mailto:pantheon@media.mit.edu">our email address</a>.</p>
       <h2>The Ghosts of Information</h2>
-      <iframe src="https://player.vimeo.com/video/89016128" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      <iframe src="https://player.vimeo.com/video/89016128" width="640" height="360" frameBorder="0" webkitallowfullscreen mozallowfullscreen allowFullScreen></iframe>
       <h2>Mapping Global Cultural Production</h2>
-      <iframe src="https://player.vimeo.com/video/89015710?color=222222&title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      <iframe src="https://player.vimeo.com/video/89015710?color=222222&title=0&byline=0&portrait=0" width="640" height="360" frameBorder="0" webkitallowfullscreen mozallowfullscreen allowFullScreen></iframe>
     </div>
-  );
-};
+  ;
 
 export default Vision;

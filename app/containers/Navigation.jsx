@@ -37,7 +37,7 @@ const Navigation = ({logOut, activateSearch}) => {
               </ul>
             </li>
             <li className="item">
-              <Link to="/profile" className="item-link profiles-link" activeClassName="active">Profiles</Link>
+              <Link to="" className="item-link profiles-link" activeClassName="active">Profiles</Link>
               <ul className="sub-items">
                 <li><a href="/profile/person" className="item-link">People</a></li>
                 <li><a href="/profile/place" className="item-link">Places</a></li>

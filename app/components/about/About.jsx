@@ -1,14 +1,14 @@
 import React from "react";
-import { Link } from "react-router";
+import {Link} from "react-router";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
-import styles from "css/components/miscpage";
+import "css/components/miscpage";
+import "css/components/about";
 
-const About = ({children}) => {
-  return (
+const About = ({children}) =>
     <div className="about">
       <Helmet
-        htmlAttributes={{"lang": "en", "amp": undefined}}
+        htmlAttributes={{lang: "en", amp: undefined}}
         title="About Pantheon"
         meta={config.meta}
         link={config.link}
@@ -40,7 +40,6 @@ const About = ({children}) => {
       </nav>
       {children}
     </div>
-  );
-};
+  ;
 
 export default About;
