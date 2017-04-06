@@ -101,7 +101,7 @@ class Home extends Component {
                   shapeConfig: Object.assign({Area: {label: false}}, shapeConfig(attrs)),
                   time: "logyear",
                   timeline: false,
-                  tooltipConfig: groupTooltip(stackedData),
+                  tooltipConfig: Object.assign({duration: 0}, groupTooltip(stackedData)),
                   x: "logyear",
                   xConfig: {
                     tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
@@ -141,7 +141,7 @@ class Home extends Component {
                   </li>
                 </ul>
               </div>
-              <h4 className="legend-title">Domains</h4>
+              <h4 className="legend-title">Domains of all <span>Occupations</span></h4>
             </div>
           }
           </div>

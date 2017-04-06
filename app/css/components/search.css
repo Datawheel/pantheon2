@@ -26,20 +26,67 @@
 
   & .search-close {
     position: absolute;
-    right: 0;
-    top: 8px;
+    right: 5px;
+    top: 9px;
     padding: 24px;
     cursor: pointer;
 
-    &:hover {
-      opacity: 0.6;
+    & i {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      box-sizing: border-box;
+      display: block;
+
+      & > * {
+        position: absolute;
+        display: block;
+      }
     }
 
-    & i {
-      font-style: normal;
-      font-size: 24px;
-      font-weight: 400;
-      padding: 3px;
+    & .close-perimeter {
+      width: 30px;
+      height: 30px;
+      top: 0;
+      left: 0;
+      border: 1px solid var(--colorSand);
+      border-radius: 50%;
+    }
+
+    & .close-x {
+      height: 20px;
+      width: 1px;
+      left: 15px;
+      top: 4px;
+      opacity: 1;
+      box-sizing: border-box;
+      border-left: 1px solid var(--colorSand);
+    }
+
+    & .close-back {
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
+
+    & .close-for {
+      transform: rotate(-45deg);
+      transition: all 0.5s 0.1s;
+    }
+
+    &:hover {
+      & .close-x {
+        height: 0;
+      }
+
+      & .close-back {
+        top: 25px;
+        left: 0;
+      }
+
+      & .close-for {
+        top: 25px;
+        left: 30px;
+      }
     }
   }
 

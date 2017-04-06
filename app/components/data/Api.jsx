@@ -1,7 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const Api = () => {
-  return (
+const Api = () =>
     <div className="api-container">
       <h1>API</h1>
       <p className="intro">
@@ -10,9 +9,9 @@ const Api = () => {
       <h2>People:</h2>
         <h3>Identifiers:</h3>
         <ul className="items">
-          <li className="item" className="item">en_curid : English Wikipedia page ID.</li>
-          <li className="item" className="item">name : English Wikipedia page title.</li>
-          <li className="item" className="item">wd_id : Wikidata entity ID.</li>
+          <li className="item">en_curid : English Wikipedia page ID.</li>
+          <li className="item">name : English Wikipedia page title.</li>
+          <li className="item">wd_id : Wikidata entity ID.</li>
         </ul>
 
         <h3>Birth and death:</h3>
@@ -82,7 +81,6 @@ const Api = () => {
         <p>group : Alternative aggregation for occupations (used to track changes in composition of history due to changes in media).</p>
 
     </div>
-  );
-};
+  ;
 
 export default Api;

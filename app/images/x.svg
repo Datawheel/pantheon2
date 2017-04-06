@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 40.1 (33804) - http://www.bohemiancoding.com/sketch -->
-    <title>Combined Shape</title>
+<svg width="28px" height="27px" viewBox="0 0 28 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 2</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="EXPLORER---many-locations---POPUP---lite" transform="translate(-955.000000, -33.000000)" fill="#363636">
-            <g id="Group-2">
-                <path d="M963.464579,41.2411008 L970.313184,34.3906166 C970.50842,34.1953277 970.508376,33.8787452 970.313087,33.6835099 C970.117799,33.4882745 969.801216,33.4883179 969.605981,33.6836068 L962.757569,40.533897 L955.909157,33.6836068 C955.713922,33.4883179 955.39734,33.4882745 955.202051,33.6835099 C955.006762,33.8787452 955.006718,34.1953277 955.201954,34.3906166 L962.050559,41.2411008 L955.201954,48.0915849 C955.006718,48.2868739 955.006762,48.6034564 955.202051,48.7986917 C955.39734,48.9939271 955.713922,48.9938837 955.909157,48.7985948 L962.757569,41.9483046 L969.605981,48.7985948 C969.801216,48.9938837 970.117799,48.9939271 970.313087,48.7986917 C970.508376,48.6034564 970.50842,48.2868739 970.313184,48.0915849 L963.464579,41.2411008 Z" id="Combined-Shape"></path>
+        <g id="EXPLORER---many-locations---POPUP---lite" transform="translate(-949.000000, -58.000000)" stroke="#AFAAA4">
+            <g id="Group-2" transform="translate(949.000000, 58.000000)">
+                <path d="M6.55555556,6.5 L20.0648116,20.0092561" id="Line" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M6.55555556,6.5 L20.0648116,20.0092561" id="Line-Copy" stroke-linecap="round" stroke-linejoin="round" transform="translate(13.555556, 13.500000) scale(-1, 1) translate(-13.555556, -13.500000) "></path>
+                <circle id="Oval-2" cx="13.5555556" cy="13.5" r="13"></circle>
             </g>
         </g>
     </g>
