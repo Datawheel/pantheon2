@@ -35,6 +35,12 @@
     flex: 1;
   }
 
+  & .section {
+    & + .section {
+      margin-top: 50px;
+    }
+  }
+
   & iframe {
     width: 100%;
   }
@@ -56,11 +62,22 @@
     }
   }
 
+  & h3 {
+    @apply --searchResults;
+    margin-top: 30px;
+    color: var(--colorTan);
+    letter-spacing: 0.5px;
+  }
+
   & p {
     @apply --bodyText;
 
     & + p {
       margin-top: 5px;
+    }
+
+    & > span {
+      font-style: italic;
     }
 
     &.intro {
@@ -86,6 +103,41 @@
     display: block;
     margin: 0 auto 10px;
     text-align: center;
+  }
+
+  & .formulas {
+    margin: 20px auto;
+    & p {
+      text-align: center;
+    }
+    & img {
+      &.f1 {
+        height: 17px;
+      }
+      &.f2 {
+        height: 44px;
+      }
+      &.f3 {
+        height: 33px;
+      }
+      &.f4 {
+        height: 37.5px;
+      }
+    }
+  }
+
+  & .api-container {
+    & h3 {
+      margin: 10px 0 3px;
+    }
+
+    & .item {
+      @apply --bodyText;
+    }
+
+    & p, & .item {
+      margin-left: 15px;
+    }
   }
 
   & .footer-title {

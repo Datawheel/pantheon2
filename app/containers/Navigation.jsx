@@ -58,7 +58,6 @@ const Navigation = ({logOut, activateSearch}) => {
                 <li><a href="/about/publications" className="item-link">Publications</a></li>
                 <li><a href="/about/methods" className="item-link">Methods</a></li>
                 <li><a href="/about/data_sources" className="item-link">Data Sources</a></li>
-                <li><a href="/about/resources" className="item-link">Resources</a></li>
                 <li><a href="/about/contact" className="item-link">Contact</a></li>
               </ul>
             </li>
@@ -116,7 +115,6 @@ const Navigation = ({logOut, activateSearch}) => {
                 <li><a href="/about/publications">Publications</a></li>
                 <li><a href="/about/methods">Methods</a></li>
                 <li><a href="/about/data_sources">Data Sources</a></li>
-                <li><a href="/about/resources">Resources</a></li>
                 <li><a href="/about/contact">Contact</a></li>
               </ul>
             </li>

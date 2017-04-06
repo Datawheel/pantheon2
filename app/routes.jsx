@@ -18,7 +18,6 @@ import Methods from "components/about/Methods";
 import Team from "components/about/Team";
 import Publications from "components/about/Publications";
 import DataSources from "components/about/DataSources";
-import Resources from "components/about/Resources";
 import Contact from "components/about/Contact";
 
 // explore componenets
@@ -91,7 +90,6 @@ export default function checkId() {
         <Route path="team" component={Team} />
         <Route path="publications" component={Publications} />
         <Route path="data_sources" component={DataSources} />
-        <Route path="resources" component={Resources} />
         <Route path="contact" component={Contact} />
       </Route>
 
