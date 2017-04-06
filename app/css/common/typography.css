@@ -205,7 +205,7 @@
   --searchResults {
     font-size: var(--sizeMedium);
     font-weight: 400;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     line-height: 1.7em;
   }
 }
