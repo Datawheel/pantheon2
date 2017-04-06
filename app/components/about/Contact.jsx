@@ -4,10 +4,8 @@ const Contact = () => {
   return (
     <div>
       <h1>Contact</h1>
-      <p>Pantheon team:</p>
-      <p>pantheon@media.mit.edu</p>
-      <p>Datawheel:</p>
-      <p>info@datawheel.us</p>
+      <p>Pantheon team: <a href="mailto:pantheon@media.mit.edu">pantheon@media.mit.edu</a></p>
+      <p>Datawheel team: <a href="mailto:info@datawheel.us">info@datawheel.us</a></p>
     </div>
   );
 };
