@@ -1,100 +1,5 @@
 @import '../common/typography';
 
-.error-banner {
-  height: 150%;
-  background-size: 50%;
-  background-repeat: repeat;
-  background-position: 0 0;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 0;
-
-  @media (max-width: 768px) {
-    background-size: contain;
-  }
-
-  & img {
-    width: 100%;
-  }
-}
-
-.error-container {
-  position: absolute;
-  width: 100%;
-  z-index: 1;
-  height: 100vh;
-
-  & .error-msg {
-    @apply --pageTitle;
-    color: var(--colorEggshell);
-    margin: 54px auto 0;
-    padding: 100px 0 80px;
-    text-align: center;
-  }
-
-  & .footer-title {
-    max-width: 500px;
-    margin: 0 30px 30px;
-
-    & a {
-      @apply --bodyLink;
-    }
-
-    & img {
-      width: 16px;
-      margin: 0 4px -2px 4px;
-    }
-  }
-
-  & .page {
-    & p {
-      color: var(--colorSand);
-    }
-
-    & .error-photo {
-      background-color: var(--colorSlate);
-    }
-  }
-}
-
-.newton {
-  background-image: url("../../images/misc/error/14627.jpg");
-}
-.federer {
-  background-image: url("../../images/misc/error/262376.jpg");
-}
-.disney {
-  background-image: url("../../images/misc/error/32917.jpg");
-}
-.vangogh {
-  background-image: url("../../images/misc/error/32603.jpg");
-}
-.dagama {
-  background-image: url("../../images/misc/error/45080.jpg");
-}
-.laozi {
-  background-image: url("../../images/misc/error/65119.jpg");
-}
-.agnez {
-  background-image: url("../../images/misc/error/14611137.jpg");
-}
-.curie {
-  background-image: url("../../images/misc/error/20408.jpg");
-}
-
-.error-photo {
-  &.sports {
-    background-color: var(--colorSports);
-  }
-  &.arts {
-    background-color: var(--colorArts);
-  }
-  &.publicfigure {
-    background-color: var(--colorPublicFigure)
-  }
-}
-
 .data, .about {
   max-width: 950px;
   margin: 0 auto;
@@ -129,4 +34,170 @@
   & > div {
     flex: 1;
   }
+
+  & iframe {
+    width: 100%;
+  }
+
+  & h1 {
+    font-family: var(--fontBody);
+    @apply --profileSectionTitle;
+    margin: 8px 0 10px;
+  }
+
+  & h2 {
+    @apply --profileVizTitle;
+    text-transform: none;
+    margin: 30px 0 5px;
+
+    &.obj-title {
+      text-align: center;
+      margin: 40px auto 15px;
+    }
+  }
+
+  & p {
+    @apply --bodyText;
+
+    & + p {
+      margin-top: 5px;
+    }
+
+    &.intro {
+      margin-bottom: 15px;
+    }
+
+    &.outro {
+      margin-top: 15px;
+    }
+
+    & a {
+      @apply --bodyLink;
+    }
+  }
+
+  & .long-text {
+    & p + p {
+      margin-top: 10px;
+    }
+  }
+
+  & .cc-img {
+    display: block;
+    margin: 0 auto 10px;
+    text-align: center;
+  }
+
+  & .footer-title {
+    @apply --sectionTitle;
+    display: block;
+    text-align: center;
+    margin: 40px auto 10px;
+  }
+
+  & .footer-carousel-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  & .footer-carousel-item {
+    display: inline-block;
+    width: 145px;
+    flex: 0 0 auto;
+    margin: 10px 20px;
+  }
+
+  & .footer-carousel-item-photo {
+    display: block;
+    width: 145px;
+    height: 145px;
+    overflow: hidden;
+    position: relative;
+    margin: auto;
+    box-sizing: border-box;
+    border: 1px solid var(--colorMatza);
+
+    & a {
+      background-size: contain;
+      background-position: 50% 0%;
+      background-repeat: no-repeat;
+      width: 100%;
+      height: 100%;
+      display: block;
+
+      & img {
+        width: 103%;
+        height: 104%;
+        left: -2%;
+        position: relative;
+        top: -2%;
+      }
+    }
+  }
+
+  & .footer-carousel-item-title {
+    margin: 13px 0 0;
+    padding: 0;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+
+    & a {
+      text-decoration: none;
+      outline: none;
+      color: var(--colorEggshell);
+      @apply --bodyLink;
+    }
+  }
+
+  & p {
+    max-width: 100%;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.01em;
+    margin: 0;
+  }
+}
+
+.cesar {
+  background-image: url("../../images/about/team/cesar_hidalgo.png");
+}
+.cristian {
+  background-image: url("../../images/about/team/cristian_jara_figueroa.jpg");
+}
+.dw {
+  background-image: url("../../images/globalFooter/datawheel.png");
+}
+.amy {
+  background-image: url("../../images/about/team/amy_yu.png");
+}
+.kevin {
+  background-image: url("../../images/about/team/kevin_hu.png");
+}
+.shahar {
+  background-image: url("../../images/about/team/shahar_ronen.png");
+}
+.deepak {
+  background-image: url("../../images/about/team/deepak_jagdish.png");
+}
+.defne {
+  background-image: url("../../images/about/team/defne_gurel.png");
+}
+.tiffany {
+  background-image: url("../../images/about/team/tiffany_lu.jpg");
+}
+.ali {
+  background-image: url("../../images/about/team/ali_almossawi.jpg");
+}
+.andrew {
+  background-image: url("../../images/about/team/andrew_mao.png");
 }

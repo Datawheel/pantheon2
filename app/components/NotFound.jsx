@@ -2,6 +2,7 @@ import React, {PropTypes} from "react";
 import Helmet from "react-helmet";
 import config from "helmconfig.js";
 import {connect} from "react-redux";
+import "css/components/notfound";
 import {activateSearch} from "actions/nav";
 import superGif from "images/misc/super.gif";
 import searchSvg from "images/icons/icon-search-w.svg";

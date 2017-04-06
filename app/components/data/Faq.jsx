@@ -2,7 +2,7 @@ import React from 'react';
 
 const Faq = () => {
   return (
-    <div>
+    <div className="data-faq-container">
       <h1>Frequently Asked Questions</h1>
       <p>This section contain bullet point answers for some of the most frequent questions. For a more thorough answer see the <a href="/about/methods">Methods</a> section.</p>
       <h2>What is culture?</h2>
