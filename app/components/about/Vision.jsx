@@ -2,6 +2,7 @@ import React from "react";
 
 const Vision = () =>
     <div className="long-text">
+      <div className="big-wave"></div>
       <h1>About</h1>
       <p className="intro">
         Pantheon is a project that aims to create a data driven view of history based on the biographies of the people that have been important enough to be recorded as part of our cultural memory. This visualization tool is part of a much larger project that contemplates the compilation, analysis, and visualization of data to understand historical process by identifying global trends and patterns that might be hidden in narrative descriptions of history. Dive in, visualize, and enjoy.

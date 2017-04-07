@@ -67,6 +67,7 @@ class Home extends Component {
     return (
       <div className="home-container">
 
+        <div className="fut"></div>
         <div className="flying-plane"></div>
 
         <HomeHead />
