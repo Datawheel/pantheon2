@@ -101,7 +101,7 @@ class Search extends Component {
           </div>
           <ul className="results-list">
             {this.state.results.map(result =>
-              <li key={`person_${result.slug}`} className="result-person">
+              <li key={`person_${result.slug}`} className={`result-${result.profile_type}`}>
                 <a href={`/profile/${result.profile_type}/${result.slug}`}>{result.name}</a>
                 <sub>
                   {result.primary_meta ? <span>{result.primary_meta}</span> : null}

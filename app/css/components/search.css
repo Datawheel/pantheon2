@@ -193,6 +193,8 @@
         text-decoration: none;
         @apply --searchResults;
         cursor: pointer;
+        box-sizing: border-box;
+        border-bottom: 1px solid rgba(255,255,255,0);
 
         &:hover {
           border-bottom: 1px solid currentColor;
@@ -207,7 +209,7 @@
       }
 
       & span {
-        color: var(--colorStone);
+        color: var(--colorTan);
         text-align: right;
         display: inline-block;
         min-width: 90px;
@@ -216,38 +218,68 @@
       }
     }
 
-    & .result-profession {
+    & .result-occupation {
       & a::before {
         content: '';
         background: url('../../images/icons/icon-prof.svg') no-repeat;
         background-size: contain;
+        background-position: 50%;
+      }
+
+      &.highlighted {
+        & a::before {
+          background: url('../../images/icons/icon-prof-h.svg') no-repeat;
+          background-size: contain;
+          background-position: 50%;
+        }
       }
     }
 
     & .result-person {
-
       & a::before {
         content: '';
         background: url('../../images/icons/icon-person.svg') no-repeat;
         background-size: contain;
+        background-position: 50%;
+      }
+
+      &.highlighted {
+        & a::before {
+          background: url('../../images/icons/icon-person-h.svg') no-repeat;
+          background-size: contain;
+          background-position: 50%;
+        }
       }
     }
 
     & .result-place {
-
       & a::before {
         content: '';
         background: url('../../images/icons/icon-place.svg') no-repeat;
         background-size: contain;
+        background-position: 50%;
+      }
+
+      &.highlighted {
+        & a::before {
+          background: url('../../images/icons/icon-place-h.svg') no-repeat;
+          background-size: contain;
+          background-position: 50%;
+        }
       }
     }
 
-    & li.highlighted {
-      padding-left: 20px;
-      & a::before {
+    & .highlighted {
+      position: relative;
+      &::before {
+        position: absolute;
         content: '';
-        background: url('../../images/tri-right-b.svg') no-repeat;
+        background: url('../../images/icons/icon-rec-r.svg') no-repeat;
         background-size: contain;
+        width: 9px;
+        height: 11px;
+        left: -10px;
+        top: 12px;
       }
     }
 
