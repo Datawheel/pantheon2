@@ -16,14 +16,19 @@ class Controls extends Component {
     super(props);
   }
 
+  toggleSidePanel(e) {
+    e.preventDefault();
+    document.getElementById("side-panel").classList.toggle("hide");
+  }
+
   render() {
     const {page} = this.props.explore;
 
     return (
-      <div className="explore-controls viz-explorer">
+      <div className="explore-controls viz-explorer" id="side-panel">
         <div className="control-header">
-          <h2 className="viz-explorer">{page === "rankings" ? "Rankings" : "Explorer"}</h2>
-          <i className="control-hide"></i>
+          <h2 className="viz-explorer"><span className="helper-text">Open&nbsp;</span>{page === "rankings" ? "Rankings" : "Explorer"}<span className="helper-text">&nbsp;Panel</span></h2>
+          <i className="control-toggle" onClick={this.toggleSidePanel}></i>
         </div>
 
         <section className="control-group">

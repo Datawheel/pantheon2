@@ -63,6 +63,7 @@
   padding-right: 10px;
   box-sizing: border-box;
   width: 208px;
+  transition: width 1s;
 
   & h3 {
     @apply --exploreControlTitles;
@@ -355,7 +356,7 @@
     }
   }
 
-  & .control-hide {
+  & .control-toggle {
     background-repeat: no-repeat;
     background-image: url('../../../images/icons/icon-hide.svg');
     background-position: 50%;
@@ -371,6 +372,56 @@
     &:active {
       background-image: url('../../../images/icons/icon-show.svg');
       margin-bottom: -8px;
+    }
+  }
+}
+
+/* hidden panel styles */
+.explore-controls {
+  & .helper-text {
+    display: none;
+  }
+
+  &.hide {
+    width: 38px;
+    flex: 0 0 38px;
+    box-sizing: border-box;
+
+    & .control-header {
+      flex-direction: column-reverse;
+      justify-content: flex-end;
+      height: 100%;
+      padding: 20px 0 0;
+      position: relative;
+
+      & h2 {
+        transform: rotate(270deg);
+        display: flex;
+        position: absolute;
+        top: 107px;
+      }
+
+      & .helper-text {
+        display: inline-block;
+        @apply --exploreControlHeader;
+        font-size: 1em;
+        text-transform: capitalize;
+      }
+
+      & .control-toggle {
+        background-image: url('../../../images/icons/icon-show.svg');
+        margin-bottom: -8px;
+
+        &:hover {
+          background-image: url('../../../images/icons/icon-hide.svg');
+          margin-bottom: 0;
+          margin-top: -2px;
+        }
+      }
+    }
+
+    & .control-group {
+      display: none;
     }
   }
 }
