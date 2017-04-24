@@ -183,6 +183,37 @@
         background-image: url('../../../images/viztypes/map.svg');
         margin: -4px 0 0 -20px;
       }
+
+      &.occupations::before {
+        background-image: url('../../../images/viztypes/occupations.svg');
+        background-position: 50% 0;
+        margin: -4px 0 0 -20px;
+      }
+      &.people::before {
+        background-image: url('../../../images/viztypes/people.svg');
+        background-position: 50% 0;
+        margin: -5px 0 0 -20px;
+      }
+      &.places::before {
+        background-image: url('../../../images/viztypes/places.svg');
+        background-position: 50% 0;
+        margin: -6px 0 0 -20px;
+      }
+      &.d-3::before {
+        background-image: url('../../../images/viztypes/d-3.svg');
+      }
+      &.d-2::before {
+        background-image: url('../../../images/viztypes/d-2.svg');
+        background-size: 10px 9px;
+        background-position: 50% 0;
+        margin: -1px 0 0 -20px;
+      }
+      &.d-1::before {
+        background-image: url('../../../images/viztypes/d-1.svg');
+        background-size: 5px 5px;
+        background-position: 50% 50%;
+        margin: -5px 0 0 -20px;
+      }
     }
   }
 

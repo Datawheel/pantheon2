@@ -24,28 +24,30 @@ class ShowControl extends Component {
     }
     return (
       <div className="filter">
-        <h3>Of People grouped by</h3>
-        <ul className="items options flat-options">
+        <h3>Group People by</h3>
+        <ul className="items filter options viztype-options">
           {rankingTypes.map(rt =>
             <li key={rt.id} value={rt.id}>
-              <a href="#" data-id={rt.id} onClick={this.changeShowType} className={!type || type === rt.id  ? "active" : null}>{rt.name}</a>
+              <h4><a href="#" data-id={rt.id} onClick={this.changeShowType} className={`${rt.id} ${!type || type === rt.id  ? "active" : null}`}>{rt.name}</a></h4>
             </li>
           )}
         </ul>
         { type === "occupations" && page === "rankings"
-        ? <div className="options subfilter flat-options-w-title">
-          <ul className="items options flat-options">
-            <li><a href="#" id="occupations" onClick={this.changeShowDepth} className={!depth || depth === "occupations"  ? "active" : null}>Occu</a></li>
-            <li><a href="#" id="industries" onClick={this.changeShowDepth} className={depth === "industries" ? "active" : null}>Industry</a></li>
-            <li><a href="#" id="domains" onClick={this.changeShowDepth} className={depth === "domains" ? "active" : null}>Domain</a></li>
+        ? <div className="options filter">
+          <h3>Data Depth</h3>
+          <ul className="items options viztype-options">
+            <li><h4><a href="#" id="occupations" onClick={this.changeShowDepth} className={`d-3 ${!depth || depth === "occupations"  ? "active" : null}`}>Occupation</a></h4></li>
+            <li><h4><a href="#" id="industries" onClick={this.changeShowDepth} className={`d-2 ${depth === "industries" ? "active" : null}`}>Industry</a></h4></li>
+            <li><h4><a href="#" id="domains" onClick={this.changeShowDepth} className={`d-1 ${depth === "domains" ? "active" : null}`}>Domain</a></h4></li>
           </ul>
         </div>
         : null}
         { type === "places" && page === "rankings"
-        ? <div className="options subfilter flat-options-w-title">
-          <ul className="items options flat-options">
-            <li><a href="#" id="places" onClick={this.changeShowDepth} className={!depth || depth === "places" ? "active" : null}>City</a></li>
-            <li><a href="#" id="countries" onClick={this.changeShowDepth} className={depth === "countries" ? "active" : null}>Country</a></li>
+        ? <div className="options filter">
+          <h3>Data Depth</h3>
+          <ul className="items options viztype-options">
+            <li><h4><a href="#" id="places" onClick={this.changeShowDepth} className={`d-2 ${!depth || depth === "places" ? "active" : null}`}>City</a></h4></li>
+            <li><h4><a href="#" id="countries" onClick={this.changeShowDepth} className={`d-1 ${depth === "countries" ? "active" : null}`}>Country</a></h4></li>
           </ul>
         </div>
         : null}
