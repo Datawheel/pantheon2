@@ -23,7 +23,7 @@ const Navigation = ({logOut, activateSearch}) => {
         <div className="navigation global-nav" role="navigation">
           <ul className="items">
             <li className="nav-btn" onClick={() => {
-              document.querySelector(".m-navigation").style.display = "block";
+              document.querySelector(".m-navigation").classList.add("open");
             }}>
               <span>
                 <img src={navSvg} alt="Open navigation." />
@@ -83,7 +83,7 @@ const Navigation = ({logOut, activateSearch}) => {
               <img className="logo" src={pantheonLogoSvg} alt="Pantheon" />
             </a>
             <span className="close-btn" onClick={() => {
-              document.querySelector(".m-navigation").style.display = "none";
+              document.querySelector(".m-navigation").classList.remove("open");
             }}>
               <img src={closeSvg} alt="Close navigation." />
             </span>

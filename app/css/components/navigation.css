@@ -224,10 +224,21 @@
 }
 
 .m-navigation {
-  display: none;
+  position: fixed;
+  display: block;
   z-index: 99;
   background-color: var(--colorEggshell);
-  min-height: 100vh;
+  height: 0;
+  top: -430px;
+  border-bottom: 1px solid var(--colorTan);
+  transition: top 0.7s;
+  opacity: 1;
+
+  &.open {
+    height: 430px;
+    top: 0;
+    opacity: 1;
+  }
 
   & .logo-container {
     padding: 16px 0;
