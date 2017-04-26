@@ -16,16 +16,4 @@
     cursor: pointer;
     transition: 0.1s background-color ease;
   }
-
-  --greenButton {
-    @apply --button;
-    color: var(--colorWhite);
-    background: var(--colorSalem);
-    border-color: var(--colorSalem);
-
-    &:hover {
-      background: var(--colorDarkerSalem);
-      border-color: var(--colorDarkerSalem);
-    }
-  }
 }

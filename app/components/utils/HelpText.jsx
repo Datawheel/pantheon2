@@ -2,7 +2,7 @@ import React from "react";
 import styles from "css/components/utils/helptext";
 
 const HelpText = ({text}) =>
-    <span className="help-text">{text}</span>
+    <a className="help-text">{text}</a>
   ;
 
 export default HelpText;

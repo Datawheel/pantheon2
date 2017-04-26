@@ -2,6 +2,7 @@ import React, {PropTypes} from "react";
 import {connect} from "react-redux";
 import {activateSearch} from "actions/nav";
 import "css/components/home/homehead";
+import HelpText from "components/utils/HelpText";
 import searchSvg from "images/icons/icon-search.svg";
 import pantheonLogoSvg from "images/logo.svg";
 
@@ -9,6 +10,9 @@ const HomeHead = ({activateSearch}) =>
   <div className="home-head">
     <h1><img src={pantheonLogoSvg} alt="Pantheon" /></h1>
     <h3>Mapping Cultural Memory</h3>
+    <div className="post">
+      <p><strong>Pantheon</strong> is an <a href="https://www.media.mit.edu/projects/pantheon-new/overview/" target="_blank">MIT Media Lab</a> research project celebrating the development of collective learning that endows our species with fantastic capacities. How has <HelpText text="cultural memory" /> changed with the introduction of each of these <strong>Communication Technologies</strong>?</p>
+    </div>
     <div className="home-search">
       <img src={searchSvg} alt="Search" />
       <a onClick={activateSearch}>Start a search</a>

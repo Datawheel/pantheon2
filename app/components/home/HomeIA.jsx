@@ -1,10 +1,13 @@
-import React from 'react';
+import React from "react";
 import "css/components/home/homeIA";
+import HelpText from "components/utils/HelpText";
 
 const HomeIA = () => {
   return (
     <div className="ia">
+      <div className="flying-plane"></div>
       <h3>The Structure of Pantheon</h3>
+      <p className="post">This site visualizes data on over <span>47,000</span> of the most <HelpText text="globally memorable individuals" /> around the world. We invite you to explore and engage with our research through a variety of avenues:</p>
       <ul className="items ia-top">
         <li className="ia-top-bg"></li>
         <li className="item ia-top-item">
