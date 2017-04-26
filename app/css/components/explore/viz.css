@@ -2,12 +2,6 @@
 @import '../../common/typography';
 
 .explore-body {
+  height: 95vh;
   width: 100%;
-  height: 100%;
-
-  & .viz-shell {
-    height: 100%;
-    width: 100%;
-  }
-
 }

@@ -80,34 +80,32 @@ class VizShell extends Component {
 
     return (
       <div className="explore-viz-container">
-        <div className="viz-shell">
-          <MyViz config={Object.assign(
-            {
-              shapeConfig: vizShapeConfig
+        <MyViz config={Object.assign(
+          {
+            shapeConfig: vizShapeConfig
+          },
+          config,
+          {
+            data: vizData,
+            height: false,
+            timeline: false,
+            groupBy: config.groupBy.map(groupBy(attrs)),
+            legendConfig: {
+              shapeConfig: {
+                labelConfig: {
+                  fontColor: "#4B4A48",
+                  fontFamily: () => "Amiko",
+                  fontResize: false,
+                  fontSize: () => 14
+                },
+                height: () => 13,
+                labelPadding: 0,
+                width: () => 13
+              }
             },
-            config,
-            {
-              data: vizData,
-              height: false,
-              timeline: false,
-              groupBy: config.groupBy.map(groupBy(attrs)),
-              legendConfig: {
-                shapeConfig: {
-                  labelConfig: {
-                    fontColor: "#4B4A48",
-                    fontFamily: () => "Amiko",
-                    fontResize: false,
-                    fontSize: () => 14
-                  },
-                  height: () => 13,
-                  labelPadding: 0,
-                  width: () => 13
-                }
-              },
-              tooltipConfig: type === "Priestley" ? peopleTooltip : groupTooltip(vizData)
-            }
-          )} />
-        </div>
+            tooltipConfig: type === "Priestley" ? peopleTooltip : groupTooltip(vizData)
+          }
+        )} />
       </div>
     );
   }
