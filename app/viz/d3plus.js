@@ -178,11 +178,11 @@ export default {
     },
     tickFormat: d => d % 1 ? "" : FORMATTERS.commas(d),
     tickSize: 5,
-    title: "Number of People",
+    title: "Globally Memorable Individuals",
     titleConfig: {
       fontColor: "#9E978D",
       fontFamily: () => "Amiko",
-      fontSize: () => 12
+      fontSize: () => 11
     }
   },
 

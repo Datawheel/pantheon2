@@ -43,7 +43,7 @@
     @apply --bodyText;
     width: 62%;
     min-width: 335px;
-    max-width: 590px;
+    max-width: 560px;
     margin: 0 auto 30px;
     padding: 0;
     z-index: 1;
@@ -51,16 +51,28 @@
     & a {
       @apply --bodyLink;
       font-weight: 400;
+      border-bottom: 1px dotted var(--colorSand);
     }
   }
 
   & .viz-container {
     position: relative;
     width: 100%;
-    margin: -200px auto 100px;
     box-sizing: border-box;
     padding: 0 48px 0 24px;
     z-index: -1;
+
+    @media (max-width: 750px) {
+      margin: 0 auto 100px;
+    }
+
+    @media (min-width: 751px) and (max-width: 1000px) {
+      margin: -60px auto 100px;
+    }
+
+    @media (min-width: 1001px) {
+      margin: -200px auto 100px;
+    }
   }
 
   & .legend-title {
@@ -107,6 +119,8 @@
         height: 16px;
         @apply --smallCaps;
         margin-bottom: 0;
+        color: var(--colorStone);
+        text-shadow: 0.5px -0.5px 0 var(--colorEggshell);
 
         & a {
           @apply --bodyLink;
@@ -121,32 +135,41 @@
 
       & .era-img {
         background-size: contain;
-        background-position: 0% 0%;
+        background-position: 50% 100%;
         background-blend-mode: multiply;
         background-color: transparent;
         background-repeat: no-repeat;
-        min-height: 60px;
-        max-width: 100px;
+
+        @media (max-width: 1000px) {
+          min-height: 45px;
+          max-height: 50px;
+          max-width: 80px;
+        }
+
+        @media (min-width: 1001px) {
+          min-height: 60px;
+          max-width: 100px;
+        }
       }
 
       &.computer {
         right: 1.28%;
-        height: 380px;
+        height: 140px;
 
         & .era-img {
           background-image: url("../../images/home/smartphone.gif");
-          width: 33px;
-          margin-left: 28px;
+          width: 43px;
+          margin-left: 8px;
         }
         & p {
-          left: 64px;
-          top: -50px;
+          left: 58px;
+          top: -30px;
         }
       }
 
       &.television {
         right: 11.5%;
-        height: 500px;
+        height: 240px;
 
         & .era-img {
           margin-left: 0;
@@ -161,7 +184,7 @@
 
       &.film-radio {
         right: 21.20%;
-        height: 300px;
+        height: 330px;
 
         & .era-img {
           margin-left: 25px;
@@ -207,7 +230,7 @@
 
       &.scribal {
         right: 82.51%;
-        height: 80px;
+        height: 200px;
 
         & .era-img {
           margin-left: -10px;

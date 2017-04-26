@@ -67,15 +67,9 @@ class Home extends Component {
     return (
       <div className="home-container">
 
-        <div className="flying-plane"></div>
-
         <HomeHead />
 
         <div className="home-body">
-          <div className="post">
-            <p><strong>Pantheon</strong> is an <a href="https://www.media.mit.edu/projects/pantheon-new/overview/" target="_blank">MIT Media Lab</a> research project celebrating the development of collective learning that endows our species with fantastic capacities. This site visualizes data on over 47,000 of the most globally memorable individuals around the world. We invite you to explore and engage with our research. To begin, choose a <strong>Communication Technology Era</strong> to see its profile:</p>
-          </div>
-
           <div className="viz-container">
           { !stackedData
             ? <div>Loading...</div>

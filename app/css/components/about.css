@@ -21,7 +21,6 @@
     }
 
     & .item-link {
-      @apply --globalNav;
       color: var(--colorDark);
       text-decoration: none;
 
