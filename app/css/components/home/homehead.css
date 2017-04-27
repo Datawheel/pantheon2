@@ -3,8 +3,15 @@
 
 .home-head {
   margin: 0 auto;
-  padding: 120px 0 30px;
   text-align: center;
+
+  @media (max-width: 750px) {
+    padding: 76px 0 0;
+  }
+
+  @media (min-width: 751px) {
+    padding: 120px 0 30px;
+  }
 
   & h1 {
     margin: 0 auto;
@@ -20,9 +27,22 @@
   }
 }
 
+.home-head-content {
+  z-index: 200;
+  display: flex;
+
+  @media (max-width: 750px) {
+    flex-direction: column-reverse;
+  }
+
+  @media (min-width: 751px) {
+    flex-direction: column;
+  }
+}
+
 .home-search {
   position: relative;
-  max-width: 266px;
+  max-width: 333px;
   margin: 0 auto;
   text-align: left;
   z-index: 20;
@@ -30,16 +50,21 @@
   & img {
     position: absolute;
     width: 16px;
-    margin: 5px;
     opacity: 0.4;
+
+    @media (max-width: 750px) {
+      margin: 11px 5px 6px 11px
+    }
+
+    @media (min-width: 751px) {
+      margin: 5px;
+    }
   }
 
   & a {
     width: 100%;
     display: inline-block;
-    padding: 5px 28px 2px;
     border: 0;
-    border-bottom: 1px solid var(--colorMatza);
     box-sizing: border-box;
     background: none;
     line-height: 1;
@@ -50,6 +75,26 @@
 
     &:active, &:focus {
       outline: none;
+    }
+
+    @media (max-width: 750px) {
+      border: 1px solid var(--colorMatza);
+      border-radius: 20px;
+      padding: 8px 0px 5px 32px;
+      background-color: var(--colorEggshellOverlay);
+
+      &:hover {
+        background-color: var(--colorEggshell);
+      }
+    }
+
+    @media (min-width: 751px) {
+      border-bottom: 1px solid var(--colorMatza);
+      padding: 5px 28px 2px;
+
+      &:hover {
+        opacity: 0.7;
+      }
     }
   }
 }

@@ -3,6 +3,7 @@
   /* neutrals scale */
   --colorSnow:                #FFF;
   --colorEggshell:            #F4F4F1;
+  --colorKashi:               #e8e9e7;
   --colorLint:                #E4E4E1;
   --colorCardboard:           #D6D6D0;
   --colorMatza:               #D0C9BF;
@@ -14,6 +15,7 @@
   --colorBlackhole:           #000;
 
   --colorEggshellOverlay:     rgba(244, 244, 241, 0.7);
+  --colorKashiOverlay:        rgba(233, 234, 232, 0.5);
 
   --colorCtrl:                #36687F;
   --colorCtrlShape:           #718D9A;
