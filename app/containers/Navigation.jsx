@@ -1,29 +1,64 @@
-import React, {PropTypes} from "react";
+import React, {PropTypes, Component} from "react";
 import {Link} from "react-router";
 import {connect} from "react-redux";
-import {logOut, activateSearch} from "actions/nav";
+import {activateSearch} from "actions/nav";
 import "css/components/navigation";
 import pantheonLogoSvg from "images/logo.svg";
 import searchSvg from "images/icons/icon-search.svg";
 import navSvg from "images/icons/icon-nav.svg";
 import closeSvg from "images/icons/icon-close.svg";
 
-const toggleSubNav = (e) => {
-  const itemChildren = e.target.childNodes;
-  itemChildren.forEach(child => {
-    if (child.nodeType === 1 && child.tagName === "UL") {
-      child.style.display = "block";
-    }
-  });
-};
+class Navigation extends Component {
 
-const Navigation = ({logOut, activateSearch}) => {
-  return (
+  constructor(props) {
+    super(props);
+  }
+
+  toggleSubNav(e) {
+    const itemChildren = e.target.childNodes;
+    e.target.classList.toggle("o");
+    itemChildren.forEach(child => {
+      if (child.nodeType === 1 && child.tagName === "UL") {
+        child.classList.toggle("open");
+      }
+    });
+    document.getElementById("m-navigation").classList.toggle("expanded");
+    document.body.classList.toggle("frozen");
+  }
+
+  toggleSubNavSib(e) {
+    const itemSibling = e.target.nextSibling;
+    itemSibling.classList.toggle("open");
+    e.target.parentNode.classList.toggle("o");
+    document.getElementById("m-navigation").classList.toggle("expanded");
+    document.body.classList.toggle("frozen");
+  }
+
+  closeMobileNav() {
+    document.getElementById("m-navigation").classList.remove("open");
+    document.getElementById("m-navigation").classList.remove("expanded");
+    document.body.classList.remove("frozen");
+
+    const subItems = document.getElementsByClassName("sub-items");
+    [].forEach.call(subItems, function(el) {
+      el.classList.remove("open");
+    });
+
+    const items = document.getElementsByClassName("item");
+    [].forEach.call(items, function(el) {
+      el.classList.remove("o");
+    });
+  }
+
+  render() {
+    const {activateSearch} = this.props;
+
+    return (
       <nav>
-        <div className="navigation global-nav" role="navigation">
+        <div id="navigation" className="global-nav" role="navigation">
           <ul className="items">
             <li className="nav-btn" onClick={() => {
-              document.querySelector(".m-navigation").classList.add("open");
+              document.querySelector("#m-navigation").classList.add("open");
             }}>
               <span>
                 <img src={navSvg} alt="Open navigation." />
@@ -77,14 +112,12 @@ const Navigation = ({logOut, activateSearch}) => {
             </li>
           </ul>
         </div>
-        <div className="m-navigation global-nav">
+        <div id="m-navigation" className="global-nav">
           <div className="logo-container">
             <a href="/" className="home">
               <img className="logo" src={pantheonLogoSvg} alt="Pantheon" />
             </a>
-            <span className="close-btn" onClick={() => {
-              document.querySelector(".m-navigation").classList.remove("open");
-            }}>
+            <span className="close-btn" onClick={this.closeMobileNav}>
               <img src={closeSvg} alt="Close navigation." />
             </span>
           </div>
@@ -92,23 +125,23 @@ const Navigation = ({logOut, activateSearch}) => {
             <li className="item">
               <a href="/" className="item-link home-link">Home</a>
             </li>
-            <li className="item">
-              <a href="/explore/viz" className="item-link explore-link">Explore</a>
+            <li className="item" onClick={this.toggleSubNav}>
+              <a className="item-link explore-link" onClick={this.toggleSubNavSib}>Explore</a>
               <ul className="sub-items">
                 <li><a href="/explore/viz">Explorer</a></li>
                 <li><a href="/explore/rankings">Rankings</a></li>
               </ul>
             </li>
-            <li className="item">
-              <a to="/profile" className="item-link profiles-link">Profiles</a>
+            <li className="item" onClick={this.toggleSubNav}>
+              <a className="item-link profiles-link" onClick={this.toggleSubNavSib}>Profiles</a>
               <ul className="sub-items">
                 <li><a href="/profile/person">People</a></li>
                 <li><a href="/profile/place">Places</a></li>
                 <li><a href="/profile/occupation">Occupations</a></li>
               </ul>
             </li>
-            <li className="item">
-              <a href="/about/vision" className="item-link about-link">About</a>
+            <li className="item" onClick={this.toggleSubNav}>
+              <a className="item-link about-link" onClick={this.toggleSubNavSib}>About</a>
               <ul className="sub-items">
                 <li><a href="/about/vision">Vision</a></li>
                 <li><a href="/about/team">Team</a></li>
@@ -118,8 +151,8 @@ const Navigation = ({logOut, activateSearch}) => {
                 <li><a href="/about/contact">Contact</a></li>
               </ul>
             </li>
-            <li className="item">
-              <a to="/data/datasets" className="item-link data-link">Data</a>
+            <li className="item" onClick={this.toggleSubNav}>
+              <a className="item-link data-link" onClick={this.toggleSubNavSib}>Data</a>
               <ul className="sub-items">
                 <li><a href="/data/datasets">Download</a></li>
                 <li><a href="/data/api">API</a></li>
@@ -131,11 +164,11 @@ const Navigation = ({logOut, activateSearch}) => {
           </ul>
         </div>
       </nav>
-  );
-};
+    );
+  }
+}
 
 Navigation.propTypes = {
-  logOut: PropTypes.func.isRequired,
   activateSearch: PropTypes.func.isRequired
 };
 
@@ -143,4 +176,4 @@ function mapStateToProps(state) {
   return {};
 }
 
-export default connect(mapStateToProps, {logOut, activateSearch})(Navigation);
+export default connect(mapStateToProps, {activateSearch})(Navigation);

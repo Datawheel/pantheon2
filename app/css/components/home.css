@@ -3,7 +3,7 @@
 
 .home {
 
-  & .navigation {
+  & #navigation {
     & .items {
       max-width: 590px;
 

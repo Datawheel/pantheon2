@@ -5,9 +5,16 @@
   width: 100%;
   position: absolute;
   padding: 25px 0;
-  bottom: 0;
   background-color: var(--colorDark);
   z-index: 10;
+
+  @media (max-width: 750px) {
+    top: 100vh;
+  }
+
+  @media (min-width: 751px) {
+    bottom: 0;
+  }
 
   & ol {
     max-width: 1200px;
