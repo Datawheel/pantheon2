@@ -37,6 +37,10 @@
 
   @media (min-width: 751px) {
     flex-direction: column;
+
+    & .post {
+      z-index: 50;
+    }
   }
 }
 

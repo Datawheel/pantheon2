@@ -27,7 +27,7 @@ const Intro = ({era, eras, peopleBorn}) => {
           What was the cultural production of the {era.name}?
         </h3>
         <p>
-          The {era.name} occured roughly between {FORMATTERS.year(era.start_year)} and {FORMATTERS.year(era.end_year)} and is defined by the rapid adoption of a new <HelpText text="communication technology" />.
+          The {era.name} occured roughly between {FORMATTERS.year(era.start_year)} and {FORMATTERS.year(era.end_year)} and is defined by the rapid adoption of a new <HelpText text="communication technology" msg="See related paper, 'The medium is the memory: how communication technologies shape what we remember.'" link="https://arxiv.org/abs/1512.05020" linkTitle="The medium is the memory" />.
           The most globally remembered individuals born in this time period are <AnchorList items={peopleBorn} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : `${d.name}`} url={d => `/profile/person/${d.slug}/`} />.&nbsp;
           {nextPrevSentence}&nbsp;
           Pantheon aims to help us understand global cultural development by visualizing a dataset of "globally memorable people" through their professions, birth and resting places, and Wikipedia activity.&nbsp;

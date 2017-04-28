@@ -1,10 +1,14 @@
 @import '../../common/colors';
 @import '../../common/typography';
 
+.help-txt-box {
+  display: inline;
+  position: relative;
+}
+
 .help-text {
   font-weight: 700;
   cursor: help;
-  display: inline-block;
   border-bottom: 1px solid transparent;
 
   &:hover {
@@ -25,5 +29,74 @@
     width: 14px;
     margin: -1px 2px 0 5px;
     background-size: contain;
+  }
+}
+
+.help-modal {
+  display: block;
+  position: absolute;
+  top: 25px;
+  width: 150%;
+  min-width: 200px;
+  max-width: 385px;
+  min-height: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  background-color: var(--colorEggshell);
+  border: 1px solid var(--colorMatza) !important;
+  font-family: var(--fontBody);
+  z-index: 300;
+
+  @media (max-width: 517px) {
+    left: 0;
+    right: 0;
+  }
+
+  @media (min-width: 518px) {
+    left: -25%;
+  }
+
+  &.show {
+    display: block;
+  }
+
+  & .help-modal-body {
+    display: block;
+    color: var(--colorStone);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    padding: 10px 7px 7px;
+    box-sizing: border-box;
+    word-break: break-all;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  & .help-modal-deeplink {
+    display: block;
+    @apply --exploreControlLabels;
+    line-height: 1.5em;
+    padding: 5px 0;
+
+    & .deep-link {
+      border-bottom: 0;
+
+      &:hover {
+        color: var(--colorBlackhole);
+      }
+
+      &::after {
+        content: '';
+        position: relative;
+        display: inline-block;
+        height: 8px;
+        width: 6px;
+        margin: 0 0 -1px 3px;
+        background: url('../../../images/tri-right-b.svg') no-repeat;
+        background-size: contain;
+      }
+    }
   }
 }
