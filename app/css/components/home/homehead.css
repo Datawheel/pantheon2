@@ -84,7 +84,7 @@
     @media (max-width: 750px) {
       border: 1px solid var(--colorMatza);
       border-radius: 20px;
-      padding: 8px 0px 5px 32px;
+      padding: 8px 14px 5px 32px;
       background-color: var(--colorEggshellOverlay);
 
       &:hover {
