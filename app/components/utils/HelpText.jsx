@@ -22,13 +22,13 @@ class HelpText extends Component {
 
     return (
       <span className="help-txt-box">
-        <a className="help-text" title={msg} onMouseOver={this.handleMouseIn.bind(this)}>{text}</a>
+        <a className="help-text" title={msg} onMouseEnter={this.handleMouseIn.bind(this)}>{text}</a>
         { this.state.hover
-        ? <span className="help-modal" onMouseOut={this.handleMouseOut.bind(this)}>
+        ? <span className="help-modal" onMouseEnter={this.handleMouseIn.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
             <span className="help-modal-body">
               { msg ? msg : null }
               { link
-                ? <span className="help-modal-deeplink">Go to <a href={link} target="_blank" className="deep-link">{linkTitle}</a></span>
+                ? <span className="help-modal-deeplink" onMouseEnter={this.handleMouseIn.bind(this)}>Go to <a href={link} target="_blank" className="deep-link">{linkTitle}</a></span>
                 : <span className="help-modal-deeplink">For details, see <Link to="/about/methods" className="deep-link">Methods</Link></span>
               }
             </span>

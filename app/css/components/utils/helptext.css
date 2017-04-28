@@ -35,7 +35,7 @@
 .help-modal {
   display: block;
   position: absolute;
-  top: 25px;
+  top: 15px;
   width: 150%;
   min-width: 200px;
   max-width: 385px;
@@ -72,6 +72,7 @@
     word-break: break-all;
     word-break: break-word;
     hyphens: auto;
+    z-index: 70;
   }
 
   & .help-modal-deeplink {

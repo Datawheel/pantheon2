@@ -12,7 +12,7 @@ const HomeHead = ({activateSearch}) =>
     <h3>Mapping Cultural Memory</h3>
     <div className="home-head-content">
       <div className="post">
-        <p><strong>Pantheon</strong> is an <a href="https://www.media.mit.edu/projects/pantheon-new/overview/" target="_blank">MIT Media Lab</a> research project celebrating the development of collective learning that endows our species with fantastic capacities. How has <HelpText text="cultural memory" /> changed with the introduction of each of these <strong>Communication Technologies</strong>?</p>
+        <p><strong>Pantheon</strong> is an <a href="https://www.media.mit.edu/projects/pantheon-new/overview/" target="_blank">MIT Media Lab</a> research project celebrating the development of collective learning that endows our species with fantastic capacities. How has <HelpText text="cultural memory" msg="Defined as the accumulation of globally relevant historical characters." /> changed with the introduction of each of these <strong>Communication Technologies</strong>?</p>
       </div>
       <div className="home-search">
         <img src={searchSvg} alt="Search" />
