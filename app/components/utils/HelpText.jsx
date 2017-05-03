@@ -13,22 +13,35 @@ class HelpText extends Component {
     this.setState({hover: true});
   }
 
-  handleMouseOut() {
+  handleMouseOut(event) {
+
+    const {parent} = this.refs;
+
+    let e = event.toElement || event.relatedTarget;
+    while (e && e.parentNode && e.parentNode !== window) {
+      if (e.parentNode === parent || e === parent) {
+        if (e.preventDefault) e.preventDefault();
+        return;
+      }
+      e = e.parentNode;
+    }
+
     this.setState({hover: false});
   }
 
   render() {
     const {text, msg, link, linkTitle} = this.props;
+    const {hover} = this.state;
 
     return (
-      <span className="help-txt-box">
-        <a className="help-text" title={msg} onMouseEnter={this.handleMouseIn.bind(this)}>{text}</a>
-        { this.state.hover
-        ? <span className="help-modal" onMouseEnter={this.handleMouseIn.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
+      <span ref="parent" className="help-txt-box" onMouseEnter={this.handleMouseIn.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
+        <a className={ `help-text ${ hover ? "hover" : "" }` } title={msg}>{text}</a>
+        { hover
+        ? <span className="help-modal">
             <span className="help-modal-body">
               { msg ? msg : null }
               { link
-                ? <span className="help-modal-deeplink" onMouseEnter={this.handleMouseIn.bind(this)}>Go to <a href={link} target="_blank" className="deep-link">{linkTitle}</a></span>
+                ? <span className="help-modal-deeplink">Go to <a href={link} target="_blank" className="deep-link">{linkTitle}</a></span>
                 : <span className="help-modal-deeplink">For details, see <Link to="/about/methods" className="deep-link">Methods</Link></span>
               }
             </span>
