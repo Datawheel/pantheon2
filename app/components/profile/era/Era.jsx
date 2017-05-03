@@ -14,6 +14,7 @@ import {fetchAllOccupations} from "actions/occupation";
 import {Geomap, Priestley, StackedArea, Treemap} from "d3plus-react";
 import {COLORS_CONTINENT, FORMATTERS, YEAR_BUCKETS} from "types";
 import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import "css/components/profile/structure";
 
 class Era extends Component {
 
@@ -246,8 +247,10 @@ class Era extends Component {
           link={config.link}
         />
         <Header era={era} />
-        <Intro era={era} eras={eras} peopleBorn={peopleBornInEra.slice(0, 3)} />
-        <ProfileNav sections={sections} />
+        <div className="about-section">
+          <ProfileNav sections={sections} />
+          <Intro era={era} eras={eras} peopleBorn={peopleBornInEra.slice(0, 3)} />
+        </div>
         {sections.map((section, key) =>
           <Section
             index={key}

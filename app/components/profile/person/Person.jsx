@@ -17,6 +17,7 @@ import {fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fe
 import "css/components/profile/person";
 import {LinePlot} from "d3plus-react";
 import {extent} from "d3-array";
+import "css/components/profile/structure";
 
 import {FORMATTERS} from "types";
 
@@ -112,8 +113,10 @@ class Person extends Component {
           link={config.link}
         />
         <Header person={personProfile.person} pageviews={personProfile.pageviews} />
-        <ProfileNav sections={sections} />
-        <Intro totalPageViews={totalPageViews} />
+        <div className="about-section">
+          <ProfileNav sections={sections} />
+          <Intro totalPageViews={totalPageViews} />
+        </div>
         {sections.map((section, key) =>
           <Section
             index={key}

@@ -1,5 +1,6 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
+import "css/components/utils/mouse";
 import {COLORS_DOMAIN} from "types";
 import {plural} from "pluralize";
 import {nest} from "d3-collection";
@@ -97,6 +98,9 @@ const Header = ({occupation, people}) => {
              yConfig: {labels: [], ticks: [], title: false}
            }} />
         </pre>
+      </div>
+      <div className="mouse">
+        <span className="mouse-scroll"></span>
       </div>
     </header>
   );

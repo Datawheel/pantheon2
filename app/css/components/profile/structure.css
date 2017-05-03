@@ -1,0 +1,10 @@
+@import '../../common/colors';
+@import '../../common/typography';
+
+.about-section {
+  @media (max-width: 750px) {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}

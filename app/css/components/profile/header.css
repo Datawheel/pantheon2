@@ -69,14 +69,26 @@ header {
 
     & .bg-img {
       background-blend-mode: darken;
-      background-position: 0% 0%;
       background-size: cover;
       height: 100%;
-      width: 50%;
+
+      @media (min-width: 751px) {
+        background-position: 0% 0%;
+        width: 50%;
+      }
+      @media (max-width: 750px) {
+        background-position: 50% 0%;
+        width: 100%;
+      }
     }
 
     & .bg-img-r {
-      transform: scaleX(-1);
+      @media (min-width: 751px) {
+        transform: scaleX(-1);
+      }
+      @media (max-width: 750px) {
+        display: none;
+      }
     }
   }
 

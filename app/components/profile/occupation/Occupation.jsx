@@ -18,6 +18,7 @@ import {fetchEras} from "actions/era";
 import {COLORS_CONTINENT, FORMATTERS, YEAR_BUCKETS} from "types";
 import {Priestley, StackedArea, Treemap} from "d3plus-react";
 import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import "css/components/profile/structure";
 
 import {extent} from "d3-array";
 
@@ -248,8 +249,10 @@ class Occupation extends Component {
           link={config.link}
         />
         <Header occupation={occupation} people={people} />
-        <ProfileNav sections={sections} />
-        <Intro occupation={occupation} occupations={occupations} />
+        <div className="about-section">
+          <ProfileNav sections={sections} />
+          <Intro occupation={occupation} occupations={occupations} />
+        </div>
         {sections.map((section, key) =>
           <Section
             index={key}

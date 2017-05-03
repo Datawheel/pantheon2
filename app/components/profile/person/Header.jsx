@@ -1,5 +1,6 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
+import "css/components/utils/mouse";
 import {LinePlot} from "d3plus-react";
 
 import {COLORS_DOMAIN, FORMATTERS} from "types";
@@ -92,6 +93,9 @@ const Header = ({pageviews, person}) => {
                yConfig: {labels: [], ticks: [], title: false}
              }} />
         </pre>
+      </div>
+      <div className="mouse">
+        <span className="mouse-scroll"></span>
       </div>
     </header>
   );

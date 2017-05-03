@@ -4,15 +4,16 @@
   --fontBody:                'Amiko', Helvetica, Arial, sans-serif;
   --fontTitle:               'Marcellus', Times, serif;
 
-  --sizeXXS:                 0.643em;
-  --sizeXS:                  0.785em;
-  --sizeSmall:               0.857em;
-  --sizeBody:                1.0em;
-  --sizeMedium:              1.142em;
-  --sizeML:                  1.21em;
-  --sizeLarge:               1.5em;
-  --sizeXL:                  2.36em;
-  --sizeXXL:                 2.57em;
+  --sizeXXS:                 0.09rem;
+  --sizeXS:                  1.1rem;
+  --sizeSmall:               1.2rem;
+  --sizeBody:                1.4rem;
+  --sizeMobileSmall:         1.5rem;
+  --sizeMedium:              1.6rem;
+  --sizeML:                  1.7rem;
+  --sizeLarge:               2.1rem;
+  --sizeXL:                  3.3rem;
+  --sizeXXL:                 3.6rem;
 
   --pageTitle {
     font-size: var(--sizeXXL);
@@ -26,21 +27,21 @@
     text-transform: uppercase;
     font-size: var(--sizeXL);
     font-weight: 400;
-    letter-spacing: .07em;
+    letter-spacing: 0.3rem;
   }
 
   --priLabel {
     color: var(--colorDark);
     font-size: var(--sizeBody);
     font-weight: 400;
-    letter-spacing: .1em;
+    letter-spacing: .14rem;
     text-transform: uppercase;
   }
 
   --secLabel {
     color: var(--colorTan);
     font-size: var(--sizeBody);
-    letter-spacing: .07em;
+    letter-spacing: .07rem;
     font-weight: 400;
   }
 
@@ -48,7 +49,7 @@
     color: var(--colorTan);
     font-size: var(--sizeSmall);
     font-weight: 600;
-    letter-spacing: .05em;
+    letter-spacing: .05rem;
     text-transform: uppercase;
   }
 
@@ -63,7 +64,7 @@
   --subHeading {
     font-size: var(--sizeLarge);
     font-weight: 700;
-    line-height: 1.725em;
+    line-height: 1.725rem;
   }
 
   --normal {
@@ -82,6 +83,11 @@
     line-height: calc(2 * var(--sizeSmall));
     margin: 0;
     font-weight: 400;
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeBody);
+      line-height: calc(2 * var(--sizeBody));
+    }
   }
 
   --bodyLink {
@@ -104,7 +110,20 @@
     font-size: var(--sizeSmall);
     font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: .07em;
+    letter-spacing: .07rem;
+  }
+
+  --profileIntroTitle {
+    font-size: var(--sizeSmall);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .07rem;
+    line-height: calc(1.75 * var(--sizeSmall));
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeMobileSmall);
+      line-height: calc(1.6 * var(--sizeMobileSmall));
+    }
   }
 
   --boldSmallCaps {
@@ -112,7 +131,7 @@
     font-weight: 600;
     line-height: var(--sizeSmall);
     text-transform: uppercase;
-    letter-spacing: .1em;
+    letter-spacing: .1rem;
   }
 
   --dropdownLink {
@@ -132,7 +151,7 @@
   --exploreControlHeader {
     color: var(--colorEggshell);
     font-size: var(--sizeSmall);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.05rem;
     font-weight: 400;
   }
 
@@ -149,7 +168,7 @@
     font-size: var(--sizeXXS);
     color: var(--colorSlate);
     font-weight: 400;
-    letter-spacing: .05em;
+    letter-spacing: .7rem;
     line-height: var(--sizeXXS);
     text-transform: uppercase;
   }
@@ -174,11 +193,20 @@
   }
 
   --profileNav {
-    font-size: var(--sizeXS);
-    font-weight: 700;
-    line-height: var(--sizeXS);
     text-transform: uppercase;
-    letter-spacing: .07em;
+    letter-spacing: .05rem;
+
+    @media (min-width: 751px) {
+      font-size: var(--sizeSmall);
+      font-weight: 700;
+      line-height: var(--sizeSmall);
+    }
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeBody);
+      line-height: var(--sizeBody);
+      font-weight: 600;
+    }
   }
 
   --calloutText {
@@ -186,7 +214,7 @@
     font-size: var(--sizeLarge);
     font-weight: 400;
     line-height: var(--sizeLarge);
-    letter-spacing: 0.057em;
+    letter-spacing: 0.057rem;
   }
 
   --profileSectionTitle {
@@ -194,7 +222,7 @@
     font-weight: 400;
     line-height: var(--sizeML);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.1rem;
   }
 
   --profileVizTitle {
@@ -205,7 +233,7 @@
   --searchResults {
     font-size: var(--sizeMedium);
     font-weight: 400;
-    letter-spacing: 0.05em;
-    line-height: 1.7em;
+    letter-spacing: 0.05rem;
+    line-height: 1.7rem;
   }
 }

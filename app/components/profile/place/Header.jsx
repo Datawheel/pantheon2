@@ -1,5 +1,6 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
+import "css/components/utils/mouse";
 import {FORMATTERS} from "types";
 import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
@@ -90,6 +91,9 @@ const Header = ({country, people, place}) => {
                yConfig: {labels: [], ticks: [], title: false}
              }} />
         </pre>
+      </div>
+      <div className="mouse">
+        <span className="mouse-scroll"></span>
       </div>
     </header>
   );

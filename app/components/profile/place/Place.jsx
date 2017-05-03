@@ -17,6 +17,7 @@ import {fetchAllOccupations} from "actions/occupation";
 import {FORMATTERS, YEAR_BUCKETS} from "types";
 import {Geomap, Priestley, Treemap, StackedArea} from "d3plus-react";
 import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import "css/components/profile/structure";
 
 import {extent} from "d3-array";
 
@@ -244,8 +245,10 @@ class Place extends Component {
           link={config.link}
         />
         <Header place={place} country={country} people={peopleBornHere} />
-        <ProfileNav sections={sections} />
-        <Intro place={place} placeRanks={placeRanks} />
+        <div className="about-section">
+          <ProfileNav sections={sections} />
+          <Intro place={place} placeRanks={placeRanks} />
+        </div>
         {sections.map((section, key) =>
           <Section
             index={key}

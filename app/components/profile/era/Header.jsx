@@ -1,5 +1,6 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
+import "css/components/utils/mouse";
 import placeholderViz from "images/profile/placeholder_era_viz.png";
 import {FORMATTERS} from "types";
 
@@ -15,6 +16,9 @@ const Header = ({era}) =>
         <h2 className="profile-type">Time Period</h2>
         <h1 className="profile-name">{era.name}</h1>
         <h2 className="date-subtitle">{FORMATTERS.year(era.start_year)} - {FORMATTERS.year(era.end_year)}</h2>
+      </div>
+      <div className="mouse">
+        <span className="mouse-scroll"></span>
       </div>
     </header>
   ;
