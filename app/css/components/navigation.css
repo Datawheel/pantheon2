@@ -228,7 +228,7 @@
   display: block;
   z-index: 99;
   background-color: var(--colorEggshell);
-  min-height: 430px;
+  min-height: 428px;
   top: -431px;
   opacity: 1;
   transition: top 0.6s;
