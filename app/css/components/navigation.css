@@ -406,6 +406,10 @@
   padding: 50px 0;
   border-top: 1px solid var(--colorCardboard);
 
+  @media (max-width: 1172px) {
+    margin: 0 7.2vw;
+  }
+
   @media (max-width: 750px) {
     flex-direction: column;
     justify-content: center;
@@ -431,6 +435,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-wrap: wrap;
 
     & .item > .item-link {
       @apply --boldSmallCaps;
@@ -448,11 +453,12 @@
   }
 
   & .right {
-    max-width: 200px;
+    max-width: 250px;
     margin: 0 0 0 auto;
 
     @media (max-width: 750px) {
-      margin-top: 20px;
+      margin: 20px 0 0 auto;
+      width: 250px;
     }
 
     & .authors {
