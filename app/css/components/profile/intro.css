@@ -11,6 +11,10 @@
 
   @media (max-width: 750px) {
     padding: 45px 0 0;
+
+    &.person {
+      padding: 217px 0 0;
+    }
   }
 
   &.person {
@@ -66,9 +70,11 @@
     }
   }
 
-  & img {
+  & .intro-content > img {
     @media (max-width: 750px) {
-      display: none;
+      position: absolute;
+      top: 0;
+      height: 260px;
     }
 
     @media (min-width: 751px) {

@@ -76,6 +76,18 @@
 
   & span {
     background-color: var(--colorDark);
+
+    &:first-child {
+      @media (max-width: 355px) {
+        max-width: 160px;
+        display: inline-block;
+        word-wrap: break-word;
+        word-break: break-all;
+        word-break: break-word;
+        hyphens: auto;
+        vertical-align: text-top;
+      }
+    }
   }
 
   & a {

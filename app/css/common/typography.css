@@ -40,17 +40,31 @@
 
   --secLabel {
     color: var(--colorTan);
-    font-size: var(--sizeBody);
     letter-spacing: .07rem;
     font-weight: 400;
+
+    @media (min-width: 751px) {
+      font-size: var(--sizeBody);
+    }
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeMedium);
+    }
   }
 
   --contextLabel {
     color: var(--colorTan);
-    font-size: var(--sizeSmall);
     font-weight: 600;
     letter-spacing: .05rem;
     text-transform: uppercase;
+
+    @media (min-width: 751px) {
+      font-size: var(--sizeSmall);
+    }
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeMedium);
+    }
   }
 
   --sectionTitle {
