@@ -40,14 +40,11 @@ const Header = ({pageviews, person}) => {
           <LinePlot
              config={{
                data: sparkData,
-               height: 100,
+               height: 150,
                groupBy: "person",
                legend: false,
                on: {
-                 "click.shape": () => {},
-                 "mouseenter.shape": () => {},
-                 "mousemove.shape": () => {},
-                 "mouseleave.shape": () => {}
+
                },
                shape: d => d.shape || "Line",
                shapeConfig: {
@@ -65,8 +62,15 @@ const Header = ({pageviews, person}) => {
                time: d => d.pageview_date,
                timeline: false,
                tooltipConfig: {
-                 body: d => `<span class="center">${FORMATTERS.date(d.pageview_date)} - ${FORMATTERS.commas(d.num_pageviews)}</span>`,
-                 title: "Page Views (PV)"
+                 footer: d => `<span class="center">${FORMATTERS.date(d.pageview_date)}</span>`,
+                 title: d => `${FORMATTERS.commas(d.num_pageviews)} Page Views`,
+                 titleStyle: {"text-align": "center"},
+                 width: "200px",
+                 footerStyle: {
+                   "font-size": "12px",
+                   "text-transform": "none",
+                   "color": "#4B4A48"
+                 }
                },
                width: 275,
                x: d => d.pageview_date,
@@ -85,7 +89,7 @@ const Header = ({pageviews, person}) => {
                  titleConfig: {
                    fontColor: "#4B4A48",
                    fontFamily: () => "Amiko",
-                   fontSize: () => 10,
+                   fontSize: () => 11,
                    stroke: "#4B4A48"
                  }
                },
