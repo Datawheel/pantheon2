@@ -36,7 +36,7 @@
 .help-modal {
   display: block;
   position: absolute;
-  top: 15px;
+  top: 20px;
   width: 150%;
   min-width: 200px;
   max-width: 385px;
@@ -79,7 +79,7 @@
   & .help-modal-deeplink {
     display: block;
     @apply --exploreControlLabels;
-    line-height: 1.5em;
+    line-height: 1.5;
     padding: 5px 0;
 
     & .deep-link {

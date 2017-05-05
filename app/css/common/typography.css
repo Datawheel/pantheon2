@@ -4,7 +4,7 @@
   --fontBody:                'Amiko', Helvetica, Arial, sans-serif;
   --fontTitle:               'Marcellus', Times, serif;
 
-  --sizeXXS:                 0.09rem;
+  --sizeXXS:                 0.9rem;
   --sizeXS:                  1.1rem;
   --sizeSmall:               1.2rem;
   --sizeBody:                1.4rem;
@@ -182,7 +182,7 @@
     font-size: var(--sizeXXS);
     color: var(--colorSlate);
     font-weight: 400;
-    letter-spacing: .7rem;
+    letter-spacing: .07rem;
     line-height: var(--sizeXXS);
     text-transform: uppercase;
   }

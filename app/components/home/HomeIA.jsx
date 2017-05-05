@@ -6,7 +6,7 @@ const HomeIA = () => (
   <div className="ia">
     <div className="flying-plane"></div>
     <h3>The Structure of Pantheon</h3>
-    <p className="post">This site visualizes data on over <span>47,000</span> of the most <HelpText text="globally memorable individuals" msg="Individuals who reached a minimum threshold on two measures of 'global memorability': L, the number of Wikipedia language editions a character is featured in, and the Historical Popularity Index (HPI), which corrects L by adding information an an individual's age, pageview concentrations, and number of non-English pageviews." /> around the world. We invite you to explore and engage with our research through a variety of avenues:</p>
+    <p className="post">This site visualizes data on over <span>47,000</span> of the most <HelpText text="globally memorable individuals" msg="Individuals with L > 25 and HPI > 15. L is the number of Wikipedia language editions a character is featured in. Historical Popularity Index (HPI) corrects L by adding information an an individual's age, pageview concentrations, and number of non-English pageviews." /> around the world. We invite you to explore and engage with our research through a variety of avenues:</p>
     <ul className="items ia-top">
       <li className="ia-top-bg"></li>
       <li className="item ia-top-item">
