@@ -4,6 +4,10 @@
 @import '/reacttable-override';
 @import '/slider-override';
 
+:root {
+  --viz-height: 70vh;
+}
+
 .explore-container {
   width: 100%;
   margin: 90px auto 5px;
@@ -38,6 +42,10 @@
   flex-direction: column;
   align-items: center;
   flex: 1;
+}
+
+.explore-viz-container {
+  height: var(--viz-height);
 }
 
 .explore-head {
@@ -383,6 +391,7 @@
   }
 
   &.hide {
+    height: var(--viz-height);
     width: 38px;
     flex: 0 0 38px;
     box-sizing: border-box;
