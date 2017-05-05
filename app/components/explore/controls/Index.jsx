@@ -30,7 +30,7 @@ class Controls extends Component {
     return (
       <div className="explore-controls viz-explorer" id="side-panel">
         <div className="control-header">
-          <h2 className="viz-explorer"><span className="helper-text">Open&nbsp;</span>{page === "rankings" ? "Rankings" : "Explorer"}<span className="helper-text">&nbsp;Panel</span></h2>
+          <h2 className="viz-explorer"><span className="helper-text">Open&nbsp;</span>{page === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text">&nbsp;Panel</span></h2>
           <i className="control-toggle" onClick={this.toggleSidePanel}></i>
         </div>
 

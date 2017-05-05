@@ -138,7 +138,7 @@ const NotFound = ({activateSearch}) => {
                   <a href="/explore/viz" className="error-photo"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/explore/viz">Visual Explorer</a>
+                  <a href="/explore/viz">Visualizations</a>
                 </h4>
                 <p>Create custom visualizations using the Pantheon dataset.</p>
               </li>

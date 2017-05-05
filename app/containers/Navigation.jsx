@@ -67,7 +67,7 @@ class Navigation extends Component {
             <li className="item">
               <Link to="/explore/viz" className="item-link explore-link" activeClassName="active">Explore</Link>
               <ul className="sub-items">
-                <li><a href="/explore/viz" className="item-link">Explorer</a></li>
+                <li><a href="/explore/viz" className="item-link">Visualizations</a></li>
                 <li><a href="/explore/rankings" className="item-link">Rankings</a></li>
               </ul>
             </li>
@@ -128,7 +128,7 @@ class Navigation extends Component {
             <li className="item" onClick={this.toggleSubNav}>
               <a className="item-link explore-link" onClick={this.toggleSubNavSib}>Explore</a>
               <ul className="sub-items">
-                <li><a href="/explore/viz">Explorer</a></li>
+                <li><a href="/explore/viz">Visualizations</a></li>
                 <li><a href="/explore/rankings">Rankings</a></li>
               </ul>
             </li>
@@ -138,6 +138,7 @@ class Navigation extends Component {
                 <li><a href="/profile/person">People</a></li>
                 <li><a href="/profile/place">Places</a></li>
                 <li><a href="/profile/occupation">Occupations</a></li>
+                <li><a href="/profile/era">Eras</a></li>
               </ul>
             </li>
             <li className="item" onClick={this.toggleSubNav}>

@@ -10,9 +10,9 @@ const HomeIA = () => (
     <ul className="items ia-top">
       <li className="ia-top-bg"></li>
       <li className="item ia-top-item">
-        <a href="/explore/viz"><h2 className="viz-explorer">Explorer</h2></a>
+        <a href="/explore/viz"><h2 className="viz-explorer">Visualizations</h2></a>
         <p>Create data visualizations using the Pantheon dataset.&nbsp;
-        <a href="/explore/viz" className="deep-link">View Explorer</a></p>
+        <a href="/explore/viz" className="deep-link">View Visualizations</a></p>
       </li>
       <li className="item ia-top-item center">
         <h2 className="profiles">Profiles</h2>
