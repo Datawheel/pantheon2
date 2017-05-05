@@ -174,7 +174,7 @@
       }
 
       &.computer {
-        right: 1.28%;
+        right: 5.2%;
         height: 140px;
 
         & .era-img {
@@ -189,7 +189,7 @@
       }
 
       &.television {
-        right: 11.5%;
+        right: 13.6%;
         height: 240px;
 
         & .era-img {
@@ -204,7 +204,7 @@
       }
 
       &.film-radio {
-        right: 21.20%;
+        right: 22.25%;
         height: 330px;
 
         & .era-img {
@@ -219,7 +219,7 @@
       }
 
       &.newspaper {
-        right: 40.25%;
+        right: 43.6%;
         height: 150px;
 
         & .era-img {
@@ -234,7 +234,7 @@
       }
 
       &.printing {
-        right: 51.28%;
+        right: 49.95%;
         height: 250px;
 
         & .era-img {
@@ -250,7 +250,7 @@
       }
 
       &.scribal {
-        right: 82.51%;
+        right: 80.2%;
         height: 200px;
 
         & .era-img {

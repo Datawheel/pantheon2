@@ -1,14 +1,13 @@
 import React, {Component} from "react";
 import apiClient from "apiconfig";
 import axios from "axios";
+import {FORMATTERS} from "types";
 import "css/components/home";
 import HomeGrid from "components/home/HomeGrid";
 import HomeIA from "components/home/HomeIA";
 import HomeHead from "components/home/HomeHead";
 import {StackedArea} from "d3plus-react";
 import {bucketScale, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
-import {FORMATTERS, YEAR_BUCKETS} from "types";
-import {extent} from "d3-array";
 
 /*
  * Note: This is kept as a container-level component,
@@ -42,16 +41,11 @@ class Home extends Component {
         .filter(p => p.birthyear !== null)
         .sort((a, b) => b.langs - a.langs);
 
-      let birthyearSpan = extent(stackedData, d => d.birthyear);
-      birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
-
       stackedData.forEach(d => {
         d.occupation_name = d.occupation.occupation;
         d.occupation_id = `${d.occupation.id}`;
         d.place = d.birthplace;
-        d.logyear = birthyearSpan < YEAR_BUCKETS * 2
-                  ? d.birthyear
-                  : bucketScale(d.birthyear);
+        d.logyear = bucketScale(d.birthyear);
       });
     }
 
@@ -63,6 +57,9 @@ class Home extends Component {
         return obj;
       }, {});
     }
+
+    const ticks = [-3500, -500, 1450, 1600, 1900, 1950, 1995, 2016];
+    const logTicks = ticks.map(bucketScale);
 
     return (
       <div className="home-container">
@@ -98,7 +95,9 @@ class Home extends Component {
                   tooltipConfig: Object.assign({duration: 0}, groupTooltip(stackedData)),
                   x: "logyear",
                   xConfig: {
-                    tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
+                    labels: logTicks,
+                    ticks: [],
+                    tickFormat: d => FORMATTERS.year(ticks[logTicks.indexOf(new Date(d).getFullYear())])
                   },
                   y: d => d.id instanceof Array ? d.id.length : 1,
                   yConfig: {

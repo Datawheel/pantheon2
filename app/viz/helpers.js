@@ -2,7 +2,7 @@ import {COLORS_DOMAIN} from "types";
 import {min, max} from "d3-array";
 import {scaleLinear, scaleLog} from "d3-scale";
 
-const domain = [1, 100], maxYear = 2016, minYear = -3500;
+const domain = [1, 100], maxYear = 2016, minYear = -4500;
 const yearMap = scaleLinear().domain([maxYear, minYear]).range(domain);
 const logMap = scaleLog().domain(domain).rangeRound([50, 1]);
 
