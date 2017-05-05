@@ -25,7 +25,13 @@ class VizShell extends Component {
     let attrs, vizData, vizShapeConfig;
 
     if (!data.length) {
-      return <div className="explore-viz-container">Loading data</div>;
+      return <div className="explore-viz-container">
+        <div className="loading-img">
+          <p>Loading data<span className="loading-dot">.</span><span className="loading-dot">.</span><span className="loading-dot">.</span></p>
+          <div className="spinner"></div>
+          <div className="spin-cover"></div>
+        </div>
+      </div>;
     }
 
     if (show.type === "places") {

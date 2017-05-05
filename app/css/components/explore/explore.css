@@ -1,5 +1,6 @@
 @import '../../common/colors';
 @import '../../common/typography';
+@import '../../common/loader';
 @import '../../common/input';
 @import '/reacttable-override';
 @import '/slider-override';
