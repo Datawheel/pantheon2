@@ -111,7 +111,7 @@ class Home extends Component {
                 <ul className="items">
                   <li className="item era computer">
                     <div className="era-img"></div>
-                    <p><a href="/profile/era/personal_computer">Computer</a></p>
+                    <p><a href="/profile/era/personal_computer">Internet</a></p>
                   </li>
                   <li className="item era television">
                     <div className="era-img"></div>

@@ -224,12 +224,12 @@
 
         & .era-img {
           margin-left: 25px;
-          background-image: url("../../images/home/news.png");
-          width: 77px;
+          background-image: url("../../images/home/news2.png");
+          width: 45px;
         }
         & p {
-          left: 105px;
-          top: -60px;
+          left: 75px;
+          top: -50px;
         }
       }
 
