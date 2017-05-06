@@ -9,6 +9,12 @@
   --viz-height: 70vh;
 }
 
+.loading-img {
+  & .spinner {
+    background-image: url("../../../images/loading.gif");
+  }
+}
+
 .explore-container {
   width: 100%;
   margin: 90px auto 5px;
