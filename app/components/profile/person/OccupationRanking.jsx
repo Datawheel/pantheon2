@@ -42,7 +42,7 @@ class OccupationRanking extends Component {
         </p>
         <div className="rank-title">
           <h3>Top Global {person.occupation.occupation}s</h3>
-          <a href="#">Go to all Rankings</a>
+          <a href="/explore/rankings">Go to all Rankings</a>
         </div>
         <div className="rank-carousel">
           <ul className="rank-list" ref="rankListBorn">

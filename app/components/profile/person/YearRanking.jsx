@@ -65,7 +65,7 @@ class YearRanking extends Component {
         </p>
         <div className="rank-title">
           <h3>Others Born in {FORMATTERS.year(person.birthyear.name)}</h3>
-          <a href="#">Go to all Rankings</a>
+          <a href="/explore/rankings">Go to all Rankings</a>
         </div>
         <div className="rank-carousel">
           <ul className="rank-list" ref="rankListBorn">
@@ -87,7 +87,7 @@ class YearRanking extends Component {
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>Others Deceased in {FORMATTERS.year(person.deathyear.name)}</h3>
-              <a href="#">Go to all Rankings</a>
+              <a href="/explore/rankings">Go to all Rankings</a>
             </div>
             <div className="rank-carousel">
               <ul className="rank-list" ref="rankListDead">

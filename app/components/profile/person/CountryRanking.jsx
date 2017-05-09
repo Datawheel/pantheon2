@@ -63,7 +63,7 @@ class CountryRanking extends Component {
         </p>
         <div className="rank-title">
           <h3>Others born in {person.birthcountry.name}</h3>
-          <a href="#">Go to all Rankings</a>
+          <a href="/explore/rankings">Go to all Rankings</a>
         </div>
         <div className="rank-carousel">
           <ul className="rank-list" ref="rankListBorn">
@@ -85,7 +85,7 @@ class CountryRanking extends Component {
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>Others deceased in {person.deathcountry.name}</h3>
-              <a href="#">Go to all Rankings</a>
+              <a href="/explore/rankings">Go to all Rankings</a>
             </div>
             <div className="rank-carousel">
               <ul className="rank-list" ref="rankListDead">

@@ -17,14 +17,14 @@ const PeopleRanking = ({place, peopleBorn, peopleDied}) => {
       </p>
       <div className="rank-title">
         <h3>People Born in {place.name}</h3>
-        <a href="#">Go to all Rankings</a>
+        <a href="/explore/rankings">Go to all Rankings</a>
       </div>
       <PhotoCarousel people={topRankingBorn} />
       { topRankingDied.length ?
         <div className="rank-sec-body">
           <div className="rank-title">
             <h3>People Deceased in {place.name}</h3>
-            <a href="#">Go to all Rankings</a>
+            <a href="/explore/rankings">Go to all Rankings</a>
           </div>
           <PhotoCarousel people={topRankingDied} />
         </div> : null }
