@@ -16,7 +16,7 @@ import NotFound from "components/NotFound";
 import {fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations} from "actions/occupation";
 import {fetchEras} from "actions/era";
 import {COLORS_CONTINENT, FORMATTERS, YEAR_BUCKETS} from "types";
-import {Priestley, StackedArea, Treemap} from "d3plus-react";
+import {Priestley, StackedArea, Treemap, Tree} from "d3plus-react";
 import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 import "css/components/profile/structure";
 
@@ -198,43 +198,28 @@ class Occupation extends Component {
         slug: "related",
         content: <RelatedOccupations occupation={occupation} occupations={occupations} />,
         viz: [
-          <Treemap
-            key="tmap_domain"
+          <Tree
+            key="tree_domain"
             config={{
-              title: `Occupations Within the ${occupation.domain} Domain`,
-              attrs: occupations,
+              title: `Related Occupations Within the ${occupation.domain} Domain`,
               data: tmapDomainData,
-              depth: 1,
-              groupBy: ["industry", "occupation_name"].map(groupBy(attrs)),
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               legend: false,
               on: on("occupation", d => d.occupation.occupation_slug),
-              shapeConfig: shapeConfig(attrs),
-              time: "birthyear",
-              tooltipConfig: groupTooltip(tmapDomainData, d => d.occupation.occupation_slug),
-              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
-            }} />,
-          <StackedArea
-            key="stacked_domain"
-            config={{
-              title: `${occupation.domain} Domain Over Time`,
-              attrs: occupations,
-              data: tmapDomainData,
-              depth: 1,
-              groupBy: ["industry", "occupation_name"].map(groupBy(attrs)),
-              legend: false,
-              on: on("occupation", d => d.occupation.occupation_slug),
-              shapeConfig: Object.assign({}, shapeConfig(attrs), {
-                stroke: () => "#F4F4F1",
-                strokeWidth: () => 1
-              }),
-              time: "logyear",
+              orient: "horizontal",
+              shapeConfig: Object.assign({}, shapeConfig(attrs),
+                {
+                  labelConfig: {
+                    fontColor: "#4B4A48",
+                    fontFamily: () => "Amiko",
+                    fontResize: false,
+                    fontSize: () => 13
+                  }
+                }),
               timeline: false,
               tooltipConfig: groupTooltip(tmapDomainData, d => d.occupation.occupation_slug),
-              x: "logyear",
-              xConfig: {
-                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-              },
-              y: d => d.id instanceof Array ? d.id.length : 1
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
         ]
       }
