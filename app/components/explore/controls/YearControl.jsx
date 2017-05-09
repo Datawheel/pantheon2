@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {FORMATTERS} from "types";
-import {Range} from "rc-slider";
 import {changeYears} from "actions/explore";
 
 const ENTER_KEY_CODE = 13;
@@ -69,17 +68,6 @@ class YearControl extends Component {
           <span>and</span>
           <input type="text" id="endYear" value={!tempYearStart && tempYearEnd !== null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={yearChange} onKeyDown={yearChange} onBlur={yearChange} />
         </div>
-        <Range
-          pushable={1}
-          min={-4000}
-          max={2013}
-          step={1}
-          marks={timelineMarks}
-          tipFormatter={v => FORMATTERS.year(v)} allowCross={false}
-          onChange={v => { this.setState({tempYearStart: v[0], tempYearEnd: v[1]}); } }
-          onAfterChange={v => { this.setState({tempYearStart: null, tempYearEnd: null}); this.changeYears(v); } }
-          value={tempYearStart && tempYearEnd ? [tempYearStart, tempYearEnd] : years}
-          defaultValue={years} />
       </div>
     );
   }
