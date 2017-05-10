@@ -1,5 +1,6 @@
 @import '../common/colors';
 @import '../common/typography';
+@import '../common/input';
 
 .global-nav {
   position: absolute;
@@ -50,6 +51,16 @@
 
     &.home-link::before {
       background: url('../../images/globalNav/home.svg') no-repeat;
+      background-size: contain;
+    }
+
+    &.citation-link::before {
+      background: url('../../images/globalNav/citation.svg') no-repeat;
+      background-size: contain;
+    }
+
+    &.feedback-link::before {
+      background: url('../../images/icons/icon-email.svg') no-repeat;
       background-size: contain;
     }
   }
@@ -228,8 +239,8 @@
   display: block;
   z-index: 99;
   background-color: var(--colorEggshell);
-  min-height: 428px;
-  top: -431px;
+  min-height: 570px;
+  top: -573px;
   opacity: 1;
   transition: top 0.6s;
 
@@ -280,7 +291,7 @@
     padding-top: 22px;
     padding-left: 0;
     padding-right: 0;
-    padding-bottom: 22px;
+    padding-bottom: 18px;
     margin: 0 20px;
     cursor: pointer;
 
@@ -289,20 +300,22 @@
     }
 
     &:hover {
+      opacity: 1;
+
       & .item-link {
         color: var(--colorSand);
+        opacity: 1;
       }
     }
 
-    &:not(last-child) {
-      border-bottom: 1px solid var(--colorCardboard);
+    & + .item {
+      border-top: 1px solid var(--colorCardboard);
     }
   }
 
   & .item-link {
     margin-left: 40px;
-    font-size: 18px;
-    font-weight: 400;
+    @apply --profileSectionTitle;
 
     &.explore-link, &.profiles-link, &.about-link, &.data-link {
       @apply --dropdownLink;
@@ -343,7 +356,7 @@
     }
 
     &.search-link::before {
-      left: -28px;
+      left: 13px;
       margin-top: -3px;
       width: 20px;
       height: 20px;
@@ -354,6 +367,20 @@
       margin-top: -3px;
       width: 24px;
       height: 24px;
+    }
+
+    &.citation-link::before {
+      left: 13px;
+      margin-top: -3px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &.feedback-link::before {
+      left: -26px;
+      margin-top: -2px;
+      width: 20px;
+      height: 20px;
     }
   }
 
@@ -377,7 +404,7 @@
 
     & li {
       display: block;
-      padding: 22px 0;
+      padding: 22px 0 18px;
 
       & a {
         @apply --boldSmallCaps;
@@ -390,9 +417,21 @@
     }
   }
 
-  & .search-link {
-    padding: 22px 0;
-    margin: 0 20px 0 60px;
+  & .search-link, & .citation-link {
+    padding: 22px 0 18px 40px;
+    margin: 0 20px;
+  }
+
+  & .citation-link {
+    & input {
+      text-transform: none;
+      display: block;
+      width: 100%;
+      @apply --panelInput;
+      @apply --exploreControlInputText;
+      margin-top: 13px;
+      margin-left: -20px;
+    }
   }
 }
 

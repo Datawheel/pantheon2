@@ -161,7 +161,14 @@ class Navigation extends Component {
                 <li><a href="/data/faq">FAQ</a></li>
               </ul>
             </li>
-            <li className="search-link item-link" onClick={ activateSearch }>Search</li>
+            <li className="item search-link item-link" onClick={ activateSearch }>Search</li>
+            <li className="item">
+              <a href="http://bit.ly/QWSKoc" target="_blank" className="item-link feedback-link">Give Feedback</a>
+            </li>
+            <li className="item item-link citation-link">
+              Usage Citation
+              <input type="text" value="Yu, A. Z., et al. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific Data 2:150075. doi: 10.1038/sdata.2015.75" />
+            </li>
           </ul>
         </div>
       </nav>
