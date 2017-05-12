@@ -495,7 +495,7 @@
 .global-footer {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   max-width: 1024px;
   margin: 0 auto;
@@ -512,7 +512,7 @@
   }
 
   & .site-map {
-    max-width: 465px;
+    max-width: 505px;
   }
 
   & .items, & .sub-items {
@@ -525,6 +525,7 @@
 
   & .item {
     min-width: 90px;
+    margin: 5px;
   }
 
   & .items {
