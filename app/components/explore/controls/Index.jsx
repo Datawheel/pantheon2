@@ -34,7 +34,7 @@ class Controls extends Component {
           <i className="control-toggle" onClick={this.toggleSidePanel}></i>
         </div>
 
-        <section className="control-group">
+        <section className="control-group main-selector">
           {page === "viz" ? <VizControl /> : null}
           <ShowControl page={page} />
         </section>

@@ -40,8 +40,26 @@
 
 .explore, .rankings {
   color: var(--colorSlate);
-  padding: 5px 24px 60px;
+  padding-bottom: 60px;
+  padding-left: 24px;
+  padding-right: 24px;
   box-sizing: border-box;
+
+  @media (min-width: 751px) {
+    padding-top: 5px;
+  }
+}
+
+.explore {
+  @media (max-width: 750px) {
+    padding-top: 10px;
+  }
+}
+
+.rankings {
+  @media (max-width: 750px) {
+    padding-top: 10px;
+  }
 }
 
 .ranking-table-container, .explore-viz-container {
@@ -57,6 +75,10 @@
 
 .explore-head {
   margin-bottom: 25px;
+
+  @media (max-width: 750px) {
+    margin-top: -32px;
+  }
 }
 
 .rankings {
@@ -70,15 +92,36 @@
 
 .explore-body {
   display: flex;
+  @media (min-width: 751px) {
+    flex-direction: row;
+  }
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
 /* shared Control Panel styles*/
 .explore-controls {
-  flex: 0 0 208px;
-  padding-right: 10px;
-  box-sizing: border-box;
-  width: 208px;
   transition: width 1s;
+
+  @media (min-width: 751px) {
+    flex: 0 0 208px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    width: 208px;
+  }
+
+  @media (max-width: 750px) {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 45px 0 45px;
+    z-index: 98;
+  }
 
   & h3 {
     @apply --exploreControlTitles;
@@ -183,7 +226,7 @@
         background-size: contain;
         width: 14px;
         height: 14px;
-        margin: -3px 0 0 -20px;
+        margin: -1px 0 0 -20px;
       }
 
       &.treemap::before {
@@ -197,23 +240,23 @@
       }
       &.map::before {
         background-image: url('../../../images/viztypes/map.svg');
-        margin: -4px 0 0 -20px;
+        margin: -2px 0 0 -20px;
       }
 
       &.occupations::before {
         background-image: url('../../../images/viztypes/occupations.svg');
         background-position: 50% 0;
-        margin: -4px 0 0 -20px;
+        margin: -1px 0 0 -20px;
       }
       &.people::before {
         background-image: url('../../../images/viztypes/people.svg');
         background-position: 50% 0;
-        margin: -5px 0 0 -20px;
+        margin: -3px 0 0 -20px;
       }
       &.places::before {
         background-image: url('../../../images/viztypes/places.svg');
         background-position: 50% 0;
-        margin: -6px 0 0 -20px;
+        margin: -2px 0 0 -20px;
       }
       &.d-3::before {
         background-image: url('../../../images/viztypes/d-3.svg');
@@ -276,10 +319,26 @@
   }
 
   & .control-group {
+    background-color: var(--colorEggshell);
     border: solid 1px var(--colorSand);
-    margin-bottom: 9px;
     padding: 16px 11px 16px;
     box-sizing: border-box;
+
+    @media (min-width: 751px) {
+      margin-bottom: 9px;
+    }
+
+    @media (max-width: 750px) {
+      border-bottom-color: var(--colorMatza);
+      border-top-color: var(--colorMatza);
+      margin-bottom: -1px;
+      box-shadow: 3px 0 2px var(--colorSandOverlay), -2px 0 1px var(--colorSandOverlay);
+
+      &:last-child {
+        box-shadow: 0 2px 1px var(--colorSandOverlay), 3px 0 2px var(--colorSandOverlay), -2px 0 1px var(--colorSandOverlay);
+        border-bottom-color: var(--colorSand);
+      }
+    }
   }
 
   & .share-group {
@@ -337,36 +396,52 @@
   align-items: center;
   margin: 0;
   height: 30px;
-  padding: 10px 5px 7px 30px;
   box-sizing: border-box;
   background-color: var(--colorSlate);
 
+  @media (min-width: 751px) {
+    padding: 10px 5px 7px 30px;
+  }
+
+  @media (max-width: 750px) {
+    position: absolute;
+    top: -30px;
+    right: 45px;
+    left: 45px;
+    padding: 6px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
   & h2 {
-    position: relative;
-    margin: 0;
     @apply --exploreControlHeader;
 
-    &.rankings {
-      &::before {
-        content: '';
-        position: absolute;
-        background: url('../../../images/icons/icon-rankings.svg') no-repeat;
-        background-size: contain;
-        width: 16px;
-        height: 9px;
-        margin: -2px 0 0 -20px;
-      }
-    }
+    @media (min-width: 751px) {
+      position: relative;
+      margin: 0;
 
-    &.viz-explorer {
-      &::before {
-        content: '';
-        position: absolute;
-        background: url('../../../images/icons/icon-explore.svg') no-repeat;
-        background-size: contain;
-        width: 17px;
-        height: 17px;
-        margin: -2px 0 0 -20px;
+      &.rankings {
+        &::before {
+          content: '';
+          position: absolute;
+          background: url('../../../images/icons/icon-rankings.svg') no-repeat;
+          background-size: contain;
+          width: 16px;
+          height: 9px;
+          margin: -2px 0 0 -20px;
+        }
+      }
+
+      &.viz-explorer {
+        &::before {
+          content: '';
+          position: absolute;
+          background: url('../../../images/icons/icon-explore.svg') no-repeat;
+          background-size: contain;
+          width: 17px;
+          height: 17px;
+          margin: -2px 0 0 -20px;
+        }
       }
     }
   }
@@ -391,6 +466,44 @@
   }
 }
 
+.main-selector {
+  @media (min-width: 640px) and (max-width: 750px) {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  & .filter {
+    & h3 {
+      @media (max-width: 750px) {
+        margin: 0;
+      }
+    }
+
+    & + .filter {
+      @media (min-width: 640px) and (max-width: 750px) {
+        margin: 0;
+      }
+
+      @media (max-width: 639px) {
+        margin: 20px 0 0;
+      }
+    }
+  }
+
+  & .viztype-options {
+    @media (max-width: 750px) {
+      display: flex;
+      flex-direction: row;
+
+      & li {
+        padding: 13px 5px 3px;
+      }
+    }
+  }
+}
+
 /* hidden panel styles */
 .explore-controls {
   & .helper-text {
@@ -398,46 +511,53 @@
   }
 
   &.hide {
-    height: var(--viz-height);
-    width: 38px;
-    flex: 0 0 38px;
     box-sizing: border-box;
 
-    & .control-header {
-      flex-direction: column-reverse;
-      justify-content: flex-end;
-      height: 100%;
-      padding: 20px 0 0;
-      position: relative;
+    & .control-toggle {
+      background-image: url('../../../images/icons/icon-show.svg');
+      margin-bottom: -8px;
 
-      & h2 {
-        transform: rotate(270deg);
-        display: flex;
-        position: absolute;
-        top: 107px;
-      }
-
-      & .helper-text {
-        display: inline-block;
-        @apply --exploreControlHeader;
-        font-size: 1em;
-        text-transform: capitalize;
-      }
-
-      & .control-toggle {
-        background-image: url('../../../images/icons/icon-show.svg');
-        margin-bottom: -8px;
-
-        &:hover {
-          background-image: url('../../../images/icons/icon-hide.svg');
-          margin-bottom: 0;
-          margin-top: -2px;
-        }
+      &:hover {
+        background-image: url('../../../images/icons/icon-hide.svg');
+        margin-bottom: 0;
+        margin-top: -2px;
       }
     }
 
     & .control-group {
       display: none;
+    }
+
+    & .helper-text {
+      display: inline-block;
+      @apply --exploreControlHeader;
+      font-size: 1em;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.explore-controls {
+  &.hide {
+    @media (min-width: 751px) {
+      height: var(--viz-height);
+      width: 38px;
+      flex: 0 0 38px;
+
+      & .control-header {
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+        height: 100%;
+        padding: 20px 0 0;
+        position: relative;
+
+        & h2 {
+          transform: rotate(270deg);
+          display: flex;
+          position: absolute;
+          top: 124px;
+        }
+      }
     }
   }
 }
