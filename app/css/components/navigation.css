@@ -29,6 +29,11 @@
       background-size: contain;
     }
 
+    &.rankings-link::before {
+      background: url('../../images/globalNav/rankings.svg') no-repeat;
+      background-size: contain;
+    }
+
     &.profiles-link::before {
       background: url('../../images/globalNav/profile.svg') no-repeat;
       background-size: contain;
@@ -41,6 +46,11 @@
 
     &.data-link::before {
       background: url('../../images/globalNav/data.svg') no-repeat;
+      background-size: contain;
+    }
+
+    &.api-link::before {
+      background: url('../../images/globalNav/api.svg') no-repeat;
       background-size: contain;
     }
 
@@ -78,7 +88,7 @@
     align-items: center;
 
     @media (max-width: 990px) {
-      max-width: 90%;
+      max-width: 95%;
       margin: 0 0 0 auto;
     }
 
@@ -115,14 +125,17 @@
     }
 
     & > .item-link {
-      @apply --dropdownLink;
       display: block;
-      padding: 0 0 10px 0;
+      padding: 0 0 5px 0;
       text-align: left;
 
       @media (max-width: 990px) {
         padding: 0;
       }
+    }
+
+    & > .dd {
+      @apply --dropdownLink;
     }
   }
 
@@ -132,6 +145,13 @@
       top: -4px;
       width: 18px;
       height: 18px;
+    }
+
+    &.rankings-link::before {
+      left: -22px;
+      top: 0px;
+      width: 18px;
+      height: 12px;
     }
 
     &.profiles-link::before {
@@ -154,12 +174,29 @@
       width: 15px;
       height: 15px;
     }
+
+    &.api-link::before {
+      left: -22px;
+      top: -3px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  & .home-link {
+    @media (min-width: 751px) and (max-width: 990px) {
+      display: none;
+    }
   }
 
   & .logo {
     width: 140px;
 
-    @media (max-width: 990px) {
+    @media (min-width: 751px) and (max-width: 990px) {
+      display: none;
+    }
+
+    @media (max-width: 750px) {
       width: 124px;
     }
 
@@ -239,8 +276,8 @@
   display: block;
   z-index: 99;
   background-color: var(--colorEggshell);
-  min-height: 570px;
-  top: -573px;
+  min-height: 690px;
+  top: -693px;
   opacity: 1;
   transition: top 0.6s;
 
@@ -317,7 +354,7 @@
     margin-left: 40px;
     @apply --profileSectionTitle;
 
-    &.explore-link, &.profiles-link, &.about-link, &.data-link {
+    &.profiles-link, &.about-link, &.data-link {
       @apply --dropdownLink;
 
       &::after {
@@ -330,6 +367,13 @@
     &.explore-link::before {
       left: -31px;
       margin-top: -4px;
+      width: 25px;
+      height: 25px;
+    }
+
+    &.rankings-link::before {
+      left: -31px;
+      margin-top: 0;
       width: 25px;
       height: 25px;
     }
@@ -355,6 +399,13 @@
       height: 22px;
     }
 
+    &.api-link::before {
+      left: -31px;
+      margin-top: -2px;
+      width: 25px;
+      height: 25px;
+    }
+
     &.search-link::before {
       left: 13px;
       margin-top: -3px;
@@ -363,7 +414,7 @@
     }
 
     &.home-link::before {
-      left: -26px;
+      left: -31px;
       margin-top: -3px;
       width: 24px;
       height: 24px;
@@ -433,6 +484,12 @@
       margin-left: -20px;
     }
   }
+}
+
+.app.explorer .global-footer {
+  margin: 0 24px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .global-footer {
@@ -526,4 +583,14 @@
 body.frozen {
   max-height: 100vh;
   overflow: hidden;
+}
+
+.app {
+  &.explore {
+    @media (max-width: 750px) {
+      & .home-link {
+        /*display: none !important;*/
+      }
+    }
+  }
 }

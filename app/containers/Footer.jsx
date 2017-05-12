@@ -34,6 +34,7 @@ const Footer = () =>
             <Link to="/about/vision" className="item-link about-link">About</Link>
             <ul className="sub-items">
               <li><a href="/about/vision" className="item-link">Vision</a></li>
+              <li><a href="/data/faq" className="item-link">FAQ</a></li>
               <li><a href="/about/team" className="item-link">Team</a></li>
               <li><a href="/about/publications" className="item-link">Publications</a></li>
               <li><a href="/about/methods" className="item-link">Methods</a></li>
@@ -46,10 +47,12 @@ const Footer = () =>
             <Link to="/data/datasets" className="item-link data-link">Data</Link>
             <ul className="sub-items">
               <li><a href="/data/datasets" className="item-link">Download</a></li>
-              <li><a href="/data/api" className="item-link">API</a></li>
               <li><a href="/data/permissions" className="item-link">Permissions</a></li>
-              <li><a href="/data/faq" className="item-link">FAQ</a></li>
             </ul>
+          </li>
+
+          <li className="item">
+            <Link to="/data/api" className="item-link api-link">API</Link>
           </li>
         </ul>
 

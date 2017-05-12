@@ -65,14 +65,13 @@ class Navigation extends Component {
               </span>
             </li>
             <li className="item">
-              <Link to="/explore/viz" className="item-link explore-link" activeClassName="active">Explore</Link>
-              <ul className="sub-items">
-                <li><a href="/explore/viz" className="item-link">Visualizations</a></li>
-                <li><a href="/explore/rankings" className="item-link">Rankings</a></li>
-              </ul>
+              <Link to="/explore/viz" className="item-link explore-link" activeClassName="active">Explorer</Link>
             </li>
             <li className="item">
-              <Link to="" className="item-link profiles-link" activeClassName="active">Profiles</Link>
+              <Link to="/explore/rankings" className="item-link rankings-link" activeClassName="active">Rankings</Link>
+            </li>
+            <li className="item">
+              <Link to="" className="item-link profiles-link dd" activeClassName="active">Profiles</Link>
               <ul className="sub-items">
                 <li><a href="/profile/person" className="item-link">People</a></li>
                 <li><a href="/profile/place" className="item-link">Places</a></li>
@@ -86,9 +85,10 @@ class Navigation extends Component {
               </a>
             </li>
             <li className="item">
-              <Link to="/about/vision" className="item-link about-link" activeClassName="active">About</Link>
+              <Link to="/about/vision" className="item-link about-link dd" activeClassName="active">About</Link>
               <ul className="sub-items">
                 <li><a href="/about/vision" className="item-link">Vision</a></li>
+                <li><a href="/data/faq" className="item-link">FAQ</a></li>
                 <li><a href="/about/team" className="item-link">Team</a></li>
                 <li><a href="/about/publications" className="item-link">Publications</a></li>
                 <li><a href="/about/methods" className="item-link">Methods</a></li>
@@ -97,13 +97,14 @@ class Navigation extends Component {
               </ul>
             </li>
             <li className="item">
-              <Link to="/data/datasets" className="item-link data-link" activeClassName="active">Data</Link>
+              <Link to="/data/datasets" className="item-link data-link dd" activeClassName="active">Data</Link>
               <ul className="sub-items">
                 <li><a href="/data/datasets" className="item-link">Download</a></li>
-                <li><a href="/data/api" className="item-link">API</a></li>
                 <li><a href="/data/permissions" className="item-link">Permissions</a></li>
-                <li><a href="/data/faq" className="item-link">FAQ</a></li>
               </ul>
+            </li>
+            <li className="item">
+              <Link to="/data/api" className="item-link api-link" activeClassName="active">API</Link>
             </li>
             <li className="search-btn">
               <span onClick={ activateSearch }>
@@ -125,12 +126,11 @@ class Navigation extends Component {
             <li className="item">
               <a href="/" className="item-link home-link">Home</a>
             </li>
-            <li className="item" onClick={this.toggleSubNav}>
-              <a className="item-link explore-link" onClick={this.toggleSubNavSib}>Explore</a>
-              <ul className="sub-items">
-                <li><a href="/explore/viz">Visualizations</a></li>
-                <li><a href="/explore/rankings">Rankings</a></li>
-              </ul>
+            <li className="item">
+              <a href="/explore/viz" className="item-link explore-link">Visualizations</a>
+            </li>
+            <li className="item">
+              <a href="/explore/rankings" className="item-link rankings-link">Rankings</a>
             </li>
             <li className="item" onClick={this.toggleSubNav}>
               <a className="item-link profiles-link" onClick={this.toggleSubNavSib}>Profiles</a>
@@ -145,6 +145,7 @@ class Navigation extends Component {
               <a className="item-link about-link" onClick={this.toggleSubNavSib}>About</a>
               <ul className="sub-items">
                 <li><a href="/about/vision">Vision</a></li>
+                <li><a href="/data/faq">FAQ</a></li>
                 <li><a href="/about/team">Team</a></li>
                 <li><a href="/about/publications">Publications</a></li>
                 <li><a href="/about/methods">Methods</a></li>
@@ -156,10 +157,11 @@ class Navigation extends Component {
               <a className="item-link data-link" onClick={this.toggleSubNavSib}>Data</a>
               <ul className="sub-items">
                 <li><a href="/data/datasets">Download</a></li>
-                <li><a href="/data/api">API</a></li>
                 <li><a href="/data/permissions">Permissions</a></li>
-                <li><a href="/data/faq">FAQ</a></li>
               </ul>
+            </li>
+            <li className="item">
+              <a href="/data/api" className="item-link api-link">API</a>
             </li>
             <li className="item search-link item-link" onClick={ activateSearch }>Search</li>
             <li className="item">

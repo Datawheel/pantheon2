@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="17px" height="18px" viewBox="0 0 17 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 40.1 (33804) - http://www.bohemiancoding.com/sketch -->
-    <title>Group Copy 2</title>
+<svg width="17px" height="17px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>data</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon-data-w" transform="translate(0.000000, -3.000000)" stroke="#363636">
-            <g id="Group-Copy-2" transform="translate(10.809464, 11.472602) rotate(-26.000000) translate(-10.809464, -11.472602) translate(3.309464, 2.972602)">
+        <g id="icon-api" transform="translate(0.000000, -3.000000)" stroke="#363636" stroke-width="0.8">
+            <g id="data" transform="translate(10.809464, 10.927533) rotate(-26.000000) translate(-10.809464, -10.927533) translate(3.309464, 2.427533)">
                 <circle id="Oval-2" cx="1.28618421" cy="1.28618421" r="1.28618421"></circle>
-                <ellipse id="Oval-2-Copy-5" cx="12.9736842" cy="4.47368421" rx="1.28618421" ry="1.28618421"></ellipse>
+                <circle id="Oval-2-Copy-5" cx="12.9736842" cy="4.47368421" r="1.28618421"></circle>
                 <circle id="Oval-2-Copy-6" cx="10.8486842" cy="10.8486842" r="1.28618421"></circle>
                 <path d="M2.125,2.125 C2.125,2.125 4.08380265,2.125 4.86115349,3.39985542 C5.63850433,4.67471084 5.73190789,6.72691697 5.73190789,6.72691697" id="Path-3"></path>
-                <path d="M6.22941243,5.87749546 C6.22941243,5.87749546 8.18821509,5.87749546 8.96556593,7.15235088 C9.74291676,8.4272063 9.83632033,10.4794124 9.83632033,10.4794124" id="Path-3-Copy-2" transform="translate(8.032866, 8.178454) scale(-1, 1) rotate(-90.000000) translate(-8.032866, -8.178454) "></path>
-                <path d="M2.57236842,4.69736842 C2.57236842,4.69736842 7.41622925,4.69736842 9.33851543,7.84991787 C11.2608016,11.0024673 11.4917763,16.0773026 11.4917763,16.0773026" id="Path-3-Copy" stroke-linecap="round" transform="translate(7.032072, 10.387336) scale(-1, 1) translate(-7.032072, -10.387336) "></path>
+                <path d="M5.73190789,6.375 C5.73190789,6.375 7.78411402,6.46840356 9.05896944,7.2457544 C10.3338249,8.02310524 10.3338249,9.98190789 10.3338249,9.98190789 L10.3338249,9.98190789" id="Path-3-Copy-2"></path>
+                <path d="M2.57236842,16.0773026 C2.57236842,16.0773026 2.80334312,11.0024673 4.7256293,7.84991787 C6.64791549,4.69736842 11.4917763,4.69736842 11.4917763,4.69736842 L11.4917763,4.69736842" id="Path-3-Copy" stroke-linecap="round"></path>
             </g>
         </g>
     </g>

@@ -11,6 +11,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {page: undefined};
   }
 
   getChildContext() {
@@ -19,10 +20,28 @@ class App extends Component {
     };
   }
 
+  componentWillMount() {
+    let page;
+    if (this.props.location.pathname === "/") {
+      page = "app home";
+    }
+    else if (this.props.location.pathname === "/explore/rankings") {
+      page = "app rankings";
+    }
+    else if (this.props.location.pathname === "/explore/viz") {
+      page = "app explorer";
+    }
+    else {
+      page = "app";
+    }
+    this.setState({page});
+  }
+
   render() {
-    const {children, searchActive, location} = this.props;
+    const {children, searchActive} = this.props;
+
     return (
-      <div className={ location.pathname === "/" ? "app home" : "app"}>
+      <div className={this.state.page}>
         { searchActive ? <Search /> : null }
         <Navigation />
         {children}
