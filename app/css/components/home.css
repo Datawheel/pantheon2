@@ -34,7 +34,6 @@
   }
 
   & .home-body {
-    margin-bottom: 60px;
     position: relative;
     z-index: 0;
   }
@@ -72,6 +71,8 @@
   & .viz-container {
     position: relative;
     width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 100px;
@@ -269,9 +270,9 @@
 
   & .floating-content {
     position: absolute;
-    top: 0;
-    width: 100vw;
-    overflow-x: hidden;
+    bottom: -40px;
+    width: 80%;
+    margin: 0 auto;
     height: 100%;
     left: 0;
     right: 0;
@@ -280,8 +281,8 @@
     & .box {
       display: block;
       position: absolute;
-      bottom: -145px;
-      animation: float 20s ease-in 10s infinite;
+      bottom: 0px;
+      animation: float 20s ease-in infinite;
       z-index: -2;
     }
 
@@ -341,25 +342,6 @@
         }
       }
     }
-  }
-
-  & .flying-plane {
-    width: 100px;
-    height: 50px;
-    background-image: url("../../images/home/plane.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 100% 0%;
-    background-blend-mode: multiply;
-    background-color: var(--colorEggshell);
-    z-index: -1;
-    position: absolute;
-    top: 20px;
-    left: -120px;
-    animation: fly 40s linear 5s infinite, shake 1.64s linear infinite;
-    transform: translate3d(0,0,0) rotate(0deg);
-    perspective: 1000px;
-    backface-visibility: hidden;
   }
 }
 
@@ -424,25 +406,6 @@
 }
 
 @keyframes float {
-  from {bottom: -150px;}
-  to {bottom: 1000px;}
-}
-
-@keyframes fly {
-  from {left: -120px; top: 20px;}
-  to {left: 102vw; top: 110px;}
-}
-
-@keyframes shake {
-  10%, 50%, 90% {
-    transform: translate3d(-1px, 0, 0) rotate(-2deg);
-  }
-
-  20% {
-    transform: rotate(-1deg);
-  }
-
-  30%, 70% {
-    transform: translate3d(1px, -1px, 0) rotate(-2deg);
-  }
+  from {bottom: 0;}
+  to {bottom: 50%;}
 }

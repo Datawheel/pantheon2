@@ -88,7 +88,7 @@
       background-color: var(--colorEggshellOverlay);
 
       &:hover {
-        background-color: var(--colorEggshell);
+        background-color: var(--colorKashi);
       }
     }
 

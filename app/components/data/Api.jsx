@@ -1,7 +1,9 @@
 import React from "react";
+import "css/common/plane";
 
 const Api = () =>
     <div className="api-container">
+      <div className="flying-plane"></div>
       <h1>API</h1>
       <p className="intro">
         Access the API online <a href="https://app.swaggerhub.com/api/alexandersimoes/Pantheon/2.0.0">here</a>.

@@ -36,7 +36,7 @@
       display: inline-block;
       height: 8px;
       width: 6px;
-      margin: 0 0 0 3px;
+      margin: 0 0 -1px 3px;
       background: url('../../../images/tri-right.svg') no-repeat;
       background-size: contain;
     }
@@ -46,7 +46,7 @@
     width: 100%;
     max-width: 1024px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 0;
     margin: 0 auto;
     list-style-type: none;
@@ -71,18 +71,28 @@
     }
 
     &.ranks {
-      &::before {
-        content: '';
-        background: none;
+      @media (max-width: 550px) {
+        &::before {
+          content: '';
+          position: absolute;
+          background: url('../../../images/icons/icon-rankings.svg') no-repeat;
+          background-size: contain;
+          width: 18px;
+          height: 10px;
+          margin: 3px 0 0 -20px;
+        }
       }
-      &::after {
-        content: '';
-        position: absolute;
-        background: url('../../../images/icons/icon-rankings.svg') no-repeat;
-        background-size: contain;
-        width: 18px;
-        height: 10px;
-        margin: 3px -22px -2px 0;
+
+      @media (min-width: 551px) {
+        &::after {
+          content: '';
+          position: absolute;
+          background: url('../../../images/icons/icon-rankings.svg') no-repeat;
+          background-size: contain;
+          width: 18px;
+          height: 10px;
+          margin: 3px -22px -2px 0;
+        }
       }
     }
 
@@ -102,7 +112,18 @@
   & .ia-top {
     position: relative;
     margin-top: 30px;
-    margin-bottom: 100px;
+
+    @media (max-width: 550px) {
+      flex-direction: column;
+    }
+
+    @media (min-width: 551px) and (max-width: 750px) {
+      margin-bottom: 30px;
+    }
+
+    @media (min-width: 751px) {
+      margin-bottom: 80px;
+    }
 
     & .ia-top-bg {
       position: absolute;
@@ -111,15 +132,25 @@
       right: 0;
       margin-left: auto;
       margin-right: auto;
-      width: 58.59375%;
-      max-width: 600px;
-      height: 300px;
-      background-image: url('../../../images/home/ia-frame.svg');
       background-repeat: no-repeat;
       background-size: contain;
-      background-position: 50% 30px;
       overflow: visible;
       z-index: 0;
+
+      @media (min-width: 960px) {
+        width: 58.59375%;
+        max-width: 600px;
+        height: 300px;
+        background-image: url('../../../images/home/ia-frame.svg');
+        background-position: 50% 30px;
+      }
+
+      @media (min-width: 551px) and (max-width: 960px) {
+        background-image: url('../../../images/home/ia-frame-qrt.svg');
+        width: 90%;
+        height: 400px;
+        background-position: 50% 30px;
+      }
     }
 
     & li {
@@ -128,14 +159,67 @@
   }
 
   & .ia-top-item {
-    &.right {
-      text-align: right;
+    @media (max-width: 550px) {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      border-style: solid;
+      border-color: var(--colorEggshell);
+      padding: 10px 10px 10px 25px;
+
+      & + .ia-top-item {
+        margin-top: 30px;
+      }
+      &.viz {
+        order: 1;
+        border-width: 1px;
+      }
+      &.ranks {
+        order: 2;
+        border-width: 1px;
+      }
+      &.profiles {
+        order: 3;
+        border-width: 1px 1px 0 1px;
+      }
+    }
+
+    @media (min-width: 551px) {
+      box-sizing: border-box;
+      margin: 5px 30px;
+
+      &.ranks {
+        text-align: right;
+      }
+      &.profiles {
+        text-align: center;
+      }
     }
   }
 
   & .ia-p-types {
+    flex-wrap: wrap;
+
     & li {
-      max-width: 200px;
+      box-sizing: border-box;
+      @media (max-width: 550px) {
+        max-width: 80%;
+        padding: 10px 10px 10px 25px;
+
+        & + li {
+          margin-top: 20px;
+        }
+      }
+      @media (min-width: 551px) and (max-width: 960px) {
+        max-width: 45%;
+        margin-bottom: 30px;
+        padding: 10px;
+        background-color: var(--colorDark);
+      }
+      @media (min-width: 961px) {
+        max-width: 23%;
+        margin: 5px 0;
+      }
 
       &.ia-p-type {
         z-index: 1;

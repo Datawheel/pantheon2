@@ -1,0 +1,39 @@
+@import 'colors';
+
+.flying-plane {
+  width: 100px;
+  height: 50px;
+  background-image: url("../../images/home/plane.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 100% 0%;
+  background-blend-mode: multiply;
+  background-color: var(--colorEggshell);
+  z-index: -1;
+  position: absolute;
+  top: 20px;
+  left: -120px;
+  animation: fly 40s linear 5s infinite, shake 1.64s linear infinite;
+  transform: translate3d(0,0,0) rotate(0deg);
+  perspective: 1000px;
+  backface-visibility: hidden;
+}
+
+@keyframes fly {
+  from {left: -120px; top: 20px;}
+  to {left: 102vw; top: 110px;}
+}
+
+@keyframes shake {
+  10%, 50%, 90% {
+    transform: translate3d(-1px, 0, 0) rotate(-2deg);
+  }
+
+  20% {
+    transform: rotate(-1deg);
+  }
+
+  30%, 70% {
+    transform: translate3d(1px, -1px, 0) rotate(-2deg);
+  }
+}

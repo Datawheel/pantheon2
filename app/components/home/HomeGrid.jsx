@@ -48,8 +48,6 @@ const HomeGrid = ({activateSearch}) =>
             <h3>Usain Bolt</h3>
           </a>
         </li>
-      </ul>
-      <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/person/che_guevara">
             <div className="grid-box-bg-container">
@@ -90,8 +88,6 @@ const HomeGrid = ({activateSearch}) =>
             <h3>Cara Delevingne</h3>
           </a>
         </li>
-      </ul>
-      <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/person/mahatma_gandhi">
             <div className="grid-box-bg-container">
@@ -132,8 +128,6 @@ const HomeGrid = ({activateSearch}) =>
             <h3>Writers</h3>
           </a>
         </li>
-      </ul>
-      <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/occupation/linguist">
             <div className="grid-box-bg-container">
@@ -174,8 +168,6 @@ const HomeGrid = ({activateSearch}) =>
             <h3>Aung San Suu Kyi</h3>
           </a>
         </li>
-      </ul>
-      <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/person/mao_zedong">
             <div className="grid-box-bg-container">
@@ -216,8 +208,6 @@ const HomeGrid = ({activateSearch}) =>
             <h3>Berlin</h3>
           </a>
         </li>
-      </ul>
-      <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/person/muhammad">
             <div className="grid-box-bg-container">
@@ -258,8 +248,6 @@ const HomeGrid = ({activateSearch}) =>
             <h3>Cesária Évora</h3>
           </a>
         </li>
-      </ul>
-      <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/person/aishwarya_rai_bachchan">
             <div className="grid-box-bg-container">
@@ -300,8 +288,6 @@ const HomeGrid = ({activateSearch}) =>
             <h3>Ronaldo</h3>
           </a>
         </li>
-      </ul>
-      <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/person/gautama_buddha">
             <div className="grid-box-bg-container">
@@ -342,8 +328,6 @@ const HomeGrid = ({activateSearch}) =>
             <h3>Istanbul</h3>
           </a>
         </li>
-      </ul>
-      <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/person/ban_kimoon">
             <div className="grid-box-bg-container">

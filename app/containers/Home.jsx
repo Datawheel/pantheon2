@@ -67,10 +67,9 @@ class Home extends Component {
         <HomeHead />
 
         <div className="home-body">
-          <div className="viz-container">
           { !stackedData
-            ? <div>Loading...</div>
-            : <div>
+          ? <div>Loading...</div>
+          : <div className="viz-container">
               <StackedArea
                 config={{
                   data: stackedData,
@@ -106,7 +105,7 @@ class Home extends Component {
                     }
                   }
                 }} />
-              <div className="timeline-container">
+                <div className="timeline-container">
                 <ul className="items">
                   <li className="item era computer">
                     <div className="era-img"></div>
@@ -133,11 +132,10 @@ class Home extends Component {
                     <p><a href="/profile/era/scribal">Scribal</a></p>
                   </li>
                 </ul>
-              </div>
-              <h4 className="legend-title">Domains of all <span>Occupations</span></h4>
+                </div>
+                <h4 className="legend-title">Domains of all <span>Occupations</span></h4>
             </div>
           }
-          </div>
 
           <HomeIA />
 

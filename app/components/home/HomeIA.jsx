@@ -4,20 +4,19 @@ import HelpText from "components/utils/HelpText";
 
 const HomeIA = () => (
   <div className="ia">
-    <div className="flying-plane"></div>
     <h3>The Structure of Pantheon</h3>
     <p className="post">This site visualizes data on over <span>47,000</span> of the most <HelpText text="globally memorable individuals" msg="Individuals with L > 25 and HPI > 15. L is the number of Wikipedia language editions a character is featured in. Historical Popularity Index (HPI) corrects L by adding information an an individual's age, pageview concentrations, and number of non-English pageviews." /> around the world. We invite you to explore and engage with our research through a variety of avenues:</p>
     <ul className="items ia-top">
       <li className="ia-top-bg"></li>
-      <li className="item ia-top-item">
+      <li className="item ia-top-item viz">
         <a href="/explore/viz"><h2 className="viz-explorer">Visualizations</h2></a>
         <p>Create data visualizations using the Pantheon dataset.&nbsp;
         <a href="/explore/viz" className="deep-link">View Visualizations</a></p>
       </li>
-      <li className="item ia-top-item center">
+      <li className="item ia-top-item profiles">
         <h2 className="profiles">Profiles</h2>
       </li>
-      <li className="item ia-top-item right">
+      <li className="item ia-top-item ranks">
         <a href="/explore/rankings"><h2 className="ranks">Rankings</h2></a>
         <p>Rank all people, places and occupations by Historical Popularity Index (HPI).&nbsp;
         <a href="/explore/rankings" className="deep-link">View Rankings</a></p>
