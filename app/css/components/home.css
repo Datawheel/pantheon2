@@ -5,7 +5,7 @@
 
   & #navigation {
     & .items {
-      max-width: 590px;
+      max-width: 720px;
 
       & .item {
         flex: 0 1 auto;
@@ -15,7 +15,7 @@
 
       @media (min-width: 751px) and (max-width: 990px) {
         margin: 0 auto;
-        max-width: 590px;
+        max-width: 720px;
       }
 
       & .item.home-link {

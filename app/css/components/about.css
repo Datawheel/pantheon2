@@ -1,14 +1,26 @@
+@import '../common/colors';
 @import '../common/typography';
+@import '../common/input';
 
 .data, .about {
-  max-width: 950px;
-  margin: 0 auto;
-  padding: 90px 0;
   display: flex;
   flex-direction: row;
+  max-width: 1024px;
+  margin: 0 auto;
+  border-top: 1px solid var(--colorCardboard);
+  padding: 50px 24px;
+
+  @media (max-width: 1172px) {
+    margin: 0 7.2vw;
+  }
 
   & .page-nav {
     flex: 0 1 200px;
+    padding-top: 70px;
+
+    @media (max-width: 750px) {
+      display: none;
+    }
 
     & .page-items {
       padding: 0;
@@ -47,7 +59,7 @@
   & h1 {
     font-family: var(--fontBody);
     @apply --profileSectionTitle;
-    margin: 8px 0 10px;
+    margin: 30px 0;
   }
 
   & h2 {
@@ -90,6 +102,14 @@
     & a {
       @apply --bodyLink;
     }
+  }
+
+  & input {
+    display: block;
+    width: 100%;
+    margin: 10px 0 40px;
+    @apply --panelInput;
+    @apply --exploreControlInputText;
   }
 
   & .long-text {
