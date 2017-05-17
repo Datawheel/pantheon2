@@ -59,14 +59,14 @@ class CountryRanking extends Component {
           <h3>Others born in <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a></h3>
           <a href="/explore/rankings">Go to all Rankings</a>
         </div>
-        <PhotoCarousel me={person} people={ranking.birthcountryPeers} />
+        <PhotoCarousel me={person} people={ranking.birthcountryPeers} rankAccessor="birthcountry_rank_unique" />
         { ranking.deathcountryPeers.length ?
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>Others deceased in <a href={`/profile/place/${person.deathcountry.slug}`}>{person.deathcountry.name}</a></h3>
               <a href="/explore/rankings">Go to all Rankings</a>
             </div>
-            <PhotoCarousel me={person} people={ranking.deathcountryPeers} />
+            <PhotoCarousel me={person} people={ranking.deathcountryPeers} rankAccessor="deathcountry_rank_unique" />
           </div>
           : null }
       </div>

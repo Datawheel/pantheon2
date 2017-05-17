@@ -24,7 +24,7 @@ class PhotoCarousel extends Component {
   }
 
   render() {
-    const {me, people} = this.props;
+    const {me, people, rankAccessor} = this.props;
     const myId = me ? me.id : null;
     const scroll = this.scroll.bind(this);
 
@@ -41,7 +41,8 @@ class PhotoCarousel extends Component {
               </div>
               <h2><a href={`/profile/person/${person.slug}/`}>{person.name}</a></h2>
               <p className="rank-year">{FORMATTERS.year(person.birthyear)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear)}` : "Present"}</p>
-              <p className="rank-year"><strong>{FORMATTERS.decimal(person.hpi)}</strong> HPI</p>
+              <p className="rank-year"><strong>HPI:</strong> {FORMATTERS.decimal(person.hpi)}</p>
+              {rankAccessor ? <p className="rank-year"><strong>Rank:</strong> {person[rankAccessor]}</p> : null}
             </li>
           )}
         </ul>

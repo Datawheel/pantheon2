@@ -19,14 +19,14 @@ const PeopleRanking = ({place, peopleBorn, peopleDied}) => {
         <h3>People Born in {place.name}</h3>
         <a href="/explore/rankings">Go to all Rankings</a>
       </div>
-      <PhotoCarousel people={topRankingBorn} />
+      <PhotoCarousel people={topRankingBorn} rankAccessor={place.is_country ? "birthcountry_rank_unique" : "birthplace_rank_unique"} />
       { topRankingDied.length ?
         <div className="rank-sec-body">
           <div className="rank-title">
             <h3>People Deceased in {place.name}</h3>
             <a href="/explore/rankings">Go to all Rankings</a>
           </div>
-          <PhotoCarousel people={topRankingDied} />
+          <PhotoCarousel people={topRankingDied} rankAccessor={place.is_country ? "deathcountry_rank_unique" : "deathplace_rank_unique"} />
         </div> : null }
     </div>
   );

@@ -34,7 +34,7 @@ class OccupationRanking extends Component {
           <h3>Top Global {person.occupation.occupation}s</h3>
           <a href="/explore/rankings">Go to all Rankings</a>
         </div>
-        <PhotoCarousel me={person} people={ranking.peers} />
+        <PhotoCarousel me={person} people={ranking.peers} rankAccessor="occupation_rank_unique" />
       </div>
     );
   }

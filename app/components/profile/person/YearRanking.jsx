@@ -61,14 +61,14 @@ class YearRanking extends Component {
           <h3>Others Born in {FORMATTERS.year(person.birthyear.name)}</h3>
           <a href="/explore/rankings">Go to all Rankings</a>
         </div>
-        <PhotoCarousel me={person} people={ranking.birthyearPeers} />
+        <PhotoCarousel me={person} people={ranking.birthyearPeers} rankAccessor="birthyear_rank_unique" />
         { ranking.deathyearPeers.length ?
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>Others Deceased in {FORMATTERS.year(person.deathyear.name)}</h3>
               <a href="/explore/rankings">Go to all Rankings</a>
             </div>
-            <PhotoCarousel me={person} people={ranking.deathyearPeers} />
+            <PhotoCarousel me={person} people={ranking.deathyearPeers} rankAccessor="deathyear_rank_unique" />
           </div>
           : null }
       </div>
