@@ -1,9 +1,17 @@
 import React, {Component} from "react";
 import PersonImage from "components/utils/PersonImage";
 import defaultImage from "images/icons/icon-person.svg";
+import backArrow from "images/tri-left-b.svg";
+import forwardArrow from "images/tri-right-b.svg";
 import {COLORS_DOMAIN, FORMATTERS} from "types";
 
 class PhotoCarousel extends Component {
+
+  scroll(e) {
+    e.preventDefault();
+    const direction = e.target.classList.contains("back") ? -1 : 1;
+    this.rankList.scrollLeft += 150 * direction;
+  }
 
   componentDidMount() {
     const rankMe = this.rankList.querySelector(".rank-me");
@@ -18,9 +26,11 @@ class PhotoCarousel extends Component {
   render() {
     const {me, people} = this.props;
     const myId = me ? me.id : null;
+    const scroll = this.scroll.bind(this);
 
     return (
       <div className="rank-carousel">
+        <a className="arrow back" href="#" onClick={scroll}><img className="back" src={backArrow} alt="Load previous" /></a>
         <ul className="rank-list" ref={ul => {this.rankList = ul}}>
           {people.map(person =>
             <li key={person.id} className={person.id === myId ? "rank-me" : null}>
@@ -35,6 +45,7 @@ class PhotoCarousel extends Component {
             </li>
           )}
         </ul>
+        <a className="arrow forward" href="#" onClick={scroll}><img className="forward" src={forwardArrow} alt="Load previous" /></a>
       </div>
     );
   }

@@ -2,34 +2,6 @@
 @import '../../common/typography';
 
 .person {
-  & .rank-carousel {
-    position: relative;
-
-    &::after {
-      content: '';
-      position: absolute;
-      display: inline-block;
-      background: url('../../../images/tri-right-b.svg') no-repeat;
-      background-size: contain;
-      width: 15px;
-      height: 30px;
-      top: 72px;
-      right: -45px;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      display: inline-block;
-      background: url('../../../images/tri-right-b.svg') no-repeat;
-      background-size: contain;
-      width: 15px;
-      height: 30px;
-      transform: scaleX(-1);
-      top: 72px;
-      left: -45px;
-    }
-  }
 
   & .metrics-container {
     display: flex;
