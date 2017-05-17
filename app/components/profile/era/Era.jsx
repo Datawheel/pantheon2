@@ -66,11 +66,25 @@ class Era extends Component {
                    : Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
-    const geomapData = tmapBornData.filter(d => d.place && d.place.lat_lon)
-              .concat(tmapDeathData.filter(d => d.place && d.place.lat_lon))
+    const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat_lon)
               .sort((a, b) => b.langs - a.langs)
               .slice(0, 100);
-    geomapData.forEach(d => {
+    geomapBornData.forEach(d => {
+      d.place_name = d.place.name;
+      d.place_coord = d.place.lat_lon;
+      if (!(d.place_coord instanceof Array)) {
+        d.place_coord = d.place_coord
+          .replace("(", "")
+          .replace(")", "")
+          .split(",").map(Number);
+      }
+      d.place_coord.reverse();
+    });
+
+    const geomapDeathData = tmapDeathData.filter(d => d.place && d.place.lat_lon)
+              .sort((a, b) => b.langs - a.langs)
+              .slice(0, 100);
+    geomapDeathData.forEach(d => {
       d.place_name = d.place.name;
       d.place_coord = d.place.lat_lon;
       if (!(d.place_coord instanceof Array)) {
@@ -166,13 +180,13 @@ class Era extends Component {
         ]
       },
       {
-        title: "Places",
-        slug: "places",
+        title: "Places of Cultural Celebrity Births",
+        slug: "places_births",
         viz: [<Geomap
-                  key="geomap1"
+                  key="geomapBirths"
                   config={{
-                    title: `Major Cities in ${era.name} for Births and Deaths of Cultural Celebrities`,
-                    data: geomapData,
+                    title: `Major Cities in ${era.name} for Births of Cultural Celebrities`,
+                    data: geomapBornData,
                     depth: 1,
                     fitFilter: d => ["152", "643"].includes(d.id),
                     groupBy: ["event", "place_name"],
@@ -189,7 +203,34 @@ class Era extends Component {
                         strokeWidth: 0.75
                       }
                     },
-                    tooltipConfig: groupTooltip(geomapData, d => d.place.slug)
+                    tooltipConfig: groupTooltip(geomapBornData, d => d.place.slug)
+                  }} />]
+      },
+      {
+        title: "Places of Cultural Celebrity Deaths",
+        slug: "places_deaths",
+        viz: [<Geomap
+                  key="geomapDeaths"
+                  config={{
+                    title: `Major Cities in ${era.name} for Deaths of Cultural Celebrities`,
+                    data: geomapDeathData,
+                    depth: 1,
+                    fitFilter: d => ["152", "643"].includes(d.id),
+                    groupBy: ["event", "place_name"],
+                    on: on("place", d => d.place.slug),
+                    shapeConfig: {
+                      fill: d => d.event.toLowerCase().indexOf("birth") > 0
+                               ? "rgba(76, 94, 215, 0.4)"
+                               : "rgba(95, 1, 22, 0.4)",
+                      stroke: () => "#4A4948",
+                      strokeWidth: 1,
+                      Path: {
+                        fill: "transparent",
+                        stroke: "#4A4948",
+                        strokeWidth: 0.75
+                      }
+                    },
+                    tooltipConfig: groupTooltip(geomapDeathData, d => d.place.slug)
                   }} />]
       },
       {
