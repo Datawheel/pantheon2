@@ -53,7 +53,7 @@ function setUrl(exploreState) {
 export function getNewData(dispatch, getState) {
   dispatch({data: [], type: "FETCH_EXPLORE_DATA_SUCCESS"});
   const {explore} = getState();
-  const {page, place, occupation, rankings, years} = explore;
+  const {page, place, occupation, rankings, years, sorting} = explore;
   const yearType = "birthyear";
   let apiHeaders = null;
 
@@ -84,7 +84,12 @@ export function getNewData(dispatch, getState) {
     occupationFilter = `&occupation=in.${occupation.selectedOccupations}`;
   }
 
-  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${limitOffset}`;
+  let sortingFilter = "&order=hpi.desc.nullslast";
+  if (sorting) {
+    sortingFilter = `&order=${sorting.id}.${sorting.direction}.nullslast`;
+  }
+
+  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${limitOffset}${sortingFilter}`;
   console.log("getNewData", dataUrl);
   return apiClient.get(dataUrl, {headers: apiHeaders}).then(res => {
     if (page === "rankings") {
