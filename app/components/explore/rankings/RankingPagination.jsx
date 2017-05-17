@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {changePage} from "actions/explore";
+import {animateScroll} from "react-scroll";
 
 class RankingPagination extends Component {
 
@@ -33,6 +34,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   changePage: e => {
     e.preventDefault();
+    animateScroll.scrollToTop({duration: 500});
     const direction = e.target.innerText.toLowerCase() === "next" ? 1 : -1;
     dispatch(changePage(direction));
   }

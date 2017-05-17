@@ -13,7 +13,7 @@ export const INDUSTRY_DEPTH = "INDUSTRY";
 export const DOMAIN_DEPTH = "DOMAIN";
 
 // for rankings pages
-export const RANKINGS_RESULTS_PER_PAGE = 20;
+export const RANKINGS_RESULTS_PER_PAGE = 100;
 
 export const COLORS_DOMAIN = {
   sports: "#BB3B57",
