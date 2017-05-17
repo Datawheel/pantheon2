@@ -1,18 +1,12 @@
 import React, {Component} from "react";
 import AnchorList from "components/utils/AnchorList";
-import PersonImage from "components/utils/PersonImage";
+import PhotoCarousel from "components/utils/PhotoCarousel";
 import {FORMATTERS} from "types";
 
 class YearRanking extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    const {rankListBorn, rankListDead} = this.refs;
-    rankListBorn.scrollLeft = 700;
-    if (rankListDead) rankListDead.scrollLeft = 780;
   }
 
   render() {
@@ -67,44 +61,14 @@ class YearRanking extends Component {
           <h3>Others Born in {FORMATTERS.year(person.birthyear.name)}</h3>
           <a href="/explore/rankings">Go to all Rankings</a>
         </div>
-        <div className="rank-carousel">
-          <ul className="rank-list" ref="rankListBorn">
-            {ranking.birthyearPeers.map(peer =>
-              <li key={peer.id} className={ranking.me.birthyear_rank_unique === peer.birthyear_rank_unique ? "rank-me" : null}>
-                <div className="rank-photo">
-                  <a href={`/profile/person/${peer.slug}/`}>
-                    <PersonImage src={`/people/${peer.id}.jpg`} alt={`Photo of ${peer.name}`} />
-                  </a>
-                </div>
-                <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-                <p className="rank-year">{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : "Present"}</p>
-                <p className="rank-num">Rank <span>{peer.birthyear_rank_unique}</span></p>
-              </li>
-            )}
-          </ul>
-        </div>
+        <PhotoCarousel me={person} people={ranking.birthyearPeers} />
         { ranking.deathyearPeers.length ?
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>Others Deceased in {FORMATTERS.year(person.deathyear.name)}</h3>
               <a href="/explore/rankings">Go to all Rankings</a>
             </div>
-            <div className="rank-carousel">
-              <ul className="rank-list" ref="rankListDead">
-                {ranking.deathyearPeers.map(peer =>
-                  <li key={peer.id} className={ranking.me.deathyear_rank_unique === peer.deathyear_rank_unique ? "rank-me" : null}>
-                    <div className="rank-photo">
-                      <a href={`/profile/person/${peer.slug}/`}>
-                        <PersonImage src={`/people/${peer.id}.jpg`} alt={`Photo of ${peer.name}`} />
-                      </a>
-                    </div>
-                    <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-                    <p className="rank-year">{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : "Present"}</p>
-                    <p className="rank-num">Rank <span>{peer.deathyear_rank_unique}</span></p>
-                  </li>
-                )}
-              </ul>
-            </div>
+            <PhotoCarousel me={person} people={ranking.deathyearPeers} />
           </div>
           : null }
       </div>

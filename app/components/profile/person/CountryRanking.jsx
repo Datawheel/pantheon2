@@ -1,18 +1,12 @@
 import React, {Component} from "react";
 import AnchorList from "components/utils/AnchorList";
-import PersonImage from "components/utils/PersonImage";
+import PhotoCarousel from "components/utils/PhotoCarousel";
 import {FORMATTERS} from "types";
 
 class CountryRanking extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    const {rankListBorn, rankListDead} = this.refs;
-    rankListBorn.scrollLeft = 700;
-    if (rankListDead) rankListDead.scrollLeft = 780;
   }
 
   render() {
@@ -52,57 +46,27 @@ class CountryRanking extends Component {
     return (
       <div>
         <p>
-          Among people born in {person.birthcountry.name}, {person.name} ranks <a>{ranking.me.birthcountry_rank}</a> out of {person.birthcountry.num_born}.&nbsp;
+          Among people born in <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>, {person.name} ranks <a>{ranking.me.birthcountry_rank}</a> out of {person.birthcountry.num_born}.&nbsp;
           { betterBirthPeers }
           { worseBirthPeers }
           { ranking.deathcountryPeers.length ?
-            <span>&nbsp;Among people deceased in {person.deathcountry.name}, {person.name} ranks {ranking.me.deathcountry_rank_unique} out of {person.deathcountry.num_died}.&nbsp;</span>
+            <span>&nbsp;Among people deceased in <a href={`/profile/place/${person.deathcountry.slug}`}>{person.deathcountry.name}</a>, {person.name} ranks {ranking.me.deathcountry_rank_unique} out of {person.deathcountry.num_died}.&nbsp;</span>
             : null}
           { betterDeathPeers }
           { worseDeathPeers }
         </p>
         <div className="rank-title">
-          <h3>Others born in {person.birthcountry.name}</h3>
+          <h3>Others born in <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a></h3>
           <a href="/explore/rankings">Go to all Rankings</a>
         </div>
-        <div className="rank-carousel">
-          <ul className="rank-list" ref="rankListBorn">
-            {ranking.birthcountryPeers.map(peer =>
-              <li key={peer.id} className={ranking.me.birthcountry_rank_unique === peer.birthcountry_rank_unique ? "rank-me" : null}>
-                <div className="rank-photo">
-                  <a href={`/profile/person/${peer.slug}/`}>
-                    <PersonImage src={`/people/${peer.id}.jpg`} alt={`Photo of ${peer.name}`} />
-                  </a>
-                </div>
-                <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-                <p className="rank-year">{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : "Present"}</p>
-                <p className="rank-num">Rank <span>{peer.birthcountry_rank_unique}</span></p>
-              </li>
-            )}
-          </ul>
-        </div>
+        <PhotoCarousel me={person} people={ranking.birthcountryPeers} />
         { ranking.deathcountryPeers.length ?
           <div className="rank-sec-body">
             <div className="rank-title">
-              <h3>Others deceased in {person.deathcountry.name}</h3>
+              <h3>Others deceased in <a href={`/profile/place/${person.deathcountry.slug}`}>{person.deathcountry.name}</a></h3>
               <a href="/explore/rankings">Go to all Rankings</a>
             </div>
-            <div className="rank-carousel">
-              <ul className="rank-list" ref="rankListDead">
-                {ranking.deathcountryPeers.map(peer =>
-                  <li key={peer.id} className={ranking.me.deathcountry_rank_unique === peer.deathcountry_rank_unique ? "rank-me" : null}>
-                    <div className="rank-photo">
-                      <a href={`/profile/person/${peer.slug}/`}>
-                        <PersonImage src={`/people/${peer.id}.jpg`} alt={`Photo of ${peer.name}`} />
-                      </a>
-                    </div>
-                    <h2><a href={`/profile/person/${peer.slug}/`}>{peer.name}</a></h2>
-                    <p className="rank-year">{FORMATTERS.year(peer.birthyear)} - {peer.deathyear ? `${FORMATTERS.year(peer.deathyear)}` : "Present"}</p>
-                    <p className="rank-num">Rank <span>{peer.deathcountry_rank_unique}</span></p>
-                  </li>
-                )}
-              </ul>
-            </div>
+            <PhotoCarousel me={person} people={ranking.deathcountryPeers} />
           </div>
           : null }
       </div>
