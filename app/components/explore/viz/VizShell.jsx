@@ -6,7 +6,7 @@ import {StackedArea, Treemap, Viz} from "d3plus-react";
 import {changeViz} from "actions/explore";
 import {COLORS_CONTINENT, COUNTRY_DEPTH, PLACE_DEPTH, OCCUPATION_DEPTH, DOMAIN_DEPTH, FORMATTERS, YEAR_BUCKETS} from "types";
 import {extent} from "d3-array";
-import {bucketScale, groupBy, groupTooltip, peopleTooltip, shapeConfig} from "viz/helpers";
+import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 
 class VizShell extends Component {
 
@@ -65,6 +65,7 @@ class VizShell extends Component {
           const o = attrs[d.occupation_id];
           if (o) {
             d.occupation_name = o.name;
+            d.occupation_slug = o.slug;
             d.domain = o.domain;
             d.domain_slug = o.domain_slug;
             d.industry = o.industry;
@@ -83,6 +84,8 @@ class VizShell extends Component {
     }
 
     const MyViz = type === "StackedArea" ? StackedArea : Treemap;
+
+    const accessor = show.type === "places" ? d => d.birthcountry.slug : d => d.occupation_slug;
 
     return (
       <div className="explore-viz-container">
@@ -109,7 +112,8 @@ class VizShell extends Component {
                 width: () => 13
               }
             },
-            tooltipConfig: type === "Priestley" ? peopleTooltip : groupTooltip(vizData)
+            on: on(show.type.slice(0, show.type.length - 1), accessor),
+            tooltipConfig: type === "Priestley" ? peopleTooltip : groupTooltip(vizData, accessor)
           }
         )} />
       </div>
