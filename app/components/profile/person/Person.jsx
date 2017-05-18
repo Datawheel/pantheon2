@@ -74,7 +74,6 @@ class Person extends Component {
         viz: <LinePlot
               config={{
                 height: 600,
-                title: "Page Views vs Language Editions",
                 data: lineData,
                 shapeConfig: {
                   fill: d => d.color,
@@ -89,7 +88,7 @@ class Person extends Component {
                 tooltipConfig: {
                   body: d => {
                     let date = d.x instanceof Array ? extent(d.x) : [d.x];
-                    date = date.length > 1 ? date.map(FORMATTERS.dateShort) : date.map(FORMATTERS.date);
+                    date = date.map(FORMATTERS.month);
                     return `<span class="large">${FORMATTERS.commas(d.langs || d.views)}</span><br />${date.join(" to ")}`;
                   },
                   footer: ""

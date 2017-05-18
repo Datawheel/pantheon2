@@ -169,7 +169,7 @@ class Navigation extends Component {
             </li>
             <li className="item item-link citation-link">
               Usage Citation
-              <input type="text" value="Yu, A. Z., et al. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific Data 2:150075. doi: 10.1038/sdata.2015.75" />
+              <input readOnly type="text" value="Yu, A. Z., et al. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific Data 2:150075. doi: 10.1038/sdata.2015.75" />
             </li>
           </ul>
         </div>

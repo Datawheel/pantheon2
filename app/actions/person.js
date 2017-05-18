@@ -122,7 +122,7 @@ export function fetchYearRanks(store) {
 export function fetchPageviews(store) {
   const getPageviewsProm = makePersonRequest("get", null, null, `/person?slug=eq.${store.id}&select=id`).then(personIdRes => {
     const personId = personIdRes.data[0].id;
-    return makePersonRequest("get", null, null, `/indicators?person=eq.${personId}&order=pageview_date`);
+    return makePersonRequest("get", null, null, `/indicators?person=eq.${personId}&order=pageview_date&num_pageviews=not.is.null`);
   });
 
   return {

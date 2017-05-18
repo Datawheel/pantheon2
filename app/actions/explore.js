@@ -59,7 +59,7 @@ export function getNewData(dispatch, getState) {
 
   setUrl(explore);
 
-  let selectFields = "name,langs,id,birthyear,birthcountry{id,country_name,continent},birthplace,occupation_id:occupation";
+  let selectFields = "name,langs,id,birthyear,birthcountry{id,country_name,continent,slug},birthplace,occupation_id:occupation";
   let limitOffset = "";
   if (page === "rankings") {
     apiHeaders = {Prefer: "count=exact"};

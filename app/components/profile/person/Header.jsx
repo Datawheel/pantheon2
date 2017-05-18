@@ -8,10 +8,11 @@ import {COLORS_DOMAIN, FORMATTERS} from "types";
 const Header = ({pageviews, person}) => {
 
   const viewData = pageviews.map(d => {
-    d.pageview_date = new Date(d.pageview_date);
+    d.pageview_date = typeof d.pageview_date === "string" ? new Date(d.pageview_date.replace("Z", "")) : d.pageview_date;
     return d;
   }).sort((a, b) => a.pageview_date - b.pageview_date);
   const dates = viewData.map(d => d.pageview_date);
+
   const sparkTicks = [new Date(Math.min(...dates)), new Date(Math.max(...dates))];
   const sparkNums = sparkTicks.map(Number);
   const circleData = viewData.filter(d => sparkNums.includes(d.pageview_date.getTime()));

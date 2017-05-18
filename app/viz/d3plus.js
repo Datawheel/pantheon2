@@ -41,6 +41,14 @@ export default {
     title: false
   },
 
+  backConfig: {
+    fontColor: "#000",
+    fontFamily: "Amiko",
+    fontSize: 14,
+    fontWeight: 400,
+    text: "« Back"
+  },
+
   depth: 0,
   height: 600,
 
