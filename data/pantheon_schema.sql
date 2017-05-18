@@ -109,7 +109,14 @@ CREATE TABLE person
   occupation_rank integer,
   occupation_rank_unique integer,
 
-  occ_acc real,
+  birthera smallint REFERENCES era (id),
+  birthera_rank integer,
+  birthera_rank_unique integer,
+
+  deathera smallint REFERENCES era (id),
+  deathera_rank integer,
+  deathera_rank_unique integer,
+
   langs integer,
   hpi real,
   twitter CHARACTER VARYING(100),

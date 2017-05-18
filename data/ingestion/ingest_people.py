@@ -37,6 +37,15 @@ occupations = occupations["occupation"].to_dict()
 occupations = {v:k for k, v in occupations.items()}
 people["occupation"] = people["occupation"].replace(occupations)
 
+# need era IDs (for rankings)
+eras = pd.read_sql("select id, start_year, end_year from era", engine, index_col="id")
+eras_lookup = {y:None for y in range(-3501, -500)}
+for id, (start_year, end_year) in eras.iterrows():
+    for year in range(start_year, end_year+1):
+        eras_lookup[year] = id
+people["birthera"] = people["birthyear"].replace(eras_lookup)
+people["deathera"] = people["deathyear"].replace(eras_lookup)
+
 # print people.tail(10)
 # print people[people["id"]==435773]
 
@@ -55,9 +64,10 @@ people = people.drop(["place_id", "is_country"], axis=1)
 
 # calculate ranks...
 for rank_type in ["birthyear", "deathyear", "birthcountry", "deathcountry", \
-                    "birthplace", "deathplace", "occupation"]:
-    people["{}_rank".format(rank_type)] = people.groupby(rank_type)['langs'].rank(ascending=False, method="dense", na_option="bottom")
-    people["{}_rank_unique".format(rank_type)] = people.groupby(rank_type)['langs'].rank(ascending=False, method="first", na_option="bottom")
+                    "birthplace", "deathplace", "occupation", "birthera", "deathera"]:
+    people["{}_rank".format(rank_type)] = people.groupby(rank_type)['hpi'].rank(ascending=False, method="dense", na_option="bottom")
+    people["{}_rank_unique".format(rank_type)] = people.groupby(rank_type)['hpi'].rank(ascending=False, method="first", na_option="bottom")
 
 # print people.tail(10)
+# print people.loc[0,:]
 people.to_sql("person", engine, if_exists="append", index=False)
