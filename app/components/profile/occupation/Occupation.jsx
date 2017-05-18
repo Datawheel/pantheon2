@@ -186,8 +186,12 @@ class Occupation extends Component {
               depth: 1,
               end: "deathyear",
               groupBy: ["diedcontinent", "name"],
+              height: 700,
               on: on("person", d => d.slug),
-              shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
+              shapeConfig: {
+                fill: d => COLORS_CONTINENT[d.diedcontinent],
+                labelPadding: 2
+              },
               start: "birthyear",
               tooltipConfig: peopleTooltip
             }} />

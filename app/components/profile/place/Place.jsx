@@ -255,6 +255,7 @@ class Place extends Component {
                     depth: 1,
                     end: "deathyear",
                     groupBy: ["domain", "name"].map(groupBy(attrs)),
+                    height: 700,
                     on: on("person", d => d.slug),
                     start: "birthyear",
                     shapeConfig: Object.assign({}, shapeConfig(attrs), {
