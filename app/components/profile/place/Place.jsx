@@ -161,7 +161,7 @@ class Place extends Component {
                 config={{
                   title: "Births Over Time",
                   data: tmapBornData,
-                  groupBy: ["domain"].map(groupBy(attrs)),
+                  groupBy: ["domain", "industry"].map(groupBy(attrs)),
                   shapeConfig: shapeConfig(attrs),
                   time: "logyear",
                   timeline: false,
@@ -177,7 +177,7 @@ class Place extends Component {
                 config={{
                   title: "Deaths Over Time",
                   data: tmapDeathData,
-                  groupBy: ["domain"].map(groupBy(attrs)),
+                  groupBy: ["domain", "industry"].map(groupBy(attrs)),
                   shapeConfig: shapeConfig(attrs),
                   time: "logyear",
                   timeline: false,
