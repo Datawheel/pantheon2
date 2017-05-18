@@ -74,7 +74,6 @@ class Person extends Component {
         viz: <LinePlot
               config={{
                 height: 600,
-                title: "Page Views vs Language Editions",
                 data: lineData,
                 shapeConfig: {
                   fill: d => d.color,
