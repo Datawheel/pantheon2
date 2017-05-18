@@ -18,8 +18,8 @@ const MemMetrics = ({pageviews, person}) => {
           <p>Page Views (PV)</p>
         </li>
         <li className="metric">
-          <h4>12.7 M</h4>
-          <p>English Page Views (PVE)</p>
+          <h4>{person.hpi}</h4>
+          <p>Historical Popularity Index (HPI)</p>
         </li>
         <li className="metric">
           <h4>{person.langs}</h4>
