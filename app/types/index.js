@@ -45,6 +45,8 @@ export const FORMATTERS = {
   shareWhole: format(".0%"),
   date: timeFormat("%B %d, %Y"),
   dateShort: timeFormat("%m/%d/%y"),
+  month: timeFormat("%B %Y"),
+  monthShort: timeFormat("%m/%Y"),
   year: y => y < 0 ? `${Math.abs(y)} BC` : Math.round(y),
   ordinal: n => {
     if (n > 3 && n < 21) return `${n}th`; // thanks kennebec
