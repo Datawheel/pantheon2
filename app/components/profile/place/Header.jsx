@@ -1,6 +1,7 @@
 import React, {PropTypes} from "react";
 import "css/components/profile/header";
 import "css/components/utils/mouse";
+import placeholderImg from "images/profile/placeholder_place_profile.jpg";
 import {FORMATTERS} from "types";
 import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";

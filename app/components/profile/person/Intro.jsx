@@ -15,6 +15,22 @@ const Intro = ({person, totalPageViews}) => {
         backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug],
         decoLines = 14;
 
+  let fromSentence;
+  if (person.geacron_name !== person.birthcountry.name) {
+    fromSentence = <span>born in {person.bplace_name}, {person.geacron_name} which is now part of modern day <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> </span>;
+  }
+  else {
+    const birthplace = person.birthplace.state
+          ? <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}, {person.birthplace.state}</a>
+          : <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>;
+    if (person.bplace_name !== person.birthplace.name) {
+      fromSentence = <span>born in {person.bplace_name}, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> which is part of the {birthplace} metro area </span>;
+    }
+    else {
+      fromSentence = <span>born in {birthplace}, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a></span>;
+    }
+  }
+
   return (
     <section className="intro-section person">
       <div className="intro-deco">
@@ -35,8 +51,8 @@ const Intro = ({person, totalPageViews}) => {
           <p>
             {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>&nbsp;
             {person.birthplace
-             ? <span>born in <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> </span> : null}
-             in <b>{FORMATTERS.year(person.birthyear.name)}</b>.
+             ? <span>{fromSentence}</span> : null}
+             <span> in <b>{FORMATTERS.year(person.birthyear.name)}</b>.</span>
             {person.deathyear
               ? `${person.gender ? " He" : " She"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
             &nbsp;Since the start of Wikipedia, {person.gender ? "he" : "she"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
