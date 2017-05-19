@@ -15,20 +15,31 @@ def unicodeToAscii(s):
 
 people = pd.read_csv("raw/people_20170228.tsv", sep="\t", na_values="null", true_values="true", false_values="false", encoding="utf-8")
 people = people.rename(columns={"curid":"id", "bplace_geonameid":"birthplace", "dplace_geonameid":"deathplace", "l":"langs"})
-people = people.drop(["bplace_lat", "bplace_lon", "bplace_name", "geacron_name", \
-                        "dplace_lat", "dplace_lon", "dplace_name", "wd_id", "prob_ratio", \
-                        "name_common","region","continent","least_developed"], axis=1)
+people = people.drop(["wd_id", "prob_ratio", "name_common","region","continent","least_developed"], axis=1)
 people["slug"] = people["name"].apply(unicodeToAscii)
 people["slug"] = people["slug"].str.lower().str.replace(" ", "_")
 
+people['bplace_lat_lon'] = None
+people['dplace_lat_lon'] = None
+people.loc[lambda df: df.bplace_lat.notnull(), ("bplace_lat_lon",)] = people.bplace_lat.map(str) + ", " + people.bplace_lon.map(str)
+people.loc[lambda df: df.dplace_lat.notnull(), ("dplace_lat_lon",)] = people.dplace_lat.map(str) + ", " + people.dplace_lon.map(str)
+people = people.drop(["bplace_lat", "bplace_lon", "dplace_lat", "dplace_lon"], axis=1)
+
 # need birth & death country
-countries = pd.read_sql("select p1.id as place_id, p2.id as country_code from place p1, place p2 where p1.is_country is false and p2.is_country is true and p1.country_code = p2.country_code", engine)
+# countries = pd.read_sql("select p1.id as place_id, p2.id as country_code from place p1, place p2 where p1.is_country is false and p2.is_country is true and p1.country_code = p2.country_code", engine)
+countries = pd.read_sql("select id as country_id, country_code from place where is_country is true and country_code is not null", engine)
+# countryid_countrycode_lookup = countries["id"].to_dict()
+place_countrycode = pd.read_csv("raw/cities_20170228.tsv", sep="\t", na_values="null", usecols=("geonameid", "ccode"), encoding="utf-8")
+place_countrycode.ccode = place_countrycode.ccode.str.lower()
+place_countrycode = place_countrycode.merge(countries, how="left", left_on="ccode", right_on="country_code")
+place_countrycode = place_countrycode[["geonameid", "country_id"]]
+
 people["birthcountry"] = people["birthplace"]
 people["deathcountry"] = people["deathplace"]
-people = people.merge(countries, how="left", left_on="birthcountry", right_on="place_id")
-people = people.merge(countries, how="left", left_on="deathcountry", right_on="place_id", suffixes=('', '_death'))
-people = people.drop(["place_id", "place_id_death", "birthcountry", "deathcountry"], axis=1)
-people = people.rename(columns={"country_code":"birthcountry", "country_code_death":"deathcountry"})
+people = people.merge(place_countrycode, how="left", left_on="birthcountry", right_on="geonameid")
+people = people.merge(place_countrycode, how="left", left_on="deathcountry", right_on="geonameid", suffixes=('', '_death'))
+people = people.drop(["geonameid", "geonameid_death", "birthcountry", "deathcountry"], axis=1)
+people = people.rename(columns={"country_id":"birthcountry", "country_id_death":"deathcountry"})
 
 # need occupation IDs
 occupations = pd.read_sql("select id, occupation from occupation", engine, index_col="id")
@@ -49,18 +60,20 @@ people["deathera"] = people["deathyear"].replace(eras_lookup)
 # print people.tail(10)
 # print people[people["id"]==435773]
 
-places = pd.read_sql("select id as place_id, is_country from place", engine)
-people = people.merge(places, how="left", left_on="birthplace", right_on="place_id")
-# print people.dtypes
+# replace birthplace with metroid
+place_metro_lookup = pd.read_csv("raw/cities_20170228.tsv", sep="\t", na_values="null", usecols=("geonameid", "metroid"), encoding="utf-8", index_col="geonameid")
+place_metro_lookup = place_metro_lookup["metroid"].to_dict()
+people["birthplace"] = people["birthplace"].replace(place_metro_lookup)
+# places = pd.read_sql("select id as place_id, is_country from place", engine)
+# people = people.merge(places, how="left", left_on="birthplace", right_on="place_id")
 # print people.loc[0,:]
-# print people.is_country.value_counts()
-people.loc[lambda df: df.is_country.isnull(), ("is_country",)] = False
-people.loc[lambda df: df.is_country, ("birthplace",)] = None
-people = people.drop(["place_id", "is_country"], axis=1)
 
-people = people.merge(places, how="left", left_on="deathplace", right_on="place_id")
-people.loc[lambda df: df.is_country & ~df.deathplace.isnull(), ("deathplace",)] = None
-people = people.drop(["place_id", "is_country"], axis=1)
+# print people.is_country.value_counts()
+# people.loc[lambda df: df.is_country.isnull(), ("is_country",)] = False
+# people.loc[lambda df: df.is_country, ("birthplace",)] = None
+
+people["deathplace"] = people["deathplace"].replace(place_metro_lookup)
+# people.loc[lambda df: df.is_country & ~df.deathplace.isnull(), ("deathplace",)] = None
 
 # calculate ranks...
 for rank_type in ["birthyear", "deathyear", "birthcountry", "deathcountry", \
