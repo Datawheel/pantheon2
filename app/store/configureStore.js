@@ -3,7 +3,7 @@ import {routerMiddleware} from "react-router-redux";
 import thunk from "redux-thunk";
 import rootReducer from "reducers";
 import promiseMiddleware from "middlewares/promiseMiddleware";
-import createLogger from "redux-logger";
+import {createLogger} from "redux-logger";
 
 /*
  * @param {Object} initial state to bootstrap our stores with for server-side rendering
