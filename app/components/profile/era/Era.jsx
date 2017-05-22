@@ -262,20 +262,21 @@ class Era extends Component {
         title: "Overlapping Lives",
         slug: "overlapping_lives",
         viz: [<Priestley
-                  title={`Top ${priestleyMax} Contemporaries Born during the ${era.name}`}
-                  key="priestley1"
-                  config={{
-                    data: priestleyData,
-                    depth: 1,
-                    end: "deathyear",
-                    groupBy: ["domain", "name"].map(groupBy(attrs)),
-                    on: on("person", d => d.slug),
-                    start: "birthyear",
-                    shapeConfig: Object.assign({}, shapeConfig(attrs), {
-                      labelPadding: 2
-                    }),
-                    tooltipConfig: peopleTooltip
-                  }} />]
+                key="priestley1"
+                title={`Top ${priestleyMax} Contemporaries Born during the ${era.name}`}
+                config={{
+                  data: priestleyData,
+                  depth: 1,
+                  detectVisible: false,
+                  end: "deathyear",
+                  groupBy: ["domain", "name"].map(groupBy(attrs)),
+                  on: on("person", d => d.slug),
+                  start: "birthyear",
+                  shapeConfig: Object.assign({}, shapeConfig(attrs), {
+                    labelPadding: 2
+                  }),
+                  tooltipConfig: peopleTooltip
+                }} />]
       }
     ];
 

@@ -184,6 +184,7 @@ class Occupation extends Component {
               title: `Lifespans of the Top ${priestleyMax} ${occupation.occupation}s`,
               data: priestleyData,
               depth: 1,
+              detectVisible: false,
               end: "deathyear",
               groupBy: ["diedcontinent", "name"],
               height: 700,
