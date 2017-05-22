@@ -253,6 +253,7 @@ class Place extends Component {
                   config={{
                     data: priestleyData,
                     depth: 1,
+                    detectVisible: false,
                     end: "deathyear",
                     groupBy: ["domain", "name"].map(groupBy(attrs)),
                     height: 700,
