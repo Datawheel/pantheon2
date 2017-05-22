@@ -15,7 +15,7 @@ class Viz extends Component {
   }
 
   componentWillMount() {
-    setExplorePage("viz");
+    this.props.setExplorePage("viz");
   }
 
   render() {
@@ -48,10 +48,16 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = dispatch => ({
+  setExplorePage: page => {
+    dispatch(setExplorePage(page));
+  }
+});
+
 Viz.need = [
   initExplore,
   initExplorePlace,
   initExploreOccupation
 ];
 
-export default connect(mapStateToProps, {setExplorePage})(Viz);
+export default connect(mapStateToProps, mapDispatchToProps)(Viz);

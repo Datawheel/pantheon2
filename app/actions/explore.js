@@ -229,7 +229,12 @@ export function initExplore(params, location) {
 // Actions from controls
 // ---------------------------
 export function setExplorePage(page) {
-  return dispatch => dispatch({type: "SET_EXPLORE_PAGE", page});
+  return dispatch => {
+    if (page === "viz") {
+      dispatch({type: "CHANGE_EXPLORE_SHOW_TYPE", data: "places"});
+    }
+    return dispatch({type: "SET_EXPLORE_PAGE", page});
+  };
 }
 export function changeShowType(type) {
   return (dispatch, getState) => {
