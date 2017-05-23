@@ -59,6 +59,10 @@
     }
   }
 
+  & iframe.yasiv-youtube {
+    pointer-events: none;
+  }
+
   & .metrics-list {
     list-style-type: none;
     margin: 0;
