@@ -13,7 +13,7 @@ const data = (
   switch (action.type) {
     case "FETCH_EXPLORE_DATA":
       // return Object.assign({}, state, {loading: true});
-      return {data: [], loading: false};
+      return {data: [], loading: true};
     case "FETCH_EXPLORE_DATA_SUCCESS":
       return {data: action.data, loading: false};
     default:

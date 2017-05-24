@@ -19,7 +19,7 @@ class VizShell extends Component {
   }
 
   render() {
-    const {data, show, occupation, viz, years} = this.props.explore;
+    const {data, show, occupation, viz, years, place} = this.props.explore;
     const {occupations} = occupation;
     const {type, config} = viz;
     let attrs, vizData, vizShapeConfig;
@@ -46,10 +46,17 @@ class VizShell extends Component {
       let birthyearSpan = extent(data.data, d => d.birthyear);
       birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
 
+      let dataFilter = p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent;
+      if (place.selectedCountry !== "all") {
+        dataFilter = p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent && p.birthplace;
+      }
       vizData = data.data
-        .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
+        .filter(dataFilter)
         .map(d => {
           d.borncountry = d.birthcountry.country_name;
+          if (place.selectedCountry !== "all") {
+            d.bornplace = d.birthplace.name;
+          }
           d.borncontinent = d.birthcountry.continent;
           d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
                        ? d.birthyear
@@ -82,7 +89,7 @@ class VizShell extends Component {
             console.log(d.profession_id, attrs);
           }
           d.event = "OCCUPATIONS OF FAMOUS PEOPLE";
-          d.place = d.birthplace;
+          d.place = d.birthplace.id;
           d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
                        ? d.birthyear
                        : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;

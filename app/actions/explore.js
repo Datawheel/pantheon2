@@ -43,7 +43,7 @@ function setUrl(exploreState) {
   if (metric.metricType) {
     queryStr = `${queryStr}&metricType=${metric.metricType}&cutoff=${metric.cutoff}`;
   }
-  if (typeof history !== 'undefined' && history.pushState) {
+  if (typeof history !== "undefined" && history.pushState) {
     const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}${queryStr}`;
     window.history.pushState({path: newurl}, "", newurl);
   }
@@ -54,6 +54,9 @@ function setUrl(exploreState) {
 // request data from server
 // ---------------------------
 export function getNewData(dispatch, getState) {
+  // // first we "drop" the viz by feeding it an empty array of data
+  // dispatch({type: "FETCH_EXPLORE_DATA_SUCCESS", data: []});
+  // next we trigger the loading screen
   dispatch({type: "FETCH_EXPLORE_DATA"});
   const {explore} = getState();
   const {metric, page, place, occupation, rankings, years, sorting} = explore;
@@ -62,7 +65,7 @@ export function getNewData(dispatch, getState) {
 
   setUrl(explore);
 
-  let selectFields = "name,langs,id,birthyear,birthcountry{id,country_name,continent,slug},birthplace,occupation_id:occupation";
+  let selectFields = "name,langs,id,birthyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug},occupation_id:occupation";
   let limitOffset = "";
   if (page === "rankings") {
     apiHeaders = {Prefer: "count=exact"};
@@ -367,8 +370,8 @@ export function changeViz(vizType, triggerUpdate = true) {
     vizType = vizType || explore.viz.type;
     if (explore.show.type === "places") {
       config = {
-        depth: 1,
-        groupBy: ["borncontinent", "borncountry"],
+        depth: explore.place.selectedCountry === "all" ? 1 : 2,
+        groupBy: explore.place.selectedCountry === "all" ? ["borncontinent", "borncountry"] : ["borncontinent", "borncountry", "bornplace"],
         time: "birthyear",
         shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]}
       };
