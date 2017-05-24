@@ -12,7 +12,7 @@ polyfill();
 // Set the URL based on data
 // ---------------------------
 function setUrl(exploreState) {
-  const {place, occupation, show, type, typeNesting, years} = exploreState;
+  const {metric, place, occupation, show, type, typeNesting, years} = exploreState;
   let queryStr = `?years=${years}`;
   if (show) {
     queryStr = `${queryStr}&show=${show.type}`;
@@ -40,6 +40,9 @@ function setUrl(exploreState) {
       queryStr = `${queryStr}&occupation=${occupation.selectedOccupationSlug}`;
     }
   }
+  if (metric.metricType) {
+    queryStr = `${queryStr}&metricType=${metric.metricType}&cutoff=${metric.cutoff}`;
+  }
   if (typeof history !== 'undefined' && history.pushState) {
     const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}${queryStr}`;
     window.history.pushState({path: newurl}, "", newurl);
@@ -53,7 +56,7 @@ function setUrl(exploreState) {
 export function getNewData(dispatch, getState) {
   dispatch({data: [], type: "FETCH_EXPLORE_DATA_SUCCESS"});
   const {explore} = getState();
-  const {page, place, occupation, rankings, years, sorting} = explore;
+  const {metric, page, place, occupation, rankings, years, sorting} = explore;
   const yearType = "birthyear";
   let apiHeaders = null;
 
@@ -89,7 +92,12 @@ export function getNewData(dispatch, getState) {
     sortingFilter = `&order=${sorting.id}.${sorting.direction}.nullslast`;
   }
 
-  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${limitOffset}${sortingFilter}`;
+  let metricCutoff = "";
+  if (metric.metricType) {
+    metricCutoff = `&${metric.metricType}=gte.${metric.cutoff}`;
+  }
+
+  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${limitOffset}${sortingFilter}${metricCutoff}`;
   console.log("getNewData", dataUrl);
   return apiClient.get(dataUrl, {headers: apiHeaders}).then(res => {
     if (page === "rankings") {
@@ -218,10 +226,13 @@ export function initExplore(params, location) {
   const {pathname, query} = location;
   const years = SANITIZERS.years(query.years);
   const show = SANITIZERS.show(query.show, pathname);
+  const metric = SANITIZERS.metric(query.metricType, query.cutoff);
   return dispatch => dispatch({
     type: "INIT_EXPLORE",
     years,
-    show
+    show,
+    metricType: metric.metricType,
+    cutoff: metric.cutoff
   });
 }
 
@@ -333,6 +344,16 @@ export function changeOccupations(selectedOccupation, occupationList, triggerUpd
     dispatch({type: "CHANGE_EXPLORER_OCCUPATIONS", data: occupationList});
     dispatch({type: "CHANGE_EXPLORER_OCCUPATION_SLUG", data: selectedOccupation});
     if (triggerUpdate) return getNewData(dispatch, getState);
+  };
+}
+
+// -------------------------
+// Actions from advanced controls
+// ---------------------------
+export function changeMetric(metricType, cutoff) {
+  return (dispatch, getState) => {
+    dispatch({type: "CHANGE_EXPLORE_METRIC", metricType, cutoff});
+    return getNewData(dispatch, getState);
   };
 }
 

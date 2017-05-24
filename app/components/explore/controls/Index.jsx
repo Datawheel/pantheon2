@@ -6,6 +6,7 @@ import PlaceControl from "components/explore/controls/PlaceControl";
 import OccupationControl from "components/explore/controls/OccupationControl";
 import ShowControl from "components/explore/controls/ShowControl";
 import VizControl from "components/explore/controls/VizControl";
+import AdvancedControl from "components/explore/controls/AdvancedControl";
 import emIconSvg from "images/icons/icon-email.svg";
 import fbIconSvg from "images/icons/icon-facebook.svg";
 import twIconSvg from "images/icons/icon-twitter.svg";
@@ -63,20 +64,7 @@ class Controls extends Component {
         </section>
         <section className="control-group advanced-group">
           <h3>Advanced Options</h3>
-          <div className="flat-options">
-            <ul className="items options flat-options filter">
-              <li><a href="#" id="hpimetric" className="active hpimetric">HPI</a></li>
-              <li><a href="#" id="lmetric" className="lmetric">L</a></li>
-            </ul>
-            <span>></span>
-            <select>
-              <option>10</option>
-              <option selected>15</option>
-              <option>20</option>
-              <option>25</option>
-              <option>30</option>
-            </select>
-          </div>
+          <AdvancedControl />
         </section>
         <section className="control-group flat-group share-group">
           <h3>Share</h3>

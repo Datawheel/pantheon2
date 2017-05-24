@@ -1,3 +1,8 @@
+import {format} from "d3-format";
+import {timeFormat} from "d3-time-format";
+import {range} from "d3-array";
+import {closest} from "d3plus-common";
+
 export const NUM_RANKINGS = 12;
 export const NUM_RANKINGS_PRE = Math.floor(NUM_RANKINGS / 2);
 export const NUM_RANKINGS_POST = Math.floor(NUM_RANKINGS / 2);
@@ -11,6 +16,9 @@ export const CITY_DEPTH = "CITY";
 export const OCCUPATION_DEPTH = "OCCUPATION";
 export const INDUSTRY_DEPTH = "INDUSTRY";
 export const DOMAIN_DEPTH = "DOMAIN";
+
+export const HPI_RANGE = range(4, 27);
+export const LANGS_RANGE = range(15, 20).concat(range(20, 50, 5)).concat(range(50, 100, 15)).concat(range(100, 225, 25));
 
 // for rankings pages
 export const RANKINGS_RESULTS_PER_PAGE = 100;
@@ -33,9 +41,6 @@ export const COLORS_CONTINENT = {
   Europe: "#5F0116",
   Oceania: "#4C5ED7"
 };
-
-import {format} from "d3-format";
-import {timeFormat} from "d3-time-format";
 
 export const FORMATTERS = {
   commas: format(","),
@@ -86,5 +91,12 @@ export const SANITIZERS = {
   years: yearStr => {
     if (!yearStr || !yearStr.includes(",")) return [1900, 2015];
     return [sanitizeYear(yearStr.split(",")[0]), sanitizeYear(yearStr.split(",")[1])];
+  },
+  metric: (metricType, cutoff) => {
+    metricType = ["hpi", "langs"].includes(metricType) ? metricType : "hpi";
+    const metricRange = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
+    cutoff = cutoff.match(/\d+/) ? parseInt(cutoff.match(/\d+/)[0], 10) : metricRange[0];
+    cutoff = closest(cutoff, metricRange);
+    return {metricType, cutoff};
   }
 };

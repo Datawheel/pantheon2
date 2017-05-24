@@ -191,9 +191,23 @@ const rankings = (
   }
 };
 
+const metric = (
+  state = {metricType: "hpi", cutoff: 4},
+  action
+) => {
+  switch (action.type) {
+    case "INIT_EXPLORE":
+    case "CHANGE_EXPLORE_METRIC":
+      return {metricType: action.metricType, cutoff: action.cutoff};
+    default:
+      return state;
+  }
+};
+
 const exploreReducer = combineReducers({
   data,
   grouping,
+  metric,
   occupation,
   page,
   place,

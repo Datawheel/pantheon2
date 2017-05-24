@@ -32,10 +32,19 @@
 
 .explore-date {
   @apply --searchResults;
-  margin-top: 3px;
+  margin: 3px 0;
   color: var(--colorTan);
   letter-spacing: 0.5px;
   text-align: center;
+}
+
+.explore-head {
+  & p {
+    text-align: center;
+    font-style: italic;
+    font-size: 12px;
+    margin-top: 5px;
+  }
 }
 
 .explore, .rankings {
