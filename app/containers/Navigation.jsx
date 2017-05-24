@@ -65,10 +65,10 @@ class Navigation extends Component {
               </span>
             </li>
             <li className="item">
-              <Link to="/explore/viz" className="item-link explore-link" activeClassName="active">Explorer</Link>
+              <a href="/explore/viz" className="item-link explore-link">Explorer</a>
             </li>
             <li className="item">
-              <Link to="/explore/rankings" className="item-link rankings-link" activeClassName="active">Rankings</Link>
+              <a href="/explore/rankings" className="item-link rankings-link">Rankings</a>
             </li>
             <li className="item">
               <Link to="" className="item-link profiles-link dd" activeClassName="active">Profiles</Link>

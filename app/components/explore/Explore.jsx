@@ -61,7 +61,7 @@ class Explore extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  initExplore: (years) => {
+  initExplore: years => {
     dispatch(initExplore({years}));
   }
 });

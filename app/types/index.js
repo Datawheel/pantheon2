@@ -95,8 +95,13 @@ export const SANITIZERS = {
   metric: (metricType, cutoff) => {
     metricType = ["hpi", "langs"].includes(metricType) ? metricType : "hpi";
     const metricRange = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
-    cutoff = cutoff.match(/\d+/) ? parseInt(cutoff.match(/\d+/)[0], 10) : metricRange[0];
-    cutoff = closest(cutoff, metricRange);
+    if (cutoff) {
+      cutoff = cutoff.match(/\d+/) ? parseInt(cutoff.match(/\d+/)[0], 10) : metricRange[0];
+      cutoff = closest(cutoff, metricRange);
+    }
+    else {
+      cutoff = metricRange[0];
+    }
     return {metricType, cutoff};
   }
 };

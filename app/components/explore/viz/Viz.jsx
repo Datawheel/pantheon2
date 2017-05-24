@@ -22,7 +22,7 @@ class Viz extends Component {
     const {show, years, metric} = this.props.explore;
     const metricRange = metric.metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
     let metricSentence;
-    if(metric.cutoff > metricRange[0]) {
+    if (metric.cutoff > metricRange[0]) {
       if (metric.metricType === "hpi") {
         metricSentence = `Showing people with a Historical Popularity Index (HPI) greater than ${metric.cutoff}.`;
       }

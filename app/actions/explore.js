@@ -54,7 +54,7 @@ function setUrl(exploreState) {
 // request data from server
 // ---------------------------
 export function getNewData(dispatch, getState) {
-  dispatch({data: [], type: "FETCH_EXPLORE_DATA_SUCCESS"});
+  dispatch({type: "FETCH_EXPLORE_DATA"});
   const {explore} = getState();
   const {metric, page, place, occupation, rankings, years, sorting} = explore;
   const yearType = "birthyear";
@@ -123,10 +123,10 @@ function fetchAllCountries() {
   return axios.get("http://localhost:3100/place?is_country=is.true&order=name&select=id,name,country_code");
 }
 function fetchAllPlaces() {
-  return axios.get("http://localhost:3100/place?is_country=is.false&order=born_rank&select=id,name,country_code,slug&limit=200");
+  return axios.get("http://localhost:3100/place?is_country=is.false&order=born_rank&select=id,name,country_code,slug,state,country_code&limit=500");
 }
 function fetchPlacesInCountry(countryStr) {
-  return axios.get(`http://localhost:3100/place?is_country=is.false&country_code=eq.${countryStr}&order=name&select=id,name,slug`);
+  return axios.get(`http://localhost:3100/place?is_country=is.false&country_code=eq.${countryStr}&order=name&select=id,name,slug,state,country_code`);
 }
 function fetchCountryId(countryStr) {
   return axios.get(`http://localhost:3100/place?country_code=eq.${countryStr}&is_country=is.true&select=id`);
@@ -299,7 +299,7 @@ export function changeCountry(countryStrCode, countryNumCode, triggerUpdate = tr
       countryId: countryNumCode,
       countryStr: countryStrCode
     });
-    return apiClient.get(`/place?is_country=is.false&country_code=eq.${countryStrCode}&order=name&select=id,name,slug`)
+    return apiClient.get(`/place?is_country=is.false&country_code=eq.${countryStrCode}&order=name&select=id,name,slug,state,country_code`)
       .then(res => {
         dispatch({type: "GET_PLACES_IN_COUNTRY_SUCCESS", data: res.data});
         if (triggerUpdate) return getNewData(dispatch, getState);

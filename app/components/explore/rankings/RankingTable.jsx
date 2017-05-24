@@ -58,7 +58,7 @@ class RankingTable extends Component {
           className="ranking-table -highlight"
           columns={columns}
           pageSize={pageSize}
-          data={data}
+          data={data.data}
           showPagination={false}
           pages={pages}
           loading={loading}

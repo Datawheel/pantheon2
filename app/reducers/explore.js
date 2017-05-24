@@ -7,12 +7,15 @@ const page = (state = "viz", action) => {
 };
 
 const data = (
-  state = [],
+  state = {data: [], loading: false},
   action
 ) => {
   switch (action.type) {
+    case "FETCH_EXPLORE_DATA":
+      // return Object.assign({}, state, {loading: true});
+      return {data: [], loading: false};
     case "FETCH_EXPLORE_DATA_SUCCESS":
-      return action.data;
+      return {data: action.data, loading: false};
     default:
       return state;
   }

@@ -24,7 +24,7 @@ class VizShell extends Component {
     const {type, config} = viz;
     let attrs, vizData, vizShapeConfig;
 
-    if (!data.length) {
+    if (data.loading) {
       return <div className="explore-viz-container">
         <div className="loading-img">
           <p>Loading data<span className="loading-dot">.</span><span className="loading-dot">.</span><span className="loading-dot">.</span></p>
@@ -34,11 +34,19 @@ class VizShell extends Component {
       </div>;
     }
 
+    if (!data.data.length) {
+      return <div className="explore-viz-container">
+        <div className="loading-img">
+          <p>No data found.</p>
+        </div>
+      </div>;
+    }
+
     if (show.type === "places") {
-      let birthyearSpan = extent(data, d => d.birthyear);
+      let birthyearSpan = extent(data.data, d => d.birthyear);
       birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
 
-      vizData = data
+      vizData = data.data
         .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
         .map(d => {
           d.borncountry = d.birthcountry.country_name;
@@ -51,14 +59,14 @@ class VizShell extends Component {
       vizShapeConfig = {fill: d => COLORS_CONTINENT[d.borncontinent]};
     }
     else if (show.type === "occupations") {
-      let birthyearSpan = extent(data, d => d.birthyear);
+      let birthyearSpan = extent(data.data, d => d.birthyear);
       birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
       attrs = occupations.reduce((obj, d) => {
         obj[d.id] = d;
         return obj;
       }, {});
 
-      vizData = data
+      vizData = data.data
         .filter(p => p.birthyear !== null && p.occupation_id !== null)
         .map(d => {
           d.occupation_id = `${d.occupation_id}`;

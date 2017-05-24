@@ -62,7 +62,7 @@ class PlaceControl extends Component {
               <option value="all">All Cities</option>
               {placesInCountry.map(p =>
                 <option key={p.id} value={p.id} data-slug={p.slug}>
-                  {p.name}
+                  {p.state && p.country_code === "usa" ? `${p.name}, ${p.state}` : `${p.name}`}
                 </option>
               )}
             </select>
@@ -72,9 +72,9 @@ class PlaceControl extends Component {
         : <div>
             <select value={selectedPlace} onChange={changePlace}>
               <option value="all">All Cities</option>
-              {places.map(c =>
-                <option key={c.id} value={c.id} data-slug={c.slug}>
-                  {c.name}
+              {places.map(p =>
+                <option key={p.id} value={p.id} data-slug={p.slug}>
+                  {p.state && p.country_code === "usa" ? `${p.name}, ${p.state}` : `${p.name}`}
                 </option>
               )}
             </select>
