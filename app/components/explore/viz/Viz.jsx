@@ -6,7 +6,7 @@ import "css/components/explore/explore";
 import Controls from "components/explore/controls/Index";
 import VizShell from "components/explore/viz/VizShell";
 import {initExplore, initExplorePlace, initExploreOccupation, setExplorePage} from "actions/explore";
-import {FORMATTERS, HPI_RANGE, LANGS_RANGE} from "types";
+import {FORMATTERS, HPI_RANGE, LANGS_RANGE, COUNTRY_DEPTH, CITY_DEPTH} from "types";
 
 class Viz extends Component {
 
@@ -19,7 +19,8 @@ class Viz extends Component {
   }
 
   render() {
-    const {show, years, metric} = this.props.explore;
+    const {show, years, metric, place} = this.props.explore;
+
     const metricRange = metric.metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
     let metricSentence;
     if (metric.cutoff > metricRange[0]) {
@@ -31,16 +32,26 @@ class Viz extends Component {
       }
     }
 
+    let placeSentence = "";
+    if (place.selectedDepth === COUNTRY_DEPTH && place.selectedCountry !== "all") {
+      const country = place.countries.filter(c => c.id === parseInt(place.selectedCountry, 10))[0];
+      placeSentence = place.selectedPlaceInCountryStr && place.selectedPlaceInCountryStr !== "all" ? ` in ${place.selectedPlaceInCountryStr}, ${country.name}` : ` in ${country.name}`;
+    }
+    else if (place.selectedDepth === CITY_DEPTH && place.selectedPlace !== "all") {
+      const thisPlace = place.places.filter(p => p.id === parseInt(place.selectedPlace, 10))[0];
+      placeSentence = ` in ${thisPlace.name}`;
+    }
+
     return (
       <div className="explore">
         <Helmet
           htmlAttributes={{lang: "en", amp: undefined}}
-          title="Visualizations - Pantheon"
+          title={`Visualizing ${show.type}${placeSentence} (${FORMATTERS.year(years[0])} - ${FORMATTERS.year(years[1])})`}
           meta={config.meta}
           link={config.link}
         />
         <div className="explore-head">
-          <h1 className="explore-title">How have the {show.type} of all globally remembered people changed over time?</h1>
+          <h1 className="explore-title">How have the {show.type} of all globally remembered people{placeSentence} changed over time?</h1>
           <h3 className="explore-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
           {metricSentence ? <p>{metricSentence}</p> : null}
         </div>
