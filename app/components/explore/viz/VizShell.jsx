@@ -89,7 +89,7 @@ class VizShell extends Component {
             console.log(d.profession_id, attrs);
           }
           d.event = "OCCUPATIONS OF FAMOUS PEOPLE";
-          d.place = d.birthplace.id;
+          // d.place = d.birthplace.id;
           d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
                        ? d.birthyear
                        : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
