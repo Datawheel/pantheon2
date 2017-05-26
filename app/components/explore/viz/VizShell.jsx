@@ -2,11 +2,10 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import "css/components/explore/explore";
 import "css/components/explore/viz";
-import {StackedArea, Treemap, Viz} from "d3plus-react";
+import {StackedArea, Treemap} from "d3plus-react";
 import {changeViz} from "actions/explore";
-import {COLORS_CONTINENT, COUNTRY_DEPTH, PLACE_DEPTH, OCCUPATION_DEPTH, DOMAIN_DEPTH, FORMATTERS, YEAR_BUCKETS} from "types";
-import {extent} from "d3-array";
-import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import {COLORS_CONTINENT} from "types";
+import {calculateYearBucket, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 
 class VizShell extends Component {
 
@@ -19,7 +18,7 @@ class VizShell extends Component {
   }
 
   render() {
-    const {data, show, occupation, viz, years, place} = this.props.explore;
+    const {data, show, occupation, viz, place} = this.props.explore;
     const {occupations} = occupation;
     const {type, config} = viz;
     let attrs, vizData, vizShapeConfig;
@@ -42,9 +41,11 @@ class VizShell extends Component {
       </div>;
     }
 
+    const [yearLabels, ticks] = calculateYearBucket(data.data);
+    console.log(yearLabels);
+    console.log(ticks);
+
     if (show.type === "places") {
-      let birthyearSpan = extent(data.data, d => d.birthyear);
-      birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
 
       let dataFilter = p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent;
       if (place.selectedCountry !== "all") {
@@ -58,16 +59,11 @@ class VizShell extends Component {
             d.bornplace = d.birthplace.name;
           }
           d.borncontinent = d.birthcountry.continent;
-          d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
-                       ? d.birthyear
-                       : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
           return d;
         });
       vizShapeConfig = {fill: d => COLORS_CONTINENT[d.borncontinent]};
     }
     else if (show.type === "occupations") {
-      let birthyearSpan = extent(data.data, d => d.birthyear);
-      birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
       attrs = occupations.reduce((obj, d) => {
         obj[d.id] = d;
         return obj;
@@ -90,9 +86,6 @@ class VizShell extends Component {
           }
           d.event = "OCCUPATIONS OF FAMOUS PEOPLE";
           // d.place = d.birthplace.id;
-          d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
-                       ? d.birthyear
-                       : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
           return d;
         });
       vizShapeConfig = shapeConfig(attrs);
@@ -112,23 +105,13 @@ class VizShell extends Component {
           {
             data: vizData,
             height: false,
-            timeline: false,
             groupBy: config.groupBy.map(groupBy(attrs)),
-            legendConfig: {
-              shapeConfig: {
-                labelConfig: {
-                  fontColor: "#4B4A48",
-                  fontFamily: () => "Amiko",
-                  fontResize: false,
-                  fontSize: () => 14
-                },
-                height: () => 13,
-                labelPadding: 0,
-                width: () => 13
-              }
-            },
             on: on(show.type.slice(0, show.type.length - 1), accessor),
-            tooltipConfig: type === "Priestley" ? peopleTooltip : groupTooltip(vizData, accessor)
+            tooltipConfig: type === "Priestley" ? peopleTooltip : groupTooltip(vizData, accessor),
+            xConfig: {
+              labels: ticks,
+              tickFormat: d => yearLabels[d]
+            }
           }
         )} />
       </div>

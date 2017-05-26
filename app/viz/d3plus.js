@@ -1,4 +1,5 @@
 import {FORMATTERS} from "types";
+// import {merge} from "d3-array";
 import {default as topojson} from "json/world-50m.json";
 
 function uniques(a) {
@@ -15,7 +16,8 @@ export default {
     id: uniques,
     langs: a => Math.max(...a),
     logyear: uniques,
-    occupation_id: uniques
+    occupation_id: uniques,
+    yearBucket: uniques
   },
 
   axisConfig: {
@@ -58,11 +60,11 @@ export default {
         fontColor: "#4B4A48",
         fontFamily: () => "Amiko",
         fontResize: false,
-        fontSize: () => 13
+        fontSize: () => 14
       },
-      height: () => 18,
+      height: () => 13,
       labelPadding: 0,
-      width: () => 18
+      width: () => 13
     }
   },
 
@@ -74,7 +76,7 @@ export default {
 
   shapeConfig: {
     labelConfig: {
-      fontColor: (d, i) => ["#fff", "rgba(255, 255, 255, 0.45)"][d.l],
+      fontColor: "rgba(255, 255, 255, 0.8)",
       fontFamily: () => "Amiko",
       textAnchor: "start"
     }
@@ -82,6 +84,7 @@ export default {
 
   sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
   tiles: false,
+  timeline: false,
   timeFilter: () => true,
 
   timelineConfig: {
@@ -145,6 +148,7 @@ export default {
     width: "225px"
   },
 
+  x: "yearBucket",
   xConfig: {
     barConfig: {
       "stroke": "#D6D6D0",
@@ -162,11 +166,11 @@ export default {
       },
       stroke: "#D6D6D0"
     },
-    tickFormat: d => FORMATTERS.year(new Date(d).getFullYear()),
     tickSize: 5,
     title: false
   },
 
+  y: "yearWeight",
   yConfig: {
     barConfig: {
       "stroke": "#9E978D",

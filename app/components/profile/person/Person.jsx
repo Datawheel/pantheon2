@@ -79,11 +79,11 @@ class Person extends Component {
                   fill: d => d.color,
                   Line: {
                     fill: "none",
-                    stroke: d => d.color,
+                    stroke: d => d.data.color,
                     strokeWidth: 2
                   }
                 },
-                time: d => d.x,
+                time: "x",
                 timeline: false,
                 tooltipConfig: {
                   body: d => {
@@ -93,6 +93,9 @@ class Person extends Component {
                   },
                   footer: ""
                 },
+                x: "x",
+                xConfig: {tickFormat: d => FORMATTERS.year(new Date(d).getFullYear())},
+                y: "y",
                 yConfig: {tickFormat: () => "", title: false}
               }} />
       },

@@ -52,7 +52,7 @@ export const FORMATTERS = {
   dateShort: timeFormat("%m/%d/%y"),
   month: timeFormat("%B %Y"),
   monthShort: timeFormat("%m/%Y"),
-  year: y => y < 0 ? `${Math.abs(y)} BC` : Math.round(y),
+  year: y => y < 0 ? `${Math.abs(y)} BC` : `${Math.round(y)}`,
   ordinal: n => {
     if (n > 3 && n < 21) return `${n}th`; // thanks kennebec
     switch (n % 10) {

@@ -12,8 +12,8 @@ import Occupations from "components/profile/era/Occupations";
 import {fetchEra, fetchEras, fetchPeopleBornInEra, fetchPeopleDiedInEra} from "actions/era";
 import {fetchAllOccupations} from "actions/occupation";
 import {Geomap, Priestley, StackedArea, Treemap} from "d3plus-react";
-import {COLORS_CONTINENT, FORMATTERS, YEAR_BUCKETS} from "types";
-import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import {COLORS_CONTINENT, FORMATTERS} from "types";
+import {calculateYearBucket, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 import "css/components/profile/structure";
 
 class Era extends Component {
@@ -27,11 +27,15 @@ class Era extends Component {
     const {era, eras, peopleBornInEra, peopleDiedInEra} = eraProfile;
     const {occupations} = occupationProfile;
 
-    const yearSpan = era.end_year - era.start_year;
     const tmapBornData = peopleBornInEra
       .filter(p => p.birthyear !== null)
       .filter(p => p.birthcountry !== null)
       .sort((a, b) => b.langs - a.langs);
+
+    const [bornBuckets, bornTicks] = calculateYearBucket(tmapBornData, d => d.birthyear);
+    console.log(bornBuckets);
+    console.log(bornTicks);
+
     tmapBornData.forEach(d => {
       d.borncountry = d.birthcountry.country_name;
       d.borncontinent = d.birthcountry.continent;
@@ -39,17 +43,15 @@ class Era extends Component {
       d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
       d.place = d.birthplace;
-      d.logyear = yearSpan < YEAR_BUCKETS * 2
-                ? d.birthyear
-                : bucketScale(d.birthyear);
-      d.bucketyear = yearSpan < YEAR_BUCKETS * 2
-                   ? d.birthyear
-                   : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const tmapDeathData = peopleDiedInEra
       .filter(p => p.deathyear !== null)
       .sort((a, b) => b.langs - a.langs);
+
+    const [deathBuckets, deathTicks] = calculateYearBucket(tmapDeathData, d => d.deathyear);
+    console.log(deathBuckets);
+    console.log(deathTicks);
 
     tmapDeathData.forEach(d => {
       d.industry = d.occupation.industry;
@@ -58,12 +60,6 @@ class Era extends Component {
       d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
       d.place = d.deathplace;
-      d.logyear = yearSpan < YEAR_BUCKETS * 2
-                ? d.deathyear
-                : bucketScale(d.deathyear);
-      d.bucketyear = yearSpan < YEAR_BUCKETS * 2
-                   ? d.deathyear
-                   : Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat_lon)
@@ -151,14 +147,11 @@ class Era extends Component {
               data: tmapBornData,
               groupBy: ["domain"].map(groupBy(attrs)),
               shapeConfig: shapeConfig(attrs),
-              time: "logyear",
-              timeline: false,
               tooltipConfig: groupTooltip(tmapBornData),
-              x: "logyear",
               xConfig: {
-                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-              },
-              y: d => d.id instanceof Array ? d.id.length : 1
+                ticks: bornTicks,
+                tickFormat: d => bornBuckets[d]
+              }
             }} />,
           <StackedArea
             key="stacked2"
@@ -168,14 +161,11 @@ class Era extends Component {
               groupBy: ["domain"].map(groupBy(attrs)),
               shapeConfig: shapeConfig(attrs),
               stackOffset: "expand",
-              time: "logyear",
-              timeline: false,
               tooltipConfig: groupTooltip(tmapBornData),
-              x: "logyear",
               xConfig: {
-                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-              },
-              y: d => d.id instanceof Array ? d.id.length : 1
+                ticks: bornTicks,
+                tickFormat: d => bornBuckets[d]
+              }
             }} />
         ]
       },
@@ -243,18 +233,15 @@ class Era extends Component {
             config={{
               title: `Birth Places of people born during the ${era.name}`,
               data: tmapBornData,
-              depth: 1,
+              depth: 0,
               groupBy: ["borncontinent", "borncountry"],
               on: on("place", d => d.birthcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-              time: "logyear",
-              timeline: false,
               tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
-              x: "logyear",
               xConfig: {
-                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-              },
-              y: d => d.id instanceof Array ? d.id.length : 1
+                ticks: bornTicks,
+                tickFormat: d => bornBuckets[d]
+              }
             }} />
         ]
       },

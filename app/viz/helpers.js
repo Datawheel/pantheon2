@@ -1,16 +1,58 @@
-import {COLORS_DOMAIN} from "types";
-import {min, max} from "d3-array";
-import {scaleLinear, scaleLog} from "d3-scale";
+import {COLORS_DOMAIN, FORMATTERS} from "types";
+import {extent, histogram, min, max, range} from "d3-array";
 
-const domain = [1, 100], maxYear = 2016, minYear = -4500;
-const yearMap = scaleLinear().domain([maxYear, minYear]).range(domain);
-const logMap = scaleLog().domain(domain).rangeRound([50, 1]);
+export function calculateYearBucket(data = [], accessor = d => d.birthyear) {
 
-function bucketScale(val) {
-  return logMap(yearMap(val));
+  const [minYear, maxYear] = extent(data, accessor);
+  const years = data.map(d => maxYear - accessor(d));
+  const buckets = 50;
+
+  function linspace(min, max, num) {
+    const r = range(0, num, 1);
+    return r.map(n => min + n * (max - min) / (num - 1));
+  }
+
+  const big = Math.abs(minYear - maxYear);
+  let a = linspace(0, Math.log10(big), buckets)
+      .map(d => Math.ceil(Math.pow(10, d)));
+  a = a.filter((d, i) => i === a.indexOf(d));
+
+  const h = histogram()
+    .domain([0, big])
+    .thresholds(a)
+    (years);
+
+  data.forEach(d => {
+    const ago = maxYear - accessor(d);
+    const i = a.indexOf(a.filter(x => x >= ago)[0]);
+    const b = h[i];
+    d.yearWeight = 1 / (b.x1 - b.x0);
+    d.yearBucket = a.length - i;
+  });
+
+  const labels = h
+    .map(b => FORMATTERS.year(Math.round(maxYear - (b.x0 + (b.x1 - b.x0) / 2))));
+
+  if (!labels.includes(FORMATTERS.year(minYear))) {
+    data.push(Object.assign({}, data[0] || {}, {
+      yearWeight: 0,
+      yearBucket: 0
+    }));
+    labels.push(FORMATTERS.year(minYear));
+  }
+  else {
+    data.forEach(d => {
+      d.yearBucket--;
+    });
+  }
+  labels.reverse();
+
+  const divisions = 5;
+  const ticks = labels.map((d, i) => i).filter(i => !i || i === labels.length - 1 || i <= labels.length - divisions && !(i % divisions));
+
+  return [labels, ticks];
+
 }
-bucketScale.invert = val => Math.round(yearMap.invert(logMap.invert(new Date(val).getFullYear())));
-export {bucketScale};
 
 export function groupBy(attrs) {
 
@@ -45,7 +87,7 @@ export function groupTooltip(data, accessor = () => []) {
       const people = data.filter(d => names.includes(d.name));
       const peopleNames = people.map(d => d.name);
       people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
-        txt += `<br /><span class="bold">${n.name}</span>b.${n.birthyear}`;
+        txt += `<br /><span class="bold">${n.name}</span>b.${FORMATTERS.year(n.birthyear)}`;
       });
       return txt;
     },
@@ -74,8 +116,8 @@ export const peopleTooltip = {
               ? deathyear - birthyear
               : new Date().getFullYear() - birthyear;
     return deathyear !== null
-         ? `<span class="bold">${birthyear} - ${deathyear}</span>${age} year${suffix}</span>`
-         : `<span class="bold">Born ${birthyear}</span>${age} year${suffix}</span>`;
+         ? `<span class="bold">${FORMATTERS.year(birthyear)} - ${FORMATTERS.year(deathyear)}</span>${age} year${suffix}</span>`
+         : `<span class="bold">Born ${FORMATTERS.year(birthyear)}</span>${age} year${suffix}</span>`;
   },
   footer: d => d.name instanceof Array ? "" : "Click to View Profile"
 };
@@ -84,7 +126,7 @@ export function shapeConfig(attrs) {
   return {
     fill: d => {
       if (d.color) return d.color;
-      else if (d.occupation_id !== void 0) {
+      else if (d.occupation_id !== undefined) {
         let occ = d.occupation_id.constructor === Array ? d.occupation_id[0] : d.occupation_id;
         if (occ instanceof Array) occ = occ[0];
         return COLORS_DOMAIN[attrs[occ].domain_slug];

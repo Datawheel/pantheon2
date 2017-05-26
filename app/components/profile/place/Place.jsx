@@ -14,12 +14,9 @@ import LivingPeople from "components/profile/place/LivingPeople";
 import NotFound from "components/NotFound";
 import {fetchPlace, fetchCountry, fetchPlaceRanks, fetchPeopleBornHere, fetchPeopleDiedHere, fetchPeopleBornHereAlive} from "actions/place";
 import {fetchAllOccupations} from "actions/occupation";
-import {FORMATTERS, YEAR_BUCKETS} from "types";
 import {Geomap, Priestley, Treemap, StackedArea} from "d3plus-react";
-import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import {calculateYearBucket, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 import "css/components/profile/structure";
-
-import {extent} from "d3-array";
 
 class Place extends Component {
 
@@ -32,35 +29,31 @@ class Place extends Component {
       return <NotFound />;
     }
     const {placeProfile, occupationProfile} = this.props;
-    const {place, country, placeRanks, peopleBornHere, peopleDiedHere, occupationsBornHere, occupationsDiedHere, peopleBornHereAlive} = placeProfile;
+    const {place, country, placeRanks, peopleBornHere, peopleDiedHere, peopleBornHereAlive} = placeProfile;
     const {occupations} = occupationProfile;
 
     const tmapBornData = peopleBornHere
       .filter(p => p.birthyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
-    let birthyearSpan = extent(tmapBornData, d => d.birthyear);
-    birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
+    const [bornBuckets, bornTicks] = calculateYearBucket(tmapBornData, d => d.birthyear);
+    console.log(bornBuckets);
+    console.log(bornTicks);
 
     tmapBornData.forEach(d => {
       d.occupation_name = d.occupation.occupation;
       d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
       d.place = d.birthplace;
-      d.logyear = birthyearSpan < YEAR_BUCKETS * 2
-                ? d.birthyear
-                : bucketScale(d.birthyear);
-      d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
-                   ? d.birthyear
-                   : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const tmapDeathData = peopleDiedHere
       .filter(p => p.deathyear !== null)
       .sort((a, b) => b.langs - a.langs);
 
-    let deathyearSpan = extent(tmapBornData, d => d.birthyear);
-    deathyearSpan = deathyearSpan[1] - deathyearSpan[0];
+    const [deathBuckets, deathTicks] = calculateYearBucket(peopleDiedHere, d => d.deathyear);
+    console.log(deathBuckets);
+    console.log(deathTicks);
 
     tmapDeathData.forEach(d => {
       d.industry = d.occupation.industry;
@@ -69,12 +62,6 @@ class Place extends Component {
       d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
       d.place = d.deathplace;
-      d.logyear = deathyearSpan < YEAR_BUCKETS * 2
-                ? d.deathyear
-                : bucketScale(d.deathyear);
-      d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
-                   ? d.deathyear
-                   : Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat_lon)
@@ -163,14 +150,11 @@ class Place extends Component {
                   data: tmapBornData,
                   groupBy: ["domain", "industry"].map(groupBy(attrs)),
                   shapeConfig: shapeConfig(attrs),
-                  time: "logyear",
-                  timeline: false,
                   tooltipConfig: groupTooltip(tmapBornData),
-                  x: "logyear",
                   xConfig: {
-                    tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-                  },
-                  y: d => d.id instanceof Array ? d.id.length : 1
+                    labels: bornTicks,
+                    tickFormat: d => bornBuckets[d]
+                  }
                 }} />,
           <StackedArea
                 key="stacked2"
@@ -179,14 +163,11 @@ class Place extends Component {
                   data: tmapDeathData,
                   groupBy: ["domain", "industry"].map(groupBy(attrs)),
                   shapeConfig: shapeConfig(attrs),
-                  time: "logyear",
-                  timeline: false,
                   tooltipConfig: groupTooltip(tmapDeathData),
-                  x: "logyear",
                   xConfig: {
-                    tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-                  },
-                  y: d => d.id instanceof Array ? d.id.length : 1
+                    labels: deathTicks,
+                    tickFormat: d => deathBuckets[d]
+                  }
                 }} />
         ]
       },

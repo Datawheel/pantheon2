@@ -1,13 +1,12 @@
 import React, {Component} from "react";
 import apiClient from "apiconfig";
 import axios from "axios";
-import {FORMATTERS} from "types";
 import "css/components/home";
 import HomeGrid from "components/home/HomeGrid";
 import HomeIA from "components/home/HomeIA";
 import HomeHead from "components/home/HomeHead";
 import {StackedArea} from "d3plus-react";
-import {bucketScale, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
+import {calculateYearBucket, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
 
 /*
  * Note: This is kept as a container-level component,
@@ -36,6 +35,10 @@ class Home extends Component {
 
     let stackedData = [];
 
+    const [yearBuckets, ticks] = calculateYearBucket(personData);
+    console.log(yearBuckets);
+    console.log(ticks);
+
     if (personData) {
       stackedData = personData
         .filter(p => p.birthyear !== null)
@@ -45,7 +48,6 @@ class Home extends Component {
         d.occupation_name = d.occupation.occupation;
         d.occupation_id = `${d.occupation.id}`;
         d.place = d.birthplace;
-        d.logyear = bucketScale(d.birthyear);
       });
     }
 
@@ -58,8 +60,7 @@ class Home extends Component {
       }, {});
     }
 
-    const ticks = [-3500, -500, 1450, 1600, 1900, 1950, 1995, 2016];
-    const logTicks = ticks.map(bucketScale);
+    // const eras = [-500, 1450, 1600, 1900, 1950, 1995];
 
     return (
       <div className="home-container">
@@ -73,32 +74,26 @@ class Home extends Component {
               <StackedArea
                 config={{
                   data: stackedData,
-                  groupBy: ["domain"].map(groupBy(attrs)),
+                  depth: 0,
+                  groupBy: ["domain", "industry"].map(groupBy(attrs)),
+                  height: 500,
                   legendConfig: {
                     shapeConfig: {
                       labelConfig: {
-                        fontColor: "#4B4A48",
-                        fontFamily: () => "Amiko",
-                        fontResize: false,
                         fontSize: () => 12
                       },
                       height: () => 11,
-                      labelPadding: 0,
                       width: () => 11
                     }
                   },
-                  legendPosition: "bottom",
+                  // legendPosition: "bottom",
                   shapeConfig: Object.assign({Area: {label: false}}, shapeConfig(attrs)),
-                  time: "logyear",
                   timeline: false,
                   tooltipConfig: Object.assign({duration: 0}, groupTooltip(stackedData)),
-                  x: "logyear",
                   xConfig: {
-                    labels: logTicks,
-                    ticks: [],
-                    tickFormat: d => FORMATTERS.year(ticks[logTicks.indexOf(new Date(d).getFullYear())])
+                    labels: ticks,
+                    tickFormat: d => yearBuckets[d]
                   },
-                  y: d => d.id instanceof Array ? d.id.length : 1,
                   yConfig: {
                     gridConfig: {
                       "stroke-width": 0

@@ -9,11 +9,11 @@ import {LinePlot} from "d3plus-react";
 const Header = ({occupation, people}) => {
 
   const yearAndCount = nest()
-    .key(p => p.bucketyear)
-    .rollup(leaves => ({count: leaves.length, bucketyear: leaves[0].bucketyear}))
-    .entries(people.filter(p => p.bucketyear))
-    .sort((a, b) => a.value.bucketyear - b.value.bucketyear)
-    .map(d => Object.assign({}, d.value, {id: "line", txt: `${d.value.count} birth(s) between ${d.value.bucketyear - 49} and ${d.value.bucketyear}`}));
+    .key(p => p.yearBucket)
+    .rollup(leaves => ({count: leaves.length, yearBucket: leaves[0].yearBucket}))
+    .entries(people.filter(p => p.yearBucket))
+    .sort((a, b) => a.value.yearBucket - b.value.yearBucket)
+    .map(d => Object.assign({}, d.value, {id: "line", txt: `${d.value.count} birth(s) between ${d.value.yearBucket - 49} and ${d.value.yearBucket}`}));
 
   const sparkData = yearAndCount.concat([
     Object.assign({}, yearAndCount[0], {shape: "Circle", id: "circle"}),
@@ -67,14 +67,12 @@ const Header = ({occupation, people}) => {
                  strokeWidth: 1
                }
              },
-             time: d => d.bucketyear,
              timeline: false,
              tooltipConfig: {
                body: d => d.txt,
                title: "Individuals Born"
              },
              width: 275,
-             x: d => d.bucketyear,
             //  xConfig: {
             //    barConfig: {"stroke-width": 0},
             //    labels: sparkTicks,

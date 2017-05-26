@@ -15,12 +15,10 @@ import Section from "components/profile/Section";
 import NotFound from "components/NotFound";
 import {fetchOccupation, fetchPeople, fetchPeopleInDomain, fetchAllOccupations} from "actions/occupation";
 import {fetchEras} from "actions/era";
-import {COLORS_CONTINENT, FORMATTERS, YEAR_BUCKETS} from "types";
+import {COLORS_CONTINENT} from "types";
 import {Priestley, StackedArea, Treemap, Tree} from "d3plus-react";
-import {bucketScale, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
+import {calculateYearBucket, groupBy, groupTooltip, on, peopleTooltip, shapeConfig} from "viz/helpers";
 import "css/components/profile/structure";
-
-import {extent} from "d3-array";
 
 class Occupation extends Component {
 
@@ -44,44 +42,32 @@ class Occupation extends Component {
       d.domain = d.occupation.domain;
       d.occupation_id = `${d.occupation_id}`;
       d.occupation_name = d.occupation.occupation;
-      d.logyear = bucketScale(d.birthyear);
-      d.bucketyear = Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const tmapBornData = people
       .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
       .sort((a, b) => b.langs - a.langs);
 
-    let birthyearSpan = extent(tmapBornData, d => d.birthyear);
-    birthyearSpan = birthyearSpan[1] - birthyearSpan[0];
+    const [bornBuckets, bornTicks] = calculateYearBucket(tmapBornData, d => d.birthyear);
+    console.log(bornBuckets);
+    console.log(bornTicks);
 
     tmapBornData.forEach(d => {
       d.borncountry = d.birthcountry.country_name;
       d.borncontinent = d.birthcountry.continent;
-      d.logyear = birthyearSpan < YEAR_BUCKETS * 2
-                ? d.birthyear
-                : bucketScale(d.birthyear);
-      d.bucketyear = birthyearSpan < YEAR_BUCKETS * 2
-                   ? d.birthyear
-                   : Math.round(d.birthyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const tmapDeathData = people
       .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country_name && p.deathcountry.continent)
       .sort((a, b) => b.langs - a.langs);
 
-    let deathyearSpan = extent(tmapDeathData, d => d.deathyear);
-    deathyearSpan = deathyearSpan[1] - deathyearSpan[0];
+    const [deathBuckets, deathTicks] = calculateYearBucket(tmapDeathData, d => d.deathyear);
+    console.log(deathBuckets);
+    console.log(deathTicks);
 
     tmapDeathData.forEach(d => {
       d.diedcountry = d.deathcountry.country_name;
       d.diedcontinent = d.deathcountry.continent;
-      d.logyear = deathyearSpan < YEAR_BUCKETS * 2
-                ? d.deathyear
-                : bucketScale(d.deathyear);
-      d.bucketyear = deathyearSpan < YEAR_BUCKETS * 2
-                   ? d.deathyear
-                   : Math.round(d.deathyear / YEAR_BUCKETS) * YEAR_BUCKETS;
     });
 
     const priestleyMax = 25;
@@ -140,36 +126,30 @@ class Occupation extends Component {
             config={{
               title: `Birth Places of ${occupation.occupation}s Over Time`,
               data: tmapBornData,
-              depth: 1,
+              depth: 0,
               groupBy: ["borncontinent", "borncountry"],
               on: on("place", d => d.birthcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-              time: "logyear",
-              timeline: false,
               tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
-              x: "logyear",
               xConfig: {
-                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-              },
-              y: d => d.id instanceof Array ? d.id.length : 1
+                labels: bornTicks,
+                tickFormat: d => bornBuckets[d]
+              }
             }} />,
           <StackedArea
             key="stacked_country2"
             config={{
               title: `Death Places of ${occupation.occupation}s Over Time`,
               data: tmapDeathData,
-              depth: 1,
+              depth: 0,
               groupBy: ["diedcontinent", "diedcountry"],
               on: on("place", d => d.deathcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              time: "logyear",
-              timeline: false,
               tooltipConfig: groupTooltip(tmapDeathData, d => d.deathcountry.slug),
-              x: "logyear",
               xConfig: {
-                tickFormat: d => FORMATTERS.year(bucketScale.invert(d))
-              },
-              y: d => d.id instanceof Array ? d.id.length : 1
+                labels: deathTicks,
+                tickFormat: d => deathBuckets[d]
+              }
             }} />
         ]
       },
@@ -222,7 +202,6 @@ class Occupation extends Component {
                     fontSize: () => 13
                   }
                 }),
-              timeline: false,
               tooltipConfig: groupTooltip(tmapDomainData, d => d.occupation.occupation_slug),
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />

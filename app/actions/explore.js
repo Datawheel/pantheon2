@@ -2,7 +2,7 @@
 import {polyfill} from "es6-promise";
 import apiClient from "apiconfig";
 import axios from "axios";
-import {COLORS_CONTINENT, COUNTRY_DEPTH, CITY_DEPTH, DOMAIN_DEPTH, OCCUPATION_DEPTH,
+import {COLORS_CONTINENT, COUNTRY_DEPTH, CITY_DEPTH, DOMAIN_DEPTH, FORMATTERS, OCCUPATION_DEPTH,
           RANKINGS_RESULTS_PER_PAGE, SANITIZERS} from "types";
 import {nest} from "d3-collection";
 
@@ -370,32 +370,15 @@ export function changeViz(vizType, triggerUpdate = true) {
     vizType = vizType || explore.viz.type;
     if (explore.show.type === "places") {
       config = {
-        depth: explore.place.selectedCountry === "all" ? 1 : 2,
-        groupBy: explore.place.selectedCountry === "all" ? ["borncontinent", "borncountry"] : ["borncontinent", "borncountry", "bornplace"],
-        time: "birthyear",
-        shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]}
+        depth: vizType === "StackedArea" ? 0 : explore.place.selectedCountry === "all" ? 1 : 2,
+        groupBy: explore.place.selectedCountry === "all" ? ["borncontinent", "borncountry"] : ["borncontinent", "borncountry", "bornplace"]
       };
-      if (vizType === "StackedArea") {
-        config = Object.assign(config, {
-          time: "bucketyear",
-          x: "bucketyear",
-          y: d => d.id instanceof Array ? d.id.length : 1
-        });
-      }
     }
     else if (explore.show.type === "occupations") {
       config = {
-        depth: 2,
-        groupBy: ["domain", "industry", "occupation_name"],
-        time: "birthyear"
+        depth: vizType === "StackedArea" ? 0 : 2,
+        groupBy: ["domain", "industry", "occupation_name"]
       };
-      if (vizType === "StackedArea") {
-        config = Object.assign(config, {
-          time: "bucketyear",
-          x: "bucketyear",
-          y: d => d.id instanceof Array ? d.id.length : 1
-        });
-      }
     }
     dispatch({type: "CHANGE_EXPLORE_VIZ", vizConfig: config, vizType});
     if (!explore.data.length && triggerUpdate) {

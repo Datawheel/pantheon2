@@ -73,14 +73,12 @@
     width: 100%;
     max-width: 100vw;
     overflow: hidden;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 100px;
+    margin: -20px auto 100px;
     box-sizing: border-box;
     padding: 0 48px 0 24px;
     z-index: -1;
 
-    @media (max-width: 450px) {
+    /*@media (max-width: 450px) {
       margin-top: -20px;
     }
 
@@ -94,7 +92,7 @@
 
     @media (min-width: 1001px) {
       margin-top: -200px;
-    }
+    }*/
   }
 
   & .legend-title {
@@ -175,7 +173,7 @@
       }
 
       &.computer {
-        right: 5.2%;
+        right: 24%;
         height: 140px;
 
         & .era-img {
@@ -190,7 +188,7 @@
       }
 
       &.television {
-        right: 13.6%;
+        right: 39.2%;
         height: 240px;
 
         & .era-img {
@@ -205,7 +203,7 @@
       }
 
       &.film-radio {
-        right: 22.25%;
+        right: 46.5%;
         height: 330px;
 
         & .era-img {
@@ -220,7 +218,7 @@
       }
 
       &.newspaper {
-        right: 43.6%;
+        right: 63.6%;
         height: 150px;
 
         & .era-img {
@@ -235,7 +233,7 @@
       }
 
       &.printing {
-        right: 49.95%;
+        right: 68.2%;
         height: 250px;
 
         & .era-img {
@@ -251,7 +249,7 @@
       }
 
       &.scribal {
-        right: 80.2%;
+        right: 88%;
         height: 200px;
 
         & .era-img {
