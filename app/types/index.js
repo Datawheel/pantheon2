@@ -103,5 +103,6 @@ export const SANITIZERS = {
       cutoff = metricRange[0];
     }
     return {metricType, cutoff};
-  }
+  },
+  gender: gender => gender === "true" || gender === "false" ? JSON.parse(gender) : null
 };

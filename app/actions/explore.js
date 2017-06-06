@@ -12,7 +12,7 @@ polyfill();
 // Set the URL based on data
 // ---------------------------
 function setUrl(exploreState) {
-  const {metric, place, occupation, show, type, typeNesting, years} = exploreState;
+  const {gender, metric, place, occupation, show, type, typeNesting, years} = exploreState;
   let queryStr = `?years=${years}`;
   if (show) {
     queryStr = `${queryStr}&show=${show.type}`;
@@ -43,6 +43,9 @@ function setUrl(exploreState) {
   if (metric.metricType) {
     queryStr = `${queryStr}&metricType=${metric.metricType}&cutoff=${metric.cutoff}`;
   }
+  if (gender === true || gender === false) {
+    queryStr = `${queryStr}&gender=${gender}`;
+  }
   if (typeof history !== "undefined" && history.pushState) {
     const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}${queryStr}`;
     window.history.pushState({path: newurl}, "", newurl);
@@ -59,9 +62,10 @@ export function getNewData(dispatch, getState) {
   // next we trigger the loading screen
   dispatch({type: "FETCH_EXPLORE_DATA"});
   const {explore} = getState();
-  const {metric, page, place, occupation, rankings, years, sorting} = explore;
+  const {gender, metric, page, place, occupation, rankings, years, sorting} = explore;
   const yearType = "birthyear";
   let apiHeaders = null;
+  console.log("getNewData, `gender`--", gender)
 
   setUrl(explore);
 
@@ -100,7 +104,12 @@ export function getNewData(dispatch, getState) {
     metricCutoff = `&${metric.metricType}=gte.${metric.cutoff}`;
   }
 
-  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${limitOffset}${sortingFilter}${metricCutoff}`;
+  let genderFilter = "";
+  if (gender === true || gender === false) {
+    genderFilter = `&gender=is.${gender}`;
+  }
+
+  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${limitOffset}${sortingFilter}${metricCutoff}${genderFilter}`;
   console.log("getNewData", dataUrl);
   return apiClient.get(dataUrl, {headers: apiHeaders}).then(res => {
     if (page === "rankings") {
@@ -230,12 +239,15 @@ export function initExplore(params, location) {
   const years = SANITIZERS.years(query.years);
   const show = SANITIZERS.show(query.show, pathname);
   const metric = SANITIZERS.metric(query.metricType, query.cutoff);
+  const gender = SANITIZERS.gender(query.gender);
+  console.log('\n\n\n!!!GENDER!!!!', gender)
   return dispatch => dispatch({
     type: "INIT_EXPLORE",
     years,
     show,
     metricType: metric.metricType,
-    cutoff: metric.cutoff
+    cutoff: metric.cutoff,
+    gender
   });
 }
 
@@ -356,6 +368,16 @@ export function changeOccupations(selectedOccupation, occupationList, triggerUpd
 export function changeMetric(metricType, cutoff) {
   return (dispatch, getState) => {
     dispatch({type: "CHANGE_EXPLORE_METRIC", metricType, cutoff});
+    return getNewData(dispatch, getState);
+  };
+}
+
+// -------------------------
+// Actions from gender controls
+// ---------------------------
+export function changeGender(gender) {
+  return (dispatch, getState) => {
+    dispatch({type: "CHANGE_EXPLORE_GENDER", gender});
     return getNewData(dispatch, getState);
   };
 }

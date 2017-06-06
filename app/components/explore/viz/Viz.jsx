@@ -19,7 +19,7 @@ class Viz extends Component {
   }
 
   render() {
-    const {show, years, metric, place} = this.props.explore;
+    const {gender, show, years, metric, place} = this.props.explore;
 
     const metricRange = metric.metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
     let metricSentence;
@@ -42,6 +42,11 @@ class Viz extends Component {
       placeSentence = ` in ${thisPlace.name}`;
     }
 
+    let genderedPronoun = "people";
+    if (gender === true || gender === false) {
+      genderedPronoun = gender === true ? "men" : "women";
+    }
+
     return (
       <div className="explore">
         <Helmet
@@ -51,7 +56,7 @@ class Viz extends Component {
           link={config.link}
         />
         <div className="explore-head">
-          <h1 className="explore-title">How have the {show.type} of all globally remembered people{placeSentence} changed over time?</h1>
+          <h1 className="explore-title">How have the {show.type} of all globally remembered {genderedPronoun}{placeSentence} changed over time?</h1>
           <h3 className="explore-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
           {metricSentence ? <p>{metricSentence}</p> : null}
         </div>

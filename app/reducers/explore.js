@@ -207,8 +207,24 @@ const metric = (
   }
 };
 
+const gender = (
+  state = null,
+  // state = true,
+  // state = false,
+  action
+) => {
+  switch (action.type) {
+    case "INIT_EXPLORE":
+    case "CHANGE_EXPLORE_GENDER":
+      return action.gender;
+    default:
+      return state;
+  }
+};
+
 const exploreReducer = combineReducers({
   data,
+  gender,
   grouping,
   metric,
   occupation,
