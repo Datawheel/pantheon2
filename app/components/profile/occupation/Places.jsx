@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import {nest} from "d3-collection";
 import AnchorList from "components/utils/AnchorList";
 import {plural} from "pluralize";

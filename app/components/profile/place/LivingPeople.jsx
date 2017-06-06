@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import AnchorList from 'components/utils/AnchorList';
+import React from "react";
+import AnchorList from "components/utils/AnchorList";
 
-const LivingPeople = ({ place, data }) => {
+const LivingPeople = ({place, data}) => {
   return (
     <div>
       <p>
@@ -9,11 +9,11 @@ const LivingPeople = ({ place, data }) => {
       </p>
       <div className={'rank-title'}>
         <h3>MAGICAL PLACEHOLDER: Mapping Global Career</h3>
-        <a href='#'>Go to all Rankings</a>
-        <button type='button'>Suggest Life Event</button>
+        <a href="#">Go to all Rankings</a>
+        <button type="button">Suggest Life Event</button>
       </div>
     </div>
   );
-}
+};
 
 export default LivingPeople;

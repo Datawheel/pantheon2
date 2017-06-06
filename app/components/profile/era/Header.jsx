@@ -1,4 +1,5 @@
-import React, {PropTypes} from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import "css/components/profile/header";
 import "css/components/utils/mouse";
 import placeholderViz from "images/profile/placeholder_era_viz.png";

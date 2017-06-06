@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import AnchorList from "components/utils/AnchorList";
-import { plural } from "pluralize";
+import {plural} from "pluralize";
 
 const RelatedOccupations = ({ occupation, occupations }) => {
 

@@ -70,6 +70,7 @@
     "postcss-nesting": "^2.3.1",
     "postcss-reporter": "^3.0.0",
     "postcss-simple-vars": "^4.0.0",
+    "prop-types": "^15.5.10",
     "rc-slider": "^6.1.0",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",

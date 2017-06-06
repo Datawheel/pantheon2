@@ -1,11 +1,12 @@
-import React, { Component, PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import AnchorList from "components/utils/AnchorList";
-import styles from "css/components/profile/intro";
+import "css/components/profile/intro";
 import iconProfW from "images/globalNav/profile-w.svg";
 import {plural} from "pluralize";
-import { FORMATTERS } from "types";
+import {FORMATTERS} from "types";
 
-const Intro = ({ occupation, occupations }) => {
+const Intro = ({occupation, occupations}) => {
   const myIndex = occupations.findIndex(o => o.id === occupation.id);
 
   return (
@@ -24,7 +25,7 @@ const Intro = ({ occupation, occupations }) => {
       </div>
     </section>
   );
-}
+};
 
 Intro.propTypes = {
   occupation: PropTypes.object

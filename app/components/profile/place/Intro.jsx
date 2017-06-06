@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import AnchorList from "components/utils/AnchorList";
 import styles from "css/components/profile/intro";
 import iconProfW from "images/globalNav/profile-w.svg";

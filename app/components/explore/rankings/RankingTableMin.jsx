@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from "react";
+import React, {Component} from "react";
 
 import "css/components/explore/explore.css";
 import "css/components/explore/rankings.css";

@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from "react";
+import React, {Component} from "react";
 import {polyfill} from "es6-promise";
 import {connect} from "react-redux";
 import {activateSearch} from "actions/nav";

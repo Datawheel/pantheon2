@@ -1,5 +1,6 @@
-import React, {Component, PropTypes} from "react";
-import styles from 'css/components/utils/personImage';
+import React, {Component} from "react";
+import PropTypes from "prop-types";
+import "css/components/utils/personImage";
 
 class PersonImage extends Component {
 

@@ -1,8 +1,8 @@
-import React, {Component, PropTypes} from "react";
+import React from "react";
 import {nest} from "d3-collection";
 import AnchorList from "components/utils/AnchorList";
 
-const OccupationTrends = ({ place, peopleBorn, peopleDied, occupations }) => {
+const OccupationTrends = ({place, peopleBorn, peopleDied, occupations}) => {
 
   const currentYear = new Date().getFullYear();
   const topModern = nest()
