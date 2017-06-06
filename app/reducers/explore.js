@@ -222,6 +222,20 @@ const gender = (
   }
 };
 
+const yearType = (
+  state = "birthyear",
+  // state = "deathyear",
+  action
+) => {
+  switch (action.type) {
+    case "INIT_EXPLORE":
+    case "CHANGE_EXPLORE_YEAR_TYPE":
+      return action.yearType;
+    default:
+      return state;
+  }
+};
+
 const exploreReducer = combineReducers({
   data,
   gender,
@@ -235,7 +249,8 @@ const exploreReducer = combineReducers({
   type,
   typeNesting,
   viz,
-  years
+  years,
+  yearType
 });
 
 export default exploreReducer;

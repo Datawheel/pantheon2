@@ -12,7 +12,7 @@ polyfill();
 // Set the URL based on data
 // ---------------------------
 function setUrl(exploreState) {
-  const {gender, metric, place, occupation, show, type, typeNesting, years} = exploreState;
+  const {gender, metric, place, occupation, show, type, typeNesting, years, yearType} = exploreState;
   let queryStr = `?years=${years}`;
   if (show) {
     queryStr = `${queryStr}&show=${show.type}`;
@@ -46,6 +46,9 @@ function setUrl(exploreState) {
   if (gender === true || gender === false) {
     queryStr = `${queryStr}&gender=${gender}`;
   }
+  if (yearType === "deathyear") {
+    queryStr = `${queryStr}&yearType=${yearType}`;
+  }
   if (typeof history !== "undefined" && history.pushState) {
     const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}${queryStr}`;
     window.history.pushState({path: newurl}, "", newurl);
@@ -62,14 +65,12 @@ export function getNewData(dispatch, getState) {
   // next we trigger the loading screen
   dispatch({type: "FETCH_EXPLORE_DATA"});
   const {explore} = getState();
-  const {gender, metric, page, place, occupation, rankings, years, sorting} = explore;
-  const yearType = "birthyear";
+  const {gender, metric, page, place, occupation, rankings, sorting, years, yearType} = explore;
   let apiHeaders = null;
-  console.log("getNewData, `gender`--", gender)
 
   setUrl(explore);
 
-  let selectFields = "name,langs,id,birthyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug},occupation_id:occupation";
+  let selectFields = "name,langs,id,birthyear,deathyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug},occupation_id:occupation";
   let limitOffset = "";
   if (page === "rankings") {
     apiHeaders = {Prefer: "count=exact"};
@@ -240,14 +241,15 @@ export function initExplore(params, location) {
   const show = SANITIZERS.show(query.show, pathname);
   const metric = SANITIZERS.metric(query.metricType, query.cutoff);
   const gender = SANITIZERS.gender(query.gender);
-  console.log('\n\n\n!!!GENDER!!!!', gender)
+  const yearType = SANITIZERS.yearType(query.yearType);
   return dispatch => dispatch({
     type: "INIT_EXPLORE",
     years,
     show,
     metricType: metric.metricType,
     cutoff: metric.cutoff,
-    gender
+    gender,
+    yearType
   });
 }
 
@@ -378,6 +380,16 @@ export function changeMetric(metricType, cutoff) {
 export function changeGender(gender) {
   return (dispatch, getState) => {
     dispatch({type: "CHANGE_EXPLORE_GENDER", gender});
+    return getNewData(dispatch, getState);
+  };
+}
+
+// -------------------------
+// Actions from yearType controls
+// ---------------------------
+export function changeYearType(yearType) {
+  return (dispatch, getState) => {
+    dispatch({type: "CHANGE_EXPLORE_YEAR_TYPE", yearType});
     return getNewData(dispatch, getState);
   };
 }

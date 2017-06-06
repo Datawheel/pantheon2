@@ -104,5 +104,6 @@ export const SANITIZERS = {
     }
     return {metricType, cutoff};
   },
-  gender: gender => gender === "true" || gender === "false" ? JSON.parse(gender) : null
+  gender: gender => gender === "true" || gender === "false" ? JSON.parse(gender) : null,
+  yearType: yearType => yearType === "deathyear" ? yearType : "birthyear"
 };

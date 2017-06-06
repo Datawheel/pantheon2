@@ -18,7 +18,7 @@ class VizShell extends Component {
   }
 
   render() {
-    const {data, show, occupation, viz, place} = this.props.explore;
+    const {data, show, occupation, viz, place, yearType} = this.props.explore;
     const {occupations} = occupation;
     const {type, config} = viz;
     let attrs, vizData, vizShapeConfig;
@@ -41,15 +41,15 @@ class VizShell extends Component {
       </div>;
     }
 
-    const [yearLabels, ticks] = calculateYearBucket(data.data);
-    console.log(yearLabels);
-    console.log(ticks);
+    const [yearLabels, ticks] = calculateYearBucket(data.data, d => d[yearType]);
+    console.log("yearLabels:", yearLabels);
+    console.log("ticks:", ticks);
 
     if (show.type === "places") {
 
-      let dataFilter = p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent;
+      let dataFilter = p => p[yearType] !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent;
       if (place.selectedCountry !== "all") {
-        dataFilter = p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent && p.birthplace;
+        dataFilter = p => p[yearType] !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent && p.birthplace;
       }
       vizData = data.data
         .filter(dataFilter)
@@ -70,7 +70,7 @@ class VizShell extends Component {
       }, {});
 
       vizData = data.data
-        .filter(p => p.birthyear !== null && p.occupation_id !== null)
+        .filter(p => p[yearType] !== null && p.occupation_id !== null)
         .map(d => {
           d.occupation_id = `${d.occupation_id}`;
           const o = attrs[d.occupation_id];

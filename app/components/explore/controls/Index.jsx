@@ -8,6 +8,7 @@ import ShowControl from "components/explore/controls/ShowControl";
 import VizControl from "components/explore/controls/VizControl";
 import AdvancedControl from "components/explore/controls/AdvancedControl";
 import GenderControl from "components/explore/controls/GenderControl";
+import YearTypeControl from "components/explore/controls/YearTypeControl";
 import emIconSvg from "images/icons/icon-email.svg";
 import fbIconSvg from "images/icons/icon-facebook.svg";
 import twIconSvg from "images/icons/icon-twitter.svg";
@@ -43,15 +44,7 @@ class Controls extends Component {
 
         <section className="control-group">
           <GenderControl />
-
-          <div className="filter">
-            <h3>Filtered by</h3>
-            <ul className="items options flat-options filter">
-              <li><a href="#" id="birthyear" className="active birthyear">Births</a></li>
-              <li><a href="#" id="deathyear" className="deathyear">Deaths</a></li>
-            </ul>
-          </div>
-
+          <YearTypeControl />
           <YearControl />
           <PlaceControl />
           <OccupationControl />

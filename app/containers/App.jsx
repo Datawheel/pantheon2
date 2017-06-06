@@ -70,14 +70,14 @@ class App extends Component {
 }
 
 App.childContextTypes = {
-  d3plus: React.PropTypes.object
+  d3plus: PropTypes.object
 };
 
 App.defaultProps = {d3plus};
 
 App.propTypes = {
   children: PropTypes.object,
-  d3plus: React.PropTypes.object,
+  d3plus: PropTypes.object,
   searchActive: PropTypes.bool.isRequired
 };
 
