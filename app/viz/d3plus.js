@@ -75,6 +75,11 @@ export default {
   pointSizeMin: 8,
 
   shapeConfig: {
+    Area: {
+      stroke: "#F4F4F1",
+      strokeOpacity: 0.3,
+      strokeWidth: 1
+    },
     labelConfig: {
       fontColor: "rgba(255, 255, 255, 0.8)",
       fontFamily: () => "Amiko",

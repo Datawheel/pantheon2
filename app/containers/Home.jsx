@@ -86,7 +86,6 @@ class Home extends Component {
                       width: () => 11
                     }
                   },
-                  // legendPosition: "bottom",
                   shapeConfig: Object.assign({Area: {label: false}}, shapeConfig(attrs)),
                   timeline: false,
                   tooltipConfig: Object.assign({duration: 0}, groupTooltip(stackedData)),
