@@ -310,17 +310,27 @@ export function changePlaceDepth(depth) {
 
 export function changeCountry(countryStrCode, countryNumCode, triggerUpdate = true) {
   return (dispatch, getState) => {
+    const {explore} = getState();
     dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     dispatch({
       type: "CHANGE_EXPLORE_COUNTRY",
       countryId: countryNumCode,
       countryStr: countryStrCode
     });
-    return apiClient.get(`/place?is_country=is.false&country_code=eq.${countryStrCode}&order=name&select=id,name,slug,state,country_code`)
+    apiClient.get(`/place?is_country=is.false&country_code=eq.${countryStrCode}&order=name&select=id,name,slug,state,country_code`)
       .then(res => {
         dispatch({type: "GET_PLACES_IN_COUNTRY_SUCCESS", data: res.data});
-        if (triggerUpdate) return getNewData(dispatch, getState);
       });
+    // need to change depth in config (if country --> show city depth)
+    let config = explore.viz.vizConfig;
+    if (explore.show.type === "places") {
+      config = {
+        depth: explore.viz.vizType === "StackedArea" ? 0 : countryStrCode === "all" ? 1 : 2,
+        groupBy: countryStrCode === "all" ? ["borncontinent", "borncountry"] : ["borncontinent", "borncountry", "bornplace"]
+      };
+    }
+    dispatch({type: "CHANGE_EXPLORE_VIZ", vizConfig: config, vizType: explore.viz.vizType});
+    if (triggerUpdate) return getNewData(dispatch, getState);
   };
 }
 
@@ -401,6 +411,7 @@ export function changeViz(vizType, triggerUpdate = true) {
   return (dispatch, getState) => {
     let config;
     const {explore} = getState();
+    console.log("\n\nexplore.place.selectedCountry", explore.place.selectedCountry);
     vizType = vizType || explore.viz.type;
     if (explore.show.type === "places") {
       config = {
