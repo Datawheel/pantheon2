@@ -149,12 +149,12 @@
 
   & select {
     width: 100%;
-    @apply --panelInput;
-    @apply --exploreControlInputText;
     background-image: url('../../../images/tri-dd-down.svg');
     background-position: 100% 50%;
     background-size: 30px 7px;
     cursor: pointer;
+    @apply --panelInput;
+    @apply --exploreControlInputText;
 
     &.add-control-input {
       margin-top: 10px;

@@ -50,4 +50,10 @@ const config = {
   ]
 };
 
+// Remove stylesheets because we do not extract them into a css file
+// in development mode
+if (process.env.NODE_ENV === "development") {
+  config.link = config.link.filter(l => l.rel !== "stylesheet");
+}
+
 export default config;

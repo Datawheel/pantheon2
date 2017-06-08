@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var assetsPath = path.join(__dirname, '..', 'public', 'assets');
 var hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
+var InlineEnviromentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
 
 var commonLoaders = [
   {
@@ -55,7 +56,8 @@ var postCSSConfig = function () {
     require('postcss-cssnext')({
       browsers: ['> 1%', 'last 2 versions']
     }),
-    require('postcss-reporter')({ clearMessages: true })
+    require('postcss-reporter')({ clearMessages: true }),
+    require('postcss-apply')()
   ];
 };
 
@@ -116,7 +118,8 @@ module.exports = {
         new webpack.DefinePlugin({
           __DEVCLIENT__: true,
           __DEVSERVER__: false
-        })
+        }),
+        new InlineEnviromentVariablesPlugin({ NODE_ENV: 'development' })
     ],
     postcss: postCSSConfig
 };

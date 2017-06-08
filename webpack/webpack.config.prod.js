@@ -54,7 +54,8 @@ var postCSSConfig = function () {
     require('postcss-cssnext')({
       browsers: ['> 1%', 'last 2 versions']
     }),
-    require('postcss-reporter')({ clearMessages: true })
+    require('postcss-reporter')({ clearMessages: true }),
+    require('postcss-apply')()
   ];
 };
 
