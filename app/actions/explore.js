@@ -415,13 +415,13 @@ export function changeViz(vizType, triggerUpdate = true) {
     vizType = vizType || explore.viz.type;
     if (explore.show.type === "places") {
       config = {
-        depth: vizType === "StackedArea" ? 0 : explore.place.selectedCountry === "all" ? 1 : 2,
+        depth: explore.place.selectedCountry === "all" ? 1 : 2,
         groupBy: explore.place.selectedCountry === "all" ? ["borncontinent", "borncountry"] : ["borncontinent", "borncountry", "bornplace"]
       };
     }
     else if (explore.show.type === "occupations") {
       config = {
-        depth: vizType === "StackedArea" ? 0 : 2,
+        depth: 2,
         groupBy: ["domain", "industry", "occupation_name"]
       };
     }

@@ -145,7 +145,8 @@ class Era extends Component {
             config={{
               title: "Births Over Time",
               data: tmapBornData,
-              groupBy: ["domain"].map(groupBy(attrs)),
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               shapeConfig: shapeConfig(attrs),
               tooltipConfig: groupTooltip(tmapBornData),
               xConfig: {
@@ -158,7 +159,8 @@ class Era extends Component {
             config={{
               title: "Birth Shares Over Time",
               data: tmapBornData,
-              groupBy: ["domain"].map(groupBy(attrs)),
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               shapeConfig: shapeConfig(attrs),
               stackOffset: "expand",
               tooltipConfig: groupTooltip(tmapBornData),
@@ -233,7 +235,7 @@ class Era extends Component {
             config={{
               title: `Birth Places of people born during the ${era.name}`,
               data: tmapBornData,
-              depth: 0,
+              depth: 1,
               groupBy: ["borncontinent", "borncountry"],
               on: on("place", d => d.birthcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},

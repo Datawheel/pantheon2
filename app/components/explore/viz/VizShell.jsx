@@ -42,8 +42,6 @@ class VizShell extends Component {
     }
 
     const [yearLabels, ticks] = calculateYearBucket(data.data, d => d[yearType]);
-    console.log("yearLabels:", yearLabels);
-    console.log("ticks:", ticks);
 
     if (show.type === "places") {
 
@@ -59,6 +57,7 @@ class VizShell extends Component {
             d.bornplace = d.birthplace.name;
           }
           d.borncontinent = d.birthcountry.continent;
+          d.occupation_id = `${d.occupation_id}`;
           return d;
         });
       vizShapeConfig = {fill: d => COLORS_CONTINENT[d.borncontinent]};
@@ -85,7 +84,6 @@ class VizShell extends Component {
             console.log(d.profession_id, attrs);
           }
           d.event = "OCCUPATIONS OF FAMOUS PEOPLE";
-          // d.place = d.birthplace.id;
           return d;
         });
       vizShapeConfig = shapeConfig(attrs);

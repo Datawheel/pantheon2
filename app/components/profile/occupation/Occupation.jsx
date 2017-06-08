@@ -126,7 +126,7 @@ class Occupation extends Component {
             config={{
               title: `Birth Places of ${occupation.occupation}s Over Time`,
               data: tmapBornData,
-              depth: 0,
+              depth: 1,
               groupBy: ["borncontinent", "borncountry"],
               on: on("place", d => d.birthcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
@@ -141,7 +141,7 @@ class Occupation extends Component {
             config={{
               title: `Death Places of ${occupation.occupation}s Over Time`,
               data: tmapDeathData,
-              depth: 0,
+              depth: 1,
               groupBy: ["diedcontinent", "diedcountry"],
               on: on("place", d => d.deathcountry.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},

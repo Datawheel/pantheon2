@@ -148,7 +148,8 @@ class Place extends Component {
                 config={{
                   title: "Births Over Time",
                   data: tmapBornData,
-                  groupBy: ["domain", "industry"].map(groupBy(attrs)),
+                  depth: 2,
+                  groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
                   shapeConfig: shapeConfig(attrs),
                   tooltipConfig: groupTooltip(tmapBornData),
                   xConfig: {
@@ -161,7 +162,8 @@ class Place extends Component {
                 config={{
                   title: "Deaths Over Time",
                   data: tmapDeathData,
-                  groupBy: ["domain", "industry"].map(groupBy(attrs)),
+                  depth: 2,
+                  groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
                   shapeConfig: shapeConfig(attrs),
                   tooltipConfig: groupTooltip(tmapDeathData),
                   xConfig: {
