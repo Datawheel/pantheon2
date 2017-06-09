@@ -177,10 +177,9 @@ person.name,
 person.slug,
 person.langs as weight,
 occupation.occupation as primary_meta,
-country.name as secondary_meta,
+CASE WHEN person.geacron_name IS NULL THEN country.name ELSE person.geacron_name END as secondary_meta,
 setweight(to_tsvector(unaccent(person.name)), 'A') ||
-setweight(to_tsvector(unaccent(occupation.occupation)), 'D') ||
-setweight(to_tsvector(unaccent(place.name)), 'D') as document,
+setweight(to_tsvector(unaccent(CASE WHEN person.geacron_name IS NULL THEN country.name ELSE person.geacron_name END)), 'D') as document,
 'person' as profile_type
 from person, place, occupation, place as country
 where person.birthplace=place.id
