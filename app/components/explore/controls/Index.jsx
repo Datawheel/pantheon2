@@ -21,7 +21,7 @@ class Controls extends Component {
 
   toggleSidePanel(e) {
     e.preventDefault();
-    document.getElementById("side-panel").classList.toggle("hide");
+    document.getElementById("side-panel").classList.toggle("mobile-show");
     const evt = window.document.createEvent("UIEvents");
     evt.initUIEvent("resize", true, false, window, 0);
     window.dispatchEvent(evt);
