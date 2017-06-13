@@ -36,7 +36,7 @@ class Person extends Component {
     if (this.props.personProfile.person.id === undefined) {
       return <NotFound />;
     }
-    // return <div>testing...</div>
+
     const {personProfile} = this.props;
     const occupation = personProfile.person.occupation;
 
@@ -79,7 +79,10 @@ class Person extends Component {
                   fill: d => d.color,
                   Line: {
                     fill: "none",
-                    stroke: d => d.data.color,
+                    stroke: d => {
+                      while (d.__d3plus__) d = d.data;
+                      return d.color;
+                    },
                     strokeWidth: 2
                   }
                 },
