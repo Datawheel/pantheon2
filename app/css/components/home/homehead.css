@@ -46,22 +46,21 @@
 
 .home-search {
   position: relative;
-  max-width: 333px;
-  margin: 0 auto;
+  width: 380px;
+  margin: 10px auto 30px auto;
   text-align: left;
   z-index: 20;
 
   & img {
     position: absolute;
     width: 16px;
-    opacity: 0.4;
 
     @media (max-width: 750px) {
       margin: 11px 5px 6px 11px
     }
 
     @media (min-width: 751px) {
-      margin: 5px;
+      margin: 11px 5px 6px 11px
     }
   }
 
@@ -73,32 +72,32 @@
     background: none;
     line-height: 1;
     @apply --normal;
-    color: var(--colorSand);
+    color: var(--colorStone);
     letter-spacing: 0.5px;
     cursor: pointer;
+
+    border: 1px solid var(--colorStone);
+    border-radius: 20px;
+    padding: 8px 14px 5px 42px;
+    background-color: var(--colorEggshellOverlay);
 
     &:active, &:focus {
       outline: none;
     }
 
-    @media (max-width: 750px) {
-      border: 1px solid var(--colorMatza);
-      border-radius: 20px;
-      padding: 8px 14px 5px 32px;
-      background-color: var(--colorEggshellOverlay);
+    @media (max-width: 750px) {}
 
-      &:hover {
-        background-color: var(--colorKashi);
-      }
+    &:hover {
+      background-color: var(--colorKashi);
     }
 
-    @media (min-width: 751px) {
-      border-bottom: 1px solid var(--colorMatza);
+    /*@media (min-width: 751px) {
+      border-bottom: 1px solid var(--colorSlate);
       padding: 5px 28px 2px;
 
       &:hover {
         opacity: 0.7;
       }
-    }
+    }*/
   }
 }
