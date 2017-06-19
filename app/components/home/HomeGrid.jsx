@@ -1,11 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {activateSearch} from "actions/nav";
 import "css/components/home/homegrid";
-import searchSvg from "images/icons/icon-search.svg";
 
-const HomeGrid = ({activateSearch}) =>
+const HomeGrid = () =>
     <div className="profile-grid">
       <h4 className="grid-title">Explore People, Places, Occupations, and Eras</h4>
       <ul className="grid-row">
@@ -370,15 +366,6 @@ const HomeGrid = ({activateSearch}) =>
           </a>
         </li>
       </ul>
-    </div>
-  ;
+    </div>;
 
-HomeGrid.propTypes = {
-  activateSearch: PropTypes.func.isRequired
-};
-
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps, {activateSearch})(HomeGrid);
+export default HomeGrid;

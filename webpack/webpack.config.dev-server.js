@@ -10,34 +10,34 @@ var commonLoaders = [
      * Read more http://babeljs.io/docs/usage/experimental/
      */
     test: /\.js$|\.jsx$/,
-    loader: 'babel-loader',
+    loader: "babel-loader",
     // Reason why we put this here instead of babelrc
     // https://github.com/gaearon/react-transform-hmr/issues/5#issuecomment-142313637
     query: {
-      presets: ['es2015', 'react', 'stage-0'],
-      plugins: ['transform-decorators-legacy']
+      presets: ["es2015", "react", "stage-0"],
+      plugins: ["transform-decorators-legacy"]
     },
-    include: path.join(__dirname, '..', 'app'),
-    exclude: path.join(__dirname, '..', 'node_modules')
+    include: path.join(__dirname, "..", "app"),
+    exclude: path.join(__dirname, "..", "node_modules")
   },
-  { test: /\.json$/, loader: 'json-loader' },
+  {test: /\.json$/, loader: "json-loader"},
   {
     test: /\.(png|jpg|jpeg|gif|svg|ico)$/,
-    loader: 'url',
+    loader: "url",
     query: {
-        name: '[hash].[ext]',
+        name: "[hash].[ext]",
         limit: 10000,
     }
   },
   // {test: /\.(jpg|png|svg)$/, loader: "file?name=[path][name].[ext]"},
-  { test: /\.html$/, loader: 'html-loader' },
+  {test: /\.html$/, loader: "html-loader"},
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+    loader: "url-loader?limit=10000&mimetype=application/font-woff"
   },
   {
     test: /webfont\.(ttf|eot|svg)(\?.*)?$/,
-    loader: 'file-loader'
+    loader: "file-loader"
   }
 ];
 

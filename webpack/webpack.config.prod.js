@@ -48,14 +48,14 @@ var commonLoaders = [
 
 var postCSSConfig = function () {
   return [
-    require('postcss-simple-vars')(),
-    require('postcss-nesting')(),
-    require('postcss-import')(),
-    require('postcss-cssnext')({
-      browsers: ['> 1%', 'last 2 versions']
+    require("postcss-simple-vars")(),
+    require("postcss-nesting")(),
+    require("postcss-import")(),
+    require("postcss-apply")(),
+    require("postcss-cssnext")({
+      browsers: ["> 1%", "last 2 versions"]
     }),
-    require('postcss-reporter')({ clearMessages: true }),
-    require('postcss-apply')()
+    require("postcss-reporter")({clearMessages: true})
   ];
 };
 

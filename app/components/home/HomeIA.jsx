@@ -1,8 +1,7 @@
 import React from "react";
 import "css/components/home/homeIA";
-import HelpText from "components/utils/HelpText";
 
-const HomeIA = () => (
+const HomeIA = () =>
   <div className="ia">
     <h3>How Pantheon Works</h3>
     <p className="post">Pantheon helps you visually explore data of more than 50,000 biographies with a presence of <strong>14+ language editions</strong> on Wikipedia. You can explore pantheon data by looking at:</p>
@@ -26,7 +25,6 @@ const HomeIA = () => (
         </p>
       </li>
     </ul>
-  </div>
-);
+  </div>;
 
 export default HomeIA;

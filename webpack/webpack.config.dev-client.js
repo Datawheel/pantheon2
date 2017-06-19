@@ -53,11 +53,11 @@ var postCSSConfig = function () {
       path: path.join(__dirname, '..', 'app', 'css'),
       addDependencyTo: webpack // for hot-reloading
     }),
+    require('postcss-apply')(),
     require('postcss-cssnext')({
       browsers: ['> 1%', 'last 2 versions']
     }),
-    require('postcss-reporter')({ clearMessages: true }),
-    require('postcss-apply')()
+    require('postcss-reporter')({ clearMessages: true })
   ];
 };
 
