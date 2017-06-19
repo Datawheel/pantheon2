@@ -7,7 +7,7 @@ import searchSvg from "images/icons/icon-search.svg";
 
 const HomeGrid = ({activateSearch}) =>
     <div className="profile-grid">
-      <h4 className="grid-title">Start a new <a onClick={ activateSearch }><img src={searchSvg} alt="Search" />Search</a> or browse Profiles:</h4>
+      <h4 className="grid-title">Explore People, Places, Occupations, and Eras</h4>
       <ul className="grid-row">
         <li className="grid-box">
           <a href="/profile/person/ada_lovelace">
@@ -50,13 +50,13 @@ const HomeGrid = ({activateSearch}) =>
           </a>
         </li>
         <li className="grid-box">
-          <a href="/profile/person/che_guevara">
+          <a href="/profile/era/printing">
             <div className="grid-box-bg-container">
               <div className="grid-box-bg-img-mask">
-                <div className="grid-box-bg-img che pubfig"></div>
+                <div className="grid-box-bg-img print pubfig"></div>
               </div>
             </div>
-            <h3>Che Guevara</h3>
+            <h3>Printing Era</h3>
           </a>
         </li>
         <li className="grid-box">
@@ -80,7 +80,7 @@ const HomeGrid = ({activateSearch}) =>
           </a>
         </li>
         <li className="grid-box">
-          <a href="/profile/place/cara_delevingne">
+          <a href="/profile/person/cara_delevingne">
             <div className="grid-box-bg-container">
               <div className="grid-box-bg-img-mask">
                 <div className="grid-box-bg-img cara arts"></div>
@@ -220,7 +220,7 @@ const HomeGrid = ({activateSearch}) =>
           </a>
         </li>
         <li className="grid-box">
-          <a href="/profile/people/stephen_hawking">
+          <a href="/profile/person/stephen_hawking">
             <div className="grid-box-bg-container">
               <div className="grid-box-bg-img-mask">
                 <div className="grid-box-bg-img hawk scitech"></div>

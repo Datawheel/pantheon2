@@ -18,12 +18,11 @@
   }
 
   & .grid-title {
-    max-width: 500px;
-    width: 90%;
     margin: 0 auto 50px;
     @apply --sectionTitle;
     display: block;
     text-align: center;
+    font-size: 26px;
 
     & a {
       @apply --bodyLink;
@@ -126,7 +125,7 @@
       &.bair {background-image:url('/place/3435910.jpg');}
       &.aung {background-image:url('/people/2847.jpg');}
       &.krishna {background-image:url('/people/42154.jpg');}
-      &.che {background-image:url('/people/13623554.jpg');}
+      &.print {background-image:url('/era/2.jpg');}
       &.dali {background-image:url('/people/40112.jpg');}
       &.aung {background-image:url('/people/2847.jpg');}
       &.yulia {background-image:url('/people/1246843.jpg');}
