@@ -10,14 +10,17 @@ import pantheonLogoSvg from "images/logo.svg";
 const HomeHead = ({activateSearch}) =>
   <div className="home-head">
     <h1><img src={pantheonLogoSvg} alt="Pantheon" /></h1>
-    <h3>Mapping Cultural Memory</h3>
-    <div className="home-head-content">    
+    <div className="home-head-content">
       <div className="home-search">
         <img src={searchSvg} alt="Search" />
         <a onClick={activateSearch}>Search people, places, & occupations</a>
       </div>
       <div className="post">
-        <p><strong>Pantheon</strong> is an <a href="https://www.media.mit.edu/projects/pantheon-new/overview/" target="_blank">MIT Media Lab</a> research project celebrating the development of collective learning that endows our species with fantastic capacities. How has <HelpText text="cultural memory" msg="Defined as the accumulation of globally relevant historical characters." /> changed with the introduction of each of these <strong>Communication Technologies</strong>?</p>
+        <p><strong>Pantheon</strong> is a dataset, visualization tool,
+        and research effort, that enables you to explore human collective
+        memory. <strong>Pantheon</strong> gathers information on nearly 50,000 biographies to
+        help you understand the <a href="/profile/place">places</a>, <a href="/profile/person">people</a>, <a href="/profile/occupation">occupations</a> and <a href="/profile/era">eras</a>,
+        of human collective memory.</p>
       </div>
     </div>
   </div>
