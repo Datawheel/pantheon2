@@ -32,7 +32,6 @@ class Viz extends Component {
     }
     else {
       const gendersLookup = {people: "", men: "male", women: "female"};
-      console.log(gendersLookup[genderedPronoun], returnOccupation);
       return `${gendersLookup[genderedPronoun]} ${plural(returnOccupation.name)}`;
     }
   }
@@ -51,7 +50,7 @@ class Viz extends Component {
   }
 
   render() {
-    const {gender, show, years, metric, occupation, place} = this.props.explore;
+    const {gender, show, years, metric, occupation, place, yearType} = this.props.explore;
 
     const metricRange = metric.metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
     let metricSentence;
@@ -70,10 +69,12 @@ class Viz extends Component {
     }
     const occupationSubject = this.getOccupationSubject(occupation, genderedPronoun);
     const fromLocation = this.getFromLocation(place);
+    const verb = yearType === "birthyear" ? "were" : "did";
+    const predicate = yearType === "birthyear" ? "born" : "die";
 
     const title = show.type === "occupations"
       ? `What occupations were held by memorable ${occupationSubject}${fromLocation}?`
-      : `Where were memorable ${occupationSubject}${fromLocation} born?`;
+      : `Where ${verb} memorable ${occupationSubject}${fromLocation} ${predicate}?`;
 
     return (
       <div className="explore">
