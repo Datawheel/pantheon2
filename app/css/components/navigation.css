@@ -9,6 +9,11 @@
   right: 0;
   width: 100%;
 
+  /* Need to offset because home link doesn't have a left-hand-side icon */
+  & .home-link {
+    margin: 0 0 0 -21px;
+  }
+
   & .item-link {
     @apply --boldSmallCaps;
     color: var(--colorDark);
@@ -117,7 +122,7 @@
       min-width: 90px;
       text-align: left;
     }
-    
+
     @media (max-width: 750px) {
       display: none !important;
     }

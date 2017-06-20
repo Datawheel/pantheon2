@@ -66,7 +66,7 @@ class Navigation extends Component {
               </span>
             </li>
             <li className="item">
-              <a href="/explore/viz" className="item-link explore-link">Explorer</a>
+              <a href="/explore/viz" className="item-link explore-link">Vizualizations</a>
             </li>
             <li className="item">
               <a href="/explore/rankings" className="item-link rankings-link">Rankings</a>
