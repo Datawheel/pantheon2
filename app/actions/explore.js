@@ -65,7 +65,7 @@ export function getNewData(dispatch, getState) {
   // next we trigger the loading screen
   dispatch({type: "FETCH_EXPLORE_DATA"});
   const {explore} = getState();
-  const {gender, metric, page, place, occupation, rankings, sorting, years, yearType} = explore;
+  const {gender, metric, page, place, occupation, rankings, show, sorting, years, yearType} = explore;
   let apiHeaders = null;
 
   setUrl(explore);
@@ -74,9 +74,14 @@ export function getNewData(dispatch, getState) {
   let limitOffset = "";
   if (page === "rankings") {
     apiHeaders = {Prefer: "count=exact"};
-    selectFields = "name,slug,occupation{id,occupation,occupation_slug},birthyear,deathyear,gender,birthplace{id,name,slug},deathplace{id,name,slug},langs,hpi,id";
-    const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
-    limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+    selectFields = "name,slug,occupation{id,occupation,occupation_slug,industry,domain},birthyear,deathyear,gender,birthplace{id,name,slug},birthcountry{id,name,slug,region},deathplace{id,name,slug},langs,hpi,id";
+    if (show.type === "people") {
+      const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
+      limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+    }
+    // if (show.type === "occupations") {
+    //   selectFields = "name,slug,occupation{*},industry,domain,num_born,num_born_women";
+    // }
   }
 
   let placeFilter = "";
@@ -113,17 +118,42 @@ export function getNewData(dispatch, getState) {
   const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${limitOffset}${sortingFilter}${metricCutoff}${genderFilter}`;
   console.log("getNewData", dataUrl);
   return apiClient.get(dataUrl, {headers: apiHeaders}).then(res => {
+    let rankingData = res.data;
     if (page === "rankings") {
       const contentRange = res.headers["content-range"];
       const totalResults = parseInt(contentRange.split("/")[1], 10);
-      const totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
+      let totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
+      if (show.type === "occupations") {
+        rankingData = nest()
+          .key(d => d.occupation.id)
+          .rollup(leaves => ({
+            num_born: leaves.length,
+            occupation: leaves[0].occupation
+          }))
+          .entries(rankingData.filter(d => d.occupation))
+          .sort((a, b) => b.value.num_born - a.value.num_born)
+          .map(d => d.value);
+      }
+      if (show.type === "places") {
+        rankingData = nest()
+          .key(d => d.birthplace.id)
+          .rollup(leaves => ({
+            num_born: leaves.length,
+            place: leaves[0].birthplace,
+            country: leaves[0].birthcountry
+          }))
+          .entries(rankingData.filter(d => d.birthplace && d.birthcountry))
+          .sort((a, b) => b.value.num_born - a.value.num_born)
+          .map(d => d.value);
+        console.log(rankingData)
+      }
       dispatch({
         type: "CHANGE_RANKINGS_PAGES",
         pages: totalPages
       });
     }
     return dispatch({
-      data: res.data,
+      data: rankingData,
       type: "FETCH_EXPLORE_DATA_SUCCESS"
     });
   });
@@ -264,12 +294,13 @@ export function setExplorePage(page) {
     return dispatch({type: "SET_EXPLORE_PAGE", page});
   };
 }
-export function changeShowType(type) {
+export function changeShowType(type, triggerUpdate = false) {
   return (dispatch, getState) => {
     dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     dispatch({type: "CHANGE_EXPLORE_SHOW_TYPE", data: type});
     const {explore} = getState();
-    setUrl(explore);
+    if (triggerUpdate) return getNewData(dispatch, getState);
+    return setUrl(explore);
   };
 }
 

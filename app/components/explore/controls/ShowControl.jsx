@@ -63,11 +63,13 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   changeShowType: e => {
     const showType = e.target.dataset.id;
     e.preventDefault();
-    dispatch(changeShowType(showType));
+    const {page} = props;
+    const triggerUpdate = page === "rankings" ? true : false;
+    dispatch(changeShowType(showType, true));
     dispatch(changeViz(null, false));
   },
   changeShowDepth: e => {

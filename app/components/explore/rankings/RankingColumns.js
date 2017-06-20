@@ -67,28 +67,30 @@ export const COLUMNS = {
       {
         header: "Occupation",
         accessor: "occupation",
-        render: ({value, row}) => <a href={`/profile/occupation/${row["occupation_slug"]}`}>{value}</a>
+        render: ({value}) => <a href={`/profile/occupation/${value.occupation_slug}`}>{value.occupation}</a>
       },
       {
         header: "Industry",
-        accessor: "industry"
+        accessor: "occupation",
+        render: ({value}) => <span>{value.industry}</span>
       },
       {
         header: "Domain",
-        accessor: "domain"
+        accessor: "occupation",
+        render: ({value}) => <span>{value.domain}</span>
       },
       {
         header: "People",
         accessor: "num_born",
         sort: "desc",
         minWidth: 55
-      },
-      {
-        header: "% Women",
-        accessor: "num_born_women",
-        minWidth: 72,
-        render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
       }
+      // {
+      //   header: "% Women",
+      //   accessor: "num_born_women",
+      //   minWidth: 72,
+      //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
+      // }
     ],
     industries: [
       {
@@ -149,43 +151,44 @@ export const COLUMNS = {
       },
       {
         header: "Country",
-        accessor: "name",
-        render: ({value, row}) => <a href={`/profile/place/${row["slug"]}`}>{value}</a>
+        accessor: "place",
+        render: ({value}) => <a href={`/profile/place/${value.slug}`}>{value.name}</a>
       },
-      {
-        header: "Continent",
-        accessor: "continent"
-      },
-      {
-        header: "Births",
-        accessor: "num_born",
-        minWidth: 60
-      },
-      {
-        header: "Deaths",
-        accessor: "num_died",
-        minWidth: 60
-      }
+      // {
+      //   header: "Continent",
+      //   accessor: "continent"
+      // },
+      // {
+      //   header: "Births",
+      //   accessor: "num_born",
+      //   minWidth: 60
+      // },
+      // {
+      //   header: "Deaths",
+      //   accessor: "num_died",
+      //   minWidth: 60
+      // }
     ],
     places: [
       {
         header: "#",
         accessor: "born_rank_unique",
-        minWidth: 35,
         render: ({value, index}) => <span>{value ? value : index+1}</span>
       },
       {
         header: "City",
-        accessor: "name",
-        render: ({value, row}) => <a href={`/profile/place/${row["slug"]}`}>{value}</a>
+        accessor: "place",
+        render: ({value}) => <a href={`/profile/place/${value.slug}`}>{value.name}</a>
       },
       {
         header: "Country",
-        accessor: "country_name"
+        accessor: "country",
+        render: ({value}) => <a href={`/profile/place/${value.slug}`}>{value.name}</a>
       },
       {
         header: "Region",
-        accessor: "region"
+        accessor: "country",
+        render: ({value}) => <span>{value.region}</span>
       },
       {
         header: "Births",
@@ -193,11 +196,11 @@ export const COLUMNS = {
         minWidth: 60,
         sort: "desc"
       },
-      {
-        header: "Deaths",
-        accessor: "num_died",
-        minWidth: 60
-      }
+      // {
+      //   header: "Deaths",
+      //   accessor: "num_died",
+      //   minWidth: 60
+      // }
     ]
   }
 };
