@@ -74,7 +74,7 @@ export function getNewData(dispatch, getState) {
   let limitOffset = "";
   if (page === "rankings") {
     apiHeaders = {Prefer: "count=exact"};
-    selectFields = "name,slug,occupation{id,occupation,occupation_slug},birthyear,deathyear,gender,birthplace{id,name,slug},langs,hpi,id";
+    selectFields = "name,slug,occupation{id,occupation,occupation_slug},birthyear,deathyear,gender,birthplace{id,name,slug},deathplace{id,name,slug},langs,hpi,id";
     const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
     limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
   }

@@ -26,12 +26,12 @@ class Rankings extends Component {
       <div className="rankings">
         <Helmet
           htmlAttributes={{lang: "en", amp: undefined}}
-          title="Rankings - Pantheon"
+          title={`${show.type} Rankings - Pantheon`}
           meta={config.meta}
           link={config.link}
         />
         <div className="explore-head">
-          <h1 className="explore-title">Most Globally Remembered {show.type}</h1>
+          <h1 className="explore-title">{show.type}</h1>
           <h3 className="explore-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
         </div>
         <div className="explore-body">

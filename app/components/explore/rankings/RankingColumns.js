@@ -46,6 +46,12 @@ export const COLUMNS = {
         accessor: d => d.birthplace ? d.birthplace.name : null,
         render: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : <span>{"Unknown"}</span>
       },
+      {
+        id: "deathplace.name",
+        header: "Death Place",
+        accessor: d => d.deathplace ? d.deathplace.name : null,
+        render: ({value, row}) => value ? <a href={`/profile/place/${row.deathplace.slug}`}>{value}</a> : <span></span>
+      },
       {header: "L", accessor: "langs", minWidth: 35},
       {header: "HPI", accessor: "hpi", sort: "desc", maxWidth: 80}
     ]
