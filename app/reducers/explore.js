@@ -1,5 +1,6 @@
 import {combineReducers} from "redux";
-import {COUNTRY_DEPTH, OCCUPATION_DEPTH, RANKINGS_RESULTS_PER_PAGE} from "types";
+import {COUNTRY_DEPTH, OCCUPATION_DEPTH, RANKINGS_RESULTS_PER_PAGE,
+          YEAR_RANGE} from "types";
 
 const page = (state = "viz", action) => {
   if (action.type ===  "SET_EXPLORE_PAGE") return action.page;
@@ -78,7 +79,7 @@ const show = (
 };
 
 const years = (
-  state = [1900, 2000],
+  state = YEAR_RANGE,
   action
 ) => {
   switch (action.type) {

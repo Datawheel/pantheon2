@@ -19,6 +19,7 @@ export const DOMAIN_DEPTH = "DOMAIN";
 
 export const HPI_RANGE = range(4, 27);
 export const LANGS_RANGE = range(15, 20).concat(range(20, 50, 5)).concat(range(50, 100, 15)).concat(range(100, 225, 25));
+export const YEAR_RANGE = [-3501, 2015];
 
 // for rankings pages
 export const RANKINGS_RESULTS_PER_PAGE = 100;
@@ -89,7 +90,7 @@ export const SANITIZERS = {
     return {type, depth};
   },
   years: yearStr => {
-    if (!yearStr || !yearStr.includes(",")) return [1900, 2015];
+    if (!yearStr || !yearStr.includes(",")) return YEAR_RANGE;
     return [sanitizeYear(yearStr.split(",")[0]), sanitizeYear(yearStr.split(",")[1])];
   },
   metric: (metricType, cutoff) => {
