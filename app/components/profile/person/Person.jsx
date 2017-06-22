@@ -107,7 +107,7 @@ class Person extends Component {
     ];
 
     if (personProfile.person.birthcountry) {
-      sections.push({title: "In the Same Place", slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />});
+      sections.push({title: `In ${personProfile.person.birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />});
     }
 
     return (

@@ -1,13 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AnchorList from "components/utils/AnchorList";
-import styles from "css/components/profile/intro";
+import "css/components/profile/intro";
 import iconProfW from "images/globalNav/profile-w.svg";
 import {FORMATTERS} from "types";
+import {nest} from "d3-collection";
+import {plural} from "pluralize";
 
-const Intro = ({place, placeRanks}) => {
+const Intro = ({placeProfile}) => {
+  const {place, country, placeRanks, peopleBornHere, peopleDiedHere} = placeProfile;
   const {me, peers} = placeRanks;
-  const myIndex = peers.findIndex(p => p.name == me.name);
+  const myIndex = peers.findIndex(p => p.name === me.name);
+
+  const occupationsBorn = nest()
+    .key(d => d.occupation.id)
+    .rollup(leaves => ({num_born: leaves.length, occupation: leaves[0].occupation}))
+    .entries(peopleBornHere.filter(d => d.occupation_id))
+    .sort((a, b) => b.value.num_born - a.value.num_born)
+    .map(d => d.value)
+    .slice(0, 2);
+  const occupationsDied = nest()
+    .key(d => d.occupation.id)
+    .rollup(leaves => ({num_died: leaves.length, occupation: leaves[0].occupation}))
+    .entries(peopleDiedHere.filter(d => d.occupation_id))
+    .sort((a, b) => b.value.num_died - a.value.num_died)
+    .map(d => d.value)
+    .slice(0, 2);
 
   return (
     <section className="intro-section">
@@ -15,12 +33,23 @@ const Intro = ({place, placeRanks}) => {
         <div className="intro-text">
           <h3>
             <img src={iconProfW} />
-            What is the Cultural Export of {place.name}?
+            {place.name}
           </h3>
           <p>
-            {place.name} ranks {FORMATTERS.ordinal(me.born_rank_unique)} for producing culturally remembered individuals, behind <AnchorList items={peers.slice(Math.max(0, myIndex - 3), myIndex)} name={d => d.name} url={d => `/profile/place/${d.slug}/`} />.
-            Pantheon aims to help us understand global cultural development by visualizing a dataset of "globally memorable people" through their professions, birth and resting places, and Wikipedia activity.
-            &nbsp;<a href="/about/" className="deep-link">Read more about our research</a>
+            {place.name} ranks {FORMATTERS.ordinal(me.born_rank_unique)} in number of biographies on Pantheon, behind <AnchorList items={peers.slice(Math.max(0, myIndex - 3), myIndex)} name={d => d.name} url={d => `/profile/place/${d.slug}/`} />.
+            Memorable people born in {place.name} include <AnchorList items={peopleBornHere.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
+            {peopleDiedHere
+              ? <span> Memorable people who died in {place.name} include <AnchorList items={peopleDiedHere.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
+              : null}
+            {occupationsBorn
+              ? <span> {place.name} has been the birth place of many <AnchorList items={occupationsBorn} name={d => plural(d.occupation.occupation)} url={d => `/profile/occupation/${d.occupation.occupation_slug}/`} /></span>
+              : null}
+            {occupationsDied
+              ? <span> and the death place of many <AnchorList items={occupationsDied} name={d => plural(d.occupation.occupation)} url={d => `/profile/occupation/${d.occupation.occupation_slug}/`} />.</span>
+              : <span>.</span>}
+            {!place.is_country
+              ? <span> {place.name} is located in <a href={`/profile/place/${country.slug}`}>{country.name}</a>.</span>
+              : null}
           </p>
         </div>
       </div>

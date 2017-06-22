@@ -14,7 +14,7 @@ const Occupations = ({place, peopleBorn, peopleDied}) => {
     .key(d => d.occupation.id)
     .rollup(leaves => ({num_died: leaves.length, occupation: leaves[0].occupation}))
     .entries(peopleDied.filter(d => d.occupation_id))
-    .sort((a, b) => b.value.num_born - a.value.num_born)
+    .sort((a, b) => b.value.num_died - a.value.num_died)
     .map(d => d.value);
 
   return (

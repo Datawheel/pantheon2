@@ -29,7 +29,7 @@ class Place extends Component {
       return <NotFound />;
     }
     const {placeProfile, occupationProfile} = this.props;
-    const {place, country, placeRanks, peopleBornHere, peopleDiedHere, peopleBornHereAlive} = placeProfile;
+    const {place, country, peopleBornHere, peopleDiedHere, peopleBornHereAlive} = placeProfile;
     const {occupations} = occupationProfile;
 
     const tmapBornData = peopleBornHere
@@ -37,8 +37,6 @@ class Place extends Component {
       .sort((a, b) => b.langs - a.langs);
 
     const [bornBuckets, bornTicks] = calculateYearBucket(tmapBornData, d => d.birthyear);
-    console.log(bornBuckets);
-    console.log(bornTicks);
 
     tmapBornData.forEach(d => {
       d.occupation_name = d.occupation.occupation;
@@ -52,8 +50,6 @@ class Place extends Component {
       .sort((a, b) => b.langs - a.langs);
 
     const [deathBuckets, deathTicks] = calculateYearBucket(peopleDiedHere, d => d.deathyear);
-    console.log(deathBuckets);
-    console.log(deathTicks);
 
     tmapDeathData.forEach(d => {
       d.industry = d.occupation.industry;
@@ -273,7 +269,7 @@ class Place extends Component {
         <Header place={place} country={country} people={peopleBornHere} />
         <div className="about-section">
           <ProfileNav sections={sections} />
-          <Intro place={place} placeRanks={placeRanks} />
+          <Intro placeProfile={placeProfile} />
         </div>
         {sections.map((section, key) =>
           <Section
