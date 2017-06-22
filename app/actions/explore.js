@@ -145,7 +145,6 @@ export function getNewData(dispatch, getState) {
           .entries(rankingData.filter(d => d.birthplace && d.birthcountry))
           .sort((a, b) => b.value.num_born - a.value.num_born)
           .map(d => d.value);
-        console.log(rankingData)
       }
       dispatch({
         type: "CHANGE_RANKINGS_PAGES",

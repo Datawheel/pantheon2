@@ -121,7 +121,7 @@ class Person extends Component {
         <Header person={personProfile.person} pageviews={personProfile.pageviews} />
         <div className="about-section">
           <ProfileNav sections={sections} />
-          <Intro totalPageViews={totalPageViews} />
+          <Intro personProfile={personProfile} totalPageViews={totalPageViews} />
         </div>
         {sections.map((section, key) =>
           <Section

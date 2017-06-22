@@ -8,8 +8,10 @@ import {FORMATTERS} from "types";
 
 import {COLORS_DOMAIN} from "types";
 
-const Intro = ({person, totalPageViews}) => {
-
+const Intro = ({personProfile, totalPageViews}) => {
+  const {person} = personProfile;
+  const occupationRank = personProfile.occupationRank.me.occupation_rank_unique;
+  const birthcountryRank = personProfile.countryRank ? personProfile.countryRank.me.birthcountry_rank_unique : null;
   const age = person.deathyear !== null
             ? person.deathyear.id - person.birthyear.id
             : new Date().getFullYear() - person.birthyear.id,
@@ -52,6 +54,16 @@ const Intro = ({person, totalPageViews}) => {
     }
   }
 
+  // <p>
+  //   {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
+  //   {!person.birthcountry && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
+  //   {person.deathyear
+  //     ? `${person.gender ? " He" : " She"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
+  //   &nbsp;Since the start of Wikipedia, {person.gender ? "he" : "she"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
+  //   By analyzing all "globally remembered people," Pantheon aims to understand cultural development through changes in occupations, birth and death places, and Wikipedia activity.&nbsp;
+  //   <a href="/about/" className="deep-link">Read about our methods</a>
+  // </p>
+
   return (
     <section className="intro-section person">
       <div className="intro-deco">
@@ -63,20 +75,17 @@ const Intro = ({person, totalPageViews}) => {
         <PersonImage src={`/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} />
         <div className="intro-text">
           <h3>
-            <img src={iconProfW} />
-            {person.deathyear
-            ? `In Cultural Memory of ${person.name}`
-            : `The Global Cultural Production of ${person.name}`
-            }
+            <img src={iconProfW} /> {person.name}
           </h3>
           <p>
             {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
             {!person.birthcountry && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
             {person.deathyear
-              ? `${person.gender ? " He" : " She"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
-            &nbsp;Since the start of Wikipedia, {person.gender ? "he" : "she"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
-            By analyzing all "globally remembered people," Pantheon aims to understand cultural development through changes in occupations, birth and death places, and Wikipedia activity.&nbsp;
-            <a href="/about/" className="deep-link">Read about our methods</a>
+              ? `${person.name} died at ${age} years old in ${FORMATTERS.year(person.deathyear.name)}.`
+              : `${person.name} is currently ${age} years old.`}
+            &nbsp;Since 2007, {person.gender ? "his" : "her"} Wikipedia page in English has received more than {FORMATTERS.commas(totalPageViews)} page views.
+            &nbsp;{person.gender ? "His" : "Her"} biography is available in {person.langs} different languages on Wikipedia making {person.gender ? "him" : "her"} the {FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
+            {!person.birthcountry ? <span>.</span> : <span> and {FORMATTERS.ordinal(birthcountryRank)} most popular biography from {person.birthcountry.name}.</span>}
           </p>
         </div>
       </div>
