@@ -224,3 +224,15 @@ setweight(to_tsvector(place.country_code), 'B') as document,
 'place' as profile_type
 from place
 where is_country is true;
+
+INSERT INTO search (id, name, slug, weight, primary_meta, secondary_meta, document, profile_type)
+SELECT
+era.id,
+era.name,
+era.slug,
+100 as weight,
+era.start_year as primary_meta,
+era.end_year as secondary_meta,
+setweight(to_tsvector(era.name), 'A') as document,
+'era' as profile_type
+from era;
