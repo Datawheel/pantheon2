@@ -15,11 +15,11 @@ const People = ({people, occupation}) => {
   return (
     <div>
       <p>
-        Between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}, there have been {FORMATTERS.commas(people.length)} globally memorable {plural(occupation.occupation)}, with {FORMATTERS.share(shareAlive)} still alive.
-        The most globally memorable living {plural(occupation.occupation)} are <AnchorList items={people.filter(p => p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
-        { peopleDead.length
-          ? <span> By contrast, the most memorable deceased {plural(occupation.occupation)} are <AnchorList items={people.filter(p => !p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
-          : null }
+      Pantheon has information on {FORMATTERS.commas(people.length)} {plural(occupation.occupation)} born between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}. {FORMATTERS.share(shareAlive)} or ({FORMATTERS.commas(peopleAlive.length)}) are still alive.
+      The most famous living {plural(occupation.occupation)} include <AnchorList items={people.filter(p => p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
+      { peopleDead.length
+        ? <span> The most famous deceased {plural(occupation.occupation)} include <AnchorList items={people.filter(p => !p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
+        : null }
       </p>
       <div className="rank-title">
         <h3>Most famous living {plural(occupation.occupation)}</h3>

@@ -2,6 +2,7 @@ import React from "react";
 import {nest} from "d3-collection";
 import {plural} from "pluralize";
 import {FORMATTERS} from "types";
+import AnchorList from "components/utils/AnchorList";
 
 const PlacesTime = ({eras, people, occupation}) => {
   people = people
@@ -11,8 +12,8 @@ const PlacesTime = ({eras, people, occupation}) => {
     const thisEra = eras.filter(e => p.birthyear >= e.start_year && p.birthyear <= e.end_year);
     p.era = thisEra.length ? thisEra[0].id : null;
   });
-  const oldestPerson = people[people.length - 1];
-  const oldestPlace = oldestPerson.birthplace;
+  const oldestPeople = people.slice(Math.max(people.length - 3, 1));
+  // const oldestPlace = oldestPerson.birthplace;
   const youngestPerson = people[1];
   const youngestPlace = youngestPerson.birthplace;
   const peopleByEra = nest()
@@ -24,10 +25,9 @@ const PlacesTime = ({eras, people, occupation}) => {
   return (
     <div>
       <p>
-        The first globally memorable {occupation.occupation} in Pantheon, <a href={`/profile/person/${oldestPerson.slug}`}>{oldestPerson.name}</a> was born in {oldestPlace ? <span><a href={`/profile/place/${oldestPlace.slug}`}>{oldestPlace.name}</a>, <a href={`/profile/place/${oldestPerson.birthcountry.slug}`}>{oldestPerson.birthcountry.name}</a></span> : null} in {FORMATTERS.year(oldestPerson.birthyear)}&nbsp;
-        whereas the most recent globally memorable {occupation.occupation}, <a href={`/profile/person/${youngestPerson.slug}`}>{youngestPerson.name}</a> was born in {youngestPlace ? <span><a href={`/profile/place/${youngestPlace.slug}`}>{youngestPlace.name}</a>, <a href={`/profile/place/${youngestPerson.birthcountry.slug}`}>{youngestPerson.birthcountry.name}</a></span> : null} in {FORMATTERS.year(youngestPerson.birthyear)}.&nbsp;
+        The first {plural(occupation.occupation)} in Pantheon are <AnchorList items={oldestPeople} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.&nbsp;
         The concentration of {plural(occupation.occupation)} was largest during the <a href={`/profile/era/${eraWithMostPeople.slug}`}>{eraWithMostPeople.name}</a>, which lasted from {FORMATTERS.year(eraWithMostPeople.start_year)} to {FORMATTERS.year(eraWithMostPeople.end_year)}.
-        Some birth or death locations for earlier {plural(occupation.occupation)} are unknown, which may account for timelines differences below.
+        Some birth or death locations for earlier {plural(occupation.occupation)} are unknown, which may account for timeline differences below.
       </p>
     </div>
   );

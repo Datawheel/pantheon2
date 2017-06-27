@@ -170,12 +170,11 @@ class Place extends Component {
         ]
       },
       {
-        title: "Cities of Cultural Celebrity Births",
+        title: "Major cities by number of births",
         slug: "citiesBorn",
         viz: [<Geomap
                   key="geomapBirths"
                   config={{
-                    title: `Major Cities in ${place.name} for Births of Cultural Celebrities`,
                     data: geomapBornData,
                     depth: 1,
                     fitFilter: `${country.country_num}`,
@@ -197,12 +196,11 @@ class Place extends Component {
                   }} />]
       },
       {
-        title: "Cities of Cultural Celebrity Deaths",
+        title: "Major cities by number of deaths",
         slug: "citiesDeath",
         viz: [<Geomap
                   key="geomapDeaths"
                   config={{
-                    title: `Major Cities in ${place.name} for Deaths of Cultural Celebrities`,
                     data: geomapDeathData,
                     depth: 1,
                     fitFilter: `${country.country_num}`,

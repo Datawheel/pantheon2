@@ -39,7 +39,6 @@ const Header = ({occupation, people}) => {
         </div>
       </div>
       <div className="info">
-        <p className="top-desc">Cultural Production of</p>
         <h2 className="profile-type">Occupation</h2>
         <h1 className="profile-name">{plural(occupation.occupation)}</h1>
         <pre>
