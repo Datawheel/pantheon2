@@ -1,5 +1,5 @@
 import React from "react";
-import HelpText from "components/utils/HelpText";
+import {nest} from "d3-collection";
 import AnchorList from "components/utils/AnchorList";
 import "css/components/profile/intro";
 import iconProfW from "images/globalNav/profile-w.svg";
@@ -19,19 +19,22 @@ const Intro = ({era, eras, peopleBorn}) => {
   else if (nextEra) {
     nextPrevSentence = <span>This Era was followed by the <a href={`/profile/era/${nextEra.slug}`}>{nextEra.name}</a>.</span>;
   }
+  const cities = nest()
+    .key(d => d.place.id)
+    .rollup(leaves => ({num_born: leaves.length, city: leaves[0].place}))
+    .entries(peopleBorn.filter(d => d.place))
+    .sort((a, b) => b.value.num_born - a.value.num_born)
+    .map(d => d.value);
+  
   return <section className="intro-section era">
     <div className="intro-content">
       <div className="intro-text">
-        <h3>
-          <img src={iconProfW} />
-          What was the cultural production of the {era.name}?
-        </h3>
+        <h3><img src={iconProfW} /></h3>
         <p>
-          The {era.name} occured roughly between {FORMATTERS.year(era.start_year)} and {FORMATTERS.year(era.end_year)} and is defined by the rapid adoption of a new <HelpText text="communication technology" msg="See related paper, 'The medium is the memory: how communication technologies shape what we remember.'" link="https://arxiv.org/abs/1512.05020" linkTitle="The medium is the memory" />.
-          The most globally remembered individuals born in this time period are <AnchorList items={peopleBorn} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : `${d.name}`} url={d => `/profile/person/${d.slug}/`} />.&nbsp;
-          {nextPrevSentence}&nbsp;
-          Pantheon aims to help us understand global cultural development by visualizing a dataset of "globally memorable people" through their professions, birth and resting places, and Wikipedia activity.&nbsp;
-          <a href="/about/" className="deep-link">Read about our methods</a>
+          The {era.name} took place between {FORMATTERS.year(era.start_year)} and {FORMATTERS.year(era.end_year)}.
+          &nbsp;{nextPrevSentence}&nbsp;
+          The most memorable people born in this era include <AnchorList items={peopleBorn.slice(0, 3)} name={d => `${d.name}`} url={d => `/profile/person/${d.slug}/`} />.
+          The most important cities in this era were <AnchorList items={cities.slice(0, 3)} name={d => `${d.city.name} (${d.num_born})`} url={d => `/profile/place/${d.city.slug}/`} />.
         </p>
       </div>
       <ul className="items era-timeline">
