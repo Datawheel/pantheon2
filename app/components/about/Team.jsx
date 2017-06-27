@@ -104,16 +104,6 @@ const Team = () => {
               <a className="error-photo about tiffany"></a>
             </div>
             <h4 className="footer-carousel-item-title">
-              <a>tiffany</a>
-            </h4>
-            <p>Undergraduate</p>
-            <p>Undergraduate Researcher</p>
-          </li>
-          <li className="footer-carousel-item">
-            <div className="footer-carousel-item-photo">
-              <a className="error-photo about tiffany"></a>
-            </div>
-            <h4 className="footer-carousel-item-title">
               <a>Tiffany Lu</a>
             </h4>
             <p>Undergraduate</p>
