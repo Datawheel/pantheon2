@@ -11,7 +11,7 @@ class MemMetrics extends Component {
 
   componentDidMount() {
     const {person} = this.props;
-    axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}&maxResults=1&type=video&videoEmbeddable=true&key=AIzaSyB0gtWcJ2moxtxdVGkC0WvIdFvQX4nRNPs`)
+    axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=AIzaSyB0gtWcJ2moxtxdVGkC0WvIdFvQX4nRNPs`)
       .then(res => {
         const vid = res.data.items[0];
         this.setState({vid});

@@ -67,7 +67,7 @@ class Person extends Component {
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageviews={personProfile.pageviews} person={personProfile.person} />},
-      {title: "Related Videos from YouTube", slug: "related", content: <div onClick={e => { e.target.childNodes[0].style.pointerEvents = "all"; }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${personProfile.person.name}`} frameBorder="0" width="1024" height="600" /></div>},
+      {title: "Related Videos from YouTube", slug: "related", content: <div onClick={e => { e.target.childNodes[0].style.pointerEvents = "all"; }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${personProfile.person.name}%20${personProfile.person.occupation.occupation}`} frameBorder="0" width="1024" height="600" /></div>},
       {
         title: "Online Attention",
         slug: "afterlife",
