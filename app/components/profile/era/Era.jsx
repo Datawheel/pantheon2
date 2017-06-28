@@ -280,7 +280,7 @@ class Era extends Component {
         <Header era={era} />
         <div className="about-section">
           <ProfileNav sections={sections} />
-          <Intro era={era} eras={eras} peopleBorn={peopleBornInEra} />
+          <Intro era={era} eras={eras} peopleBorn={peopleBornInEra} peopleDied={peopleDiedInEra} />
         </div>
         {sections.map((section, key) =>
           <Section
