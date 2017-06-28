@@ -22,14 +22,14 @@ const People = ({people, occupation}) => {
         : null }
       </p>
       <div className="rank-title">
-        <h3>Most famous living {plural(occupation.occupation)}</h3>
+        <h3>Living {plural(occupation.occupation)}</h3>
         <a href="/explore/rankings">Go to all Rankings</a>
       </div>
       <PhotoCarousel people={peopleAlive.slice(0, 12)} rankAccessor="occupation_rank_unique" />
       { peopleDead.length
         ? <div className="rank-sec-body">
             <div className="rank-title">
-              <h3>Most famous deceased {plural(occupation.occupation)}</h3>
+              <h3>Deceased {plural(occupation.occupation)}</h3>
               <a href="/explore/rankings">Go to all Rankings</a>
             </div>
             <PhotoCarousel people={peopleDead.slice(0, 12)} rankAccessor="occupation_rank_unique" />

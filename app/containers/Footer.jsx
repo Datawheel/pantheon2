@@ -2,7 +2,7 @@ import React from "react";
 import {Link} from "react-router";
 import "css/components/navigation";
 import mlLogo from "images/globalFooter/ml_logo.png";
-import mcLogo from "images/globalFooter/CL_logo.svg";
+import clLogo from "images/globalFooter/CL_logo.png";
 import ccLogo from "images/globalFooter/cc.png";
 import fb from "images/globalFooter/facebook.svg";
 import tw from "images/globalFooter/twitter.svg";
@@ -60,7 +60,7 @@ const Footer = () =>
           <ul className="items authors">
             <li>
               <a href="http://macroconnections.media.mit.edu/">
-              <img src={mcLogo} alt="Collective Learning website" />
+              <img src={clLogo} alt="Collective Learning website" />
               </a>
             </li>
             <li>
