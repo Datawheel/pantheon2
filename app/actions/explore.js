@@ -126,7 +126,16 @@ export function getNewData(dispatch, getState) {
       console.log("\n\n\n", place, show)
       if (show.type === "occupations") {
         rankingData = nest()
-          .key(d => d.occupation.id)
+          .key(d => {
+            switch (show.depth) {
+              case "domains":
+                return d.occupation.domain;
+              case "industries":
+                return d.occupation.industry;
+              default:
+                return d.occupation.id;
+            }
+          })
           .rollup(leaves => ({
             num_born: leaves.length,
             occupation: leaves[0].occupation

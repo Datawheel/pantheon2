@@ -101,23 +101,25 @@ export const COLUMNS = {
       },
       {
         header: "Industry",
-        accessor: "industry"
+        accessor: "occupation",
+        render: ({value}) => <span>{value.industry}</span>
       },
       {
         header: "Domain",
-        accessor: "domain"
+        accessor: "occupation",
+        render: ({value}) => <span>{value.domain}</span>
       },
       {
         header: "People",
         accessor: "num_born",
         sort: "desc"
       },
-      {
-        header: "% Women",
-        accessor: "num_born_women",
-        minWidth: 72,
-        render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
-      }
+      // {
+      //   header: "% Women",
+      //   accessor: "num_born_women",
+      //   minWidth: 72,
+      //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
+      // }
     ],
     domains: [
       {
@@ -127,19 +129,20 @@ export const COLUMNS = {
       },
       {
         header: "Domain",
-        accessor: "domain"
+        accessor: "occupation",
+        render: ({value}) => <span>{value.domain}</span>
       },
       {
         header: "People",
         accessor: "num_born",
         sort: "desc"
       },
-      {
-        header: "% Women",
-        accessor: "num_born_women",
-        minWidth: 72,
-        render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
-      }
+      // {
+      //   header: "% Women",
+      //   accessor: "num_born_women",
+      //   minWidth: 72,
+      //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
+      // }
     ]
   },
   places: {
