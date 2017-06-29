@@ -123,7 +123,6 @@ export function getNewData(dispatch, getState) {
       const contentRange = res.headers["content-range"];
       const totalResults = parseInt(contentRange.split("/")[1], 10);
       let totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
-      console.log("\n\n\n", place, show)
       if (show.type === "occupations") {
         rankingData = nest()
           .key(d => {
