@@ -151,18 +151,24 @@ export const COLUMNS = {
       },
       {
         header: "Country",
-        accessor: "place",
+        accessor: "country",
         render: ({value}) => <a href={`/profile/place/${value.slug}`}>{value.name}</a>
       },
-      // {
-      //   header: "Continent",
-      //   accessor: "continent"
-      // },
-      // {
-      //   header: "Births",
-      //   accessor: "num_born",
-      //   minWidth: 60
-      // },
+      {
+        header: "Region",
+        accessor: "country",
+        render: ({value}) => <span>{value.region}</span>
+      },
+      {
+        header: "Continent",
+        accessor: "country",
+        render: ({value}) => <span>{value.continent}</span>
+      },
+      {
+        header: "Births",
+        accessor: "num_born",
+        minWidth: 60
+      }
       // {
       //   header: "Deaths",
       //   accessor: "num_died",

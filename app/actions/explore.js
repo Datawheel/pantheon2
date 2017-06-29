@@ -74,7 +74,7 @@ export function getNewData(dispatch, getState) {
   let limitOffset = "";
   if (page === "rankings") {
     apiHeaders = {Prefer: "count=exact"};
-    selectFields = "name,slug,occupation{id,occupation,occupation_slug,industry,domain},birthyear,deathyear,gender,birthplace{id,name,slug},birthcountry{id,name,slug,region},deathplace{id,name,slug},langs,hpi,id";
+    selectFields = "name,slug,occupation{id,occupation,occupation_slug,industry,domain},birthyear,deathyear,gender,birthplace{id,name,slug},birthcountry{id,name,slug,continent,region},deathplace{id,name,slug},langs,hpi,id";
     if (show.type === "people") {
       const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
       limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
@@ -123,6 +123,7 @@ export function getNewData(dispatch, getState) {
       const contentRange = res.headers["content-range"];
       const totalResults = parseInt(contentRange.split("/")[1], 10);
       let totalPages = Math.ceil(totalResults / RANKINGS_RESULTS_PER_PAGE);
+      console.log("\n\n\n", place, show)
       if (show.type === "occupations") {
         rankingData = nest()
           .key(d => d.occupation.id)
@@ -136,7 +137,7 @@ export function getNewData(dispatch, getState) {
       }
       if (show.type === "places") {
         rankingData = nest()
-          .key(d => d.birthplace.id)
+          .key(d => show.depth === "countries" ? d.birthcountry.id : d.birthplace.id)
           .rollup(leaves => ({
             num_born: leaves.length,
             place: leaves[0].birthplace,
@@ -307,8 +308,9 @@ export function changeShowDepth(depth) {
   return (dispatch, getState) => {
     dispatch({type: "CHANGE_RANKING_PAGE", data: 0});
     dispatch({type: "CHANGE_EXPLORE_SHOW_DEPTH", data: depth});
-    const {explore} = getState();
-    setUrl(explore);
+    // const {explore} = getState();
+    // setUrl(explore);
+    getNewData(dispatch, getState);
   };
 }
 
