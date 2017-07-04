@@ -237,6 +237,18 @@ const yearType = (
   }
 };
 
+const searchTerm = (
+  state = "",
+  action
+) => {
+  switch (action.type) {
+    case "CHANGE_RANKING_SEARCH":
+      return action.data;
+    default:
+      return state;
+  }
+};
+
 const exploreReducer = combineReducers({
   data,
   gender,
@@ -251,7 +263,8 @@ const exploreReducer = combineReducers({
   typeNesting,
   viz,
   years,
-  yearType
+  yearType,
+  searchTerm
 });
 
 export default exploreReducer;

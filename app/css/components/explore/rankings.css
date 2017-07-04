@@ -25,12 +25,15 @@
   }
 }
 
-.ranking-pagination {
+.ranking-head {
   width: 100%;
-  padding: 10px 0 7px;
-  height: 30px;
   display: flex;
   justify-content: space-between;
+}
+
+.ranking-pagination {
+  padding: 10px 0 7px;
+  height: 30px;
 
   & span {
     @apply --smallCaps;

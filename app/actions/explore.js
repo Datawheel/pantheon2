@@ -65,7 +65,8 @@ export function getNewData(dispatch, getState) {
   // next we trigger the loading screen
   dispatch({type: "FETCH_EXPLORE_DATA"});
   const {explore} = getState();
-  const {gender, metric, page, place, occupation, rankings, show, sorting, years, yearType} = explore;
+  const {gender, metric, page, place, occupation, rankings, searchTerm, show,
+          sorting, years, yearType} = explore;
   let apiHeaders = null;
 
   setUrl(explore);
@@ -77,7 +78,7 @@ export function getNewData(dispatch, getState) {
     selectFields = "name,slug,occupation{id,occupation,occupation_slug,industry,domain},birthyear,deathyear,gender,birthplace{id,name,slug},birthcountry{id,name,slug,continent,region},deathplace{id,name,slug},langs,hpi,id";
     if (show.type === "people") {
       const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
-      limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}`;
+      limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}&name=ilike.${searchTerm}*`;
     }
     // if (show.type === "occupations") {
     //   selectFields = "name,slug,occupation{*},industry,domain,num_born,num_born_women";
@@ -478,8 +479,17 @@ export function changeViz(vizType, triggerUpdate = true) {
 export function changePage(direction) {
   return (dispatch, getState) => {
     const {explore} = getState();
-    console.log("page:", explore.rankings.page);
     dispatch({type: "CHANGE_RANKING_PAGE", data: explore.rankings.page + direction});
+    return getNewData(dispatch, getState);
+  };
+}
+
+export function changeSearch(searchTerm) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: "CHANGE_RANKING_SEARCH",
+      data: searchTerm
+    });
     return getNewData(dispatch, getState);
   };
 }

@@ -16,9 +16,8 @@ class RankingPagination extends Component {
     const totalNumPages = rankings.pages;
 
     return (
-      <div className="ranking-pagination">
-        <a href="#" onClick={currentPage > 0 ? this.changePage : null}>Prev</a>
-        <a href="#" onClick={currentPage < (totalNumPages - 1) ? this.changePage : null}>Next</a>
+      <div className="ranking-result-count">
+        <span>page {rankings.page + 1} of {rankings.pages}</span>
       </div>
     );
   }

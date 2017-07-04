@@ -4,6 +4,8 @@ import ReactTable from "react-table";
 import "css/components/explore/explore";
 import {RANKINGS_RESULTS_PER_PAGE} from "types";
 import RankingPagination from "components/explore/rankings/RankingPagination";
+import RankingResultCount from "components/explore/rankings/RankingResultCount";
+import RankingSearch from "components/explore/rankings/RankingSearch";
 import {sortRankingsTable, updateRankingsTable} from "actions/rankings";
 import {getNewData} from "actions/explore";
 import {COLUMNS} from "components/explore/rankings/RankingColumns";
@@ -53,7 +55,11 @@ class RankingTable extends Component {
 
     return (
       <div className="ranking-table-container">
-        <RankingPagination />
+        <div className="ranking-head">
+          <RankingPagination />
+          <RankingResultCount />
+          <RankingSearch />
+        </div>
         <ReactTable
           className="ranking-table -highlight"
           columns={columns}
