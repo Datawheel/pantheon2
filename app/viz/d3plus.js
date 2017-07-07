@@ -89,7 +89,7 @@ export default {
 
   sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
   tiles: false,
-  time: "yearBucket",
+  // time: "yearBucket",
   timeline: false,
   timeFilter: () => true,
 

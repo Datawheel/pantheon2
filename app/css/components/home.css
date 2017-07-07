@@ -157,6 +157,8 @@
         }
       }
 
+      /* eras = [-500, 1450, 1600, 1900, 1950, 1995] */
+
       & .era-img {
         background-size: contain;
         background-position: 50% 100%;
@@ -177,8 +179,8 @@
       }
 
       &.computer {
-        right: 24%;
-        height: 140px;
+        right: 10.1%;
+        height: 175px;
 
         & .era-img {
           background-image: url("../../images/home/smartphone.gif");
@@ -192,8 +194,8 @@
       }
 
       &.television {
-        right: 39.2%;
-        height: 240px;
+        right: 42%;
+        height: 300px;
 
         & .era-img {
           margin-left: 0;
@@ -207,8 +209,8 @@
       }
 
       &.film-radio {
-        right: 46.5%;
-        height: 330px;
+        right: 52.5%;
+        height: 220px;
 
         & .era-img {
           margin-left: 25px;
@@ -222,7 +224,7 @@
       }
 
       &.newspaper {
-        right: 63.6%;
+        right: 70.6%;
         height: 150px;
 
         & .era-img {
@@ -237,7 +239,7 @@
       }
 
       &.printing {
-        right: 68.2%;
+        right: 76.6%;
         height: 250px;
 
         & .era-img {
@@ -253,7 +255,7 @@
       }
 
       &.scribal {
-        right: 88%;
+        right: 94%;
         height: 200px;
 
         & .era-img {

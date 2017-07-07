@@ -36,8 +36,6 @@ class Home extends Component {
     let stackedData = [];
 
     const [yearBuckets, ticks] = calculateYearBucket(personData);
-    console.log(yearBuckets);
-    console.log(ticks);
 
     if (personData) {
       stackedData = personData
@@ -59,8 +57,6 @@ class Home extends Component {
         return obj;
       }, {});
     }
-
-    // const eras = [-500, 1450, 1600, 1900, 1950, 1995];
 
     return (
       <div className="home-container">

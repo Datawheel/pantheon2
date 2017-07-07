@@ -3,8 +3,18 @@ import {extent, histogram, min, max, range} from "d3-array";
 
 export function calculateYearBucket(data = [], accessor = d => d.birthyear) {
 
-  const [minYear, maxYear] = extent(data, accessor);
-  const years = data.map(d => maxYear - accessor(d));
+  let [minYear, maxYear] = extent(data, accessor);
+  const earlyYears = minYear < -500 ? minYear + 500 : 1;
+  const laterYears = maxYear > 2000 ? maxYear - 2000 : 1;
+  if (minYear < -500) minYear = -500;
+  if (maxYear > 2000) maxYear = 2000;
+  const accessorClamp = d => {
+    let y = accessor(d);
+    if (y < minYear) y = minYear;
+    if (y > maxYear) y = maxYear;
+    return y;
+  };
+  const years = data.map(d => maxYear - accessorClamp(d));
   const buckets = 50;
 
   function linspace(min, max, num) {
@@ -20,35 +30,21 @@ export function calculateYearBucket(data = [], accessor = d => d.birthyear) {
   const h = histogram()
     .domain([0, big])
     .thresholds(a)
-    (years);
+    (years).reverse();
 
   data.forEach(d => {
-    const ago = maxYear - accessor(d);
-    const i = a.indexOf(a.filter(x => x >= ago)[0]);
-    const b = h[i];
-    d.yearWeight = 1 / (b.x1 - b.x0);
-    d.yearBucket = a.length - i;
+    const ago = maxYear - accessorClamp(d);
+    const b = !ago ? h[h.length - 1] : h.find(group => group.x0 <= ago);
+    d.yearWeight = b.x1 === b.x0 ? 1 / earlyYears : !b.x0 ? 1 / laterYears : 1 / (b.x1 - b.x0);
+    d.yearBucket = h.indexOf(b);
   });
 
-  const labels = h
-    .map(b => FORMATTERS.year(Math.round(maxYear - (b.x0 + (b.x1 - b.x0) / 2))));
-
-  if (!labels.includes(FORMATTERS.year(minYear))) {
-    data.push(Object.assign({}, data[0] || {}, {
-      yearWeight: 0,
-      yearBucket: 0
-    }));
-    labels.push(FORMATTERS.year(minYear));
-  }
-  else {
-    data.forEach(d => {
-      d.yearBucket--;
-    });
-  }
-  labels.reverse();
+  const labels = h.map(b => FORMATTERS.year(Math.round(maxYear - (b.x0 + (b.x1 - b.x0) / 2))));
 
   const divisions = 5;
-  const ticks = labels.map((d, i) => i).filter(i => !i || i === labels.length - 1 || i <= labels.length - divisions && !(i % divisions));
+  const ticks = labels
+    .map((d, i) => i)
+    .filter(i => !i || i === labels.length - 1 || i <= labels.length - divisions && !(i % divisions));
 
   return [labels, ticks];
 
