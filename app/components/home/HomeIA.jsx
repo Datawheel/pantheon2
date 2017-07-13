@@ -21,7 +21,7 @@ const HomeIA = () =>
       <li className="item ia-top-item ranks">
         <a href="/explore/rankings"><h2 className="ranks">Rankings</h2></a>
         <p>
-        Rank people, places, and occupations. <a href="/explore/rankings" className="deep-link">View Rankings</a>
+        Rank <a href="/profile/person">people</a>, <a href="/profile/place">places</a>, and <a href="/profile/occupation">occupations</a>. <a href="/explore/rankings" className="deep-link">View Rankings</a>
         </p>
       </li>
     </ul>
