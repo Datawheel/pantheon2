@@ -48,7 +48,7 @@ export default function checkId() {
       candidates = ["india", "united_kingdom", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_d'ivoire_(ivory_coast)", "dallas", "philippines"];
     }
     else if (path.includes("occupation")) {
-      candidates = ["architect", "social_activist", "politician", "pilot", "physicist", "biologist", "astronomer", "athlete", "basketball_player", "baseball_player", "chef", "celebrity", "game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
+      candidates = ["architect", "social_activist", "political_leaders", "pilot", "physicist", "biologist", "astronomer", "athlete", "basketball_player", "baseball_player", "chef", "celebrity", "game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];
     }
     else if (path.includes("person")) {
       candidates = ["joseph_cook", "pope_paschal_ii", "nick_drake", "lewis_carroll", "eddie_irvine", "manfred,_king_of_sicily", "julius_caesar", "john_l._hall", "jenny_lind", "henri_nestle", "raif_badawi", "emma_shapplin", "beyonce", "jim_morrison"];
