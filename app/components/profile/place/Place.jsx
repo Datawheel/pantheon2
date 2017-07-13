@@ -187,7 +187,7 @@ class Place extends Component {
                       stroke: () => "#4A4948",
                       strokeWidth: 1,
                       Path: {
-                        fill: d => d.id === `${country.country_num}` ? "#ccc" : "transparent",
+                        fill: d => parseInt(d.id, 10) === parseInt(country.country_num, 10) ? "#ccc" : "transparent",
                         stroke: "#4A4948",
                         strokeWidth: 0.75
                       }
@@ -213,7 +213,7 @@ class Place extends Component {
                       stroke: () => "#4A4948",
                       strokeWidth: 1,
                       Path: {
-                        fill: d => d.id === `${country.country_num}` ? "#ccc" : "transparent",
+                        fill: d => parseInt(d.id, 10) === parseInt(country.country_num, 10) ? "#ccc" : "transparent",
                         stroke: "#4A4948",
                         strokeWidth: 0.75
                       }
