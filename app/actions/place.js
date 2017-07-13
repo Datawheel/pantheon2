@@ -76,7 +76,7 @@ export function fetchPeopleDiedHere(store) {
     const placeName = placeIdRes.data[0].name;
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "deathcountry" : "deathplace";
-    return makePlaceRequest("get", null, null, `/person?${placeColumn}=eq.${placeId}&order=langs.desc&select=deathplace{id,name,slug,lat_lon},occupation{*},occupation_id:occupation,*`);
+    return makePlaceRequest("get", null, null, `/person?${placeColumn}=eq.${placeId}&order=hpi.desc.nullslast&select=deathplace{id,name,slug,lat_lon},occupation{*},occupation_id:occupation,*`);
   });
 
   return {
@@ -91,7 +91,7 @@ export function fetchPeopleBornHereAlive(store) {
     const placeName = placeIdRes.data[0].name;
     const placeCountryName = placeIdRes.data[0].country_name;
     const placeColumn = placeName === placeCountryName ? "birthcountry" : "birthplace";
-    return makePlaceRequest("get", null, null, `/person?${placeColumn}=eq.${placeId}&limit=3&order=langs.desc&alive=is.true`);
+    return makePlaceRequest("get", null, null, `/person?${placeColumn}=eq.${placeId}&limit=3&order=hpi.desc.nullslast&alive=is.true`);
   });
 
   return {
