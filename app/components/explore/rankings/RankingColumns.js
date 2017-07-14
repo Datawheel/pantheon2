@@ -171,12 +171,12 @@ export const COLUMNS = {
         header: "Births",
         accessor: "num_born",
         minWidth: 60
+      },
+      {
+        header: "Deaths",
+        accessor: "num_died",
+        minWidth: 60
       }
-      // {
-      //   header: "Deaths",
-      //   accessor: "num_died",
-      //   minWidth: 60
-      // }
     ],
     places: [
       {
@@ -205,11 +205,11 @@ export const COLUMNS = {
         minWidth: 60,
         sort: "desc"
       },
-      // {
-      //   header: "Deaths",
-      //   accessor: "num_died",
-      //   minWidth: 60
-      // }
+      {
+        header: "Deaths",
+        accessor: "num_died",
+        minWidth: 60
+      }
     ]
   }
 };

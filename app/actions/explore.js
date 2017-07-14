@@ -75,7 +75,7 @@ export function getNewData(dispatch, getState) {
   let limitOffset = "";
   if (page === "rankings") {
     apiHeaders = {Prefer: "count=exact"};
-    selectFields = "name,slug,occupation{id,occupation,occupation_slug,industry,domain},birthyear,deathyear,gender,birthplace{id,name,slug},birthcountry{id,name,slug,continent,region},deathplace{id,name,slug},langs,hpi,id";
+    selectFields = "name,slug,occupation{id,occupation,occupation_slug,industry,domain},birthyear,deathyear,gender,birthplace{id,name,slug},birthcountry{id,name,slug,continent,region},deathplace{id,name,slug},deathcountry{id,name,slug,continent,region},langs,hpi,id";
     if (show.type === "people") {
       const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
       limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}&name=ilike.${searchTerm}*`;
@@ -145,7 +145,17 @@ export function getNewData(dispatch, getState) {
           .map(d => d.value);
       }
       if (show.type === "places") {
-        rankingData = nest()
+        const deathPlacesData = nest()
+          .key(d => show.depth === "countries" ? d.deathcountry.id : d.deathplace.id)
+          .rollup(leaves => ({
+            num_died: leaves.length,
+            place: leaves[0].deathplace,
+            country: leaves[0].deathcountry
+          }))
+          .entries(rankingData.filter(d => d.deathplace && d.deathcountry))
+          .sort((a, b) => b.value.num_died - a.value.num_died)
+          .map(d => d.value);
+        const birthPlacesData = nest()
           .key(d => show.depth === "countries" ? d.birthcountry.id : d.birthplace.id)
           .rollup(leaves => ({
             num_born: leaves.length,
@@ -155,6 +165,8 @@ export function getNewData(dispatch, getState) {
           .entries(rankingData.filter(d => d.birthplace && d.birthcountry))
           .sort((a, b) => b.value.num_born - a.value.num_born)
           .map(d => d.value);
+        const mergeId = show.depth === "countries" ? "country" : "place";
+        rankingData = birthPlacesData.map(bplace => Object.assign(bplace, deathPlacesData.find(dplace => dplace[mergeId].slug === bplace[mergeId].slug)));
       }
       dispatch({
         type: "CHANGE_RANKINGS_PAGES",
