@@ -67,6 +67,7 @@ export function getNewData(dispatch, getState) {
   const {explore} = getState();
   const {gender, metric, page, place, occupation, rankings, searchTerm, show,
           sorting, years, yearType} = explore;
+  const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
   let apiHeaders = null;
 
   setUrl(explore);
@@ -77,7 +78,6 @@ export function getNewData(dispatch, getState) {
     apiHeaders = {Prefer: "count=exact"};
     selectFields = "name,slug,occupation{id,occupation,occupation_slug,industry,domain},birthyear,deathyear,gender,birthplace{id,name,slug},birthcountry{id,name,slug,continent,region},deathplace{id,name,slug},deathcountry{id,name,slug,continent,region},langs,hpi,id";
     if (show.type === "people") {
-      const offset = rankings.page * RANKINGS_RESULTS_PER_PAGE;
       limitOffset = `&limit=${RANKINGS_RESULTS_PER_PAGE}&offset=${offset}&name=ilike.${searchTerm}*`;
     }
     // if (show.type === "occupations") {
@@ -143,6 +143,8 @@ export function getNewData(dispatch, getState) {
           .entries(rankingData.filter(d => d.occupation))
           .sort((a, b) => b.value.num_born - a.value.num_born)
           .map(d => d.value);
+        totalPages = Math.ceil(rankingData.length / RANKINGS_RESULTS_PER_PAGE);
+        rankingData = rankingData.slice(offset);
       }
       if (show.type === "places") {
         const deathPlacesData = nest()
@@ -167,6 +169,8 @@ export function getNewData(dispatch, getState) {
           .map(d => d.value);
         const mergeId = show.depth === "countries" ? "country" : "place";
         rankingData = birthPlacesData.map(bplace => Object.assign(bplace, deathPlacesData.find(dplace => dplace[mergeId].slug === bplace[mergeId].slug)));
+        totalPages = Math.ceil(rankingData.length / RANKINGS_RESULTS_PER_PAGE);
+        rankingData = rankingData.slice(offset);
       }
       dispatch({
         type: "CHANGE_RANKINGS_PAGES",

@@ -7,18 +7,28 @@ class RankingPagination extends Component {
 
   constructor(props) {
     super(props);
-    this.changePage = this.props.changePage.bind(this);
+  }
+
+  changePage(e) {
+    e.preventDefault();
+    const direction = e.target.innerText.toLowerCase() === "next" ? 1 : -1;
+    animateScroll.scrollToTop({duration: 500});
+    this.props.changePage(direction);
   }
 
   render() {
     const {rankings} = this.props;
     const currentPage = rankings.page;
     const totalNumPages = rankings.pages;
+    const changePage = this.changePage.bind(this);
 
     return (
       <div className="ranking-pagination">
-        <a href="#" onClick={currentPage > 0 ? this.changePage : null}>Prev</a>
-        <a href="#" onClick={currentPage < (totalNumPages - 1) ? this.changePage : null}>Next</a>
+        {currentPage > 0
+          ? <a href="#" onClick={changePage}>Prev</a> : <span>Prev</span>}
+        &nbsp;|&nbsp;
+        {currentPage < totalNumPages - 1
+          ? <a href="#" onClick={changePage}>Next</a> : <span>Next</span>}
       </div>
     );
   }
@@ -31,10 +41,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  changePage: e => {
-    e.preventDefault();
-    animateScroll.scrollToTop({duration: 500});
-    const direction = e.target.innerText.toLowerCase() === "next" ? 1 : -1;
+  changePage: direction => {
     dispatch(changePage(direction));
   }
 });
