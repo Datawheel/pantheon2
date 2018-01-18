@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="9px" height="16px" viewBox="0 0 9 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-facebook</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.599999964">
+        <g id="EXPLORER---all-domains,-all-locations" transform="translate(-170.000000, -575.000000)" fill="#363636">
+            <g id="Group-13">
+                <g id="PANEL" transform="translate(26.000000, 94.000000)">
+                    <g id="Group-5" transform="translate(0.000000, 475.583333)">
+                        <g id="Group-38" transform="translate(106.250000, 6.250000)">
+                            <g id="icon-facebook" transform="translate(38.677536, 0.000000)">
+                                <path d="M7.57211538,0.105168269 L7.57211538,2.41887019 L6.19616386,2.41887019 C5.69369324,2.41887019 5.35481771,2.52403846 5.17953726,2.734375 C5.00425681,2.94471154 4.91661659,3.26021635 4.91661659,3.68088942 L4.91661659,5.33728966 L7.48447516,5.33728966 L7.14267829,7.9314403 L4.91661659,7.9314403 L4.91661659,14.5833333 L2.23482572,14.5833333 L2.23482572,7.9314403 L0,7.9314403 L0,5.33728966 L2.23482572,5.33728966 L2.23482572,3.42673277 C2.23482572,2.33999399 2.53864517,1.49718717 3.14628405,0.8983123 C3.75392294,0.299437433 4.56313435,0 5.57391827,0 C6.43279247,0 7.09885817,0.0350560897 7.57211538,0.105168269 L7.57211538,0.105168269 Z" id="Shape"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
