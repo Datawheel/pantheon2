@@ -1,0 +1,263 @@
+:root {
+
+  --fontBody:                'Amiko', Helvetica, Arial, sans-serif;
+  --fontTitle:               'Marcellus', Times, serif;
+
+  --sizeXXS:                 0.9rem;
+  --sizeXS:                  1.1rem;
+  --sizeSmall:               1.2rem;
+  --sizeBody:                1.4rem;
+  --sizeMobileSmall:         1.5rem;
+  --sizeMedium:              1.6rem;
+  --sizeML:                  1.7rem;
+  --sizeLarge:               2.1rem;
+  --sizeXL:                  3.3rem;
+  --sizeXXL:                 3.6rem;
+
+  --pageTitle {
+    font-size: var(--sizeXXL);
+    font-weight: 600;
+    line-height: calc(1.3 * var(--sizeXXL));
+  }
+
+  --priTitle {
+    color: var(--colorDark);
+    font-family: var(--fontTitle);
+    text-transform: uppercase;
+    font-size: var(--sizeXL);
+    font-weight: 400;
+    letter-spacing: 0.3rem;
+  }
+
+  --priLabel {
+    color: var(--colorDark);
+    font-size: var(--sizeBody);
+    font-weight: 400;
+    letter-spacing: .14rem;
+    text-transform: uppercase;
+  }
+
+  --secLabel {
+    color: var(--colorTan);
+    letter-spacing: .07rem;
+    font-weight: 400;
+
+    @media (min-width: 751px) {
+      font-size: var(--sizeBody);
+    }
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeMedium);
+    }
+  }
+
+  --contextLabel {
+    color: var(--colorTan);
+    font-weight: 600;
+    letter-spacing: .05rem;
+    text-transform: uppercase;
+
+    @media (min-width: 751px) {
+      font-size: var(--sizeSmall);
+    }
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeMedium);
+    }
+  }
+
+  --sectionTitle {
+    font-family: var(--fontBody);
+    font-size: var(--sizeML);
+    font-weight: 400;
+    line-height: calc(1.3 * var(--fontBody));
+    letter-spacing: 0;
+  }
+
+  --subHeading {
+    font-size: var(--sizeLarge);
+    font-weight: 700;
+    line-height: 1.725rem;
+  }
+
+  --normal {
+    font-size: var(--sizeBody);
+    font-weight: 400;
+    line-height: calc(1.7 * var(--sizeBody));
+  }
+
+  --small {
+    font-size: var(--sizeSmall);
+    font-weight: 400;
+  }
+
+  --bodyText {
+    font-size: var(--sizeSmall);
+    line-height: calc(2 * var(--sizeSmall));
+    margin: 0;
+    font-weight: 400;
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeBody);
+      line-height: calc(2 * var(--sizeBody));
+    }
+  }
+
+  --bodyLink {
+    font-weight: 700;
+    color: currentColor;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+      border-bottom: 1px solid currentColor;
+    }
+  }
+
+  --deepLink {
+
+  }
+
+  --smallCaps {
+    font-size: var(--sizeSmall);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .07rem;
+  }
+
+  --profileIntroTitle {
+    font-size: var(--sizeSmall);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .07rem;
+    line-height: calc(1.75 * var(--sizeSmall));
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeMobileSmall);
+      line-height: calc(1.6 * var(--sizeMobileSmall));
+    }
+  }
+
+  --boldSmallCaps {
+    font-size: var(--sizeSmall);
+    font-weight: 600;
+    line-height: var(--sizeSmall);
+    text-transform: uppercase;
+    letter-spacing: .1rem;
+  }
+
+  --dropdownLink {
+    &::after {
+      content: '';
+      position: relative;
+      display: inline-block;
+      height: 6px;
+      width: 12px;
+      margin: 0 0 1px 2px;
+      background-image: url("/images/ui/tri-down.svg");
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
+
+  --exploreControlHeader {
+    color: var(--colorEggshell);
+    font-size: var(--sizeSmall);
+    letter-spacing: 0.05rem;
+    font-weight: 400;
+  }
+
+  --exploreControlTitles {
+    color: var(--colorStone);
+    font-size: var(--sizeXS);
+    line-height: calc(1.3 * var(--sizeXS));
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  --exploreControlLabels {
+    font-size: var(--sizeXXS);
+    color: var(--colorSlate);
+    font-weight: 400;
+    letter-spacing: .07rem;
+    line-height: var(--sizeXXS);
+    text-transform: uppercase;
+  }
+
+  --exploreControlActiveLink {
+    color: var(--colorDark);
+    font-weight: 700;
+    border-bottom: 2px solid var(--colorCtrlShape);
+  }
+
+  --exploreControlActiveLinkHover {
+    border-bottom: 2px solid var(--colorCtrlShape);
+    cursor: default;
+  }
+
+  --exploreControlInputText {
+    color: var(--colorCtrl);
+    font-family: var(--fontBody);
+    font-weight: 600;
+    font-size: var(--sizeSmall);
+    line-height: var(--sizeBody);
+  }
+
+  --profileNav {
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+
+    @media (min-width: 751px) {
+      font-size: var(--sizeSmall);
+      font-weight: 700;
+      line-height: var(--sizeSmall);
+    }
+
+    @media (max-width: 750px) {
+      font-size: var(--sizeBody);
+      line-height: var(--sizeBody);
+      font-weight: 600;
+    }
+  }
+
+  --calloutText {
+    color: var(--colorTan);
+    font-size: var(--sizeLarge);
+    font-weight: 400;
+    line-height: var(--sizeLarge);
+    letter-spacing: 0.057rem;
+  }
+
+  --profileSectionTitle {
+    font-size: var(--sizeML);
+    font-weight: 400;
+    line-height: var(--sizeML);
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+  }
+
+  --profileVizTitle {
+    @apply --sectionTitle;
+    color: var(--colorBlackhole);
+  }
+
+  --searchResults {
+    font-size: var(--sizeMedium);
+    font-weight: 400;
+    letter-spacing: 0.05rem;
+    line-height: 1.7rem;
+  }
+
+  --panelInput {
+    height: 30px;
+    padding: 7px 5px 3px;
+    appearance: none;
+    border: 1px solid var(--colorTan);
+    box-sizing: border-box;
+    border-radius: 0;
+    background-color: rgba(255,255,255,0);
+    background-repeat: no-repeat;
+  }
+}

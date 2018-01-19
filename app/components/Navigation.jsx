@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
+import "components/Navigation.css";
 
 class Navigation extends Component {
 
@@ -74,7 +75,7 @@ class Navigation extends Component {
             </li>
             <li className="item home-link">
               <a href="/" className="home">
-                <img className="logo" src="/images/logo.svg" alt="Pantheon" />
+                <img className="logo" src="/images/logos/logo_pantheon.svg" alt="Pantheon" />
               </a>
             </li>
             <li className="item">
@@ -109,7 +110,7 @@ class Navigation extends Component {
         <div id="m-navigation" className="global-nav">
           <div className="logo-container">
             <a href="/" className="home">
-              <img className="logo" src="/images/logo.svg" alt="Pantheon" />
+              <img className="logo" src="/images/logos/logo_pantheon.svg" alt="Pantheon" />
             </a>
             <span className="close-btn" onClick={this.closeMobileNav}>
               <img src="/images/icons/icon-close.svg" alt="Close navigation." />
