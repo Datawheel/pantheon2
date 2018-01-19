@@ -24,16 +24,16 @@ import Home from "pages/Home";
 // import Explore from "components/explore/Explore";
 // import Viz from "components/explore/viz/Viz";
 // import Rankings from "components/explore/rankings/Rankings";
-//
-// // data section components
-// import Data from "components/data/Data";
-// import Datasets from "components/data/Datasets";
-// import Api from "components/data/Api";
-// import Permissions from "components/data/Permissions";
-// import Faq from "components/data/Faq";
-//
-// // custom 404 page
-// import NotFound from "components/NotFound";
+
+// data section components
+import Data from "pages/data/Data";
+import Datasets from "pages/data/Datasets";
+import Api from "pages/data/Api";
+import Permissions from "pages/data/Permissions";
+import Faq from "pages/data/Faq";
+
+// custom 404 page
+import NotFound from "components/NotFound";
 
 /*
  * @param {Redux Store}
@@ -100,6 +100,7 @@ export default function RouteCreate() {
         <Route path="occupation(/:id)" component={Occupation} onEnter={checkForId} />
         <Route path="era(/:id)" component={Era} onEnter={checkForId} />
       </Route>
+      */}
 
       <Route path="data" component={Data}>
         <Route path="datasets" component={Datasets} />
@@ -109,7 +110,6 @@ export default function RouteCreate() {
       </Route>
 
       <Route path="*" component={NotFound} status={404} />
-      */}
 
     </Route>
   );
