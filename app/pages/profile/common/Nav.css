@@ -1,0 +1,129 @@
+@import "components/common/colors";
+@import "components/common/typography";
+
+.profile-nav {
+  width: 100%;
+  background-color: var(--colorDark);
+  z-index: 10;
+
+  @media (max-width: 750px) {
+    position: relative;
+    padding: 25px 0 30px;
+  }
+
+  @media (min-width: 751px) {
+    position: absolute;
+    bottom: 0;
+    padding: 25px 0;
+  }
+
+  & ol {
+    display: flex;
+    counter-reset: li;
+
+    @media (min-width: 751px) {
+      padding: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    @media (max-width: 750px) {
+      width: 100%;
+      padding: 0 7.2vw;
+      margin: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      overflow-x: hidden;
+    }
+  }
+
+  & li {
+    position: relative;
+    list-style: none;
+
+    @media (min-width: 751px) {
+      padding: 3px;
+      margin: 0 0 0 5px;
+    }
+
+    @media (max-width: 750px) {
+      padding: 10px 0;
+      margin: 0;
+      width: 100%;
+      overflow: hidden;
+
+      &::after {
+        float: left;
+        width: 0;
+        white-space: nowrap;
+        color: var(--colorSand);
+        content: ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+      }
+    }
+
+    &::before {
+      content: counter(li, upper-roman);
+      counter-increment: li;
+      @apply --profileNav;
+      color: var(--colorEggshell);
+      background-color: var(--colorDark);
+    }
+  }
+
+  & span {
+    background-color: var(--colorDark);
+
+    &:first-child {
+      @media (max-width: 355px) {
+        max-width: 160px;
+        display: inline-block;
+        word-wrap: break-word;
+        word-break: break-all;
+        word-break: break-word;
+        hyphens: auto;
+        vertical-align: text-top;
+      }
+    }
+  }
+
+  & a {
+    text-decoration: none;
+    outline: none;
+    padding: 5px 5px 5px 0;
+    @apply --profileNav;
+    color: var(--colorEggshell)
+  }
+
+  & .jump-to-link {
+    @media (min-width: 751px) {
+      display: none;
+      & a {
+        display: none;
+      }
+    }
+
+    @media (max-width: 750px) {
+      padding-left: 0.33em;
+      position: relative;
+      z-index: 1;
+      float: right;
+
+      & a {
+        @apply --bodyLink;
+        color: var(--colorSand);
+        text-transform: none;
+      }
+    }
+  }
+}
+
+@media screen and ( min-height: 900px ){
+  .profile-nav {
+    bottom: auto;
+    top: 825px;
+  }
+}

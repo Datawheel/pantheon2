@@ -1,0 +1,235 @@
+@import "components/common/colors";
+@import "components/common/typography";
+
+@import url('https://fonts.googleapis.com/css?family=Marcellus');
+
+header {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  max-height: 900px;
+  overflow-x: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bg-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--colorEggshellOverlay) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC) repeat;
+  }
+}
+
+.bg-img-mask {
+  background-color: var(--colorEggshell);
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  width: 105%;
+  height: 105%;
+  top: -2.5%;
+  bottom: -2.5%;
+  left: -2.5%;
+  right: -2.5%;
+  z-index: -1;
+  overflow: hidden;
+
+  &.era {
+    background-color: var(--colorEggshell);
+    filter: blur(2px);
+
+    & .bg-img {
+      background-position: 60% 50%;
+      background-size: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  &.person {
+    @media (min-width: 751px) {
+      filter: blur(6px) saturate(110%) contrast(200%);
+    }
+
+    @media (max-width: 750px) {
+      flex-direction: column;
+      filter: blur(3px) saturate(100%) contrast(200%);
+    }
+
+    & .bg-img {
+      background-blend-mode: luminosity;
+      background-size: cover;
+
+      @media (min-width: 751px) {
+        background-position: 0% 0%;
+        width: 50%;
+        height: 100%;
+      }
+      @media (max-width: 750px) {
+        background-position: 0% 30%;
+        width: 100%;
+        height: 50%;
+      }
+    }
+
+    & .bg-img-r {
+      @media (min-width: 751px) {
+        transform: scaleX(-1);
+      }
+      @media (max-width: 750px) {
+        transform: scaleY(-1);
+      }
+    }
+  }
+
+  &.place {
+    flex-direction: column;
+
+    & .bg-img {
+      height: 50%;
+      width: 100%;
+      position: relative;
+      background-position: 50% 100%;
+      background-size: cover;
+    }
+
+    & .bg-img-b {
+      transform: scaleY(-1);
+      bottom: 1px;
+    }
+  }
+
+  &.profession {
+    background-color: var(--colorSlate);
+    filter: blur(3px);
+    flex-direction: column;
+
+    & .bg-img {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      flex: 1;
+
+      & img {
+        flex: 0 33vw;
+        min-width: 360px;
+        min-height: 480px;
+      }
+    }
+
+    & .bg-img-m {
+      /*transform: scaleY(-1);*/
+      position: relative;
+      bottom: 1px;
+    }
+
+    & .bg-img-mask-after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+    }
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(244, 244, 244, 0.85);
+  border: solid 1px var(--colorStone);
+  margin: 0 auto;
+  width: 85%;
+  max-width: 450px;
+  box-sizing: border-box;
+  z-index: 9;
+
+  & h1 {
+    hyphens: none;
+  }
+
+  @media (min-width: 751px) {
+    padding: 32px;
+  }
+
+  @media (max-width: 750px) {
+    height: 61.8%;
+    min-width: 300px;
+    max-height: 450px;
+  }
+}
+
+.top-desc {
+  @apply --contextLabel;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: 751px) {
+    margin-bottom: 14px;
+  }
+  @media (max-width: 750px) {
+    margin-bottom: 20px;
+  }
+}
+
+h1 {
+  @apply --priTitle;
+  margin: 0;
+  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+pre {
+  margin: 0 auto;
+}
+
+.profile-type {
+  @apply --priLabel;
+  margin: 0 auto 10px;
+}
+
+.date-subtitle {
+  @apply --secLabel;
+  margin-top: 14px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: 751px) {
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 750px) {
+    margin-bottom: 30px;
+  }
+
+  & a {
+    color: inherit;
+  }
+}
+
+.sparkline {
+  width: 275px;
+}
