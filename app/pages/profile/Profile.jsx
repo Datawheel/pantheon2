@@ -8,18 +8,18 @@ import {Link} from "react-router";
  */
 const Profile = ({children}) => {
   const sampleProfiles = [
-    {type: "person", slug: "Wendy_Carlos"},
-    {type: "person", slug: "Katie_Couric"},
-    {type: "person", slug: "Nostradamus"},
-    {type: "person", slug: "Mikhail_Bulgakov"},
-    {type: "place", slug: "Jefferson_Valley-Yorktown"},
-    {type: "place", slug: "Paris"},
-    {type: "place", slug: "Argentina"},
-    {type: "place", slug: "Australia"},
-    {type: "domain", slug: "architect"},
-    {type: "domain", slug: "geologist"},
-    {type: "domain", slug: "occultist"},
-    {type: "domain", slug: "musician"}
+    {type: "person", slug: "wendy_carlos"},
+    {type: "person", slug: "katie_couric"},
+    {type: "person", slug: "nostradamus"},
+    {type: "person", slug: "mikhail_bulgakov"},
+    {type: "place", slug: "jefferson_valley-yorktown"},
+    {type: "place", slug: "paris"},
+    {type: "place", slug: "argentina"},
+    {type: "place", slug: "australia"},
+    {type: "occupation", slug: "architect"},
+    {type: "occupation", slug: "geologist"},
+    {type: "occupation", slug: "occultist"},
+    {type: "occupation", slug: "musician"}
   ];
 
   return (

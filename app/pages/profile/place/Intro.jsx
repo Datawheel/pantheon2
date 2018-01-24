@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import AnchorList from "components/utils/AnchorList";
 import "pages/profile/common/Intro.css";
-// import iconProfW from "images/globalNav/profile-w.svg";
 import {FORMATTERS} from "types/index";
 import {nest} from "d3-collection";
 import {plural} from "pluralize";
