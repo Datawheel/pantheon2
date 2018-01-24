@@ -44,34 +44,25 @@ const occupationURL = "http://localhost:3100/occupation?occupation_slug=eq.<id>"
 const allOccupationsURL = "http://localhost:3100/occupation?order=num_born.desc.nullslast";
 const allErasURL = "http://localhost:3100/era?order=start_year";
 const peopleURL = "http://localhost:3100/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=birthplace{id,name,slug},birthcountry{id,continent,country_name,name,slug},deathcountry{id,continent,country_name,name,slug},deathplace{id,name,slug},occupation{*},occupation_id:occupation,*";
-const peopleInDomainURL = "http://localhost:3100/";
+const occsInDomainURL = "http://localhost:3100/occupation?domain_slug=eq.<occupation.domain_slug>&select=id";
+const peopleInDomainURL = "http://localhost:3100/person?occupation=in.<domain.occIds>&order=langs.desc&select=occupation{*},occupation_id:occupation,*";
 
 Occupation.preneed = [
   fetchData("occupations", allOccupationsURL, res => res),
   fetchData("eras", allErasURL, res => res),
-  fetchData("occupation", occupationURL, res => {
-    const occupation = res[0];
-
-    // const placeRankLow = Math.max(1, parseInt(place.born_rank_unique, 10) - NUM_RANKINGS_PRE);
-    // const placeRankHigh = Math.max(NUM_RANKINGS, parseInt(place.born_rank_unique, 10) + NUM_RANKINGS_POST);
-    // const sumlevelFilter = place.name === place.country_name ? "is_country=is.true" : "is_country=is.false";
-
-    return Object.assign({}, occupation);
-  })
+  fetchData("occupation", occupationURL, res => res[0])
 ];
 
 Occupation.need = [
   fetchData("people", peopleURL, res => res),
-  fetchData("domain", "http://localhost:3100/occupation?domain_slug=eq.<occupation.domain_slug>&select=id", res => {
+  fetchData("domain", occsInDomainURL, res => {
     const occIds = res.reduce((arr, obj) => arr.concat([obj.id]), []);
     return {occIds: `${occIds}`};
   })
-  // fetchData("peopleInDomain", peopleInDomainURL, res => res),
-  // fetchData("eras", erasURL, res => res)
 ];
 
 Occupation.postneed = [
-  fetchData("peopleInDomain", "http://localhost:3100/person?occupation=in.<domain.occIds>&order=langs.desc&select=occupation{*},occupation_id:occupation,*", res => res)
+  fetchData("peopleInDomain", peopleInDomainURL, res => res)
 ];
 
 export default connect(state => ({data: state.data}), {})(Occupation);
