@@ -7,7 +7,7 @@ import Home from "pages/Home";
 // profile components
 import Profile from "pages/profile/Profile";
 import Person from "pages/profile/person/Person";
-// import Place from "components/profile/place/Place";
+import Place from "pages/profile/place/Place";
 // import Occupation from "components/profile/occupation/Occupation";
 // import Era from "components/profile/era/Era";
 //
@@ -97,7 +97,7 @@ export default function RouteCreate() {
 
       <Route path="profile" component={Profile}>
         <Route path="person(/:id)" component={Person} onEnter={checkForId} />
-        {/* <Route path="place(/:id)" component={Place} onEnter={checkForId} /> */}
+        <Route path="place(/:id)" component={Place} onEnter={checkForId} />
         {/* <Route path="occupation(/:id)" component={Occupation} onEnter={checkForId} /> */}
         {/* <Route path="era(/:id)" component={Era} onEnter={checkForId} /> */}
       </Route>

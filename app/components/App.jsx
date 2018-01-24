@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import Navigation from "components/Navigation";
 import Footer from "components/Footer";
+import {CanonComponent} from "datawheel-canon";
+import d3plus from "viz/d3plus";
 import "./App.css";
 
 class App extends Component {
@@ -47,11 +49,11 @@ class App extends Component {
   render() {
     const {children, searchActive} = this.props;
     return (
-      <div className="container">
+      <CanonComponent d3plus={d3plus} className="container">
         <Navigation />
         { children }
         <Footer />
-      </div>
+      </CanonComponent>
     );
   }
 

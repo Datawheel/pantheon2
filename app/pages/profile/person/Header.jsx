@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "pages/profile/person/Header.css";
+import "pages/profile/common/Header.css";
 import "components/common/mouse.css";
 import {LinePlot} from "d3plus-react";
 
