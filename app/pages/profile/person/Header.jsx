@@ -23,7 +23,7 @@ const Header = ({pageViews, person}) => {
   ]);
 
   const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug],
-        backgroundImage = `url('/people/${person.id}.jpg')`;
+        backgroundImage = `url('/images/profile/people/${person.id}.jpg')`;
 
   return (
     <header className="hero">
@@ -39,64 +39,64 @@ const Header = ({pageViews, person}) => {
         <p className="date-subtitle">{FORMATTERS.year(person.birthyear.name)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear.name)}` : "Today"}</p>
         <pre>
           <LinePlot
-             config={{
-               data: sparkData,
-               height: 150,
-               groupBy: "person",
-               legend: false,
-               on: {
+            config={{
+              data: sparkData,
+              height: 150,
+              groupBy: "person",
+              legend: false,
+              on: {
 
-               },
-               shape: d => d.shape || "Line",
-               shapeConfig: {
-                 hoverOpacity: 1,
-                 Circle: {
-                   fill: "#4B4A48",
-                   r: () => 3.5
-                 },
-                 Line: {
-                   fill: "none",
-                   stroke: "#4B4A48",
-                   strokeWidth: 1
-                 }
-               },
-               time: d => d.pageview_date,
-               timeline: false,
-               tooltipConfig: {
-                 footer: d => `<span class="center">${FORMATTERS.date(d.pageview_date)}</span>`,
-                 title: d => `${FORMATTERS.commas(d.num_pageviews)} Page Views`,
-                 titleStyle: {"text-align": "center"},
-                 width: "200px",
-                 footerStyle: {
-                   "font-size": "12px",
-                   "text-transform": "none",
-                   "color": "#4B4A48"
-                 }
-               },
-               width: 275,
-               x: d => d.pageview_date,
-               xConfig: {
-                 barConfig: {"stroke-width": 0},
-                 labels: sparkTicks,
-                 shapeConfig: {
-                   fill: "#4B4A48",
-                   fontColor: "#4B4A48",
-                   fontSize: () => 8,
-                   stroke: "#4B4A48"
-                 },
-                 ticks: sparkTicks,
-                 tickSize: 0,
-                 title: "WIKIPEDIA PAGE VIEWS (PV)",
-                 titleConfig: {
-                   fontColor: "#4B4A48",
-                   fontFamily: () => "Amiko",
-                   fontSize: () => 11,
-                   stroke: "#4B4A48"
-                 }
-               },
-               y: d => d.num_pageviews,
-               yConfig: {labels: [], ticks: [], title: false}
-             }} />
+              },
+              shape: d => d.shape || "Line",
+              shapeConfig: {
+                hoverOpacity: 1,
+                Circle: {
+                  fill: "#4B4A48",
+                  r: () => 3.5
+                },
+                Line: {
+                  fill: "none",
+                  stroke: "#4B4A48",
+                  strokeWidth: 1
+                }
+              },
+              time: d => d.pageview_date,
+              timeline: false,
+              tooltipConfig: {
+                footer: d => `<span class="center">${FORMATTERS.date(d.pageview_date)}</span>`,
+                title: d => `${FORMATTERS.commas(d.num_pageviews)} Page Views`,
+                titleStyle: {"text-align": "center"},
+                width: "200px",
+                footerStyle: {
+                  "font-size": "12px",
+                  "text-transform": "none",
+                  "color": "#4B4A48"
+                }
+              },
+              width: 275,
+              x: d => d.pageview_date,
+              xConfig: {
+                barConfig: {"stroke-width": 0},
+                labels: sparkTicks,
+                shapeConfig: {
+                  fill: "#4B4A48",
+                  fontColor: "#4B4A48",
+                  fontSize: () => 8,
+                  stroke: "#4B4A48"
+                },
+                ticks: sparkTicks,
+                tickSize: 0,
+                title: "WIKIPEDIA PAGE VIEWS (PV)",
+                titleConfig: {
+                  fontColor: "#4B4A48",
+                  fontFamily: () => "Amiko",
+                  fontSize: () => 11,
+                  stroke: "#4B4A48"
+                }
+              },
+              y: d => d.num_pageviews,
+              yConfig: {labels: [], ticks: [], title: false}
+            }} />
         </pre>
       </div>
       <div className="mouse">

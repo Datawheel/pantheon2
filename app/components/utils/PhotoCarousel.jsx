@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import PersonImage from "components/utils/PersonImage";
-// import backArrow from "images/tri-left-b.svg";
-// import forwardArrow from "images/tri-right-b.svg";
 import {COLORS_DOMAIN, FORMATTERS} from "types/index";
 
 class PhotoCarousel extends Component {
@@ -35,7 +33,7 @@ class PhotoCarousel extends Component {
             <li key={person.id} className={person.id === myId ? "rank-me" : null}>
               <div className="rank-photo" style={{backgroundColor: COLORS_DOMAIN[person.occupation.domain_slug]}}>
                 <a href={`/profile/person/${person.slug}/`}>
-                  <PersonImage src={`/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} fallbackSrc="/images/icons/icon-person.svg" />
+                  <PersonImage src={`/images/profile/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} fallbackSrc="/images/icons/icon-person.svg" />
                 </a>
               </div>
               <h2><a href={`/profile/person/${person.slug}/`}>{person.name}</a></h2>

@@ -7,7 +7,7 @@ import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 
 const Header = ({country, people, place}) => {
-  const placeImg = place.img_link ? `/place/${place.id}.jpg` : country.img_link ? `/place/${country.id}.jpg` : "/images/profile/placeholder_place_profile.jpg";
+  const placeImg = place.img_link ? `/images/profile/place/${place.id}.jpg` : country.img_link ? `/images/profile/place/${country.id}.jpg` : "/images/profile/placeholder_place_profile.jpg";
 
   const yearAndCount = nest()
     .key(p => p.birthyear)
