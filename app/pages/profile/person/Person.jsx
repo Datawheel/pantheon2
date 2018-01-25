@@ -3,12 +3,12 @@ import {connect} from "react-redux";
 import Helmet from "react-helmet";
 import {fetchData} from "datawheel-canon";
 
-// import config from "helmconfig.js";
+import config from "helmet.js";
 import ProfileNav from "pages/profile/common/Nav";
 import Section from "pages/profile/common/Section";
 import Header from "pages/profile/person/Header";
 import Intro from "pages/profile/person/Intro";
-// import Footer from "components/profile/person/Footer";
+import Footer from "pages/profile/person/Footer";
 import MemMetrics from "pages/profile/person/MemMetrics";
 import OccupationRanking from "pages/profile/person/OccupationRanking";
 import YearRanking from "pages/profile/person/YearRanking";
@@ -113,17 +113,12 @@ class Person extends Component {
     // if (personProfile.person.birthcountry) {
     //   sections.push({title: `In ${personProfile.person.birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />});
     // }
-    //
     return (
       <div className="person">
-        {/*
         <Helmet
-          htmlAttributes={{lang: "en", amp: undefined}}
-          title={`${personProfile.person.name} - Pantheon`}
-          meta={config.meta.concat([{property: "og:title", content: personProfile.person.name}])}
-          link={config.link}
+          title={person.name}
+          meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: person.name} : meta)}
         />
-        */}
         <Header person={person} pageViews={pageViews} />
         <div className="about-section">
           <ProfileNav sections={sections} />
@@ -142,7 +137,7 @@ class Person extends Component {
             {section.viz ? <div className="viz">{section.viz}</div> : null}
           </Section>
         )}
-        {/* <Footer person={person} ranking={occupationRank} /> */}
+        <Footer person={person} ranking={occupationRanks} />
       </div>
     );
   }

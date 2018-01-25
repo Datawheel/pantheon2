@@ -1,12 +1,13 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "datawheel-canon";
-// import Helmet from "react-helmet";
-// import config from "helmconfig.js";
+import Helmet from "react-helmet";
+import config from "helmet.js";
 import Header from "pages/profile/occupation/Header";
+import {plural} from "pluralize";
 // import ProfileNav from "pages/profile/Nav";
 import Intro from "pages/profile/occupation/Intro";
-// import Footer from "pages/profile/occupation/Footer";
+import Footer from "pages/profile/occupation/Footer";
 import People from "pages/profile/occupation/sections/People";
 import Places from "pages/profile/occupation/sections/Places";
 import PlacesTime from "pages/profile/occupation/sections/PlacesTime";
@@ -26,6 +27,10 @@ class Occupation extends Component {
 
     return (
       <div>
+        <Helmet
+          title={plural(occupation.occupation)}
+          meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: plural(occupation.occupation)} : meta)}
+        />
         <Header occupation={occupation} people={people} />
         <div className="about-section">
           <Intro occupation={occupation} occupations={occupations} />
@@ -35,6 +40,7 @@ class Occupation extends Component {
         <PlacesTime eras={eras} people={people} occupation={occupation} />
         <OverlappingLives people={people} occupation={occupation} />
         <RelatedOccupations peopleInDomain={peopleInDomain} occupation={occupation} occupations={occupations} />
+        <Footer />
       </div>
     );
   }

@@ -1,9 +1,10 @@
 import React from "react";
+import "pages/profile/common/Footer.css";
 
 const Footer = ({person, ranking}) => {
-  const me = ranking.peers.findIndex(p => p.id === ranking.me.id);
-  const aboveMe = ranking.peers[me + 1];
-  const belowMe = ranking.peers[me - 1];
+  const me = ranking.findIndex(p => p.id === person.id);
+  const aboveMe = ranking[me + 1];
+  const belowMe = ranking[me - 1];
 
   return (
     <footer className="profile-footer">
@@ -12,7 +13,7 @@ const Footer = ({person, ranking}) => {
         <ul className="footer-carousel-container">
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
-              <a href={`/profile/occupation/${person.occupation.occupation_slug}`} style={{backgroundImage: `url(/occupation/${person.occupation.occupation_slug}.jpg)`}}></a>
+              <a href={`/profile/occupation/${person.occupation.occupation_slug}`} style={{backgroundImage: `url(/images/profile/occupation/${person.occupation.occupation_slug}.jpg)`}}></a>
             </div>
             <h4 className="footer-carousel-item-title">
               <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
@@ -20,31 +21,34 @@ const Footer = ({person, ranking}) => {
             <p>{person.occupation.num_born} Individuals</p>
           </li>
 
-          { belowMe ? <li className="footer-carousel-item">
+          {belowMe
+            ? <li className="footer-carousel-item">
               <div className="footer-carousel-item-photo">
-                <a href={`/profile/person/${belowMe.slug}`} style={{backgroundImage: `url(/people/${belowMe.id}.jpg)`}}></a>
+                <a href={`/profile/person/${belowMe.slug}`} style={{backgroundImage: `url(/images/profile/people/${belowMe.id}.jpg)`}}></a>
               </div>
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/person/${belowMe.slug}`}>{belowMe.name}</a>
               </h4>
               <p>Rank {belowMe.occupation_rank}</p>
             </li>
-          : null }
+            : null }
 
-          { aboveMe ? <li className="footer-carousel-item">
+          {aboveMe
+            ? <li className="footer-carousel-item">
               <div className="footer-carousel-item-photo">
-                <a href={`/profile/person/${aboveMe.slug}`} style={{backgroundImage: `url(/people/${aboveMe.id}.jpg)`}}></a>
+                <a href={`/profile/person/${aboveMe.slug}`} style={{backgroundImage: `url(/images/profile/people/${aboveMe.id}.jpg)`}}></a>
               </div>
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/person/${aboveMe.slug}`}>{aboveMe.name}</a>
               </h4>
               <p>Rank {aboveMe.occupation_rank}</p>
             </li>
-          : null }
+            : null }
 
-          { person.birthplace ? <li className="footer-carousel-item">
+          {person.birthplace
+            ? <li className="footer-carousel-item">
               <div className="footer-carousel-item-photo">
-                <a href={`/profile/place/${person.birthplace.slug}`} style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}>
+                <a href={`/profile/place/${person.birthplace.slug}`} style={{backgroundImage: `url(/images/profile/place/${person.birthcountry.id}.jpg)`}}>
                 </a>
               </div>
               <h4 className="footer-carousel-item-title">
@@ -52,18 +56,19 @@ const Footer = ({person, ranking}) => {
               </h4>
               <p>{person.birthplace.num_born} Individuals</p>
             </li>
-          : null }
+            : null }
 
-          { person.birthcountry ? <li className="footer-carousel-item">
+          {person.birthcountry
+            ? <li className="footer-carousel-item">
               <div className="footer-carousel-item-photo" style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}>
-                <a href={`/profile/place/${person.birthcountry.slug}`} style={{backgroundImage: `url(/place/${person.birthcountry.id}.jpg)`}}></a>
+                <a href={`/profile/place/${person.birthcountry.slug}`} style={{backgroundImage: `url(/images/profile/place/${person.birthcountry.id}.jpg)`}}></a>
               </div>
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>
               </h4>
               <p>{person.birthcountry.num_born} Individuals</p>
             </li>
-          : null }
+            : null }
 
         </ul>
       </div>

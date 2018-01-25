@@ -1,5 +1,5 @@
 import React from "react";
-import "css/components/profile/footer";
+import "pages/profile/common/Footer.css";
 
 const Footer = () =>
   <footer className="profile-footer">

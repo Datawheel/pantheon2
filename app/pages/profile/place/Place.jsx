@@ -1,11 +1,12 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "datawheel-canon";
-// import config from "helmconfig.js";
+import Helmet from "react-helmet";
+import config from "helmet.js";
 import Header from "pages/profile/place/Header";
 // import ProfileNav from "pages/profile/Nav";
 import Intro from "pages/profile/place/Intro";
-// import Footer from "pages/profile/place/Footer";
+import Footer from "pages/profile/place/Footer";
 import PeopleRanking from "pages/profile/place/sections/PeopleRanking";
 import Occupations from "pages/profile/place/sections/Occupations";
 import OccupationTrends from "pages/profile/place/sections/OccupationTrends";
@@ -35,6 +36,10 @@ class Place extends Component {
 
     return (
       <div>
+        <Helmet
+          title={place.name}
+          meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: place.name} : meta)}
+        />
         <Header place={place} country={country} people={peopleBornHere} />
         <div className="about-section">
           <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
@@ -46,6 +51,7 @@ class Place extends Component {
         <GeomapDeath country={country} peopleDied={peopleDiedHere} />
         <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} />
         <LivingPeople place={place} data={peopleBornHereAlive} />
+        <Footer />
       </div>
     );
   }

@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "datawheel-canon";
-// import Helmet from "react-helmet";
-// import config from "helmconfig.js";
+import Helmet from "react-helmet";
+import config from "helmet.js";
 // import ProfileNav from "pages/profile/Nav";
 import Header from "pages/profile/era/Header";
 import Intro from "pages/profile/era/Intro";
-// import Footer from "pages/profile/era/Footer";
+import Footer from "pages/profile/era/Footer";
 import PeopleRanking from "pages/profile/era/sections/PeopleRanking";
 import Occupations from "pages/profile/era/sections/Occupations";
 import OccupationsOverTime from "pages/profile/era/sections/OccupationsOverTime";
@@ -26,6 +26,10 @@ class Era extends Component {
 
     return (
       <div>
+        <Helmet
+          title={era.name}
+          meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: era.name} : meta)}
+        />
         <Header era={era} />
         <div className="about-section">
           <Intro era={era} eras={eras} peopleBorn={peopleBornInEra} peopleDied={peopleDiedInEra} />
@@ -36,6 +40,7 @@ class Era extends Component {
         <GeomapBirth era={era} peopleBorn={peopleBornInEra} />
         <GeomapDeath era={era} peopleDied={peopleDiedInEra} />
         <OverlappingLives era={era} occupations={occupations} peopleBorn={peopleBornInEra} />
+        <Footer />
       </div>
     );
   }
