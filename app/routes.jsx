@@ -10,16 +10,16 @@ import Person from "pages/profile/person/Person";
 import Place from "pages/profile/place/Place";
 import Occupation from "pages/profile/occupation/Occupation";
 import Era from "pages/profile/era/Era";
-//
-// // about components
-// import About from "components/about/About";
-// import Vision from "components/about/Vision";
-// import Methods from "components/about/Methods";
-// import Team from "components/about/Team";
-// import Publications from "components/about/Publications";
-// import DataSources from "components/about/DataSources";
-// import Contact from "components/about/Contact";
-//
+
+// about components
+import About from "pages/about/About";
+import Vision from "pages/about/Vision";
+import Methods from "pages/about/Methods";
+import Team from "pages/about/Team";
+import Publications from "pages/about/Publications";
+import DataSources from "pages/about/DataSources";
+import Contact from "pages/about/Contact";
+
 // // explore componenets
 // import Explore from "components/explore/Explore";
 // import Viz from "components/explore/viz/Viz";
@@ -84,6 +84,7 @@ export default function RouteCreate() {
         <Route path="viz" component={Viz} />
         <Route path="rankings" component={Rankings} />
       </Route>
+      */}
 
       <Route path="about" component={About}>
         <Route path="vision" component={Vision} />
@@ -93,7 +94,6 @@ export default function RouteCreate() {
         <Route path="data_sources" component={DataSources} />
         <Route path="contact" component={Contact} />
       </Route>
-      */}
 
       <Route path="profile" component={Profile}>
         <Route path="person(/:id)" component={Person} onEnter={checkForId} />
