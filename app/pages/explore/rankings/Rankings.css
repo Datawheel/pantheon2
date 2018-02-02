@@ -1,0 +1,70 @@
+@import "components/common/typography";
+@import "components/common/colors";
+
+.ranking-table {
+  width: 100%;
+
+  & .rt-th {}
+
+  & .rt-td {
+    @apply --small;
+    font-size: 11px;
+
+    & a {
+      @apply --bodyLink;
+      font-size: 11px;
+      font-weight: 400;
+      border-bottom: 1px solid var(--colorSnow);
+    }
+  }
+
+  & .rt-td, & .rt-th {
+    &:nth-child(1), &:nth-child(2) {
+      text-align: left;
+    }
+  }
+}
+
+.ranking-head {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ranking-pagination {
+  padding: 10px 0 7px;
+  height: 30px;
+
+  & span {
+    @apply --smallCaps;
+  }
+
+  & a {
+    border-bottom: 1px solid transparent;
+    @apply --bodyLink;
+    @apply --smallCaps;
+
+    &:last-child::after {
+      content: '';
+      position: relative;
+      display: inline-block;
+      background: url('/images/ui/tri-right-b.svg') no-repeat;
+      background-size: contain;
+      width: 7px;
+      height: 13px;
+      margin: 0 0 -4px 3px;
+    }
+
+    &:first-child::before {
+      content: '';
+      position: relative;
+      display: inline-block;
+      background: url('/images/ui/tri-right-b.svg') no-repeat;
+      background-size: contain;
+      width: 7px;
+      height: 13px;
+      margin: 0 3px -4px 0;
+      transform: scaleX(-1);
+    }
+  }
+}

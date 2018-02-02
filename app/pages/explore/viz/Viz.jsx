@@ -4,6 +4,7 @@ import {fetchData} from "datawheel-canon";
 import Helmet from "react-helmet";
 import Controls from "pages/explore/controls/Index";
 import VizShell from "pages/explore/viz/VizShell";
+import RankingTable from "pages/explore/rankings/RankingTable";
 import {nest} from "d3-collection";
 import {merge} from "d3-array";
 import {FORMATTERS, HPI_RANGE, LANGS_RANGE} from "types";
@@ -90,6 +91,7 @@ class Viz extends Component {
   }
 
   render() {
+    const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
     const {nestedOccupations, occupations} = occupationResponse;
     const {city, country, data, gender, metricCutoff, metricType, loading, occupation, show, viz, years, yearType} = this.state;
@@ -130,16 +132,28 @@ class Viz extends Component {
             updateData={this.updateData}
             update={this.update}
             nestedOccupations={nestedOccupations}
+            pageType={pageType}
             places={places}
           />
-          <VizShell
-            loading={loading}
-            data={data}
-            occupations={occupations}
-            show={show}
-            viz={viz}
-            yearType={yearType}
-          />
+          {pageType === "viz"
+            ? <VizShell
+              loading={loading}
+              data={data}
+              occupations={occupations}
+              show={show}
+              viz={viz}
+              yearType={yearType}
+            />
+            : <RankingTable
+              loading={loading}
+              data={data}
+              occupations={occupations}
+              places={places}
+              show={show}
+              viz={viz}
+              yearType={yearType}
+            />
+          }
         </div>
       </div>
     );

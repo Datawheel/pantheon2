@@ -70,7 +70,7 @@ class Controls extends Component {
 
   fetchData = () => {
     const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType} = this.state;
-    const selectFields = "name,langs,id,birthyear,deathyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug,lat_lon},occupation_id:occupation";
+    const selectFields = "name,langs,hpi,id,slug,birthyear,deathyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug,lat_lon},occupation_id:occupation";
     const apiHeaders = null;
 
     let placeFilter = "";
@@ -118,22 +118,21 @@ class Controls extends Component {
   }
 
   render() {
-    const page = "viz";
-    const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType} = this.state;
+    const {city, country, gender, metricCutoff, metricType, occupation, pageType, show, viz, years, yearType} = this.state;
     const {nestedOccupations, places} = this.props;
 
     return (
       <div className="explore-controls viz-explorer" id="side-panel">
         <div className="control-header">
-          <h2 className="viz-explorer"><span className="helper-text">Open&nbsp;</span>{page === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text">&nbsp;Panel</span></h2>
+          <h2 className="viz-explorer"><span className="helper-text">Open&nbsp;</span>{pageType === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text">&nbsp;Panel</span></h2>
           <i className="control-toggle" onClick={this.toggleSidePanel}></i>
         </div>
 
         <section className="control-group main-selector">
-          {page === "viz"
+          {pageType === "viz"
             ? <VizControl viz={viz} changeViz={this.update} />
             : null}
-          <ShowControl page={page} show={show} changeShow={this.update} />
+          <ShowControl page={pageType} show={show} changeShow={this.update} />
         </section>
 
         <section className="control-group">

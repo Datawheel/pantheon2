@@ -23,7 +23,7 @@ import Contact from "pages/about/Contact";
 // // explore componenets
 import Explore from "pages/explore/Explore";
 import Viz from "pages/explore/viz/Viz";
-// import Rankings from "pages/explore/rankings/Rankings";
+import Rankings from "pages/explore/rankings/Rankings";
 
 // data section components
 import Data from "pages/data/Data";
@@ -78,8 +78,8 @@ export default function RouteCreate() {
       <IndexRoute component={Home} />
 
       <Route path="explore" component={Explore}>
-        <Route path="viz" component={Viz} />
-        {/* <Route path="rankings" component={Rankings} /> */}
+        <Route path="viz" component={Viz} pageType={"viz"} />
+        <Route path="rankings" component={Viz} pageType={"rankings"} />
       </Route>
 
       <Route path="about" component={About}>

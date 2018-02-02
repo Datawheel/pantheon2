@@ -12,16 +12,8 @@ class VizShell extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    // this.props.changeViz("Treemap");
-  }
-
   render() {
-    // const {data, occupation, viz, place, yearType} = this.props.explore;
     const {data, loading, occupations, show, viz, yearType} = this.props;
-    // const show = "occupations";
-    // const {occupations} = occupation;
-    // const {type, config} = viz;
 
     if (loading) {
       return <div className="explore-viz-container">
@@ -42,7 +34,6 @@ class VizShell extends Component {
     }
 
     let MyViz;
-    console.log("type!!!", viz);
     switch (viz) {
       case "stackedarea":
         MyViz = PStacked;
