@@ -1,0 +1,69 @@
+@import "components/common/typography";
+@import "components/common/colors";
+
+.loading-img {
+  margin-top: 60px;
+  width: 300px;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 0;
+
+  & p {
+    text-align: center;
+    @apply --smallCaps;
+    z-index: 10;
+    position: absolute;
+    top: 145px;
+    left: 0;
+    right: 0;
+  }
+
+  & .loading-dot {
+    animation: 1s blink infinite;
+    &:nth-child(2) {
+      animation-delay: 250ms;
+    }
+    &:nth-child(3) {
+      animation-delay: 500ms;
+    }
+  }
+
+  & .spinner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*background-image: url("../../../images/loading.gif");*/
+    background-size: contain;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    animation: spin 1s steps(12) infinite;
+    z-index: 1;
+  }
+
+  & .spin-cover {
+    position: absolute;
+    width: 60px;
+    height: 75px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: 0 auto;
+    box-sizing: content-box;
+    border-style: solid;
+    border-color: var(--colorEggshell);
+    border-width: 225px 120px 0;
+    opacity: 0.9;
+    z-index: 2;
+  }
+}
+
+@keyframes blink {
+  50% { color: rgba(255,255,255,0); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

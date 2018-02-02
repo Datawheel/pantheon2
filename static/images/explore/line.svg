@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="15px" height="13px" viewBox="0 0 15 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>line</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="EXPLORER---all-domains,-all-locations" transform="translate(-142.000000, -618.000000)" fill="#4A4948">
+            <g id="Group-13-Copy" transform="translate(1.000000, 17.000000)">
+                <g id="PANEL" transform="translate(25.694444, 94.444444)">
+                    <g id="all-L,-all-D-stacked" transform="translate(0.000000, 438.888889)">
+                        <g id="viz-options" transform="translate(14.583333, 35.416667)">
+                            <path d="M110.656787,41.9445695 L115.602227,40.0696982 L115.602227,39 L110.70532,40.9992937 L107.916105,40.0461246 L104.864505,41.1703789 L101.002221,41.4655593 L101.002221,42.2911034 L105.268971,41.9734207 L108.014422,41.0654029 L110.656787,41.9445695 Z M110.760732,38.227281 L115.602227,34.2394453 L115.602227,33 L110.601375,37.1800533 L107.864011,35.804305 L104.934688,37.5262053 L101.002221,38.1737358 L101.002221,39 L105.351241,38.3555965 L108.022684,36.8511883 L110.760732,38.227281 Z M101.002221,44.0499878 L115.602227,44.0499878 L115.604448,45 L101.002221,45 L101.002221,44.0499878 Z" id="line"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -95,6 +95,10 @@ function sanitizeYear(yr) {
 }
 
 export const SANITIZERS = {
+  vizType: viz => {
+    const supportedViz = ["treemap", "stackedarea", "linechart", "map"];
+    return supportedViz.includes(viz.toLowerCase()) ? viz.toLowerCase() : supportedViz[0];
+  },
   show: (showStr, pathname) => {
     let types = ["people", "occupations", "places"];
     const depths = ["people", "occupations", "industries", "domains", "places", "countries"];
@@ -108,7 +112,9 @@ export const SANITIZERS = {
     }
     type = types.includes(type) ? type : types[0];
     depth = depths.includes(depth) ? depth : null;
-    return {type, depth};
+    // console.log("type, depth", type, depth)
+    // return {type, depth};
+    return type;
   },
   years: yearStr => {
     if (!yearStr || !yearStr.includes(",")) return YEAR_RANGE;
@@ -127,5 +133,7 @@ export const SANITIZERS = {
     return {metricType, cutoff};
   },
   gender: gender => gender === "true" || gender === "false" ? JSON.parse(gender) : null,
-  yearType: yearType => yearType === "deathyear" ? yearType : "birthyear"
+  yearType: yearType => yearType === "deathyear" ? yearType : "birthyear",
+  country: place => place && place.includes("|") ? place.split("|")[0] : place,
+  city: place => place && place.includes("|") ? place.split("|")[1] : "all"
 };

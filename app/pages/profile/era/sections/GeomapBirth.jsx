@@ -38,6 +38,8 @@ const GeomapBirth = ({era, peopleBorn}) => {
         config={{
           title: `Major Cities in ${era.name} for Births of Cultural Celebrities`,
           data: geomapBornData,
+          pointSizeMax: 30,
+          pointSizeMin: 2,
           depth: 1,
           fitFilter: d => ["152", "643"].includes(d.id),
           groupBy: ["event", "place_name"],

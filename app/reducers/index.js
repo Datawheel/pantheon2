@@ -1,8 +1,10 @@
 import {combineReducers} from "redux";
 import personProfile from "reducers/personProfile";
+import explore from "reducers/explore";
 
 const rootReducer = combineReducers({
-  personProfile
+  personProfile,
+  explore
 });
 
 export default rootReducer;

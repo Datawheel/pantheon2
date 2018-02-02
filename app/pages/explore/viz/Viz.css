@@ -1,0 +1,6 @@
+@import "components/common/typography";
+@import "components/common/colors";
+
+.explore-body {
+  width: 100%;
+}

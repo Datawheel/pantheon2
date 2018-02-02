@@ -21,9 +21,9 @@ import DataSources from "pages/about/DataSources";
 import Contact from "pages/about/Contact";
 
 // // explore componenets
-// import Explore from "components/explore/Explore";
-// import Viz from "components/explore/viz/Viz";
-// import Rankings from "components/explore/rankings/Rankings";
+import Explore from "pages/explore/Explore";
+import Viz from "pages/explore/viz/Viz";
+// import Rankings from "pages/explore/rankings/Rankings";
 
 // data section components
 import Data from "pages/data/Data";
@@ -77,14 +77,10 @@ export default function RouteCreate() {
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
 
-      {/*
-      <Route path="person(/:id)" component={Person} />
-
       <Route path="explore" component={Explore}>
         <Route path="viz" component={Viz} />
-        <Route path="rankings" component={Rankings} />
+        {/* <Route path="rankings" component={Rankings} /> */}
       </Route>
-      */}
 
       <Route path="about" component={About}>
         <Route path="vision" component={Vision} />
