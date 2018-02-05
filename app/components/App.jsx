@@ -47,9 +47,10 @@ class App extends Component {
   }
 
   render() {
+    const {page} = this.state;
     const {children, searchActive} = this.props;
     return (
-      <CanonComponent d3plus={d3plus} className="container">
+      <CanonComponent d3plus={d3plus} className={`${page} container`}>
         <Navigation />
         { children }
         <Footer />
