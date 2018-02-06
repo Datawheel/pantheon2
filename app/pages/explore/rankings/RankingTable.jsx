@@ -18,12 +18,12 @@ class RankingTable extends Component {
   }
 
   render() {
-    const {data, loading, occupations, places, viz, yearType} = this.props;
-    const show = "people";
-    const showDepth = "people";
-    // console.log("show", show)
+    const {data, loading, occupations, places, show, viz, yearType} = this.props;
+    // const {data, loading, occupations, places, viz, yearType} = this.props;
+    // const show = "people";
+    const showDepth = show;
     const columns = getColumns(show, showDepth, occupations, places);
-    console.log("data", data);
+    console.log("show", show);
 
     return (
       <div className="ranking-table-container">
@@ -31,6 +31,7 @@ class RankingTable extends Component {
         </div>
         <ReactTable
           style={{width: "100%"}}
+          loading={loading}
           data={data}
           columns={columns}
         />

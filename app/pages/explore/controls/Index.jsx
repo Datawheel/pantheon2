@@ -10,6 +10,7 @@ import VizControl from "pages/explore/controls/VizControl";
 import AdvancedControl from "pages/explore/controls/AdvancedControl";
 import GenderControl from "pages/explore/controls/GenderControl";
 import YearTypeControl from "pages/explore/controls/YearTypeControl";
+import dataFormatter from "pages/explore/rankings/dataFormatter";
 import {SANITIZERS} from "types";
 
 class Controls extends Component {
@@ -69,8 +70,9 @@ class Controls extends Component {
   }
 
   fetchData = () => {
+    const {pathname} = this.props.location;
     const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType} = this.state;
-    const selectFields = "name,langs,hpi,id,slug,birthyear,deathyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug,lat_lon},occupation_id:occupation";
+    const selectFields = "name,langs,hpi,id,slug,birthyear,deathyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug,lat_lon},deathplace{id,name,country_name,slug},occupation_id:occupation,occupation{id,occupation,occupation_slug}";
     const apiHeaders = null;
 
     let placeFilter = "";
@@ -99,7 +101,8 @@ class Controls extends Component {
     const dataUrl = `http://localhost:3100/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}`;
     console.log("getNewData", dataUrl);
     axios.get(dataUrl, {headers: apiHeaders}).then(res => {
-      this.props.updateData(Object.assign({data: res.data, loading: false, show, viz}, this.state));
+      const data = pathname.includes("explore/rankings") ? dataFormatter(res.data, show) : res.data;
+      this.props.updateData(Object.assign({data, loading: false, show, viz}, this.state));
     });
   }
 
@@ -111,9 +114,13 @@ class Controls extends Component {
   }
 
   update = (key, val) => {
+    const {pathname} = this.props.location;
     this.setState({[key]: val}, () => {
       this.setQueryParams();
       this.props.update(key, val);
+      if (pathname.includes("explore/rankings")) {
+        this.fetchData();
+      }
     });
   }
 

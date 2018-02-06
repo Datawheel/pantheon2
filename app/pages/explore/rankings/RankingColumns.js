@@ -1,5 +1,6 @@
 /* eslint react/display-name: 0 */
 import React from "react";
+import AnchorList from "components/utils/AnchorList";
 import {FORMATTERS} from "types";
 
 const getColumns = (show, nesting, occupations, places) => {
@@ -54,7 +55,7 @@ const getColumns = (show, nesting, occupations, places) => {
           Cell: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : <span>-</span>
         },
         {
-          id: "deathplace.name",
+          id: "deathplace",
           Header: "Death Place",
           accessor: d => d.deathplace ? d.deathplace.name : null,
           Cell: ({value, row}) => value ? <a href={`/profile/place/${row.deathplace.slug}`}>{value}</a> : <span>-</span>
@@ -68,14 +69,14 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "#",
           accessor: "num_born",
-          Cell: ({index}) => <span>{index+1}</span>,
+          Cell: ({index}) => <span>{index + 1}</span>,
           minWidth: 30
-        }
-        // {
-        //   header: "Occupation",
-        //   accessor: "occupation",
-        //   Cell: ({value}) => <a href={`/profile/occupation/${value.occupation_slug}`}>{value.occupation}</a>
-        // },
+        },
+        {
+          Header: "Occupation",
+          accessor: "name",
+          Cell: ({value, original}) => <a href={`/profile/occupation/${original.slug}`}>{value}</a>
+        },
         // {
         //   header: "Industry",
         //   accessor: "occupation",
@@ -86,12 +87,29 @@ const getColumns = (show, nesting, occupations, places) => {
         //   accessor: "occupation",
         //   render: ({value}) => <span>{value.domain}</span>
         // },
-        // {
-        //   header: "People",
-        //   accessor: "num_born",
-        //   sort: "desc",
-        //   minWidth: 55
-        // }
+        {
+          Header: "People",
+          accessor: "count",
+          sort: "desc",
+          minWidth: 55
+        },
+        {
+          Header: "Avg. HPI",
+          accessor: "avg_hpi",
+          Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+          minWidth: 55
+        },
+        {
+          Header: "Avg. L",
+          accessor: "avg_langs",
+          Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+          minWidth: 55
+        },
+        {
+          Header: "Top 3",
+          accessor: "top_ranked",
+          Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
+        }
         // {
         //   header: "% Women",
         //   accessor: "num_born_women",
@@ -187,36 +205,49 @@ const getColumns = (show, nesting, occupations, places) => {
       ],
       places: [
         {
-          header: "#",
-          accessor: "born_rank_unique",
-          render: ({value, index}) => <span>{value ? value : index+1}</span>
+          Header: "#",
+          accessor: "count",
+          Cell: ({index}) => <span>{index + 1}</span>,
+          minWidth: 30
         },
         {
-          header: "City",
-          accessor: "place",
-          render: ({value}) => <a href={`/profile/place/${value.slug}`}>{value.name}</a>
+          Header: "City",
+          accessor: "name",
+          render: ({value, original}) => <a href={`/profile/place/${original.slug}`}>{value}</a>
         },
         {
-          header: "Country",
-          accessor: "country",
-          render: ({value}) => <a href={`/profile/place/${value.slug}`}>{value.name}</a>
+          Header: "Country",
+          accessor: "country_name",
+          render: ({value}) => <a href={`/profile/place/${value}`}>{value}</a>
         },
         {
-          header: "Region",
-          accessor: "country",
-          render: ({value}) => <span>{value.region}</span>
-        },
-        {
-          header: "Births",
-          accessor: "num_born",
+          Header: "People",
+          accessor: "count",
           minWidth: 60,
           sort: "desc"
         },
         {
-          header: "Deaths",
-          accessor: "num_died",
-          minWidth: 60
+          Header: "Avg. HPI",
+          accessor: "avg_hpi",
+          Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+          minWidth: 55
+        },
+        {
+          Header: "Avg. L",
+          accessor: "avg_langs",
+          Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+          minWidth: 55
+        },
+        {
+          Header: "Top 3",
+          accessor: "top_ranked",
+          Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
         }
+        // {
+        //   header: "Deaths",
+        //   accessor: "num_died",
+        //   minWidth: 60
+        // }
       ]
     }
   };

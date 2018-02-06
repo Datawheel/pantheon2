@@ -93,8 +93,13 @@ class Viz extends Component {
   render() {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
-    const {nestedOccupations, occupations} = occupationResponse;
     const {city, country, data, gender, metricCutoff, metricType, loading, occupation, show, viz, years, yearType} = this.state;
+
+    if (!occupationResponse) {
+      return <div>loading...</div>;
+    }
+
+    const {nestedOccupations, occupations} = occupationResponse;
 
     const metricRange = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
     let metricSentence;
