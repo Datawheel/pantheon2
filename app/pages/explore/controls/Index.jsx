@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {connect} from "react-redux";
-import axios from "axios";
+import api from "apiConfig";
 import YearControl from "pages/explore/controls/YearControl";
 import PlaceControl from "pages/explore/controls/PlaceControl";
 import OccupationControl from "pages/explore/controls/OccupationControl";
@@ -100,7 +100,7 @@ class Controls extends Component {
 
     const dataUrl = `http://localhost:3100/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}`;
     console.log("getNewData", dataUrl);
-    axios.get(dataUrl, {headers: apiHeaders}).then(res => {
+    api.get(dataUrl, {headers: apiHeaders}).then(res => {
       const data = pathname.includes("explore/rankings") ? dataFormatter(res.data, show) : res.data;
       this.props.updateData(Object.assign({data, loading: false, show, viz}, this.state));
     });
