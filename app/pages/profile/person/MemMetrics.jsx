@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {FORMATTERS} from "types/index";
 import axios from "axios";
+import "pages/profile/person/MemMetrics.css";
 
 class MemMetrics extends Component {
 
@@ -11,7 +12,11 @@ class MemMetrics extends Component {
 
   componentDidMount() {
     const {person} = this.props;
-    axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=AIzaSyB0gtWcJ2moxtxdVGkC0WvIdFvQX4nRNPs`)
+
+    // Note: this key is restricted to Pantheon domains, if you want to use this in your
+    // codebase, please generate a key: https://developers.google.com/youtube/v3/docs/
+    const apiKey = "AIzaSyAkUC_UekOQbJvoMo_2pJqLRzgCTuUD_wE";
+    axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=${apiKey}`)
       .then(res => {
         const vid = res.data.items[0];
         this.setState({vid});
