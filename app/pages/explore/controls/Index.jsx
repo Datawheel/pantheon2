@@ -117,16 +117,20 @@ class Controls extends Component {
     const {pathname} = this.props.location;
     this.setState({[key]: val}, () => {
       this.setQueryParams();
-      this.props.update({[key]: val, loading: true, data: []});
       if (pathname.includes("explore/rankings")) {
+        this.props.update({[key]: val, loading: true, data: []});
         this.fetchData();
+      }
+      else {
+        this.props.update({[key]: val});
       }
     });
   }
 
   render() {
     const {city, country, gender, metricCutoff, metricType, occupation, pageType, show, viz, years, yearType} = this.state;
-    const {nestedOccupations, places} = this.props;
+    const {location, nestedOccupations, places} = this.props;
+    const {pathname} = location;
 
     return (
       <div className="explore-controls viz-explorer" id="side-panel">
@@ -139,7 +143,7 @@ class Controls extends Component {
           {pageType === "viz"
             ? <VizControl viz={viz} changeViz={this.update} />
             : null}
-          <ShowControl page={pageType} show={show} changeShow={this.update} />
+          <ShowControl page={pathname.includes("explore/rankings") ? "rankings" : "viz"} show={show} changeShow={this.update} />
         </section>
 
         <section className="control-group">

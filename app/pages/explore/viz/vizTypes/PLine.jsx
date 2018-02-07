@@ -73,6 +73,7 @@ class PLine extends Component {
           data: stackedData,
           depth,
           groupBy: grouping,
+          height: false,
           shapeConfig: shapeConf,
           // x: birthyear,
           xConfig: {

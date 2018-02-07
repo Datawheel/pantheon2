@@ -58,6 +58,7 @@ class PStacked extends Component {
           data: stackedData,
           depth,
           groupBy: grouping,
+          height: false,
           shapeConfig: shapeConf,
           xConfig: {
             labels: bornTicks,

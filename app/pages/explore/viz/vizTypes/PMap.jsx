@@ -47,6 +47,7 @@ class PMap extends Component {
           depth: 1,
           fitFilter: d => ["152", "643"].includes(d.id),
           groupBy: ["event", "place_name"],
+          height: false,
           // on: on("place", d => d.place.slug),
           shapeConfig: {
             fill: d => d.event.toLowerCase().indexOf("birth") > 0

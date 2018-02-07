@@ -55,6 +55,7 @@ class PTreemap extends Component {
           data: tmapData,
           depth,
           groupBy: grouping,
+          height: false,
           shapeConfig: shapeConf,
           time: "birthyear",
           // tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
