@@ -1,9 +1,7 @@
 import React from "react";
 import "pages/profile/common/Intro.css";
 import PersonImage from "components/utils/PersonImage";
-// import {FORMATTERS} from "types";
-import {FORMATTERS} from "types/index";
-
+import {FORMATTERS} from "types";
 import {COLORS_DOMAIN} from "types";
 
 const Intro = ({person, totalPageViews}) => {

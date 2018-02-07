@@ -1,5 +1,5 @@
 import React from "react";
-import "pages/profile/common/Nav";
+import "pages/profile/common/Nav.css";
 
 const Nav = ({sections}) =>
   <nav className="profile-nav">

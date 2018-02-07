@@ -55,9 +55,9 @@
     & a {
       background-size: cover;
       background-position: 25% 50%;
-      width: 100%;
-      height: 100%;
       display: block;
+      height: 100%;
+      width: 100%;
 
       & img {
         width: 103%;
@@ -81,8 +81,8 @@
     & a {
       text-decoration: none;
       outline: none;
-      color: var(--colorEggshell);
       @apply --bodyLink;
+      color: var(--colorEggshell);
     }
   }
 

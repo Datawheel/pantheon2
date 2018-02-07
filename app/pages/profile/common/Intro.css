@@ -126,6 +126,7 @@
 
   & h3 {
     @apply --profileIntroTitle;
+    color: inherit;
     display: block;
     text-align: center;
 
