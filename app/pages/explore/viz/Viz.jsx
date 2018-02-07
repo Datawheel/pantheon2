@@ -86,8 +86,8 @@ class Viz extends Component {
   }
 
   updateData = updatedState => this.setState(updatedState);
-  update = (key, val) => {
-    this.setState({[key]: val});
+  update = newState => {
+    this.setState(Object.assign({}, this.state, newState));
   }
 
   render() {

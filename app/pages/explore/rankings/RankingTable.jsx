@@ -1,14 +1,7 @@
 import React, {Component} from "react";
 import ReactTable from "react-table";
-import {RANKINGS_RESULTS_PER_PAGE} from "types";
-// import RankingPagination from "pages/explore/rankings/RankingPagination";
-// import RankingResultCount from "pages/explore/rankings/RankingResultCount";
-// import RankingSearch from "pages/explore/rankings/RankingSearch";
-// import {sortRankingsTable, updateRankingsTable} from "actions/rankings";
-// import {getNewData} from "actions/explore";
 import getColumns from "pages/explore/rankings/RankingColumns";
 import "pages/explore/Explore.css";
-// import "@blueprintjs/labs/dist/blueprint-labs.css";
 import "react-table/react-table.css";
 
 class RankingTable extends Component {
@@ -18,12 +11,10 @@ class RankingTable extends Component {
   }
 
   render() {
-    const {data, loading, occupations, places, show, viz, yearType} = this.props;
-    // const {data, loading, occupations, places, viz, yearType} = this.props;
-    // const show = "people";
+    const {data, loading, occupations, places, show} = this.props;
     const showDepth = show;
     const columns = getColumns(show, showDepth, occupations, places);
-    console.log("show", show);
+    const sortCol = columns.find(c => c.defaultSorted);
 
     return (
       <div className="ranking-table-container">
@@ -31,9 +22,17 @@ class RankingTable extends Component {
         </div>
         <ReactTable
           style={{width: "100%"}}
+          className="-striped -highlight"
           loading={loading}
           data={data}
           columns={columns}
+          defaultSorted={[
+            {
+              id: sortCol.accessor,
+              desc: true
+            }
+          ]}
+          defaultPageSize={50}
         />
       </div>
     );

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import ReactTable from "react-table";
 import {RANKINGS_RESULTS_PER_PAGE} from "types";
-import {updateRankingsTable} from "actions/rankings";
+// import {updateRankingsTable} from "actions/rankings";
 import {COLUMNS} from "pages/explore/rankings/RankingColumns";
 
 import "pages/explore/Explore.css";

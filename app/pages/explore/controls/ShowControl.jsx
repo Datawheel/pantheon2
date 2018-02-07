@@ -25,7 +25,6 @@ class ShowControl extends Component {
     // const {type, depth} = explore.show;
     const type = "people";
     const depth = "people";
-    console.log("show", show)
 
     if (page === "viz") {
       rankingTypes = this.rankingTypes.slice(1, this.rankingTypes.length);

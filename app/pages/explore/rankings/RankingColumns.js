@@ -61,36 +61,36 @@ const getColumns = (show, nesting, occupations, places) => {
           Cell: ({value, row}) => value ? <a href={`/profile/place/${row.deathplace.slug}`}>{value}</a> : <span>-</span>
         },
         {Header: "L", accessor: "langs", minWidth: 35},
-        {Header: "HPI", accessor: "hpi", sort: "desc", maxWidth: 80}
+        {Header: "HPI", accessor: "hpi", defaultSorted: true, maxWidth: 80}
       ]
     },
     occupations: {
       occupations: [
         {
-          Header: "#",
-          accessor: "num_born",
-          Cell: ({index}) => <span>{index + 1}</span>,
-          minWidth: 30
-        },
-        {
           Header: "Occupation",
           accessor: "name",
           Cell: ({value, original}) => <a href={`/profile/occupation/${original.slug}`}>{value}</a>
         },
-        // {
-        //   header: "Industry",
-        //   accessor: "occupation",
-        //   render: ({value}) => <span>{value.industry}</span>
-        // },
-        // {
-        //   header: "Domain",
-        //   accessor: "occupation",
-        //   render: ({value}) => <span>{value.domain}</span>
-        // },
+        {
+          Header: "Industry",
+          accessor: "id",
+          Cell: ({value}) => {
+            const occ = occupations.find(o => o.id === value);
+            return <span>{occ.industry}</span>;
+          }
+        },
+        {
+          Header: "Domain",
+          accessor: "id",
+          Cell: ({value}) => {
+            const occ = occupations.find(o => o.id === value);
+            return <span>{occ.domain}</span>;
+          }
+        },
         {
           Header: "People",
           accessor: "count",
-          sort: "desc",
+          defaultSorted: true,
           minWidth: 55
         },
         {
@@ -205,26 +205,20 @@ const getColumns = (show, nesting, occupations, places) => {
       ],
       places: [
         {
-          Header: "#",
-          accessor: "count",
-          Cell: ({index}) => <span>{index + 1}</span>,
-          minWidth: 30
-        },
-        {
           Header: "City",
           accessor: "name",
-          render: ({value, original}) => <a href={`/profile/place/${original.slug}`}>{value}</a>
+          Cell: ({value, original}) => <a href={`/profile/place/${original.slug}`}>{value}</a>
         },
         {
           Header: "Country",
           accessor: "country_name",
-          render: ({value}) => <a href={`/profile/place/${value}`}>{value}</a>
+          Cell: ({value}) => <a href={`/profile/place/${value}`}>{value}</a>
         },
         {
           Header: "People",
           accessor: "count",
-          minWidth: 60,
-          sort: "desc"
+          defaultSorted: true,
+          minWidth: 60
         },
         {
           Header: "Avg. HPI",

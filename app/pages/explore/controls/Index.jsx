@@ -117,7 +117,7 @@ class Controls extends Component {
     const {pathname} = this.props.location;
     this.setState({[key]: val}, () => {
       this.setQueryParams();
-      this.props.update(key, val);
+      this.props.update({[key]: val, loading: true, data: []});
       if (pathname.includes("explore/rankings")) {
         this.fetchData();
       }
