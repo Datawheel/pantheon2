@@ -98,7 +98,7 @@ class Controls extends Component {
       metricFilter = `&${metricType}=gte.${metricCutoff}`;
     }
 
-    const dataUrl = `http://localhost:3100/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}`;
+    const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}`;
     console.log("getNewData", dataUrl);
     api.get(dataUrl, {headers: apiHeaders}).then(res => {
       const data = pathname.includes("explore/rankings") ? dataFormatter(res.data, show) : res.data;
