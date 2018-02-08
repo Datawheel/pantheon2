@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {fetchData} from "datawheel-canon";
 import Helmet from "react-helmet";
 import config from "helmet.js";
-// import ProfileNav from "pages/profile/Nav";
+import ProfileNav from "pages/profile/common/Nav";
 import Header from "pages/profile/era/Header";
 import Intro from "pages/profile/era/Intro";
 import Footer from "pages/profile/era/Footer";
@@ -19,6 +19,14 @@ class Era extends Component {
 
   constructor(props) {
     super(props);
+    this.sections = [
+      {slug: "most-remembered", title: "Most Remembered"},
+      {slug: "occupations", title: "Occupations"},
+      {slug: "occupations-over-time", title: "Occupations Over Time"},
+      {slug: "major-cities-by-number-of-births", title: "Major Cities By Number of Births"},
+      {slug: "major-cities-by-number-of-deaths", title: "Major Cities By Number of Deaths"},
+      {slug: "overlapping-lives", title: "Overlapping Lives"}
+    ];
   }
 
   render() {
@@ -32,6 +40,7 @@ class Era extends Component {
         />
         <Header era={era} />
         <div className="about-section">
+          <ProfileNav sections={this.sections} />
           <Intro era={era} eras={eras} peopleBorn={peopleBornInEra} peopleDied={peopleDiedInEra} />
         </div>
         <PeopleRanking era={era} peopleBorn={peopleBornInEra} peopleDied={peopleDiedInEra} />

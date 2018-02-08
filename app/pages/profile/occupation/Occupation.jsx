@@ -5,7 +5,7 @@ import Helmet from "react-helmet";
 import config from "helmet.js";
 import Header from "pages/profile/occupation/Header";
 import {plural} from "pluralize";
-// import ProfileNav from "pages/profile/Nav";
+import ProfileNav from "pages/profile/common/Nav";
 import Intro from "pages/profile/occupation/Intro";
 import Footer from "pages/profile/occupation/Footer";
 import People from "pages/profile/occupation/sections/People";
@@ -19,10 +19,16 @@ class Occupation extends Component {
 
   constructor(props) {
     super(props);
+    this.sections = [
+      {slug: "people", title: "People"},
+      {slug: "places", title: "Places"},
+      {slug: "places-over-time", title: "Places Over Time"},
+      {slug: "overlapping-lives", title: "Overlapping Lives"},
+      {slug: "related-occupations", title: "Related Occupations"}
+    ];
   }
 
   render() {
-    // console.log(this.props);
     const {occupation, occupations, people, peopleInDomain, eras} = this.props.data;
 
     return (
@@ -33,6 +39,7 @@ class Occupation extends Component {
         />
         <Header occupation={occupation} people={people} />
         <div className="about-section">
+          <ProfileNav sections={this.sections} />
           <Intro occupation={occupation} occupations={occupations} />
         </div>
         <People occupation={occupation} people={people} />
