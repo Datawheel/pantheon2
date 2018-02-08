@@ -31,7 +31,7 @@ const GeomapBirth = ({country, peopleBorn}) => {
   });
 
   return <section className="profile-section">
-    <SectionHead title="Major cities by number of births" index={1} numSections={5} />
+    <SectionHead title="Cities by Births" index={1} numSections={5} />
     <div className="section-body">
       <Geomap
         key="geomapBirths"

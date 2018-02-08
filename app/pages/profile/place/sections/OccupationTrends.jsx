@@ -54,7 +54,7 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
   }
 
   return <section className="profile-section">
-    <SectionHead title="Occupation Trends" index={1} numSections={5} />
+    <SectionHead title="Occupational Trends" index={1} numSections={5} />
     <div className="section-body">
       <div>
         {topModern.length

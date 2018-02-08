@@ -4,7 +4,7 @@ import {fetchData} from "datawheel-canon";
 import Helmet from "react-helmet";
 import config from "helmet.js";
 import Header from "pages/profile/place/Header";
-// import ProfileNav from "pages/profile/Nav";
+import ProfileNav from "pages/profile/common/Nav";
 import Intro from "pages/profile/place/Intro";
 import Footer from "pages/profile/place/Footer";
 import PeopleRanking from "pages/profile/place/sections/PeopleRanking";
@@ -24,6 +24,15 @@ class Place extends Component {
 
   constructor(props) {
     super(props);
+    this.sections = [
+      {slug: "people", title: "People"},
+      {slug: "occupations", title: "Occupations"},
+      {slug: "occupational-trends", title: "Occupational Trends"},
+      {slug: "cities-by-births", title: "Cities by Births"},
+      {slug: "cities-by-deaths", title: "Cities by Deaths"},
+      {slug: "overlapping-lives", title: "Overlapping Lives"},
+      {slug: "living-people", title: "Living People"}
+    ];
   }
 
   render() {
@@ -42,6 +51,7 @@ class Place extends Component {
         />
         <Header place={place} country={country} people={peopleBornHere} />
         <div className="about-section">
+          <ProfileNav sections={this.sections} />
           <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
         </div>
         <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />

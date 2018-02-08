@@ -13,7 +13,7 @@ const Footer = ({person, ranking}) => {
         <ul className="footer-carousel-container">
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
-              <a href={`/profile/occupation/${person.occupation.occupation_slug}`} style={{backgroundImage: `url(/images/profile/occupation/${person.occupation.occupation_slug}.jpg)`}}></a>
+              <a href={`/profile/occupation/${person.occupation.occupation_slug}`} style={{backgroundImage: `url(/images/profile/occupation/${person.occupation.id}.jpg)`}}></a>
             </div>
             <h4 className="footer-carousel-item-title">
               <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>

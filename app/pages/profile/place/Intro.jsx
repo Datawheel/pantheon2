@@ -8,7 +8,6 @@ import {plural} from "pluralize";
 
 const Intro = ({place, country, placeRanks, peopleBornHere, peopleDiedHere}) => {
   const myIndex = placeRanks.findIndex(p => p.name === place.name);
-  console.log("myIndex", myIndex)
 
   const occupationsBorn = nest()
     .key(d => d.occupation.id)
