@@ -1,6 +1,5 @@
 import React, {Component} from "react";
-import {CanonComponent} from "datawheel-canon";
-import d3plus from "viz/d3plus";
+import {Canon} from "datawheel-canon";
 import Navigation from "components/Navigation";
 import Footer from "components/Footer";
 import Search from "components/Search";
@@ -58,12 +57,12 @@ class App extends Component {
     const {page, searchActive} = this.state;
     const {children} = this.props;
     return (
-      <CanonComponent d3plus={d3plus} className={`${page} container`}>
+      <Canon className={`${page} container`}>
         {searchActive ? <Search activateSearch={this.activateSearch} /> : null}
         <Navigation activateSearch={this.activateSearch} />
         { children }
         <Footer />
-      </CanonComponent>
+      </Canon>
     );
   }
 

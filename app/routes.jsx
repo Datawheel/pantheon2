@@ -1,7 +1,7 @@
 import React from "react";
 import {Route, IndexRoute} from "react-router";
 
-import App from "components/App";
+import App from "App";
 import Home from "pages/Home";
 
 // profile components
@@ -23,7 +23,7 @@ import Contact from "pages/about/Contact";
 // // explore componenets
 import Explore from "pages/explore/Explore";
 import Viz from "pages/explore/viz/Viz";
-import Rankings from "pages/explore/rankings/Rankings";
+// import Rankings from "pages/explore/rankings/Rankings";
 
 // data section components
 import Data from "pages/data/Data";
@@ -45,7 +45,7 @@ export default function RouteCreate() {
   function genRandId(path) {
     let candidates;
     if (path.includes("place")) {
-      candidates = ["india", "united_kingdom", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "shanghai", "st._louis", "cote_d'ivoire_(ivory_coast)", "dallas", "philippines"];
+      candidates = ["india", "united_kingdom", "france", "italy", "chile", "brazil", "bulgaria", "rome", "coimbra", "albuquerque", "oslo", "thailand", "indonesia", "st._louis", "cote_d'ivoire_(ivory_coast)", "dallas", "philippines"];
     }
     else if (path.includes("occupation")) {
       candidates = ["architect", "social_activist", "political_leaders", "pilot", "physicist", "biologist", "astronomer", "athlete", "basketball_player", "baseball_player", "chef", "celebrity", "game_designer", "actor", "film_director", "philosopher", "computer_scientist", "snooker", "youtuber"];

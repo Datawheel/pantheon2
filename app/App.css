@@ -1,5 +1,5 @@
-@import "common/colors";
-@import "common/typography";
+@import "components/common/colors";
+@import "components/common/typography";
 @import url("https://fonts.googleapis.com/css?family=Amiko:400,600,700");
 
 * {box-sizing: border-box;}
