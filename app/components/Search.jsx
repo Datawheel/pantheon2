@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {strip} from "d3plus-text";
-import apiClient from "apiconfig";
+import api from "apiConfig";
 import "components/Search.css";
 
 class Search extends Component {
@@ -23,7 +23,7 @@ class Search extends Component {
     userQueryCleaned[userQueryCleaned.length - 1] = `${lastItem}:*`;
     userQueryCleaned = userQueryCleaned.join("%26");
 
-    apiClient.get(`/search?document=@@.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
+    api.get(`/search?document=@@.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
       .then(queryResults => {
         const results = queryResults.data;
         if (results) {

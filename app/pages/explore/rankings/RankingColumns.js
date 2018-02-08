@@ -11,7 +11,7 @@ const getColumns = (show, nesting, occupations, places) => {
           Header: "#",
           accessor: "rank",
           // sortable: false,
-          Cell: ({index}) => <span>{index + 1}</span>,
+          Cell: ({value}) => <span>{value}</span>,
           minWidth: 45
         },
         {

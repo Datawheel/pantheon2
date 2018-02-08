@@ -74,11 +74,14 @@ class Viz extends Component {
       viz: "treemap",
       city: "all",
       country: "all",
+      filteredData: [],
       gender: null,
       nestedOccupations: null,
       occupation: "all",
       occupations: null,
+      pageSize: 50,
       places: null,
+      searching: false,
       show: "occupations",
       years: [],
       yearType: "birthyear"
@@ -89,11 +92,22 @@ class Viz extends Component {
   update = newState => {
     this.setState(Object.assign({}, this.state, newState));
   }
+  search = term => {
+    const {data, show} = this.state;
+    console.log("data", data);
+    console.log("term", term);
+    console.log("show", show);
+    this.setState({
+      searching: true,
+      filteredData: data.filter(d => d.name.toLowerCase().includes(term))
+    });
+  }
+
 
   render() {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
-    const {city, country, data, gender, metricCutoff, metricType, loading, occupation, show, viz, years, yearType} = this.state;
+    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
 
     if (!occupationResponse) {
       return <div>loading...</div>;
@@ -151,9 +165,12 @@ class Viz extends Component {
             />
             : <RankingTable
               loading={loading}
-              data={data}
+              data={searching ? filteredData : data}
               occupations={occupations}
               places={places}
+              pageSize={pageSize}
+              changePageSize={this.update}
+              search={this.search}
               show={show}
               viz={viz}
               yearType={yearType}

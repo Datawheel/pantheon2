@@ -34,5 +34,8 @@ export default function dataFormatter(dataArray, show) {
       .entries(data.filter(d => d.birthplace))
       .map(d => d.value);
   }
+  else {
+    data = data.map((d, i) => Object.assign(d, {rank: i + 1}));
+  }
   return data;
 }

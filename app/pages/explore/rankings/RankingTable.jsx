@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import ReactTable from "react-table";
 import getColumns from "pages/explore/rankings/RankingColumns";
+import RankingSearch from "pages/explore/rankings/RankingSearch";
+import RankingResultsPerPage from "pages/explore/rankings/RankingResultsPerPage";
 import "pages/explore/Explore.css";
 import "react-table/react-table.css";
 
@@ -11,7 +13,7 @@ class RankingTable extends Component {
   }
 
   render() {
-    const {data, loading, occupations, places, show} = this.props;
+    const {changePageSize, data, loading, occupations, pageSize, places, search, show} = this.props;
     const showDepth = show;
     const columns = getColumns(show, showDepth, occupations, places);
     const sortCol = columns.find(c => c.defaultSorted);
@@ -19,6 +21,8 @@ class RankingTable extends Component {
     return (
       <div className="ranking-table-container">
         <div className="ranking-head">
+          <RankingResultsPerPage changePageSize={changePageSize} />
+          <RankingSearch search={search} />
         </div>
         <ReactTable
           style={{width: "100%"}}
@@ -33,6 +37,8 @@ class RankingTable extends Component {
             }
           ]}
           defaultPageSize={50}
+          pageSize={Math.min(pageSize, data.length)}
+          showPageSizeOptions={false}
         />
       </div>
     );

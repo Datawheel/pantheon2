@@ -72,8 +72,9 @@ class Controls extends Component {
   fetchData = () => {
     const {pathname} = this.props.location;
     const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType} = this.state;
-    const selectFields = "name,langs,hpi,id,slug,birthyear,deathyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug,lat_lon},deathplace{id,name,country_name,slug},occupation_id:occupation,occupation{id,occupation,occupation_slug}";
+    const selectFields = "name,langs,hpi,id,slug,gender,birthyear,deathyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug,lat_lon},deathplace{id,name,country_name,slug},occupation_id:occupation,occupation{id,occupation,occupation_slug}";
     const apiHeaders = null;
+    const sorting = "&order=hpi.desc.nullslast";
 
     let placeFilter = "";
     if (country !== "all") {
@@ -98,7 +99,7 @@ class Controls extends Component {
       metricFilter = `&${metricType}=gte.${metricCutoff}`;
     }
 
-    const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}`;
+    const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${sorting}`;
     console.log("getNewData", dataUrl);
     api.get(dataUrl, {headers: apiHeaders}).then(res => {
       const data = pathname.includes("explore/rankings") ? dataFormatter(res.data, show) : res.data;
