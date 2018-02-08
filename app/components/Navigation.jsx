@@ -34,14 +34,18 @@ class Navigation extends Component {
     document.body.classList.remove("frozen");
 
     const subItems = document.getElementsByClassName("sub-items");
-    [].forEach.call(subItems, function(el) {
+    [].forEach.call(subItems, el => {
       el.classList.remove("open");
     });
 
     const items = document.getElementsByClassName("item");
-    [].forEach.call(items, function(el) {
+    [].forEach.call(items, el => {
       el.classList.remove("o");
     });
+  }
+
+  activateSearch = () => {
+    console.log("search!")
   }
 
   render() {
@@ -157,9 +161,9 @@ class Navigation extends Component {
             <li className="item">
               <a href="/data/api" className="item-link api-link">API</a>
             </li>
-            <li className="item search-link item-link" onClick={ activateSearch }>Search</li>
+            <li className="item search-link item-link" onClick={activateSearch}>Search</li>
             <li className="item">
-              <a href="http://bit.ly/QWSKoc" target="_blank" className="item-link feedback-link">Give Feedback</a>
+              <a href="http://bit.ly/QWSKoc" target="_blank" rel="noopener noreferrer" className="item-link feedback-link">Give Feedback</a>
             </li>
             <li className="item item-link citation-link">
               Usage Citation

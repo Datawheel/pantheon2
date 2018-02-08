@@ -1,15 +1,19 @@
 import React, {Component} from "react";
-import Navigation from "components/Navigation";
-import Footer from "components/Footer";
 import {CanonComponent} from "datawheel-canon";
 import d3plus from "viz/d3plus";
+import Navigation from "components/Navigation";
+import Footer from "components/Footer";
+import Search from "components/Search";
 import "./App.css";
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {page: undefined};
+    this.state = {
+      page: undefined,
+      searchActive: false
+    };
   }
 
   componentWillMount() {
@@ -46,12 +50,17 @@ class App extends Component {
     }, false);
   }
 
+  activateSearch = () => {
+    this.setState({searchActive: !this.state.searchActive});
+  }
+
   render() {
-    const {page} = this.state;
-    const {children, searchActive} = this.props;
+    const {page, searchActive} = this.state;
+    const {children} = this.props;
     return (
       <CanonComponent d3plus={d3plus} className={`${page} container`}>
-        <Navigation />
+        {searchActive ? <Search activateSearch={this.activateSearch} /> : null}
+        <Navigation activateSearch={this.activateSearch} />
         { children }
         <Footer />
       </CanonComponent>

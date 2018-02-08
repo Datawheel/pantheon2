@@ -1,0 +1,287 @@
+@import "common/colors";
+@import "common/typography";
+
+.search {
+  background: var(--colorEggshellOverlay) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAFCAYAAAB8ZH1oAAAAK0lEQVQYV2P8+vVjPQMDAwM3N38jiMYFGGEShDTAFRLSgKEQlwacCtE1AAAVaBNgQH40pQAAAABJRU5ErkJggg==) repeat;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  padding: 24px 50px;
+  z-index: 101;
+
+  &::before {
+    content: '';
+    background: linear-gradient(var(--colorEggshell), transparent);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+
+  & .search-close {
+    position: absolute;
+    right: 15px;
+    top: 19px;
+    padding: 14px;
+    cursor: pointer;
+
+    & i {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      box-sizing: border-box;
+      display: block;
+
+      & > * {
+        position: absolute;
+        display: block;
+      }
+    }
+
+    & .close-perimeter {
+      width: 30px;
+      height: 30px;
+      top: 0;
+      left: 0;
+      border: 1px solid var(--colorSand);
+      border-radius: 50%;
+      background-color: var(--colorEggshell);
+      transition: all 0.1s;
+    }
+
+    & .close-x {
+      height: 20px;
+      width: 1px;
+      left: 15px;
+      top: 4px;
+      opacity: 1;
+      box-sizing: border-box;
+      border-left: 1px solid var(--colorSand);
+    }
+
+    & .close-back {
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
+
+    & .close-for {
+      transform: rotate(-45deg);
+      transition: all 0.5s 0.1s;
+    }
+
+    &:hover {
+      & .close-x {
+        height: 0;
+        border-color: var(--colorEggshell);
+      }
+
+      & .close-perimeter {
+        background-color: var(--colorInstitutions);
+        opacity: 0.8;
+      }
+
+      & .close-back {
+        top: 25px;
+        left: 0;
+      }
+
+      & .close-for {
+        top: 25px;
+        left: 30px;
+      }
+    }
+  }
+
+  & .search-results {
+    margin: 0 34px;
+    box-sizing: border-box;
+  }
+
+  & .search-result-input {
+    position: relative;
+
+    & .search-mg {
+      display: inline-block;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      top: 10px;
+      left: -50px;
+      transition: all 0.5s;
+
+      & .search-mg-perimeter {
+        width: 30px;
+        height: 30px;
+        top: 0;
+        left: 0;
+        border: 1px solid var(--colorSand);
+        border-radius: 50%;
+        position: absolute;
+        transition: all 0.5s;
+        background-color: var(--colorEggshell);
+      }
+
+      & .search-mg-handle {
+        left: 30px;
+        top: 22px;
+        transform: rotate(-45deg);
+        width: 1px;
+        height: 13px;
+        position: absolute;
+        opacity: 1;
+        box-sizing: border-box;
+        border-left: 1px solid var(--colorSand);
+        transform: rotate(-45deg);
+        transition: all 0.3s;
+      }
+    }
+
+    &:hover {
+      & .search-mg-handle, & .search-mg-perimeter {
+        border-color: var(--colorCtrl);
+      }
+
+      & .search-mg-perimeter {
+        background-color: var(--colorCtrl);
+        opacity: 0.8;
+      }
+
+      & .search-mg-handle {
+        height: 0px;
+        left: 24px;
+      }
+    }
+
+    & input {
+      width: 100%;
+      padding: 15px 0 10px;
+      border: none;
+      border-bottom: solid 1px var(--colorSand);
+      background: transparent;
+      color: var(--colorBlackhole);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 0;
+      z-index: 1;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  & .results-list {
+    margin: 0;
+    padding: 20px 0;
+    list-style-type: none;
+
+    & li {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 6px 0;
+
+      & a {
+        position: relative;
+        color: var(--colorSlate);
+        text-decoration: none;
+        @apply --searchResults;
+        cursor: pointer;
+        box-sizing: border-box;
+        border-bottom: 1px solid rgba(255,255,255,0);
+
+        &:hover {
+          border-bottom: 1px solid currentColor;
+        }
+
+        &::before {
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          margin: 0 -35px;
+        }
+      }
+
+      & span {
+        color: var(--colorTan);
+        text-align: right;
+        display: inline-block;
+        min-width: 90px;
+        padding-left: 20px;
+        @apply --searchResults;
+      }
+    }
+
+    & .result-occupation {
+      & a::before {
+        content: '';
+        background: url("/images/icons/icon-prof.svg") no-repeat;
+        background-size: contain;
+        background-position: 50%;
+      }
+
+      &.highlighted {
+        & a::before {
+          background: url("/images/icons/icon-prof-h.svg") no-repeat;
+          background-size: contain;
+          background-position: 50%;
+        }
+      }
+    }
+
+    & .result-person {
+      & a::before {
+        content: '';
+        background: url("/images/icons/icon-person.svg") no-repeat;
+        background-size: contain;
+        background-position: 50%;
+      }
+
+      &.highlighted {
+        & a::before {
+          background: url("/images/icons/icon-person-h.svg") no-repeat;
+          background-size: contain;
+          background-position: 50%;
+        }
+      }
+    }
+
+    & .result-place {
+      & a::before {
+        content: '';
+        background: url("/images/icons/icon-place.svg") no-repeat;
+        background-size: contain;
+        background-position: 50%;
+      }
+
+      &.highlighted {
+        & a::before {
+          background: url("/images/icons/icon-place-h.svg") no-repeat;
+          background-size: contain;
+          background-position: 50%;
+        }
+      }
+    }
+
+    & .highlighted {
+      position: relative;
+      &::before {
+        position: absolute;
+        content: '';
+        background: url("/images/icons/icon-rec-r.svg") no-repeat;
+        background-size: contain;
+        width: 9px;
+        height: 11px;
+        left: -10px;
+        top: 12px;
+      }
+    }
+
+  }
+}
