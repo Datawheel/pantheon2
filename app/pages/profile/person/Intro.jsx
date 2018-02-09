@@ -6,7 +6,7 @@ import {COLORS_DOMAIN} from "types";
 
 const Intro = ({person, totalPageViews}) => {
   const occupationRank = person.occupation_rank_unique;
-  const birthcountryRank = person.countryRank ? person.me.birthcountry_rank_unique : null;
+  const birthcountryRank = person.birthcountry_rank_unique ? person.birthcountry_rank_unique : null;
   const age = person.deathyear !== null
           ? person.deathyear.id - person.birthyear.id
           : new Date().getFullYear() - person.birthyear.id,
