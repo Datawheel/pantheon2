@@ -103,46 +103,48 @@
 }
 
 
-& #navigation {
-  & .items {
-    max-width: 720px;
+/* .home {
+  & #navigation {
+    & .items {
+      max-width: 720px;
 
-    & .item {
-      flex: 0 1 auto;
-      padding: 8px;
-      min-width: auto;
+      & .item {
+        flex: 0 1 auto;
+        padding: 8px;
+        min-width: auto;
 
-      @media (max-width: 750px) {
+        @media (max-width: 750px) {
+          display: none;
+        }
+      }
+
+      @media (min-width: 751px) and (max-width: 990px) {
+        margin: 0 auto;
+        max-width: 720px;
+      }
+
+      & .item.home-link {
+        display: none;
+      }
+
+      & .search-btn {
         display: none;
       }
     }
-
-    @media (min-width: 751px) and (max-width: 990px) {
-      margin: 0 auto;
-      max-width: 720px;
-    }
-
-    & .item.home-link {
-      display: none;
-    }
-
-    & .search-btn {
-      display: none;
-    }
   }
-}
+} */
 
-& .home-container {
+.home-container {
   width: 100%;
   position: relative;
 }
 
-& .home-body {
+.home-body {
   position: relative;
   z-index: 0;
 }
 
-& .post {
+.post {
   @apply --bodyText;
   min-width: 328px;
   text-align: left;
@@ -172,7 +174,7 @@
   }
 }
 
-& .viz-container {
+.viz-container {
   position: relative;
   width: 100%;
   max-width: 100vw;
@@ -199,13 +201,13 @@
   }*/
 }
 
-& .legend-title {
+.legend-title {
   text-align: center;
   margin: 10px auto 0;
   @apply --boldSmallCaps;
 }
 
-& .timeline-container {
+.timeline-container {
   position: absolute;
   bottom: 0;
   height: 100%;
@@ -372,7 +374,7 @@
   }
 }
 
-& .floating-content {
+.floating-content {
   position: absolute;
   bottom: -40px;
   width: 80%;
@@ -568,6 +570,7 @@
 
   & h2 {
     @apply --smallCaps;
+    color: inherit;
     font-size: 1em;
     margin: 0 0 5px;
     position: relative;

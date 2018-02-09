@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import PropTypes from "prop-types";
 import {Canon} from "datawheel-canon";
 import Navigation from "components/Navigation";
 import Footer from "components/Footer";
@@ -13,6 +14,10 @@ class App extends Component {
       page: undefined,
       searchActive: false
     };
+  }
+
+  getChildContext() {
+    return {activateSearch: this.activateSearch};
   }
 
   componentWillMount() {
@@ -38,13 +43,13 @@ class App extends Component {
       if (event.keyCode === 83) {
         if (event.target.tagName !== "INPUT") {
           event.preventDefault();
-          this.props.activateSearch();
+          this.activateSearch();
         }
       }
       // 'esc' key
       if (event.keyCode === 27) {
         event.preventDefault();
-        this.props.activateSearch();
+        this.activateSearch();
       }
     }, false);
   }
@@ -65,8 +70,10 @@ class App extends Component {
       </Canon>
     );
   }
-
-
 }
+
+App.childContextTypes = {
+  activateSearch: PropTypes.func
+};
 
 export default App;

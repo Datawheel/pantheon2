@@ -52,13 +52,13 @@ const getColumns = (show, nesting, occupations, places) => {
           id: "birthplace",
           Header: "Birth Place",
           accessor: d => d.birthplace ? d.birthplace.name : null,
-          Cell: ({value, row}) => value ? <a href={`/profile/place/${row.birthplace.slug}`}>{value}</a> : <span>-</span>
+          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.birthplace.slug}`}>{value}</a> : <span>-</span>
         },
         {
           id: "deathplace",
           Header: "Death Place",
           accessor: d => d.deathplace ? d.deathplace.name : null,
-          Cell: ({value, row}) => value ? <a href={`/profile/place/${row.deathplace.slug}`}>{value}</a> : <span>-</span>
+          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.deathplace.slug}`}>{value}</a> : <span>-</span>
         },
         {Header: "L", accessor: "langs", minWidth: 35},
         {Header: "HPI", accessor: "hpi", defaultSorted: true, maxWidth: 80}

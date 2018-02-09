@@ -1,14 +1,22 @@
 import React, {Component} from "react";
+import PropTypes from "prop-types";
+import apiClient from "apiConfig";
 import axios from "axios";
 import HomeGrid from "pages/HomeGrid";
+import {StackedArea} from "d3plus-react";
+import {calculateYearBucket, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
 import "pages/Home.css";
 
 class Home extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
 
   componentDidMount() {
-    const dataUrl = "http:localhost:3100/person?select=birthyear,id,name,occupation{id,domain,occupation}";
-    axios.all([axios.get("http:localhost:3100/occupation?select=id,occupation,industry,domain_slug,domain"), axios.get(dataUrl)]).then(res => {
-      console.log("axios get!", res)
+    const dataUrl = "/person?select=birthyear,id,name,occupation{id,domain,occupation}";
+
+    axios.all([apiClient.get("/occupation?select=id,occupation,industry,domain_slug,domain"), apiClient.get(dataUrl)]).then(res => {
       this.setState({occuData: res[0].data, personData: res[1].data});
     });
   }
@@ -19,7 +27,33 @@ class Home extends Component {
   }
 
   render() {
-    const stackedData = [];
+    const {activateSearch} = this.context;
+    const {occuData, personData} = this.state;
+
+    let stackedData = [];
+
+    const [yearBuckets, ticks] = calculateYearBucket(personData);
+
+    if (personData) {
+      stackedData = personData
+        .filter(p => p.birthyear !== null)
+        .sort((a, b) => b.langs - a.langs);
+
+      stackedData.forEach(d => {
+        d.occupation_name = d.occupation.occupation;
+        d.occupation_id = `${d.occupation.id}`;
+        d.place = d.birthplace;
+      });
+    }
+
+    let attrs = false;
+
+    if (occuData) {
+      attrs = occuData.reduce((obj, d) => {
+        obj[d.id] = d;
+        return obj;
+      }, {});
+    }
 
     return (
       <div className="home-container">
@@ -28,7 +62,7 @@ class Home extends Component {
           <div className="home-head-content">
             <div className="home-search">
               <img src="/images/icons/icon-search.svg" alt="Search" />
-              <a href="#" onClick={this.activateSearch}>Search people, places, & occupations</a>
+              <a href="#" onClick={activateSearch}>Search people, places, & occupations</a>
             </div>
             <div className="post">
               <p><strong>Pantheon</strong> is a dataset, visualization tool,
@@ -44,7 +78,63 @@ class Home extends Component {
           {!stackedData
             ? <div>Loading...</div>
             : <div className="viz-container">
-              Stacked here...
+              <StackedArea
+                config={{
+                  data: stackedData,
+                  depth: 0,
+                  groupBy: ["domain", "industry"].map(groupBy(attrs)),
+                  height: 500,
+                  legendConfig: {
+                    shapeConfig: {
+                      labelConfig: {
+                        fontSize: () => 12
+                      },
+                      height: () => 11,
+                      width: () => 11
+                    }
+                  },
+                  shapeConfig: Object.assign({Area: {label: false}}, shapeConfig(attrs)),
+                  timeline: false,
+                  tooltipConfig: Object.assign({duration: 0}, groupTooltip(stackedData)),
+                  xConfig: {
+                    labels: ticks,
+                    tickFormat: d => yearBuckets[d]
+                  },
+                  yConfig: {
+                    gridConfig: {
+                      "stroke-width": 0
+                    }
+                  }
+                }} />
+              <div className="timeline-container">
+                <ul className="items">
+                  <li className="item era computer">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/personal_computer">Internet</a></p>
+                  </li>
+                  <li className="item era television">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/television">Television</a></p>
+                  </li>
+                  <li className="item era film-radio">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/radio_and_film">Film & Radio</a></p>
+                  </li>
+                  <li className="item era newspaper">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/newspaper">Newspaper</a></p>
+                  </li>
+                  <li className="item era printing">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/printing">Printing</a></p>
+                  </li>
+                  <li className="item era scribal">
+                    <div className="era-img"></div>
+                    <p><a href="/profile/era/scribal">Scribal</a></p>
+                  </li>
+                </ul>
+              </div>
+              <h4 className="legend-title">Domains of all <span>Occupations</span></h4>
             </div>}
         </div>
 
@@ -96,5 +186,9 @@ class Home extends Component {
 
   }
 }
+
+Home.contextTypes = {
+  activateSearch: PropTypes.func
+};
 
 export default Home;

@@ -27,7 +27,7 @@
   }
 
   & .site-map {
-    max-width: 505px;
+    max-width: 525px;
   }
 
   & .items, & .sub-items {
@@ -59,6 +59,7 @@
 
   & .sub-items .item-link {
     @apply --bodyText;
+    font-size: 12px;
     &:hover {
       border-bottom: 1px solid currentColor;
     }
