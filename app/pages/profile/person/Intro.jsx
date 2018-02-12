@@ -80,7 +80,7 @@ const Intro = ({person, totalPageViews}) => {
               : `${person.name} is currently ${age} years old.`}
             &nbsp;Since 2007, {person.gender ? "his" : "her"} Wikipedia page in English has received more than {FORMATTERS.commas(totalPageViews)} page views.
             &nbsp;{person.gender ? "His" : "Her"} biography is available in {person.langs} different languages on Wikipedia making {person.gender ? "him" : "her"} the {FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
-            {!person.birthcountry ? <span>.</span> : <span> and {FORMATTERS.ordinal(birthcountryRank)} most popular biography from {person.birthcountry.name}.</span>}
+            {!person.birthcountry ? <span>.</span> : <span> and the {birthcountryRank !== 1 ? FORMATTERS.ordinal(birthcountryRank) : ""} most popular biography from <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>.</span>}
           </p>
         </div>
       </div>

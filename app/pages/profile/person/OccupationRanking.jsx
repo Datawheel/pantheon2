@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import AnchorList from "components/utils/AnchorList";
 import PhotoCarousel from "components/utils/PhotoCarousel";
+import {FORMATTERS} from "types";
 
 class OccupationRanking extends Component {
 
@@ -24,7 +25,7 @@ class OccupationRanking extends Component {
     return (
       <div>
         <p>
-          Among {person.occupation.occupation}s, {person.name} ranks <a>{me.occupation_rank}</a> out of {person.occupation.num_born}.&nbsp;
+          Among {person.occupation.occupation}s, {person.name} ranks <a>{FORMATTERS.commas(me.occupation_rank)}</a> out of {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
           { betterPeers }
           { worsePeers }
         </p>
