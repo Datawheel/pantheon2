@@ -60,7 +60,7 @@ class Place extends Component {
         <GeomapBirth country={country} peopleBorn={peopleBornHere} />
         <GeomapDeath country={country} peopleDied={peopleDiedHere} />
         <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} />
-        <LivingPeople place={place} data={peopleBornHereAlive} />
+        {/* <LivingPeople place={place} data={peopleBornHereAlive} /> */}
         <Footer />
       </div>
     );

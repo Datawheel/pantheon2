@@ -18,7 +18,7 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
     .entries(peopleBorn)
     .sort((a, b) => b.values.length - a.values.length);
   const occupationsLookup = occupations.reduce((obj, item) => {
-    obj[item.id] = item;
+    obj[`${item.id}`] = item;
     return obj;
   }, {});
 
@@ -52,6 +52,7 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
   if (!topOverall.length && !topModern.length) {
     return null;
   }
+console.log("topModern", topModern, occupationsLookup, occupationsLookup[topOverall[0].key])
 
   return <section className="profile-section">
     <SectionHead title="Occupational Trends" index={1} numSections={5} />
@@ -59,10 +60,10 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
       <div>
         {topModern.length
           ? <p>
-            Over the past 100 years the top profession of globally memorable people from {place.name} has been {occupationsLookup[topModern[0].key].name}, including <AnchorList items={topModern[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />. Whereas throughout history the profession with the most memorable people from {place.name} has been {occupationsLookup[topOverall[0].key].name}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />.
+            Over the past 100 years the top profession of globally memorable people from {place.name} has been {occupationsLookup[topModern[0].key].occupation}, including <AnchorList items={topModern[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />. Whereas throughout history the profession with the most memorable people from {place.name} has been {occupationsLookup[topOverall[0].key].occupation}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />.
           </p>
           : <p>
-            Throughout history the profession with the most memorable people from {place.name} has been {occupationsLookup[topOverall[0].key].name}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />.
+            Throughout history the profession with the most memorable people from {place.name} has been {occupationsLookup[topOverall[0].key].occupation}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={(d) => `/profile/person/${d.slug}`} />.
           </p>}
       </div>
       <StackedArea
