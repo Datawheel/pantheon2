@@ -11,7 +11,7 @@ const OverlappingLives = ({people, occupation}) => {
     .sort((a, b) => b.birthyear - a.birthyear);
 
   const tmapBornData = people
-    .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
+    .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
@@ -31,14 +31,14 @@ const OverlappingLives = ({people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-            Which {plural(occupation.occupation)} were alive at the same time? This visualization shows the lifespans of the 25 most globally memorable {plural(occupation.occupation)} over all time.
+            Which {plural(occupation.occupation)} were alive at the same time? This visualization shows the lifespans of the {priestleyData.length} most globally memorable {plural(occupation.occupation)} since 1700.
           </p>
         </div>
       </div>
       <Priestley
         key="priestley1"
         config={{
-          title: `Lifespans of the Top ${priestleyMax} ${occupation.occupation}s`,
+          title: `Lifespans of the Top ${priestleyData.length} ${occupation.occupation}s`,
           data: priestleyData,
           depth: 1,
           detectVisible: false,

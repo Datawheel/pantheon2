@@ -13,7 +13,7 @@ const PeopleRanking = ({era, peopleBorn, peopleDied}) => {
       <div className="section-body">
         <div>
           <p>
-            Between {FORMATTERS.year(era.start_year)} and {FORMATTERS.year(era.end_year)}, the {era.name} era was the birth place of {FORMATTERS.commas(peopleBorn.length)} globally memorable people, including <AnchorList items={peopleBorn.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. {topRankingDied.length ? <span>Additionaly, {FORMATTERS.commas(peopleDied.length)} globally memorable people have passed away during the {era.name} era including <AnchorList items={peopleDied.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span> : null}
+            Between {FORMATTERS.year(era.start_year)} and {FORMATTERS.year(era.end_year)}, the {era.name} era was the birth place of {FORMATTERS.commas(peopleBorn.length)} globally memorable people, including <AnchorList items={peopleBorn.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. {topRankingDied.length ? <span>Additionaly, {FORMATTERS.commas(peopleDied.length)} globally memorable people passed away during the {era.name} era including <AnchorList items={peopleDied.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span> : null}
           </p>
           <div className="rank-title">
             <h3>People Born during the {era.name} era</h3>

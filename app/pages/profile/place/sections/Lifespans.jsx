@@ -5,7 +5,7 @@ import {groupBy, shapeConfig, peopleTooltip, on} from "viz/helpers";
 
 const Lifespans = ({attrs, place, peopleBorn}) => {
   const tmapBornData = peopleBorn
-    .filter(p => p.birthyear !== null && p.birthyear > 1799)
+    .filter(p => p.birthyear !== null && p.birthyear > 1699)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
@@ -24,9 +24,9 @@ const Lifespans = ({attrs, place, peopleBorn}) => {
   return <section className="profile-section">
     <SectionHead title="Overlapping Lives" index={1} numSections={5} />
     <div className="section-body">
-      <p>Below is a visual represetation of the lifespans of the top {priestleyMax} globally memorable people born in {place.name} since 1800.</p>
+      <p>Below is a visual represetation of the lifespans of the top {priestleyData.length} globally memorable people born in {place.name} since 1700.</p>
       <Priestley
-        title={`Lifespans of Top ${priestleyMax} Individuals Born in ${place.name}`}
+        title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${place.name}`}
         key="priestley1"
         config={{
           data: priestleyData,

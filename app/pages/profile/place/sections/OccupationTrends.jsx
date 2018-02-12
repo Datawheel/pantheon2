@@ -52,7 +52,6 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
   if (!topOverall.length && !topModern.length) {
     return null;
   }
-console.log("topModern", topModern, occupationsLookup, occupationsLookup[topOverall[0].key])
 
   return <section className="profile-section">
     <SectionHead title="Occupational Trends" index={1} numSections={5} />

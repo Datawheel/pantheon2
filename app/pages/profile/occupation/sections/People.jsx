@@ -19,7 +19,7 @@ const People = ({people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-          Pantheon has information on {FORMATTERS.commas(people.length)} {plural(occupation.occupation)} born between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}. {FORMATTERS.share(shareAlive)} or ({FORMATTERS.commas(peopleAlive.length)}) are still alive.
+          Pantheon has information on {FORMATTERS.commas(people.length)} {plural(occupation.occupation)} born between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}. {FORMATTERS.share(shareAlive)} or {FORMATTERS.commas(peopleAlive.length)} are still alive.
           The most famous living {plural(occupation.occupation)} include <AnchorList items={people.filter(p => p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
             {peopleDead.length
               ? <span> The most famous deceased {plural(occupation.occupation)} include <AnchorList items={people.filter(p => !p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>

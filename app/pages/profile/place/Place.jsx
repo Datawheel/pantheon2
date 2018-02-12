@@ -58,8 +58,8 @@ class Place extends Component {
         <Occupations attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <OccupationTrends attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} />
         <GeomapBirth country={country} peopleBorn={peopleBornHere} />
-        <GeomapDeath country={country} peopleDied={peopleDiedHere} />
-        <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} />
+        {peopleBornHere.filter(p => p.deathyear !== null).length ? <GeomapDeath country={country} peopleDied={peopleDiedHere} /> : null}
+        {peopleBornHere.filter(p => p.deathyear !== null).length ? <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} /> : null}
         {/* <LivingPeople place={place} data={peopleBornHereAlive} /> */}
         <Footer />
       </div>
