@@ -78,12 +78,12 @@ export function groupBy(attrs) {
 export function groupTooltip(data, accessor = () => []) {
   return {
     body: d => {
-      const names = d.name instanceof Array ? d.name.slice(0, 3) : [d.name];
+      const names = d.name instanceof Array ? d.name : [d.name];
       let txt = `<span class='sub'>Top Ranked ${names.length === 1 ? "Person" : "People"}</span>`;
-      const people = data.filter(d => names.includes(d.name));
+      const people = data.sort((a, b) => b.hpi - a.hpi).filter(d => names.includes(d.name));
       const peopleNames = people.map(d => d.name);
       people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
-        txt += `<br /><span class="bold">${n.name}</span>b.${FORMATTERS.year(n.birthyear)}`;
+        txt += `<br /><span class="bold">${n.name}</span> b.${FORMATTERS.year(n.birthyear)}`;
       });
       return txt;
     },
@@ -109,11 +109,11 @@ export const peopleTooltip = {
     const deathyear = d.deathyear instanceof Array ? max(d.deathyear) : d.deathyear;
     const suffix = d.birthyear instanceof Array ? " span" : "s old";
     const age = deathyear !== null
-              ? deathyear - birthyear
-              : new Date().getFullYear() - birthyear;
+      ? deathyear - birthyear
+      : new Date().getFullYear() - birthyear;
     return deathyear !== null
-         ? `<span class="bold">${FORMATTERS.year(birthyear)} - ${FORMATTERS.year(deathyear)}</span>${age} year${suffix}</span>`
-         : `<span class="bold">Born ${FORMATTERS.year(birthyear)}</span>${age} year${suffix}</span>`;
+      ? `<span class="bold">${FORMATTERS.year(birthyear)} - ${FORMATTERS.year(deathyear)}</span>${age} year${suffix}</span>`
+      : `<span class="bold">Born ${FORMATTERS.year(birthyear)}</span>${age} year${suffix}</span>`;
   },
   footer: d => d.name instanceof Array ? "" : "Click to View Profile"
 };
