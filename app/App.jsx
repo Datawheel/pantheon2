@@ -5,6 +5,7 @@ import Navigation from "components/Navigation";
 import Footer from "components/Footer";
 import Search from "components/Search";
 import "./App.css";
+import "components/common/tooltip.css";
 
 class App extends Component {
 
