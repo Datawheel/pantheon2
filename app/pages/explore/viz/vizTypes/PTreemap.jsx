@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {Treemap} from "d3plus-react";
 import {COLORS_CONTINENT} from "types";
 import {nest} from "d3-collection";
-import {groupBy, shapeConfig} from "viz/helpers";
+import {merge} from "d3-array";
+import {groupBy, groupTooltip, shapeConfig} from "viz/helpers";
 
 class PTreemap extends Component {
 
@@ -18,6 +19,7 @@ class PTreemap extends Component {
     let grouping = ["domain", "industry", "occupation_name"].map(groupBy(occsObj));
     const occsObj = occupations.reduce((obj, d) => ({...obj, [d.id]: d}), {});
     let shapeConf = shapeConfig(occsObj);
+    let ttData;
 
     if (show === "places") {
       dataFilter = p => p[yearType] !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent;
@@ -49,6 +51,21 @@ class PTreemap extends Component {
         return d;
       });
 
+    if (show === "occupations") {
+      ttData = nest()
+        .key(d => occsObj[d.occupation.id].industry)
+        .rollup(leaves => leaves.sort((a, b) => b.hpi - a.hpi).slice(0, 4))
+        .entries(tmapData)
+        .map(d => d.value);
+    }
+    else if (show === "places") {
+      ttData = nest()
+        .key(d => d.borncountry)
+        .rollup(leaves => leaves.sort((a, b) => b.hpi - a.hpi).slice(0, 4))
+        .entries(tmapData)
+        .map(d => d.value);
+    }
+
     return (
       <Treemap
         config={{
@@ -58,7 +75,7 @@ class PTreemap extends Component {
           height: false,
           shapeConfig: shapeConf,
           time: "birthyear",
-          // tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
+          tooltipConfig: groupTooltip(merge(ttData), d => show === "places" ? d.birthcountry.slug : d.occupation.occupation_slug),
           sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
         }}
       />

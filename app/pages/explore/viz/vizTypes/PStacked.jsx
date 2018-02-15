@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {StackedArea} from "d3plus-react";
 import {COLORS_CONTINENT} from "types";
 import {nest} from "d3-collection";
-import {calculateYearBucket, groupBy, shapeConfig} from "viz/helpers";
+import {calculateYearBucket, groupTooltip, groupBy, shapeConfig} from "viz/helpers";
 
 class PStacked extends Component {
 
@@ -60,6 +60,7 @@ class PStacked extends Component {
           groupBy: grouping,
           height: false,
           shapeConfig: shapeConf,
+          tooltipConfig: groupTooltip(stackedData),
           xConfig: {
             labels: bornTicks,
             tickFormat: d => bornBuckets[d]
