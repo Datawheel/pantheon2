@@ -141,7 +141,7 @@ class Controls extends Component {
         </div>
 
         <section className="control-group main-selector">
-          {pageType === "viz"
+          {pathname.includes("explore/viz")
             ? <VizControl viz={viz} changeViz={this.update} />
             : null}
           <ShowControl page={pathname.includes("explore/rankings") ? "rankings" : "viz"} show={show} changeShow={this.update} />

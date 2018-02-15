@@ -44,10 +44,6 @@ class Navigation extends Component {
     });
   }
 
-  activateSearch = () => {
-    console.log("search!")
-  }
-
   render() {
     const {activateSearch} = this.props;
 
@@ -66,7 +62,7 @@ class Navigation extends Component {
               <a href="/explore/viz" className="item-link explore-link">Vizualizations</a>
             </li>
             <li className="item">
-              <a href="/explore/rankings" className="item-link rankings-link">Rankings</a>
+              <a href="/explore/rankings?show=people" className="item-link rankings-link">Rankings</a>
             </li>
             <li className="item">
               <Link to="" className="item-link profiles-link dd" activeClassName="active">Profiles</Link>
