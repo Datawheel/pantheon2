@@ -17,9 +17,6 @@ import LivingPeople from "pages/profile/place/sections/LivingPeople";
 import {NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST} from "types/index";
 import "pages/profile/common/Structure.css";
 
-// <ProfileNav sections={sections} />
-// <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
-
 class Place extends Component {
 
   constructor(props) {

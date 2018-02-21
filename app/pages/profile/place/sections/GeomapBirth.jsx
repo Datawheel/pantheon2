@@ -1,5 +1,6 @@
 import React from "react";
 import SectionHead from "pages/profile/common/SectionHead";
+import VizWrapper from "pages/profile/common/VizWrapper";
 import {Geomap} from "d3plus-react";
 import {groupTooltip, on} from "viz/helpers";
 
@@ -33,28 +34,32 @@ const GeomapBirth = ({country, peopleBorn}) => {
   return <section className="profile-section">
     <SectionHead title="Cities by Births" index={1} numSections={5} />
     <div className="section-body">
-      <Geomap
-        key="geomapBirths"
-        config={{
-          data: geomapBornData,
-          depth: 1,
-          fitFilter: `${country.country_num}`,
-          groupBy: ["event", "place_name"],
-          on: on("place", d => d.place.slug),
-          shapeConfig: {
-            fill: d => d.event.toLowerCase().indexOf("birth") > 0
-              ? "rgba(76, 94, 215, 0.4)"
-              : "rgba(95, 1, 22, 0.4)",
-            stroke: () => "#4A4948",
-            strokeWidth: 1,
-            Path: {
-              fill: d => parseInt(d.id, 10) === parseInt(country.country_num, 10) ? "#ccc" : "transparent",
-              stroke: "#4A4948",
-              strokeWidth: 0.75
-            }
-          },
-          tooltipConfig: groupTooltip(geomapBornData, d => d.place.slug)
-        }} />
+      <VizWrapper component={this} refKey="viz">
+        <Geomap
+          ref={viz => this.viz = viz}
+          key="geomapBirths"
+          config={{
+            title: `Cities by birth in ${country.name}`,
+            data: geomapBornData,
+            depth: 1,
+            fitFilter: `${country.country_num}`,
+            groupBy: ["event", "place_name"],
+            on: on("place", d => d.place.slug),
+            shapeConfig: {
+              fill: d => d.event.toLowerCase().indexOf("birth") > 0
+                ? "rgba(76, 94, 215, 0.4)"
+                : "rgba(95, 1, 22, 0.4)",
+              stroke: () => "#4A4948",
+              strokeWidth: 1,
+              Path: {
+                fill: d => parseInt(d.id, 10) === parseInt(country.country_num, 10) ? "#ccc" : "transparent",
+                stroke: "#4A4948",
+                strokeWidth: 0.75
+              }
+            },
+            tooltipConfig: groupTooltip(geomapBornData, d => d.place.slug)
+          }} />
+      </VizWrapper>
     </div>
   </section>;
 };

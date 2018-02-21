@@ -28,12 +28,12 @@
   },
   "homepage": "https://github.com/MacroConnections/pantheon2#readme",
   "dependencies": {
-    "babel-eslint": "^8.1.2",
-    "datawheel-canon": "^0.14.3",
-    "eslint": "^4.15.0",
+    "babel-eslint": "^8.2.2",
+    "datawheel-canon": "^0.14.6",
+    "eslint": "^4.18.1",
     "mondrian-rest-client": "github:datawheel/mondrian-rest-client",
     "numeral": "^2.0.6",
-    "react-scroll": "^1.7.6",
+    "react-scroll": "^1.7.7",
     "react-table": "^6.7.6"
   }
 }

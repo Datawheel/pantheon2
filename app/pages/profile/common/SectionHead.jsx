@@ -11,10 +11,6 @@ const SectionHead = ({index, numSections, title}) =>
         )}
       </span>
     </div>
-    <div className="section-actions">
-      <a className="section-share"><img src="/images/icons/icon-share.svg" alt="Share this visualization" /></a>
-      <a className="section-download"><img src="/images/icons/icon-download.svg" alt="Download this visualization" /></a>
-    </div>
   </div>;
 
 export default SectionHead;

@@ -1,5 +1,6 @@
 import React from "react";
 import SectionHead from "pages/profile/common/SectionHead";
+import VizWrapper from "pages/profile/common/VizWrapper";
 import {Priestley} from "d3plus-react";
 import {groupBy, shapeConfig, peopleTooltip, on} from "viz/helpers";
 
@@ -25,23 +26,26 @@ const Lifespans = ({attrs, place, peopleBorn}) => {
     <SectionHead title="Overlapping Lives" index={1} numSections={5} />
     <div className="section-body">
       <p>Below is a visual represetation of the lifespans of the top {priestleyData.length} globally memorable people born in {place.name} since 1700.</p>
-      <Priestley
-        title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${place.name}`}
-        key="priestley1"
-        config={{
-          data: priestleyData,
-          depth: 1,
-          detectVisible: false,
-          end: "deathyear",
-          groupBy: ["domain", "name"].map(groupBy(attrs)),
-          height: 700,
-          on: on("person", d => d.slug),
-          start: "birthyear",
-          shapeConfig: Object.assign({}, shapeConfig(attrs), {
-            labelPadding: 2
-          }),
-          tooltipConfig: peopleTooltip
-        }} />
+      <VizWrapper component={this} refKey="viz">
+        <Priestley
+          ref={viz => this.viz = viz}
+          title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${place.name}`}
+          key="priestley1"
+          config={{
+            data: priestleyData,
+            depth: 1,
+            detectVisible: false,
+            end: "deathyear",
+            groupBy: ["domain", "name"].map(groupBy(attrs)),
+            height: 700,
+            on: on("person", d => d.slug),
+            start: "birthyear",
+            shapeConfig: Object.assign({}, shapeConfig(attrs), {
+              labelPadding: 2
+            }),
+            tooltipConfig: peopleTooltip
+          }} />
+      </VizWrapper>
     </div>
   </section>;
 };
