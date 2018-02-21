@@ -4,6 +4,7 @@ import {nest} from "d3-collection";
 import {Treemap} from "d3plus-react";
 import AnchorList from "components/utils/AnchorList";
 import SectionHead from "pages/profile/common/SectionHead";
+import VizWrapper from "pages/profile/common/VizWrapper";
 import {plural} from "pluralize";
 import {groupTooltip, on} from "viz/helpers";
 import {COLORS_CONTINENT} from "types";
@@ -61,32 +62,38 @@ const Places = ({people, occupation}) => {
             By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.deathplace.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathplace.slug}/`} />.
           </p>
         </div>
-        <Treemap
-          key="tmap_country1"
-          config={{
-            title: `Birth Places for ${occupation.occupation}`,
-            data: tmapBornData,
-            depth: 1,
-            groupBy: ["borncontinent", "borncountry"],
-            on: on("place", d => d.birthcountry.slug),
-            shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-            time: "birthyear",
-            tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
-            sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
-          }} />,
-        <Treemap
-          key="tmap_country2"
-          config={{
-            title: `Death Places for ${occupation.occupation}`,
-            data: tmapDeathData,
-            depth: 1,
-            groupBy: ["diedcontinent", "diedcountry"],
-            on: on("place", d => d.deathcountry.slug),
-            shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-            time: "deathyear",
-            tooltipConfig: groupTooltip(tmapBornData, d => d.deathcountry.slug),
-            sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
-          }} />
+        <VizWrapper component={this} refKey="viz">
+          <Treemap
+            ref={viz => this.viz = viz}
+            key="tmap_country1"
+            config={{
+              title: `Birth Places of ${plural(occupation.occupation)}`,
+              data: tmapBornData,
+              depth: 1,
+              groupBy: ["borncontinent", "borncountry"],
+              on: on("place", d => d.birthcountry.slug),
+              shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
+              time: "birthyear",
+              tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+            }} />
+        </VizWrapper>
+        <VizWrapper component={this} refKey="viz2">
+          <Treemap
+            ref={viz => this.viz2 = viz}
+            key="tmap_country2"
+            config={{
+              title: `Death Places of ${plural(occupation.occupation)}`,
+              data: tmapDeathData,
+              depth: 1,
+              groupBy: ["diedcontinent", "diedcountry"],
+              on: on("place", d => d.deathcountry.slug),
+              shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
+              time: "deathyear",
+              tooltipConfig: groupTooltip(tmapBornData, d => d.deathcountry.slug),
+              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+            }} />
+        </VizWrapper>
       </div>
     </section>
   );

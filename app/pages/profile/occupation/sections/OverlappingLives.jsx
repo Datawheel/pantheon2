@@ -1,5 +1,6 @@
 import React from "react";
 import SectionHead from "pages/profile/common/SectionHead";
+import VizWrapper from "pages/profile/common/VizWrapper";
 import {Priestley} from "d3plus-react";
 import {plural} from "pluralize";
 import {peopleTooltip, on} from "viz/helpers";
@@ -35,24 +36,27 @@ const OverlappingLives = ({people, occupation}) => {
           </p>
         </div>
       </div>
-      <Priestley
-        key="priestley1"
-        config={{
-          title: `Lifespans of the Top ${priestleyData.length} ${occupation.occupation}s`,
-          data: priestleyData,
-          depth: 1,
-          detectVisible: false,
-          end: "deathyear",
-          groupBy: ["diedcontinent", "name"],
-          height: 700,
-          on: on("person", d => d.slug),
-          shapeConfig: {
-            fill: d => COLORS_CONTINENT[d.diedcontinent],
-            labelPadding: 2
-          },
-          start: "birthyear",
-          tooltipConfig: peopleTooltip
-        }} />
+      <VizWrapper component={this} refKey="viz">
+        <Priestley
+          ref={viz => this.viz = viz}
+          key="priestley1"
+          config={{
+            title: `Lifespans of the Top ${priestleyData.length} ${occupation.occupation}s`,
+            data: priestleyData,
+            depth: 1,
+            detectVisible: false,
+            end: "deathyear",
+            groupBy: ["diedcontinent", "name"],
+            height: 700,
+            on: on("person", d => d.slug),
+            shapeConfig: {
+              fill: d => COLORS_CONTINENT[d.diedcontinent],
+              labelPadding: 2
+            },
+            start: "birthyear",
+            tooltipConfig: peopleTooltip
+          }} />
+      </VizWrapper>
     </section>
   );
 };
