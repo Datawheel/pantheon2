@@ -4,6 +4,7 @@ import {plural} from "pluralize";
 import {Treemap} from "d3plus-react";
 import AnchorList from "components/utils/AnchorList";
 import SectionHead from "pages/profile/common/SectionHead";
+import VizWrapper from "pages/profile/common/VizWrapper";
 import {groupBy, groupTooltip, on, shapeConfig} from "viz/helpers";
 
 const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
@@ -64,30 +65,36 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
             <AnchorList items={occupationsDied.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_died})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />.
           </p>
         </div>
-        <Treemap
-          key="tmap1"
-          config={{
-            title: `Occupations of People Born during the ${era.name}`,
-            data: tmapBornData,
-            depth: 2,
-            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
-            on: on("occupation", d => d.occupation.occupation_slug),
-            shapeConfig: shapeConfig(attrs),
-            time: "birthyear",
-            tooltipConfig: groupTooltip(tmapBornData, d => d.occupation.occupation_slug)
-          }} />,
-        <Treemap
-          key="tmap2"
-          config={{
-            title: `Occupations of People Deceased during the ${era.name}`,
-            data: tmapDeathData,
-            depth: 2,
-            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
-            on: on("occupation", d => d.occupation.occupation_slug),
-            shapeConfig: shapeConfig(attrs),
-            time: "deathyear",
-            tooltipConfig: groupTooltip(tmapDeathData, d => d.occupation.occupation_slug)
-          }} />
+        <VizWrapper component={this} refKey="viz">
+          <Treemap
+            ref={viz => this.viz = viz}
+            key="tmap1"
+            config={{
+              title: `Occupations of People Born during the ${era.name}`,
+              data: tmapBornData,
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+              on: on("occupation", d => d.occupation.occupation_slug),
+              shapeConfig: shapeConfig(attrs),
+              time: "birthyear",
+              tooltipConfig: groupTooltip(tmapBornData, d => d.occupation.occupation_slug)
+            }} />
+        </VizWrapper>
+        <VizWrapper component={this} refKey="viz2">
+          <Treemap
+            ref={viz => this.viz2 = viz}
+            key="tmap2"
+            config={{
+              title: `Occupations of People Deceased during the ${era.name}`,
+              data: tmapDeathData,
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+              on: on("occupation", d => d.occupation.occupation_slug),
+              shapeConfig: shapeConfig(attrs),
+              time: "deathyear",
+              tooltipConfig: groupTooltip(tmapDeathData, d => d.occupation.occupation_slug)
+            }} />
+        </VizWrapper>
       </div>
     </section>
   );

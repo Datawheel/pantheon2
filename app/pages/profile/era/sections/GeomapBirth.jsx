@@ -1,5 +1,6 @@
 import React from "react";
 import SectionHead from "pages/profile/common/SectionHead";
+import VizWrapper from "pages/profile/common/VizWrapper";
 import {Geomap} from "d3plus-react";
 import {groupTooltip, on} from "viz/helpers";
 
@@ -33,31 +34,34 @@ const GeomapBirth = ({era, peopleBorn}) => {
   return <section className="profile-section">
     <SectionHead title="Major cities by number of births" index={1} numSections={5} />
     <div className="section-body">
-      <Geomap
-        key="geomapBirths"
-        config={{
-          title: `Major Cities in ${era.name} for Births of Cultural Celebrities`,
-          data: geomapBornData,
-          pointSizeMax: 30,
-          pointSizeMin: 2,
-          depth: 1,
-          fitFilter: d => ["152", "643"].includes(d.id),
-          groupBy: ["event", "place_name"],
-          on: on("place", d => d.place.slug),
-          shapeConfig: {
-            fill: d => d.event.toLowerCase().indexOf("birth") > 0
-              ? "rgba(76, 94, 215, 0.4)"
-              : "rgba(95, 1, 22, 0.4)",
-            stroke: () => "#4A4948",
-            strokeWidth: 1,
-            Path: {
-              fill: "transparent",
-              stroke: "#4A4948",
-              strokeWidth: 0.75
-            }
-          },
-          tooltipConfig: groupTooltip(geomapBornData, d => d.place.slug)
-        }} />
+      <VizWrapper component={this} refKey="viz">
+        <Geomap
+          ref={viz => this.viz = viz}
+          key="geomapBirths"
+          config={{
+            title: `Major Cities in ${era.name} for Births of Cultural Celebrities`,
+            data: geomapBornData,
+            pointSizeMax: 30,
+            pointSizeMin: 2,
+            depth: 1,
+            fitFilter: d => ["152", "643"].includes(d.id),
+            groupBy: ["event", "place_name"],
+            on: on("place", d => d.place.slug),
+            shapeConfig: {
+              fill: d => d.event.toLowerCase().indexOf("birth") > 0
+                ? "rgba(76, 94, 215, 0.4)"
+                : "rgba(95, 1, 22, 0.4)",
+              stroke: () => "#4A4948",
+              strokeWidth: 1,
+              Path: {
+                fill: "transparent",
+                stroke: "#4A4948",
+                strokeWidth: 0.75
+              }
+            },
+            tooltipConfig: groupTooltip(geomapBornData, d => d.place.slug)
+          }} />
+      </VizWrapper>
     </div>
   </section>;
 };

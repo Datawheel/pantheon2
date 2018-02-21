@@ -25,6 +25,36 @@
     width: 100%;
   }
 
+  & .section-actions {
+    margin: 20px 0 0 0;
+    position: relative;
+
+    & button {
+      background: transparent;
+      border: 1px solid var(--colorSand);
+      color: var(--colorSand);
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 18px;
+      margin: 0 6px;
+      padding: 4px 8px;
+      position: absolute;
+      right: 0;
+      top: -6px;
+      text-transform: uppercase;
+      z-index: 99;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    & img {
+      height: 14px;
+      opacity: 0.7;
+    }
+  }
+
   & .section-head {
     display: flex;
     flex-direction: row;
@@ -34,22 +64,6 @@
     & .section-title, & .section-actions {
       & > * {
         display: inline-block;
-      }
-    }
-
-    & .section-actions {
-      & a {
-        padding: 2px 3px;
-        margin: 0 6px;
-        cursor: pointer;
-
-        &:hover {
-          opacity: 0.7;
-        }
-      }
-
-      & img {
-        height: 20px;
       }
     }
 

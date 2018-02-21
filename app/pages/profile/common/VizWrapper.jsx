@@ -36,12 +36,10 @@ class VizWrapper extends Component {
     const {popupOpen} = this.state;
     const {children} = this.props;
 
-    return <div>
-      <div className="section-actions">
-        <button className="section-download" onClick={this.openSave}>
-          <img src="/images/icons/icon-download.svg" alt="Download this visualization" />
-        </button>
-      </div>
+    return <div className="section-actions">
+      <button className="section-download" onClick={this.openSave}>
+        Download <img src="/images/icons/icon-download.svg" alt="Download this visualization" />
+      </button>
       <Dialog
         iconName="cloud-download"
         isOpen={popupOpen}

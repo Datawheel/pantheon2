@@ -1,6 +1,7 @@
 import React from "react";
 import {StackedArea} from "d3plus-react";
 import SectionHead from "pages/profile/common/SectionHead";
+import VizWrapper from "pages/profile/common/VizWrapper";
 import {calculateYearBucket, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
 
 const OccupationsOverTime = ({peopleBorn, peopleDied, occupations}) => {
@@ -43,35 +44,41 @@ const OccupationsOverTime = ({peopleBorn, peopleDied, occupations}) => {
     <section className="profile-section">
       <SectionHead title="Occupations Over Time" index={1} numSections={5} />
       <div className="section-body">
-        <StackedArea
-          key="stacked1"
-          config={{
-            title: "Births Over Time",
-            data: tmapBornData,
-            depth: 2,
-            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
-            shapeConfig: shapeConfig(attrs),
-            tooltipConfig: groupTooltip(tmapBornData),
-            xConfig: {
-              ticks: bornTicks,
-              tickFormat: d => bornBuckets[d]
-            }
-          }} />,
-        <StackedArea
-          key="stacked2"
-          config={{
-            title: "Birth Shares Over Time",
-            data: tmapBornData,
-            depth: 2,
-            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
-            shapeConfig: shapeConfig(attrs),
-            stackOffset: "expand",
-            tooltipConfig: groupTooltip(tmapBornData),
-            xConfig: {
-              ticks: bornTicks,
-              tickFormat: d => bornBuckets[d]
-            }
-          }} />
+        <VizWrapper component={this} refKey="viz">
+          <StackedArea
+            ref={viz => this.viz = viz}
+            key="stacked1"
+            config={{
+              title: "Births Over Time",
+              data: tmapBornData,
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+              shapeConfig: shapeConfig(attrs),
+              tooltipConfig: groupTooltip(tmapBornData),
+              xConfig: {
+                ticks: bornTicks,
+                tickFormat: d => bornBuckets[d]
+              }
+            }} />
+        </VizWrapper>
+        <VizWrapper component={this} refKey="viz2">
+          <StackedArea
+            ref={viz => this.viz2 = viz}
+            key="stacked2"
+            config={{
+              title: "Birth Shares Over Time",
+              data: tmapBornData,
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+              shapeConfig: shapeConfig(attrs),
+              stackOffset: "expand",
+              tooltipConfig: groupTooltip(tmapBornData),
+              xConfig: {
+                ticks: bornTicks,
+                tickFormat: d => bornBuckets[d]
+              }
+            }} />
+        </VizWrapper>
       </div>
     </section>
   );
