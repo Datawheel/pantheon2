@@ -14,17 +14,14 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const dataUrl = "/person?select=birthyear,id,name,occupation{id,domain,occupation}";
+    const dataUrl = "/person?select=birthyear,id,name,occupation(id,domain,occupation)";
 
     axios.all([apiClient.get("/occupation?select=id,occupation,industry,domain_slug,domain"), apiClient.get(dataUrl)]).then(res => {
       this.setState({occuData: res[0].data, personData: res[1].data});
     });
   }
 
-  activateSearch = e => {
-    console.log(e);
-    return false;
-  }
+  activateSearch = e => false
 
   render() {
     const {activateSearch} = this.context;
@@ -75,7 +72,7 @@ class Home extends Component {
         </div>
 
         <div className="home-body">
-          {!stackedData
+          {!stackedData || !attrs
             ? <div>Loading...</div>
             : <div className="viz-container">
               <StackedArea

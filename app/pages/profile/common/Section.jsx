@@ -17,9 +17,7 @@ const Section = ({children, index, numSections, slug, title}) =>
         <a className="section-download"><img src="/images/icons/icon-download.svg" alt="Download this visualization" /></a>
       </div>
     </div>
-    <div className="section-body">
-      { children }
-    </div>
+    <div className="section-body">{children}</div>
   </section>;
 
 export default Section;

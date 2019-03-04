@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Link} from "react-router";
 import AnchorList from "components/utils/AnchorList";
 import PhotoCarousel from "components/utils/PhotoCarousel";
 import {FORMATTERS} from "types";
@@ -31,7 +32,7 @@ class OccupationRanking extends Component {
         </p>
         <div className="rank-title">
           <h3>Top Global {person.occupation.occupation}s</h3>
-          <a href="/explore/rankings">Go to all Rankings</a>
+          <Link to={`/explore/rankings?show=people&occupation=${person.occupation.id}`}>Go to all Rankings</Link>
         </div>
         <PhotoCarousel me={person} people={ranking} rankAccessor="occupation_rank_unique" />
       </div>

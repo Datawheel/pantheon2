@@ -38,7 +38,6 @@ const GeomapDeath = ({country, peopleDied}) => {
     <div className="section-body">
       <VizWrapper component={this} refKey="viz">
         <Geomap
-          ref={viz => this.viz = viz}
           key="geomapDeaths"
           config={{
             title: `Cities by deaths in ${country.name}`,

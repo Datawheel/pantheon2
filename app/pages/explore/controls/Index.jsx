@@ -17,13 +17,13 @@ class Controls extends Component {
 
   constructor(props) {
     super(props);
-    const {query: qParams} = this.props.location;
+    const {qParams} = props;
     this.state = {
       city: SANITIZERS.city(qParams.place) || "all",
       country: SANITIZERS.country(qParams.place) || "all",
       gender: SANITIZERS.gender(qParams.viz),
       occupation: qParams.occupation || "all",
-      show: SANITIZERS.show(qParams.show || "occupations", this.props.location.pathname),
+      show: SANITIZERS.show(qParams.show ? qParams.show : props.pageType === "viz" ? "occupations" : "people", props.pageType),
       viz: SANITIZERS.vizType(qParams.viz || "Treemap"),
       years: SANITIZERS.years(qParams.years),
       yearType: SANITIZERS.yearType(qParams.yearType),
@@ -34,6 +34,18 @@ class Controls extends Component {
 
   componentDidMount() {
     this.fetchData();
+  }
+
+  componentDidUpdate(prevProps) {
+    // console.log("from controls prevProps:", prevProps);
+    // console.log("from controls this.props:", this.props);
+    if (this.props.pageType !== prevProps.pageType) {
+      console.log("CONTROL SHOULD UPDATE!");
+      this.props.updateData(Object.assign({data: [], loading: true}, this.state));
+      // this.props.updateData(Object.assign({data: [], loading: true}, this.state), this.fetchData);
+      // this.fetchData();
+      // console.log("controls componentDidUpdate!", this.props);
+    }
   }
 
   toggleSidePanel = e => {
@@ -70,9 +82,9 @@ class Controls extends Component {
   }
 
   fetchData = () => {
-    const {pathname} = this.props.location;
+    const {pageType} = this.props;
     const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType} = this.state;
-    const selectFields = "name,langs,hpi,id,slug,gender,birthyear,deathyear,birthcountry{id,country_name,continent,slug},birthplace{id,name,country_name,continent,slug,lat_lon},deathplace{id,name,country_name,slug},occupation_id:occupation,occupation{id,occupation,occupation_slug}";
+    const selectFields = "name,langs,hpi,id,slug,gender,birthyear,deathyear,birthcountry(id,country_name,continent,slug),birthplace(id,name,country_name,continent,slug,lat_lon),deathplace(id,name,country_name,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
     const apiHeaders = null;
     const sorting = "&order=hpi.desc.nullslast";
 
@@ -86,7 +98,7 @@ class Controls extends Component {
 
     let occupationFilter = "";
     if (occupation !== "all") {
-      occupationFilter = `&occupation=in.${occupation}`;
+      occupationFilter = `&occupation=in.(${occupation})`;
     }
 
     let genderFilter = "";
@@ -102,7 +114,7 @@ class Controls extends Component {
     const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${sorting}`;
     console.log("getNewData", dataUrl);
     api.get(dataUrl, {headers: apiHeaders}).then(res => {
-      const data = pathname.includes("explore/rankings") ? dataFormatter(res.data, show) : res.data;
+      const data = pageType === "rankings" ? dataFormatter(res.data, show) : res.data;
       this.props.updateData(Object.assign({data, loading: false, show, viz}, this.state));
     });
   }
@@ -129,9 +141,8 @@ class Controls extends Component {
   }
 
   render() {
-    const {city, country, gender, metricCutoff, metricType, occupation, pageType, show, viz, years, yearType} = this.state;
-    const {location, nestedOccupations, places} = this.props;
-    const {pathname} = location;
+    const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType} = this.state;
+    const {pageType, nestedOccupations, places} = this.props;
 
     return (
       <div className="explore-controls viz-explorer" id="side-panel">
@@ -141,10 +152,10 @@ class Controls extends Component {
         </div>
 
         <section className="control-group main-selector">
-          {pathname.includes("explore/viz")
+          {pageType === "viz"
             ? <VizControl viz={viz} changeViz={this.update} />
             : null}
-          <ShowControl page={pathname.includes("explore/rankings") ? "rankings" : "viz"} show={show} changeShow={this.update} />
+          <ShowControl page={pageType} show={show} changeShow={this.update} />
         </section>
 
         <section className="control-group">

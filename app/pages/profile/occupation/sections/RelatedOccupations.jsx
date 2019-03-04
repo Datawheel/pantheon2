@@ -31,7 +31,7 @@ const RelatedOccupations = ({peopleInDomain, occupation, occupations}) => {
             {plural(occupation.occupation)} are found within the {occupation.domain} domain which also contains the following occupations <AnchorList items={occupations.filter(p => p.domain_slug === occupation.domain_slug && p.id !== occupation.id).slice(0, 5)} name={d => d.occupation} url={d => `/profile/occupation/${d.occupation_slug}/`} />.
           </p>
         </div>
-        <Tree
+        {/* <Tree
           key="tree_domain"
           config={{
             title: `Related Occupations Within the ${occupation.domain} Domain`,
@@ -52,7 +52,7 @@ const RelatedOccupations = ({peopleInDomain, occupation, occupations}) => {
               }),
             tooltipConfig: groupTooltip(tmapDomainData, d => d.occupation.occupation_slug),
             sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
-          }} />
+          }} /> */}
       </div>
     </section>
   );

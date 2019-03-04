@@ -59,7 +59,6 @@ const PlacesTime = ({eras, people, occupation}) => {
         </div>
         <VizWrapper component={this} refKey="viz">
           <StackedArea
-            ref={viz => this.viz = viz}
             key="stacked_country1"
             config={{
               title: `Birth Places of ${occupation.occupation}s Over Time`,
@@ -77,7 +76,6 @@ const PlacesTime = ({eras, people, occupation}) => {
         </VizWrapper>
         <VizWrapper component={this} refKey="viz2">
           <StackedArea
-            ref={viz => this.viz2 = viz}
             key="stacked_country2"
             config={{
               title: `Death Places of ${occupation.occupation}s Over Time`,

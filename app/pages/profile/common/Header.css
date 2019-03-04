@@ -79,7 +79,7 @@ header {
       background-size: cover;
 
       @media (min-width: 751px) {
-        background-position: 0% 0%;
+        background-position: 0% 30%;
         width: 50%;
         height: 100%;
       }
@@ -181,7 +181,7 @@ header {
 }
 
 .top-desc {
-  @apply --contextLabel;
+  @mixin contextLabel;
   margin-top: 0;
   margin-left: auto;
   margin-right: auto;
@@ -195,7 +195,7 @@ header {
 }
 
 h1 {
-  @apply --priTitle;
+  @mixin priTitle;
   margin: 0;
   word-break: break-all;
   word-break: break-word;
@@ -207,12 +207,12 @@ pre {
 }
 
 .profile-type {
-  @apply --priLabel;
+  @mixin priLabel;
   margin: 0 auto 10px;
 }
 
 .date-subtitle {
-  @apply --secLabel;
+  @mixin secLabel;
   margin-top: 14px;
   margin-left: auto;
   margin-right: auto;

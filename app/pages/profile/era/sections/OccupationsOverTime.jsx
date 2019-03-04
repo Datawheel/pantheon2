@@ -46,7 +46,6 @@ const OccupationsOverTime = ({peopleBorn, peopleDied, occupations}) => {
       <div className="section-body">
         <VizWrapper component={this} refKey="viz">
           <StackedArea
-            ref={viz => this.viz = viz}
             key="stacked1"
             config={{
               title: "Births Over Time",
@@ -63,7 +62,6 @@ const OccupationsOverTime = ({peopleBorn, peopleDied, occupations}) => {
         </VizWrapper>
         <VizWrapper component={this} refKey="viz2">
           <StackedArea
-            ref={viz => this.viz2 = viz}
             key="stacked2"
             config={{
               title: "Birth Shares Over Time",

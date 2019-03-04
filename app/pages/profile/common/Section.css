@@ -68,7 +68,7 @@
     }
 
     & h4 {
-      @apply --profileSectionTitle;
+      @mixin profileSectionTitle;
       margin: 0;
       padding-right: 10px;
     }
@@ -93,7 +93,7 @@
     margin-top: 17.3px;
 
     & p {
-      @apply --bodyText;
+      @mixin bodyText;
       width: 62%;
 
       @media (max-width: 750px) {
@@ -102,7 +102,7 @@
     }
 
     & a {
-      @apply --bodyLink;
+      @mixin bodyLink;
     }
 
   }
@@ -117,12 +117,12 @@
     padding: 20px 0 25px;
 
     & h3 {
-      @apply --profileVizTitle;
+      @mixin profileVizTitle;
       margin: 0;
     }
 
     & a {
-      @apply --smallCaps;
+      @mixin smallCaps;
       &::after {
         content: '';
         position: relative;
@@ -194,7 +194,7 @@
       }
 
       & .rank-prof {
-        @apply --smallCaps;
+        @mixin smallCaps;
       }
 
       & .rank-photo {

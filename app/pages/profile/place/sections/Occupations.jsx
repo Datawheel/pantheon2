@@ -57,10 +57,9 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
             <AnchorList items={occupationsDied.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_died})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />.
           </p>
         </div>
-        <VizWrapper component={this} refKey="viz">
+        <VizWrapper component={this} refKey="occAliveTmapViz">
           <Treemap
-            ref={comp => this.viz = comp}
-            key="tmap1"
+            key="occAliveTmapViz"
             config={{
               title: `Occupations of People Born in ${place.name}`,
               data: tmapBornData,
@@ -72,10 +71,9 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
               tooltipConfig: groupTooltip(tmapBornData, d => d.occupation.occupation_slug)
             }} />
         </VizWrapper>
-        <VizWrapper component={this} refKey="viz2">
+        <VizWrapper component={this} refKey="occDeadTmapViz">
           <Treemap
-            ref={comp => this.viz2 = comp}
-            key="tmap2"
+            key="occDeadTmapViz"
             config={{
               title: `Occupations of People Deceased in ${place.name}`,
               data: tmapDeathData,

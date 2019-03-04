@@ -13,10 +13,10 @@ const HomeGrid = () => {
     {cat: "arts", id: "cara", name: "Cara Delevingne", url: "/profile/person/cara_delevingne"},
     {cat: "pubfig", id: "gandhi", name: "Mahatma Gandhi", url: "/profile/person/mahatma_gandhi"},
     {cat: "scitech", id: "ein", name: "Albert Einstein", url: "/profile/person/albert_einstein"},
-    {cat: "arts", id: "arch", name: "Architects", url: "/profile/occupation/architects"},
-    {cat: "hum", id: "writers", name: "Writers", url: "/profile/occupation/writers"},
-    {cat: "hum", id: "linguists", name: "Linguists", url: "/profile/occupation/linguists"},
-    {cat: "arts", id: "fdir", name: "Film Directors", url: "/profile/occupation/film_directors"},
+    {cat: "arts", id: "arch", name: "Architects", url: "/profile/occupation/architect"},
+    {cat: "hum", id: "writer", name: "Writers", url: "/profile/occupation/writer"},
+    {cat: "hum", id: "linguist", name: "Linguist", url: "/profile/occupation/linguist"},
+    {cat: "arts", id: "fdir", name: "Film Directors", url: "/profile/occupation/film_director"},
     {cat: "", id: "nyc", name: "New York City", url: "/profile/place/new_york_city"},
     {cat: "pubfig", id: "aung", name: "Aung San Suu Kyi", url: "/profile/person/aung_san_suu_kyi/"},
     {cat: "inst", id: "mao", name: "Mao Zedong", url: "/profile/person/mao_zedong"},
@@ -38,7 +38,7 @@ const HomeGrid = () => {
     {cat: "inst", id: "ban", name: "Ban Ki-Moon", url: "/profile/person/ban_kimoon"},
     {cat: "inst", id: "gmr", name: "George Maxwell Richards", url: "/profile/person/george_maxwell_richards"},
     {cat: "inst", id: "yulia", name: "Yulia Tymoshenko", url: "/profile/person/yulia_tymoshenko"},
-    {cat: "arts", id: "frida", name: "Frida Kahlo", url: "/profile/person/frida_kKahlo"}
+    {cat: "arts", id: "frida", name: "Frida Kahlo", url: "/profile/person/frida_kahlo"}
   ];
 
   return <div className="profile-grid">

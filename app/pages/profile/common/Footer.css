@@ -2,7 +2,7 @@
 @import "components/common/typography";
 
 .profile-footer {
-  @apply --themeDark;
+  @mixin themeDark;
   padding: 50px 20px;
   position: relative;
 
@@ -16,7 +16,7 @@
   }
 
   & .footer-title {
-    @apply --sectionTitle;
+    @mixin sectionTitle;
     color: var(--colorEggshell);
     max-width: 200px;
     display: block;
@@ -81,7 +81,7 @@
     & a {
       text-decoration: none;
       outline: none;
-      @apply --bodyLink;
+      @mixin bodyLink;
       color: var(--colorEggshell);
     }
   }

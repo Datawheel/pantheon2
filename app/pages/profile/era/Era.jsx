@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {fetchData} from "datawheel-canon";
+import {fetchData} from "@datawheel/canon-core";
+import axios from "axios";
 import Helmet from "react-helmet";
 import config from "helmet.js";
 import ProfileNav from "pages/profile/common/Nav";
@@ -27,6 +28,13 @@ class Era extends Component {
       {slug: "major-cities-by-number-of-deaths", title: "Major Cities By Number of Deaths"},
       {slug: "overlapping-lives", title: "Overlapping Lives"}
     ];
+  }
+
+  componentDidMount() {
+    // generate screenshot on page load
+    const {id: slug} = this.props.params;
+    const screenshotUrl = `/api/screenshot/era/${slug}/`;
+    axios.get(screenshotUrl);
   }
 
   render() {
@@ -56,11 +64,11 @@ class Era extends Component {
 
 }
 
-const eraURL = "http://localhost:3100/era?slug=eq.<id>";
-const allErasURL = "http://localhost:3100/era?order=start_year";
-const peopleBornInEraURL = "http://localhost:3100/person?birthyear=gte.<era.start_year>&birthyear=lte.<era.end_year>&order=hpi.desc.nullslast&select=birthplace{id,name,slug,lat_lon},birthcountry{id,continent,country_code,country_name,name,slug},occupation{*},occupation_id:occupation,*";
-const peopleDiedInEraURL = "http://localhost:3100/person?deathyear=gte.<era.start_year>&deathyear=lte.<era.end_year>&order=hpi.desc.nullslast&select=deathcountry{id,continent,country_code,country_name,name,slug},deathplace{id,name,slug,lat_lon},occupation{*},occupation_id:occupation,*";
-const allOccupationsURL = "http://localhost:3100/occupation?order=num_born.desc.nullslast";
+const eraURL = "/era?slug=eq.<id>";
+const allErasURL = "/era?order=start_year";
+const peopleBornInEraURL = "/person?birthyear=gte.<era.start_year>&birthyear=lte.<era.end_year>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),birthcountry(id,continent,country_code,country_name,name,slug),occupation(*),occupation_id:occupation,*";
+const peopleDiedInEraURL = "/person?deathyear=gte.<era.start_year>&deathyear=lte.<era.end_year>&order=hpi.desc.nullslast&select=deathcountry(id,continent,country_code,country_name,name,slug),deathplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
+const allOccupationsURL = "/occupation?order=num_born.desc.nullslast";
 
 Era.preneed = [
   fetchData("era", eraURL, res => res[0]),

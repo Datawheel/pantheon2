@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import Helmet from "react-helmet";
-import {fetchData} from "datawheel-canon";
-
+import {fetchData} from "@datawheel/canon-core";
+import axios from "axios";
 import config from "helmet.js";
 import ProfileNav from "pages/profile/common/Nav";
 import Section from "pages/profile/common/Section";
@@ -33,13 +33,20 @@ class Person extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    // generate screenshot on page load
+    const {id: slug} = this.props.params;
+    const screenshotUrl = `/api/screenshot/person/${slug}/`;
+    axios.get(screenshotUrl);
+  }
+
   render() {
 
     // if (this.props.personProfile.person.id === undefined) {
     //   return <NotFound />;
     // }
     // console.log(this.props);
-    const {person, pageViews, occupationRanks, birthYearRanks, deathYearRanks} = this.props.data;
+    const {person, pageViews, occupationRanks, birthYearRanks, deathYearRanks, wikiExtract} = this.props.data;
 
     // const {personProfile} = this.props;
     // const occupation = personProfile.person.occupation;
@@ -71,7 +78,9 @@ class Person extends Component {
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={pageViews} person={person} />},
-      {title: "Related Videos from YouTube", slug: "related", content: <div onClick={e => { e.target.childNodes[0].style.pointerEvents = "all"; }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation}`} frameBorder="0" width="1024" height="600" /></div>},
+      {title: "Related Videos from YouTube", slug: "related", content: <div onClick={e => {
+        e.target.childNodes[0].style.pointerEvents = "all";
+      }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation}`} frameBorder="0" width="1024" height="600" /></div>},
       {
         title: "Online Attention",
         slug: "afterlife",
@@ -113,18 +122,30 @@ class Person extends Component {
     // if (personProfile.person.birthcountry) {
     //   sections.push({title: `In ${personProfile.person.birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />});
     // }
+    const pageUrl = this.props.location.href.split("?")[0].replace(/\/$/, "");
+    const pageHeaderMetaTags = config.meta.map(meta => {
+      if (meta.property && meta.property === "og:title") {
+        return {property: "og:title", content: person.name};
+      }
+      if (meta.property && meta.property === "og:image") {
+        return {property: "og:image", content: `${pageUrl.replace("/profile/", "/images/screenshots/")}.png`};
+      }
+      return meta;
+    });
+
     return (
       <div className="person">
         <Helmet
           title={person.name}
-          meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: person.name} : meta)}
+          meta={pageHeaderMetaTags}
         />
         <Header person={person} pageViews={pageViews} />
         <div className="about-section">
           <ProfileNav sections={sections} />
           <Intro
             person={person}
-            totalPageViews={totalPageViews} />
+            totalPageViews={totalPageViews}
+            wikiExtract={wikiExtract} />
         </div>
         {sections.map((section, key) =>
           <Section
@@ -143,11 +164,13 @@ class Person extends Component {
   }
 }
 
-const personURL = "http://localhost:3100/person?slug=eq.<id>&select=occupation{*},birthcountry{*},birthplace{*},birthyear{*},deathcountry{*},deathplace{*},deathyear{*},*,birthyearId:birthyear,deathyearId:deathyear";
-const pageViewsURL = "http://localhost:3100/indicators?person=eq.<person.id>&order=pageview_date&num_pageviews=not.is.null";
-const occupationRanksURL = "http://localhost:3100/person?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<person.occupationRankLow>&occupation_rank_unique=lte.<person.occupationRankHigh>&order=occupation_rank_unique&select=occupation{*},birthcountry{*},hpi,langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear";
-const birthYearRanksURL = "http://localhost:3100/person?birthyear=eq.<person.birthyearId>&birthyear_rank_unique=gte.<person.birthYearRankLow>&birthyear_rank_unique=lte.<person.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation{id,domain_slug},birthcountry{*},langs,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear";
-const deathYearRanksURL = "http://localhost:3100/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation{id,domain_slug},deathcountry{*},langs,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear";
+const personURL = "/person?slug=eq.<id>&select=occupation(*),birthcountry(*),birthplace(*),birthyear(*),deathcountry(*),deathplace(*),deathyear(*),*,birthyearId:birthyear,deathyearId:deathyear";
+const pageViewsURL = "/indicators?person=eq.<person.id>&order=pageview_date&num_pageviews=not.is.null";
+const occupationRanksURL = "/person?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<person.occupationRankLow>&occupation_rank_unique=lte.<person.occupationRankHigh>&order=occupation_rank_unique&select=occupation(*),birthcountry(*),hpi,langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear";
+const birthYearRanksURL = "/person?birthyear=eq.<person.birthyearId>&birthyear_rank_unique=gte.<person.birthYearRankLow>&birthyear_rank_unique=lte.<person.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation(id,domain_slug),birthcountry(*),langs,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear";
+const deathYearRanksURL = "/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation(id,domain_slug),deathcountry(*),langs,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear";
+const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&pageids=<person.id>&format=json&exlimit=1&origin=*";
+
 Person.preneed = [
   fetchData("person", personURL, res => {
     const person = res[0];
@@ -158,10 +181,13 @@ Person.preneed = [
     const birthYearRankLow = Math.max(1, parseInt(person.birthyear_rank_unique, 10) - NUM_RANKINGS_PRE);
     const birthYearRankHigh = Math.max(NUM_RANKINGS, parseInt(person.birthyear_rank_unique, 10) + NUM_RANKINGS_POST);
 
-    const deathYearRankLow = Math.max(1, parseInt(person.deathyear_rank_unique, 10) - NUM_RANKINGS_PRE);
-    const deathYearRankHigh = Math.max(NUM_RANKINGS, parseInt(person.deathyear_rank_unique, 10) + NUM_RANKINGS_POST);
+    const deathYearRankLow = person.deathyear_rank_unique ? Math.max(1, parseInt(person.deathyear_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
+    const deathYearRankHigh = person.deathyear_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.deathyear_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
 
-    return Object.assign({occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathYearRankLow, deathYearRankHigh}, person);
+    const deathyearId = person.deathyearId || "9999";
+    const deathyear_rank_unique = person.deathyear_rank_unique || "9999";
+
+    return {...person, deathyear_rank_unique, deathyearId, occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathYearRankLow, deathYearRankHigh};
   })
 ];
 
@@ -173,7 +199,8 @@ Person.need = [
   fetchData("pageViews", pageViewsURL, res => res),
   fetchData("occupationRanks", occupationRanksURL, res => res),
   fetchData("birthYearRanks", birthYearRanksURL, res => res),
-  fetchData("deathYearRanks", deathYearRanksURL, res => res)
+  fetchData("deathYearRanks", deathYearRanksURL, res => res),
+  fetchData("wikiExtract", wikiURL)
 // //   fetchCreationdates
 ];
 

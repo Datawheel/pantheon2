@@ -64,7 +64,6 @@ const Places = ({people, occupation}) => {
         </div>
         <VizWrapper component={this} refKey="viz">
           <Treemap
-            ref={viz => this.viz = viz}
             key="tmap_country1"
             config={{
               title: `Birth Places of ${plural(occupation.occupation)}`,
@@ -80,7 +79,6 @@ const Places = ({people, occupation}) => {
         </VizWrapper>
         <VizWrapper component={this} refKey="viz2">
           <Treemap
-            ref={viz => this.viz2 = viz}
             key="tmap_country2"
             config={{
               title: `Death Places of ${plural(occupation.occupation)}`,

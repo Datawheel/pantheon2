@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Canon} from "datawheel-canon";
 import Navigation from "components/Navigation";
 import Footer from "components/Footer";
 import Search from "components/Search";
@@ -62,13 +61,26 @@ class App extends Component {
   render() {
     const {page, searchActive} = this.state;
     const {children} = this.props;
+
+    // conditional for screenshots to remove all extraneous design
+    if (this.props.location.pathname.match(/screenshot[\/]{0,1}$/)) {
+      return (
+        <div id="App" className="screenshot container">
+          <div className="ss-logo-container">
+            <img className="logo" src="/images/logos/logo_pantheon.svg" alt="Pantheon" />
+          </div>
+          <div>{children}</div>
+        </div>
+      );
+    }
+
     return (
-      <Canon className={`${page} container`}>
+      <div id="App" className={`${page} container`}>
         {searchActive ? <Search activateSearch={this.activateSearch} /> : null}
         <Navigation activateSearch={this.activateSearch} />
-        { children }
+        <div>{children}</div>
         <Footer />
-      </Canon>
+      </div>
     );
   }
 }

@@ -65,6 +65,7 @@ class PTreemap extends Component {
         .entries(tmapData)
         .map(d => d.value);
     }
+    // return <div>tmap</div>;
 
     return (
       <Treemap
@@ -74,7 +75,7 @@ class PTreemap extends Component {
           groupBy: grouping,
           height: false,
           shapeConfig: shapeConf,
-          time: "birthyear",
+          // time: "birthyear",
           tooltipConfig: groupTooltip(merge(ttData), d => show === "places" ? d.birthcountry.slug : d.occupation.occupation_slug),
           sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
         }}

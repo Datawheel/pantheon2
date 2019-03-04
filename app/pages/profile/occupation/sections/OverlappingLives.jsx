@@ -38,7 +38,6 @@ const OverlappingLives = ({people, occupation}) => {
       </div>
       <VizWrapper component={this} refKey="viz">
         <Priestley
-          ref={viz => this.viz = viz}
           key="priestley1"
           config={{
             title: `Lifespans of the Top ${priestleyData.length} ${occupation.occupation}s`,

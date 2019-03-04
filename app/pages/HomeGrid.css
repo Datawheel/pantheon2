@@ -8,7 +8,7 @@
 
   & .grid-title {
     margin: 0 auto 50px;
-    @apply --sectionTitle;
+    @mixin sectionTitle;
     display: block;
     text-align: center;
     font-size: 26px;
@@ -35,7 +35,7 @@
         text-align: center;
         width: 100%;
         z-index: 9;
-        @apply --priTitle;
+        @mixin priTitle;
         font-size: 18px;
       }
 
@@ -85,7 +85,7 @@
         &.london {background-image:url('/images/profile/place/2643743.jpg');}
         &.hawk {background-image:url('/images/profile/people/19376148.jpg');}
         &.muhammad {background-image:url('/images/profile/people/18934.jpg');}
-        &.writers {background-image:url('/images/profile/people/16027.jpg');}
+        &.writer {background-image:url('/images/profile/people/16027.jpg');}
         &.explorers {background-image:url('/images/profile/people/526051.jpg');}
         &.berlin {background-image:url('/images/profile/place/2950159.jpg');}
         &.tokyo {background-image:url('/images/profile/place/1850147.jpg');}
@@ -98,7 +98,7 @@
         &.marx {background-image:url('/images/profile/people/16743.jpg');}
         &.moscow {background-image:url('/images/profile/place/524901.jpg');}
         &.istanbul {background-image:url('/images/profile/place/745044.jpg');}
-        &.linguists {background-image:url('/images/profile/people/21566.jpg');}
+        &.linguist {background-image:url('/images/profile/people/21566.jpg');}
         &.arch {background-image:url('/images/profile/people/220556.jpg');}
         &.fdir {background-image:url('/images/profile/people/26683.jpg');}
         &.bair {background-image:url('/images/profile/place/3435910.jpg');}

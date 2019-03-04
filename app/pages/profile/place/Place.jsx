@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {fetchData} from "datawheel-canon";
+import {fetchData} from "@datawheel/canon-core";
 import Helmet from "react-helmet";
 import config from "helmet.js";
 import Header from "pages/profile/place/Header";
@@ -33,7 +33,7 @@ class Place extends Component {
   }
 
   render() {
-    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive} = this.props.data;
+    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive, wikiExtract} = this.props.data;
 
     const attrs = occupations.reduce((obj, d) => {
       obj[d.id] = d;
@@ -49,7 +49,7 @@ class Place extends Component {
         <Header place={place} country={country} people={peopleBornHere} />
         <div className="about-section">
           <ProfileNav sections={this.sections} />
-          <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
+          <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} wikiExtract={wikiExtract} />
         </div>
         <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <Occupations attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
@@ -57,6 +57,7 @@ class Place extends Component {
         <GeomapBirth country={country} peopleBorn={peopleBornHere} />
         {peopleBornHere.filter(p => p.deathyear !== null).length ? <GeomapDeath country={country} peopleDied={peopleDiedHere} /> : null}
         {peopleBornHere.filter(p => p.deathyear !== null).length ? <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} /> : null}
+
         {/* <LivingPeople place={place} data={peopleBornHereAlive} /> */}
         <Footer />
       </div>
@@ -64,13 +65,14 @@ class Place extends Component {
   }
 }
 
-const placeURL = "http://localhost:3100/place?slug=eq.<id>";
-const countryURL = "http://localhost:3100/place?country_code=eq.<place.country_code>&is_country=is.true";
-const peopleBornHereURL = "http://localhost:3100/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace{id,name,slug,lat_lon},occupation{*},occupation_id:occupation,*";
-const peopleDiedHereURL = "http://localhost:3100/person?<place.deathPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=deathplace{id,name,slug,lat_lon},occupation{*},occupation_id:occupation,*";
-const placeRanksURL = "http://localhost:3100/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique&<place.sumlevelFilter>";
-const occupationsURL = "http://localhost:3100/occupation?order=num_born.desc.nullslast";
-const peopleBornHereAliveURL = "http://localhost:3100/person?<place.birthPlaceColumn>=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
+const placeURL = "/place?slug=eq.<id>";
+const countryURL = "/place?country_code=eq.<place.country_code>&is_country=is.true";
+const peopleBornHereURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
+const peopleDiedHereURL = "/person?<place.deathPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=deathplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
+const placeRanksURL = "/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique&<place.sumlevelFilter>";
+const occupationsURL = "/occupation?order=num_born.desc.nullslast";
+const peopleBornHereAliveURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
+const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&format=json&exlimit=1&titles=<place.name>&origin=*";
 
 Place.preneed = [
   fetchData("place", placeURL, res => {
@@ -94,7 +96,8 @@ Place.need = [
   fetchData("peopleDiedHere", peopleDiedHereURL, res => res),
   fetchData("placeRanks", placeRanksURL, res => res),
   fetchData("occupations", occupationsURL, res => res),
-  fetchData("peopleBornHereAlive", peopleBornHereAliveURL, res => res)
+  fetchData("peopleBornHereAlive", peopleBornHereAliveURL, res => res),
+  fetchData("wikiExtract", wikiURL)
 ];
 
 export default connect(state => ({data: state.data}), {})(Place);

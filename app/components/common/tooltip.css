@@ -44,7 +44,7 @@
       display: block;
       margin-top: 3px;
       margin-bottom: -7px;
-      @apply --sectionTitle;
+      @mixin sectionTitle;
       font-size: 18px;
     }
 

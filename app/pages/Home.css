@@ -22,7 +22,7 @@
   }
 
   & h3 {
-    @apply --priLabel;
+    @mixin priLabel;
     margin: 5px auto 25px;
   }
 }
@@ -71,7 +71,7 @@
     box-sizing: border-box;
     background: none;
     line-height: 1;
-    @apply --normal;
+    @mixin normal;
     color: var(--colorStone);
     letter-spacing: 0.5px;
     cursor: pointer;
@@ -145,7 +145,7 @@
 }
 
 .post {
-  @apply --bodyText;
+  @mixin bodyText;
   min-width: 328px;
   text-align: left;
   margin-left: auto;
@@ -168,7 +168,7 @@
   }
 
   & a {
-    @apply --bodyLink;
+    @mixin bodyLink;
     font-weight: 400;
     border-bottom: 1px dotted var(--colorSand);
   }
@@ -204,7 +204,7 @@
 .legend-title {
   text-align: center;
   margin: 10px auto 0;
-  @apply --boldSmallCaps;
+  @mixin boldSmallCaps;
 }
 
 .timeline-container {
@@ -243,13 +243,13 @@
     & p {
       position: relative;
       height: 16px;
-      @apply --smallCaps;
+      @mixin smallCaps;
       margin-bottom: 0;
       color: var(--colorStone);
       text-shadow: 0.5px -0.5px 0 var(--colorEggshell);
 
       & a {
-        @apply --bodyLink;
+        @mixin bodyLink;
         font-weight: 400;
         pointer-events: all;
         &:hover {
@@ -517,7 +517,7 @@
 
 
 .ia {
-  @apply --themeDark;
+  @mixin themeDark;
   width: 100%;
   padding: 50px 0 65px;
   margin-bottom: 60px;
@@ -528,13 +528,13 @@
   position: relative;
 
   & h3 {
-    @apply --profileVizTitle;
+    @mixin profileVizTitle;
     color: var(--colorEggshell);
     font-size: 26px;
   }
 
   & p {
-    @apply --bodyText;
+    @mixin bodyText;
 
     & span {
       font-weight: 700;
@@ -542,7 +542,7 @@
   }
 
   & a {
-    @apply --bodyLink;
+    @mixin bodyLink;
   }
 
   & .deep-link {
@@ -569,7 +569,7 @@
   }
 
   & h2 {
-    @apply --smallCaps;
+    @mixin smallCaps;
     color: inherit;
     font-size: 1em;
     margin: 0 0 5px;

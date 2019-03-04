@@ -37,16 +37,16 @@ class HelpText extends Component {
       <span ref="parent" className="help-txt-box" onMouseEnter={this.handleMouseIn.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
         <a className={ `help-text ${ hover ? "hover" : "" }` } title={msg}>{text}</a>
         { hover
-        ? <span className="help-modal">
+          ? <span className="help-modal">
             <span className="help-modal-body">
               { msg ? msg : null }
               { link
-                ? <span className="help-modal-deeplink">Go to <a href={link} target="_blank" className="deep-link">{linkTitle}</a></span>
+                ? <span className="help-modal-deeplink">Go to <a href={link} target="_blank" rel="noopener noreferrer" className="deep-link">{linkTitle}</a></span>
                 : <span className="help-modal-deeplink">For details, see <Link to="/about/methods" className="deep-link">Methods</Link></span>
               }
             </span>
           </span>
-        : null
+          : null
         }
       </span>
     );

@@ -8,7 +8,8 @@
     "build": "canon-build",
     "start": "canon-start",
     "locales": "canon-locales",
-    "setup": "canon-setup"
+    "setup": "canon-setup",
+    "release": "canon-release"
   },
   "repository": {
     "type": "git",
@@ -28,12 +29,12 @@
   },
   "homepage": "https://github.com/MacroConnections/pantheon2#readme",
   "dependencies": {
-    "babel-eslint": "^8.2.2",
-    "datawheel-canon": "^0.14.6",
-    "eslint": "^4.18.1",
-    "mondrian-rest-client": "github:datawheel/mondrian-rest-client",
+    "@datawheel/canon-core": "^0.17.6",
+    "electron-screenshot-service": "^4.0.3",
     "numeral": "^2.0.6",
+    "pluralize": "^7.0.0",
     "react-scroll": "^1.7.7",
-    "react-table": "^6.7.6"
+    "react-table": "^6.7.6",
+    "xvfb": "^0.2.3"
   }
 }

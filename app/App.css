@@ -11,9 +11,9 @@ html {
 body {
   margin: 0;
   font-size: 14px;
-  font-size: 1.4rem;
+  font-size: 1.4rem !important;
   font-family: var(--fontBody);
-  @apply --themeLight;
+  @mixin themeLight;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -35,4 +35,18 @@ a {
 
 .center {
   text-align: center;
+}
+
+.ss-logo-container {
+  left: 0;
+  padding: 20px 0 0 0;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 100%;
+  z-index: 98;
+  & img {
+    width: 300px;
+  }
 }

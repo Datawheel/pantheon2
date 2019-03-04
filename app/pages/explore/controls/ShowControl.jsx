@@ -41,7 +41,7 @@ class ShowControl extends Component {
                   href="#"
                   data-id={rt.id}
                   onClick={this.changeShowType}
-                  className={`${rt.id} ${!show || (show === rt.id)  ? "active" : null}`}>
+                  className={`${rt.id} ${!show || show === rt.id  ? "active" : null}`}>
                   {rt.name}
                 </a>
               </h4>

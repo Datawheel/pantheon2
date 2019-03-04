@@ -38,7 +38,6 @@ const GeomapDeath = ({era, peopleDied}) => {
     <div className="section-body">
       <VizWrapper component={this} refKey="viz">
         <Geomap
-          ref={viz => this.viz = viz}
           key="geomapDeaths"
           config={{
             title: `Major Cities in ${era.name} for Deaths of Cultural Celebrities`,

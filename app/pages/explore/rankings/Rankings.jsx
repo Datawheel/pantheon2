@@ -64,7 +64,7 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
     : null;
 };
 
-class Viz extends Component {
+class Ranking extends Component {
 
   constructor(props) {
     super(props);
@@ -89,9 +89,6 @@ class Viz extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // console.log("prevProps", prevProps);
-    // console.log("this.props", this.props);
-    // Typical usage (don't forget to compare props):
     if (this.props.location.pathname !== prevProps.location.pathname) {
       // this.fetchData(this.props.userID);
       // console.log("should update!!!");
@@ -122,6 +119,7 @@ class Viz extends Component {
   render() {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
+    const {query: qParams} = this.props.location;
     const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
 
     if (!occupationResponse) {
@@ -168,12 +166,17 @@ class Viz extends Component {
             nestedOccupations={nestedOccupations}
             pageType={pageType}
             places={places}
+            qParams={qParams}
           />
           {data.length
-            ? <VizShell
+            ? <RankingTable
               loading={loading}
-              data={data}
+              data={searching ? filteredData : data}
               occupations={occupations}
+              places={places}
+              pageSize={pageSize}
+              changePageSize={this.update}
+              search={this.search}
               show={show}
               viz={viz}
               yearType={yearType}
@@ -184,7 +187,7 @@ class Viz extends Component {
   }
 }
 
-Viz.need = [
+Ranking.need = [
   fetchData("places", "/place", res => {
     const countries = res.filter(d => d.is_country).reduce((obj, item) =>
       Object.assign(obj, {[item.country_code]: item}), {});
@@ -215,4 +218,4 @@ Viz.need = [
   })
 ];
 
-export default connect(state => ({data: state.data}), {})(Viz);
+export default connect(state => ({data: state.data}), {})(Ranking);

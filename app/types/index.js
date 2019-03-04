@@ -99,7 +99,7 @@ export const SANITIZERS = {
     const supportedViz = ["treemap", "stackedarea", "linechart", "map"];
     return supportedViz.includes(viz.toLowerCase()) ? viz.toLowerCase() : supportedViz[0];
   },
-  show: (showStr, pathname) => {
+  show: (showStr, pageType) => {
     let types = ["people", "occupations", "places"];
     const depths = ["people", "occupations", "industries", "domains", "places", "countries"];
     let type = showStr;
@@ -107,7 +107,7 @@ export const SANITIZERS = {
     if (type && type.includes("|")) {
       [type, depth] = type.split("|");
     }
-    if (pathname.includes("/viz")) {
+    if (pageType === "viz") {
       types = ["occupations", "places"];
     }
     type = types.includes(type) ? type : types[0];

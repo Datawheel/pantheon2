@@ -80,12 +80,12 @@ iframe.yasiv-youtube {
   }
 
   & h4 {
-    @apply --calloutText;
+    @mixin calloutText;
     margin: 0;
   }
 
   & p {
-    @apply --smallCaps;
+    @mixin smallCaps;
     line-height: 1.5;
     margin-top: 5px;
     min-width: auto;

@@ -46,7 +46,6 @@ const OverlappingLives = ({era, occupations, peopleBorn}) => {
     <div className="section-body">
       <VizWrapper component={this} refKey="viz">
         <Priestley
-          ref={viz => this.viz = viz}
           key="priestley1"
           title={`Top ${priestleyMax} Contemporaries Born during the ${era.name}`}
           config={{

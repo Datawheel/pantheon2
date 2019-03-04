@@ -36,7 +36,6 @@ const GeomapBirth = ({era, peopleBorn}) => {
     <div className="section-body">
       <VizWrapper component={this} refKey="viz">
         <Geomap
-          ref={viz => this.viz = viz}
           key="geomapBirths"
           config={{
             title: `Major Cities in ${era.name} for Births of Cultural Celebrities`,

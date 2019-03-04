@@ -86,6 +86,10 @@ const Header = ({pageViews, person}) => {
                 },
                 ticks: sparkTicks,
                 tickSize: 0,
+                tickFormat: d => {
+                  if (typeof d === "number") return new Date(d).getFullYear();
+                  return d;
+                },
                 title: "WIKIPEDIA PAGE VIEWS (PV)",
                 titleConfig: {
                   fontColor: "#4B4A48",

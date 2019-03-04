@@ -4,7 +4,7 @@ import PersonImage from "components/utils/PersonImage";
 import {FORMATTERS} from "types";
 import {COLORS_DOMAIN} from "types";
 
-const Intro = ({person, totalPageViews}) => {
+const Intro = ({person, totalPageViews, wikiExtract}) => {
   const occupationRank = person.occupation_rank_unique;
   const birthcountryRank = person.birthcountry_rank_unique ? person.birthcountry_rank_unique : null;
   const age = person.deathyear !== null
@@ -13,7 +13,7 @@ const Intro = ({person, totalPageViews}) => {
         backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug],
         decoLines = 14;
 
-  let fromSentence;
+  let fromSentence, wikiSentence, wikiSlug;
   if (!person.birthplace) {
 
     /* Example test case person:
@@ -49,21 +49,25 @@ const Intro = ({person, totalPageViews}) => {
     }
   }
 
-  // <p>
-  //   {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
-  //   {!person.birthcountry && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
-  //   {person.deathyear
-  //     ? `${person.gender ? " He" : " She"} lived to be ${age} before passing in ${FORMATTERS.year(person.deathyear.name)}.` : null }
-  //   &nbsp;Since the start of Wikipedia, {person.gender ? "he" : "she"} has accumulated {FORMATTERS.commas(totalPageViews)} page views, spanning {person.langs} total different language editions.
-  //   By analyzing all "globally remembered people," Pantheon aims to understand cultural development through changes in occupations, birth and death places, and Wikipedia activity.&nbsp;
-  //   <a href="/about/" className="deep-link">Read about our methods</a>
-  // </p>
+  // wikipedia excerpt
+  if (wikiExtract) {
+    if (wikiExtract.query) {
+      if (wikiExtract.query.pages) {
+        if (wikiExtract.query.pages[`${person.id}`]) {
+          wikiSentence = wikiExtract.query.pages[`${person.id}`].extract;
+          wikiSentence = wikiSentence.slice(0, wikiSentence.lastIndexOf(". "));
+          wikiSlug = wikiExtract.query.pages[`${person.id}`].title.replace(" ", "_");
+        }
+      }
+    }
+  }
+
 
   return (
     <section className="intro-section person">
       <div className="intro-deco">
         <div className="deco-lines">
-          { Array(decoLines).fill().map((d, i) => <span key={i} className="deco-line" style={{backgroundColor}}></span>) }
+          {Array(decoLines).fill().map((d, i) => <span key={i} className="deco-line" style={{backgroundColor}}></span>)}
         </div>
       </div>
       <div className="intro-content">
@@ -72,15 +76,19 @@ const Intro = ({person, totalPageViews}) => {
           <h3>
             <img src="/images/ui/profile-w.svg" /> {person.name}
           </h3>
+          {wikiSentence
+            ? <p>{wikiSentence}. <a href={`https://en.wikipedia.org/wiki/${wikiSlug}`} target="_blank" rel="noopener noreferrer">Read more on Wikipedia</a></p>
+            : <p>
+              {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
+              {!person.birthcountry && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
+              {person.deathyear
+                ? `${person.name} died at ${age} years old in ${FORMATTERS.year(person.deathyear.name)}.`
+                : `${person.name} is currently ${age} years old.`}
+            </p>}
           <p>
-            {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
-            {!person.birthcountry && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
-            {person.deathyear
-              ? `${person.name} died at ${age} years old in ${FORMATTERS.year(person.deathyear.name)}.`
-              : `${person.name} is currently ${age} years old.`}
-            &nbsp;Since 2007, {person.gender ? "his" : "her"} Wikipedia page in English has received more than {FORMATTERS.commas(totalPageViews)} page views.
-            &nbsp;{person.gender ? "His" : "Her"} biography is available in {person.langs} different languages on Wikipedia making {person.gender ? "him" : "her"} the {FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
-            {!person.birthcountry ? <span>.</span> : <span> and the {birthcountryRank !== 1 ? FORMATTERS.ordinal(birthcountryRank) : ""} most popular biography from <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>.</span>}
+            <React.Fragment>Since 2007, {person.gender ? "his" : "her"} Wikipedia page in English has received more than {FORMATTERS.commas(totalPageViews)} page views. </React.Fragment>
+            <React.Fragment>{person.gender ? "His" : "Her"} biography is available in {person.langs} different languages on Wikipedia making {person.gender ? "him" : "her"} the {FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a></React.Fragment>
+            <React.Fragment>{!person.birthcountry ? <span>.</span> : <span> and the {birthcountryRank !== 1 ? FORMATTERS.ordinal(birthcountryRank) : ""} most popular biography from <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>.</span>}</React.Fragment>
           </p>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router";
 import AnchorList from "components/utils/AnchorList";
 import PhotoCarousel from "components/utils/PhotoCarousel";
 import SectionHead from "pages/profile/common/SectionHead";
@@ -9,8 +10,9 @@ const People = ({people, occupation}) => {
 
   const youngestBirthyear = Math.max(...people.map(r => r.birthyear));
   const oldestBirthyear = Math.min(...people.filter(p => p.birthyear).map(r => r.birthyear));
-  const peopleAlive = people.filter(p => p.alive);
-  const peopleDead = people.filter(p => !p.alive);
+
+  const peopleAlive = people.filter(p => p.alive).sort((personA, personB) => personA.occupation_rank_unique - personB.occupation_rank_unique);
+  const peopleDead = people.filter(p => !p.alive).sort((personA, personB) => personA.occupation_rank_unique - personB.occupation_rank_unique);
   const shareAlive = peopleAlive.length / people.length;
 
   return (
@@ -27,14 +29,14 @@ const People = ({people, occupation}) => {
           </p>
           <div className="rank-title">
             <h3>Living {plural(occupation.occupation)}</h3>
-            <a href="/explore/rankings">Go to all Rankings</a>
+            <Link to={`/explore/rankings?show=people&occupation=${occupation.id}`}>Go to all Rankings</Link>
           </div>
           <PhotoCarousel people={peopleAlive.slice(0, 12)} rankAccessor="occupation_rank_unique" />
           { peopleDead.length
             ? <div className="rank-sec-body">
               <div className="rank-title">
                 <h3>Deceased {plural(occupation.occupation)}</h3>
-                <a href="/explore/rankings">Go to all Rankings</a>
+                <Link to={`/explore/rankings?show=people&occupation=${occupation.id}`}>Go to all Rankings</Link>
               </div>
               <PhotoCarousel people={peopleDead.slice(0, 12)} rankAccessor="occupation_rank_unique" />
             </div>

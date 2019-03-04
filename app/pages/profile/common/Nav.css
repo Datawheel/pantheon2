@@ -68,7 +68,7 @@
     &::before {
       content: counter(li, upper-roman);
       counter-increment: li;
-      @apply --profileNav;
+      @mixin profileNav;
       color: var(--colorEggshell);
       background-color: var(--colorDark);
     }
@@ -94,7 +94,7 @@
     text-decoration: none;
     outline: none;
     padding: 5px 5px 5px 0;
-    @apply --profileNav;
+    @mixin profileNav;
     color: var(--colorEggshell)
   }
 
@@ -113,7 +113,7 @@
       float: right;
 
       & a {
-        @apply --bodyLink;
+        @mixin bodyLink;
         color: var(--colorSand);
         text-transform: none;
       }
