@@ -122,6 +122,7 @@ class Viz extends Component {
   render() {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
+    const {query: qParams} = this.props.location;
     const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
 
     if (!occupationResponse) {
@@ -168,16 +169,16 @@ class Viz extends Component {
             nestedOccupations={nestedOccupations}
             pageType={pageType}
             places={places}
+            qParams={qParams}
           />
-          {data.length
-            ? <VizShell
-              loading={loading}
-              data={data}
-              occupations={occupations}
-              show={show}
-              viz={viz}
-              yearType={yearType}
-            /> : null}
+          <VizShell
+            loading={loading}
+            data={data}
+            occupations={occupations}
+            show={show}
+            viz={viz}
+            yearType={yearType}
+          />
         </div>
       </div>
     );

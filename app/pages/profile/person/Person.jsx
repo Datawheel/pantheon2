@@ -21,6 +21,7 @@ import {LinePlot} from "d3plus-react";
 import {extent} from "d3-array";
 // import "css/components/profile/structure";
 import {FORMATTERS, NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST} from "types/index";
+import {plural} from "pluralize";
 
 class Person extends Component {
 
@@ -115,7 +116,7 @@ class Person extends Component {
             yConfig: {tickFormat: () => "", title: false}
           }} />
       },
-      {title: `Among ${person.occupation.occupation}s`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />},
+      {title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={person} birthYearRanking={birthYearRanks} deathYearRanking={deathYearRanks} />}
     ];
     //

@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Link} from "react-router";
 import AnchorList from "components/utils/AnchorList";
 import PhotoCarousel from "components/utils/PhotoCarousel";
+import {plural} from "pluralize";
 import {FORMATTERS} from "types";
 
 class OccupationRanking extends Component {
@@ -26,12 +27,12 @@ class OccupationRanking extends Component {
     return (
       <div>
         <p>
-          Among {person.occupation.occupation}s, {person.name} ranks <a>{FORMATTERS.commas(me.occupation_rank)}</a> out of {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
+          Among {plural(person.occupation.occupation)}, {person.name} ranks <a>{FORMATTERS.commas(me.occupation_rank)}</a> out of {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
           { betterPeers }
           { worsePeers }
         </p>
         <div className="rank-title">
-          <h3>Top Global {person.occupation.occupation}s</h3>
+          <h3>Top Global {plural(person.occupation.occupation)}</h3>
           <Link to={`/explore/rankings?show=people&occupation=${person.occupation.id}`}>Go to all Rankings</Link>
         </div>
         <PhotoCarousel me={person} people={ranking} rankAccessor="occupation_rank_unique" />

@@ -6,8 +6,22 @@ import {FORMATTERS} from "types/index";
 import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 
-const Header = ({country, people, place}) => {
-  const placeImg = place.img_link ? `/images/profile/place/${place.id}.jpg` : country.img_link ? `/images/profile/place/${country.id}.jpg` : "/images/profile/placeholder_place_profile.jpg";
+const Header = ({country, people, place, wikiImg}) => {
+  let placeImg = place.img_link ? `/images/profile/place/${place.id}.jpg` : country.img_link ? `/images/profile/place/${country.id}.jpg` : "/images/profile/placeholder_place_profile.jpg";
+  // wikipedia excerpt
+  if (wikiImg) {
+    if (wikiImg.query) {
+      if (wikiImg.query.pages) {
+        const results = Object.values(wikiImg.query.pages);
+        if (results.length) {
+          const wikiThumbnail = results[0].thumbnail;
+          if (wikiThumbnail) {
+            placeImg = wikiThumbnail.source;
+          }
+        }
+      }
+    }
+  }
 
   const yearAndCount = nest()
     .key(p => p.birthyear)
@@ -37,60 +51,64 @@ const Header = ({country, people, place}) => {
         <p className="date-subtitle">{ FORMATTERS.year(country.soverign_date) === 0 ? "1AD" : FORMATTERS.year(country.soverign_date) } - Today</p>
         <pre>
           <LinePlot
-             config={{
-               data: sparkData,
-               height: 100,
-               groupBy: "id",
-               legend: false,
-               on: {
-                 "click.shape": () => {},
-                 "mouseenter.shape": () => {},
-                 "mousemove.shape": () => {},
-                 "mouseleave.shape": () => {}
-               },
-               shape: d => d.shape || "Line",
-               shapeConfig: {
-                 hoverOpacity: 1,
-                 Circle: {
-                   fill: "#4B4A48",
-                   r: () => 3.5
-                 },
-                 Line: {
-                   fill: "none",
-                   stroke: "#4B4A48",
-                   strokeWidth: 1
-                 }
-               },
-               time: d => d.birthyear,
-               timeline: false,
-               tooltipConfig: {
-                 body: d => d.txt,
-                 title: "Individuals Born"
-               },
-               width: 275,
-               x: d => d.birthyear,
-              //  xConfig: {
-              //    barConfig: {"stroke-width": 0},
-              //    labels: sparkTicks,
-              //    shapeConfig: {
-              //      fill: "#4B4A48",
-              //      fontColor: "#4B4A48",
-              //      fontSize: () => 8,
-              //      stroke: "#4B4A48"
-              //    },
-              //    ticks: sparkTicks,
-              //    tickSize: 0,
-              //    title: "Count",
-              //    titleConfig: {
-              //      fontColor: "#4B4A48",
-              //      fontFamily: () => "Amiko",
-              //      fontSize: () => 10,
-              //      stroke: "#4B4A48"
-              //    }
-              //  },
-               y: d => d.count,
-               yConfig: {labels: [], ticks: [], title: false}
-             }} />
+            config={{
+              data: sparkData,
+              height: 100,
+              groupBy: "id",
+              legend: false,
+              on: {
+                "click.shape": () => {},
+                "mouseenter.shape": () => {},
+                "mousemove.shape": () => {},
+                "mouseleave.shape": () => {}
+              },
+              shape: d => d.shape || "Line",
+              shapeConfig: {
+                hoverOpacity: 1,
+                Circle: {
+                  fill: "#4B4A48",
+                  r: () => 3.5
+                },
+                Line: {
+                  fill: "none",
+                  stroke: "#4B4A48",
+                  strokeWidth: 1
+                }
+              },
+              time: d => d.birthyear,
+              timeline: false,
+              tooltipConfig: {
+                body: d => d.txt,
+                title: "Individuals Born"
+              },
+              width: 275,
+              x: d => d.birthyear,
+              xConfig: {
+                // barConfig: {"stroke-width": 0},
+                // labels: sparkTicks,
+                // shapeConfig: {
+                //   fill: "#4B4A48",
+                //   fontColor: "#4B4A48",
+                //   fontSize: () => 8,
+                //   stroke: "#4B4A48"
+                // },
+                // ticks: sparkTicks,
+                // tickSize: 0,
+                // title: "Count",
+                // titleConfig: {
+                //   fontColor: "#4B4A48",
+                //   fontFamily: () => "Amiko",
+                //   fontSize: () => 10,
+                //   stroke: "#4B4A48"
+                // }
+                tickFormat: d => {
+                  if (typeof d === "number") return new Date(d).getFullYear();
+                  return d;
+                }
+              },
+              y: d => d.count,
+              yConfig: {labels: [], ticks: [], title: false}
+            }} />
         </pre>
       </div>
       <div className="mouse">

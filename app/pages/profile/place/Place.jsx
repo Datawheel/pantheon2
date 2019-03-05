@@ -33,7 +33,7 @@ class Place extends Component {
   }
 
   render() {
-    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive, wikiExtract} = this.props.data;
+    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive, wikiExtract, wikiImg} = this.props.data;
 
     const attrs = occupations.reduce((obj, d) => {
       obj[d.id] = d;
@@ -46,12 +46,12 @@ class Place extends Component {
           title={place.name}
           meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: place.name} : meta)}
         />
-        <Header place={place} country={country} people={peopleBornHere} />
+        <Header place={place} country={country} people={peopleBornHere} wikiImg={wikiImg} />
         <div className="about-section">
           <ProfileNav sections={this.sections} />
           <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} wikiExtract={wikiExtract} />
         </div>
-        <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
+        <PeopleRanking country={country} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <Occupations attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <OccupationTrends attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} />
         <GeomapBirth country={country} peopleBorn={peopleBornHere} />
@@ -73,6 +73,7 @@ const placeRanksURL = "/place?born_rank_unique=gte.<place.placeRankLow>&born_ran
 const occupationsURL = "/occupation?order=num_born.desc.nullslast";
 const peopleBornHereAliveURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
 const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&format=json&exlimit=1&titles=<place.name>&origin=*";
+const wikiImgURL = "https://en.wikipedia.org/w/api.php?action=query&titles=<place.name>&prop=pageimages&format=json&pithumbsize=1000&origin=*";
 
 Place.preneed = [
   fetchData("place", placeURL, res => {
@@ -97,7 +98,8 @@ Place.need = [
   fetchData("placeRanks", placeRanksURL, res => res),
   fetchData("occupations", occupationsURL, res => res),
   fetchData("peopleBornHereAlive", peopleBornHereAliveURL, res => res),
-  fetchData("wikiExtract", wikiURL)
+  fetchData("wikiExtract", wikiURL),
+  fetchData("wikiImg", wikiImgURL)
 ];
 
 export default connect(state => ({data: state.data}), {})(Place);

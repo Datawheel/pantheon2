@@ -67,7 +67,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
-              time: "birthyear",
+              // time: "birthyear",
               tooltipConfig: groupTooltip(tmapBornData, d => d.occupation.occupation_slug)
             }} />
         </VizWrapper>
@@ -81,7 +81,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
-              time: "deathyear",
+              // time: "deathyear",
               tooltipConfig: groupTooltip(tmapDeathData, d => d.occupation.occupation_slug)
             }} />
         </VizWrapper>

@@ -5,13 +5,15 @@ import PhotoCarousel from "components/utils/PhotoCarousel";
 import SectionHead from "pages/profile/common/SectionHead";
 import {FORMATTERS} from "types/index";
 
-const PeopleRanking = ({place, peopleBorn, peopleDied}) => {
+const PeopleRanking = ({country, place, peopleBorn, peopleDied}) => {
   const youngestBirthyear = Math.max(...peopleBorn.map(r => r.birthyear));
   const oldestBirthyear = Math.min(...peopleBorn.map(r => r.birthyear));
   const moreDeaths = peopleDied.length > peopleBorn.length ? true : false;
 
   const topRankingBorn = peopleBorn.slice(0, 12);
   const topRankingDied = peopleDied.slice(0, 12);
+  const placeQueryParamId = place.is_country ? place.id : `${country.id}|${place.id}`;
+
   return (
     <section className="profile-section">
       <SectionHead title="People" index={1} numSections={5} />
@@ -22,14 +24,14 @@ const PeopleRanking = ({place, peopleBorn, peopleDied}) => {
           </p>
           <div className="rank-title">
             <h3>People Born in {place.name}</h3>
-            <Link to={`/explore/rankings?show=people&place=${place.id}`}>Go to all Rankings</Link>
+            <Link to={`/explore/rankings?show=people&place=${placeQueryParamId}`}>Go to all Rankings</Link>
           </div>
           <PhotoCarousel people={topRankingBorn} rankAccessor={place.is_country ? "birthcountry_rank_unique" : "birthplace_rank_unique"} />
           { topRankingDied.length
             ? <div className="rank-sec-body">
               <div className="rank-title">
                 <h3>People Deceased in {place.name}</h3>
-                <Link to={`/explore/rankings?show=people&place=${place.id}`}>Go to all Rankings</Link>
+                <Link to={`/explore/rankings?show=people&place=${placeQueryParamId}&placeType=deathplace`}>Go to all Rankings</Link>
               </div>
               <PhotoCarousel people={topRankingDied} rankAccessor={place.is_country ? "deathcountry_rank_unique" : "deathplace_rank_unique"} />
             </div> : null }

@@ -134,6 +134,7 @@ export const SANITIZERS = {
   },
   gender: gender => gender === "true" || gender === "false" ? JSON.parse(gender) : null,
   yearType: yearType => yearType === "deathyear" ? yearType : "birthyear",
+  placeType: placeType => placeType === "deathplace" ? placeType : "birthplace",
   country: place => place && place.includes("|") ? place.split("|")[0] : place,
   city: place => place && place.includes("|") ? place.split("|")[1] : "all"
 };

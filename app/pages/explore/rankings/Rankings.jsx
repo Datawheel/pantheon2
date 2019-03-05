@@ -122,6 +122,8 @@ class Ranking extends Component {
     const {query: qParams} = this.props.location;
     const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
 
+    console.log("isLoading???", loading);
+
     if (!occupationResponse) {
       return <div>loading...</div>;
     }
@@ -168,19 +170,18 @@ class Ranking extends Component {
             places={places}
             qParams={qParams}
           />
-          {data.length
-            ? <RankingTable
-              loading={loading}
-              data={searching ? filteredData : data}
-              occupations={occupations}
-              places={places}
-              pageSize={pageSize}
-              changePageSize={this.update}
-              search={this.search}
-              show={show}
-              viz={viz}
-              yearType={yearType}
-            /> : null}
+          <RankingTable
+            loading={loading}
+            data={searching ? filteredData : data}
+            occupations={occupations}
+            places={places}
+            pageSize={pageSize}
+            changePageSize={this.update}
+            search={this.search}
+            show={show}
+            viz={viz}
+            yearType={yearType}
+          />
         </div>
       </div>
     );

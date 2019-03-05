@@ -23,8 +23,9 @@ class Controls extends Component {
       country: SANITIZERS.country(qParams.place) || "all",
       gender: SANITIZERS.gender(qParams.viz),
       occupation: qParams.occupation || "all",
+      placeType: SANITIZERS.placeType(qParams.placeType),
       show: SANITIZERS.show(qParams.show ? qParams.show : props.pageType === "viz" ? "occupations" : "people", props.pageType),
-      viz: SANITIZERS.vizType(qParams.viz || "Treemap"),
+      viz: props.pageType === "viz" ? SANITIZERS.vizType(qParams.viz || "Treemap") : null,
       years: SANITIZERS.years(qParams.years),
       yearType: SANITIZERS.yearType(qParams.yearType),
       metricCutoff: qParams.metricCutoff || "4",
@@ -41,7 +42,8 @@ class Controls extends Component {
     // console.log("from controls this.props:", this.props);
     if (this.props.pageType !== prevProps.pageType) {
       console.log("CONTROL SHOULD UPDATE!");
-      this.props.updateData(Object.assign({data: [], loading: true}, this.state));
+      // this.props.updateData(Object.assign({data: [], loading: true}, this.state));
+
       // this.props.updateData(Object.assign({data: [], loading: true}, this.state), this.fetchData);
       // this.fetchData();
       // console.log("controls componentDidUpdate!", this.props);
@@ -57,9 +59,10 @@ class Controls extends Component {
   }
 
   setQueryParams = () => {
-    const {city, country, gender, metricType, metricCutoff, occupation, show, viz, years} = this.state;
+    const {pageType} = this.props;
+    const {city, country, gender, metricType, metricCutoff, occupation, show, viz, years, yearType, placeType} = this.state;
 
-    let queryStr = `?viz=${viz}&show=${show}&years=${years}`;
+    let queryStr = pageType === "viz" ? `?viz=${viz}&show=${show}&years=${years}` : `?show=${show}&years=${years}`;
     if (country !== "all") {
       queryStr += `&place=${country}`;
       if (city !== "all") {
@@ -68,6 +71,12 @@ class Controls extends Component {
     }
     if (occupation !== "all") {
       queryStr += `&occupation=${occupation}`;
+    }
+    if (yearType !== "birthyear") {
+      queryStr += `&yearType=${yearType}`;
+    }
+    if (placeType !== "birthplace") {
+      queryStr += `&placeType=${placeType}`;
     }
     if (gender === true || gender === false) {
       queryStr += `&gender=${gender}`;
@@ -83,16 +92,16 @@ class Controls extends Component {
 
   fetchData = () => {
     const {pageType} = this.props;
-    const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType} = this.state;
+    const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType, placeType} = this.state;
     const selectFields = "name,langs,hpi,id,slug,gender,birthyear,deathyear,birthcountry(id,country_name,continent,slug),birthplace(id,name,country_name,continent,slug,lat_lon),deathplace(id,name,country_name,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
     const apiHeaders = null;
     const sorting = "&order=hpi.desc.nullslast";
 
     let placeFilter = "";
     if (country !== "all") {
-      placeFilter = `&birthcountry=eq.${country}`;
+      placeFilter = placeType === "birthplace" ? `&birthcountry=eq.${country}` : `&deathcountry=eq.${country}`;
       if (city !== "all") {
-        placeFilter = `&birthplace=eq.${city}`;
+        placeFilter = placeType === "birthplace" ? `&birthplace=eq.${city}` : `&deathplace=eq.${city}`;
       }
     }
 
@@ -120,6 +129,7 @@ class Controls extends Component {
   }
 
   updateAndFetchData = (key, val) => {
+    console.log("\n\nupdateAndFetchData!!!\n\n");
     this.setState({[key]: val}, () => {
       this.setQueryParams();
       this.fetchData();
@@ -127,6 +137,7 @@ class Controls extends Component {
   }
 
   update = (key, val) => {
+    console.log("\n\nupdate was called!!!\n\n");
     const {pathname} = this.props.location;
     this.setState({[key]: val}, () => {
       this.setQueryParams();
@@ -141,7 +152,7 @@ class Controls extends Component {
   }
 
   render() {
-    const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType} = this.state;
+    const {city, country, gender, metricCutoff, metricType, occupation, placeType, show, viz, years, yearType} = this.state;
     const {pageType, nestedOccupations, places} = this.props;
 
     return (
@@ -160,9 +171,8 @@ class Controls extends Component {
 
         <section className="control-group">
           <GenderControl gender={gender} changeGender={this.updateAndFetchData} />
-          <YearTypeControl yearType={yearType} changeYearType={this.updateAndFetchData} />
-          <YearControl years={years} changeYears={this.updateAndFetchData} />
-          {places ? <PlaceControl city={city} country={country} onChange={this.updateAndFetchData} places={places} /> : null}
+          <YearControl years={years} changeYears={this.updateAndFetchData} yearType={yearType} />
+          {places ? <PlaceControl city={city} country={country} onChange={this.updateAndFetchData} places={places} placeType={placeType} /> : null}
           <OccupationControl nestedOccupations={nestedOccupations} occupation={occupation} changeOccupation={this.updateAndFetchData} />
         </section>
 
