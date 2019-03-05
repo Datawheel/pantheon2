@@ -17,8 +17,8 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "",
           accessor: "id",
-          Cell: ({value}) => <div><img height={34} src={`/images/profile/people/${value}.jpg`}/></div>,
-          maxWidth: 45
+          Cell: ({value}) => <div><img height={68} src={`/images/profile/people/${value}.jpg`}/></div>,
+          maxWidth: 70
         },
         {
           Header: "Name",
@@ -40,7 +40,7 @@ const getColumns = (show, nesting, occupations, places) => {
           Header: "Birth",
           accessor: "birthyear",
           Cell: ({value}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"Unknown"}</span>,
-          minWidth: 80
+          minWidth: 50
         },
         {
           Header: "Death",

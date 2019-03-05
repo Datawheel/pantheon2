@@ -75,7 +75,7 @@ header {
     }
 
     & .bg-img {
-      background-blend-mode: luminosity;
+      mix-blend-mode: luminosity;
       background-size: cover;
 
       @media (min-width: 751px) {

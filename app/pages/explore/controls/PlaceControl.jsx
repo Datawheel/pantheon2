@@ -24,7 +24,6 @@ class PlaceControl extends Component {
 
   render() {
     const {city, country, places, placeType} = this.props;
-    console.log("city, country, places, placeType", city, country, places, placeType);
 
     return (
       <div className="filter place-control">
