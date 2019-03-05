@@ -15,6 +15,12 @@ const getColumns = (show, nesting, occupations, places) => {
           minWidth: 45
         },
         {
+          Header: "",
+          accessor: "id",
+          Cell: ({value}) => <div><img height={34} src={`/images/profile/people/${value}.jpg`}/></div>,
+          maxWidth: 45
+        },
+        {
           Header: "Name",
           accessor: "name",
           Cell: ({value, original}) => <a href={`/profile/person/${original.slug}`}>{value}</a>
@@ -122,7 +128,7 @@ const getColumns = (show, nesting, occupations, places) => {
           header: "#",
           accessor: "num_born",
           minWidth: 30,
-          render: ({index}) => <span>{index+1}</span>
+          render: ({index}) => <span>{index + 1}</span>
         },
         {
           header: "Industry",
@@ -138,7 +144,7 @@ const getColumns = (show, nesting, occupations, places) => {
           header: "People",
           accessor: "num_born",
           sort: "desc"
-        },
+        }
         // {
         //   header: "% Women",
         //   accessor: "num_born_women",
@@ -161,7 +167,7 @@ const getColumns = (show, nesting, occupations, places) => {
           header: "People",
           accessor: "num_born",
           sort: "desc"
-        },
+        }
         // {
         //   header: "% Women",
         //   accessor: "num_born_women",
@@ -175,7 +181,7 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           header: "#",
           accessor: "born_rank_unique",
-          render: ({value, index}) => <span>{value ? value : index+1}</span>
+          render: ({value, index}) => <span>{value ? value : index + 1}</span>
         },
         {
           header: "Country",

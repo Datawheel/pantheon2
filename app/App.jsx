@@ -46,16 +46,27 @@ class App extends Component {
           this.activateSearch();
         }
       }
-      // 'esc' key
-      if (event.keyCode === 27) {
-        event.preventDefault();
-        this.activateSearch();
-      }
     }, false);
   }
 
+  _closeSearchEscKey = event => {
+    // 'esc' key
+    if (event.keyCode === 27) {
+      event.preventDefault();
+      this.activateSearch();
+    }
+  }
+
   activateSearch = () => {
-    this.setState({searchActive: !this.state.searchActive});
+    const {searchActive} = this.state;
+    // user wants to close the search
+    if (searchActive) {
+      document.removeEventListener("keydown", this._closeSearchEscKey, false);
+    }
+    else { // user wants to open the search
+      document.addEventListener("keydown", this._closeSearchEscKey, false);
+    }
+    this.setState({searchActive: !searchActive});
   }
 
   render() {
