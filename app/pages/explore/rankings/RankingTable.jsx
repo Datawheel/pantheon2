@@ -3,6 +3,7 @@ import ReactTable from "react-table";
 import getColumns from "pages/explore/rankings/RankingColumns";
 import RankingSearch from "pages/explore/rankings/RankingSearch";
 import RankingResultsPerPage from "pages/explore/rankings/RankingResultsPerPage";
+import {animateScroll as scroll} from "react-scroll";
 import "pages/explore/rankings/Rankings.css";
 import "react-table/react-table.css";
 
@@ -45,6 +46,7 @@ class RankingTable extends Component {
           defaultPageSize={50}
           pageSize={Math.min(pageSize, data.length)}
           showPageSizeOptions={false}
+          onPageChange={() => scroll.scrollToTop()}
         />
       </div>
     );

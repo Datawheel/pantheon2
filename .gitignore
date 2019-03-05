@@ -25,3 +25,5 @@ postgrest.conf
 
 # dont commit huge images dir
 static/images/profile
+
+.vscode

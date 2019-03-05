@@ -129,7 +129,6 @@ class Controls extends Component {
   }
 
   updateAndFetchData = (key, val) => {
-    console.log("\n\nupdateAndFetchData!!!\n\n");
     this.setState({[key]: val}, () => {
       this.setQueryParams();
       this.fetchData();
@@ -137,7 +136,6 @@ class Controls extends Component {
   }
 
   update = (key, val) => {
-    console.log("\n\nupdate was called!!!\n\n");
     const {pathname} = this.props.location;
     this.setState({[key]: val}, () => {
       this.setQueryParams();

@@ -32,14 +32,12 @@ class YearControl extends Component {
       let sanitizedYear = this.sanitizeYear(tempYear);
       if (e.target.id.includes("end")) {
         sanitizedYear = Math.min(Math.max(sanitizedYear, years[0]), 2013);
-        console.log("sanitizedYear (end)!!", sanitizedYear, years[1]);
         if (sanitizedYear !== years[1]) {
           this.props.changeYears("years", [years[0], sanitizedYear]);
         }
       }
       else {
         sanitizedYear = Math.min(Math.max(sanitizedYear, -4000), years[1]);
-        console.log("sanitizedYear (start)!!", sanitizedYear, years[0]);
         if (sanitizedYear !== years[0]) {
           this.props.changeYears("years", [sanitizedYear, years[1]]);
         }

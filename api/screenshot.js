@@ -27,9 +27,13 @@ module.exports = function(app) {
       const folderPath = path.join(process.cwd(), folder);
       const imgPath = path.join(process.cwd(), folder, `${slug}.png`);
       mkdirp(folderPath, err => {
-        console.log("mkdir err", err);
+        if (err) {
+          console.log("mkdir err:", err);
+        }
         fs.writeFile(imgPath, img.data, err => {
-          console.log("fs err", err);
+          if (err) {
+            console.log("fs err", err);
+          }
           if (!isLocal) xvfb.stopSync();
           res.sendFile(imgPath);
         });
