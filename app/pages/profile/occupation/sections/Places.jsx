@@ -58,8 +58,9 @@ const Places = ({people, occupation}) => {
           <p>
             Most {plural(occupation.occupation)} were born in <AnchorList items={countriesBorn.slice(0, 3)} name={d => `${d.value.birthcountry.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.birthcountry.slug}/`} />.
             By city, the most common birth places were <AnchorList items={placesBorn.slice(0, 3)} name={d => `${d.value.birthplace.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.birthplace.slug}/`} />.
-            The most common death places of {plural(occupation.occupation)} were <AnchorList items={countriesDied.slice(0, 3)} name={d => `${d.value.deathcountry.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathcountry.slug}/`} />.
-            By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.deathplace.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathplace.slug}/`} />.
+            {tmapDeathData.length
+              ? <React.Fragment>The most common death places of {plural(occupation.occupation)} were <AnchorList items={countriesDied.slice(0, 3)} name={d => `${d.value.deathcountry.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathcountry.slug}/`} />. By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.deathplace.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathplace.slug}/`} />.</React.Fragment>
+              : null}
           </p>
         </div>
         <VizWrapper component={this} refKey="viz">
@@ -71,27 +72,35 @@ const Places = ({people, occupation}) => {
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
               on: on("place", d => d.birthcountry.slug),
+              legendConfig: {
+                label: d => d.borncontinent
+              },
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-              time: "birthyear",
+              // time: "birthyear",
               tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
         </VizWrapper>
-        <VizWrapper component={this} refKey="viz2">
-          <Treemap
-            key="tmap_country2"
-            config={{
-              title: `Death Places of ${plural(occupation.occupation)}`,
-              data: tmapDeathData,
-              depth: 1,
-              groupBy: ["diedcontinent", "diedcountry"],
-              on: on("place", d => d.deathcountry.slug),
-              shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              time: "deathyear",
-              tooltipConfig: groupTooltip(tmapBornData, d => d.deathcountry.slug),
-              sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
-            }} />
-        </VizWrapper>
+        {tmapDeathData.length
+          ? <VizWrapper component={this} refKey="viz2">
+            <Treemap
+              key="tmap_country2"
+              config={{
+                title: `Death Places of ${plural(occupation.occupation)}`,
+                data: tmapDeathData,
+                depth: 1,
+                groupBy: ["diedcontinent", "diedcountry"],
+                on: on("place", d => d.deathcountry.slug),
+                legendConfig: {
+                  label: d => d.diedcontinent
+                },
+                shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
+                // time: "deathyear",
+                tooltipConfig: groupTooltip(tmapBornData, d => d.deathcountry.slug),
+                sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
+              }} />
+          </VizWrapper>
+          : null}
       </div>
     </section>
   );

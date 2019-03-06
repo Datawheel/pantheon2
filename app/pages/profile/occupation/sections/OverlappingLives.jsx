@@ -26,6 +26,10 @@ const OverlappingLives = ({people, occupation}) => {
     .filter(p => p.deathyear !== null && p.deathcountry !== null)
     .slice(0, priestleyMax);
 
+  if (priestleyData.length < 3) {
+    return null;
+  }
+
   return (
     <section className="profile-section">
       <SectionHead title="Overlapping Lives" index={1} numSections={5} />

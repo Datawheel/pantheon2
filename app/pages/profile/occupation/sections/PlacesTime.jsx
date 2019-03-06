@@ -74,23 +74,25 @@ const PlacesTime = ({eras, people, occupation}) => {
               }
             }} />
         </VizWrapper>
-        <VizWrapper component={this} refKey="viz2">
-          <StackedArea
-            key="stacked_country2"
-            config={{
-              title: `Death Places of ${occupation.occupation}s Over Time`,
-              data: tmapDeathData,
-              depth: 1,
-              groupBy: ["diedcontinent", "diedcountry"],
-              on: on("place", d => d.deathcountry.slug),
-              shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              tooltipConfig: groupTooltip(tmapDeathData, d => d.deathcountry.slug),
-              xConfig: {
-                labels: deathTicks,
-                tickFormat: d => deathBuckets[d]
-              }
-            }} />
-        </VizWrapper>
+        {tmapDeathData.length > 1
+          ? <VizWrapper component={this} refKey="viz2">
+            <StackedArea
+              key="stacked_country2"
+              config={{
+                title: `Death Places of ${occupation.occupation}s Over Time`,
+                data: tmapDeathData,
+                depth: 1,
+                groupBy: ["diedcontinent", "diedcountry"],
+                on: on("place", d => d.deathcountry.slug),
+                shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
+                tooltipConfig: groupTooltip(tmapDeathData, d => d.deathcountry.slug),
+                xConfig: {
+                  labels: deathTicks,
+                  tickFormat: d => deathBuckets[d]
+                }
+              }} />
+          </VizWrapper>
+          : null}
       </div>
     </section>
   );

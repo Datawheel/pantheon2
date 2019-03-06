@@ -37,6 +37,9 @@ const Lifespans = ({attrs, place, peopleBorn}) => {
             end: "deathyear",
             groupBy: ["domain", "name"].map(groupBy(attrs)),
             height: 700,
+            legendConfig: {
+              label: d => d.occupation.domain
+            },
             on: on("person", d => d.slug),
             start: "birthyear",
             shapeConfig: Object.assign({}, shapeConfig(attrs), {
