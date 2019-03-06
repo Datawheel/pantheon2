@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/MacroConnections/pantheon2#readme",
   "dependencies": {
-    "@datawheel/canon-core": "^0.17.6",
+    "@datawheel/canon-core": "^0.17.7",
     "electron-screenshot-service": "^4.0.3",
     "numeral": "^2.0.6",
     "pluralize": "^7.0.0",
