@@ -12,6 +12,7 @@ import Footer from "pages/profile/person/Footer";
 import MemMetrics from "pages/profile/person/MemMetrics";
 import OccupationRanking from "pages/profile/person/OccupationRanking";
 import YearRanking from "pages/profile/person/YearRanking";
+import PageviewsByLang from "pages/profile/person/PageviewsByLang";
 // import CountryRanking from "components/profile/person/CountryRanking";
 import NotFound from "components/NotFound";
 // import {activateSearch} from "actions/nav";
@@ -116,6 +117,7 @@ class Person extends Component {
             yConfig: {tickFormat: () => "", title: false}
           }} />
       },
+      {title: `Page views of ${plural(person.name)} by language`, slug: "page-views-by-lang", content: <PageviewsByLang person={person} />},
       {title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />},
       {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={person} birthYearRanking={birthYearRanks} deathYearRanking={deathYearRanks} />}
     ];
