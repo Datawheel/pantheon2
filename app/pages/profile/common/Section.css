@@ -72,6 +72,10 @@
       margin: 0;
       padding-right: 10px;
     }
+    & h4 a {
+      color: var(--colorSlate) !important;
+      text-decoration: none;
+    }
   }
 
   & .icon-circle {

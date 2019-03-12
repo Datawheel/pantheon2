@@ -66,9 +66,9 @@ function slugifyStr(str) {
 export const FORMATTERS = {
   commas: format(","),
   decimal: format(".2f"),
-  share: format(".2%"),
+  share: format(",.2%"),
   bigNum: format(".2s"),
-  shareWhole: format(".0%"),
+  shareWhole: format(",.0%"),
   date: timeFormat("%B %d, %Y"),
   dateShort: timeFormat("%m/%d/%y"),
   month: timeFormat("%B %Y"),

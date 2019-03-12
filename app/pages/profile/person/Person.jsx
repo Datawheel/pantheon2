@@ -82,7 +82,7 @@ class Person extends Component {
       {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={pageViews} person={person} />},
       {title: "Related Videos from YouTube", slug: "related", content: <div onClick={e => {
         e.target.childNodes[0].style.pointerEvents = "all";
-      }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation}`} frameBorder="0" width="1024" height="600" /></div>},
+      }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation}`} frameBorder="0" max-width="1024" width="100%" height="600" /></div>},
       {
         title: "Online Attention",
         slug: "afterlife",
@@ -172,7 +172,7 @@ const pageViewsURL = "/indicators?person=eq.<person.id>&order=pageview_date&num_
 const occupationRanksURL = "/person?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<person.occupationRankLow>&occupation_rank_unique=lte.<person.occupationRankHigh>&order=occupation_rank_unique&select=occupation(*),birthcountry(*),hpi,langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear";
 const birthYearRanksURL = "/person?birthyear=eq.<person.birthyearId>&birthyear_rank_unique=gte.<person.birthYearRankLow>&birthyear_rank_unique=lte.<person.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation(id,domain_slug),birthcountry(*),langs,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear";
 const deathYearRanksURL = "/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation(id,domain_slug),deathcountry(*),langs,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear";
-const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&pageids=<person.id>&format=json&exlimit=1&origin=*";
+const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=<person.id>&format=json&exlimit=1&origin=*";
 
 Person.preneed = [
   fetchData("person", personURL, res => {

@@ -18,22 +18,22 @@
     "primary_family_name": "Caucasian"
   },
   "ace": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Acehnese",
     "language_local": "Ac\u00e8h",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ady": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Adyghe",
     "language_local": "\u0430\u0434\u044b\u0433\u0430\u0431\u0437\u044d",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "af": {
     "family_code": "gem",
@@ -54,13 +54,13 @@
     "primary_family_name": "Niger-Kordofanian"
   },
   "als": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Alemannic",
     "language_local": "Alemannisch",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "am": {
     "family_code": "sem",
@@ -81,13 +81,13 @@
     "primary_family_name": "Indo-European"
   },
   "ang": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Anglo-Saxon",
     "language_local": "\u00c6nglisc",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ar": {
     "family_code": "sem",
@@ -99,22 +99,22 @@
     "primary_family_name": "Afro-Asiatic"
   },
   "arc": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Aramaic",
     "language_local": "\u0710\u072a\u0721\u071d\u0710",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "arz": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Egyptian Arabic",
     "language_local": "\u0645\u0635\u0631\u0649",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "as": {
     "family_code": "inc",
@@ -135,13 +135,13 @@
     "primary_family_name": "Indo-European"
   },
   "atj": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Atikamekw",
     "language_local": "Atikamekw",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "av": {
     "family_code": "cau",
@@ -158,7 +158,7 @@
     "lang_code3": "aym",
     "language": "Aymara",
     "language_local": "Aymar aru",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Amerindian"
   },
   "az": {
@@ -189,31 +189,31 @@
     "primary_family_name": "Altaic"
   },
   "bar": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Bavarian",
     "language_local": "Boarisch",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "bat-smg": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Samogitian",
     "language_local": "\u017eemait\u0117\u0161ka",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "bcl": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Central Bicolano",
     "language_local": "Bikol Central",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "be": {
     "family_code": "sla",
@@ -225,13 +225,13 @@
     "primary_family_name": "Indo-European"
   },
   "be-tarask": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Belarusian (Tara\u0161kievica)",
     "language_local": "\u0431\u0435\u043b\u0430\u0440\u0443\u0441\u043a\u0430\u044f (\u0442\u0430\u0440\u0430\u0448\u043a\u0435\u0432\u0456\u0446\u0430)\u200e",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "bg": {
     "family_code": "sla",
@@ -243,13 +243,13 @@
     "primary_family_name": "Indo-European"
   },
   "bh": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Bhojpuri",
     "language_local": "\u092d\u094b\u091c\u092a\u0941\u0930\u0940",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "bi": {
     "family_code": "cpe",
@@ -261,13 +261,13 @@
     "primary_family_name": "Creoles and pidgins"
   },
   "bjn": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Banjar",
     "language_local": "Bahasa Banjar",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "bm": {
     "family_code": "nic",
@@ -297,13 +297,13 @@
     "primary_family_name": "Sino-Tibetan"
   },
   "bpy": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Bishnupriya Manipuri",
     "language_local": "\u09ac\u09bf\u09b7\u09cd\u09a3\u09c1\u09aa\u09cd\u09b0\u09bf\u09af\u09bc\u09be \u09ae\u09a3\u09bf\u09aa\u09c1\u09b0\u09c0",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "br": {
     "family_code": "cel",
@@ -315,31 +315,31 @@
     "primary_family_name": "Indo-European"
   },
   "bs": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "bos",
     "language": "Bosnian",
     "language_local": "bosanski",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "bug": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Buginese",
     "language_local": "\u1a05\u1a14 \u1a15\u1a18\u1a01\u1a17",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "bxr": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Buryat",
     "language_local": "\u0431\u0443\u0440\u044f\u0430\u0434",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ca": {
     "family_code": "itc",
@@ -351,22 +351,22 @@
     "primary_family_name": "Indo-European"
   },
   "cbk-zam": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Chavacano",
     "language_local": "Chavacano de Zamboanga",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "cdo": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Min Dong",
     "language_local": "M\u00ecng-d\u0115\u0324ng-ng\u1e73\u0304",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ce": {
     "family_code": "cau",
@@ -396,40 +396,40 @@
     "primary_family_name": "Austronesian"
   },
   "cho": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Choctaw",
     "language_local": "Choctaw",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "chr": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Cherokee",
     "language_local": "\u13e3\u13b3\u13a9",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "chy": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Cheyenne",
     "language_local": "Tsets\u00eahest\u00e2hese",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ckb": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Kurdish (Sorani)",
     "language_local": "\u06a9\u0648\u0631\u062f\u06cc",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "co": {
     "family_code": "itc",
@@ -446,17 +446,17 @@
     "lang_code3": "cre",
     "language": "Cree",
     "language_local": "N\u0113hiyaw\u0113win / \u14c0\u1426\u1403\u152d\u140d\u140f\u1423",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Amerindian"
   },
   "crh": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Crimean Tatar",
     "language_local": "q\u0131r\u0131mtatarca",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "cs": {
     "family_code": "sla",
@@ -468,13 +468,13 @@
     "primary_family_name": "Indo-European"
   },
   "csb": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Kashubian",
     "language_local": "kasz\u00ebbsczi",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "cu": {
     "family_code": "sla",
@@ -522,40 +522,40 @@
     "primary_family_name": "Indo-European"
   },
   "din": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Dinka",
     "language_local": "Thu\u0254\u014bj\u00e4\u014b",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "diq": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Zazaki",
     "language_local": "Zazaki",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "dsb": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Lower Sorbian",
     "language_local": "dolnoserbski",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "dty": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Doteli",
     "language_local": "\u0921\u094b\u091f\u0947\u0932\u0940",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "dv": {
     "family_code": "inc",
@@ -594,13 +594,13 @@
     "primary_family_name": "Indo-European"
   },
   "eml": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Emilian-Romagnol",
     "language_local": "emili\u00e0n e rumagn\u00f2l",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "en": {
     "family_code": "gem",
@@ -612,7 +612,7 @@
     "primary_family_name": "Indo-European"
   },
   "eo": {
-    "family_code": null,
+    "family_code": "",
     "family_name": "Constructed",
     "lang_code3": "epo",
     "language": "Esperanto",
@@ -644,17 +644,17 @@
     "lang_code3": "eus",
     "language": "Basque",
     "language_local": "euskara",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Other"
   },
   "ext": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Extremaduran",
     "language_local": "estreme\u00f1u",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "fa": {
     "family_code": "ira",
@@ -684,13 +684,13 @@
     "primary_family_name": "Uralic"
   },
   "fiu-vro": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "V\u00f5ro",
     "language_local": "V\u00f5ro",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "fj": {
     "family_code": "poz",
@@ -720,31 +720,31 @@
     "primary_family_name": "Indo-European"
   },
   "frp": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Franco-Proven\u00e7al",
     "language_local": "arpetan",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "frr": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "North Frisian",
     "language_local": "Nordfriisk",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "fur": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Friulian",
     "language_local": "furlan",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "fy": {
     "family_code": "gem",
@@ -765,22 +765,22 @@
     "primary_family_name": "Indo-European"
   },
   "gag": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Gagauz",
     "language_local": "Gagauz",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "gan": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Gan",
     "language_local": "\u8d1b\u8a9e",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "gd": {
     "family_code": "cel",
@@ -801,13 +801,13 @@
     "primary_family_name": "Indo-European"
   },
   "glk": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Gilaki",
     "language_local": "\u06af\u06cc\u0644\u06a9\u06cc",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "gn": {
     "family_code": "tup",
@@ -815,35 +815,35 @@
     "lang_code3": "grn",
     "language": "Guarani",
     "language_local": "Ava\u00f1e'\u1ebd",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Amerindian"
   },
   "gom": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Konkani",
     "language_local": "\u0917\u094b\u0902\u092f\u091a\u0940 \u0915\u094b\u0902\u0915\u0923\u0940 / G\u00f5ychi Konknni",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "gor": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Gorontalo",
     "language_local": "Bahasa Hulontalo",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "got": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Gothic",
     "language_local": "\ud800\udf32\ud800\udf3f\ud800\udf44\ud800\udf39\ud800\udf43\ud800\udf3a",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "gu": {
     "family_code": "inc",
@@ -873,22 +873,22 @@
     "primary_family_name": "Afro-Asiatic"
   },
   "hak": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Hakka",
     "language_local": "\u5ba2\u5bb6\u8a9e/Hak-k\u00e2-ng\u00ee",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "haw": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Hawaiian",
     "language_local": "Hawai\u02bbi",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "he": {
     "family_code": "sem",
@@ -909,13 +909,13 @@
     "primary_family_name": "Indo-European"
   },
   "hif": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Fiji Hindi",
     "language_local": "Fiji Hindi",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ho": {
     "family_code": "poz",
@@ -927,22 +927,22 @@
     "primary_family_name": "Austronesian"
   },
   "hr": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "hrv",
     "language": "Croatian",
     "language_local": "hrvatski",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "hsb": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Upper Sorbian",
     "language_local": "hornjoserbsce",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ht": {
     "family_code": "cpf",
@@ -972,16 +972,16 @@
     "primary_family_name": "Indo-European"
   },
   "hz": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "her",
     "language": "Herero",
     "language_local": "Otsiherero",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ia": {
-    "family_code": null,
+    "family_code": "",
     "family_name": "Constructed",
     "lang_code3": "ina",
     "language": "Interlingua",
@@ -990,16 +990,16 @@
     "primary_family_name": "Indo-European"
   },
   "id": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "ind",
     "language": "Indonesian",
     "language_local": "Bahasa Indonesia",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ie": {
-    "family_code": null,
+    "family_code": "",
     "family_name": "Constructed",
     "lang_code3": "ile",
     "language": "Interlingue",
@@ -1031,29 +1031,29 @@
     "lang_code3": "ipk",
     "language": "Inupiak",
     "language_local": "I\u00f1upiak",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Other"
   },
   "ilo": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Ilocano",
     "language_local": "Ilokano",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "inh": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Ingush",
     "language_local": "\u0413\u04c0\u0430\u043b\u0433\u04c0\u0430\u0439",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "io": {
-    "family_code": null,
+    "family_code": "",
     "family_name": "Constructed",
     "lang_code3": "ido",
     "language": "Ido",
@@ -1085,7 +1085,7 @@
     "lang_code3": "iku",
     "language": "Inuktitut",
     "language_local": "\u1403\u14c4\u1483\u144e\u1450\u1466/inuktitut",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Other"
   },
   "ja": {
@@ -1098,22 +1098,22 @@
     "primary_family_name": "Altaic"
   },
   "jam": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Jamaican Patois",
     "language_local": "Patois",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "jbo": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Lojban",
     "language_local": "la .lojban.",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "jv": {
     "family_code": "poz",
@@ -1134,40 +1134,40 @@
     "primary_family_name": "Caucasian"
   },
   "kaa": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Karakalpak",
     "language_local": "Qaraqalpaqsha",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "kab": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Kabyle",
     "language_local": "Taqbaylit",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "kbd": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Kabardian",
     "language_local": "\u0410\u0434\u044b\u0433\u044d\u0431\u0437\u044d",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "kbp": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Kabiye",
     "language_local": "Kab\u0269y\u025b",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "kg": {
     "family_code": "nic",
@@ -1211,7 +1211,7 @@
     "lang_code3": "kal",
     "language": "Greenlandic",
     "language_local": "kalaallisut",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Other"
   },
   "km": {
@@ -1220,7 +1220,7 @@
     "lang_code3": "khm",
     "language": "Khmer",
     "language_local": "\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Other"
   },
   "kn": {
@@ -1233,7 +1233,7 @@
     "primary_family_name": "Dravidian"
   },
   "ko": {
-    "family_code": null,
+    "family_code": "",
     "family_name": "Korean",
     "lang_code3": "kor",
     "language": "Korean",
@@ -1242,13 +1242,13 @@
     "primary_family_name": "Altaic"
   },
   "koi": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Komi-Permyak",
     "language_local": "\u041f\u0435\u0440\u0435\u043c \u041a\u043e\u043c\u0438",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "kr": {
     "family_code": "ssa",
@@ -1256,17 +1256,17 @@
     "lang_code3": "kau",
     "language": "Kanuri",
     "language_local": "Kanuri",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Other"
   },
   "krc": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Karachay-Balkar",
     "language_local": "\u043a\u044a\u0430\u0440\u0430\u0447\u0430\u0439-\u043c\u0430\u043b\u043a\u044a\u0430\u0440",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ks": {
     "family_code": "inc",
@@ -1278,13 +1278,13 @@
     "primary_family_name": "Indo-European"
   },
   "ksh": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Ripuarian",
     "language_local": "Ripoarisch",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ku": {
     "family_code": "ira",
@@ -1332,13 +1332,13 @@
     "primary_family_name": "Indo-European"
   },
   "lad": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Ladino",
     "language_local": "Ladino",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "lb": {
     "family_code": "gem",
@@ -1350,31 +1350,31 @@
     "primary_family_name": "Indo-European"
   },
   "lbe": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Lak",
     "language_local": "\u043b\u0430\u043a\u043a\u0443",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "lez": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Lezgian",
     "language_local": "\u043b\u0435\u0437\u0433\u0438",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "lfn": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Lingua Franca Nova",
     "language_local": "Lingua Franca Nova",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "lg": {
     "family_code": "nic",
@@ -1395,22 +1395,22 @@
     "primary_family_name": "Indo-European"
   },
   "lij": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Ligurian",
     "language_local": "Ligure",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "lmo": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Lombard",
     "language_local": "lumbaart",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ln": {
     "family_code": "nic",
@@ -1431,13 +1431,13 @@
     "primary_family_name": "Tai"
   },
   "lrc": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Northern Luri",
     "language_local": "\u0644\u06ca\u0631\u06cc \u0634\u0648\u0645\u0627\u0644\u06cc",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "lt": {
     "family_code": "bat",
@@ -1449,13 +1449,13 @@
     "primary_family_name": "Indo-European"
   },
   "ltg": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Latgalian",
     "language_local": "latga\u013cu",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "lv": {
     "family_code": "bat",
@@ -1467,31 +1467,31 @@
     "primary_family_name": "Indo-European"
   },
   "mai": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Maithili",
     "language_local": "\u092e\u0948\u0925\u093f\u0932\u0940",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "map-bms": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Banyumasan",
     "language_local": "Basa Banyumasan",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "mdf": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Moksha",
     "language_local": "\u043c\u043e\u043a\u0448\u0435\u043d\u044c",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "mg": {
     "family_code": "poz",
@@ -1512,13 +1512,13 @@
     "primary_family_name": "Austronesian"
   },
   "mhr": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Meadow Mari",
     "language_local": "\u043e\u043b\u044b\u043a \u043c\u0430\u0440\u0438\u0439",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "mi": {
     "family_code": "poz",
@@ -1530,13 +1530,13 @@
     "primary_family_name": "Austronesian"
   },
   "min": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "min",
     "language": "Minangkabau",
     "language_local": "Baso Minangkabau",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "mk": {
     "family_code": "sla",
@@ -1575,13 +1575,13 @@
     "primary_family_name": "Indo-European"
   },
   "mrj": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Hill Mari",
     "language_local": "\u043a\u044b\u0440\u044b\u043a \u043c\u0430\u0440\u044b",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ms": {
     "family_code": "poz",
@@ -1602,22 +1602,22 @@
     "primary_family_name": "Afro-Asiatic"
   },
   "mus": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Muscogee",
     "language_local": "Mvskoke",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "mwl": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Mirandese",
     "language_local": "Mirand\u00e9s",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "my": {
     "family_code": "tbq",
@@ -1629,22 +1629,22 @@
     "primary_family_name": "Sino-Tibetan"
   },
   "myv": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Erzya",
     "language_local": "\u044d\u0440\u0437\u044f\u043d\u044c",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "mzn": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Mazandarani",
     "language_local": "\u0645\u0627\u0632\u0650\u0631\u0648\u0646\u06cc",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "na": {
     "family_code": "poz",
@@ -1656,40 +1656,40 @@
     "primary_family_name": "Austronesian"
   },
   "nah": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Nahuatl",
     "language_local": "N\u0101huatl",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "nap": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Neapolitan",
     "language_local": "Napulitano",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "nds": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Low Saxon",
     "language_local": "Plattd\u00fc\u00fctsch",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "nds-nl": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Dutch Low Saxon",
     "language_local": "Nedersaksies",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ne": {
     "family_code": "inc",
@@ -1728,13 +1728,13 @@
     "primary_family_name": "Indo-European"
   },
   "nn": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "nno",
     "language": "Norwegian (Nynorsk)",
     "language_local": "norsk nynorsk",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "no": {
     "family_code": "gem",
@@ -1746,31 +1746,31 @@
     "primary_family_name": "Indo-European"
   },
   "nov": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Novial",
     "language_local": "Novial",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "nrm": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Norman",
     "language_local": "Nouormand",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "nso": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Northern Sotho",
     "language_local": "Sesotho sa Leboa",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "nv": {
     "family_code": "xnd",
@@ -1778,7 +1778,7 @@
     "lang_code3": "nav",
     "language": "Navajo",
     "language_local": "Din\u00e9 bizaad",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Amerindian"
   },
   "ny": {
@@ -1800,13 +1800,13 @@
     "primary_family_name": "Indo-European"
   },
   "olo": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Livvi-Karelian",
     "language_local": "Livvinkarjala",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "om": {
     "family_code": "cus",
@@ -1845,58 +1845,58 @@
     "primary_family_name": "Indo-European"
   },
   "pag": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Pangasinan",
     "language_local": "Pangasinan",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "pam": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Kapampangan",
     "language_local": "Kapampangan",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "pap": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Papiamentu",
     "language_local": "Papiamentu",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "pcd": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Picard",
     "language_local": "Picard",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "pdc": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Pennsylvania German",
     "language_local": "Deitsch",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "pfl": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Palatinate German",
     "language_local": "P\u00e4lzisch",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "pi": {
     "family_code": "inc",
@@ -1908,13 +1908,13 @@
     "primary_family_name": "Indo-European"
   },
   "pih": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Norfolk",
     "language_local": "Norfuk / Pitkern",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "pl": {
     "family_code": "sla",
@@ -1935,22 +1935,22 @@
     "primary_family_name": "Indo-European"
   },
   "pnb": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Western Punjabi",
     "language_local": "\u067e\u0646\u062c\u0627\u0628\u06cc",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "pnt": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Pontic",
     "language_local": "\u03a0\u03bf\u03bd\u03c4\u03b9\u03b1\u03ba\u03ac",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ps": {
     "family_code": "ira",
@@ -1976,7 +1976,7 @@
     "lang_code3": "que",
     "language": "Quechua",
     "language_local": "Runa Simi",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Amerindian"
   },
   "rm": {
@@ -1989,13 +1989,13 @@
     "primary_family_name": "Indo-European"
   },
   "rmy": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Romani",
     "language_local": "Romani",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "rn": {
     "family_code": "nic",
@@ -2016,22 +2016,22 @@
     "primary_family_name": "Indo-European"
   },
   "roa-rup": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Aromanian",
     "language_local": "arm\u00e3neashti",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "roa-tara": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Tarantino",
     "language_local": "tarand\u00edne",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ru": {
     "family_code": "sla",
@@ -2043,13 +2043,13 @@
     "primary_family_name": "Indo-European"
   },
   "rue": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Rusyn",
     "language_local": "\u0440\u0443\u0441\u0438\u043d\u044c\u0441\u043a\u044b\u0439",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "rw": {
     "family_code": "nic",
@@ -2070,22 +2070,22 @@
     "primary_family_name": "Indo-European"
   },
   "sah": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Sakha",
     "language_local": "\u0441\u0430\u0445\u0430 \u0442\u044b\u043b\u0430",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "sat": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Santali",
     "language_local": "\u1c65\u1c5f\u1c71\u1c5b\u1c5f\u1c72\u1c64",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "sc": {
     "family_code": "itc",
@@ -2097,13 +2097,13 @@
     "primary_family_name": "Indo-European"
   },
   "scn": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Sicilian",
     "language_local": "sicilianu",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "sco": {
     "family_code": "gem",
@@ -2223,22 +2223,22 @@
     "primary_family_name": "Indo-European"
   },
   "sr": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "srp",
     "language": "Serbian",
     "language_local": "\u0441\u0440\u043f\u0441\u043a\u0438 / srpski",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "srn": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Sranan",
     "language_local": "Sranantongo",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ss": {
     "family_code": "nic",
@@ -2259,13 +2259,13 @@
     "primary_family_name": "Niger-Kordofanian"
   },
   "stq": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Saterland Frisian",
     "language_local": "Seeltersk",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "su": {
     "family_code": "poz",
@@ -2295,13 +2295,13 @@
     "primary_family_name": "Niger-Kordofanian"
   },
   "szl": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Silesian",
     "language_local": "\u015bl\u016fnski",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ta": {
     "family_code": "dra",
@@ -2313,13 +2313,13 @@
     "primary_family_name": "Dravidian"
   },
   "tcy": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Tulu",
     "language_local": "\u0ca4\u0cc1\u0cb3\u0cc1",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "te": {
     "family_code": "dra",
@@ -2331,13 +2331,13 @@
     "primary_family_name": "Dravidian"
   },
   "tet": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Tetum",
     "language_local": "tetun",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "tg": {
     "family_code": "ira",
@@ -2376,13 +2376,13 @@
     "primary_family_name": "Altaic"
   },
   "tl": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "tgl",
     "language": "Tagalog",
     "language_local": "Tagalog",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "tn": {
     "family_code": "nic",
@@ -2403,13 +2403,13 @@
     "primary_family_name": "Austronesian"
   },
   "tpi": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Tok Pisin",
     "language_local": "Tok Pisin",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "tr": {
     "family_code": "trk",
@@ -2439,22 +2439,22 @@
     "primary_family_name": "Altaic"
   },
   "tum": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Tumbuka",
     "language_local": "chiTumbuka",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "tw": {
-    "family_code": null,
-    "family_name": null,
+    "family_code": "",
+    "family_name": "",
     "lang_code3": "twi",
     "language": "Twi",
     "language_local": "Twi",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ty": {
     "family_code": "poz",
@@ -2466,22 +2466,22 @@
     "primary_family_name": "Austronesian"
   },
   "tyv": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Tuvan",
     "language_local": "\u0442\u044b\u0432\u0430 \u0434\u044b\u043b",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "udm": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Udmurt",
     "language_local": "\u0443\u0434\u043c\u0443\u0440\u0442",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "ug": {
     "family_code": "trk",
@@ -2529,22 +2529,22 @@
     "primary_family_name": "Niger-Kordofanian"
   },
   "vec": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Venetian",
     "language_local": "v\u00e8neto",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "vep": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Vepsian",
     "language_local": "veps\u00e4n kel\u2019",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "vi": {
     "family_code": "aav",
@@ -2552,20 +2552,20 @@
     "lang_code3": "vie",
     "language": "Vietnamese",
     "language_local": "Ti\u1ebfng Vi\u1ec7t",
-    "primary_family_code": null,
+    "primary_family_code": "",
     "primary_family_name": "Other"
   },
   "vls": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "West Flemish",
     "language_local": "West-Vlams",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "vo": {
-    "family_code": null,
+    "family_code": "",
     "family_name": "Constructed",
     "lang_code3": "vol",
     "language": "Volap\u00fck",
@@ -2601,22 +2601,22 @@
     "primary_family_name": "Niger-Kordofanian"
   },
   "wuu": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Wu",
     "language_local": "\u5434\u8bed",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "xal": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Kalmyk",
     "language_local": "\u0445\u0430\u043b\u044c\u043c\u0433",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "xh": {
     "family_code": "nic",
@@ -2628,13 +2628,13 @@
     "primary_family_name": "Niger-Kordofanian"
   },
   "xmf": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Mingrelian",
     "language_local": "\u10db\u10d0\u10e0\u10d2\u10d0\u10da\u10e3\u10e0\u10d8",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "yi": {
     "family_code": "gem",
@@ -2664,13 +2664,13 @@
     "primary_family_name": "Tai"
   },
   "zea": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Zeelandic",
     "language_local": "Ze\u00eauws",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "zh": {
     "family_code": "zhx",
@@ -2682,13 +2682,13 @@
     "primary_family_name": "Sino-Tibetan"
   },
   "zh-classical": {
-    "family_code": null,
-    "family_name": null,
-    "lang_code3": null,
+    "family_code": "",
+    "family_name": "",
+    "lang_code3": "",
     "language": "Classical Chinese",
     "language_local": "\u6587\u8a00",
-    "primary_family_code": null,
-    "primary_family_name": null
+    "primary_family_code": "",
+    "primary_family_name": ""
   },
   "zh-min-nan": {
     "family_code": "zhx",

@@ -33,7 +33,7 @@ class MemMetrics extends Component {
     return (
       <div className="metrics-container">
         <div className="metric-vid">
-          {vid ? <iframe width="560" height="315" src={`https://www.youtube.com/embed/${vid.id.videoId}`} frameBorder="0" allowFullScreen></iframe> : <a href="" className="press-play"><i></i></a>}
+          {vid ? <iframe max-width="560" width="100%" height="315" src={`https://www.youtube.com/embed/${vid.id.videoId}`} frameBorder="0" allowFullScreen></iframe> : <a href="" className="press-play"><i></i></a>}
         </div>
         <ul className="metrics-list">
           <li className="metric">
