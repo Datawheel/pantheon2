@@ -33,7 +33,7 @@ class Place extends Component {
   }
 
   render() {
-    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive, wikiExtract, wikiImg} = this.props.data;
+    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive, wikiExtract, wikiSummary, wikiImg, wikiPageViews} = this.props.data;
 
     const attrs = occupations.reduce((obj, d) => {
       obj[d.id] = d;
@@ -46,10 +46,10 @@ class Place extends Component {
           title={place.name}
           meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: place.name} : meta)}
         />
-        <Header place={place} country={country} people={peopleBornHere} wikiImg={wikiImg} />
+        <Header place={place} country={country} people={peopleBornHere} wikiSummary={wikiSummary} wikiPageViews={wikiPageViews} />
         <div className="about-section">
           <ProfileNav sections={this.sections} />
-          <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} wikiExtract={wikiExtract} />
+          <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} wikiSummary={wikiSummary} />
         </div>
         <PeopleRanking country={country} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <Occupations attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
@@ -59,7 +59,7 @@ class Place extends Component {
         {peopleBornHere.filter(p => p.deathyear !== null).length ? <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} /> : null}
 
         {/* <LivingPeople place={place} data={peopleBornHereAlive} /> */}
-        <Footer />
+        <Footer occupations={occupations} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
       </div>
     );
   }
@@ -72,8 +72,10 @@ const peopleDiedHereURL = "/person?<place.deathPlaceColumn>=eq.<place.id>&order=
 const placeRanksURL = "/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique&<place.sumlevelFilter>";
 const occupationsURL = "/occupation?order=num_born.desc.nullslast";
 const peopleBornHereAliveURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
-const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&format=json&exlimit=1&titles=<place.name>&origin=*";
-const wikiImgURL = "https://en.wikipedia.org/w/api.php?action=query&titles=<place.name>&prop=pageimages&format=json&pithumbsize=1000&origin=*";
+// const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&format=json&exlimit=1&titles=<place.name>&origin=*";
+// const wikiImgURL = "https://en.wikipedia.org/w/api.php?action=query&titles=<place.name>&prop=pageimages&format=json&pithumbsize=1000&origin=*";
+const wikiSummaryUrl = "https://en.wikipedia.org/api/rest_v1/page/summary/<place.name>";
+const wikiPageViewsURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<place.name>/monthly/20110101/20190320";
 
 Place.preneed = [
   fetchData("place", placeURL, res => {
@@ -98,8 +100,8 @@ Place.need = [
   fetchData("placeRanks", placeRanksURL, res => res),
   fetchData("occupations", occupationsURL, res => res),
   fetchData("peopleBornHereAlive", peopleBornHereAliveURL, res => res),
-  fetchData("wikiExtract", wikiURL),
-  fetchData("wikiImg", wikiImgURL)
+  fetchData("wikiSummary", wikiSummaryUrl),
+  fetchData("wikiPageViews", wikiPageViewsURL)
 ];
 
 export default connect(state => ({data: state.data}), {})(Place);

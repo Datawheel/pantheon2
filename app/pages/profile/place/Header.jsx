@@ -6,34 +6,36 @@ import {FORMATTERS} from "types/index";
 import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
 
-const Header = ({country, people, place, wikiImg}) => {
+const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
+  let pageViewData = null;
   let placeImg = place.img_link ? `/images/profile/place/${place.id}.jpg` : country.img_link ? `/images/profile/place/${country.id}.jpg` : "/images/profile/placeholder_place_profile.jpg";
-  // wikipedia excerpt
-  if (wikiImg) {
-    if (wikiImg.query) {
-      if (wikiImg.query.pages) {
-        const results = Object.values(wikiImg.query.pages);
-        if (results.length) {
-          const wikiThumbnail = results[0].thumbnail;
-          if (wikiThumbnail) {
-            placeImg = wikiThumbnail.source;
-          }
-        }
-      }
+  // wikipedia summary
+  if (wikiSummary) {
+    if (wikiSummary.originalimage) {
+      placeImg = wikiSummary.originalimage.source;
     }
   }
 
-  const yearAndCount = nest()
-    .key(p => p.birthyear)
-    .rollup(leaves => ({count: leaves.length, birthyear: leaves[0].birthyear}))
-    .entries(people.filter(p => p.birthyear))
-    .sort((a, b) => a.value.birthyear - b.value.birthyear)
-    .map(d => Object.assign({}, d.value, {id: "line", txt: `${d.value.count} birth(s) in ${d.value.birthyear}`}));
+  if (wikiPageViews) {
+    if (wikiPageViews.items) {
+      pageViewData = wikiPageViews.items.map(pv => ({...pv, date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(4, 6)}/${pv.timestamp.substring(6, 8)}`}));
+    }
+  }
 
-  const sparkData = yearAndCount.concat([
-    Object.assign({}, yearAndCount[0], {shape: "Circle", id: "circle"}),
-    Object.assign({}, yearAndCount[yearAndCount.length - 1], {shape: "Circle", id: "circle"})
-  ]);
+  /**
+   * OLD CODE FOR SPARK LINES
+   */
+  // const yearAndCount = nest()
+  //   .key(p => p.birthyear)
+  //   .rollup(leaves => ({count: leaves.length, birthyear: leaves[0].birthyear}))
+  //   .entries(people.filter(p => p.birthyear))
+  //   .sort((a, b) => a.value.birthyear - b.value.birthyear)
+  //   .map(d => Object.assign({}, d.value, {id: "line", txt: `${d.value.count} birth(s) in ${d.value.birthyear}`}));
+
+  // const sparkData = yearAndCount.concat([
+  //   Object.assign({}, yearAndCount[0], {shape: "Circle", id: "circle"}),
+  //   Object.assign({}, yearAndCount[yearAndCount.length - 1], {shape: "Circle", id: "circle"})
+  // ]);
 
   return (
     <header className="hero">
@@ -48,42 +50,43 @@ const Header = ({country, people, place, wikiImg}) => {
         <h2 className="profile-type">Present Day</h2>
         <h1 className="profile-name">{place.name}</h1>
         { place.name !== place.country_name ? <p className="date-subtitle"><a href={`/profile/place/${country.slug}`}>{place.country_name}</a></p> : null}
-        <p className="date-subtitle">{ FORMATTERS.year(country.soverign_date) === 0 ? "1AD" : FORMATTERS.year(country.soverign_date) } - Today</p>
+        {/* <p className="date-subtitle">{ FORMATTERS.year(country.soverign_date) === 0 ? "1AD" : FORMATTERS.year(country.soverign_date) } - Today</p> */}
         <pre>
-          <LinePlot
-            config={{
-              data: sparkData,
-              height: 100,
-              groupBy: "id",
-              legend: false,
-              on: {
-                "click.shape": () => {},
-                "mouseenter.shape": () => {},
-                "mousemove.shape": () => {},
-                "mouseleave.shape": () => {}
-              },
-              shape: d => d.shape || "Line",
-              shapeConfig: {
-                hoverOpacity: 1,
-                Circle: {
-                  fill: "#4B4A48",
-                  r: () => 3.5
+          {pageViewData
+            ? <LinePlot
+              config={{
+                data: pageViewData,
+                height: 120,
+                groupBy: "article",
+                legend: false,
+                on: {
+                  "click.shape": () => {},
+                  "mouseenter.shape": () => {},
+                  "mousemove.shape": () => {},
+                  "mouseleave.shape": () => {}
                 },
-                Line: {
-                  fill: "none",
-                  stroke: "#4B4A48",
-                  strokeWidth: 1
-                }
-              },
-              time: d => d.birthyear,
-              timeline: false,
-              tooltipConfig: {
-                body: d => d.txt,
-                title: "Individuals Born"
-              },
-              width: 275,
-              x: d => d.birthyear,
-              xConfig: {
+                shape: d => d.shape || "Line",
+                shapeConfig: {
+                  hoverOpacity: 1,
+                  Circle: {
+                    fill: "#4B4A48",
+                    r: () => 3.5
+                  },
+                  Line: {
+                    fill: "none",
+                    stroke: "#4B4A48",
+                    strokeWidth: 1
+                  }
+                },
+                time: d => d.date,
+                timeline: false,
+                tooltipConfig: {
+                  body: d => d.views,
+                  title: "Page Views"
+                },
+                width: 275,
+                x: d => d.date,
+                xConfig: {
                 // barConfig: {"stroke-width": 0},
                 // labels: sparkTicks,
                 // shapeConfig: {
@@ -95,20 +98,21 @@ const Header = ({country, people, place, wikiImg}) => {
                 // ticks: sparkTicks,
                 // tickSize: 0,
                 // title: "Count",
-                // titleConfig: {
-                //   fontColor: "#4B4A48",
-                //   fontFamily: () => "Amiko",
-                //   fontSize: () => 10,
-                //   stroke: "#4B4A48"
-                // }
-                tickFormat: d => {
-                  if (typeof d === "number") return new Date(d).getFullYear();
-                  return d;
-                }
-              },
-              y: d => d.count,
-              yConfig: {labels: [], ticks: [], title: false}
-            }} />
+                  titleConfig: {
+                    fontColor: "#4B4A48",
+                    fontFamily: () => "Amiko",
+                    fontSize: () => 10,
+                    stroke: "#4B4A48"
+                  },
+                  tickFormat: d => {
+                    if (typeof d === "number") return new Date(d).getFullYear();
+                    return d;
+                  },
+                  title: "page views"
+                },
+                y: d => d.views,
+                yConfig: {labels: [], ticks: [], title: "page views"}
+              }} /> : null}
         </pre>
       </div>
       <div className="mouse">

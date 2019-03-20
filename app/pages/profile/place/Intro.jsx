@@ -6,9 +6,9 @@ import {FORMATTERS} from "types/index";
 import {nest} from "d3-collection";
 import {plural} from "pluralize";
 
-const Intro = ({place, country, placeRanks, peopleBornHere, peopleDiedHere, wikiExtract}) => {
+const Intro = ({place, country, placeRanks, peopleBornHere, peopleDiedHere, wikiSummary}) => {
   const myIndex = placeRanks.findIndex(p => p.name === place.name);
-  let wikiSentence, wikiSlug;
+  let wikiLink, wikiSentence;
 
   const occupationsBorn = nest()
     .key(d => d.occupation.id)
@@ -25,17 +25,26 @@ const Intro = ({place, country, placeRanks, peopleBornHere, peopleDiedHere, wiki
     .map(d => d.value)
     .slice(0, 2);
 
-  // wikipedia excerpt
-  if (wikiExtract) {
-    if (wikiExtract.query) {
-      if (wikiExtract.query.pages) {
-        const results = Object.values(wikiExtract.query.pages);
-        if (results.length) {
-          wikiSentence = results[0].extract;
-          wikiSentence = wikiSentence.slice(0, wikiSentence.lastIndexOf(". "));
-          wikiSlug = results[0].title.replace(" ", "_");
-        }
-      }
+  // // wikipedia excerpt
+  // if (wikiExtract) {
+  //   if (wikiExtract.query) {
+  //     if (wikiExtract.query.pages) {
+  //       const results = Object.values(wikiExtract.query.pages);
+  //       if (results.length) {
+  //         wikiSentence = results[0].extract;
+  //         wikiSentence = wikiSentence.slice(0, wikiSentence.lastIndexOf(". "));
+  //         wikiSlug = results[0].title.replace(" ", "_");
+  //       }
+  //     }
+  //   }
+  // }
+  // wikipedia summary
+  if (wikiSummary) {
+    if (wikiSummary.extract_html) {
+      wikiSentence = wikiSummary.extract;
+    }
+    if (wikiSummary.content_urls) {
+      wikiLink = wikiSummary.content_urls.desktop.page;
     }
   }
 
@@ -64,7 +73,7 @@ const Intro = ({place, country, placeRanks, peopleBornHere, peopleDiedHere, wiki
               : null}
           </p>
           {wikiSentence
-            ? <p>{wikiSentence}. <a href={`https://en.wikipedia.org/wiki/${wikiSlug}`} target="_blank" rel="noopener noreferrer">Read more on Wikipedia</a></p>
+            ? <p>{wikiSentence} <a href={wikiLink} target="_blank" rel="noopener noreferrer">Read more on Wikipedia</a></p>
             : null}
         </div>
       </div>
