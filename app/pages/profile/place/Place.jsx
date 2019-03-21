@@ -65,6 +65,9 @@ class Place extends Component {
   }
 }
 
+const dateobj = new Date();
+const year = dateobj.getFullYear();
+const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 const placeURL = "/place?slug=eq.<id>";
 const countryURL = "/place?country_code=eq.<place.country_code>&is_country=is.true";
 const peopleBornHereURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
@@ -75,7 +78,7 @@ const peopleBornHereAliveURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&l
 // const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&format=json&exlimit=1&titles=<place.name>&origin=*";
 // const wikiImgURL = "https://en.wikipedia.org/w/api.php?action=query&titles=<place.name>&prop=pageimages&format=json&pithumbsize=1000&origin=*";
 const wikiSummaryUrl = "https://en.wikipedia.org/api/rest_v1/page/summary/<place.name>";
-const wikiPageViewsURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<place.name>/monthly/20110101/20190320";
+const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<place.name>/monthly/20110101/${year}${month}01`;
 
 Place.preneed = [
   fetchData("place", placeURL, res => {

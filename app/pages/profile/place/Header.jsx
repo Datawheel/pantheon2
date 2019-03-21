@@ -5,6 +5,8 @@ import "components/common/mouse.css";
 import {FORMATTERS} from "types/index";
 import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
+import {max as D3Max, min as D3Min} from "d3-array";
+import moment from "moment";
 
 const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
   let pageViewData = null;
@@ -19,6 +21,10 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
   if (wikiPageViews) {
     if (wikiPageViews.items) {
       pageViewData = wikiPageViews.items.map(pv => ({...pv, date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(4, 6)}/${pv.timestamp.substring(6, 8)}`}));
+      const mostRecentDate = D3Max(pageViewData, d => moment(d.date, "YYYY/MM/DD"));
+      const oldestDate = D3Min(pageViewData, d => moment(d.date, "YYYY/MM/DD"));
+      pageViewData.push({...pageViewData.find(d => d.date === oldestDate.format("YYYY/MM/DD")), shape: "Circle", article: "circle"});
+      pageViewData.push({...pageViewData.find(d => d.date === mostRecentDate.format("YYYY/MM/DD")), shape: "Circle", article: "circle"});
     }
   }
 
@@ -60,10 +66,10 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
                 groupBy: "article",
                 legend: false,
                 on: {
-                  "click.shape": () => {},
-                  "mouseenter.shape": () => {},
-                  "mousemove.shape": () => {},
-                  "mouseleave.shape": () => {}
+                  // "click.shape": () => {},
+                  // "mouseenter.shape": () => {},
+                  // "mousemove.shape": () => {},
+                  // "mouseleave.shape": () => {}
                 },
                 shape: d => d.shape || "Line",
                 shapeConfig: {
@@ -81,34 +87,40 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
                 time: d => d.date,
                 timeline: false,
                 tooltipConfig: {
-                  body: d => d.views,
-                  title: "WIKIPEDIA PAGE VIEWS (PV)"
+                  footer: d => `${FORMATTERS.commas(d.views)} Page Views`,
+                  title: d => `<span class="center">${moment(d.date, "YYYY/MM/DD").format("MMMM YYYY")}</span>`,
+                  titleStyle: {"text-align": "center"},
+                  width: "200px",
+                  footerStyle: {
+                    "font-size": "12px",
+                    "text-transform": "none",
+                    "color": "#4B4A48"
+                  }
                 },
                 width: 275,
                 x: d => d.date,
                 xConfig: {
-                // barConfig: {"stroke-width": 0},
-                // labels: sparkTicks,
-                // shapeConfig: {
-                //   fill: "#4B4A48",
-                //   fontColor: "#4B4A48",
-                //   fontSize: () => 8,
-                //   stroke: "#4B4A48"
-                // },
-                // ticks: sparkTicks,
-                // tickSize: 0,
-                // title: "Count",
-                  titleConfig: {
+                  barConfig: {"stroke-width": 0},
+                  // labels: sparkTicks,
+                  shapeConfig: {
+                    fill: "#4B4A48",
                     fontColor: "#4B4A48",
-                    fontFamily: () => "Amiko",
-                    fontSize: () => 10,
+                    fontSize: () => 8,
                     stroke: "#4B4A48"
                   },
+                  // ticks: sparkTicks,
+                  tickSize: 0,
                   tickFormat: d => {
                     if (typeof d === "number") return new Date(d).getFullYear();
                     return d;
                   },
-                  title: "page views"
+                  title: "EN WIKIPEDIA PAGE VIEWS (PV)",
+                  titleConfig: {
+                    fontColor: "#4B4A48",
+                    fontFamily: () => "Amiko",
+                    fontSize: () => 11,
+                    stroke: "#4B4A48"
+                  }
                 },
                 y: d => d.views,
                 yConfig: {labels: [], ticks: [], title: ""}
