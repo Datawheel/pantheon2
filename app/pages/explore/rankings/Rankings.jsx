@@ -8,6 +8,7 @@ import RankingTable from "pages/explore/rankings/RankingTable";
 import {nest} from "d3-collection";
 import {merge} from "d3-array";
 import {FORMATTERS, HPI_RANGE, LANGS_RANGE} from "types";
+import {animateScroll as scroll} from "react-scroll";
 import {plural} from "pluralize";
 import "pages/explore/Explore.css";
 
@@ -79,6 +80,7 @@ class Ranking extends Component {
       nestedOccupations: null,
       occupation: "all",
       occupations: null,
+      page: 0,
       pageSize: 50,
       places: null,
       searching: false,
@@ -105,7 +107,7 @@ class Ranking extends Component {
     }
   }
   update = newState => {
-    this.setState(Object.assign({}, this.state, newState));
+    this.setState(Object.assign({}, this.state, newState, {page: 0}));
   }
   search = term => {
     const {data, show} = this.state;
@@ -120,7 +122,7 @@ class Ranking extends Component {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
     const {query: qParams} = this.props.location;
-    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
+    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, page, pageSize, searching, show, viz, years, yearType} = this.state;
 
     if (!occupationResponse) {
       return <div>loading...</div>;
@@ -169,12 +171,17 @@ class Ranking extends Component {
             qParams={qParams}
           />
           <RankingTable
-            loading={loading}
             data={searching ? filteredData : data}
+            changePageSize={this.update}
+            loading={loading}
             occupations={occupations}
             places={places}
+            page={page}
             pageSize={pageSize}
-            changePageSize={this.update}
+            onPageChange={page => {
+              scroll.scrollToTop();
+              this.setState({page});
+            }}
             search={this.search}
             show={show}
             viz={viz}

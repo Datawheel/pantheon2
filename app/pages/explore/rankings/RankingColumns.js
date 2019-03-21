@@ -17,12 +17,13 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "",
           accessor: "id",
-          Cell: ({value}) => <div><img height={68} src={`/images/profile/people/${value}.jpg`}/></div>,
+          Cell: ({value}) => <div className="ranking-thumbnail" style={{backgroundImage: `url('/images/profile/people/${value}.jpg')`}}></div>,
           maxWidth: 70
         },
         {
           Header: "Name",
           accessor: "name",
+          style: {whiteSpace: "unset"},
           Cell: ({value, original}) => <a href={`/profile/person/${original.slug}`}>{value}</a>
         },
         {
@@ -57,12 +58,14 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           id: "birthplace",
           Header: "Birth Place",
+          style: {whiteSpace: "unset"},
           accessor: d => d.birthplace ? d.birthplace.name : null,
           Cell: ({value, original}) => value ? <a href={`/profile/place/${original.birthplace.slug}`}>{value}</a> : <span>-</span>
         },
         {
           id: "deathplace",
           Header: "Death Place",
+          style: {whiteSpace: "unset"},
           accessor: d => d.deathplace ? d.deathplace.name : null,
           Cell: ({value, original}) => value ? <a href={`/profile/place/${original.deathplace.slug}`}>{value}</a> : <span>-</span>
         },
@@ -72,6 +75,19 @@ const getColumns = (show, nesting, occupations, places) => {
     },
     occupations: {
       occupations: [
+        {
+          Header: "",
+          id: "row",
+          maxWidth: 45,
+          filterable: false,
+          Cell: row => <div>{row.viewIndex + 1 + row.pageSize * row.page}</div>
+        },
+        {
+          Header: "",
+          accessor: "id",
+          Cell: ({value}) => <div className="ranking-thumbnail" style={{backgroundImage: `url('/images/profile/occupation/${value}.jpg')`}}></div>,
+          maxWidth: 70
+        },
         {
           Header: "Occupation",
           accessor: "name",
@@ -114,6 +130,7 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "Top 3",
           accessor: "top_ranked",
+          style: {whiteSpace: "unset"},
           Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
         }
         // {

@@ -105,7 +105,7 @@ const Header = ({person, wikiPageViews}) => {
                     if (typeof d === "number") return new Date(d).getFullYear();
                     return d;
                   },
-                  title: "EN WIKIPEDIA PAGE VIEWS (PV)",
+                  title: "EN.WIKIPEDIA PAGE VIEWS (PV)",
                   titleConfig: {
                     fontColor: "#4B4A48",
                     fontFamily: () => "Amiko",
