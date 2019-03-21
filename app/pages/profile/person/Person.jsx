@@ -26,11 +26,6 @@ import {plural} from "pluralize";
 
 class Person extends Component {
 
-  /*
-   * This replaces getInitialState. Likewise getDefaultProps and propTypes are just
-   * properties on the constructor
-   * Read more here: https://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html#es6-classes
-   */
   constructor(props) {
     super(props);
   }
@@ -38,21 +33,19 @@ class Person extends Component {
   componentDidMount() {
     // generate screenshot on page load
     const {id: slug} = this.props.params;
-    const screenshotUrl = `/api/screenshot/person/${slug}/`;
-    axios.get(screenshotUrl);
+    const {person} = this.props.data;
+    if (person !== undefined) {
+      const screenshotUrl = `/api/screenshot/person/${slug}/`;
+      axios.get(screenshotUrl);
+    }
   }
 
   render() {
-
-    // if (this.props.personProfile.person.id === undefined) {
-    //   return <NotFound />;
-    // }
-    // console.log(this.props);
     const {person, pageViews, occupationRanks, birthYearRanks, deathYearRanks, wikiExtract} = this.props.data;
+    if (person === undefined) {
+      return <NotFound />;
+    }
 
-    // const {personProfile} = this.props;
-    // const occupation = personProfile.person.occupation;
-    //
     const maxPageViews = Math.max(...pageViews.map(d => d.num_pageviews || 0));
     const totalPageViews = pageViews.reduce((sum, d) => sum + d.num_pageviews, 0);
     const totalLanguages = Math.max(...pageViews.map(d => d.num_langs || 0));
@@ -118,9 +111,11 @@ class Person extends Component {
           }} />
       },
       {title: `Page views of ${plural(person.name)} by language`, slug: "page-views-by-lang", content: <PageviewsByLang person={person} />},
-      {title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />},
-      {title: "Contemporaries", slug: "year_peers", content: <YearRanking person={person} birthYearRanking={birthYearRanks} deathYearRanking={deathYearRanks} />}
+      {title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />}
     ];
+    if (person.birthyear) {
+      sections.push({title: "Contemporaries", slug: "year_peers", content: <YearRanking person={person} birthYearRanking={birthYearRanks} deathYearRanking={deathYearRanks} />});
+    }
     //
     // if (personProfile.person.birthcountry) {
     //   sections.push({title: `In ${personProfile.person.birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />});
@@ -177,7 +172,6 @@ const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&e
 Person.preneed = [
   fetchData("person", personURL, res => {
     const person = res[0];
-
     const occupationRankLow = Math.max(1, parseInt(person.occupation_rank_unique, 10) - NUM_RANKINGS_PRE);
     const occupationRankHigh = Math.max(NUM_RANKINGS, parseInt(person.occupation_rank_unique, 10) + NUM_RANKINGS_POST);
 

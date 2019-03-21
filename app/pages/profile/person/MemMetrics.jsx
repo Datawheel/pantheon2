@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {FORMATTERS} from "types/index";
 import axios from "axios";
 import "pages/profile/person/MemMetrics.css";
@@ -11,11 +12,11 @@ class MemMetrics extends Component {
   }
 
   componentDidMount() {
-    const {person} = this.props;
+    const {env, person} = this.props;
 
     // Note: this key is restricted to Pantheon domains, if you want to use this in your
     // codebase, please generate a key: https://developers.google.com/youtube/v3/docs/
-    const apiKey = "AIzaSyAkUC_UekOQbJvoMo_2pJqLRzgCTuUD_wE";
+    const apiKey = env.YOUTUBE_API_KEY;
     axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=${apiKey}`)
       .then(res => {
         const vid = res.data.items[0];
@@ -30,6 +31,7 @@ class MemMetrics extends Component {
       .filter(pv => pv.num_pageviews)
       .map(pv => pv.num_pageviews)
       .reduce((total, newVal) => total + newVal, 0);
+
     return (
       <div className="metrics-container">
         <div className="metric-vid">
@@ -62,4 +64,4 @@ class MemMetrics extends Component {
   }
 }
 
-export default MemMetrics;
+export default connect(state => ({env: state.env}), {})(MemMetrics);

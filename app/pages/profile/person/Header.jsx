@@ -36,7 +36,9 @@ const Header = ({pageViews, person}) => {
       <div className="info">
         <h2 className="profile-type">{person.occupation.occupation}</h2>
         <h1 className="profile-name">{person.name}</h1>
-        <p className="date-subtitle">{FORMATTERS.year(person.birthyear.name)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear.name)}` : "Today"}</p>
+        {person.birthyear
+          ? <p className="date-subtitle">{FORMATTERS.year(person.birthyear.name)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear.name)}` : "Today"}</p>
+          : null}
         <pre>
           <LinePlot
             config={{

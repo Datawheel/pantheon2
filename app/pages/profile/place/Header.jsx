@@ -82,7 +82,7 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
                 timeline: false,
                 tooltipConfig: {
                   body: d => d.views,
-                  title: "Page Views"
+                  title: "WIKIPEDIA PAGE VIEWS (PV)"
                 },
                 width: 275,
                 x: d => d.date,
@@ -111,7 +111,7 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
                   title: "page views"
                 },
                 y: d => d.views,
-                yConfig: {labels: [], ticks: [], title: "page views"}
+                yConfig: {labels: [], ticks: [], title: ""}
               }} /> : null}
         </pre>
       </div>
