@@ -62,6 +62,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
             key="occAliveTmapViz"
             config={{
               title: `Occupations of People Born in ${place.name}`,
+              total: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
               data: tmapBornData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
@@ -76,6 +77,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
             key="occDeadTmapViz"
             config={{
               title: `Occupations of People Deceased in ${place.name}`,
+              total: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
               data: tmapDeathData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),

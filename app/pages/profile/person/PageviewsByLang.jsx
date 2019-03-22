@@ -9,6 +9,21 @@ import moment from "moment";
 import {Tooltip} from "@blueprintjs/core";
 import AnchorList from "components/utils/AnchorList";
 
+const langFamColors = {
+  "afa": "#cdc84c",
+  "cau": "#0E5E5B",
+  "": "#67AF8C",
+  "ine": "#B12D11",
+  "nic": "#732945",
+  "tut": "#4C5ED7",
+  "crp": "#4F680A",
+  "sit": "#D28629",
+  "map": "#260348",
+  "urj": "#160B5B",
+  "dra": "#162A6D",
+  "tai": "#255A7F"
+};
+
 class PageviewsByLang extends Component {
 
   constructor(props) {
@@ -144,15 +159,15 @@ class PageviewsByLang extends Component {
                 // fill: d => "red",
                 Line: {
                   // fill: "none",
-                  // stroke: "red",
+                  stroke: d => langFamColors[d.primary_family_code],
                   strokeWidth: 2
                 }
               },
               legendConfig: {
-                label: d => d.primary_family_name
+                label: d => Array.isArray(d.primary_family_name) ? d.primary_family_name.filter(Boolean).join(", ") : d.primary_family_name
               },
               legendTooltip: {
-                title: d => d.primary_family_name,
+                title: d => Array.isArray(d.primary_family_name) ? d.primary_family_name.filter(Boolean).join(", ") : d.primary_family_name,
                 tbody: []
               },
               time: "date",
@@ -163,16 +178,25 @@ class PageviewsByLang extends Component {
                   const dObj = new Date(d.date);
                   return dObj.toLocaleDateString("en-US", {year: "numeric", month: "long"});
                 },
-                body: d => `<ul>
-                  <li class="large">
-                    ${FORMATTERS.commas(d.views)}
-                    <span>page views</span>
-                  </li>
-                  <li class="large">
-                    ${d.project}
-                    <span>${d.language}</span>
-                  </li>
-                </ul>`
+                body: d => {
+                  let projectTxt = d.project;
+                  if (Array.isArray(d.project)) {
+                    projectTxt = d.project.slice(0, 5).join(", ");
+                    if (d.project.length > 5) {
+                      projectTxt += `... (${d.project.slice(5).length} more)`;
+                    }
+                  }
+                  return `<ul>
+                    <li class="large">
+                      ${FORMATTERS.commas(d.views)}
+                      <span>page views</span>
+                    </li>
+                    <li class="large">
+                      ${projectTxt}
+                      <span>${Array.isArray(d.language) ? d.language.join(", ") : d.language}</span>
+                    </li>
+                  </ul>`;
+                }
               },
               x: "date",
               // xConfig: {tickFormat: d => FORMATTERS.year(new Date(d).getFullYear())},

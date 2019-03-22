@@ -10,7 +10,7 @@ import moment from "moment";
 
 const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
   let pageViewData = null;
-  let placeImg = place.img_link ? `/images/profile/place/${place.id}.jpg` : country.img_link ? `/images/profile/place/${country.id}.jpg` : "/images/profile/placeholder_place_profile.jpg";
+  let placeImg = place.img_link ? `/images/profile/place/${place.id}.jpg` : country && country.img_link ? `/images/profile/place/${country.id}.jpg` : "/images/profile/placeholder_place_profile.jpg";
   // wikipedia summary
   if (wikiSummary) {
     if (wikiSummary.originalimage) {
