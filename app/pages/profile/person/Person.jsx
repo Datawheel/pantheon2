@@ -41,7 +41,7 @@ class Person extends Component {
   }
 
   render() {
-    const {person, pageViews, occupationRanks, birthYearRanks, deathYearRanks, wikiExtract, wikiPageViews} = this.props.data;
+    const {person, pageViews, occupationRanks, birthYearRanks, deathYearRanks, wikiExtract, wikiPageViews, wikiSummary} = this.props.data;
     if (person === undefined) {
       return <NotFound />;
     }
@@ -122,11 +122,19 @@ class Person extends Component {
     // }
     const pageUrl = this.props.location.href.split("?")[0].replace(/\/$/, "");
     const pageHeaderMetaTags = config.meta.map(meta => {
-      if (meta.property && meta.property === "og:title") {
-        return {property: "og:title", content: person.name};
-      }
-      if (meta.property && meta.property === "og:image") {
-        return {property: "og:image", content: `${pageUrl.replace("/profile/", "/images/screenshots/")}.png`};
+      if (meta.property) {
+        if (meta.property === "og:title") {
+          return {property: "og:title", content: person.name};
+        }
+        if (meta.property === "og:image") {
+          return {property: "og:image", content: `${pageUrl.replace("http://").replace("https://").replace("/profile/", "/images/screenshots/")}.jpg`};
+        }
+        if (meta.property === "og:description") {
+          if (wikiSummary && wikiSummary.description) {
+            const s2 = `${person.gender ? "His" : "Her"} biography is available in ${person.langs} different languages on Wikipedia making ${person.gender ? "him" : "her"} the ${FORMATTERS.ordinal(person.occupation_rank_unique)} most popular ${person.occupation.occupation}.`;
+            return {property: "og:description", content: `Pantheon profile of ${person.name}, ${wikiSummary.description}. ${s2}`};
+          }
+        }
       }
       return meta;
     });
@@ -172,6 +180,7 @@ const birthYearRanksURL = "/person?birthyear=eq.<person.birthyearId>&birthyear_r
 const deathYearRanksURL = "/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation(id,domain_slug),deathcountry(*),langs,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear";
 const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=<person.id>&format=json&exlimit=1&origin=*";
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<person.wikiSlug>/monthly/20110101/${year}${month}01`;
+const wikiSummaryURL = "https://en.wikipedia.org/api/rest_v1/page/summary/<person.wikiSlug>";
 
 Person.preneed = [
   fetchData("person", personURL, res => {
@@ -204,7 +213,8 @@ Person.need = [
   fetchData("birthYearRanks", birthYearRanksURL, res => res),
   fetchData("deathYearRanks", deathYearRanksURL, res => res),
   fetchData("wikiExtract", wikiURL),
-  fetchData("wikiPageViews", wikiPageViewsURL)
+  fetchData("wikiPageViews", wikiPageViewsURL),
+  fetchData("wikiSummary", wikiSummaryURL)
 // //   fetchCreationdates
 ];
 

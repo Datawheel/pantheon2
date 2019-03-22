@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
+import axios from "axios";
 import Helmet from "react-helmet";
 import config from "helmet.js";
 import Header from "pages/profile/place/Header";
@@ -14,6 +15,7 @@ import GeomapBirth from "pages/profile/place/sections/GeomapBirth";
 import GeomapDeath from "pages/profile/place/sections/GeomapDeath";
 import Lifespans from "pages/profile/place/sections/Lifespans";
 import LivingPeople from "pages/profile/place/sections/LivingPeople";
+import NotFound from "components/NotFound";
 import {NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST} from "types/index";
 import "pages/profile/common/Structure.css";
 
@@ -32,19 +34,45 @@ class Place extends Component {
     ];
   }
 
+  componentDidMount() {
+    // generate screenshot on page load
+    const {id: slug} = this.props.params;
+    const {place} = this.props.data;
+    if (place !== undefined) {
+      const screenshotUrl = `/api/screenshot/place/${slug}/`;
+      axios.get(screenshotUrl);
+    }
+  }
+
   render() {
     const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive, wikiExtract, wikiSummary, wikiImg, wikiPageViews} = this.props.data;
+    if (place === undefined) {
+      return <NotFound />;
+    }
 
     const attrs = occupations.reduce((obj, d) => {
       obj[d.id] = d;
       return obj;
     }, {});
 
+    const pageUrl = this.props.location.href.split("?")[0].replace(/\/$/, "");
+    const pageHeaderMetaTags = config.meta.map(meta => {
+      if (meta.property) {
+        if (meta.property === "og:title") {
+          return {property: "og:title", content: place.name};
+        }
+        if (meta.property === "og:image") {
+          return {property: "og:image", content: `${pageUrl.replace("http://").replace("https://").replace("/profile/", "/images/screenshots/")}.jpg`};
+        }
+      }
+      return meta;
+    });
+
     return (
       <div>
         <Helmet
           title={place.name}
-          meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: place.name} : meta)}
+          meta={pageHeaderMetaTags}
         />
         <Header place={place} country={country} people={peopleBornHere} wikiSummary={wikiSummary} wikiPageViews={wikiPageViews} />
         <div className="about-section">
