@@ -135,4 +135,4 @@ Place.need = [
   fetchData("wikiPageViews", wikiPageViewsURL)
 ];
 
-export default connect(state => ({data: state.data}), {})(Place);
+export default connect(state => ({data: state.data, location: state.location}), {})(Place);
