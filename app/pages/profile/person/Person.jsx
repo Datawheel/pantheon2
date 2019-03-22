@@ -127,7 +127,7 @@ class Person extends Component {
           return {property: "og:title", content: person.name};
         }
         if (meta.property === "og:image") {
-          return {property: "og:image", content: `${pageUrl.replace("http://").replace("https://").replace("/profile/", "/images/screenshots/")}.jpg`};
+          return {property: "og:image", content: `${pageUrl.replace("http://", "https://").replace("/profile/", "/images/screenshots/")}.jpg`};
         }
         if (meta.property === "og:description") {
           if (wikiSummary && wikiSummary.description) {

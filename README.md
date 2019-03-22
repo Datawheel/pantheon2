@@ -99,3 +99,16 @@ In development, after all scripts get loaded, react loads the CSS as BLOBs. That
 
 #### Client and Server Markup Mismatch
 This warning is visible only on development and totally harmless. This occurs to hash difference in `react-router`. To solve it, react router docs asks you to use `match` function. If we use `match`, `react-hot-reloader` stops working.
+
+## XVFB
+Pantheon makes use of the electron-screenshot-service module, which requires that xvfb along with a few helper packages be installed system wide on the ubuntu server.
+
+```
+sudo apt-get install -y xorg libgtk2.0-0 libgconf-2-4 libasound2 libxtst6 libxss1 libnss3 xvfb
+```
+
+## Screenshot processing
+Additional image processing is done by the `sharp` nodejs package which requires make and g++, so installing the `build-essential` apt package is necessary:
+```
+sudo apt-get install build-essential
+```

@@ -62,7 +62,7 @@ class Place extends Component {
           return {property: "og:title", content: place.name};
         }
         if (meta.property === "og:image") {
-          return {property: "og:image", content: `${pageUrl.replace("http://").replace("https://").replace("/profile/", "/images/screenshots/")}.jpg`};
+          return {property: "og:image", content: `${pageUrl.replace("http://", "https://").replace("/profile/", "/images/screenshots/")}.jpg`};
         }
       }
       return meta;
