@@ -91,6 +91,7 @@ class Controls extends Component {
   }
 
   fetchData = () => {
+    this.props.updateData(Object.assign({data: [], loading: true}, this.state));
     const {pageType} = this.props;
     const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType, placeType} = this.state;
     const selectFields = "name,langs,hpi,id,slug,gender,birthyear,deathyear,birthcountry(id,country_name,continent,slug),birthplace(id,name,country_name,continent,slug,lat_lon),deathplace(id,name,country_name,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
@@ -136,7 +137,7 @@ class Controls extends Component {
   }
 
   update = (key, val) => {
-    const {pathname} = this.props.location;
+    const {pathname} = this.props;
     this.setState({[key]: val}, () => {
       this.setQueryParams();
       if (pathname.includes("explore/rankings")) {

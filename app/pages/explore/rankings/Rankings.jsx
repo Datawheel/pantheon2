@@ -121,7 +121,7 @@ class Ranking extends Component {
   render() {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
-    const {query: qParams} = this.props.location;
+    const {query: qParams, pathname} = this.props.location;
     const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, page, pageSize, searching, show, viz, years, yearType} = this.state;
 
     if (!occupationResponse) {
@@ -168,6 +168,7 @@ class Ranking extends Component {
             nestedOccupations={nestedOccupations}
             pageType={pageType}
             places={places}
+            pathname={pathname}
             qParams={qParams}
           />
           <RankingTable
