@@ -76,6 +76,38 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
     }
   }
 
+  return (
+    <section className="intro-section person">
+      <div className="intro-deco">
+        <div className="deco-lines">
+          {Array(decoLines).fill().map((d, i) => <span key={i} className="deco-line" style={{backgroundColor}}></span>)}
+        </div>
+      </div>
+      <div className="intro-content">
+        <PersonImage src={`/images/profile/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} />
+        <div className="intro-text">
+          <h3>
+            <img src="/images/ui/profile-w.svg" /> {person.name}
+          </h3>
+          {wikiSentence
+            ? <p>{wikiSentence}. <a href={`https://en.wikipedia.org/wiki/${wikiSlug}`} target="_blank" rel="noopener noreferrer">Read more on Wikipedia</a></p>
+            : <p>
+              {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
+              {!person.birthcountry && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
+              {person.deathyear
+                ? `${person.name} died at ${age} years old in ${FORMATTERS.year(person.deathyear.name)}.`
+                : `${person.name} is currently ${age} years old.`}
+            </p>}
+          <p>
+            <React.Fragment>Since 2007, {person.gender ? "his" : "her"} Wikipedia page in English has received more than {FORMATTERS.commas(totalPageViews)} page views. </React.Fragment>
+            <React.Fragment>{person.gender ? "His" : "Her"} biography is available in {person.langs} different languages on Wikipedia making {person.gender ? "him" : "her"} the {FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a></React.Fragment>
+            <React.Fragment>{!person.birthcountry ? <span>.</span> : <span> and the {birthcountryRank !== 1 ? FORMATTERS.ordinal(birthcountryRank) : ""} most popular biography from <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>.</span>}</React.Fragment>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+
 
   return (
     <section className="intro-section person">

@@ -34,8 +34,8 @@ const Header = ({person, wikiPageViews}) => {
     }
   }
 
-  const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug],
-        backgroundImage = `url('/images/profile/people/${person.id}.jpg')`;
+  const backgroundColor = COLORS_DOMAIN[person.occupation.domain],
+        backgroundImage = `url('/images/profile/people/${person.wp_id}.jpg')`;
 
   return (
     <header className="hero">
@@ -49,7 +49,7 @@ const Header = ({person, wikiPageViews}) => {
         <h2 className="profile-type">{person.occupation.occupation}</h2>
         <h1 className="profile-name">{person.name}</h1>
         {person.birthyear
-          ? <p className="date-subtitle">{FORMATTERS.year(person.birthyear.name)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear.name)}` : "Today"}</p>
+          ? <p className="date-subtitle">{FORMATTERS.year(person.birthyear)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear)}` : "Today"}</p>
           : null}
         <pre>
           {pageViewData

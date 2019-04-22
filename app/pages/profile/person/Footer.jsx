@@ -2,7 +2,7 @@ import React from "react";
 import "pages/profile/common/Footer.css";
 
 const Footer = ({person, ranking}) => {
-  const me = ranking.findIndex(p => p.id === person.id);
+  const me = ranking.findIndex(p => p.wp_id === person.wp_id);
   const aboveMe = ranking[me + 1];
   const belowMe = ranking[me - 1];
 

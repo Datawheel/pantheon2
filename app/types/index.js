@@ -25,14 +25,14 @@ export const YEAR_RANGE = [-3501, 2015];
 export const RANKINGS_RESULTS_PER_PAGE = 100;
 
 export const COLORS_DOMAIN = {
-  sports: "#BB3B57",
-  science_and_technology: "#0E5E5B",
-  public_figure: "#67AF8C",
-  institutions: "#B12D11",
-  humanities: "#732945",
-  exploration: "#4C5ED7",
-  business_and_law: "#4F680A",
-  arts: "#D28629"
+  "SPORTS": "#BB3B57",
+  "SCIENCE & TECHNOLOGY": "#0E5E5B",
+  "PUBLIC FIGURE": "#67AF8C",
+  "INSTITUTIONS": "#B12D11",
+  "HUMANITIES": "#732945",
+  "EXPLORATION": "#4C5ED7",
+  "BUSINESS & LAW": "#4F680A",
+  "ARTS": "#D28629"
 };
 
 export const COLORS_CONTINENT = {

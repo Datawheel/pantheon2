@@ -27,9 +27,9 @@ class MemMetrics extends Component {
   render() {
     const {pageViews, person} = this.props;
     const {vid} = this.state;
-    const totalPageviews = pageViews
-      .filter(pv => pv.num_pageviews)
-      .map(pv => pv.num_pageviews)
+    const totalPageviews = pageViews.items
+      .filter(pv => pv.views)
+      .map(pv => pv.views)
       .reduce((total, newVal) => total + newVal, 0);
 
     return (
