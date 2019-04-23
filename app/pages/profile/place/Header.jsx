@@ -54,8 +54,8 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
       <div className="info">
         <p className="top-desc">Cultural Production in</p>
         <h2 className="profile-type">Present Day</h2>
-        <h1 className="profile-name">{place.name}</h1>
-        { place.name !== place.country_name ? <p className="date-subtitle"><a href={`/profile/place/${country.slug}`}>{place.country_name}</a></p> : null}
+        <h1 className="profile-name">{place.place}</h1>
+        { place.place !== place.country_name ? <p className="date-subtitle"><a href={`/profile/place/${country.slug}`}>{place.country_name}</a></p> : null}
         {/* <p className="date-subtitle">{ FORMATTERS.year(country.soverign_date) === 0 ? "1AD" : FORMATTERS.year(country.soverign_date) } - Today</p> */}
         <pre>
           {pageViewData

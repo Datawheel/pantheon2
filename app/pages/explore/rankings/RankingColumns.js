@@ -59,14 +59,14 @@ const getColumns = (show, nesting, occupations, places) => {
           id: "birthplace",
           Header: "Birth Place",
           style: {whiteSpace: "unset"},
-          accessor: d => d.birthplace ? d.birthplace.name : null,
+          accessor: d => d.birthplace ? d.birthplace.place : null,
           Cell: ({value, original}) => value ? <a href={`/profile/place/${original.birthplace.slug}`}>{value}</a> : <span>-</span>
         },
         {
           id: "deathplace",
           Header: "Death Place",
           style: {whiteSpace: "unset"},
-          accessor: d => d.deathplace ? d.deathplace.name : null,
+          accessor: d => d.deathplace ? d.deathplace.place : null,
           Cell: ({value, original}) => value ? <a href={`/profile/place/${original.deathplace.slug}`}>{value}</a> : <span>-</span>
         },
         {Header: "L", accessor: "langs", minWidth: 35},

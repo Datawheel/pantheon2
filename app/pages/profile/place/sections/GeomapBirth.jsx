@@ -7,21 +7,21 @@ import {groupTooltip, on} from "viz/helpers";
 const GeomapBirth = ({country, peopleBorn}) => {
   const tmapBornData = peopleBorn
     .filter(p => p.birthyear !== null)
-    .sort((a, b) => b.langs - a.langs);
+    .sort((a, b) => b.l - a.l);
 
   tmapBornData.forEach(d => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
+    d.place = d.bplace_geonameid;
   });
 
-  const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat_lon)
-    .sort((a, b) => b.langs - a.langs)
+  const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat && d.place.lon)
+    .sort((a, b) => b.l - a.l)
     .slice(0, 100);
   geomapBornData.forEach(d => {
-    d.place_name = d.place.name;
-    d.place_coord = d.place.lat_lon;
+    d.place_name = d.place.place;
+    d.place_coord = [d.place.lat, d.place.lon];
     if (!(d.place_coord instanceof Array)) {
       d.place_coord = d.place_coord
         .replace("(", "")
@@ -38,7 +38,7 @@ const GeomapBirth = ({country, peopleBorn}) => {
         <Geomap
           key="geomapBirths"
           config={{
-            title: `Cities by birth in ${country.name}`,
+            title: `Cities by birth in ${country.country}`,
             data: geomapBornData,
             depth: 1,
             fitFilter: `${country.country_num}`,

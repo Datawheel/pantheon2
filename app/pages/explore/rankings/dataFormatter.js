@@ -23,7 +23,7 @@ export default function dataFormatter(dataArray, show) {
       .key(d => d.birthplace.id)
       .rollup(leaves => ({
         id: leaves[0].birthplace.id,
-        name: leaves[0].birthplace.name,
+        name: leaves[0].birthplace.place,
         slug: leaves[0].birthplace.slug,
         country_name: leaves[0].birthplace.country_name,
         count: leaves.length,

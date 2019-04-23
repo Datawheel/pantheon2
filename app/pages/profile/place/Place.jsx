@@ -59,7 +59,7 @@ class Place extends Component {
     const pageHeaderMetaTags = config.meta.map(meta => {
       if (meta.property) {
         if (meta.property === "og:title") {
-          return {property: "og:title", content: place.name};
+          return {property: "og:title", content: place.place};
         }
         if (meta.property === "og:image") {
           return {property: "og:image", content: `${pageUrl.replace("http://", "https://").replace("/profile/", "/images/screenshots/")}.jpg`};
@@ -71,7 +71,7 @@ class Place extends Component {
     return (
       <div>
         <Helmet
-          title={place.name}
+          title={place.place}
           meta={pageHeaderMetaTags}
         />
         <Header place={place} country={country} people={peopleBornHere} wikiSummary={wikiSummary} wikiPageViews={wikiPageViews} />
@@ -97,29 +97,27 @@ const dateobj = new Date();
 const year = dateobj.getFullYear();
 const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 const placeURL = "/place?slug=eq.<id>";
-const countryURL = "/place?country_code=eq.<place.country_code>&is_country=is.true";
-const peopleBornHereURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
-const peopleDiedHereURL = "/person?<place.deathPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=deathplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
-const placeRanksURL = "/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique&<place.sumlevelFilter>";
+const countryURL = "/country?id=eq.<place.country>";
+// const peopleBornHereURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
+const peopleBornHereURL = "/person?bplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+// const peopleDiedHereURL = "/person?<place.deathPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=deathplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
+const peopleDiedHereURL = "/person?dplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+const placeRanksURL = "/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique";
 const occupationsURL = "/occupation?order=num_born.desc.nullslast";
-const peopleBornHereAliveURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
-// const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&format=json&exlimit=1&titles=<place.name>&origin=*";
-// const wikiImgURL = "https://en.wikipedia.org/w/api.php?action=query&titles=<place.name>&prop=pageimages&format=json&pithumbsize=1000&origin=*";
-const wikiSummaryUrl = "https://en.wikipedia.org/api/rest_v1/page/summary/<place.name>";
-const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<place.name>/monthly/20110101/${year}${month}01`;
+const peopleBornHereAliveURL = "/person?bplace_geonameid=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
+// const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&format=json&exlimit=1&titles=<place.place>&origin=*";
+// const wikiImgURL = "https://en.wikipedia.org/w/api.php?action=query&titles=<place.place>&prop=pageimages&format=json&pithumbsize=1000&origin=*";
+const wikiSummaryUrl = "https://en.wikipedia.org/api/rest_v1/page/summary/<place.place>";
+const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<place.place>/monthly/20110101/${year}${month}01`;
 
 Place.preneed = [
   fetchData("place", placeURL, res => {
     const place = res[0];
 
-    const birthPlaceColumn = place.name === place.country_name ? "birthcountry" : "birthplace";
-    const deathPlaceColumn = place.name === place.country_name ? "deathcountry" : "deathplace";
-
     const placeRankLow = Math.max(1, parseInt(place.born_rank_unique, 10) - NUM_RANKINGS_PRE);
     const placeRankHigh = Math.max(NUM_RANKINGS, parseInt(place.born_rank_unique, 10) + NUM_RANKINGS_POST);
-    const sumlevelFilter = place.name === place.country_name ? "is_country=is.true" : "is_country=is.false";
 
-    return Object.assign({birthPlaceColumn, deathPlaceColumn, placeRankLow, placeRankHigh, sumlevelFilter}, place);
+    return Object.assign({placeRankLow, placeRankHigh}, place);
   })
 ];
 

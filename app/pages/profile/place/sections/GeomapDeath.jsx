@@ -7,7 +7,7 @@ import {groupTooltip, on} from "viz/helpers";
 const GeomapDeath = ({country, peopleDied}) => {
   const tmapDeathData = peopleDied
     .filter(p => p.deathyear !== null)
-    .sort((a, b) => b.langs - a.langs);
+    .sort((a, b) => b.l - a.l);
 
   tmapDeathData.forEach(d => {
     d.industry = d.occupation.industry;
@@ -15,15 +15,15 @@ const GeomapDeath = ({country, peopleDied}) => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.deathplace;
+    d.place = d.dplace_geonameid;
   });
 
-  const geomapDeathData = tmapDeathData.filter(d => d.place && d.place.lat_lon)
-    .sort((a, b) => b.langs - a.langs)
+  const geomapDeathData = tmapDeathData.filter(d => d.place && d.place.lat && d.place.lon)
+    .sort((a, b) => b.l - a.l)
     .slice(0, 100);
   geomapDeathData.forEach(d => {
-    d.place_name = d.place.name;
-    d.place_coord = d.place.lat_lon;
+    d.place_name = d.place.place;
+    d.place_coord = [d.place.lat, d.place.lon];
     if (!(d.place_coord instanceof Array)) {
       d.place_coord = d.place_coord
         .replace("(", "")
@@ -40,7 +40,7 @@ const GeomapDeath = ({country, peopleDied}) => {
         <Geomap
           key="geomapDeaths"
           config={{
-            title: `Cities by deaths in ${country.name}`,
+            title: `Cities by deaths in ${country.country}`,
             data: geomapDeathData,
             depth: 1,
             fitFilter: `${country.country_num}`,

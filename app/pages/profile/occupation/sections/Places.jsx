@@ -57,9 +57,9 @@ const Places = ({people, occupation}) => {
         <div>
           <p>
             Most {plural(occupation.occupation)} were born in <AnchorList items={countriesBorn.slice(0, 3)} name={d => `${d.value.birthcountry.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.birthcountry.slug}/`} />.
-            By city, the most common birth places were <AnchorList items={placesBorn.slice(0, 3)} name={d => `${d.value.birthplace.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.birthplace.slug}/`} />.
+            By city, the most common birth places were <AnchorList items={placesBorn.slice(0, 3)} name={d => `${d.value.birthplace.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.birthplace.slug}/`} />.
             {tmapDeathData.length
-              ? <React.Fragment>The most common death places of {plural(occupation.occupation)} were <AnchorList items={countriesDied.slice(0, 3)} name={d => `${d.value.deathcountry.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathcountry.slug}/`} />. By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.deathplace.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathplace.slug}/`} />.</React.Fragment>
+              ? <React.Fragment>The most common death places of {plural(occupation.occupation)} were <AnchorList items={countriesDied.slice(0, 3)} name={d => `${d.value.deathcountry.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathcountry.slug}/`} />. By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.deathplace.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathplace.slug}/`} />.</React.Fragment>
               : null}
           </p>
         </div>

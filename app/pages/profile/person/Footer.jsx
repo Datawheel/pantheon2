@@ -52,7 +52,7 @@ const Footer = ({person, ranking}) => {
                 </a>
               </div>
               <h4 className="footer-carousel-item-title">
-                <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>
+                <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}</a>
               </h4>
               <p>{person.birthplace.num_born} Individuals</p>
             </li>

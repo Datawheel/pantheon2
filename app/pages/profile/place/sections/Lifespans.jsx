@@ -25,10 +25,10 @@ const Lifespans = ({attrs, place, peopleBorn}) => {
   return <section className="profile-section">
     <SectionHead title="Overlapping Lives" index={1} numSections={5} />
     <div className="section-body">
-      <p>Below is a visual represetation of the lifespans of the top {priestleyData.length} globally memorable people born in {place.name} since 1700.</p>
+      <p>Below is a visual represetation of the lifespans of the top {priestleyData.length} globally memorable people born in {place.place} since 1700.</p>
       <VizWrapper component={this} refKey="lifespansViz">
         <Priestley
-          title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${place.name}`}
+          title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${place.place}`}
           key="priestley1"
           config={{
             data: priestleyData,

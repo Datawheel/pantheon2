@@ -20,7 +20,7 @@ const GeomapBirth = ({era, peopleBorn}) => {
     .sort((a, b) => b.langs - a.langs)
     .slice(0, 100);
   geomapBornData.forEach(d => {
-    d.place_name = d.place.name;
+    d.place_name = d.place.place;
     d.place_coord = d.place.lat_lon;
     if (!(d.place_coord instanceof Array)) {
       d.place_coord = d.place_coord

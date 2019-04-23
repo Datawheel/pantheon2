@@ -35,7 +35,7 @@ class PStacked extends Component {
       .filter(dataFilter)
       .map(d => {
         d.borncountry = d.birthcountry ? d.birthcountry.country_name : d.birthcountry;
-        d.bornplace = d.birthplace ? d.birthplace.name : d.birthplace;
+        d.bornplace = d.birthplace ? d.birthplace.place : d.birthplace;
         d.borncontinent = d.birthcountry ? d.birthcountry.continent : d.birthcountry;
         d.occupation_id = `${d.occupation_id}`;
         const occ = occsObj[d.occupation_id];

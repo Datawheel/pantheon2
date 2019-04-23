@@ -8,7 +8,7 @@ const LivingPeople = ({place, data}) =>
     <div className="section-body">
       <div>
         <p>
-          Among living memorable people from {place.name}, the three most remembered are <AnchorList items={data} name={d => d.name} url={d => `/profile/person/${d.id}/`} />. Below are the careers of the top 10 people born in {place.name}.
+          Among living memorable people from {place.place}, the three most remembered are <AnchorList items={data} name={d => d.name} url={d => `/profile/person/${d.id}/`} />. Below are the careers of the top 10 people born in {place.place}.
         </p>
       </div>
     </div>

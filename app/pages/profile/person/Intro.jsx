@@ -29,14 +29,14 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
   }
   else if (person.geacron_name !== person.birthcountry.name) {
     fromSentence = person.birthyear
-      ? <span>born in {FORMATTERS.year(person.birthyear.name)} in {person.bplace_name}, {person.geacron_name} which is now part of modern day <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>. </span>
+      ? <span>born in {FORMATTERS.year(person.birthyear.name)} in {person.bplace_name}, {person.geacron_name} which is now part of modern day <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>. </span>
       : null;
   }
   else {
     const birthplace = person.birthplace.state
-      ? <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}, {person.birthplace.state}</a>
-      : <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>;
-    if (person.bplace_name !== person.birthplace.name) {
+      ? <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}, {person.birthplace.state}</a>
+      : <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}</a>;
+    if (person.bplace_name !== person.birthplace.place) {
 
       /* Example test case person:
           jack_nicholson (w/ state)
