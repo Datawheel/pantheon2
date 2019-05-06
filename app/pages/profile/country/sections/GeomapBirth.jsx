@@ -4,10 +4,10 @@ import VizWrapper from "pages/profile/common/VizWrapper";
 import {Geomap} from "d3plus-react";
 import {groupTooltip, on} from "viz/helpers";
 
-const GeomapBirth = ({era, peopleBorn}) => {
+const GeomapBirth = ({country, peopleBorn}) => {
   const tmapBornData = peopleBorn
-    .filter(p => p.birthyear !== null && p.occupation)
-    .sort((a, b) => b.langs - a.langs);
+    .filter(p => p.birthyear !== null)
+    .sort((a, b) => b.l - a.l);
 
   tmapBornData.forEach(d => {
     d.occupation_name = d.occupation.occupation;
@@ -17,7 +17,7 @@ const GeomapBirth = ({era, peopleBorn}) => {
   });
 
   const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat && d.place.lon)
-    .sort((a, b) => b.langs - a.langs)
+    .sort((a, b) => b.l - a.l)
     .slice(0, 500);
   geomapBornData.forEach(d => {
     d.place_name = d.place.place;
@@ -32,18 +32,16 @@ const GeomapBirth = ({era, peopleBorn}) => {
   });
 
   return <section className="profile-section">
-    <SectionHead title="Major cities by number of births" index={1} numSections={5} />
+    <SectionHead title="Cities by Births" index={1} numSections={5} />
     <div className="section-body">
       <VizWrapper component={this} refKey="viz">
         <Geomap
           key="geomapBirths"
           config={{
-            title: `Major Cities in ${era.name} for Births of Cultural Celebrities`,
+            title: `Cities by birth in ${country.country}`,
             data: geomapBornData,
-            pointSizeMax: 30,
-            pointSizeMin: 2,
             depth: 1,
-            fitFilter: d => ["152", "643"].includes(d.id),
+            fitFilter: `${country.country_num}`,
             groupBy: ["event", "place_name"],
             on: on("place", d => d.place.slug),
             shapeConfig: {
@@ -53,7 +51,7 @@ const GeomapBirth = ({era, peopleBorn}) => {
               stroke: () => "#4A4948",
               strokeWidth: 1,
               Path: {
-                fill: "transparent",
+                fill: d => parseInt(d.id, 10) === parseInt(country.country_num, 10) ? "#ccc" : "transparent",
                 stroke: "#4A4948",
                 strokeWidth: 0.75
               }

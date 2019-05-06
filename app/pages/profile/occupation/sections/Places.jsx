@@ -11,44 +11,49 @@ import {COLORS_CONTINENT} from "types";
 
 const Places = ({people, occupation}) => {
   const countriesBorn = nest()
-    .key(p => p.birthcountry.id)
-    .rollup(leaves => ({num_people: leaves.length, birthcountry: leaves[0].birthcountry}))
-    .entries(people.filter(p => p.birthcountry))
+    .key(p => p.bplace_country.id)
+    .rollup(leaves => ({num_people: leaves.length, bplace_country: leaves[0].bplace_country}))
+    .entries(people.filter(p => p.bplace_country))
     .sort((a, b) => b.value.num_people - a.value.num_people);
   const placesBorn = nest()
-    .key(p => p.birthplace.id)
-    .rollup(leaves => ({num_people: leaves.length, birthplace: leaves[0].birthplace}))
-    .entries(people.filter(p => p.birthplace))
+    .key(p => p.bplace_geonameid.id)
+    .rollup(leaves => ({num_people: leaves.length, bplace_geonameid: leaves[0].bplace_geonameid}))
+    .entries(people.filter(p => p.bplace_geonameid))
     .sort((a, b) => b.value.num_people - a.value.num_people);
 
   const countriesDied = nest()
-    .key(p => p.deathcountry.id)
-    .rollup(leaves => ({num_people: leaves.length, deathcountry: leaves[0].deathcountry}))
-    .entries(people.filter(p => p.deathcountry))
+    .key(p => p.dplace_country.id)
+    .rollup(leaves => ({num_people: leaves.length, dplace_country: leaves[0].dplace_country}))
+    .entries(people.filter(p => p.dplace_country))
     .sort((a, b) => b.value.num_people - a.value.num_people);
   const placesDied = nest()
-    .key(p => p.deathplace.id)
-    .rollup(leaves => ({num_people: leaves.length, deathplace: leaves[0].deathplace}))
-    .entries(people.filter(p => p.deathplace))
+    .key(p => p.dplace_geonameid.id)
+    .rollup(leaves => ({num_people: leaves.length, dplace_geonameid: leaves[0].dplace_geonameid}))
+    .entries(people.filter(p => p.dplace_geonameid))
     .sort((a, b) => b.value.num_people - a.value.num_people);
 
+  // console.log("people", people);
   const tmapBornData = people
-    .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
-    .sort((a, b) => b.langs - a.langs);
+    .filter(p => p.birthyear !== null && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
+    // .filter(p => p.birthyear !== null && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
+    .sort((a, b) => b.l - a.l);
 
   tmapBornData.forEach(d => {
-    d.borncountry = d.birthcountry.country_name;
-    d.borncontinent = d.birthcountry.continent;
+    d.borncountry = d.bplace_country.country_name;
+    d.borncontinent = d.bplace_country.continent;
   });
 
   const tmapDeathData = people
-    .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country_name && p.deathcountry.continent)
-    .sort((a, b) => b.langs - a.langs);
+    .filter(p => p.deathyear !== null && p.dplace_country && p.dplace_country.country && p.dplace_country.continent)
+    // .filter(p => p.deathyear !== null && p.dplace_country && p.dplace_country.country_name && p.dplace_country.continent)
+    .sort((a, b) => b.l - a.l);
 
   tmapDeathData.forEach(d => {
-    d.diedcountry = d.deathcountry.country_name;
-    d.diedcontinent = d.deathcountry.continent;
+    d.diedcountry = d.dplace_country.country_name;
+    d.diedcontinent = d.dplace_country.continent;
   });
+
+  console.log(countriesDied);
 
   return (
     <section className="profile-section">
@@ -56,10 +61,10 @@ const Places = ({people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-            Most {plural(occupation.occupation)} were born in <AnchorList items={countriesBorn.slice(0, 3)} name={d => `${d.value.birthcountry.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.birthcountry.slug}/`} />.
-            By city, the most common birth places were <AnchorList items={placesBorn.slice(0, 3)} name={d => `${d.value.birthplace.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.birthplace.slug}/`} />.
+            Most {plural(occupation.occupation)} were born in <AnchorList items={countriesBorn.slice(0, 3)} name={d => `${d.value.bplace_country.country} (${d.value.num_people})`} url={d => `/profile/country/${d.value.bplace_country.slug}/`} />.
+            By city, the most common birth places were <AnchorList items={placesBorn.slice(0, 3)} name={d => `${d.value.bplace_geonameid.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.bplace_geonameid.slug}/`} />.
             {tmapDeathData.length
-              ? <React.Fragment>The most common death places of {plural(occupation.occupation)} were <AnchorList items={countriesDied.slice(0, 3)} name={d => `${d.value.deathcountry.name} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathcountry.slug}/`} />. By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.deathplace.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.deathplace.slug}/`} />.</React.Fragment>
+              ? <React.Fragment>The most common death places of {plural(occupation.occupation)} were <AnchorList items={countriesDied.slice(0, 3)} name={d => `${d.value.dplace_country.country} (${d.value.num_people})`} url={d => `/profile/country/${d.value.dplace_country.slug}/`} />. By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.dplace_geonameid.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.dplace_geonameid.slug}/`} />.</React.Fragment>
               : null}
           </p>
         </div>
@@ -71,13 +76,13 @@ const Places = ({people, occupation}) => {
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
-              on: on("place", d => d.birthcountry.slug),
+              on: on("place", d => d.bplace_country.slug),
               legendConfig: {
                 label: d => d.borncontinent
               },
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               // time: "birthyear",
-              tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
+              tooltipConfig: groupTooltip(tmapBornData, d => d.bplace_country.slug),
               sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
             }} />
         </VizWrapper>
@@ -90,13 +95,13 @@ const Places = ({people, occupation}) => {
                 data: tmapDeathData,
                 depth: 1,
                 groupBy: ["diedcontinent", "diedcountry"],
-                on: on("place", d => d.deathcountry.slug),
+                on: on("place", d => d.dplace_country.slug),
                 legendConfig: {
                   label: d => d.diedcontinent
                 },
                 shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
                 // time: "deathyear",
-                tooltipConfig: groupTooltip(tmapBornData, d => d.deathcountry.slug),
+                tooltipConfig: groupTooltip(tmapBornData, d => d.dplace_country.slug),
                 sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
               }} />
           </VizWrapper>

@@ -7,9 +7,9 @@ import {Treemap} from "d3plus-react";
 import {plural} from "pluralize";
 import {groupBy, groupTooltip, on, shapeConfig} from "viz/helpers";
 
-const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
+const Occupations = ({attrs, country, peopleBorn, peopleDied}) => {
   const tmapBornData = peopleBorn
-    .filter(p => p.birthyear !== null)
+    .filter(p => p.birthyear !== null && p.occupation !== null)
     .sort((a, b) => b.l - a.l);
 
   tmapBornData.forEach(d => {
@@ -20,17 +20,18 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
   });
 
   const tmapDeathData = peopleDied
-    .filter(p => p.deathyear !== null)
+    .filter(p => p.deathyear !== null && p.occupation !== null)
     .sort((a, b) => b.l - a.l);
 
-  tmapDeathData.forEach(d => {
-    d.industry = d.occupation.industry;
-    d.domain = d.occupation.domain;
-    d.occupation_name = d.occupation.occupation;
-    d.occupation_id = `${d.occupation_id}`;
-    d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.dplace_geonameid;
-  });
+  tmapDeathData
+    .forEach(d => {
+      d.industry = d.occupation.industry;
+      d.domain = d.occupation.domain;
+      d.occupation_name = d.occupation.occupation;
+      d.occupation_id = `${d.occupation_id}`;
+      d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
+      d.place = d.dplace_geonameid;
+    });
 
   const occupationsBorn = nest()
     .key(d => d.occupation.id)
@@ -51,7 +52,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
       <div className="section-body">
         <div>
           <p>
-            Most individuals born in {place.place} were&nbsp;
+            Most individuals born in {country.country} were&nbsp;
             <AnchorList items={occupationsBorn.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_born})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />,&nbsp;
             while most who died were&nbsp;
             <AnchorList items={occupationsDied.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_died})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />.
@@ -61,7 +62,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
           <Treemap
             key="occAliveTmapViz"
             config={{
-              title: `Occupations of People Born in ${place.place}`,
+              title: `Occupations of People Born in ${country.country}`,
               total: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
               data: tmapBornData,
               depth: 2,
@@ -76,7 +77,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
           <Treemap
             key="occDeadTmapViz"
             config={{
-              title: `Occupations of People Deceased in ${place.place}`,
+              title: `Occupations of People Deceased in ${country.country}`,
               total: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
               data: tmapDeathData,
               depth: 2,

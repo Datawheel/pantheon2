@@ -33,7 +33,7 @@ function daysBetween(date1, date2) {
 
 module.exports = function(app) {
 
-  app.get("/api/screenshot/:profileType(person|place|occupation|era)/:slug", (req, res) => {
+  app.get("/api/screenshot/:profileType(person|country|place|occupation|era)/:slug", (req, res) => {
     // res.send(`path: ${req.query.path}`);
     // const url = `${req.headers.origin}${req.query.path}`;
     const {profileType, slug} = req.params;

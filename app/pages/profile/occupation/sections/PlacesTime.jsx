@@ -26,16 +26,16 @@ const PlacesTime = ({eras, people, occupation}) => {
   const eraWithMostPeople = eras.filter(e => e.id.toString() === peopleByEra[0].key)[0];
 
   const tmapBornData = people
-    .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
+    .filter(p => p.birthyear !== null && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
-    d.borncountry = d.birthcountry.country_name;
-    d.borncontinent = d.birthcountry.continent;
+    d.borncountry = d.bplace_country.country;
+    d.borncontinent = d.bplace_country.continent;
   });
 
   const tmapDeathData = people
-    .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country_name && p.deathcountry.continent)
+    .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country && p.deathcountry.continent)
     .sort((a, b) => b.langs - a.langs);
 
   tmapDeathData.forEach(d => {
@@ -65,9 +65,9 @@ const PlacesTime = ({eras, people, occupation}) => {
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
-              on: on("place", d => d.birthcountry.slug),
+              on: on("place", d => d.bplace_country.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-              tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
+              tooltipConfig: groupTooltip(tmapBornData, d => d.bplace_country.slug),
               xConfig: {
                 labels: bornTicks,
                 tickFormat: d => bornBuckets[d]

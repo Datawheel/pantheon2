@@ -46,7 +46,6 @@ class Person extends Component {
     if (person === undefined) {
       return <NotFound />;
     }
-    // return <NotFound />;
 
     const maxPageViews = Math.max(...wikiPageViews.items.map(d => d.views || 0));
     const totalPageViews = wikiPageViews.items.reduce((sum, d) => sum + d.views, 0);

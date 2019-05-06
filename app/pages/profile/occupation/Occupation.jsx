@@ -14,6 +14,7 @@ import Places from "pages/profile/occupation/sections/Places";
 import PlacesTime from "pages/profile/occupation/sections/PlacesTime";
 import OverlappingLives from "pages/profile/occupation/sections/OverlappingLives";
 import RelatedOccupations from "pages/profile/occupation/sections/RelatedOccupations";
+import NotFound from "components/NotFound";
 import "pages/profile/common/Structure.css";
 
 class Occupation extends Component {
@@ -39,6 +40,10 @@ class Occupation extends Component {
   render() {
     const {occupation, occupations, people, peopleInDomain, eras} = this.props.data;
 
+    if (occupation === undefined || occupation.id === null) {
+      return <NotFound />;
+    }
+
     return (
       <div>
         <Helmet
@@ -52,10 +57,11 @@ class Occupation extends Component {
         </div>
         <People occupation={occupation} people={people} />
         <Places people={people} occupation={occupation} />
+
         <PlacesTime eras={eras} people={people} occupation={occupation} />
-        <OverlappingLives people={people} occupation={occupation} />
+        {/* <OverlappingLives people={people} occupation={occupation} />
         <RelatedOccupations peopleInDomain={peopleInDomain} occupation={occupation} occupations={occupations} />
-        <Footer />
+        <Footer /> */}
       </div>
     );
   }
@@ -64,14 +70,14 @@ class Occupation extends Component {
 const occupationURL = "/occupation?occupation_slug=eq.<id>";
 const allOccupationsURL = "/occupation?order=num_born.desc.nullslast";
 const allErasURL = "/era?order=start_year";
-const peopleURL = "/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug),birthcountry(id,continent,country_name,name,slug),deathcountry(id,continent,country_name,name,slug),deathplace(id,name,slug),occupation(*),occupation_id:occupation,*";
+const peopleURL = "/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(*),occupation_id:occupation,*";
 const occsInDomainURL = "/occupation?domain_slug=eq.<occupation.domain_slug>&select=id";
-const peopleInDomainURL = "/person?occupation=in.(<domain.occIds>)&order=langs.desc&select=occupation(*),occupation_id:occupation,*";
+const peopleInDomainURL = "/person?occupation=in.(<domain.occIds>)&order=l.desc&select=occupation(*),occupation_id:occupation,*";
 
 Occupation.preneed = [
   fetchData("occupations", allOccupationsURL, res => res),
   fetchData("eras", allErasURL, res => res),
-  fetchData("occupation", occupationURL, res => res[0])
+  fetchData("occupation", occupationURL, res => res[0] || {id: null, domain_slug: null})
 ];
 
 Occupation.need = [

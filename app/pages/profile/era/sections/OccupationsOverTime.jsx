@@ -6,21 +6,20 @@ import {calculateYearBucket, groupBy, groupTooltip, shapeConfig} from "viz/helpe
 
 const OccupationsOverTime = ({peopleBorn, peopleDied, occupations}) => {
   const tmapBornData = peopleBorn
-    .filter(p => p.birthyear !== null)
-    .filter(p => p.birthcountry !== null)
+    .filter(p => p.birthyear !== null && p.bplace_country !== null && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
-    d.borncountry = d.birthcountry.country_name;
-    d.borncontinent = d.birthcountry.continent;
+    d.borncountry = d.bplace_country.country;
+    d.borncontinent = d.bplace_country.continent;
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
+    d.place = d.bplace_geonameid;
   });
 
   const tmapDeathData = peopleDied
-    .filter(p => p.deathyear !== null)
+    .filter(p => p.deathyear !== null && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 
   tmapDeathData.forEach(d => {
