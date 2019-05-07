@@ -79,6 +79,7 @@
 
 .explore-viz-container {
   height: var(--viz-height);
+  position: relative;
 }
 
 .explore-head {

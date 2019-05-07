@@ -4,3 +4,8 @@
 .explore-body {
   width: 100%;
 }
+
+.viz {
+  position: absolute !important;
+  height: 100%;
+}

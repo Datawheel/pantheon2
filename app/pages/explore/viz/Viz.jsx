@@ -122,7 +122,7 @@ class Viz extends Component {
   render() {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
-    const {query: qParams} = this.props.location;
+    const {query: qParams, pathname} = this.props.location;
     const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
 
     if (!occupationResponse) {
@@ -169,6 +169,7 @@ class Viz extends Component {
             nestedOccupations={nestedOccupations}
             pageType={pageType}
             places={places}
+            pathname={pathname}
             qParams={qParams}
           />
           <VizShell
@@ -186,17 +187,15 @@ class Viz extends Component {
 }
 
 Viz.need = [
-  fetchData("places", "/place", res => {
-    const countries = res.filter(d => d.is_country).reduce((obj, item) =>
-      Object.assign(obj, {[item.country_code]: item}), {});
-    const cities = res.filter(d => !d.is_country);
+  fetchData("places", "/place?select=id,place,lat,lon,slug,country(id,country,slug,country_num,country_code,continent,region),country_id:country", res => {
     const places = nest()
-      .key(d => d.country_code)
-      .entries(cities)
+      .key(d => d.country_id)
+      .entries(res)
       .map(countryData => ({
-        country: countries[countryData.values[0].country_code],
+        country: countryData.values[0].country,
         cities: countryData.values
-      }));
+      }))
+      .filter(countryData => countryData.country);
     return places;
   }),
   fetchData("occupationResponse", "/occupation", res => {

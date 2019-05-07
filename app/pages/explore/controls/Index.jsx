@@ -94,15 +94,15 @@ class Controls extends Component {
     this.props.updateData(Object.assign({data: [], loading: true}, this.state));
     const {pageType} = this.props;
     const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType, placeType} = this.state;
-    const selectFields = "name,langs,hpi,id,slug,gender,birthyear,deathyear,birthcountry(id,country_name,continent,slug),birthplace(id,name,country_name,continent,slug,lat_lon),deathplace(id,name,country_name,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
+    const selectFields = "name,l,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
     const apiHeaders = null;
     const sorting = "&order=hpi.desc.nullslast";
 
     let placeFilter = "";
     if (country !== "all") {
-      placeFilter = placeType === "birthplace" ? `&birthcountry=eq.${country}` : `&deathcountry=eq.${country}`;
+      placeFilter = placeType === "birthplace" ? `&bplace_country=eq.${country}` : `&dplace_country=eq.${country}`;
       if (city !== "all") {
-        placeFilter = placeType === "birthplace" ? `&birthplace=eq.${city}` : `&deathplace=eq.${city}`;
+        placeFilter = placeType === "birthplace" ? `&bplace_geonameid=eq.${city}` : `&dplace_geonameid=eq.${city}`;
       }
     }
 
