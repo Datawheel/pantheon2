@@ -56,20 +56,20 @@ const getColumns = (show, nesting, occupations, places) => {
           minWidth: 80
         },
         {
-          id: "birthplace",
+          id: "bplace_geonameid",
           Header: "Birth Place",
           style: {whiteSpace: "unset"},
-          accessor: d => d.birthplace ? d.birthplace.place : null,
-          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.birthplace.slug}`}>{value}</a> : <span>-</span>
+          accessor: d => d.bplace_geonameid ? d.bplace_geonameid.place : null,
+          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.bplace_geonameid.slug}`}>{value}</a> : <span>-</span>
         },
         {
-          id: "deathplace",
+          id: "dplace_geonameid",
           Header: "Death Place",
           style: {whiteSpace: "unset"},
-          accessor: d => d.deathplace ? d.deathplace.place : null,
-          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.deathplace.slug}`}>{value}</a> : <span>-</span>
+          accessor: d => d.dplace_geonameid ? d.dplace_geonameid.place : null,
+          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.dplace_geonameid.slug}`}>{value}</a> : <span>-</span>
         },
-        {Header: "L", accessor: "langs", minWidth: 35},
+        {Header: "L", accessor: "l", minWidth: 35},
         {Header: "HPI", accessor: "hpi", defaultSorted: true, maxWidth: 80}
       ]
     },
@@ -84,7 +84,7 @@ const getColumns = (show, nesting, occupations, places) => {
         },
         {
           Header: "",
-          accessor: "id",
+          accessor: "slug",
           Cell: ({value}) => <div className="ranking-thumbnail" style={{backgroundImage: `url('/images/profile/occupation/${value}.jpg')`}}></div>,
           maxWidth: 70
         },
@@ -116,9 +116,21 @@ const getColumns = (show, nesting, occupations, places) => {
           minWidth: 55
         },
         {
+          Header: "HPI",
+          accessor: "hpi",
+          Cell: ({value}) => <span>{FORMATTERS.bigNum(value)}</span>,
+          minWidth: 55
+        },
+        {
           Header: "Avg. HPI",
           accessor: "avg_hpi",
           Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+          minWidth: 55
+        },
+        {
+          Header: "L",
+          accessor: "langs",
+          Cell: ({value}) => <span>{FORMATTERS.commas(value)}</span>,
           minWidth: 55
         },
         {
@@ -244,9 +256,21 @@ const getColumns = (show, nesting, occupations, places) => {
           minWidth: 60
         },
         {
+          Header: "HPI",
+          accessor: "hpi",
+          Cell: ({value}) => <span>{FORMATTERS.bigNum(value)}</span>,
+          minWidth: 55
+        },
+        {
           Header: "Avg. HPI",
           accessor: "avg_hpi",
           Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+          minWidth: 55
+        },
+        {
+          Header: "L",
+          accessor: "langs",
+          Cell: ({value}) => <span>{FORMATTERS.commas(value)}</span>,
           minWidth: 55
         },
         {

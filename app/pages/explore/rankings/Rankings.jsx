@@ -3,7 +3,6 @@ import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import Helmet from "react-helmet";
 import Controls from "pages/explore/controls/Index";
-import VizShell from "pages/explore/viz/VizShell";
 import RankingTable from "pages/explore/rankings/RankingTable";
 import {nest} from "d3-collection";
 import {merge} from "d3-array";
@@ -195,17 +194,15 @@ class Ranking extends Component {
 }
 
 Ranking.need = [
-  fetchData("places", "/place", res => {
-    const countries = res.filter(d => d.is_country).reduce((obj, item) =>
-      Object.assign(obj, {[item.country_code]: item}), {});
-    const cities = res.filter(d => !d.is_country);
+  fetchData("places", "/place?select=id,place,lat,lon,slug,country(id,country,slug,country_num,country_code,continent,region),country_id:country", res => {
     const places = nest()
-      .key(d => d.country_code)
-      .entries(cities)
+      .key(d => d.country_id)
+      .entries(res)
       .map(countryData => ({
-        country: countries[countryData.values[0].country_code],
+        country: countryData.values[0].country,
         cities: countryData.values
-      }));
+      }))
+      .filter(countryData => countryData.country);
     return places;
   }),
   fetchData("occupationResponse", "/occupation", res => {

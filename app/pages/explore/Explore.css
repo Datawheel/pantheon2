@@ -80,6 +80,10 @@
 .explore-viz-container {
   height: var(--viz-height);
   position: relative;
+  & .viz {
+    position: absolute !important;
+    height: 100%;
+  }
 }
 
 .explore-head {

@@ -42,7 +42,8 @@ class PMap extends Component {
         d.place_coord.reverse();
         return d;
       });
-    console.log("geomapData", geomapData);
+    // console.log("geomapData", geomapData);
+
     return (
       <Geomap
         config={{
