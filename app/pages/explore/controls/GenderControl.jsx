@@ -19,8 +19,8 @@ class GenderControl extends Component {
         <h3>Filtered By</h3>
         <ul className="items options flat-options filter">
           <li><a onClick={e => this.changeCurrentGender(null, e)} href="#" id="allgender" className={gender === null ? "active allgender" : "allgender"}>All</a></li>
-          <li><a onClick={e => this.changeCurrentGender(false, e)} href="#" id="femalegender" className={gender === false ? "active femalegender" : "femalegender"}>Females</a></li>
-          <li><a onClick={e => this.changeCurrentGender(true, e)} href="#" id="malegender" className={gender === true ? "active malegender" : "malegender"}>Males</a></li>
+          <li><a onClick={e => this.changeCurrentGender("F", e)} href="#" id="femalegender" className={gender === "F" ? "active femalegender" : "femalegender"}>Females</a></li>
+          <li><a onClick={e => this.changeCurrentGender("M", e)} href="#" id="malegender" className={gender === "M" ? "active malegender" : "malegender"}>Males</a></li>
         </ul>
       </div>
     );

@@ -44,10 +44,38 @@
       display: block;
       margin-top: 3px;
       margin-bottom: -7px;
-      @apply --sectionTitle;
+      @mixin sectionTitle;
       font-size: 18px;
+    }
+
+    & ul {
+      padding: 0;
+      margin: 0;
+
+      & li.large {
+        display: inline-block;
+        padding: 0 8px 8px 0;
+
+        & span {
+          display: block;
+          font-size: 10px;
+        }
+      }
     }
 
   }
 
+}
+
+.bp3-tooltip {
+  max-width: 300px;
+
+  & .bp3-popover-content {
+    background: var(--colorEggshell) !important;
+    color: var(--colorStone) !important;
+  }
+
+  & .bp3-popover-arrow-fill {
+    fill: var(--colorEggshell) !important;
+  }
 }

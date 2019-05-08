@@ -25,12 +25,12 @@
   min-width: 352px;
   margin: 0 auto;
   text-align: center;
-  @apply --profileVizTitle;
+  @mixin profileVizTitle;
   text-transform: none;
 }
 
 .explore-date {
-  @apply --searchResults;
+  @mixin searchResults;
   margin: 3px 0;
   color: var(--colorTan);
   letter-spacing: 0.5px;
@@ -79,6 +79,11 @@
 
 .explore-viz-container {
   height: var(--viz-height);
+  position: relative;
+  & .viz {
+    position: absolute !important;
+    height: 100%;
+  }
 }
 
 .explore-head {
@@ -132,17 +137,17 @@
   }
 
   & h3 {
-    @apply --exploreControlTitles;
+    @mixin exploreControlTitles;
     margin: 0 0 5px;
   }
 
   & h4 {
-    @apply --exploreControlLabels;
+    @mixin exploreControlLabels;
     margin: 0;
   }
 
   & span {
-    @apply --exploreControlTitles;
+    @mixin exploreControlTitles;
     margin: auto;
   }
 
@@ -152,8 +157,8 @@
     background-position: 100% 50%;
     background-size: 30px 7px;
     cursor: pointer;
-    @apply --panelInput;
-    @apply --exploreControlInputText;
+    @mixin panelInput;
+    @mixin exploreControlInputText;
 
     &.add-control-input {
       margin-top: 10px;
@@ -172,8 +177,8 @@
 
   & .switch-explore-link {
     border-bottom: 1px solid transparent;
-    @apply --bodyLink;
-    @apply --smallCaps;
+    @mixin bodyLink;
+    @mixin smallCaps;
     position: relative;
 
     &::before {
@@ -205,15 +210,15 @@
     padding-left: 1px;
 
     & a {
-      @apply --bodyLink;
-      @apply --exploreControlTitles;
+      @mixin bodyLink;
+      @mixin exploreControlTitles;
       color: inherit;
 
       &.active {
-        @apply --exploreControlActiveLink;
+        @mixin exploreControlActiveLink;
 
         &:hover {
-          @apply --exploreControlActiveLinkHover;
+          @mixin exploreControlActiveLinkHover;
         }
       }
     }
@@ -390,8 +395,8 @@
     margin-top: 6px;
 
     & input {
-      @apply --panelInput;
-      @apply --exploreControlInputText;
+      @mixin panelInput;
+      @mixin exploreControlInputText;
       text-align: center;
       width: 70px;
     }
@@ -422,7 +427,7 @@
   }
 
   & h2 {
-    @apply --exploreControlHeader;
+    @mixin exploreControlHeader;
 
     @media (min-width: 751px) {
       position: relative;
@@ -532,7 +537,7 @@
 
       & .helper-text {
         display: inline-block;
-        @apply --exploreControlHeader;
+        @mixin exploreControlHeader;
         font-size: 1em;
         text-transform: capitalize;
       }

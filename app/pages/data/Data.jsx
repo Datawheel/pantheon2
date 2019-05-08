@@ -3,13 +3,11 @@ import React from "react";
 import Helmet from "react-helmet";
 // import styles from "css/components/miscpage";
 
-const Data = ({children}) => {
-  return (
+const Data = ({children}) => (
     <div className="data">
       <Helmet title="Data - Pantheon" />
-      {children}
+      <div>{children}</div>
     </div>
   );
-};
 
 export default Data;

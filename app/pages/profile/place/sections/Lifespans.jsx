@@ -25,11 +25,10 @@ const Lifespans = ({attrs, place, peopleBorn}) => {
   return <section className="profile-section">
     <SectionHead title="Overlapping Lives" index={1} numSections={5} />
     <div className="section-body">
-      <p>Below is a visual represetation of the lifespans of the top {priestleyData.length} globally memorable people born in {place.name} since 1700.</p>
-      <VizWrapper component={this} refKey="viz">
+      <p>Below is a visual represetation of the lifespans of the top {priestleyData.length} globally memorable people born in {place.place} since 1700.</p>
+      <VizWrapper component={this} refKey="lifespansViz">
         <Priestley
-          ref={viz => this.viz = viz}
-          title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${place.name}`}
+          title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${place.place}`}
           key="priestley1"
           config={{
             data: priestleyData,
@@ -38,6 +37,9 @@ const Lifespans = ({attrs, place, peopleBorn}) => {
             end: "deathyear",
             groupBy: ["domain", "name"].map(groupBy(attrs)),
             height: 700,
+            legendConfig: {
+              label: d => d.occupation.domain
+            },
             on: on("person", d => d.slug),
             start: "birthyear",
             shapeConfig: Object.assign({}, shapeConfig(attrs), {

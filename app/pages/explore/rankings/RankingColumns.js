@@ -15,8 +15,15 @@ const getColumns = (show, nesting, occupations, places) => {
           minWidth: 45
         },
         {
+          Header: "",
+          accessor: "id",
+          Cell: ({value}) => <div className="ranking-thumbnail" style={{backgroundImage: `url('/images/profile/people/${value}.jpg')`}}></div>,
+          maxWidth: 70
+        },
+        {
           Header: "Name",
           accessor: "name",
+          style: {whiteSpace: "unset"},
           Cell: ({value, original}) => <a href={`/profile/person/${original.slug}`}>{value}</a>
         },
         {
@@ -34,7 +41,7 @@ const getColumns = (show, nesting, occupations, places) => {
           Header: "Birth",
           accessor: "birthyear",
           Cell: ({value}) => value ? <span>{FORMATTERS.year(value)}</span> : <span>{"Unknown"}</span>,
-          minWidth: 80
+          minWidth: 50
         },
         {
           Header: "Death",
@@ -49,23 +56,38 @@ const getColumns = (show, nesting, occupations, places) => {
           minWidth: 80
         },
         {
-          id: "birthplace",
+          id: "bplace_geonameid",
           Header: "Birth Place",
-          accessor: d => d.birthplace ? d.birthplace.name : null,
-          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.birthplace.slug}`}>{value}</a> : <span>-</span>
+          style: {whiteSpace: "unset"},
+          accessor: d => d.bplace_geonameid ? d.bplace_geonameid.place : null,
+          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.bplace_geonameid.slug}`}>{value}</a> : <span>-</span>
         },
         {
-          id: "deathplace",
+          id: "dplace_geonameid",
           Header: "Death Place",
-          accessor: d => d.deathplace ? d.deathplace.name : null,
-          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.deathplace.slug}`}>{value}</a> : <span>-</span>
+          style: {whiteSpace: "unset"},
+          accessor: d => d.dplace_geonameid ? d.dplace_geonameid.place : null,
+          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.dplace_geonameid.slug}`}>{value}</a> : <span>-</span>
         },
-        {Header: "L", accessor: "langs", minWidth: 35},
+        {Header: "L", accessor: "l", minWidth: 35},
         {Header: "HPI", accessor: "hpi", defaultSorted: true, maxWidth: 80}
       ]
     },
     occupations: {
       occupations: [
+        {
+          Header: "",
+          id: "row",
+          maxWidth: 45,
+          filterable: false,
+          Cell: row => <div>{row.viewIndex + 1 + row.pageSize * row.page}</div>
+        },
+        {
+          Header: "",
+          accessor: "slug",
+          Cell: ({value}) => <div className="ranking-thumbnail" style={{backgroundImage: `url('/images/profile/occupation/${value}.jpg')`}}></div>,
+          maxWidth: 70
+        },
         {
           Header: "Occupation",
           accessor: "name",
@@ -94,9 +116,21 @@ const getColumns = (show, nesting, occupations, places) => {
           minWidth: 55
         },
         {
+          Header: "HPI",
+          accessor: "hpi",
+          Cell: ({value}) => <span>{FORMATTERS.bigNum(value)}</span>,
+          minWidth: 55
+        },
+        {
           Header: "Avg. HPI",
           accessor: "avg_hpi",
           Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+          minWidth: 55
+        },
+        {
+          Header: "L",
+          accessor: "langs",
+          Cell: ({value}) => <span>{FORMATTERS.commas(value)}</span>,
           minWidth: 55
         },
         {
@@ -108,6 +142,7 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "Top 3",
           accessor: "top_ranked",
+          style: {whiteSpace: "unset"},
           Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
         }
         // {
@@ -122,7 +157,7 @@ const getColumns = (show, nesting, occupations, places) => {
           header: "#",
           accessor: "num_born",
           minWidth: 30,
-          render: ({index}) => <span>{index+1}</span>
+          render: ({index}) => <span>{index + 1}</span>
         },
         {
           header: "Industry",
@@ -138,7 +173,7 @@ const getColumns = (show, nesting, occupations, places) => {
           header: "People",
           accessor: "num_born",
           sort: "desc"
-        },
+        }
         // {
         //   header: "% Women",
         //   accessor: "num_born_women",
@@ -161,7 +196,7 @@ const getColumns = (show, nesting, occupations, places) => {
           header: "People",
           accessor: "num_born",
           sort: "desc"
-        },
+        }
         // {
         //   header: "% Women",
         //   accessor: "num_born_women",
@@ -175,7 +210,7 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           header: "#",
           accessor: "born_rank_unique",
-          render: ({value, index}) => <span>{value ? value : index+1}</span>
+          render: ({value, index}) => <span>{value ? value : index + 1}</span>
         },
         {
           header: "Country",
@@ -221,9 +256,21 @@ const getColumns = (show, nesting, occupations, places) => {
           minWidth: 60
         },
         {
+          Header: "HPI",
+          accessor: "hpi",
+          Cell: ({value}) => <span>{FORMATTERS.bigNum(value)}</span>,
+          minWidth: 55
+        },
+        {
           Header: "Avg. HPI",
           accessor: "avg_hpi",
           Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+          minWidth: 55
+        },
+        {
+          Header: "L",
+          accessor: "langs",
+          Cell: ({value}) => <span>{FORMATTERS.commas(value)}</span>,
           minWidth: 55
         },
         {

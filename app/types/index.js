@@ -25,14 +25,14 @@ export const YEAR_RANGE = [-3501, 2015];
 export const RANKINGS_RESULTS_PER_PAGE = 100;
 
 export const COLORS_DOMAIN = {
-  sports: "#BB3B57",
-  science_and_technology: "#0E5E5B",
-  public_figure: "#67AF8C",
-  institutions: "#B12D11",
-  humanities: "#732945",
-  exploration: "#4C5ED7",
-  business_and_law: "#4F680A",
-  arts: "#D28629"
+  "sports": "#BB3B57",
+  "science-technology": "#0E5E5B",
+  "public-figure": "#67AF8C",
+  "institutions": "#B12D11",
+  "humanities": "#732945",
+  "exploration": "#4C5ED7",
+  "business-law": "#4F680A",
+  "arts": "#D28629"
 };
 
 export const COLORS_CONTINENT = {
@@ -66,9 +66,9 @@ function slugifyStr(str) {
 export const FORMATTERS = {
   commas: format(","),
   decimal: format(".2f"),
-  share: format(".2%"),
+  share: format(",.2%"),
   bigNum: format(".2s"),
-  shareWhole: format(".0%"),
+  shareWhole: format(",.0%"),
   date: timeFormat("%B %d, %Y"),
   dateShort: timeFormat("%m/%d/%y"),
   month: timeFormat("%B %Y"),
@@ -99,7 +99,7 @@ export const SANITIZERS = {
     const supportedViz = ["treemap", "stackedarea", "linechart", "map"];
     return supportedViz.includes(viz.toLowerCase()) ? viz.toLowerCase() : supportedViz[0];
   },
-  show: (showStr, pathname) => {
+  show: (showStr, pageType) => {
     let types = ["people", "occupations", "places"];
     const depths = ["people", "occupations", "industries", "domains", "places", "countries"];
     let type = showStr;
@@ -107,7 +107,7 @@ export const SANITIZERS = {
     if (type && type.includes("|")) {
       [type, depth] = type.split("|");
     }
-    if (pathname.includes("/viz")) {
+    if (pageType === "viz") {
       types = ["occupations", "places"];
     }
     type = types.includes(type) ? type : types[0];
@@ -134,6 +134,7 @@ export const SANITIZERS = {
   },
   gender: gender => gender === "true" || gender === "false" ? JSON.parse(gender) : null,
   yearType: yearType => yearType === "deathyear" ? yearType : "birthyear",
+  placeType: placeType => placeType === "deathplace" ? placeType : "birthplace",
   country: place => place && place.includes("|") ? place.split("|")[0] : place,
   city: place => place && place.includes("|") ? place.split("|")[1] : "all"
 };

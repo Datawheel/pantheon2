@@ -2,7 +2,7 @@ import React from "react";
 import "pages/profile/common/Footer.css";
 
 const Footer = ({person, ranking}) => {
-  const me = ranking.findIndex(p => p.id === person.id);
+  const me = ranking.findIndex(p => p.wp_id === person.wp_id);
   const aboveMe = ranking[me + 1];
   const belowMe = ranking[me - 1];
 
@@ -13,7 +13,7 @@ const Footer = ({person, ranking}) => {
         <ul className="footer-carousel-container">
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
-              <a href={`/profile/occupation/${person.occupation.occupation_slug}`} style={{backgroundImage: `url(/images/profile/occupation/${person.occupation.id}.jpg)`}}></a>
+              <a href={`/profile/occupation/${person.occupation.occupation_slug}`} style={{backgroundImage: `url(/images/profile/occupation/${person.occupation.occupation_slug}.jpg)`}}></a>
             </div>
             <h4 className="footer-carousel-item-title">
               <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
@@ -52,7 +52,7 @@ const Footer = ({person, ranking}) => {
                 </a>
               </div>
               <h4 className="footer-carousel-item-title">
-                <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.name}</a>
+                <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}</a>
               </h4>
               <p>{person.birthplace.num_born} Individuals</p>
             </li>

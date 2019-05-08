@@ -19,7 +19,8 @@
   border: 1px solid var(--colorTan);
   display: inline-block;
   height: 315px;
-  width: 560px;
+  width: 50%;
+  max-width: 560px;
   margin-right: 20px;
   position: relative;
   flex: 0 0 auto;
@@ -80,12 +81,12 @@ iframe.yasiv-youtube {
   }
 
   & h4 {
-    @apply --calloutText;
+    @mixin calloutText;
     margin: 0;
   }
 
   & p {
-    @apply --smallCaps;
+    @mixin smallCaps;
     line-height: 1.5;
     margin-top: 5px;
     min-width: auto;

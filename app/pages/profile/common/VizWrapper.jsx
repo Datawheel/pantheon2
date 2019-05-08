@@ -51,7 +51,7 @@ class VizWrapper extends Component {
           <button onClick={this.save.bind(this, "png")} type="button" className="pt-button pt-large pt-icon-media">PNG</button>
         </div>
       </Dialog>
-      {children}
+      <div>{children}</div>
     </div>;
   }
 }

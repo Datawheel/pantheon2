@@ -1,4 +1,36 @@
+@import "components/common/colors";
 .Loading {
+  @mixin themeLight;
+  height: 100vh;
+  left: 0;
+  max-width: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  & .bp3-non-ideal-state-visual {
+    max-width: 200px;
+    width: 100%;
+  }
+  & .bp3-progress-meter {
+    background-color: var(--colorDark) !important;
+  }
+  & h4.bp3-heading {
+    color: var(--colorDark) !important;
+  }
+  & .bp3-non-ideal-state-title {
+    color: var(--colorDark) !important;
+  }
+}
+
+.bp3-non-ideal-state-title {
+  color: var(--colorDark);
+}
+
+
+.loading.bp3-non-ideal-state {
+  max-width: 200px;
+  width: 100%;
   background-color: var(--dark);
   color: var(--white);
   height: 100vh;
@@ -7,15 +39,14 @@
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 20;
-  & .pt-non-ideal-state-visual {
-    max-width: 200px;
-    width: 100%;
-    & .pt-progress-meter {
-      background-color: var(--light);
-    }
+  z-index: 100;
+  & .bp3-progress-meter {
+    background-color: var(--light) !important;
   }
-  & .pt-non-ideal-state-title {
-    color: var(--white);
+  & h4.bp3-heading {
+    color: var(--white) !important;
   }
+}
+.bp3-non-ideal-state-title {
+  color: var(--white);
 }

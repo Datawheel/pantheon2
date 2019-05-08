@@ -46,7 +46,7 @@ class Explore extends Component {
       <div className="explore-container">
         <Helmet title="Explore Pantheon" />
         {children ? !<h1 className="header">Explore</h1> : null }
-        {children}
+        <div>{children}</div>
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import {nest} from "d3-collection";
-import {mean} from "d3-array";
+import {mean, sum} from "d3-array";
 
-export default function dataFormatter(dataArray, show) {
+const dataFormatter = (dataArray, show) => {
   let data = dataArray;
   if (show === "occupations") {
     data = nest()
@@ -12,30 +12,36 @@ export default function dataFormatter(dataArray, show) {
         slug: leaves[0].occupation.occupation_slug,
         count: leaves.length,
         avg_hpi: mean(leaves, d => d.hpi),
-        avg_langs: mean(leaves, d => d.langs),
+        hpi: sum(leaves, d => d.hpi),
+        avg_langs: mean(leaves, d => d.l),
+        langs: sum(leaves, d => d.l),
         top_ranked: leaves.sort((a, b) => b.hpi - a.hpi).slice(0, 3)
       }))
-      .entries(data)
+      .entries(data.filter(d => d.occupation))
       .map(d => d.value);
   }
   else if (show === "places") {
     data = nest()
-      .key(d => d.birthplace.id)
+      .key(d => d.bplace_geonameid.id)
       .rollup(leaves => ({
-        id: leaves[0].birthplace.id,
-        name: leaves[0].birthplace.name,
-        slug: leaves[0].birthplace.slug,
-        country_name: leaves[0].birthplace.country_name,
+        id: leaves[0].bplace_geonameid.id,
+        name: leaves[0].bplace_geonameid.place,
+        slug: leaves[0].bplace_geonameid.slug,
+        country_name: leaves[0].bplace_geonameid.country,
         count: leaves.length,
         avg_hpi: mean(leaves, d => d.hpi),
-        avg_langs: mean(leaves, d => d.langs),
+        hpi: sum(leaves, d => d.hpi),
+        avg_langs: mean(leaves, d => d.l),
+        langs: sum(leaves, d => d.l),
         top_ranked: leaves.sort((a, b) => b.hpi - a.hpi).slice(0, 3)
       }))
-      .entries(data.filter(d => d.birthplace))
+      .entries(data.filter(d => d.bplace_geonameid))
       .map(d => d.value);
   }
   else {
     data = data.map((d, i) => Object.assign(d, {rank: i + 1}));
   }
   return data;
-}
+};
+
+export default dataFormatter;
