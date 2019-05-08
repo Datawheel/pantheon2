@@ -78,8 +78,8 @@ class Controls extends Component {
     if (placeType !== "birthplace") {
       queryStr += `&placeType=${placeType}`;
     }
-    if (gender === true || gender === false) {
-      queryStr += `&gender=${gender}`;
+    if (`${gender}`.toUpperCase() === "M" || `${gender}`.toUpperCase() === "F") {
+      queryStr += `&gender=${gender.toUpperCase()}`;
     }
     if (!(metricType === "hpi" && `${metricCutoff}` === "4")) {
       queryStr += `&${metricType}=gte.${metricCutoff}`;
@@ -112,8 +112,8 @@ class Controls extends Component {
     }
 
     let genderFilter = "";
-    if (gender === true || gender === false) {
-      genderFilter = `&gender=is.${gender}`;
+    if (`${gender}`.toUpperCase() === "M" || `${gender}`.toUpperCase() === "F") {
+      genderFilter = `&gender=eq.${gender.toUpperCase()}`;
     }
 
     let metricFilter = "";
@@ -131,6 +131,13 @@ class Controls extends Component {
 
   updateAndFetchData = (key, val) => {
     this.setState({[key]: val}, () => {
+      this.setQueryParams();
+      this.fetchData();
+    });
+  }
+
+  updateManyAndFetchData = newState => {
+    this.setState(newState, () => {
       this.setQueryParams();
       this.fetchData();
     });
@@ -165,7 +172,7 @@ class Controls extends Component {
           {pageType === "viz"
             ? <VizControl viz={viz} changeViz={this.update} />
             : null}
-          <ShowControl page={pageType} show={show} changeShow={this.update} />
+          <ShowControl page={pageType} show={show} update={this.update} updateManyAndFetchData={this.updateManyAndFetchData} />
         </section>
 
         <section className="control-group">

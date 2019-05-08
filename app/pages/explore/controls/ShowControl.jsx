@@ -15,8 +15,21 @@ class ShowControl extends Component {
 
   changeShowType = e => {
     e.preventDefault();
-    // console.log("change!!!", e.target.dataset.id)
-    this.props.changeShow("show", e.target.dataset.id);
+    const {update, updateManyAndFetchData} = this.props;
+    const newShowType = e.target.dataset.id;
+
+    // if we're switching to show people we want to remove x constraints
+    if (newShowType === "people") {
+      return update("show", newShowType);
+    }
+    // if we're switching to show occupations we want to remove any occupation constraints
+    else if (newShowType === "occupations") {
+      return updateManyAndFetchData({occupation: "all", show: newShowType});
+    }
+    // if we're switching to show people we want to remove any location constraints
+    else if (newShowType === "places") {
+      return updateManyAndFetchData({city: "all", country: "all", show: newShowType});
+    }
   }
 
   render() {

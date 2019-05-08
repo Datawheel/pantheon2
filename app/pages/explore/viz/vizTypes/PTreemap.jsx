@@ -67,7 +67,6 @@ class PTreemap extends Component {
         .map(d => d.value);
     }
     // return <div>tmap</div>;
-    console.log("tmapData", tmapData);
 
     return (
       <Treemap

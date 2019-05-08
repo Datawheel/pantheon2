@@ -25,6 +25,12 @@ class PlaceControl extends Component {
   render() {
     const {city, country, places, placeType} = this.props;
 
+    places.forEach(p => {
+      if (!p.country) {
+        console.log(p);
+      }
+    });
+
     return (
       <div className="filter place-control">
         <ul className="items options flat-options filter">
@@ -35,7 +41,7 @@ class PlaceControl extends Component {
         <select value={country} onChange={this.changeCountry}>
           <option value="all">All Countries</option>
           {places.map(c =>
-            <option key={c.country.country_code} value={c.country.id} data-countrycode={c.country.country_code}>
+            <option key={`${c.country.country_code}-${c.country.id}`} value={c.country.id} data-countrycode={c.country.country_code}>
               {c.country.country}
             </option>
           )}
