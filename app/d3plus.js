@@ -84,6 +84,12 @@ export default {
       fontColor: "rgba(255, 255, 255, 0.8)",
       fontFamily: () => "Amiko",
       textAnchor: "start"
+    },
+    // line charts
+    Line: {
+      curve: "monotoneX",
+      strokeLinecap: "round",
+      strokeWidth: 2
     }
   },
 

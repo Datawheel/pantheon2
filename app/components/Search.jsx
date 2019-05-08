@@ -23,7 +23,7 @@ class Search extends Component {
     userQueryCleaned[userQueryCleaned.length - 1] = `${lastItem}:*`;
     userQueryCleaned = userQueryCleaned.join("%26");
 
-    api.get(`/search?document=@@.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
+    api.get(`/search?document=fts.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
       .then(queryResults => {
         const results = queryResults.data;
         if (results) {
@@ -46,7 +46,7 @@ class Search extends Component {
 
     if (e.keyCode === DOWN_ARROW || e.keyCode === UP_ARROW) {
       if (!highlighted) {
-        if (e.keyCode === DOWN_ARROW)          {
+        if (e.keyCode === DOWN_ARROW) {
           document.querySelector(".results-list > li:first-child").classList.add("highlighted");
         }
       }

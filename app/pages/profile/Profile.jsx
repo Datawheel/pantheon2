@@ -42,7 +42,7 @@ const Profile = ({children}) => {
           </ul>
           : null
       }
-      {children}
+      <div>{children}</div>
     </div>
   );
 };

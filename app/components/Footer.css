@@ -50,7 +50,7 @@
     flex-wrap: wrap;
 
     & .item > .item-link {
-      @apply --boldSmallCaps;
+      @mixin boldSmallCaps;
       &:hover {
         opacity: 0.7;
       }
@@ -58,7 +58,7 @@
   }
 
   & .sub-items .item-link {
-    @apply --bodyText;
+    @mixin bodyText;
     font-size: 12px;
     &:hover {
       border-bottom: 1px solid currentColor;

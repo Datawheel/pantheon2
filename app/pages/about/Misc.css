@@ -27,7 +27,7 @@
   height: 100vh;
 
   & .error-msg {
-    @apply --pageTitle;
+    @mixin pageTitle;
     color: var(--colorEggshell);
     margin: 54px auto 0;
     padding: 100px 0 80px;
@@ -39,7 +39,7 @@
     margin: 0 30px 30px;
 
     & a {
-      @apply --bodyLink;
+      @mixin bodyLink;
     }
 
     & img {

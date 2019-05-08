@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {fetchData} from "datawheel-canon";
+import {fetchData} from "@datawheel/canon-core";
 import Helmet from "react-helmet";
 import Controls from "pages/explore/controls/Index";
 import VizShell from "pages/explore/viz/VizShell";
@@ -88,15 +88,30 @@ class Viz extends Component {
     };
   }
 
-  updateData = updatedState => this.setState(updatedState);
+  componentDidUpdate(prevProps) {
+    // console.log("prevProps", prevProps);
+    // console.log("this.props", this.props);
+    // Typical usage (don't forget to compare props):
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      // this.fetchData(this.props.userID);
+      // console.log("should update!!!");
+      // this.setState({data: [], loading: true, filteredData: []});
+    }
+  }
+
+  updateData = (updatedState, callback) => {
+    if (callback) {
+      this.setState(updatedState, callback);
+    }
+    else {
+      this.setState(updatedState);
+    }
+  }
   update = newState => {
     this.setState(Object.assign({}, this.state, newState));
   }
   search = term => {
     const {data, show} = this.state;
-    console.log("data", data);
-    console.log("term", term);
-    console.log("show", show);
     this.setState({
       searching: true,
       filteredData: data.filter(d => d.name.toLowerCase().includes(term))
@@ -107,6 +122,7 @@ class Viz extends Component {
   render() {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
+    const {query: qParams, pathname} = this.props.location;
     const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
 
     if (!occupationResponse) {
@@ -153,29 +169,17 @@ class Viz extends Component {
             nestedOccupations={nestedOccupations}
             pageType={pageType}
             places={places}
+            pathname={pathname}
+            qParams={qParams}
           />
-          {pageType === "viz"
-            ? <VizShell
-              loading={loading}
-              data={data}
-              occupations={occupations}
-              show={show}
-              viz={viz}
-              yearType={yearType}
-            />
-            : <RankingTable
-              loading={loading}
-              data={searching ? filteredData : data}
-              occupations={occupations}
-              places={places}
-              pageSize={pageSize}
-              changePageSize={this.update}
-              search={this.search}
-              show={show}
-              viz={viz}
-              yearType={yearType}
-            />
-          }
+          <VizShell
+            loading={loading}
+            data={data}
+            occupations={occupations}
+            show={show}
+            viz={viz}
+            yearType={yearType}
+          />
         </div>
       </div>
     );
@@ -183,20 +187,18 @@ class Viz extends Component {
 }
 
 Viz.need = [
-  fetchData("places", "http://localhost:3100/place", res => {
-    const countries = res.filter(d => d.is_country).reduce((obj, item) =>
-      Object.assign(obj, {[item.country_code]: item}), {});
-    const cities = res.filter(d => !d.is_country);
+  fetchData("places", "/place?select=id,place,lat,lon,slug,country(id,country,slug,country_num,country_code,continent,region),country_id:country", res => {
     const places = nest()
-      .key(d => d.country_code)
-      .entries(cities)
+      .key(d => d.country_id)
+      .entries(res)
       .map(countryData => ({
-        country: countries[countryData.values[0].country_code],
+        country: countryData.values[0].country,
         cities: countryData.values
-      }));
+      }))
+      .filter(countryData => countryData.country);
     return places;
   }),
-  fetchData("occupationResponse", "http://localhost:3100/occupation", res => {
+  fetchData("occupationResponse", "/occupation", res => {
     const nestedOccupations = nest()
       .key(d => d.domain_slug)
       .entries(res)

@@ -6,22 +6,22 @@ import {groupBy, shapeConfig, peopleTooltip, on} from "viz/helpers";
 
 const OverlappingLives = ({era, occupations, peopleBorn}) => {
   const tmapBornData = peopleBorn
-    .filter(p => p.birthyear !== null)
+    .filter(p => p.birthyear !== null && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
+    d.place = d.bplace_geonameid;
   });
 
-  const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat_lon)
+  const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat)
     .sort((a, b) => b.langs - a.langs)
     .slice(0, 100);
   geomapBornData.forEach(d => {
-    d.place_name = d.place.name;
-    d.place_coord = d.place.lat_lon;
+    d.place_name = d.place.place;
+    d.place_coord = [d.place.lat, d.place.lon];
     if (!(d.place_coord instanceof Array)) {
       d.place_coord = d.place_coord
         .replace("(", "")
@@ -46,7 +46,6 @@ const OverlappingLives = ({era, occupations, peopleBorn}) => {
     <div className="section-body">
       <VizWrapper component={this} refKey="viz">
         <Priestley
-          ref={viz => this.viz = viz}
           key="priestley1"
           title={`Top ${priestleyMax} Contemporaries Born during the ${era.name}`}
           config={{

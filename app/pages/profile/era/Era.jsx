@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {fetchData} from "datawheel-canon";
+import {fetchData} from "@datawheel/canon-core";
+import axios from "axios";
 import Helmet from "react-helmet";
 import config from "helmet.js";
 import ProfileNav from "pages/profile/common/Nav";
@@ -13,6 +14,7 @@ import OccupationsOverTime from "pages/profile/era/sections/OccupationsOverTime"
 import GeomapBirth from "pages/profile/era/sections/GeomapBirth";
 import GeomapDeath from "pages/profile/era/sections/GeomapDeath";
 import OverlappingLives from "pages/profile/era/sections/OverlappingLives";
+import NotFound from "components/NotFound";
 import "pages/profile/common/Structure.css";
 
 class Era extends Component {
@@ -29,8 +31,19 @@ class Era extends Component {
     ];
   }
 
+  componentDidMount() {
+    // generate screenshot on page load
+    const {id: slug} = this.props.params;
+    const screenshotUrl = `/api/screenshot/era/${slug}/`;
+    axios.get(screenshotUrl);
+  }
+
   render() {
     const {era, eras, occupations, peopleBornInEra, peopleDiedInEra} = this.props.data;
+
+    if (era === undefined || era.id === null) {
+      return <NotFound />;
+    }
 
     return (
       <div>
@@ -56,14 +69,14 @@ class Era extends Component {
 
 }
 
-const eraURL = "http://localhost:3100/era?slug=eq.<id>";
-const allErasURL = "http://localhost:3100/era?order=start_year";
-const peopleBornInEraURL = "http://localhost:3100/person?birthyear=gte.<era.start_year>&birthyear=lte.<era.end_year>&order=hpi.desc.nullslast&select=birthplace{id,name,slug,lat_lon},birthcountry{id,continent,country_code,country_name,name,slug},occupation{*},occupation_id:occupation,*";
-const peopleDiedInEraURL = "http://localhost:3100/person?deathyear=gte.<era.start_year>&deathyear=lte.<era.end_year>&order=hpi.desc.nullslast&select=deathcountry{id,continent,country_code,country_name,name,slug},deathplace{id,name,slug,lat_lon},occupation{*},occupation_id:occupation,*";
-const allOccupationsURL = "http://localhost:3100/occupation?order=num_born.desc.nullslast";
+const eraURL = "/era?slug=eq.<id>";
+const allErasURL = "/era?order=start_year";
+const peopleBornInEraURL = "/person?birthyear=gte.<era.start_year>&birthyear=lte.<era.end_year>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(*),occupation_id:occupation,*";
+const peopleDiedInEraURL = "/person?deathyear=gte.<era.start_year>&deathyear=lte.<era.end_year>&order=hpi.desc.nullslast&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+const allOccupationsURL = "/occupation?order=num_born.desc.nullslast";
 
 Era.preneed = [
-  fetchData("era", eraURL, res => res[0]),
+  fetchData("era", eraURL, res => res[0] || {id: null, start_year: 0, end_year: 0}),
   fetchData("eras", allErasURL, res => res),
   fetchData("occupations", allOccupationsURL, res => res)
 ];

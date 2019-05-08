@@ -26,16 +26,16 @@ const PlacesTime = ({eras, people, occupation}) => {
   const eraWithMostPeople = eras.filter(e => e.id.toString() === peopleByEra[0].key)[0];
 
   const tmapBornData = people
-    .filter(p => p.birthyear !== null && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
+    .filter(p => p.birthyear !== null && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
-    d.borncountry = d.birthcountry.country_name;
-    d.borncontinent = d.birthcountry.continent;
+    d.borncountry = d.bplace_country.country;
+    d.borncontinent = d.bplace_country.continent;
   });
 
   const tmapDeathData = people
-    .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country_name && p.deathcountry.continent)
+    .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country && p.deathcountry.continent)
     .sort((a, b) => b.langs - a.langs);
 
   tmapDeathData.forEach(d => {
@@ -59,40 +59,40 @@ const PlacesTime = ({eras, people, occupation}) => {
         </div>
         <VizWrapper component={this} refKey="viz">
           <StackedArea
-            ref={viz => this.viz = viz}
             key="stacked_country1"
             config={{
               title: `Birth Places of ${occupation.occupation}s Over Time`,
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
-              on: on("place", d => d.birthcountry.slug),
+              on: on("place", d => d.bplace_country.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
-              tooltipConfig: groupTooltip(tmapBornData, d => d.birthcountry.slug),
+              tooltipConfig: groupTooltip(tmapBornData, d => d.bplace_country.slug),
               xConfig: {
                 labels: bornTicks,
                 tickFormat: d => bornBuckets[d]
               }
             }} />
         </VizWrapper>
-        <VizWrapper component={this} refKey="viz2">
-          <StackedArea
-            ref={viz => this.viz2 = viz}
-            key="stacked_country2"
-            config={{
-              title: `Death Places of ${occupation.occupation}s Over Time`,
-              data: tmapDeathData,
-              depth: 1,
-              groupBy: ["diedcontinent", "diedcountry"],
-              on: on("place", d => d.deathcountry.slug),
-              shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-              tooltipConfig: groupTooltip(tmapDeathData, d => d.deathcountry.slug),
-              xConfig: {
-                labels: deathTicks,
-                tickFormat: d => deathBuckets[d]
-              }
-            }} />
-        </VizWrapper>
+        {tmapDeathData.length > 1
+          ? <VizWrapper component={this} refKey="viz2">
+            <StackedArea
+              key="stacked_country2"
+              config={{
+                title: `Death Places of ${occupation.occupation}s Over Time`,
+                data: tmapDeathData,
+                depth: 1,
+                groupBy: ["diedcontinent", "diedcountry"],
+                on: on("place", d => d.deathcountry.slug),
+                shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
+                tooltipConfig: groupTooltip(tmapDeathData, d => d.deathcountry.slug),
+                xConfig: {
+                  labels: deathTicks,
+                  tickFormat: d => deathBuckets[d]
+                }
+              }} />
+          </VizWrapper>
+          : null}
       </div>
     </section>
   );

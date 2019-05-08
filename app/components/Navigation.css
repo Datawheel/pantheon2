@@ -14,7 +14,7 @@
   }
 
   & .item-link {
-    @apply --boldSmallCaps;
+    @mixin boldSmallCaps;
     color: var(--colorDark);
     position: relative;
 
@@ -144,7 +144,7 @@
 
     & > .dd {
       &::after {
-        @apply --dropdownLink;
+        @mixin dropdownLink;
       }
     }
   }
@@ -348,11 +348,11 @@
 
   & .item-link {
     margin-left: 40px;
-    @apply --profileSectionTitle;
+    @mixin profileSectionTitle;
 
     &.profiles-link, &.about-link, &.data-link {
       &::after {
-        @apply --dropdownLink;
+        @mixin dropdownLink;
         width: 16px !important;
         height: 8px !important;
         margin-left: 4px !important;
@@ -453,7 +453,7 @@
       padding: 22px 0 18px;
 
       & a {
-        @apply --boldSmallCaps;
+        @mixin boldSmallCaps;
         color: var(--colorDark);
         margin-left: 60px;
         font-size: 18px;
@@ -473,8 +473,8 @@
       text-transform: none;
       display: block;
       width: 100%;
-      @apply --panelInput;
-      @apply --exploreControlInputText;
+      @mixin panelInput;
+      @mixin exploreControlInputText;
       margin-top: 13px;
       margin-left: -20px;
     }

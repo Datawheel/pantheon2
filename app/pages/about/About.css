@@ -58,12 +58,12 @@
 
   & h1 {
     font-family: var(--fontBody);
-    @apply --profileSectionTitle;
+    @mixin profileSectionTitle;
     margin: 30px 0;
   }
 
   & h2 {
-    @apply --profileVizTitle;
+    @mixin profileVizTitle;
     text-transform: none;
     margin: 30px 0 5px;
 
@@ -74,14 +74,14 @@
   }
 
   & h3 {
-    @apply --searchResults;
+    @mixin searchResults;
     margin-top: 30px;
     color: var(--colorTan);
     letter-spacing: 0.5px;
   }
 
   & p {
-    @apply --bodyText;
+    @mixin bodyText;
 
     & + p {
       margin-top: 5px;
@@ -100,7 +100,7 @@
     }
 
     & a {
-      @apply --bodyLink;
+      @mixin bodyLink;
     }
   }
 
@@ -108,8 +108,8 @@
     display: block;
     width: 100%;
     margin: 10px 0 40px;
-    @apply --panelInput;
-    @apply --exploreControlInputText;
+    @mixin panelInput;
+    @mixin exploreControlInputText;
   }
 
   & .long-text {
@@ -151,7 +151,7 @@
     }
 
     & .item {
-      @apply --bodyText;
+      @mixin bodyText;
     }
 
     & p, & .item {
@@ -160,7 +160,7 @@
   }
 
   & .footer-title {
-    @apply --sectionTitle;
+    @mixin sectionTitle;
     display: block;
     text-align: center;
     margin: 40px auto 10px;
@@ -226,7 +226,7 @@
       text-decoration: none;
       outline: none;
       color: var(--colorEggshell);
-      @apply --bodyLink;
+      @mixin bodyLink;
     }
   }
 

@@ -53,7 +53,9 @@ class VizShell extends Component {
 
     return (
       <div className="explore-viz-container">
-        <MyViz data={data} show={show} occupations={occupations} yearType={yearType} />
+        {data.length
+          ? <MyViz data={data} show={show} occupations={occupations} yearType={yearType} />
+          : null}
       </div>
     );
   }

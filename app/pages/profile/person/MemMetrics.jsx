@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {FORMATTERS} from "types/index";
 import axios from "axios";
 import "pages/profile/person/MemMetrics.css";
@@ -11,11 +12,11 @@ class MemMetrics extends Component {
   }
 
   componentDidMount() {
-    const {person} = this.props;
+    const {env, person} = this.props;
 
     // Note: this key is restricted to Pantheon domains, if you want to use this in your
     // codebase, please generate a key: https://developers.google.com/youtube/v3/docs/
-    const apiKey = "AIzaSyAkUC_UekOQbJvoMo_2pJqLRzgCTuUD_wE";
+    const apiKey = env.YOUTUBE_API_KEY;
     axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=${apiKey}`)
       .then(res => {
         const vid = res.data.items[0];
@@ -26,14 +27,15 @@ class MemMetrics extends Component {
   render() {
     const {pageViews, person} = this.props;
     const {vid} = this.state;
-    const totalPageviews = pageViews
-      .filter(pv => pv.num_pageviews)
-      .map(pv => pv.num_pageviews)
+    const totalPageviews = pageViews.items
+      .filter(pv => pv.views)
+      .map(pv => pv.views)
       .reduce((total, newVal) => total + newVal, 0);
+
     return (
       <div className="metrics-container">
         <div className="metric-vid">
-          {vid ? <iframe width="560" height="315" src={`https://www.youtube.com/embed/${vid.id.videoId}`} frameBorder="0" allowFullScreen></iframe> : <a href="" className="press-play"><i></i></a>}
+          {vid ? <iframe max-width="560" width="100%" height="315" src={`https://www.youtube.com/embed/${vid.id.videoId}`} frameBorder="0" allowFullScreen></iframe> : <a href="" className="press-play"><i></i></a>}
         </div>
         <ul className="metrics-list">
           <li className="metric">
@@ -62,4 +64,4 @@ class MemMetrics extends Component {
   }
 }
 
-export default MemMetrics;
+export default connect(state => ({env: state.env}), {})(MemMetrics);

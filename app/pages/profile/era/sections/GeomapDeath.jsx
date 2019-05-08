@@ -6,7 +6,7 @@ import {groupTooltip, on} from "viz/helpers";
 
 const GeomapDeath = ({era, peopleDied}) => {
   const tmapDeathData = peopleDied
-    .filter(p => p.deathyear !== null)
+    .filter(p => p.deathyear !== null && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 
   tmapDeathData.forEach(d => {
@@ -15,15 +15,15 @@ const GeomapDeath = ({era, peopleDied}) => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.deathplace;
+    d.place = d.dplace_geonameid;
   });
 
-  const geomapDeathData = tmapDeathData.filter(d => d.place && d.place.lat_lon)
+  const geomapDeathData = tmapDeathData.filter(d => d.place && d.place.lat && d.place.lon)
     .sort((a, b) => b.langs - a.langs)
-    .slice(0, 100);
+    .slice(0, 500);
   geomapDeathData.forEach(d => {
-    d.place_name = d.place.name;
-    d.place_coord = d.place.lat_lon;
+    d.place_name = d.place.place;
+    d.place_coord = [d.place.lat, d.place.lon];
     if (!(d.place_coord instanceof Array)) {
       d.place_coord = d.place_coord
         .replace("(", "")
@@ -38,7 +38,6 @@ const GeomapDeath = ({era, peopleDied}) => {
     <div className="section-body">
       <VizWrapper component={this} refKey="viz">
         <Geomap
-          ref={viz => this.viz = viz}
           key="geomapDeaths"
           config={{
             title: `Major Cities in ${era.name} for Deaths of Cultural Celebrities`,

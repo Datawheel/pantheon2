@@ -22,21 +22,20 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
     .map(d => d.value);
 
   const tmapBornData = peopleBorn
-    .filter(p => p.birthyear !== null)
-    .filter(p => p.birthcountry !== null)
+    .filter(p => p.birthyear !== null && p.bplace_country !== null && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
-    d.borncountry = d.birthcountry.country_name;
-    d.borncontinent = d.birthcountry.continent;
+    d.borncountry = d.bplace_country.country;
+    d.borncontinent = d.bplace_country.continent;
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
+    d.place = d.bplace_geonameid;
   });
 
   const tmapDeathData = peopleDied
-    .filter(p => p.deathyear !== null)
+    .filter(p => p.deathyear !== null && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 
   tmapDeathData.forEach(d => {
@@ -45,7 +44,7 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.deathplace;
+    d.place = d.dplace_geonameid;
   });
 
   const attrs = occupations.reduce((obj, d) => {
@@ -67,7 +66,6 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
         </div>
         <VizWrapper component={this} refKey="viz">
           <Treemap
-            ref={viz => this.viz = viz}
             key="tmap1"
             config={{
               title: `Occupations of People Born during the ${era.name}`,
@@ -82,7 +80,6 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
         </VizWrapper>
         <VizWrapper component={this} refKey="viz2">
           <Treemap
-            ref={viz => this.viz2 = viz}
             key="tmap2"
             config={{
               title: `Occupations of People Deceased during the ${era.name}`,

@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {fetchData} from "datawheel-canon";
+import {fetchData} from "@datawheel/canon-core";
+import axios from "axios";
 import Helmet from "react-helmet";
 import config from "helmet.js";
 import Header from "pages/profile/place/Header";
@@ -14,6 +15,7 @@ import GeomapBirth from "pages/profile/place/sections/GeomapBirth";
 import GeomapDeath from "pages/profile/place/sections/GeomapDeath";
 import Lifespans from "pages/profile/place/sections/Lifespans";
 import LivingPeople from "pages/profile/place/sections/LivingPeople";
+import NotFound from "components/NotFound";
 import {NUM_RANKINGS, NUM_RANKINGS_PRE, NUM_RANKINGS_POST} from "types/index";
 import "pages/profile/common/Structure.css";
 
@@ -32,58 +34,90 @@ class Place extends Component {
     ];
   }
 
+  componentDidMount() {
+    // generate screenshot on page load
+    const {id: slug} = this.props.params;
+    const {place} = this.props.data;
+    if (place !== undefined) {
+      const screenshotUrl = `/api/screenshot/place/${slug}/`;
+      axios.get(screenshotUrl);
+    }
+  }
+
   render() {
-    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive} = this.props.data;
+    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive, wikiExtract, wikiSummary, wikiImg, wikiPageViews} = this.props.data;
+    if (place === undefined) {
+      return <NotFound />;
+    }
 
     const attrs = occupations.reduce((obj, d) => {
       obj[d.id] = d;
       return obj;
     }, {});
 
+    const pageUrl = this.props.location.href.split("?")[0].replace(/\/$/, "");
+    const pageHeaderMetaTags = config.meta.map(meta => {
+      if (meta.property) {
+        if (meta.property === "og:title") {
+          return {property: "og:title", content: place.place};
+        }
+        if (meta.property === "og:image") {
+          return {property: "og:image", content: `${pageUrl.replace("http://", "https://").replace("/profile/", "/images/screenshots/")}.jpg`};
+        }
+      }
+      return meta;
+    });
+
     return (
       <div>
         <Helmet
-          title={place.name}
-          meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: place.name} : meta)}
+          title={place.place}
+          meta={pageHeaderMetaTags}
         />
-        <Header place={place} country={country} people={peopleBornHere} />
+        <Header place={place} country={country} people={peopleBornHere} wikiSummary={wikiSummary} wikiPageViews={wikiPageViews} />
         <div className="about-section">
           <ProfileNav sections={this.sections} />
-          <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
+          <Intro place={place} country={country} placeRanks={placeRanks} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} wikiSummary={wikiSummary} />
         </div>
-        <PeopleRanking place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
+        <PeopleRanking country={country} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <Occupations attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <OccupationTrends attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} />
-        <GeomapBirth country={country} peopleBorn={peopleBornHere} />
-        {peopleBornHere.filter(p => p.deathyear !== null).length ? <GeomapDeath country={country} peopleDied={peopleDiedHere} /> : null}
-        {peopleBornHere.filter(p => p.deathyear !== null).length ? <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} /> : null}
+        {place.country ? <GeomapBirth country={country} peopleBorn={peopleBornHere} /> : null}
+        {peopleBornHere.filter(p => p.deathyear !== null).length && place.country ? <GeomapDeath country={country} peopleDied={peopleDiedHere} /> : null}
+        {peopleBornHere.filter(p => p.deathyear !== null).length && place.country ? <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} /> : null}
+
         {/* <LivingPeople place={place} data={peopleBornHereAlive} /> */}
-        <Footer />
+        <Footer occupations={occupations} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
       </div>
     );
   }
 }
 
-const placeURL = "http://localhost:3100/place?slug=eq.<id>";
-const countryURL = "http://localhost:3100/place?country_code=eq.<place.country_code>&is_country=is.true";
-const peopleBornHereURL = "http://localhost:3100/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace{id,name,slug,lat_lon},occupation{*},occupation_id:occupation,*";
-const peopleDiedHereURL = "http://localhost:3100/person?<place.deathPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=deathplace{id,name,slug,lat_lon},occupation{*},occupation_id:occupation,*";
-const placeRanksURL = "http://localhost:3100/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique&<place.sumlevelFilter>";
-const occupationsURL = "http://localhost:3100/occupation?order=num_born.desc.nullslast";
-const peopleBornHereAliveURL = "http://localhost:3100/person?<place.birthPlaceColumn>=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
+const dateobj = new Date();
+const year = dateobj.getFullYear();
+const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
+const placeURL = "/place?slug=eq.<id>";
+const countryURL = "/country?id=eq.<place.country>";
+// const peopleBornHereURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
+const peopleBornHereURL = "/person?bplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+// const peopleDiedHereURL = "/person?<place.deathPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=deathplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
+const peopleDiedHereURL = "/person?dplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+const placeRanksURL = "/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique";
+const occupationsURL = "/occupation?order=num_born.desc.nullslast";
+const peopleBornHereAliveURL = "/person?bplace_geonameid=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
+// const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exchars=600&explaintext&format=json&exlimit=1&titles=<place.place>&origin=*";
+// const wikiImgURL = "https://en.wikipedia.org/w/api.php?action=query&titles=<place.place>&prop=pageimages&format=json&pithumbsize=1000&origin=*";
+const wikiSummaryUrl = "https://en.wikipedia.org/api/rest_v1/page/summary/<place.place>";
+const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<place.place>/monthly/20110101/${year}${month}01`;
 
 Place.preneed = [
   fetchData("place", placeURL, res => {
     const place = res[0];
 
-    const birthPlaceColumn = place.name === place.country_name ? "birthcountry" : "birthplace";
-    const deathPlaceColumn = place.name === place.country_name ? "deathcountry" : "deathplace";
-
     const placeRankLow = Math.max(1, parseInt(place.born_rank_unique, 10) - NUM_RANKINGS_PRE);
     const placeRankHigh = Math.max(NUM_RANKINGS, parseInt(place.born_rank_unique, 10) + NUM_RANKINGS_POST);
-    const sumlevelFilter = place.name === place.country_name ? "is_country=is.true" : "is_country=is.false";
 
-    return Object.assign({birthPlaceColumn, deathPlaceColumn, placeRankLow, placeRankHigh, sumlevelFilter}, place);
+    return Object.assign({placeRankLow, placeRankHigh}, place);
   })
 ];
 
@@ -94,7 +128,9 @@ Place.need = [
   fetchData("peopleDiedHere", peopleDiedHereURL, res => res),
   fetchData("placeRanks", placeRanksURL, res => res),
   fetchData("occupations", occupationsURL, res => res),
-  fetchData("peopleBornHereAlive", peopleBornHereAliveURL, res => res)
+  fetchData("peopleBornHereAlive", peopleBornHereAliveURL, res => res),
+  fetchData("wikiSummary", wikiSummaryUrl),
+  fetchData("wikiPageViews", wikiPageViewsURL)
 ];
 
-export default connect(state => ({data: state.data}), {})(Place);
+export default connect(state => ({data: state.data, location: state.location}), {})(Place);

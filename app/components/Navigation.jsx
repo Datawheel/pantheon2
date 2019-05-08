@@ -59,16 +59,17 @@ class Navigation extends Component {
               </span>
             </li>
             <li className="item">
-              <a href="/explore/viz" className="item-link explore-link">Vizualizations</a>
+              <Link to="/explore/viz" className="item-link explore-link">Visualizations</Link>
             </li>
             <li className="item">
-              <a href="/explore/rankings?show=people" className="item-link rankings-link">Rankings</a>
+              <Link to="/explore/rankings?show=people" className="item-link rankings-link">Rankings</Link>
             </li>
             <li className="item">
               <Link to="" className="item-link profiles-link dd" activeClassName="active">Profiles</Link>
               <ul className="sub-items">
                 <li><a href="/profile/person" className="item-link">People</a></li>
                 <li><a href="/profile/place" className="item-link">Places</a></li>
+                <li><a href="/profile/country" className="item-link">Countries</a></li>
                 <li><a href="/profile/occupation" className="item-link">Occupations</a></li>
                 <li><a href="/profile/era" className="item-link">Eras</a></li>
               </ul>
@@ -131,6 +132,7 @@ class Navigation extends Component {
               <ul className="sub-items">
                 <li><a href="/profile/person">People</a></li>
                 <li><a href="/profile/place">Places</a></li>
+                <li><a href="/profile/country">Countries</a></li>
                 <li><a href="/profile/occupation">Occupations</a></li>
                 <li><a href="/profile/era">Eras</a></li>
               </ul>

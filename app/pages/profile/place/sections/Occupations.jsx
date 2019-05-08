@@ -10,18 +10,18 @@ import {groupBy, groupTooltip, on, shapeConfig} from "viz/helpers";
 const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
   const tmapBornData = peopleBorn
     .filter(p => p.birthyear !== null)
-    .sort((a, b) => b.langs - a.langs);
+    .sort((a, b) => b.l - a.l);
 
   tmapBornData.forEach(d => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
+    d.place = d.bplace_geonameid;
   });
 
   const tmapDeathData = peopleDied
     .filter(p => p.deathyear !== null)
-    .sort((a, b) => b.langs - a.langs);
+    .sort((a, b) => b.l - a.l);
 
   tmapDeathData.forEach(d => {
     d.industry = d.occupation.industry;
@@ -29,7 +29,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.deathplace;
+    d.place = d.dplace_geonameid;
   });
 
   const occupationsBorn = nest()
@@ -51,39 +51,39 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
       <div className="section-body">
         <div>
           <p>
-            Most individuals born in {place.name} were&nbsp;
+            Most individuals born in {place.place} were&nbsp;
             <AnchorList items={occupationsBorn.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_born})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />,&nbsp;
             while most who died were&nbsp;
             <AnchorList items={occupationsDied.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_died})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />.
           </p>
         </div>
-        <VizWrapper component={this} refKey="viz">
+        <VizWrapper component={this} refKey="occAliveTmapViz">
           <Treemap
-            ref={comp => this.viz = comp}
-            key="tmap1"
+            key="occAliveTmapViz"
             config={{
-              title: `Occupations of People Born in ${place.name}`,
+              title: `Occupations of People Born in ${place.place}`,
+              total: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
               data: tmapBornData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
-              time: "birthyear",
+              // time: "birthyear",
               tooltipConfig: groupTooltip(tmapBornData, d => d.occupation.occupation_slug)
             }} />
         </VizWrapper>
-        <VizWrapper component={this} refKey="viz2">
+        <VizWrapper component={this} refKey="occDeadTmapViz">
           <Treemap
-            ref={comp => this.viz2 = comp}
-            key="tmap2"
+            key="occDeadTmapViz"
             config={{
-              title: `Occupations of People Deceased in ${place.name}`,
+              title: `Occupations of People Deceased in ${place.place}`,
+              total: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
               data: tmapDeathData,
               depth: 2,
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
-              time: "deathyear",
+              // time: "deathyear",
               tooltipConfig: groupTooltip(tmapDeathData, d => d.occupation.occupation_slug)
             }} />
         </VizWrapper>

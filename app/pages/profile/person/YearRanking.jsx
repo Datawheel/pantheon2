@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Link} from "react-router";
 import AnchorList from "components/utils/AnchorList";
 import PhotoCarousel from "components/utils/PhotoCarousel";
 import {FORMATTERS} from "types";
@@ -12,6 +13,8 @@ class YearRanking extends Component {
   render() {
     const {person, birthYearRanking, deathYearRanking} = this.props;
     const meBy = birthYearRanking.find(rank => rank.slug === person.slug);
+
+    // return <div>year ranking to come...</div>;
 
     let betterBirthPeers = null,
         betterDeathPeers = null,
@@ -29,7 +32,8 @@ class YearRanking extends Component {
       worseBirthPeers = <span>After { person.gender ? "him" : "her" } {worseRankedBirthPeers.length > 1 ? "are" : "is"} {<AnchorList items={worseRankedBirthPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}.</span>;
     }
 
-    if (deathYearRanking) {
+    // return <div>year ranking to come...</div>;
+    if (deathYearRanking.length) {
       meDy = deathYearRanking.find(rank => rank.slug === person.slug);
       const betterRankedDeathPeers = deathYearRanking.filter(p => p.deathyear_rank_unique < meDy.deathyear_rank_unique);
       const worseRankedDeathPeers = deathYearRanking.filter(p => p.deathyear_rank_unique > meDy.deathyear_rank_unique);
@@ -41,14 +45,13 @@ class YearRanking extends Component {
       }
     }
 
-
     return (
       <div>
         <p>
           Among people born in {FORMATTERS.year(person.birthyear.name)}, {person.name} ranks <a>{FORMATTERS.commas(meBy.birthyear_rank)}</a> out of {FORMATTERS.commas(person.birthyear.num_born)}.&nbsp;
           { betterBirthPeers }
           { worseBirthPeers }
-          { deathYearRanking
+          { deathYearRanking.length
             ? <span>&nbsp;Among people deceased in {FORMATTERS.year(person.deathyear.name)}, {person.name} ranks <a>{meDy.deathyear_rank}</a> out of {person.deathyear.num_died}.&nbsp;</span>
             : null}
           { betterDeathPeers }
@@ -56,14 +59,14 @@ class YearRanking extends Component {
         </p>
         <div className="rank-title">
           <h3>Others Born in {FORMATTERS.year(person.birthyear.name)}</h3>
-          <a href="/explore/rankings">Go to all Rankings</a>
+          <Link to={`/explore/rankings?viz=treemap&show=people&years=${person.birthyear.id},${person.birthyear.id}&yearType=birthyear`}>Go to all Rankings</Link>
         </div>
         <PhotoCarousel me={person} people={birthYearRanking} rankAccessor="birthyear_rank_unique" />
-        {deathYearRanking
+        {deathYearRanking.length
           ? <div className="rank-sec-body">
             <div className="rank-title">
               <h3>Others Deceased in {FORMATTERS.year(person.deathyear.name)}</h3>
-              <a href="/explore/rankings">Go to all Rankings</a>
+              <Link to={`/explore/rankings?viz=treemap&show=people&years=${person.deathyear.id},${person.deathyear.id}&yearType=deathyear`}>Go to all Rankings</Link>
             </div>
             <PhotoCarousel me={person} people={deathYearRanking} rankAccessor="deathyear_rank_unique" />
           </div>
