@@ -94,7 +94,7 @@ class Controls extends Component {
     this.props.updateData(Object.assign({data: [], loading: true}, this.state));
     const {pageType} = this.props;
     const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType, placeType} = this.state;
-    const selectFields = "name,l,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
+    const selectFields = "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
     const apiHeaders = null;
     const sorting = "&order=hpi.desc.nullslast";
 

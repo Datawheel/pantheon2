@@ -70,7 +70,10 @@ const getColumns = (show, nesting, occupations, places) => {
           Cell: ({value, original}) => value ? <a href={`/profile/place/${original.dplace_geonameid.slug}`}>{value}</a> : <span>-</span>
         },
         {Header: "L", accessor: "l", minWidth: 35},
-        {Header: "HPI", accessor: "hpi", defaultSorted: true, maxWidth: 80}
+        {Header: "L*", accessor: "l_", Cell: ({value}) => FORMATTERS.decimal(value), minWidth: 35},
+        {Header: "PVne", accessor: "non_en_page_views", Cell: ({value}) => FORMATTERS.bigNum(value), minWidth: 35},
+        {Header: "CV", accessor: "coefficient_of_variation", Cell: ({value}) => FORMATTERS.decimal(value), minWidth: 35},
+        {Header: "HPI", accessor: "hpi", Cell: ({value}) => FORMATTERS.decimal(value), defaultSorted: true, maxWidth: 80}
       ]
     },
     occupations: {
