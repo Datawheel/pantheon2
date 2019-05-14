@@ -10,10 +10,6 @@ const GeomapDeath = ({country, peopleDied}) => {
     .sort((a, b) => b.l - a.l);
 
   tmapDeathData.forEach(d => {
-    d.industry = d.occupation.industry;
-    d.domain = d.occupation.domain;
-    d.occupation_name = d.occupation.occupation;
-    d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
     d.place = d.dplace_geonameid;
   });

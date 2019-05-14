@@ -87,7 +87,7 @@ class Country extends Component {
         {peopleBornHere.filter(p => p.deathyear !== null).length ? <Lifespans attrs={attrs} country={country} peopleBorn={peopleBornHere} /> : null}
 
         {/* <LivingPeople place={place} data={peopleBornHereAlive} /> */}
-        <Footer occupations={occupations} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
+        {/* <Footer occupations={occupations} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} /> */}
       </div>
     );
   }
