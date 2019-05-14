@@ -53,6 +53,9 @@ class PhotoCarousel extends Component {
         return;
       }
 
+      console.log("lowerbound, upper", [newLowerBound, newUpperBound]);
+      console.log("rankAccessor", rankAccessor);
+
       // determine filter key
       const filterKey = rankAccessor.replace("_rank_unique", "");
 

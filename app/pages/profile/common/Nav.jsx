@@ -1,4 +1,5 @@
 import React from "react";
+import {AnchorLink} from "@datawheel/canon-core";
 import "pages/profile/common/Nav.css";
 
 const Nav = ({sections}) =>
@@ -7,7 +8,7 @@ const Nav = ({sections}) =>
       {sections.map(section =>
         <li key={section.slug}>
           <span>
-            <a href={`#${section.slug}`} className={`${section.slug}`}>. {section.title}</a>
+            <AnchorLink to={section.slug} className={`${section.slug}`}>. {section.title}</AnchorLink>
           </span>
           <span className="jump-to-link"><a href={`#${section.slug}`}>Jump to</a></span>
         </li>

@@ -11,12 +11,12 @@ const OccupationTrends = ({attrs, country, peopleBorn, peopleDied, occupations})
   const topModern = nest()
     .key(d => d.occupation.id)
     .sortValues((a, b) => b.langs - a.langs)
-    .entries(peopleBorn.filter(d => d.birthyear >= currentYear - 100))
+    .entries(peopleBorn.filter(d => d.birthyear >= currentYear - 100 && d.occupation !== null))
     .sort((a, b) => b.values.length - a.values.length);
   const topOverall = nest()
     .key(d => d.occupation.id)
     .sortValues((a, b) => b.langs - a.langs)
-    .entries(peopleBorn)
+    .entries(peopleBorn.filter(d => d.occupation !== null))
     .sort((a, b) => b.values.length - a.values.length);
   const occupationsLookup = occupations.reduce((obj, item) => {
     obj[`${item.id}`] = item;
@@ -31,7 +31,7 @@ const OccupationTrends = ({attrs, country, peopleBorn, peopleDied, occupations})
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
+    d.place = d.bplace_geonameid;
   });
 
   const tmapDeathData = peopleDied
@@ -45,7 +45,7 @@ const OccupationTrends = ({attrs, country, peopleBorn, peopleDied, occupations})
       d.occupation_name = d.occupation.occupation;
       d.occupation_id = `${d.occupation_id}`;
       d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-      d.place = d.deathplace;
+      d.place = d.dplace_geonameid;
     });
 
   const [bornBuckets, bornTicks] = calculateYearBucket(tmapBornData, d => d.birthyear);
