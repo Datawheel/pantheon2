@@ -990,13 +990,13 @@
     "primary_family_name": "Indo-European"
   },
   "id": {
-    "family_code": "",
-    "family_name": "",
+    "family_code": "poz",
+    "family_name": "Malayo-Polynesian",
     "lang_code3": "ind",
     "language": "Indonesian",
     "language_local": "Bahasa Indonesia",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "map",
+    "primary_family_name": "Austronesian"
   },
   "ie": {
     "family_code": "",

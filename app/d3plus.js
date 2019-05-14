@@ -2,10 +2,10 @@ import {FORMATTERS} from "types/index";
 // import {merge} from "d3-array";
 import {default as topojson} from "json/world-50m.json";
 
-function uniques(a) {
+const uniques = a => {
   const v = Array.from(new Set(a));
   return v.length === 1 ? v[0] : v;
-}
+};
 
 export default {
 

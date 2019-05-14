@@ -13,23 +13,23 @@ const Api = () =>
     <ul className="items">
       <li>
         Fetch data on a specific person: James Joyce
-        <input defaultValue="http://pantheon-api.datawheel.us/person?slug=eq.james_joyce" />
+        <input defaultValue="https://api.pantheon.world/person?slug=eq.james_joyce" />
       </li>
       <li>
         Fetch data on a specific city: Dublin, IRL
-        <input defaultValue="http://pantheon-api.datawheel.us/place?slug=eq.dublin" />
+        <input defaultValue="https://api.pantheon.world/place?slug=eq.dublin" />
       </li>
       <li>
         Fetch data on a specific country: Ireland
-        <input defaultValue="http://pantheon-api.datawheel.us/place?slug=eq.ireland" />
+        <input defaultValue="https://api.pantheon.world/place?slug=eq.ireland" />
       </li>
       <li>
         Fetch data on a specific occupation: Writer
-        <input defaultValue="http://pantheon-api.datawheel.us/occupation?occupation_slug=eq.writer" />
+        <input defaultValue="https://api.pantheon.world/occupation?occupation_slug=eq.writer" />
       </li>
       <li>
         Fetch data on a specific era: Newspaper Era
-        <input defaultValue="http://pantheon-api.datawheel.us/era?slug=eq.newspaper" />
+        <input defaultValue="https://api.pantheon.world/era?slug=eq.newspaper" />
       </li>
     </ul>
 

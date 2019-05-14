@@ -17,6 +17,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
     d.place = d.bplace_geonameid;
+    d.l = 0;
   });
 
   const tmapDeathData = peopleDied
