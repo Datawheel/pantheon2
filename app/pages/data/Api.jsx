@@ -21,7 +21,7 @@ const Api = () =>
       </li>
       <li>
         Fetch data on a specific country: Ireland
-        <input defaultValue="https://api.pantheon.world/place?slug=eq.ireland" />
+        <input defaultValue="https://api.pantheon.world/country?slug=eq.ireland" />
       </li>
       <li>
         Fetch data on a specific occupation: Writer

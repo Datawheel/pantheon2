@@ -31,8 +31,8 @@ const dateobj = new Date();
 const year = dateobj.getFullYear();
 const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 const placeURL = "/place?slug=eq.<id>";
-const countryURL = "/place?country_code=eq.<place.country_code>&is_country=is.true";
-const peopleBornHereURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
+const countryURL = "/country?id=eq.<place.country>";
+const peopleBornHereURL = "/person?bplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
 const wikiSummaryUrl = "https://en.wikipedia.org/api/rest_v1/page/summary/<place.place>";
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<place.place>/monthly/20110101/${year}${month}01`;
 

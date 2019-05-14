@@ -36,12 +36,13 @@ class PersonScreenshot extends Component {
 const dateobj = new Date();
 const year = dateobj.getFullYear();
 const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
-const personURL = "/person?slug=eq.<id>&select=occupation(*),birthcountry(*),birthplace(*),birthyear(*),deathcountry(*),deathplace(*),deathyear(*),*,birthyearId:birthyear,deathyearId:deathyear";
-const pageViewsURL = "/indicators?person=eq.<person.id>&order=pageview_date&num_pageviews=not.is.null";
-const occupationRanksURL = "/person?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<person.occupationRankLow>&occupation_rank_unique=lte.<person.occupationRankHigh>&order=occupation_rank_unique&select=occupation(*),birthcountry(*),hpi,langs,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear";
-const birthYearRanksURL = "/person?birthyear=eq.<person.birthyearId>&birthyear_rank_unique=gte.<person.birthYearRankLow>&birthyear_rank_unique=lte.<person.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation(id,domain_slug),birthcountry(*),langs,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear";
-const deathYearRanksURL = "/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation(id,domain_slug),deathcountry(*),langs,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear";
+const personURL = "/person?slug=eq.<id>&select=occupation(*),bplace_geonameid(*),dplace_geonameid(*),*";
+
+const occupationRanksURL = "/person?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<person.occupationRankLow>&occupation_rank_unique=lte.<person.occupationRankHigh>&order=occupation_rank_unique&select=occupation(*),bplace_country(*),hpi,l,occupation_rank,occupation_rank_unique,slug,gender,name,id,wp_id,birthyear,deathyear";
+const birthYearRanksURL = "/person?birthyear=eq.<person.birthyear>&birthyear_rank_unique=gte.<person.birthYearRankLow>&birthyear_rank_unique=lte.<person.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation(id,domain,domain_slug),bplace_country(*),l,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,wp_id,birthyear,deathyear";
+const deathYearRanksURL = "/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation(id,domain,domain_slug),dplace_country(*),l,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,wp_id,deathyear,birthyear";
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<person.wikiSlug>/monthly/20110101/${year}${month}01`;
+
 
 PersonScreenshot.preneed = [
   fetchData("person", personURL, res => {
@@ -66,25 +67,11 @@ PersonScreenshot.preneed = [
 ];
 
 PersonScreenshot.need = [
-//   fetchPerson,
-// //   fetchOccupationRanks,
-// //   fetchCountryRanks,
-// //   fetchYearRanks,
-  fetchData("pageViews", pageViewsURL, res => res),
   fetchData("occupationRanks", occupationRanksURL, res => res),
   fetchData("birthYearRanks", birthYearRanksURL, res => res),
   fetchData("deathYearRanks", deathYearRanksURL, res => res),
   fetchData("wikiPageViews", wikiPageViewsURL)
-// //   fetchCreationdates
 ];
-
-// function mapStateToProps(state) {
-//   return {
-//     personProfile: state.personProfile
-//   };
-// }
-//
-// export default connect(mapStateToProps)(Person);
 
 export default connect(state => ({
   data: state.data,

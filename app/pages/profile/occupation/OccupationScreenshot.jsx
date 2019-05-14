@@ -29,7 +29,7 @@ class OccupationScreenshot extends Component {
 }
 
 const occupationURL = "/occupation?occupation_slug=eq.<id>";
-const peopleURL = "/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug),birthcountry(id,continent,country_name,name,slug),deathcountry(id,continent,country_name,name,slug),deathplace(id,name,slug),occupation(*),occupation_id:occupation,*";
+const peopleURL = "/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(*),occupation_id:occupation,*";
 
 OccupationScreenshot.preneed = [
   fetchData("occupation", occupationURL, res => res[0])
