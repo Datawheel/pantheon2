@@ -121,7 +121,7 @@ class PhotoCarousel extends Component {
           <ul className="rank-list" ref={comp => this.rankList = comp}>
             {peopleToRender.map(person =>
               <li key={`${person.id}`} className={person.id === myId ? "rank-me" : null}>
-                <div className="rank-photo" style={{backgroundColor: COLORS_DOMAIN[person.occupation.domain_slug]}}>
+                <div className="rank-photo" style={{backgroundColor: person.occupation ? COLORS_DOMAIN[person.occupation.domain_slug] : "#efefef"}}>
                   <a href={`/profile/person/${person.slug}/`}>
                     <PersonImage src={`/images/profile/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} fallbackSrc="/images/icons/icon-person.svg" />
                   </a>
