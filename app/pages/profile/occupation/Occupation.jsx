@@ -59,9 +59,9 @@ class Occupation extends Component {
         <Places people={people} occupation={occupation} />
 
         <PlacesTime eras={eras} people={people} occupation={occupation} />
-        {/* <OverlappingLives people={people} occupation={occupation} />
+        <OverlappingLives people={people} occupation={occupation} />
         <RelatedOccupations peopleInDomain={peopleInDomain} occupation={occupation} occupations={occupations} />
-        <Footer /> */}
+        <Footer />
       </div>
     );
   }
