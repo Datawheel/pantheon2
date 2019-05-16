@@ -52,7 +52,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
       <div className="section-body">
         <div>
           <p>
-            Most individuals born in {place.place} were&nbsp;
+            Most individuals born in present day {place.place} were&nbsp;
             <AnchorList items={occupationsBorn.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_born})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />,&nbsp;
             while most who died were&nbsp;
             <AnchorList items={occupationsDied.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_died})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />.
@@ -62,7 +62,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
           <Treemap
             key="occAliveTmapViz"
             config={{
-              title: `Occupations of People Born in ${place.place}`,
+              title: `Occupations of People Born in present day ${place.place}`,
               total: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
               data: tmapBornData,
               depth: 2,
@@ -77,7 +77,7 @@ const Occupations = ({attrs, place, peopleBorn, peopleDied}) => {
           <Treemap
             key="occDeadTmapViz"
             config={{
-              title: `Occupations of People Deceased in ${place.place}`,
+              title: `Occupations of People Deceased in present day ${place.place}`,
               total: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0,
               data: tmapDeathData,
               depth: 2,
