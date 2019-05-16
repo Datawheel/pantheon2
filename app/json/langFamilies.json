@@ -423,13 +423,13 @@
     "primary_family_name": ""
   },
   "ckb": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "ira",
+    "family_name": "Iranian",
+    "lang_code3": "ckb",
     "language": "Kurdish (Sorani)",
     "language_local": "\u06a9\u0648\u0631\u062f\u06cc",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "ine",
+    "primary_family_name": "Indo-European"
   },
   "co": {
     "family_code": "itc",
@@ -873,13 +873,13 @@
     "primary_family_name": "Afro-Asiatic"
   },
   "hak": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "zhx",
+    "family_name": "Sinitic",
+    "lang_code3": "hak",
     "language": "Hakka",
     "language_local": "\u5ba2\u5bb6\u8a9e/Hak-k\u00e2-ng\u00ee",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "sit",
+    "primary_family_name": "Sino-Tibetan"
   },
   "haw": {
     "family_code": "",
@@ -1161,13 +1161,13 @@
     "primary_family_name": ""
   },
   "kbp": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "nic",
+    "family_name": "Niger-Kordofanian",
+    "lang_code3": "kbp",
     "language": "Kabiye",
     "language_local": "Kab\u0269y\u025b",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "nic",
+    "primary_family_name": "Niger-Kordofanian"
   },
   "kg": {
     "family_code": "nic",

@@ -53,8 +53,6 @@ const Places = ({people, occupation}) => {
     d.diedcontinent = d.dplace_country.continent;
   });
 
-  console.log(countriesDied);
-
   return (
     <section className="profile-section">
       <SectionHead title="Places" index={1} numSections={5} />

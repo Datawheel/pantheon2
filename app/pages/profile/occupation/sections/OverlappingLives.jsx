@@ -12,18 +12,18 @@ const OverlappingLives = ({people, occupation}) => {
     .sort((a, b) => b.birthyear - a.birthyear);
 
   const tmapBornData = people
-    .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.birthcountry && p.birthcountry.country_name && p.birthcountry.continent)
-    .sort((a, b) => b.langs - a.langs);
+    .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
+    .sort((a, b) => b.l - a.l);
 
   tmapBornData.forEach(d => {
-    d.borncountry = d.birthcountry.country_name;
-    d.borncontinent = d.birthcountry.continent;
+    d.borncountry = d.bplace_country.country_name;
+    d.borncontinent = d.bplace_country.continent;
   });
 
   const priestleyMax = 25;
 
   const priestleyData = tmapBornData
-    .filter(p => p.deathyear !== null && p.deathcountry !== null)
+    .filter(p => p.deathyear !== null && p.dplace_country !== null)
     .slice(0, priestleyMax);
 
   if (priestleyData.length < 3) {
