@@ -61,10 +61,10 @@ const OccupationTrends = ({attrs, country, peopleBorn, peopleDied, occupations})
       <div>
         {topModern.length
           ? <p>
-            Over the past 100 years the top profession of globally memorable people from {country.country} has been {occupationsLookup[topModern[0].key].occupation}, including <AnchorList items={topModern[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />. Whereas throughout history the profession with the most memorable people from {country.country} has been {occupationsLookup[topOverall[0].key].occupation}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />.
+            Over the past 100 years the top profession of globally memorable people from present day {country.country} has been {occupationsLookup[topModern[0].key].occupation}, including <AnchorList items={topModern[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />. Whereas throughout history the profession with the most memorable people from {country.country} has been {occupationsLookup[topOverall[0].key].occupation}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />.
           </p>
           : <p>
-            Throughout history the profession with the most memorable people from {country.country} has been {occupationsLookup[topOverall[0].key].occupation}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />.
+            Throughout history the profession with the most memorable people from present day {country.country} has been {occupationsLookup[topOverall[0].key].occupation}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />.
           </p>}
       </div>
       <VizWrapper component={this} refKey="viz">
