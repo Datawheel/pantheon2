@@ -8,16 +8,17 @@ import {COLORS_CONTINENT} from "types";
 
 const OverlappingLives = ({people, occupation}) => {
   people = people
-    .filter(p => p.birthyear)
+    .filter(p => p.birthyear && p.occupation)
     .sort((a, b) => b.birthyear - a.birthyear);
 
   const tmapBornData = people
-    .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
+    .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.bplace_country && p.bplace_country.country && p.bplace_country.continent && p.dplace_country && p.dplace_country.country && p.dplace_country.continent)
     .sort((a, b) => b.l - a.l);
 
   tmapBornData.forEach(d => {
     d.borncountry = d.bplace_country.country_name;
     d.borncontinent = d.bplace_country.continent;
+    d.diedcontinent = d.dplace_country.continent;
   });
 
   const priestleyMax = 25;
