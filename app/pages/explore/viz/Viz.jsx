@@ -43,10 +43,10 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
     const countryObj = places.map(p => p.country).find(c => `${c.id}` === country);
     if (city !== "all") {
       const cityObj = merge(places.map(p => p.cities)).find(c => `${c.id}` === city);
-      fromLocation = ` from ${cityObj.name}, ${countryObj.country_name}`;
+      fromLocation = ` from ${cityObj.place}, ${countryObj.country}`;
     }
     else {
-      fromLocation = ` from ${countryObj.country_name}`;
+      fromLocation = ` from ${countryObj.country}`;
     }
   }
 
@@ -187,15 +187,16 @@ class Viz extends Component {
 }
 
 Viz.need = [
-  fetchData("places", "/place?select=id,place,lat,lon,slug,country(id,country,slug,country_num,country_code,continent,region),country_id:country", res => {
+  fetchData("places", "/place?select=id,place,lat,lon,slug,country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died", res => {
     const places = nest()
       .key(d => d.country_id)
       .entries(res)
       .map(countryData => ({
         country: countryData.values[0].country,
-        cities: countryData.values
+        cities: countryData.values.sort((cityA, cityB) => cityA.place.localeCompare(cityB.place))
       }))
-      .filter(countryData => countryData.country);
+      .filter(countryData => countryData.country)
+      .sort((countryA, countryB) => countryA.country.country.localeCompare(countryB.country.country));
     return places;
   }),
   fetchData("occupationResponse", "/occupation", res => {

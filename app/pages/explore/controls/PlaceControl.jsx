@@ -31,6 +31,10 @@ class PlaceControl extends Component {
       }
     });
 
+    // console.log("places", places);
+    // console.log("placeType", placeType);
+    // console.log("country", country);
+
     return (
       <div className="filter place-control">
         <ul className="items options flat-options filter">
@@ -40,21 +44,25 @@ class PlaceControl extends Component {
 
         <select value={country} onChange={this.changeCountry}>
           <option value="all">All Countries</option>
-          {places.map(c =>
-            <option key={`${c.country.country_code}-${c.country.id}`} value={c.country.id} data-countrycode={c.country.country_code}>
-              {c.country.country}
-            </option>
-          )}
+          {places
+            .map(c =>
+              <option key={`${c.country.country_code}-${c.country.id}`} value={c.country.id} data-countrycode={c.country.country_code}>
+                {c.country.country}
+              </option>
+            )}
         </select>
 
         <select value={city} onChange={this.changeCity}>
           <option value="all">All Cities</option>
           {country !== "all" && places.length
-            ? places.find(c => `${c.country.id}` === `${country}`).cities.map(p =>
-              <option key={p.id} value={p.id} data-slug={p.slug}>
-                {p.state && p.country_code === "usa" ? `${p.place}, ${p.state}` : `${p.place}`}
-              </option>
-            )
+            ? places
+              .find(c => `${c.country.id}` === `${country}`).cities
+              .filter(c => placeType === "birthplace" ? c.num_born > 0 : c.num_died > 0)
+              .map(p =>
+                <option key={p.id} value={p.id} data-slug={p.slug}>
+                  {p.state && p.country_code === "usa" ? `${p.place}, ${p.state}` : `${p.place}`}
+                </option>
+              )
             : null}
         </select>
 
