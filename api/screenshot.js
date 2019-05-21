@@ -73,7 +73,7 @@ module.exports = function(app) {
         mkdirp(folderPath, err => {
           if (err) {
             console.error(`mkdirp err: ${err}`);
-            res.status(500).send({error: `making directory err: ${err}`});
+            return res.status(500).send({error: `making directory err: ${err}`});
           }
           // fs.writeFile(imgPath, img.data, err => {
           //   if (err) {
@@ -91,7 +91,7 @@ module.exports = function(app) {
             .toFile(imgPath, err => {
               if (err) {
                 console.error(`fs.writeFile err: ${err}`);
-                res.status(500).send({error: `file write err: ${err}`});
+                return res.status(500).send({error: `file write err: ${err}`});
               }
               if (!isLocal) xvfb.stopSync();
               console.log(`[screenshot] new screenshot: ${imgPath}`);
@@ -104,7 +104,7 @@ module.exports = function(app) {
     }
     catch (err) {
       console.error(`check if file exists err: ${err}`);
-      res.status(500).send({error: `check if file exists err: ${err}`});
+      return res.status(500).send({error: `check if file exists err: ${err}`});
     }
   });
 };

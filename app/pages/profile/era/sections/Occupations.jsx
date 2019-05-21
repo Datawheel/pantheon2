@@ -59,9 +59,9 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
         <div>
           <p>
             Most individuals born in the {era.name} were&nbsp;
-            <AnchorList items={occupationsBorn.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_born})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />,&nbsp;
+            <AnchorList items={occupationsBorn.slice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_born})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />,&nbsp;
             while most who died were&nbsp;
-            <AnchorList items={occupationsDied.splice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_died})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />.
+            <AnchorList items={occupationsDied.slice(0, 5)} name={d => `${plural(d.occupation.occupation)} (${d.num_died})`} url={d => `/profile/occupation/${d.occupation.occupation_slug}`} />.
           </p>
         </div>
         <VizWrapper component={this} refKey="viz">

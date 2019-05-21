@@ -4,14 +4,14 @@ import VizWrapper from "pages/profile/common/VizWrapper";
 import {Geomap} from "d3plus-react";
 import {groupTooltip, on} from "viz/helpers";
 
-const GeomapDeath = ({country, peopleDied}) => {
+const GeomapDeath = ({place, peopleDied}) => {
   const tmapDeathData = peopleDied
     .filter(p => p.deathyear !== null)
     .sort((a, b) => b.l - a.l);
 
   tmapDeathData.forEach(d => {
-    d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.dplace_geonameid;
+    d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
+    d.place = d.bplace_geonameid;
   });
 
   const geomapDeathData = tmapDeathData.filter(d => d.place && d.place.lat && d.place.lon)
@@ -30,16 +30,16 @@ const GeomapDeath = ({country, peopleDied}) => {
   });
 
   return <section className="profile-section">
-    <SectionHead title="Cities by Deaths" index={1} numSections={5} />
+    <SectionHead title="Birth Places" index={1} numSections={5} />
     <div className="section-body">
       <VizWrapper component={this} refKey="viz">
         <Geomap
-          key="geomapDeaths"
+          key="geomapBirths"
           config={{
-            title: `Cities by deaths in ${country.country}`,
+            title: `Birth places for people deceased in ${place.place}`,
             data: geomapDeathData,
             depth: 1,
-            fitFilter: `${country.country_num}`,
+            fitFilter: `${place.place_num}`,
             groupBy: ["event", "place_name"],
             on: on("place", d => d.place.slug),
             shapeConfig: {
@@ -49,7 +49,7 @@ const GeomapDeath = ({country, peopleDied}) => {
               stroke: () => "#4A4948",
               strokeWidth: 1,
               Path: {
-                fill: d => parseInt(d.id, 10) === parseInt(country.country_num, 10) ? "#ccc" : "transparent",
+                fill: d => parseInt(d.id, 10) === parseInt(place.place_num, 10) ? "#ccc" : "transparent",
                 stroke: "#4A4948",
                 strokeWidth: 0.75
               }

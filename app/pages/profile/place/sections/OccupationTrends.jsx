@@ -11,12 +11,12 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
   const topModern = nest()
     .key(d => d.occupation.id)
     .sortValues((a, b) => b.langs - a.langs)
-    .entries(peopleBorn.filter(d => d.birthyear >= currentYear - 100))
+    .entries(peopleBorn.filter(d => d.birthyear >= currentYear - 100 && d.occupation !== null))
     .sort((a, b) => b.values.length - a.values.length);
   const topOverall = nest()
     .key(d => d.occupation.id)
     .sortValues((a, b) => b.langs - a.langs)
-    .entries(peopleBorn)
+    .entries(peopleBorn.filter(d => d.occupation !== null))
     .sort((a, b) => b.values.length - a.values.length);
   const occupationsLookup = occupations.reduce((obj, item) => {
     obj[`${item.id}`] = item;
@@ -24,7 +24,7 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
   }, {});
 
   const tmapBornData = peopleBorn
-    .filter(p => p.birthyear !== null)
+    .filter(p => p.birthyear !== null && p.occupation !== null)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
@@ -35,7 +35,7 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
   });
 
   const tmapDeathData = peopleDied
-    .filter(p => p.deathyear !== null)
+    .filter(p => p.deathyear !== null && p.occupation !== null)
     .sort((a, b) => b.langs - a.langs);
 
   tmapDeathData.forEach(d => {
@@ -82,22 +82,23 @@ const OccupationTrends = ({attrs, place, peopleBorn, peopleDied, occupations}) =
             }
           }} />
       </VizWrapper>
-      <VizWrapper component={this} refKey="viz2">
-        <StackedArea
-          key="stacked2"
-          config={{
-            title: "Deaths Over Time",
-            data: tmapDeathData,
-            depth: 2,
-            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
-            shapeConfig: shapeConfig(attrs),
-            tooltipConfig: groupTooltip(tmapDeathData),
-            xConfig: {
-              labels: deathTicks,
-              tickFormat: d => deathBuckets[d]
-            }
-          }} />
-      </VizWrapper>
+      {tmapDeathData.length
+        ? <VizWrapper component={this} refKey="viz2">
+          <StackedArea
+            key="stacked2"
+            config={{
+              title: "Deaths Over Time",
+              data: tmapDeathData,
+              depth: 2,
+              groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+              shapeConfig: shapeConfig(attrs),
+              tooltipConfig: groupTooltip(tmapDeathData),
+              xConfig: {
+                labels: deathTicks,
+                tickFormat: d => deathBuckets[d]
+              }
+            }} />
+        </VizWrapper> : null}
     </div>
   </section>;
 };
