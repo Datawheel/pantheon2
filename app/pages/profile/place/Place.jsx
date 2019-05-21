@@ -27,8 +27,8 @@ class Place extends Component {
       {slug: "people", title: "People"},
       {slug: "occupations", title: "Occupations"},
       {slug: "occupational-trends", title: "Occupational Trends"},
-      {slug: "cities-by-births", title: "Cities by Births"},
-      {slug: "cities-by-deaths", title: "Cities by Deaths"},
+      {slug: "death-places", title: "Death places"},
+      {slug: "birth-places", title: "Birth places"},
       {slug: "overlapping-lives", title: "Overlapping Lives"},
       {slug: "living-people", title: "Living People"}
     ];
@@ -81,10 +81,10 @@ class Place extends Component {
         </div>
         <PeopleRanking country={country} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <Occupations attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
-        <OccupationTrends attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} />
-        {place.country ? <GeomapBirth country={country} peopleBorn={peopleBornHere} /> : null}
-        {peopleBornHere.filter(p => p.deathyear !== null).length && place.country ? <GeomapDeath country={country} peopleDied={peopleDiedHere} /> : null}
-        {peopleBornHere.filter(p => p.deathyear !== null).length && place.country ? <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} /> : null}
+        {peopleBornHere.length > 10 ? <OccupationTrends attrs={attrs} place={place} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} /> : null}
+        {peopleBornHere.filter(p => p.birthyear !== null && p.dplace_geonameid).length ? <GeomapBirth place={place} peopleBorn={peopleBornHere} /> : null}
+        {peopleDiedHere.filter(p => p.deathyear !== null).length ? <GeomapDeath place={place} peopleDied={peopleDiedHere} /> : null}
+        {peopleBornHere.filter(p => p.deathyear !== null && p.birthyear > 1699).length && place.country ? <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} /> : null}
 
         {/* <LivingPeople place={place} data={peopleBornHereAlive} /> */}
         <Footer occupations={occupations} peopleBornHere={peopleBornHere} peopleDiedHere={peopleDiedHere} />
@@ -99,9 +99,9 @@ const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 const placeURL = "/place?slug=eq.<id>";
 const countryURL = "/country?id=eq.<place.country>";
 // const peopleBornHereURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
-const peopleBornHereURL = "/person?bplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+const peopleBornHereURL = "/person?bplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
 // const peopleDiedHereURL = "/person?<place.deathPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=deathplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
-const peopleDiedHereURL = "/person?dplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+const peopleDiedHereURL = "/person?dplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
 const placeRanksURL = "/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique";
 const occupationsURL = "/occupation?order=num_born.desc.nullslast";
 const peopleBornHereAliveURL = "/person?bplace_geonameid=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
@@ -123,12 +123,13 @@ Place.preneed = [
 
 
 Place.need = [
-  fetchData("country", countryURL, res => res[0]),
+  fetchData("country", countryURL, res => res.length ? res[0] : null),
+  // fetchData("country", countryURL)
   fetchData("peopleBornHere", peopleBornHereURL, res => res),
   fetchData("peopleDiedHere", peopleDiedHereURL, res => res),
   fetchData("placeRanks", placeRanksURL, res => res),
   fetchData("occupations", occupationsURL, res => res),
-  fetchData("peopleBornHereAlive", peopleBornHereAliveURL, res => res),
+  // fetchData("peopleBornHereAlive", peopleBornHereAliveURL, res => res),
   fetchData("wikiSummary", wikiSummaryUrl),
   fetchData("wikiPageViews", wikiPageViewsURL)
 ];

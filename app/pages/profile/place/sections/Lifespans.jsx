@@ -6,7 +6,7 @@ import {groupBy, shapeConfig, peopleTooltip, on} from "viz/helpers";
 
 const Lifespans = ({attrs, place, peopleBorn}) => {
   const tmapBornData = peopleBorn
-    .filter(p => p.birthyear !== null && p.birthyear > 1699)
+    .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.occupation !== null)
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {

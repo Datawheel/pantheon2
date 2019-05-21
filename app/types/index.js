@@ -74,14 +74,28 @@ export const FORMATTERS = {
   month: timeFormat("%B %Y"),
   monthShort: timeFormat("%m/%Y"),
   year: y => y < 0 ? `${Math.abs(y)} BC` : `${Math.round(y)}`,
+  // ordinal: n => {
+  //   if (n > 3 && n < 21) return `${format(",")(n)}th`; // thanks kennebec
+  //   switch (n % 10) {
+  //     case 1: return `${format(",")(n)}st`;
+  //     case 2: return `${format(",")(n)}nd`;
+  //     case 3: return `${format(",")(n)}rd`;
+  //     default: return `${format(",")(n)}th`;
+  //   }
+  // },
   ordinal: n => {
-    if (n > 3 && n < 21) return `${n}th`; // thanks kennebec
-    switch (n % 10) {
-      case 1: return `${n}st`;
-      case 2: return `${n}nd`;
-      case 3: return `${n}rd`;
-      default: return `${n}th`;
+    const j = n % 10,
+          k = n % 100;
+    if (j === 1 && k != 11) {
+      return `${format(",")(n)}st`;
     }
+    if (j === 2 && k !== 12) {
+      return `${format(",")(n)}nd`;
+    }
+    if (j === 3 && k !== 13) {
+      return `${format(",")(n)}rd`;
+    }
+    return `${format(",")(n)}th`;
   },
   slugify: slugifyStr
 };

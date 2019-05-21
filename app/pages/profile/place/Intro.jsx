@@ -7,7 +7,9 @@ import {nest} from "d3-collection";
 import {plural} from "pluralize";
 
 const Intro = ({place, country, placeRanks, peopleBornHere, peopleDiedHere, wikiSummary}) => {
-  const myIndex = placeRanks.findIndex(p => p.place === place.place);
+  // console.log("placeRanks!!!", placeRanks);
+  // return <div>intro</div>;
+  const myIndex = placeRanks ? placeRanks.findIndex(p => p.place === place.place) : null;
   let wikiLink, wikiSentence;
 
   const occupationsBorn = nest()
@@ -57,20 +59,22 @@ const Intro = ({place, country, placeRanks, peopleBornHere, peopleDiedHere, wiki
             {place.place}
           </h3>
           <p>
-            {place.place} ranks {FORMATTERS.ordinal(place.born_rank_unique)} in number of biographies on Pantheon, behind <AnchorList items={placeRanks.slice(Math.max(0, myIndex - 3), myIndex)} name={d => d.place} url={d => `/profile/place/${d.slug}/`} />.
-            Memorable people born in {place.place} include <AnchorList items={peopleBornHere.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
-            {peopleDiedHere
+            {placeRanks
+              ? <span>{place.place} ranks {FORMATTERS.ordinal(place.born_rank_unique)} in number of biographies on Pantheon, behind <AnchorList items={placeRanks.slice(Math.max(0, myIndex - 3), myIndex)} name={d => d.place} url={d => `/profile/place/${d.slug}/`} />. </span>
+              : null}
+            {peopleBornHere.length
+              ? <span>Memorable people born in {place.place} include <AnchorList items={peopleBornHere.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
+              : null}
+            {peopleDiedHere.length
               ? <span> Memorable people who died in {place.place} include <AnchorList items={peopleDiedHere.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
               : null}
-            {occupationsBorn
+            {occupationsBorn.length
               ? <span> {place.place} has been the birth place of many <AnchorList items={occupationsBorn} name={d => plural(d.occupation.occupation)} url={d => `/profile/occupation/${d.occupation.occupation_slug}/`} /></span>
               : null}
-            {occupationsDied
+            {occupationsDied.length
               ? <span> and the death place of many <AnchorList items={occupationsDied} name={d => plural(d.occupation.occupation)} url={d => `/profile/occupation/${d.occupation.occupation_slug}/`} />.</span>
               : <span>.</span>}
-            {!place.is_country
-              ? <span> {place.place} is located in <a href={`/profile/country/${country.slug}`}>{country.country}</a>.</span>
-              : null}
+            {country ? <span> {place.place} is located in <a href={`/profile/country/${country.slug}`}>{country.country}</a>.</span> : null}
           </p>
           {wikiSentence
             ? <p>{wikiSentence} <a href={wikiLink} target="_blank" rel="noopener noreferrer">Read more on Wikipedia</a></p>
