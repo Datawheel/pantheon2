@@ -11,15 +11,15 @@ const GeomapBirth = ({country, peopleBorn}) => {
 
   tmapBornData.forEach(d => {
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.bplace_geonameid;
+    d.bplace = d.bplace_geonameid;
   });
 
-  const geomapBornData = tmapBornData.filter(d => d.place && d.place.lat && d.place.lon)
+  const geomapBornData = tmapBornData.filter(d => d.bplace && d.bplace.lat && d.bplace.lon)
     .sort((a, b) => b.l - a.l)
     .slice(0, 500);
   geomapBornData.forEach(d => {
-    d.place_name = d.place.place;
-    d.place_coord = [d.place.lat, d.place.lon];
+    d.place_name = d.bplace.place;
+    d.place_coord = [d.bplace.lat, d.bplace.lon];
     if (!(d.place_coord instanceof Array)) {
       d.place_coord = d.place_coord
         .replace("(", "")
@@ -41,7 +41,7 @@ const GeomapBirth = ({country, peopleBorn}) => {
             depth: 1,
             fitFilter: `${country.country_num}`,
             groupBy: ["event", "place_name"],
-            on: on("place", d => d.place.slug),
+            on: on("place", d => d.bplace.slug),
             shapeConfig: {
               fill: d => d.event.toLowerCase().indexOf("birth") > 0
                 ? "rgba(76, 94, 215, 0.4)"
@@ -54,7 +54,7 @@ const GeomapBirth = ({country, peopleBorn}) => {
                 strokeWidth: 0.75
               }
             },
-            tooltipConfig: groupTooltip(geomapBornData, d => d.place.slug)
+            tooltipConfig: groupTooltip(geomapBornData, d => d.bplace.slug)
           }} />
       </VizWrapper>
     </div>
