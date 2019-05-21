@@ -27,21 +27,13 @@ const PlacesTime = ({eras, people, occupation}) => {
 
   const tmapBornData = people
     .filter(p => p.birthyear !== null && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
-    .sort((a, b) => b.langs - a.langs);
-
-  tmapBornData.forEach(d => {
-    d.borncountry = d.bplace_country.country;
-    d.borncontinent = d.bplace_country.continent;
-  });
+    .sort((a, b) => b.l - a.l)
+    .map(d => ({...d, borncountry: d.bplace_country.country, borncontinent: d.bplace_country.continent}));
 
   const tmapDeathData = people
-    .filter(p => p.deathyear !== null && p.deathcountry && p.deathcountry.country && p.deathcountry.continent)
-    .sort((a, b) => b.langs - a.langs);
-
-  tmapDeathData.forEach(d => {
-    d.diedcountry = d.deathcountry.country_name;
-    d.diedcontinent = d.deathcountry.continent;
-  });
+    .filter(p => p.deathyear !== null && p.dplace_country && p.dplace_country.country && p.dplace_country.continent)
+    .sort((a, b) => b.l - a.l)
+    .map(d => ({...d, diedcountry: d.dplace_country.country, diedcontinent: d.dplace_country.continent}));
 
   const [bornBuckets, bornTicks] = calculateYearBucket(tmapBornData, d => d.birthyear);
   const [deathBuckets, deathTicks] = calculateYearBucket(tmapDeathData, d => d.deathyear);
@@ -74,7 +66,7 @@ const PlacesTime = ({eras, people, occupation}) => {
               }
             }} />
         </VizWrapper>
-        {tmapDeathData.length > 1
+        {tmapDeathData.length > 10
           ? <VizWrapper component={this} refKey="viz2">
             <StackedArea
               key="stacked_country2"
@@ -83,9 +75,9 @@ const PlacesTime = ({eras, people, occupation}) => {
                 data: tmapDeathData,
                 depth: 1,
                 groupBy: ["diedcontinent", "diedcountry"],
-                on: on("place", d => d.deathcountry.slug),
+                on: on("place", d => d.dplace_country.slug),
                 shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
-                tooltipConfig: groupTooltip(tmapDeathData, d => d.deathcountry.slug),
+                tooltipConfig: groupTooltip(tmapDeathData, d => d.dplace_country.slug),
                 xConfig: {
                   labels: deathTicks,
                   tickFormat: d => deathBuckets[d]

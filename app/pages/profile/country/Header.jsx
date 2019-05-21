@@ -10,13 +10,14 @@ import moment from "moment";
 
 const Header = ({country, people, wikiSummary, wikiPageViews}) => {
   let pageViewData = null;
-  let countryImg = country.img_link ? `/images/profile/place/${country.id}.jpg` : "/images/profile/placeholder_place_profile.jpg";
+  const countryImg = country.img_link ? `/images/profile/country/${country.slug}.jpg` : "/images/profile/placeholder_place_profile.jpg";
+
   // wikipedia summary
-  if (wikiSummary) {
-    if (wikiSummary.originalimage) {
-      countryImg = wikiSummary.originalimage.source;
-    }
-  }
+  // if (wikiSummary) {
+  //   if (wikiSummary.originalimage) {
+  //     countryImg = wikiSummary.originalimage.source;
+  //   }
+  // }
 
   if (wikiPageViews) {
     if (wikiPageViews.items) {
