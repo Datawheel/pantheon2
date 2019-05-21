@@ -35,23 +35,13 @@ const Places = ({people, occupation}) => {
   // console.log("people", people);
   const tmapBornData = people
     .filter(p => p.birthyear !== null && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
-    // .filter(p => p.birthyear !== null && p.bplace_country && p.bplace_country.country && p.bplace_country.continent)
-    .sort((a, b) => b.l - a.l);
-
-  tmapBornData.forEach(d => {
-    d.borncountry = d.bplace_country.country_name;
-    d.borncontinent = d.bplace_country.continent;
-  });
+    .sort((a, b) => b.l - a.l)
+    .map(d => ({...d, borncountry: d.bplace_country.country, borncontinent: d.bplace_country.continent}));
 
   const tmapDeathData = people
     .filter(p => p.deathyear !== null && p.dplace_country && p.dplace_country.country && p.dplace_country.continent)
-    // .filter(p => p.deathyear !== null && p.dplace_country && p.dplace_country.country_name && p.dplace_country.continent)
-    .sort((a, b) => b.l - a.l);
-
-  tmapDeathData.forEach(d => {
-    d.diedcountry = d.dplace_country.country_name;
-    d.diedcontinent = d.dplace_country.continent;
-  });
+    .sort((a, b) => b.l - a.l)
+    .map(d => ({...d, diedcountry: d.dplace_country.country, diedcontinent: d.dplace_country.continent}));
 
   return (
     <section className="profile-section">
