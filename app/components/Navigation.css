@@ -109,7 +109,7 @@
     min-width: 120px;
     text-align: center;
 
-    &:hover {
+    &:hover, &:focus, &:focus-within {
       & .sub-items {
         display: block;
       }
