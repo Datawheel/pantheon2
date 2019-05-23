@@ -22,19 +22,23 @@ const PeopleRanking = ({country, peopleBorn, peopleDied}) => {
           <p>
             {oldestBirthyear === youngestBirthyear ? <span>In {FORMATTERS.year(oldestBirthyear)}</span> : <span>Between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}</span> }, present day {country.country} was the birth place of {FORMATTERS.commas(peopleBorn.length)} globally memorable people, including <AnchorList items={peopleBorn.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. {topRankingDied.length ? <span>Additionaly, {FORMATTERS.commas(peopleDied.length)} globally memorable people have passed away in present day {country.country} including <AnchorList items={peopleDied.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />. { moreDeaths ? `Interestingly, more notably known people have passed away in ${country.country} than were born there.` : null}</span> : null}
           </p>
-          <div className="rank-title">
-            <h3>People Born in Present Day {country.country}</h3>
-            <Link to={`/explore/rankings?show=people&place=${placeQueryParamId}`}>Go to all Rankings</Link>
-          </div>
-          <PhotoCarousel people={topRankingBorn} rankAccessor={"bplace_country_rank_unique"} peopleAll={peopleBorn} />
-          { topRankingDied.length
+          {topRankingBorn.length
+            ? <div className="rank-sec-body">
+              <div className="rank-title">
+                <h3>People Born in Present Day {country.country}</h3>
+                <Link to={`/explore/rankings?show=people&place=${placeQueryParamId}`}>Go to all Rankings</Link>
+              </div>
+              <PhotoCarousel people={topRankingBorn} rankAccessor={"bplace_country_rank_unique"} peopleAll={peopleBorn} />
+            </div>
+            : null}
+          {topRankingDied.length
             ? <div className="rank-sec-body">
               <div className="rank-title">
                 <h3>People Deceased in Present Day {country.country}</h3>
                 <Link to={`/explore/rankings?show=people&place=${placeQueryParamId}&placeType=deathplace`}>Go to all Rankings</Link>
               </div>
               <PhotoCarousel people={topRankingDied} rankAccessor={"dplace_country_rank_unique"} peopleAll={peopleDied} />
-            </div> : null }
+            </div> : null}
         </div>
       </div>
     </section>

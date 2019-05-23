@@ -81,8 +81,8 @@ class Country extends Component {
         </div>
         <PeopleRanking country={country} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
         <Occupations attrs={attrs} country={country} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} />
-        <OccupationTrends attrs={attrs} country={country} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} />
-        <GeomapBirth country={country} peopleBorn={peopleBornHere} />
+        {peopleBornHere.length > 10 ? <OccupationTrends attrs={attrs} country={country} peopleBorn={peopleBornHere} peopleDied={peopleDiedHere} occupations={occupations} /> : null}
+        {peopleBornHere.length ? <GeomapBirth country={country} peopleBorn={peopleBornHere} /> : null}
         {peopleBornHere.filter(p => p.deathyear !== null).length ? <GeomapDeath country={country} peopleDied={peopleDiedHere} /> : null}
         {peopleBornHere.filter(p => p.deathyear !== null).length ? <Lifespans attrs={attrs} country={country} peopleBorn={peopleBornHere} /> : null}
 
