@@ -65,7 +65,7 @@ class Navigation extends Component {
               <Link to="/explore/rankings?show=people" className="item-link rankings-link">Rankings</Link>
             </li>
             <li className="item">
-              <Link to="" className="item-link profiles-link dd" activeClassName="active">Profiles</Link>
+              <a href="#" className="item-link profiles-link dd">Profiles</a>
               <ul className="sub-items">
                 <li><a href="/profile/person" className="item-link">People</a></li>
                 <li><a href="/profile/place" className="item-link">Places</a></li>
@@ -102,9 +102,9 @@ class Navigation extends Component {
               <Link to="/data/api" className="item-link api-link" activeClassName="active">API</Link>
             </li>
             <li className="search-btn">
-              <span onClick={activateSearch}>
+              <a href="#" onClick={activateSearch}>
                 <img src="/images/icons/icon-search.svg" alt="Search" />
-              </span>
+              </a>
             </li>
           </ul>
         </div>

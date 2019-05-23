@@ -81,14 +81,14 @@
     padding: 8px 14px 5px 42px;
     background-color: var(--colorEggshellOverlay);
 
-    &:active, &:focus {
-      outline: none;
-    }
-
     @media (max-width: 750px) {}
 
-    &:hover {
+    &:hover, &:active, &:focus {
       background-color: var(--colorKashi);
+      border-color: var(--colorDark);
+      color: inherit;
+      outline: none;
+      text-decoration: none;
     }
 
     /*@media (min-width: 751px) {

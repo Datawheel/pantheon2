@@ -227,6 +227,11 @@ pre {
 
   & a {
     color: inherit;
+    &:hover {
+      color: currentColor;
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
   }
 }
 

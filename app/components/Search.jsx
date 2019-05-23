@@ -93,7 +93,9 @@ class Search extends Component {
               <div className="search-mg-perimeter"></div>
               <div className="search-mg-handle"></div>
             </div>
-            <input type="text" ref={el => this._searchInput = el} onChange={this.onChange.bind(this)} />
+            <React.Fragment>
+              <input type="text" ref={el => this._searchInput = el} onChange={this.onChange.bind(this)} />
+            </React.Fragment>
           </div>
           <ul className="results-list">
             {this.state.results.map(result =>

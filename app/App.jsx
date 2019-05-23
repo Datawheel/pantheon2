@@ -57,8 +57,11 @@ class App extends Component {
     }
   }
 
-  activateSearch = () => {
+  activateSearch = e => {
     const {searchActive} = this.state;
+    if (e) {
+      e.preventDefault();
+    }
     // user wants to close the search
     if (searchActive) {
       document.removeEventListener("keydown", this._closeSearchEscKey, false);
