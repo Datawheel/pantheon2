@@ -36,7 +36,8 @@ const dataFormatter = (dataArray, show) => {
         top_ranked: leaves.sort((a, b) => b.hpi - a.hpi).slice(0, 3)
       }))
       .entries(data.filter(d => d.bplace_geonameid))
-      .map(d => d.value);
+      .map(d => d.value)
+      .filter(d => d.count >= 15);
   }
   else {
     data = data.map((d, i) => Object.assign(d, {rank: i + 1}));

@@ -62,7 +62,12 @@ class Navigation extends Component {
               <Link to="/explore/viz" className="item-link explore-link">Visualizations</Link>
             </li>
             <li className="item">
-              <Link to="/explore/rankings?show=people" className="item-link rankings-link">Rankings</Link>
+              <a href="#" className="item-link profiles-link dd">Rankings</a>
+              <ul className="sub-items">
+                <li><a href="/explore/rankings?show=people" className="item-link">People</a></li>
+                <li><a href="/explore/rankings?show=places" className="item-link">Places</a></li>
+                <li><a href="/explore/rankings?show=occupations" className="item-link">Occupations</a></li>
+              </ul>
             </li>
             <li className="item">
               <a href="#" className="item-link profiles-link dd">Profiles</a>
