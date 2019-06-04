@@ -6,8 +6,8 @@ class ShowControl extends Component {
     super(props);
     this.rankingTypes = [
       {id: "people", name: "People"},
-      {id: "occupations", name: "Occupations"},
-      {id: "places", name: "Places"}
+      {id: "places", name: "Places"},
+      {id: "occupations", name: "Occupations"}
     ];
     // this.changeShowType = this.props.changeShowType.bind(this);
     // this.changeShowDepth = this.props.changeShowDepth.bind(this);
