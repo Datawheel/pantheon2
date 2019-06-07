@@ -2,7 +2,7 @@ import React from "react";
 import "pages/profile/common/Footer.css";
 
 const Team = () =>
-  <div>
+  <div className="team-page">
     <h1>The Pantheon Team</h1>
     <p>Pantheon is a project by the <span>Collective Learning</span> group at the MIT Media Lab. The Pantheon visualization engine is a collaboration between Collective Learning and Datawheel.</p>
     <p><a href="http://www.macroconnections.media.mit.edu/">Collective Learning</a> is a research group at the MIT Media Lab focused on studying collective learning—the learning that happens at the group level, such as organizations, regions, countries, and the global community. We are a team of designers, engineers, and scientists that deploy our diverse set of skills to gain a better understanding of the world. Follow us on Twitter <a href="https://twitter.com/macromit">@MacroMIT</a>.</p>
@@ -12,10 +12,10 @@ const Team = () =>
       <ul className="footer-carousel-container">
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about cesar"></a>
+            <div className="error-photo about cesar" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>César A. Hidalgo</a>
+            César A. Hidalgo
           </h4>
           <p>Principal Investigator, Associate Professor, Head of Collective Learning</p>
           <p>Concept, Data, Design</p>
@@ -23,10 +23,10 @@ const Team = () =>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about cristian"></a>
+            <div className="error-photo about cristian" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Cristian Ignacio Jara Figueroa</a>
+            Cristian Ignacio Jara Figueroa
           </h4>
           <p>Lead Researcher, Collective Learning PhD Candidate</p>
           <p>Concept, Data, Design</p>
@@ -34,10 +34,10 @@ const Team = () =>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about dw"></a>
+            <div className="error-photo about dw" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Datawheel LLC</a>
+            Datawheel LLC
           </h4>
           <p>Development Team</p>
           <p>Design, Data, Development</p>
@@ -50,80 +50,80 @@ const Team = () =>
       <ul className="footer-carousel-container">
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about amy"></a>
+            <div className="error-photo about amy" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Amy Zhao Yu</a>
+            Amy Zhao Yu
           </h4>
           <p>Viacom</p>
           <p>Lead Researcher</p>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about kevin"></a>
+            <div className="error-photo about kevin" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Kevin Zeng Hu</a>
+            Kevin Zeng Hu
           </h4>
           <p>PhD Candidate</p>
           <p>Graduate Researcher</p>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about shahar"></a>
+            <div className="error-photo about shahar" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Shahar Ronen</a>
+            Shahar Ronen
           </h4>
           <p>Graduate Alumnus</p>
           <p>Graduate Researcher</p>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about deepak"></a>
+            <div className="error-photo about deepak" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Deepak Jagdish</a>
+            Deepak Jagdish
           </h4>
           <p>Graduate Alumnus</p>
           <p>Graduate Researcher</p>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about defne"></a>
+            <div className="error-photo about defne" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Defne Gurel</a>
+            Defne Gurel
           </h4>
           <p>Undergraduate</p>
           <p>Undergraduate Researcher</p>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about tiffany"></a>
+            <div className="error-photo about tiffany" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Tiffany Lu</a>
+            Tiffany Lu
           </h4>
           <p>Undergraduate</p>
           <p>Undergraduate Researcher</p>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about ali"></a>
+            <div className="error-photo about ali" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Ali Almossawi</a>
+            Ali Almossawi
           </h4>
           <p>Mozilla Corporation</p>
           <p>External Collaborators</p>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a className="error-photo about andrew"></a>
+            <div className="error-photo about andrew" />
           </div>
           <h4 className="footer-carousel-item-title">
-            <a>Andrew Mao</a>
+            Andrew Mao
           </h4>
           <p>Graduate Student at Harvard</p>
           <p>External Collaborators</p>
