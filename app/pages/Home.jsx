@@ -72,9 +72,8 @@ class Home extends Component {
         </div>
 
         <div className="home-body">
-          {!stackedData || !attrs
-            ? <div>Loading...</div>
-            : <div className="viz-container">
+          {stackedData && attrs &&
+            <div className="viz-container">
               <StackedArea
                 config={{
                   data: stackedData,
@@ -132,7 +131,8 @@ class Home extends Component {
                 </ul>
               </div>
               <h4 className="legend-title">Domains of all <span>Occupations</span></h4>
-            </div>}
+            </div>
+          }
         </div>
 
         <div className="ia">
@@ -142,7 +142,7 @@ class Home extends Component {
             <li className="item ia-top-item viz">
               <a href="/explore/viz"><h2 className="viz-explorer">Visualizations</h2></a>
               <p>
-              Create custom charts and maps using the Pantheon data. <a href="/explore/viz" className="deep-link">View Visualizations</a>
+              Create custom charts and maps using the Pantheon data. <a href="/explore/viz" className="deep-link">View Visualizations</a>
               </p>
             </li>
             <li className="item ia-top-item profiles">
@@ -154,7 +154,7 @@ class Home extends Component {
             <li className="item ia-top-item ranks">
               <a href="/explore/rankings"><h2 className="ranks">Rankings</h2></a>
               <p>
-              Rank <a href="/profile/person">people</a>, <a href="/profile/place">places</a>, and <a href="/profile/occupation">occupations</a>. <a href="/explore/rankings" className="deep-link">View Rankings</a>
+              Rank <a href="/profile/person">people</a>, <a href="/profile/place">places</a>, and <a href="/profile/occupation">occupations</a>. <a href="/explore/rankings" className="deep-link">View Rankings</a>
               </p>
             </li>
           </ul>
