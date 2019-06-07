@@ -163,10 +163,15 @@ class Controls extends Component {
 
     return (
       <div className="explore-controls viz-explorer" id="side-panel">
-        <div className="control-header">
-          <h2 className="viz-explorer"><span className="helper-text">Open&nbsp;</span>{pageType === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text">&nbsp;Panel</span></h2>
-          <i className="control-toggle" onClick={this.toggleSidePanel}></i>
+        {/* desktop title*/}
+        <div className="control-header desktop">
+          <h2 className="viz-explorer">Visualizations</h2>
         </div>
+        {/* mobile toggle */}
+        <button className="control-header mobile" onClick={this.toggleSidePanel}>
+          <h2 className="viz-explorer"><span className="helper-text">Open </span>{pageType === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text"> Panel</span></h2>
+          <i className="control-icon" />
+        </button>
 
         <section className="control-group main-selector">
           {pageType === "viz"

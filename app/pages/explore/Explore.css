@@ -411,8 +411,28 @@
   box-sizing: border-box;
   background-color: var(--colorSlate);
 
+  &.mobile {
+    width: calc(100% - 90px);
+    border: none;
+  }
+
+  &:hover .control-icon {
+    background-image: url('/images/icons/icon-hide-h.svg');
+  }
+  &:active .control-icon {
+    background-image: url('/images/icons/icon-show.svg');
+  }
+
+  & h2 {
+    margin: 0;
+  }
+
   @media (min-width: 751px) {
     padding: 10px 5px 7px 30px;
+
+    &.mobile {
+      display: none;
+    }
   }
 
   @media (max-width: 750px) {
@@ -423,6 +443,10 @@
     padding: 6px;
     max-width: 100%;
     box-sizing: border-box;
+
+    &.desktop {
+      display: none;
+    }
   }
 
   & h2 {
@@ -458,7 +482,7 @@
     }
   }
 
-  & .control-toggle {
+  & .control-icon {
     background-repeat: no-repeat;
     background-image: url('/images/icons/icon-hide.svg');
     background-position: 50%;
@@ -466,15 +490,6 @@
     width: 19px;
     height: 12px;
     cursor: pointer;
-
-    &:hover {
-      background-image: url('/images/icons/icon-hide-h.svg');
-    }
-
-    &:active {
-      background-image: url('/images/icons/icon-show.svg');
-      margin-bottom: -8px;
-    }
   }
 }
 
@@ -519,7 +534,7 @@
     &.hide {
       box-sizing: border-box;
 
-      & .control-toggle {
+      & .control-icon {
         background-image: url('/images/icons/icon-show.svg');
         margin-bottom: -8px;
 
