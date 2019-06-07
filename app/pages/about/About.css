@@ -1,21 +1,30 @@
 @import "components/common/mixins";
 /* @import "components/common/input"; */
 
-.data, .about {
+.data, .about-page {
   display: flex;
   flex-direction: row;
-  max-width: 1024px;
+  width: 1024px;
+  max-width: 100%;
   margin: 0 auto;
   border-top: 1px solid var(--colorCardboard);
-  padding: 50px 24px;
+  padding: 80px 24px;
 
-  @media (max-width: 1172px) {
-    margin: 0 7.2vw;
+  & .error-photo {
+    background-size: contain;
+  }
+
+  & .p2-authors {
+    margin-top: 30px;
   }
 
   & .page-nav {
     flex: 0 1 200px;
-    padding-top: 70px;
+    align-self: flex-start;
+    /* pin to screen */
+    position: sticky;
+    padding-top: 20px;
+    top: 80px;
 
     @media (max-width: 750px) {
       display: none;
@@ -112,6 +121,7 @@
   }
 
   & .long-text {
+    padding: 0; /* override canon */
     & p + p {
       margin-top: 10px;
     }

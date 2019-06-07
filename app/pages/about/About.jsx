@@ -6,7 +6,7 @@ import "pages/about/Misc.css";
 import "pages/about/About.css";
 
 const About = ({children}) =>
-  <div className="about">
+  <div className="about-page">
     <Helmet title="About Pantheon" />
     <nav className="page-nav" role="navigation">
       <ul className="page-items">
