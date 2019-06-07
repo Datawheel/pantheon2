@@ -27,14 +27,17 @@
       margin-bottom: 30px;
       height: 200px;
       position: relative;
+      overflow: hidden;
 
       & h3 {
         @mixin priTitle;
+        font-size: var(--sizeLarge);
         color: var(--colorSlate);
         display: none;
         text-align: center;
         width: 100%;
         z-index: 9;
+        padding: 1em;
       }
 
       & a {

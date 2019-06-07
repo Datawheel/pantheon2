@@ -21,7 +21,6 @@
   color: var(--colorDark);
   font-family: var(--fontTitle);
   text-transform: uppercase;
-  font-size: var(--sizeXL);
   font-weight: 400;
   letter-spacing: 0.3rem;
 }
