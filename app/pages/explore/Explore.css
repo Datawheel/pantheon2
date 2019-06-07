@@ -1,5 +1,4 @@
-@import "components/common/typography";
-@import "components/common/colors";
+@import "components/common/mixins";
 @import "components/common/loader";
 /* @import '/reacttable-override';
 @import '/slider-override'; */
