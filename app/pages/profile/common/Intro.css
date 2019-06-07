@@ -1,5 +1,4 @@
-@import "components/common/colors";
-@import "components/common/typography";
+@import "components/common/mixins";
 
 .intro-section {
   @mixin themeDark;

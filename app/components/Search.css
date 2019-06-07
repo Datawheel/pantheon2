@@ -1,5 +1,4 @@
-@import "common/colors";
-@import "common/typography";
+@import "common/mixins";
 
 .search {
   background: var(--colorEggshellOverlay) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAFCAYAAAB8ZH1oAAAAK0lEQVQYV2P8+vVjPQMDAwM3N38jiMYFGGEShDTAFRLSgKEQlwacCtE1AAAVaBNgQH40pQAAAABJRU5ErkJggg==) repeat;

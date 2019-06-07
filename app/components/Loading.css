@@ -1,4 +1,4 @@
-@import "components/common/colors";
+@import "components/common/mixins";
 .Loading {
   @mixin themeLight;
   height: 100vh;

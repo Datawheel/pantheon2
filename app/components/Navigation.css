@@ -1,5 +1,4 @@
-@import "common/colors";
-@import "common/typography";
+@import "common/mixins";
 
 .global-nav {
   position: absolute;

@@ -1,5 +1,4 @@
-@import "components/common/typography";
-@import "components/common/colors";
+@import "components/common/mixins";
 
 .loading-img {
   margin-top: 60px;

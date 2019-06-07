@@ -1,5 +1,4 @@
-@import "common/colors";
-@import "common/typography";
+@import "common/mixins";
 
 .app.explorer .global-footer {
   margin: 0 24px;

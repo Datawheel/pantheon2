@@ -1,5 +1,4 @@
-@import "components/common/typography";
-@import "components/common/colors";
+@import "components/common/mixins";
 
 .profile-grid {
   width: 100%;
@@ -30,13 +29,12 @@
       position: relative;
 
       & h3 {
+        @mixin priTitle;
         color: var(--colorSlate);
         display: none;
         text-align: center;
         width: 100%;
         z-index: 9;
-        @mixin priTitle;
-        font-size: 18px;
       }
 
       & a {

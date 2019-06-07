@@ -1,5 +1,4 @@
-@import "components/common/typography";
-@import "components/common/colors";
+@import "components/common/mixins";
 
 .home-head {
   margin: 0 auto;
@@ -132,8 +131,11 @@
 } */
 
 .home-container {
-  width: 100%;
   position: relative;
+  /* prevent floating content from making the page scroll horizontally on small screens */
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .home-body {
