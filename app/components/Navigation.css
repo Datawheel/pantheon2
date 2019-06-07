@@ -222,7 +222,7 @@
   }
 
   & .search-btn {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 6px;
     padding: 24px;
@@ -238,7 +238,6 @@
 
     @media (max-width: 800px) {
       top: 4px;
-      position: relative;
       padding: 15px;
     }
 
@@ -258,8 +257,10 @@
     }
 
     @media (max-width: 800px) {
+      position: fixed;
       display: block;
       padding: 15px;
+      top: 0;
     }
   }
 }
@@ -299,7 +300,7 @@
 
   & .close-btn {
     position: absolute;
-    right: 0;
+    left: 0;
     top: 0;
     padding: 15px;
     cursor: pointer;
