@@ -21,23 +21,16 @@
     @mixin priLabel;
     margin: 5px auto 25px;
   }
+
+  & p {
+    text-align: center;
+  }
 }
 
 .home-head-content {
   z-index: 200;
   display: flex;
-
-  @media (max-width: 750px) {
-    flex-direction: column-reverse;
-  }
-
-  @media (min-width: 751px) {
-    flex-direction: column;
-
-    & .post {
-      z-index: 50;
-    }
-  }
+  flex-direction: column;
 }
 
 .home-search {
@@ -546,19 +539,20 @@
   }
 
   & .deep-link {
+    position: relative;
     &::after {
       content: '';
-      position: relative;
-      display: inline-block;
+      position: absolute;
       height: 8px;
-      width: 6px;
-      margin: 0 0 -1px 3px;
+      bottom: 3px;
+      width: 0.5em;
+      margin-left: 0.25em;
       background: url("/images/ui/tri-right.svg") no-repeat;
       background-size: contain;
     }
   }
 
-  & ul {
+  & .items {
     width: 100%;
     max-width: 1024px;
     display: flex;
@@ -670,34 +664,20 @@
       }
     }
 
-    & li {
+    & section {
       flex: 1;
     }
   }
 
   & .ia-top-item {
     @media (max-width: 550px) {
-      width: 80%;
+      width: calc(100% - 40px);
       margin-left: auto;
       margin-right: auto;
-      border-style: solid;
-      border-color: var(--colorEggshell);
       padding: 10px 10px 10px 25px;
 
       & + .ia-top-item {
         margin-top: 30px;
-      }
-      &.viz {
-        order: 1;
-        border-width: 1px;
-      }
-      &.ranks {
-        order: 2;
-        border-width: 1px;
-      }
-      &.profiles {
-        order: 3;
-        border-width: 1px 1px 0 1px;
       }
     }
 
@@ -717,13 +697,14 @@
   & .ia-p-types {
     flex-wrap: wrap;
 
-    & li {
+    & section {
       box-sizing: border-box;
+
       @media (max-width: 550px) {
         max-width: 80%;
         padding: 10px 10px 10px 25px;
 
-        & + li {
+        & + section {
           margin-top: 20px;
         }
       }
