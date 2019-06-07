@@ -36,7 +36,7 @@
     "pluralize": "^7.0.0",
     "react-scroll": "^1.7.7",
     "react-table": "^6.7.6",
-    "sharp": "^0.22.0",
+    "sharp": "^0.22.1",
     "xvfb": "^0.2.3"
   }
 }
