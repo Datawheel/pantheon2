@@ -14,6 +14,11 @@ header {
   justify-content: center;
   padding-top: 40px;
   padding-bottom: 40px;
+
+  @media (min-width: 751px) {
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
 }
 
 .bg-container {
