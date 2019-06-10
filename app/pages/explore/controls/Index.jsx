@@ -192,14 +192,15 @@ class Controls extends Component {
           <AdvancedControl metricType={metricType} metricCutoff={metricCutoff} changeMetric={this.updateAndFetchData} />
         </section>
 
-        <section className="control-group flat-group share-group">
+        {/* TODO: add sharing and uncomment */}
+        {/*  <section className="control-group flat-group share-group">
           <h3>Share</h3>
           <ul className="items flat-options">
             <li><Link to="#" className="em"><img src="/images/icons/icon-email.svg" alt="Email this visualization"/></Link></li>
             <li><Link to="#" className="fb"><img src="/images/icons/icon-facebook.svg" alt="Share this visualization on Facebook"/></Link></li>
             <li><Link to="#" className="tw"><img src="/images/icons/icon-twitter.svg" alt="Share this visualization on Twitter"/></Link></li>
           </ul>
-        </section>
+        </section>*/}
 
       </div>
     );
