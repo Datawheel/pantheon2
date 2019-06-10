@@ -127,6 +127,7 @@
   font-weight: 700;
   color: currentColor;
   text-decoration: none;
+  border-bottom: 1px solid var(--colorMatza);
   outline: none;
   cursor: pointer;
 
