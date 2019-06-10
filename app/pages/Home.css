@@ -149,15 +149,15 @@
   @media (max-width: 750px) {
     margin-bottom: 22px;
     margin-top: 13px;
-    width: 80%;
-    max-width: 384px;
+    width: calc(100% - 60px);
   }
 
   @media (min-width: 751px) {
     margin-bottom: 30px;
     margin-top: 0;
     width: 62%;
-    max-width: 560px;
+    max-width: 600px;
+    text-align: center;
   }
 
   & a {
