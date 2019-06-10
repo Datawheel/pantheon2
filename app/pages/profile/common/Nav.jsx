@@ -4,13 +4,13 @@ import "pages/profile/common/Nav.css";
 
 const Nav = ({sections}) =>
   <nav className="profile-nav">
-    <ol>
+    <ol className="profile-nav-list">
       {sections.map(section =>
-        <li key={section.slug}>
-          <span>
-            <AnchorLink to={section.slug} className={`${section.slug}`}>. {section.title}</AnchorLink>
-          </span>
-          <span className="jump-to-link"><a href={`#${section.slug}`}>Jump to</a></span>
+        <li className="profile-nav-item" key={section.slug}>
+          <AnchorLink to={section.slug} className={`profile-nav-link ${section.slug}`}>
+            <span className="profile-nav-link-title">{section.title}</span>
+            <span className="jump-to-text" ariaHidden>Jump to</span>
+          </AnchorLink>
         </li>
       )}
     </ol>
