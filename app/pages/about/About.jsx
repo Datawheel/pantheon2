@@ -30,7 +30,7 @@ const About = ({children}) =>
         </li>
       </ul>
     </nav>
-    <div>{children}</div>
+    {children}
   </div>;
 
 export default About;

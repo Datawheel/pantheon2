@@ -60,8 +60,16 @@
     }
   }
 
-  & iframe {
-    width: 100%;
+  & .video-wrapper {
+    background-color: var(--colorSand);
+    padding-top: 56%; /* set height */
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+
+    & iframe {
+      @mixin absolute-expand;
+    }
   }
 
   & h1 {
