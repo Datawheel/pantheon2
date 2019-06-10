@@ -35,78 +35,83 @@ const Api = () =>
 
     <h2>People:</h2>
     <h3>Identifiers:</h3>
-    <ul className="items">
-      <li className="item">en_curid : English Wikipedia page ID.</li>
-      <li className="item">name : English Wikipedia page title.</li>
-      <li className="item">wd_id : Wikidata entity ID.</li>
-    </ul>
+    <dl className="items">
+      <dt>en_curid</dt> <dd>English Wikipedia page ID.</dd>
+      <dt>name</dt> <dd>English Wikipedia page title.</dd>
+      <dt>wd_id</dt> <dd>Wikidata entity ID.</dd>
+    </dl>
 
     <h3>Birth and death:</h3>
-    <ul className="items">
-      <li className="item">birth_place : Birth place.</li>
-      <li className="item">lat,lon : Coordinates of birth place.</li>
-      <li className="item">birth_year : Year of birth (or best estimation of).</li>
-      <li className="item">birth_town : Closest settlement (above 15000 people) to birth_place (identified using the geonameid from geonames.org).</li>
-      <li className="item">birth_civ : Ancient civilization of birth according to the birth_place and birth_year.</li>
-    </ul>
+    <dl className="items">
+      <dt>birth_place</dt> <dd>Birth place.</dd>
+      <dt>lat,lon</dt> <dd>Coordinates of birth place.</dd>
+      <dt>birth_year</dt> <dd>Year of birth (or best estimation of).</dd>
+      <dt>birth_town</dt> <dd>Closest settlement (above 15000 people) to birth_place (identified using the geonameid from geonames.org).</dd>
+      <dt>birth_civ</dt> <dd>Ancient civilization of birth according to the birth_place and birth_year.</dd>
+    </dl>
 
     <h3>Occupation:</h3>
-    <ul className="items">
-      <li className="item">occupation : Occupation that best describes the person’s mayor field of contribution.</li>
-      <li className="item">prob_ratio : Score of the quality of the estimation.</li>
-    </ul>
+    <dl className="items">
+      <dt>occupation</dt> <dd>Occupation that best describes the person’s mayor field of contribution.</dd>
+      <dt>prob_ratio</dt> <dd>Score of the quality of the estimation.</dd>
+    </dl>
 
     <h3>Memorability indicators (static):</h3>
-    <ul className="items">
-      <li className="item">L : Number of Wikipedia language editions that have a biography about this character.</li>
-      <li className="item">pv : Total English Wikipedia pageviews from XX 2007 until XX 2016.</li>
-      <li className="item">HPI : Human popularity index following Yu et. al. using pageviews data from July 2015 until June 2016.</li>
-    </ul>
+    <dl className="items">
+      <dt>L</dt> <dd>Number of Wikipedia language editions that have a biography about this character.</dd>
+      <dt>pv</dt> <dd>Total English Wikipedia pageviews from XX 2007 until XX 2016.</dd>
+      <dt>HPI</dt> <dd>Human popularity index following Yu et. al. using pageviews data from July 2015 until June 2016.</dd>
+    </dl>
 
     <h3>Memorability indicators (dynamic):</h3>
-    <ul className="items">
-      <li className="item">L : Number of Wikipedia language editions as a function of time.</li>
-      <li className="item">l : Fraction of Wikipedia language editions over the number of Wikipedias expressed in Pantheon.</li>
-      <li className="item">l* : Number of Wikipedia language editions normalized by the mean number of editions of all people in Pantheon.</li>
-      <li className="item">C : Article coverage. For each language at each month we define the language’s coverage as the number of people with a page in that language divided by the number of people with a page in any language. The coverage for each person is calculated as the total coverage of the languages he or she appears on.</li>
-      <li className="item">c : Article coverage normalized by the total coverage of all language editions expressed in the dataset.</li>
-      <li className="item">S : Score. The score for each language edition at each month is calculated as one over the coverage. The score of each article is calculated as the total score of the language editions it appears on. This measure is meant to assign more value to rare language editions.</li>
-      <li className="item">s : Score normalized by the total score of all language editions expressed in the dataset.</li>
-      <li className="item">R : Number of revisions of the English Wikipedia page as a function of time.</li>
-      <li className="item">r : Number of revisions of the English Wikipedia normalized by all the revisions in Pantheon.</li>
-      <li className="item">r* : Number of revisions of the English Wikipedia normalized by the average number of revisions.</li>
-      <li className="item">pv : Monthly pageviews for the English Wikipedia page.</li>
-    </ul>
+    <dl className="items">
+      <dt>L</dt> <dd>Number of Wikipedia language editions as a function of time.</dd>
+      <dt>l</dt> <dd>Fraction of Wikipedia language editions over the number of Wikipedias expressed in Pantheon.</dd>
+      <dt>l*</dt> <dd>Number of Wikipedia language editions normalized by the mean number of editions of all people in Pantheon.</dd>
+      <dt>C</dt> <dd>Article coverage. For each language at each month we define the language’s coverage as the number of people with a page in that language divided by the number of people with a page in any language. The coverage for each person is calculated as the total coverage of the languages he or she appears on.</dd>
+      <dt>c</dt> <dd>Article coverage normalized by the total coverage of all language editions expressed in the dataset.</dd>
+      <dt>S</dt> <dd>Score. The score for each language edition at each month is calculated as one over the coverage. The score of each article is calculated as the total score of the language editions it appears on. This measure is meant to assign more value to rare language editions.</dd>
+      <dt>s</dt> <dd>Score normalized by the total score of all language editions expressed in the dataset.</dd>
+      <dt>R</dt> <dd>Number of revisions of the English Wikipedia page as a function of time.</dd>
+      <dt>r</dt> <dd>Number of revisions of the English Wikipedia normalized by all the revisions in Pantheon.</dd>
+      <dt>r*</dt> <dd>Number of revisions of the English Wikipedia normalized by the average number of revisions.</dd>
+      <dt>pv</dt> <dd>Monthly pageviews for the English Wikipedia page.</dd>
+    </dl>
 
     <h3>Reference indicators (dynamic)</h3>
-    <ul className="items">
-      <li className="item">nw : Total number of Wikipedia editions expressed in the dataset.</li>
-      <li className="item">L_av : Average number of language editions of biographies in the dataset.</li>
-      <li className="item">cov : Total coverage of all the language editions expressed in the dataset.</li>
-      <li className="item">score : Total score of all language editions expressed in the dataset.</li>
-    </ul>
+    <dl className="items">
+      <dt>nw</dt> <dd>Total number of Wikipedia editions expressed in the dataset.</dd>
+      <dt>L_av</dt> <dd>Average number of language editions of biographies in the dataset.</dd>
+      <dt>cov</dt> <dd>Total coverage of all the language editions expressed in the dataset.</dd>
+      <dt>score</dt> <dd>Total score of all language editions expressed in the dataset.</dd>
+    </dl>
 
     <h2>Town:</h2>
-
-    <p>birth_town : geonameid identifier.</p>
-    <p>population : Current population estimate according to geonames.org</p>
-    <p>lat,lon : Coordinates according to geonames.org</p>
-    <p>city : Big city the town belongs to, following the DBSCAN algorithm to group towns into clusters.</p>
-    <p>country : Country the town belongs to (country code), according to modern borders.</p>
+    <dl className="items">
+      <dt>birth_town</dt> <dd>geonameid identifier.</dd>
+      <dt>population</dt> <dd>Current population estimate according to geonames.org</dd>
+      <dt>lat,lon</dt> <dd>Coordinates according to geonames.org</dd>
+      <dt>city</dt> <dd>Big city the town belongs to, following the DBSCAN algorithm to group towns into clusters.</dd>
+      <dt>country</dt> <dd>Country the town belongs to (country code), according to modern borders.</dd>
+    </dl>
 
     <h2>Country:</h2>
-    <p>country : Country code identifier.</p>
-    <p>founded : Country foundation year according to <a href="https://en.wikipedia.org/wiki/List_of_sovereign_states_by_date_of_formation" target="_blank">Wikipedia</a>.</p>
-    <p>region : UN region the country belongs to.</p>
-    <p>continent : Continent the country belongs to.</p>
+    <dl className="items">
+      <dt>country</dt> <dd>Country code identifier.</dd>
+      <dt>founded</dt> <dd>Country foundation year according to <a href="https://en.wikipedia.org/wiki/List_of_sovereign_states_by_date_of_formation" target="_blank">Wikipedia</a>.</dd>
+      <dt>region</dt> <dd>UN region the country belongs to.</dd>
+      <dt>continent</dt> <dd>Continent the country belongs to.</dd>
+    </dl>
 
     <h2>Groupings:</h2>
-    <p>least_developed : Countries that are the least developed according to the UN.</p>
-    <p>language : Countries grouped according to shared language.</p>
-    <p>colonial : Countries grouped according to shared colonial past.</p>
-    <p>industry : Second level of aggregation for occupations.</p>
-    <p>domain : Third level of aggregation for occupations.</p>
-    <p>group : Alternative aggregation for occupations (used to track changes in composition of history due to changes in media).</p>
+    <dl className="items">
+      <dt>least_developed</dt> <dd>Countries that are the least developed according to the UN.</dd>
+      <dt>language</dt> <dd>Countries grouped according to shared language.</dd>
+      <dt>colonial</dt> <dd>Countries grouped according to shared colonial past.</dd>
+      <dt>industry</dt> <dd>Second level of aggregation for occupations.</dd>
+      <dt>domain</dt> <dd>Third level of aggregation for occupations.</dd>
+      <dt>group</dt> <dd>Alternative aggregation for occupations (used to track changes in composition of history due to changes in media).</dd>
+    </dl>
 
   </div>;
 

@@ -112,15 +112,10 @@
 }
 
 @define-mixin bodyText {
-  font-size: var(--sizeSmall);
-  line-height: calc(var(--sizeSmall) * 2);
+  font-size: var(--sizeBody);
+  line-height: calc(var(--sizeBody) * 2);
   margin: 0;
   font-weight: 400;
-
-  @media (max-width: 750px) {
-    font-size: var(--sizeBody);
-    line-height: calc(2 * var(--sizeBody));
-  }
 }
 
 @define-mixin bodyLink {
