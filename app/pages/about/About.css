@@ -42,7 +42,6 @@
 
     & .item-link {
       color: var(--colorDark);
-      text-decoration: none;
 
       &:hover {
         opacity: 0.7;
@@ -162,10 +161,6 @@
     & .item {
       @mixin bodyText;
     }
-
-    & p, & .item {
-      margin-left: 15px;
-    }
   }
 
   & .footer-title {
@@ -232,8 +227,6 @@
     letter-spacing: 0.01em;
 
     & a {
-      text-decoration: none;
-      outline: none;
       color: var(--colorEggshell);
       @mixin bodyLink;
     }
