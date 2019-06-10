@@ -11,22 +11,22 @@ const About = ({children}) =>
     <nav className="page-nav" role="navigation">
       <ul className="page-items">
         <li className="item">
-          <Link to="/about/vision" className="item-link" activeClassName="active">Vision</Link>
+          <Link to="/about/vision" className="item-link" activeClassName="is-active">Vision</Link>
         </li>
         <li className="item">
-          <Link to="/about/methods" className="item-link" activeClassName="active">Methods</Link>
+          <Link to="/about/methods" className="item-link" activeClassName="is-active">Methods</Link>
         </li>
         <li className="item">
-          <Link to="/about/team" className="item-link" activeClassName="active">Team</Link>
+          <Link to="/about/team" className="item-link" activeClassName="is-active">Team</Link>
         </li>
         <li className="item">
-          <Link to="/about/publications" className="item-link" activeClassName="active">Publications</Link>
+          <Link to="/about/publications" className="item-link" activeClassName="is-active">Publications</Link>
         </li>
         <li className="item">
-          <Link to="/about/data_sources" className="item-link" activeClassName="active">Data Sources</Link>
+          <Link to="/about/data_sources" className="item-link" activeClassName="is-active">Data Sources</Link>
         </li>
         <li className="item">
-          <Link to="/about/contact" className="item-link" activeClassName="active">Contact</Link>
+          <Link to="/about/contact" className="item-link" activeClassName="is-active">Contact</Link>
         </li>
       </ul>
     </nav>
