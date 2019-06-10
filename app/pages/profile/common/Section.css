@@ -153,11 +153,11 @@
       position: absolute;
       &.back {
         top: 72px;
-        left: -45px;
+        left: -25px;
       }
       &.forward {
         top: 72px;
-        right: -45px;
+        right: -25px;
       }
     }
 
