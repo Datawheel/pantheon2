@@ -1,7 +1,8 @@
 @import "components/common/mixins";
 /* @import "components/common/input"; */
 
-.data-page, .about-page {
+.about-page,
+.data-page {
   display: flex;
   flex-direction: row;
   width: 1024px;
@@ -72,7 +73,7 @@
   & h2 {
     @mixin profileVizTitle;
     text-transform: none;
-    margin: 30px 0 5px;
+    margin: 2.5em 0 5px;
 
     &.obj-title {
       text-align: center;
@@ -82,12 +83,11 @@
 
   & h3 {
     @mixin searchResults;
-    margin-top: 30px;
-    color: var(--colorTan);
     letter-spacing: 0.5px;
   }
 
-  & p {
+  & p,
+  & dl > * {
     @mixin bodyText;
 
     & + p {
@@ -109,6 +109,27 @@
     & a {
       @mixin bodyLink;
     }
+  }
+
+  & dt {
+    color: var(--colorStone);
+    font-weight: 700;
+  }
+
+  & dd {
+    color: var(--colorSlate);
+    line-height: 1;
+    margin-bottom: 1em;
+  }
+
+  & dt,
+  & dd {
+    display: block;
+  }
+
+  & dd:after {
+    content: "\A";
+    white-space: pre;
   }
 
   & input {
@@ -155,7 +176,7 @@
 
   & .api-container {
     & h3 {
-      margin: 10px 0 3px;
+      margin-top: 2em;
     }
 
     & .item {
