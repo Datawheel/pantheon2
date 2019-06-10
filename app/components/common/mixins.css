@@ -1,3 +1,11 @@
+/* ellipsis */
+/* NOTE: works best with defined width & height, 1 line of text */
+@define-mixin overflow-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* COLORS */
 @define-mixin themeDark {
   background-color: var(--colorDark);
