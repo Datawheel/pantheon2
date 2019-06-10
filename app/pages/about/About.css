@@ -127,9 +127,10 @@
     display: block;
   }
 
+  /* add line breaks */
   & dd:after {
     content: "\A";
-    white-space: pre;
+    display: block;
   }
 
   & input {
