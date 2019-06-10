@@ -8,7 +8,7 @@
   z-index: 10;
 
   @media (min-width: 751px) {
-    padding-top: 25px;
+    padding: 25px;
   }
 }
 

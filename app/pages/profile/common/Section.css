@@ -24,7 +24,7 @@
     width: 100%;
   }
 
-  & .section-actions {
+  /* & .section-actions {
     margin: 20px 0 0 0;
     position: relative;
 
@@ -54,7 +54,7 @@
       top: -1px;
       opacity: 0.75;
     }
-  }
+  } */
 
   & .section-head {
     display: flex;
@@ -67,7 +67,8 @@
       margin: 0;
     }
 
-    & .section-title, & .section-actions {
+    & .section-title,
+    & .section-actions {
       & > * {
         display: inline-block;
       }
@@ -81,6 +82,7 @@
     & h4 a {
       color: var(--colorSlate) !important;
       text-decoration: none;
+      cursor: text;
     }
   }
 
