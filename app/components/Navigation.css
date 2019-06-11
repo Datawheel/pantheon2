@@ -299,7 +299,7 @@
     transform 0.2s ease-out,
     opacity 0.2s ease-out;
 
-  @media (min-width: 751px) {
+  @media (min-width: 801px) {
     display: none;
   }
 
