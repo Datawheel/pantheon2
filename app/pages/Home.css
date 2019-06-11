@@ -205,7 +205,7 @@
 
 .timeline-container {
   position: absolute;
-  bottom: 0;
+  bottom: 17px;
   height: 100%;
   width: 100%;
   padding-left: 65px;
@@ -213,6 +213,15 @@
   padding-bottom: 70px;
   box-sizing: border-box;
   pointer-events: none;
+
+  /* fudge positioning for smaller screens to account for label wrapping */
+  @media (max-width: 1081px) {
+    bottom: 40px;
+  }
+
+  @media (max-width: 660px) {
+    display: none;
+  }
 
   & .items {
     position: relative;
