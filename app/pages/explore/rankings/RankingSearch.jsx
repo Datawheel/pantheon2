@@ -28,7 +28,7 @@ class RankingPagination extends Component {
           onChange={this.changeSearch}
           onKeyPress={e => e.key === "Enter" ? this.props.search(searchTerm) : null}
         />
-        <button onClick={this.changeSearch}>Search</button>
+        <button onClick={this.changeSearch}>Filter</button>
       </div>
     );
   }
