@@ -70,7 +70,7 @@ class Navigation extends Component {
               </ul>
             </li>
             <li className="item">
-              <a href="#" className="item-link profiles-link dd">Profiles</a>
+              <a href="/profile/person" className="item-link profiles-link dd">Profiles</a>
               <ul className="sub-items">
                 <li><a href="/profile/person" className="item-link">People</a></li>
                 <li><a href="/profile/place" className="item-link">Places</a></li>
