@@ -80,23 +80,21 @@ class Search extends Component {
 
     return (
       <div className="search">
-        <div className="search-close">
-          <i onClick={activateSearch}>
-            <span className="close-perimeter"></span>
-            <span className="close-x close-back"></span>
-            <span className="close-x close-for"></span>
+        <button className="search-close" onClick={activateSearch}>
+          <i>
+            <span className="close-perimeter" />
+            <span className="close-x close-back" />
+            <span className="close-x close-for" />
           </i>
-        </div>
+        </button>
         <div className="search-results">
-          <div className="search-result-input">
+          <label className="search-result-input">
             <div className="search-mg">
-              <div className="search-mg-perimeter"></div>
-              <div className="search-mg-handle"></div>
+              <div className="search-mg-perimeter" />
+              <div className="search-mg-handle" />
             </div>
-            <React.Fragment>
-              <input type="text" ref={el => this._searchInput = el} onChange={this.onChange.bind(this)} />
-            </React.Fragment>
-          </div>
+            <input type="text" ref={el => this._searchInput = el} onChange={this.onChange.bind(this)} />
+          </label>
           <ul className="results-list">
             {this.state.results.map(result =>
               <li key={`person_${result.slug}`} className={`result-${result.profile_type}`}>
