@@ -5,6 +5,7 @@ import axios from "axios";
 import HomeGrid from "pages/HomeGrid";
 import {StackedArea} from "d3plus-react";
 import {calculateYearBucket, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
+import Spinner from "components/Spinner";
 import "pages/Home.css";
 
 class Home extends Component {
@@ -72,8 +73,8 @@ class Home extends Component {
         </div>
 
         <div className="home-body">
-          {stackedData && attrs &&
-            <div className="viz-container">
+          {stackedData && attrs
+            ? <div className="viz-container">
               <StackedArea
                 config={{
                   data: stackedData,
@@ -132,6 +133,7 @@ class Home extends Component {
               </div>
               <h4 className="legend-title">Domains of all <span>Occupations</span></h4>
             </div>
+            : <Spinner />
           }
         </div>
 
