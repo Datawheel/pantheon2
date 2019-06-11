@@ -1,16 +1,9 @@
 @import "components/common/mixins";
-@import "components/common/loader";
 /* @import '/reacttable-override';
 @import '/slider-override'; */
 
 :root {
   --viz-height: 70vh;
-}
-
-.loading-img {
-  & .spinner {
-    background-image: url("/images/misc/loading.gif");
-  }
 }
 
 .explore-container {
