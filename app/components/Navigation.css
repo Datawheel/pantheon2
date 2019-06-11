@@ -293,16 +293,19 @@
   z-index: 99;
   background-color: var(--colorEggshell);
   min-height: 690px;
-  top: -693px;
-  opacity: 1;
-  transition: top 0.6s;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition:
+    transform 0.2s ease-out,
+    opacity 0.2s ease-out;
 
   @media (min-width: 751px) {
     display: none;
   }
 
   &.open {
-    top: 0;
+    transform: none;
+    opacity: 1;
   }
 
   &.expand {
@@ -310,7 +313,7 @@
   }
 
   & .logo-container {
-    padding: 16px 0;
+    padding: 12px 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -341,10 +344,7 @@
   }
 
   & .item {
-    padding-top: 22px;
-    padding-left: 0;
-    padding-right: 0;
-    padding-bottom: 18px;
+    padding: 0;
     margin: 0 20px;
     cursor: pointer;
 
@@ -367,6 +367,8 @@
   }
 
   & .item-link {
+    display: block;
+    padding: 1em 0;
     margin-left: 40px;
     @mixin profileSectionTitle;
 
@@ -453,14 +455,8 @@
   & .sub-items {
     display: none;
     background-color: var(--colorMatza);
-    margin-top: 22px;
-    margin-left: -20px;
-    margin-right: -20px;
-    margin-bottom: 22px;
-    padding-top: 13px;
-    padding-left: 0;
-    padding-right: 0;
-    padding-bottom: 13px;
+    margin: 0 -20px 20px -20px;
+    padding: 0;
 
     &.open {
       display: block;
@@ -470,15 +466,15 @@
 
     & li {
       display: block;
-      padding: 22px 0 18px;
 
       & a {
         @mixin boldSmallCaps;
+        display: block;
         color: var(--colorDark);
         margin-left: 60px;
         font-size: 18px;
         font-weight: 400;
-        padding: 22px 0;
+        padding: 1em 0;
       }
     }
   }
