@@ -70,7 +70,7 @@ class Navigation extends Component {
               </ul>
             </li>
             <li className="item">
-              <a href="#" className="item-link profiles-link dd">Profiles</a>
+              <a href="/profile/person" className="item-link profiles-link dd">Profiles</a>
               <ul className="sub-items">
                 <li><a href="/profile/person" className="item-link">People</a></li>
                 <li><a href="/profile/place" className="item-link">Places</a></li>
@@ -107,9 +107,9 @@ class Navigation extends Component {
               <Link to="/data/api" className="item-link api-link" activeClassName="active">API</Link>
             </li>
             <li className="search-btn">
-              <a href="#" onClick={activateSearch}>
+              <button onClick={activateSearch}>
                 <img src="/images/icons/icon-search.svg" alt="Search" />
-              </a>
+              </button>
             </li>
           </ul>
         </div>

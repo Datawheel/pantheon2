@@ -1,4 +1,4 @@
-@import "components/common/colors";
+@import "components/common/mixins";
 .Loading {
   @mixin themeLight;
   height: 100vh;
@@ -31,8 +31,8 @@
 .loading.bp3-non-ideal-state {
   max-width: 200px;
   width: 100%;
-  background-color: var(--dark);
-  color: var(--white);
+  background-color: var(--colorDark);
+  color: var(--colorEggshell);
   height: 100vh;
   left: 0;
   max-width: none;
@@ -41,12 +41,12 @@
   width: 100%;
   z-index: 100;
   & .bp3-progress-meter {
-    background-color: var(--light) !important;
+    background-color: var(--colorTan) !important;
   }
   & h4.bp3-heading {
-    color: var(--white) !important;
+    color: var(--colorEggshell) !important;
   }
 }
 .bp3-non-ideal-state-title {
-  color: var(--white);
+  color: var(--colorEggshell);
 }

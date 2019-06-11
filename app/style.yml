@@ -15,17 +15,8 @@
 #   import style from "style.yml";
 #
 
-dark: "rgb(61, 71, 55)"
-light: "rgb(101, 111, 95)"
-white: "#fafafa"
-
 nav-height: 40px
 subnav-size: 200px
-
-nested:
-  color1: "red"
-  color2: "black"
-
 
 fontBody: "'Amiko', Helvetica, Arial, sans-serif"
 fontTitle: "'Marcellus', Times, serif"

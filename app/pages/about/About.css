@@ -1,22 +1,31 @@
-@import "components/common/typography";
-@import "components/common/colors";
+@import "components/common/mixins";
 /* @import "components/common/input"; */
 
-.data, .about {
+.about-page,
+.data-page {
+  @mixin max-container-width;
   display: flex;
   flex-direction: row;
-  max-width: 1024px;
+  width: 1024px;
   margin: 0 auto;
   border-top: 1px solid var(--colorCardboard);
-  padding: 50px 24px;
+  padding: 80px 0;
 
-  @media (max-width: 1172px) {
-    margin: 0 7.2vw;
+  & .error-photo {
+    background-size: contain;
+  }
+
+  & .p2-authors {
+    margin-top: 30px;
   }
 
   & .page-nav {
     flex: 0 1 200px;
-    padding-top: 70px;
+    align-self: flex-start;
+    /* pin to screen */
+    position: sticky;
+    padding-top: 20px;
+    top: 80px;
 
     @media (max-width: 750px) {
       display: none;
@@ -33,11 +42,11 @@
     }
 
     & .item-link {
-      color: var(--colorDark);
-      text-decoration: none;
+      color: var(--colorStone);
 
-      &:hover {
-        opacity: 0.7;
+      &.is-active {
+        font-weight: 600;
+        color: var(--colorDark);
       }
     }
   }
@@ -52,8 +61,16 @@
     }
   }
 
-  & iframe {
-    width: 100%;
+  & .video-wrapper {
+    background-color: var(--colorSand);
+    padding-top: 56%; /* set height */
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+
+    & iframe {
+      @mixin absolute-expand;
+    }
   }
 
   & h1 {
@@ -65,7 +82,7 @@
   & h2 {
     @mixin profileVizTitle;
     text-transform: none;
-    margin: 30px 0 5px;
+    margin: 2.5em 0 5px;
 
     &.obj-title {
       text-align: center;
@@ -75,12 +92,11 @@
 
   & h3 {
     @mixin searchResults;
-    margin-top: 30px;
-    color: var(--colorTan);
     letter-spacing: 0.5px;
   }
 
-  & p {
+  & p,
+  & dl > * {
     @mixin bodyText;
 
     & + p {
@@ -104,6 +120,28 @@
     }
   }
 
+  & dt {
+    color: var(--colorStone);
+    font-weight: 700;
+  }
+
+  & dd {
+    color: var(--colorSlate);
+    line-height: 1;
+    margin-bottom: 1em;
+  }
+
+  & dt,
+  & dd {
+    display: block;
+  }
+
+  /* add line breaks */
+  & dd:after {
+    content: "\A";
+    display: block;
+  }
+
   & input {
     display: block;
     width: 100%;
@@ -113,6 +151,7 @@
   }
 
   & .long-text {
+    padding: 0; /* override canon */
     & p + p {
       margin-top: 10px;
     }
@@ -147,15 +186,11 @@
 
   & .api-container {
     & h3 {
-      margin: 10px 0 3px;
+      margin-top: 2em;
     }
 
     & .item {
       @mixin bodyText;
-    }
-
-    & p, & .item {
-      margin-left: 15px;
     }
   }
 
@@ -223,8 +258,6 @@
     letter-spacing: 0.01em;
 
     & a {
-      text-decoration: none;
-      outline: none;
       color: var(--colorEggshell);
       @mixin bodyLink;
     }

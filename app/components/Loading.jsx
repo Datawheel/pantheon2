@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {translate} from "react-i18next";
-import {NonIdealState, ProgressBar} from "@blueprintjs/core";
+// import {NonIdealState, ProgressBar} from "@blueprintjs/core";
+import Navigation from "components/Navigation";
+import Spinner from "components/Spinner";
 import "./Loading.css";
 
 /**
@@ -11,13 +13,20 @@ import "./Loading.css";
 class Loading extends Component {
   render() {
     const {progress, t, total} = this.props;
-    return <NonIdealState
-      className="Loading"
-      title={ t("Loading.title") }
-      description={ t("Loading.description", {progress, total}) }
-    >
-      <ProgressBar value={progress / total} />
-    </NonIdealState>;
+    // return <NonIdealState
+    //   className="Loading"
+    //   title={ t("Loading.title") }
+    //   description={ t("Loading.description", {progress, total}) }
+    // >
+    //   <ProgressBar value={progress / total} />
+    // </NonIdealState>;
+
+    return (
+      <React.Fragment>
+        <Navigation />
+        <Spinner />
+      </React.Fragment>
+    );
   }
 }
 

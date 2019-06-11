@@ -1,5 +1,4 @@
-@import "components/common/colors";
-@import "components/common/typography";
+@import "components/common/mixins";
 
 .about-section {
   @media (max-width: 750px) {

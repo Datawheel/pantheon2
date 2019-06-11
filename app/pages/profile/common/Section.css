@@ -1,5 +1,4 @@
-@import "components/common/colors";
-@import "components/common/typography";
+@import "components/common/mixins";
 
 .profile-section {
   overflow: visible;
@@ -18,9 +17,6 @@
     margin-top: 90px;
   }
 
-  &:not(:last-child) {
-  }
-
   & > * {
     width: 100%;
   }
@@ -29,8 +25,15 @@
     margin: 20px 0 0 0;
     position: relative;
 
+    /* hide download button on small screens */
+    @media (max-width: 800px) {
+      & button {
+        display: none;
+      }
+    }
+
     & button {
-      background: transparent;
+      background: color(var(--colorEggshell) a(0.75));
       border: 1px solid var(--colorSand);
       color: var(--colorSand);
       cursor: pointer;
@@ -40,18 +43,20 @@
       padding: 4px 8px;
       position: absolute;
       right: 0;
-      top: -6px;
       text-transform: uppercase;
       z-index: 99;
 
-      &:hover {
-        opacity: 0.7;
+      &:hover, &:focus {
+        background: var(--colorSnow);
+        box-shadow: 0 1px 1em color(var(--colorTan) a(0.25));
       }
     }
 
     & img {
-      height: 14px;
-      opacity: 0.7;
+      height: 1em;
+      vertical-align: middle;
+      top: -1px;
+      opacity: 0.75;
     }
   }
 
@@ -61,7 +66,13 @@
     justify-content: space-between;
     align-items: center;
 
-    & .section-title, & .section-actions {
+    /* override canon */
+    & .section-title {
+      margin: 0;
+    }
+
+    & .section-title,
+    & .section-actions {
       & > * {
         display: inline-block;
       }
@@ -75,6 +86,7 @@
     & h4 a {
       color: var(--colorSlate) !important;
       text-decoration: none;
+      cursor: text;
     }
   }
 
@@ -147,11 +159,11 @@
       position: absolute;
       &.back {
         top: 72px;
-        left: -45px;
+        left: -25px;
       }
       &.forward {
         top: 72px;
-        right: -45px;
+        right: -25px;
       }
     }
 

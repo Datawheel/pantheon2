@@ -1,5 +1,4 @@
-@import "components/common/colors";
-@import "components/common/typography";
+@import "components/common/mixins";
 
 .d3plus-tooltip {
   border: 1px solid var(--colorMatza) !important;

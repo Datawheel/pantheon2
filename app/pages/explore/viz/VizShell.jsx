@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import Spinner from "components/Spinner";
 import PTreemap from "pages/explore/viz/vizTypes/PTreemap";
 import PStacked from "pages/explore/viz/vizTypes/PStacked";
 import PLine from "pages/explore/viz/vizTypes/PLine";
@@ -17,11 +18,7 @@ class VizShell extends Component {
 
     if (loading) {
       return <div className="explore-viz-container">
-        <div className="loading-img">
-          <p>Loading data<span className="loading-dot">.</span><span className="loading-dot">.</span><span className="loading-dot">.</span></p>
-          <div className="spinner"></div>
-          <div className="spin-cover"></div>
-        </div>
+        <Spinner />
       </div>;
     }
 

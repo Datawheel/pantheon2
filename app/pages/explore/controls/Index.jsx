@@ -163,10 +163,15 @@ class Controls extends Component {
 
     return (
       <div className="explore-controls viz-explorer" id="side-panel">
-        <div className="control-header">
-          <h2 className="viz-explorer"><span className="helper-text">Open&nbsp;</span>{pageType === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text">&nbsp;Panel</span></h2>
-          <i className="control-toggle" onClick={this.toggleSidePanel}></i>
+        {/* desktop title*/}
+        <div className="control-header desktop">
+          <h2 className="viz-explorer">Visualizations</h2>
         </div>
+        {/* mobile toggle */}
+        <button className="control-header mobile" onClick={this.toggleSidePanel}>
+          <h2 className="viz-explorer"><span className="helper-text">Open </span>{pageType === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text"> Panel</span></h2>
+          <i className="control-icon" />
+        </button>
 
         <section className="control-group main-selector">
           {pageType === "viz"
@@ -187,14 +192,15 @@ class Controls extends Component {
           <AdvancedControl metricType={metricType} metricCutoff={metricCutoff} changeMetric={this.updateAndFetchData} />
         </section>
 
-        <section className="control-group flat-group share-group">
+        {/* TODO: add sharing and uncomment */}
+        {/*  <section className="control-group flat-group share-group">
           <h3>Share</h3>
           <ul className="items flat-options">
             <li><Link to="#" className="em"><img src="/images/icons/icon-email.svg" alt="Email this visualization"/></Link></li>
             <li><Link to="#" className="fb"><img src="/images/icons/icon-facebook.svg" alt="Share this visualization on Facebook"/></Link></li>
             <li><Link to="#" className="tw"><img src="/images/icons/icon-twitter.svg" alt="Share this visualization on Twitter"/></Link></li>
           </ul>
-        </section>
+        </section>*/}
 
       </div>
     );

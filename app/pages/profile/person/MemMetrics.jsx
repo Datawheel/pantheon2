@@ -32,10 +32,22 @@ class MemMetrics extends Component {
       .map(pv => pv.views)
       .reduce((total, newVal) => total + newVal, 0);
 
+    // if (!vid) { vid = {id: {videoId: "XyNlqQId-nk"}}; } // testing
+
     return (
       <div className="metrics-container">
         <div className="metric-vid">
-          {vid ? <iframe max-width="560" width="100%" height="315" src={`https://www.youtube.com/embed/${vid.id.videoId}`} frameBorder="0" allowFullScreen></iframe> : <a href="" className="press-play"><i></i></a>}
+          {vid
+            ? <iframe
+              src={`https://www.youtube.com/embed/${vid.id.videoId}`}
+              max-width="560"
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              allowFullScreen
+            />
+            : <button className="press-play" disabled tabIndex="-1"><i /></button>
+          }
         </div>
         <ul className="metrics-list">
           <li className="metric">

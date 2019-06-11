@@ -1,5 +1,4 @@
-@import "components/common/colors";
-@import "components/common/typography";
+@import "components/common/mixins";
 
 .profile-footer {
   @mixin themeDark;
@@ -33,24 +32,38 @@
     align-items: flex-start;
     list-style-type: none;
     padding: 0;
-    margin: 0;
+    margin: 0 -20px;
+    width: calc(100% + 40px);
+
+    @media (min-width: 751px) {
+      margin: 0 -10px;
+      width: calc(100% + 20px);
+    }
   }
 
   & .footer-carousel-item {
     display: inline-block;
     width: 145px;
-    margin: 10px 20px;
+    margin: 10px;
+    max-width: calc(50vw - 20px);
+
+    @media (min-width: 751px) {
+      margin: 10px 20px;
+    }
   }
 
   & .footer-carousel-item-photo {
     display: block;
-    width: 145px;
     height: 145px;
     overflow: hidden;
     position: relative;
     margin: auto;
     box-sizing: border-box;
     border: 1px solid var(--colorMatza);
+
+    &:hover + .footer-carousel-item-title > a {
+      border-color: var(--colorSand);
+    }
 
     & a {
       background-size: cover;
@@ -70,8 +83,8 @@
   }
 
   & .footer-carousel-item-title {
-    margin: 13px 0 0;
-    padding: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0; /* reset default */
     font-size: 12px;
     line-height: 18px;
     font-weight: 700;
@@ -79,10 +92,17 @@
     letter-spacing: 0.01em;
 
     & a {
+      display: inline;
       text-decoration: none;
       outline: none;
       @mixin bodyLink;
       color: var(--colorEggshell);
+      border-color: var(--colorSlate);
+      transition: border-color 0.2s ease;
+
+      &:hover, &:focus {
+        border-color: var(--colorSand);
+      }
     }
   }
 
