@@ -1,8 +1,7 @@
 import {COLORS_DOMAIN, FORMATTERS} from "types/index";
 import {extent, histogram, min, max, range} from "d3-array";
 
-export function calculateYearBucket(data = [], accessor = d => d.birthyear) {
-
+export const calculateYearBucket = (data = [], accessor = d => d.birthyear) => {
   let [minYear, maxYear] = extent(data, accessor);
   const earlyYears = minYear < -500 ? minYear + 500 : 1;
   const laterYears = maxYear > 2000 ? maxYear - 2000 : 1;
@@ -17,14 +16,14 @@ export function calculateYearBucket(data = [], accessor = d => d.birthyear) {
   const years = data.map(d => maxYear - accessorClamp(d));
   const buckets = 50;
 
-  function linspace(min, max, num) {
+  const linspace = (min, max, num) => {
     const r = range(0, num, 1);
     return r.map(n => min + n * (max - min) / (num - 1));
-  }
+  };
 
   const big = Math.abs(minYear - maxYear);
   let a = linspace(0, Math.log10(big), buckets)
-      .map(d => Math.ceil(Math.pow(10, d)));
+    .map(d => Math.ceil(Math.pow(10, d)));
   a = a.filter((d, i) => i === a.indexOf(d));
 
   const h = histogram()
@@ -48,9 +47,9 @@ export function calculateYearBucket(data = [], accessor = d => d.birthyear) {
 
   return [labels, ticks];
 
-}
+};
 
-export function groupBy(attrs) {
+export const groupBy = attrs => {
 
   if (!attrs) return g => g;
 
@@ -66,42 +65,38 @@ export function groupBy(attrs) {
     else {
 
 
-      if (!attrs[d.occupation_id]) console.log(d.occupation_id, attrs[d.occupation_id]);
+      if (!attrs[d.occupation_id]) console.log(`No occupation found with ID: ${d.occupation_id}`, attrs[d.occupation_id]);
       val = attrs[d.occupation_id][g];
     }
 
     return val;
   };
 
-}
+};
 
-export function groupTooltip(data, accessor = () => []) {
-  return {
-    body: d => {
-      const names = d.name instanceof Array ? d.name : [d.name];
-      let txt = `<span class='sub'>Top Ranked ${names.length === 1 ? "Person" : "People"}</span>`;
-      const people = data.sort((a, b) => b.hpi - a.hpi).filter(d => names.includes(d.name));
-      const peopleNames = people.map(d => d.name);
-      people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
-        txt += `<br /><span class="bold">${n.name}</span> b.${FORMATTERS.year(n.birthyear)}`;
-      });
-      return txt;
-    },
-    footer: d => {
-      const id = accessor(d);
-      return id instanceof Array ? "" : "Click to View Profile";
-    }
-  };
-}
+export const groupTooltip = (data, accessor = () => []) => ({
+  body: d => {
+    const names = d.name instanceof Array ? d.name : [d.name];
+    let txt = `<span class='sub'>Top Ranked ${names.length === 1 ? "Person" : "People"}</span>`;
+    const people = data.sort((a, b) => b.hpi - a.hpi).filter(d => names.includes(d.name));
+    const peopleNames = people.map(d => d.name);
+    people.filter((d, i) => peopleNames.indexOf(d.name) === i).slice(0, 3).forEach(n => {
+      txt += `<br /><span class="bold">${n.name}</span> b.${FORMATTERS.year(n.birthyear)}`;
+    });
+    return txt;
+  },
+  footer: d => {
+    const id = accessor(d);
+    return id instanceof Array ? "" : "Click to View Profile";
+  }
+});
 
-export function on(category, accessor) {
-  return  {
-    "click.shape": d => {
-      const id = accessor(d);
-      if (!(id instanceof Array)) window.location.href = `/profile/${category}/${id}`;
-    }
-  };
-}
+export const on = (category, accessor) => ({
+  "click.shape": d => {
+    const id = accessor(d);
+    if (!(id instanceof Array)) window.location.href = `/profile/${category}/${id}`;
+  }
+});
 
 export const peopleTooltip = {
   body: d => {
@@ -118,16 +113,14 @@ export const peopleTooltip = {
   footer: d => d.name instanceof Array ? "" : "Click to View Profile"
 };
 
-export function shapeConfig(attrs) {
-  return {
-    fill: d => {
-      if (d.color) return d.color;
-      else if (d.occupation_id !== undefined) {
-        let occ = d.occupation_id.constructor === Array ? d.occupation_id[0] : d.occupation_id;
-        if (occ instanceof Array) occ = occ[0];
-        return COLORS_DOMAIN[attrs[occ].domain_slug];
-      }
-      return "#ccc";
+export const shapeConfig = attrs => ({
+  fill: d => {
+    if (d.color) return d.color;
+    else if (d.occupation_id !== undefined) {
+      let occ = d.occupation_id.constructor === Array ? d.occupation_id[0] : d.occupation_id;
+      if (occ instanceof Array) occ = occ[0];
+      return COLORS_DOMAIN[attrs[occ].domain_slug];
     }
-  };
-}
+    return "#ccc";
+  }
+});
