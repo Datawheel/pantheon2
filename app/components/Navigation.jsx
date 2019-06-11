@@ -107,9 +107,9 @@ class Navigation extends Component {
               <Link to="/data/api" className="item-link api-link" activeClassName="active">API</Link>
             </li>
             <li className="search-btn">
-              <a href="#" onClick={activateSearch}>
+              <button onClick={activateSearch}>
                 <img src="/images/icons/icon-search.svg" alt="Search" />
-              </a>
+              </button>
             </li>
           </ul>
         </div>

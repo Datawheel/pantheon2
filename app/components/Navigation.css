@@ -225,8 +225,20 @@
     position: fixed;
     right: 0;
     top: 6px;
-    padding: 24px;
-    cursor: pointer;
+    padding: 0 !important;
+
+    & button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 10px;
+
+      @media (min-width: 801px) {
+        padding: 16px;
+        margin-top: 6px;
+        margin-right: 6px;
+      }
+    }
 
     &:hover {
       opacity: 0.6;
