@@ -67,7 +67,7 @@
 
     border: 1px solid var(--colorStone);
     border-radius: 20px;
-    padding: 8px 14px 5px 42px;
+    padding: 5px 14px 7px 42px;
     background-color: var(--colorEggshellOverlay);
 
     @media (max-width: 750px) {}
