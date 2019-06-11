@@ -13,8 +13,8 @@
 }
 
 .explore-title {
-  width: 80%;
-  min-width: 352px;
+  width: 600px;
+  max-width: 100%;
   margin: 0 auto;
   text-align: center;
   @mixin profileVizTitle;
@@ -71,10 +71,18 @@
 
 .explore-viz-container {
   height: var(--viz-height);
+  min-height: 500px;
   position: relative;
+
   & .viz {
     position: absolute !important;
     height: 100%;
+  }
+
+  @media (min-width: 751px) {
+    margin-left: 12px;
+    top: -3px; /* fudge into place */
+    min-height: 687px; /* line up with controls */
   }
 }
 
