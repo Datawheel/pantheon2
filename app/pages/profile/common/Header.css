@@ -1,18 +1,24 @@
-@import "components/common/colors";
-@import "components/common/typography";
+@import "components/common/mixins";
 
 @import url('https://fonts.googleapis.com/css?family=Marcellus');
 
 header {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   max-height: 900px;
   overflow-x: hidden;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+
+  @media (min-width: 751px) {
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
 }
 
 .bg-container {
@@ -164,6 +170,7 @@ header {
   max-width: 450px;
   box-sizing: border-box;
   z-index: 9;
+  padding: 16px;
 
   & h1 {
     hyphens: none;
@@ -171,12 +178,6 @@ header {
 
   @media (min-width: 751px) {
     padding: 32px;
-  }
-
-  @media (max-width: 750px) {
-    height: 61.8%;
-    min-width: 300px;
-    max-height: 450px;
   }
 }
 
@@ -196,6 +197,7 @@ header {
 
 h1 {
   @mixin priTitle;
+  font-size: var(--sizeXXL);
   margin: 0;
   word-break: break-all;
   word-break: break-word;

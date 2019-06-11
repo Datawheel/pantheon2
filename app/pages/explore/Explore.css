@@ -1,17 +1,9 @@
-@import "components/common/typography";
-@import "components/common/colors";
-@import "components/common/loader";
+@import "components/common/mixins";
 /* @import '/reacttable-override';
 @import '/slider-override'; */
 
 :root {
   --viz-height: 70vh;
-}
-
-.loading-img {
-  & .spinner {
-    background-image: url("/images/misc/loading.gif");
-  }
 }
 
 .explore-container {
@@ -21,8 +13,8 @@
 }
 
 .explore-title {
-  width: 80%;
-  min-width: 352px;
+  width: 600px;
+  max-width: 100%;
   margin: 0 auto;
   text-align: center;
   @mixin profileVizTitle;
@@ -79,10 +71,18 @@
 
 .explore-viz-container {
   height: var(--viz-height);
+  min-height: 500px;
   position: relative;
+
   & .viz {
     position: absolute !important;
     height: 100%;
+  }
+
+  @media (min-width: 751px) {
+    margin-left: 12px;
+    top: -3px; /* fudge into place */
+    min-height: 687px; /* line up with controls */
   }
 }
 
@@ -132,7 +132,7 @@
     left: 0;
     width: 100%;
     box-sizing: border-box;
-    padding: 0 45px 0 45px;
+    padding: 0 10px;
     z-index: 98;
   }
 
@@ -226,7 +226,7 @@
 
   & .viztype-options {
     & li {
-      padding-top: 13px;
+      padding-top: 0.625em;
     }
 
     & a {
@@ -237,9 +237,9 @@
         position: absolute;
         background-repeat: no-repeat;
         background-size: contain;
-        width: 14px;
-        height: 14px;
-        margin: -1px 0 0 -20px;
+        width: 1.25em;
+        height: 1.25em;
+        margin: 1px 0 0 -20px;
       }
 
       &.treemap::before {
@@ -253,23 +253,19 @@
       }
       &.map::before {
         background-image: url('/images/explore/map.svg');
-        margin: -2px 0 0 -20px;
       }
 
       &.occupations::before {
         background-image: url('/images/explore/occupations.svg');
         background-position: 50% 0;
-        margin: -1px 0 0 -20px;
       }
       &.people::before {
         background-image: url('/images/explore/people.svg');
         background-position: 50% 0;
-        margin: -3px 0 0 -20px;
       }
       &.places::before {
         background-image: url('/images/explore/places.svg');
         background-position: 50% 0;
-        margin: -2px 0 0 -20px;
       }
       &.d-3::before {
         background-image: url('/images/explore/d-3.svg');
@@ -278,13 +274,11 @@
         background-image: url('/images/explore/d-2.svg');
         background-size: 10px 9px;
         background-position: 50% 0;
-        margin: -1px 0 0 -20px;
       }
       &.d-1::before {
         background-image: url('/images/explore/d-1.svg');
         background-size: 5px 5px;
         background-position: 50% 50%;
-        margin: -5px 0 0 -20px;
       }
     }
   }
@@ -334,11 +328,12 @@
   & .control-group {
     background-color: var(--colorEggshell);
     border: solid 1px var(--colorSand);
-    padding: 16px 11px 16px;
+    padding: 16px;
     box-sizing: border-box;
 
     @media (min-width: 751px) {
       margin-bottom: 9px;
+      padding: 11px;
     }
 
     @media (max-width: 750px) {
@@ -356,13 +351,15 @@
 
   & .share-group {
     & li {
+
+      /* space out adjacent items */
+      &:not(:last-child) {
+        margin-right: 1.5em;
+      }
+
       &::after {
         content: "";
         padding: 0;
-      }
-      &::before {
-        content: "";
-        padding-left: 16px;
       }
 
       & a {
@@ -412,8 +409,32 @@
   box-sizing: border-box;
   background-color: var(--colorSlate);
 
+  &.mobile {
+    width: calc(100% - 90px);
+    border: none;
+    top: -36px;
+    border-radius: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  &:hover .control-icon {
+    background-image: url('/images/icons/icon-hide-h.svg');
+  }
+  &:active .control-icon {
+    background-image: url('/images/icons/icon-show.svg');
+  }
+
+  & h2 {
+    margin: 0;
+  }
+
   @media (min-width: 751px) {
     padding: 10px 5px 7px 30px;
+
+    &.mobile {
+      display: none;
+    }
   }
 
   @media (max-width: 750px) {
@@ -424,6 +445,10 @@
     padding: 6px;
     max-width: 100%;
     box-sizing: border-box;
+
+    &.desktop {
+      display: none;
+    }
   }
 
   & h2 {
@@ -459,7 +484,7 @@
     }
   }
 
-  & .control-toggle {
+  & .control-icon {
     background-repeat: no-repeat;
     background-image: url('/images/icons/icon-hide.svg');
     background-position: 50%;
@@ -467,15 +492,6 @@
     width: 19px;
     height: 12px;
     cursor: pointer;
-
-    &:hover {
-      background-image: url('/images/icons/icon-hide-h.svg');
-    }
-
-    &:active {
-      background-image: url('/images/icons/icon-show.svg');
-      margin-bottom: -8px;
-    }
   }
 }
 
@@ -502,6 +518,7 @@
     @media (max-width: 750px) {
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
 
       & li {
         padding: 13px 5px 3px;
@@ -520,7 +537,7 @@
     &.hide {
       box-sizing: border-box;
 
-      & .control-toggle {
+      & .control-icon {
         background-image: url('/images/icons/icon-show.svg');
         margin-bottom: -8px;
 
@@ -552,15 +569,18 @@
       & .control-group {
         display: block;
       }
-      & .main-selector {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-between;
+    }
+    & .filter + .filter {
+      margin-top: 1em;
+    }
+    & .viztype-options > li {
+      padding: 0.5em 0;
+
+      &:not(:last-child) {
+        margin-right: 2em;
       }
     }
   }
-
 }
 
 .explore-controls {

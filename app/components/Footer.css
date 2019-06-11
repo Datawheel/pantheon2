@@ -1,5 +1,4 @@
-@import "common/colors";
-@import "common/typography";
+@import "common/mixins";
 
 .app.explorer .global-footer {
   margin: 0 24px;
@@ -8,18 +7,15 @@
 }
 
 .global-footer {
+  @mixin max-container-width;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  max-width: 1024px;
+  width: 1024px;
   margin: 0 auto;
   padding: 50px 0;
   border-top: 1px solid var(--colorCardboard);
-
-  @media (max-width: 1172px) {
-    margin: 0 7.2vw;
-  }
 
   @media (max-width: 750px) {
     flex-direction: column;
@@ -27,20 +23,56 @@
   }
 
   & .site-map {
-    max-width: 525px;
+    margin-bottom: 40px;
+
+    /* single column layout on small screens */
+    @media (max-width: 400px) {
+      /* reset to block */
+      & li, & a {
+        display: block;
+        width: 100%;
+      }
+
+      /* underline overrides */
+      & a {
+        border-bottom: 1px solid var(--colorLint);
+      }
+      & li:last-child > a {
+        border-color: transparent;
+      }
+
+      /* titles */
+      & > .item > .item-link {
+        border-bottom: 1px solid var(--colorMatza);
+        padding-bottom: 1rem;
+      }
+      /* adjust spacing between adjacent groups */
+      & .item + .item {
+        margin-top: 1em;
+      }
+    }
+
+    @media (min-width: 750px) {
+      padding-right: 20px;
+    }
   }
 
   & .items, & .sub-items {
     width: 100%;
   }
 
+  /* underline */
   & .item-link {
     color: var(--colorDark);
+
+    &:hover, &:focus {
+      text-decoration: none;
+      border-bottom: 1px solid currentColor !important;
+    }
   }
 
   & .item {
     min-width: 90px;
-    margin: 5px;
   }
 
   & .items {
@@ -48,6 +80,10 @@
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
+
+    @media (max-width: 749px) {
+      width: 100%;
+    }
 
     & .item > .item-link {
       @mixin boldSmallCaps;
@@ -60,18 +96,17 @@
   & .sub-items .item-link {
     @mixin bodyText;
     font-size: 12px;
-    &:hover {
-      border-bottom: 1px solid currentColor;
-    }
   }
 
-  & .right {
-    max-width: 250px;
-    margin: 0 0 0 auto;
+  & .sites {
+    width: 250px;
+    max-width: 100%;
+    margin: 10px auto 0 auto;
 
-    @media (max-width: 750px) {
-      margin: 20px 0 0 auto;
+    @media (min-width: 750px) {
+      margin-right: 0;
       width: 250px;
+      min-width: 250px;
     }
 
     & .authors {

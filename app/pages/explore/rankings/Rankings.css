@@ -1,5 +1,24 @@
-@import "components/common/typography";
-@import "components/common/colors";
+@import "components/common/mixins";
+
+.ranking-table-container {
+
+  /* error message */
+  & .ReactTable {
+    min-height: 200px; /* prevent error message from overlapping table header & footer */
+
+    & .rt-noData {
+      background: none;
+      bottom: 20px;
+    }
+  }
+
+  /* prevent page overflow */
+  @media (min-width: 751px) {
+    padding: 0 0 10px 20px;
+    max-width: calc(100% - 20px);
+    overflow-x: auto;
+  }
+}
 
 .ranking-table {
   width: 100%;
@@ -35,7 +54,48 @@
 .ranking-head {
   width: 100%;
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+
+  & select {
+    margin-left: 0.5em;
+  }
+
+  & input {
+    border: 1px solid var(--colorTan);
+    border-right-width: 0;
+    padding: 0.25em 0.5em;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  & button {
+    border: 1px solid var(--colorStone);
+    background: none;
+    cursor: pointer;
+    padding: 0.25em 0.5em;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  @media (max-width: 400px) {
+    display: block;
+
+    & .ranking-result-count {
+      margin-bottom: 0.5em;
+    }
+
+    & .ranking-search {
+      display: flex;
+
+      & > input {
+        @mixin exploreControlInputText;
+        flex: 1 0 auto;
+      }
+    }
+  }
 }
 
 .ranking-pagination {

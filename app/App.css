@@ -1,5 +1,4 @@
-@import "components/common/colors";
-@import "components/common/typography";
+@import "components/common/mixins";
 @import url("https://fonts.googleapis.com/css?family=Amiko:400,600,700");
 
 * {box-sizing: border-box;}
@@ -18,8 +17,15 @@ body {
 }
 
 .app {
-  height: 100%;
   font-weight: normal;
+  /* sticky footer */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  & .global-footer {
+    margin-top: auto;
+  }
 }
 
 a {

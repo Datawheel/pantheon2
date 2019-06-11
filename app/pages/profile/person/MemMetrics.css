@@ -1,13 +1,12 @@
-@import "components/common/typography";
-@import "components/common/colors";
+@import "components/common/mixins";
 
 .metrics-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
 
   @media (max-width: 970px) {
     flex-direction: column;
-    align-items: center;
 
     & .metric-vid {
       margin-bottom: 40px;
@@ -16,24 +15,35 @@
 }
 
 .metric-vid {
-  border: 1px solid var(--colorTan);
+  background-color: var(--colorSand);
   display: inline-block;
-  height: 315px;
-  width: 50%;
-  max-width: 560px;
-  margin-right: 20px;
+  padding-top: 56%; /* set height */
+  width: 100%;
   position: relative;
   flex: 0 0 auto;
 
+  & > iframe {
+    @add-mixin absolute-expand;
+  }
+
+  /* two column layout */
+  @media (min-width: 971px) {
+    margin-right: 40px;
+    padding-top: 26.666%; /* set height */
+    width: calc(50% - 20px);
+  }
+
   & .press-play {
+    @mixin absolute-center;
     border-radius: 50%;
     border: 1px solid var(--colorTan);
     width: 60px;
     height: 60px;
     display: block;
-    position: relative;
-    top: 35%;
-    left: 41%;
+
+    &[disabled] {
+      pointer-events: none;
+    }
 
     & i {
       display: block;
@@ -65,17 +75,16 @@ iframe.yasiv-youtube {
 .metrics-list {
   list-style-type: none;
   margin: 0;
-  padding: 30px 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
+  padding: 0;
+  width: 100%;
+  columns: 5;
+  column-width: 12rem;
+  column-gap: 40px;
 
   & .metric {
-    min-width: 135px;
-    flex: 1;
+    break-inside: avoid;
 
-    & + .metric {
+    &:not(:last-child) {
       margin-bottom: 30px;
     }
   }
@@ -87,8 +96,11 @@ iframe.yasiv-youtube {
 
   & p {
     @mixin smallCaps;
-    line-height: 1.5;
-    margin-top: 5px;
     min-width: auto;
+  }
+  /* override canon */
+  & .metric.metric p {
+    line-height: 1.2;
+    margin-top: 0.5em;
   }
 }

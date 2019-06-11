@@ -1,16 +1,12 @@
-@import "components/common/typography";
-@import "components/common/colors";
+@import "components/common/mixins";
 
 .home-head {
   margin: 0 auto;
   text-align: center;
-
-  @media (max-width: 750px) {
-    padding: 76px 0 0;
-  }
+  padding: 76px 0 0;
 
   @media (min-width: 751px) {
-    padding: 120px 0 30px;
+    padding: 120px 0 10px;
   }
 
   & h1 {
@@ -18,6 +14,7 @@
 
     & img {
       width: 266px;
+      max-width: 66.666vw;
     }
   }
 
@@ -25,29 +22,23 @@
     @mixin priLabel;
     margin: 5px auto 25px;
   }
+
+  & p {
+    text-align: center;
+  }
 }
 
 .home-head-content {
   z-index: 200;
   display: flex;
-
-  @media (max-width: 750px) {
-    flex-direction: column-reverse;
-  }
-
-  @media (min-width: 751px) {
-    flex-direction: column;
-
-    & .post {
-      z-index: 50;
-    }
-  }
+  flex-direction: column;
 }
 
 .home-search {
   position: relative;
   width: 380px;
-  margin: 25px auto 25px auto;
+  max-width: calc(100% - 30px);
+  margin: 25px auto;
   text-align: left;
   z-index: 20;
 
@@ -65,6 +56,7 @@
   }
 
   & a {
+    @mixin overflow-ellipsis;
     width: 100%;
     display: inline-block;
     border: 0;
@@ -78,7 +70,7 @@
 
     border: 1px solid var(--colorStone);
     border-radius: 20px;
-    padding: 8px 14px 5px 42px;
+    padding: 5px 14px 7px 42px;
     background-color: var(--colorEggshellOverlay);
 
     @media (max-width: 750px) {}
@@ -135,18 +127,23 @@
 } */
 
 .home-container {
-  width: 100%;
   position: relative;
+  /* prevent floating content from making the page scroll horizontally on small screens */
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .home-body {
   position: relative;
   z-index: 0;
+  min-height: 580px; /* fudged; prevent overlow as viz loads in */
 }
 
 .post {
+  @mixin max-container-width;
   @mixin bodyText;
-  min-width: 328px;
+  width: 328px;
   text-align: left;
   margin-left: auto;
   margin-right: auto;
@@ -156,15 +153,14 @@
   @media (max-width: 750px) {
     margin-bottom: 22px;
     margin-top: 13px;
-    width: 80%;
-    max-width: 384px;
   }
 
   @media (min-width: 751px) {
     margin-bottom: 30px;
     margin-top: 0;
     width: 62%;
-    max-width: 560px;
+    max-width: 600px;
+    text-align: center;
   }
 
   & a {
@@ -179,7 +175,7 @@
   width: 100%;
   max-width: 100vw;
   overflow: hidden;
-  margin: -20px auto 100px;
+  margin: 0 auto;
   box-sizing: border-box;
   padding: 0 48px 0 24px;
   z-index: -1;
@@ -209,7 +205,7 @@
 
 .timeline-container {
   position: absolute;
-  bottom: 0;
+  bottom: 17px;
   height: 100%;
   width: 100%;
   padding-left: 65px;
@@ -217,6 +213,15 @@
   padding-bottom: 70px;
   box-sizing: border-box;
   pointer-events: none;
+
+  /* fudge positioning for smaller screens to account for label wrapping */
+  @media (max-width: 1081px) {
+    bottom: 40px;
+  }
+
+  @media (max-width: 660px) {
+    display: none;
+  }
 
   & .items {
     position: relative;
@@ -546,19 +551,20 @@
   }
 
   & .deep-link {
+    position: relative;
     &::after {
       content: '';
-      position: relative;
-      display: inline-block;
+      position: absolute;
       height: 8px;
-      width: 6px;
-      margin: 0 0 -1px 3px;
+      bottom: 3px;
+      width: 0.5em;
+      margin-left: 0.25em;
       background: url("/images/ui/tri-right.svg") no-repeat;
       background-size: contain;
     }
   }
 
-  & ul {
+  & .items {
     width: 100%;
     max-width: 1024px;
     display: flex;
@@ -670,34 +676,20 @@
       }
     }
 
-    & li {
+    & section {
       flex: 1;
     }
   }
 
   & .ia-top-item {
     @media (max-width: 550px) {
-      width: 80%;
+      width: calc(100% - 40px);
       margin-left: auto;
       margin-right: auto;
-      border-style: solid;
-      border-color: var(--colorEggshell);
       padding: 10px 10px 10px 25px;
 
       & + .ia-top-item {
         margin-top: 30px;
-      }
-      &.viz {
-        order: 1;
-        border-width: 1px;
-      }
-      &.ranks {
-        order: 2;
-        border-width: 1px;
-      }
-      &.profiles {
-        order: 3;
-        border-width: 1px 1px 0 1px;
       }
     }
 
@@ -717,13 +709,14 @@
   & .ia-p-types {
     flex-wrap: wrap;
 
-    & li {
+    & section {
       box-sizing: border-box;
+
       @media (max-width: 550px) {
         max-width: 80%;
         padding: 10px 10px 10px 25px;
 
-        & + li {
+        & + section {
           margin-top: 20px;
         }
       }
