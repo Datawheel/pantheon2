@@ -82,6 +82,15 @@
 .curie {
   background-image: url("/images/not-found/error/20408.jpg");
 }
+.racing-driver {
+  background-image: url("/images/profile/occupation/racing-driver.jpg");
+}
+.fashion-designer {
+  background-image: url("/images/profile/occupation/fashion-designer.jpg");
+}
+.celebrity {
+  background-image: url("/images/profile/occupation/celebrity.jpg");
+}
 
 .error-photo {
   &.sports {

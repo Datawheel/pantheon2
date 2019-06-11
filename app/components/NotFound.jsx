@@ -10,7 +10,7 @@ const NotFound = ({activateSearch}) => {
 
   return (
     <div className="not-found">
-      {/*<Helmet
+      {/* <Helmet
         htmlAttributes={{lang: "en", amp: undefined}}
         title="🍳 Error 404 - Pantheon"
         meta={config.meta}
@@ -25,10 +25,10 @@ const NotFound = ({activateSearch}) => {
             <ul className="footer-carousel-container">
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/person/isaac_newton" className="error-photo newton"></a>
+                  <a href="/profile/person/Isaac_Newton" className="error-photo newton"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/person/isaac_newton">Isaac Newton</a>
+                  <a href="/profile/person/Isaac_Newton">Isaac Newton</a>
                 </h4>
                 <p>Physicist</p>
                 <p>United Kingdom</p>
@@ -45,10 +45,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/person/walt_disney" className="error-photo disney"></a>
+                  <a href="/profile/person/Walt_Disney" className="error-photo disney"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/person/walt_disney">Walt Disney</a>
+                  <a href="/profile/person/Walt_Disney">Walt Disney</a>
                 </h4>
                 <p>Producer</p>
                 <p>United States</p>
@@ -56,10 +56,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/person/roger_federer" className="error-photo federer"></a>
+                  <a href="/profile/person/Roger_Federer" className="error-photo federer"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/person/roger_federer">Roger Federer</a>
+                  <a href="/profile/person/Roger_Federer">Roger Federer</a>
                 </h4>
                 <p>Tennis Player</p>
                 <p>Switzerland</p>
@@ -76,10 +76,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/occupation/racing_driver" className="error-photo sports"></a>
+                  <a href="/profile/occupation/racing-driver" className="error-photo sports racing-driver"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/occupation/racing_driver">Racing Driver</a>
+                  <a href="/profile/occupation/racing-driver">Racing Driver</a>
                 </h4>
                 <p>Occupation Rank 16</p>
                 <p>665 Individuals</p>
@@ -87,10 +87,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/person/agnez_mo" className="error-photo agnez"></a>
+                  <a href="/profile/person/Agnez_Mo" className="error-photo agnez"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/person/agnez_mo">Agnez Mo</a>
+                  <a href="/profile/person/Agnez_Mo">Agnez Mo</a>
                 </h4>
                 <p>Actor</p>
                 <p>Indonesia</p>
@@ -98,10 +98,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/person/laozi" className="error-photo laozi"></a>
+                  <a href="/profile/person/Laozi" className="error-photo laozi"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/person/laozi">Laozi</a>
+                  <a href="/profile/person/Laozi">Laozi</a>
                 </h4>
                 <p>Philosopher</p>
                 <p>China</p>
@@ -109,10 +109,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/person/vincent_van_gogh" className="error-photo vangogh"></a>
+                  <a href="/profile/person/Vincent_van_Gogh" className="error-photo vangogh"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/person/vincent_van_gogh">Vincent Van Gogh</a>
+                  <a href="/profile/person/Vincent_van_Gogh">Vincent Van Gogh</a>
                 </h4>
                 <p>Painter</p>
                 <p>Netherlands</p>
@@ -120,7 +120,7 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/occupation/fashion_designer" className="error-photo arts"></a>
+                  <a href="/profile/occupation/fashion_designer" className="error-photo arts fashion-designer"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
                   <a href="/profile/occupation/fashion_designer">Fashion Designer</a>
@@ -140,10 +140,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/person/vasco_da_gama" className="error-photo dagama"></a>
+                  <a href="/profile/person/Vasco_da_Gama" className="error-photo dagama"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/person/vasco_da_gama">Vasco da Gama</a>
+                  <a href="/profile/person/Vasco_da_Gama">Vasco da Gama</a>
                 </h4>
                 <p>Explorer</p>
                 <p>Portugal</p>
@@ -151,7 +151,7 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/occupation/celebrity" className="error-photo publicfigure"></a>
+                  <a href="/profile/occupation/celebrity" className="error-photo publicfigure celebrity"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
                   <a href="/profile/occupation/celebrity">Celebrity</a>
@@ -162,10 +162,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/person/marie_curie" className="error-photo curie"></a>
+                  <a href="/profile/person/Marie_Curie" className="error-photo curie"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/person/marie_curie">Marie Curie</a>
+                  <a href="/profile/person/Marie_Curie">Marie Curie</a>
                 </h4>
                 <p>Chemist</p>
                 <p>Poland</p>
