@@ -17,9 +17,6 @@
     margin-top: 90px;
   }
 
-  &:not(:last-child) {
-  }
-
   & > * {
     width: 100%;
   }
@@ -27,6 +24,13 @@
   & .section-actions {
     margin: 20px 0 0 0;
     position: relative;
+
+    /* hide download button on small screens */
+    @media (max-width: 800px) {
+      & button {
+        display: none;
+      }
+    }
 
     & button {
       background: color(var(--colorEggshell) a(0.75));
