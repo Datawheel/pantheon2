@@ -7,12 +7,12 @@
 }
 
 .global-footer {
+  @mixin max-container-width;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
   width: 1024px;
-  max-width: calc(100% - 60px);
   margin: 0 auto;
   padding: 50px 0;
   border-top: 1px solid var(--colorCardboard);

@@ -14,6 +14,7 @@
 
     & img {
       width: 266px;
+      max-width: 66.666vw;
     }
   }
 
@@ -36,7 +37,8 @@
 .home-search {
   position: relative;
   width: 380px;
-  margin: 25px auto 25px auto;
+  max-width: calc(100% - 30px);
+  margin: 25px auto;
   text-align: left;
   z-index: 20;
 
@@ -54,6 +56,7 @@
   }
 
   & a {
+    @mixin overflow-ellipsis;
     width: 100%;
     display: inline-block;
     border: 0;
@@ -138,8 +141,9 @@
 }
 
 .post {
+  @mixin max-container-width;
   @mixin bodyText;
-  min-width: 328px;
+  width: 328px;
   text-align: left;
   margin-left: auto;
   margin-right: auto;
@@ -149,7 +153,6 @@
   @media (max-width: 750px) {
     margin-bottom: 22px;
     margin-top: 13px;
-    width: calc(100% - 60px);
   }
 
   @media (min-width: 751px) {
