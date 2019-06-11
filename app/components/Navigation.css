@@ -82,6 +82,12 @@
 #navigation {
   z-index: 98;
 
+  @media (max-width: 800px) {
+    position: fixed;
+    height: var(--nav-height);
+    background: var(--colorKashi);
+  }
+
   & .items {
     width: 1024px;
     max-width: calc(100% - 50px);
@@ -118,15 +124,19 @@
       text-align: left;
     }
 
-    @media (max-width: 800px) {
-      display: none !important;
-    }
-
-    /*&:not(.home-link) {
-      @media (max-width: 750px) {
+    &:not(.home-link) {
+      @media (max-width: 800px) {
         display: none;
       }
-    }*/
+    }
+
+    @media (max-width: 800px) {
+      &.home-link {
+        @mixin absolute-horizontal-center;
+        position: fixed;
+        margin: 21px 0 0 0;
+      }
+    }
 
     & > .item-link {
       display: block;
