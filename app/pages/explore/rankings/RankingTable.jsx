@@ -18,11 +18,6 @@ class RankingTable extends Component {
     const columns = getColumns(show, showDepth, occupations, places);
     const sortCol = columns.find(c => c.defaultSorted);
 
-    // console.log("rankings data:", data);
-    // const data2 = dataFormatter(res.data, show);
-    // console.log("[RankingTable loading]", loading);
-    // console.log("[RankingTable data]", data);
-
     return (
       <div className="ranking-table-container">
         <div className="ranking-head">

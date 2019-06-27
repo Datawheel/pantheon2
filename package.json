@@ -29,13 +29,13 @@
   },
   "homepage": "https://github.com/MacroConnections/pantheon2#readme",
   "dependencies": {
-    "@datawheel/canon-core": "^0.17.19",
+    "@datawheel/canon-core": "^0.17.29",
     "electron-screenshot-service": "^4.0.3",
     "google-trends-api": "^4.9.0",
     "numeral": "^2.0.6",
-    "pluralize": "^7.0.0",
+    "pluralize": "^8.0.0",
     "react-scroll": "^1.7.7",
-    "react-table": "^6.7.6",
+    "react-table": "^6.10.0",
     "sharp": "^0.22.1",
     "xvfb": "^0.2.3"
   }
