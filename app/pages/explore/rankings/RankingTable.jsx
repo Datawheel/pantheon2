@@ -25,22 +25,23 @@ class RankingTable extends Component {
           <RankingSearch search={search} />
         </div>
         <ReactTable
-          style={{width: "100%"}}
           className="-striped -highlight"
-          loading={loading}
-          data={data}
           columns={columns}
+          defaultPageSize={50}
           defaultSorted={[
             {
               id: sortCol.accessor,
               desc: true
             }
           ]}
-          defaultPageSize={50}
+          data={data}
+          loading={loading}
+          onPageChange={onPageChange}
           page={page}
           pageSize={Math.min(pageSize, data.length)}
+          resizable={false}
           showPageSizeOptions={false}
-          onPageChange={onPageChange}
+          style={{width: "100%"}}
         />
       </div>
     );

@@ -52,8 +52,8 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "Gender",
           accessor: "gender",
-          Cell: ({value}) => <span>{value ? "Male" : "Female"}</span>,
-          minWidth: 80
+          Cell: ({value}) => <span>{value === "M" ? "Male" : "Female"}</span>,
+          minWidth: 65
         },
         {
           id: "bplace_geonameid",
