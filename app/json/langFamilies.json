@@ -774,13 +774,13 @@
     "primary_family_name": ""
   },
   "gan": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "zhx",
+    "family_name": "Sinitic",
+    "lang_code3": "gan",
     "language": "Gan",
     "language_local": "\u8d1b\u8a9e",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "sit",
+    "primary_family_name": "Sino-Tibetan"
   },
   "gd": {
     "family_code": "cel",

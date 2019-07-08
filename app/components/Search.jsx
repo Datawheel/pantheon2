@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {strip} from "d3plus-text";
+import {strip, trim} from "d3plus-text";
 import api from "apiConfig";
 import "components/Search.css";
 
@@ -17,7 +17,7 @@ class Search extends Component {
     if (userQuery.length < 3) return;
     if (userQuery.length === 0) this.setState({professionResults: [], placeResults: [], personResults: []});
 
-    let userQueryCleaned = userQuery.split(" ");
+    let userQueryCleaned = trim(userQuery).split(" ");
     userQueryCleaned = userQueryCleaned.map(strip);
     const lastItem = userQueryCleaned[userQueryCleaned.length - 1];
     userQueryCleaned[userQueryCleaned.length - 1] = `${lastItem}:*`;
@@ -93,7 +93,9 @@ class Search extends Component {
               <div className="search-mg-perimeter" />
               <div className="search-mg-handle" />
             </div>
-            <input type="text" ref={el => this._searchInput = el} onChange={this.onChange.bind(this)} />
+            <React.Fragment>
+              <input type="text" ref={el => this._searchInput = el} onChange={this.onChange.bind(this)} />
+            </React.Fragment>
           </label>
           <ul className="results-list">
             {this.state.results.map(result =>
