@@ -31,12 +31,18 @@ class Person extends Component {
   }
 
   componentDidMount() {
+    console.log("--------");
+    console.log("componentDidMount");
+    console.log("////////////////");
     // generate screenshot on page load
     const {id: slug} = this.props.params;
     const {person} = this.props.data;
     if (person !== undefined) {
       const screenshotUrl = `/api/screenshot/person/${slug}/`;
       axios.get(screenshotUrl);
+      console.log("--------");
+      console.log("called screenshot service");
+      console.log("∆∆∆∆∆∆∆∆∆∆∆∆∆");
     }
   }
 
@@ -134,7 +140,7 @@ class Person extends Component {
         }
         if (meta.property === "og:description") {
           if (wikiSummary && wikiSummary.description) {
-            const s2 = `${person.gender ? "His" : "Her"} biography is available in ${person.langs} different languages on Wikipedia making ${person.gender ? "him" : "her"} the ${FORMATTERS.ordinal(person.occupation_rank_unique)} most popular ${person.occupation.occupation}.`;
+            const s2 = `${person.gender === "M" ? "His" : "Her"} biography is available in ${person.l} different languages on Wikipedia making ${person.gender === "M" ? "him" : "her"} the ${FORMATTERS.ordinal(person.occupation_rank_unique)} most popular ${person.occupation.occupation}.`;
             return {property: "og:description", content: `Pantheon profile of ${person.name}, ${wikiSummary.description}. ${s2}`};
           }
         }
