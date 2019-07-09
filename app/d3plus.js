@@ -33,7 +33,7 @@ export default {
       fill: "#D6D6D0",
       labelConfig: {
         fontColor: "#9E978D",
-        fontFamily: () => "Amiko",
+        fontFamily: () => ["Amiko", "Arial Narrow", "sans-serif"],
         fontSize: () => 10
       },
       stroke: "#D6D6D0"
@@ -45,7 +45,7 @@ export default {
 
   backConfig: {
     fontColor: "#000",
-    fontFamily: "Amiko",
+    fontFamily: ["Amiko", "Arial Narrow", "sans-serif"],
     fontSize: 14,
     fontWeight: 400,
     text: "« Back"
@@ -58,7 +58,7 @@ export default {
     shapeConfig: {
       labelConfig: {
         fontColor: "#4B4A48",
-        fontFamily: () => "Amiko",
+        fontFamily: () => ["Amiko", "Arial Narrow", "sans-serif"],
         fontResize: false,
         fontSize: () => 14
       },
@@ -82,7 +82,7 @@ export default {
     },
     labelConfig: {
       fontColor: "rgba(255, 255, 255, 0.8)",
-      fontFamily: () => "Amiko",
+      fontFamily: () => ["Amiko", "Arial Narrow", "sans-serif"],
       textAnchor: "start"
     },
     // line charts
