@@ -31,9 +31,6 @@ class Person extends Component {
   }
 
   componentDidMount() {
-    console.log("--------");
-    console.log("componentDidMount");
-    console.log("////////////////");
     // generate screenshot on page load
     const {id: slug} = this.props.params;
     const {person} = this.props.data;
@@ -42,9 +39,6 @@ class Person extends Component {
       axios.get(screenshotUrl)
         .then(response => console.log(response))
         .catch(error => console.log(error));
-      console.log("^^^^^^^^^^^^^");
-      console.log(`screenshot service init: /api/screenshot/person/${slug}/`);
-      console.log("∆∆∆∆∆∆∆∆∆∆∆∆∆");
     }
   }
 
@@ -55,8 +49,8 @@ class Person extends Component {
       return <NotFound />;
     }
 
-    const maxPageViews = Math.max(...wikiPageViews.items.map(d => d.views || 0));
-    const totalPageViews = wikiPageViews.items.reduce((sum, d) => sum + d.views, 0);
+    const maxPageViews = wikiPageViews.items ? Math.max(...wikiPageViews.items.map(d => d.views || 0)) : 0;
+    const totalPageViews = wikiPageViews.items ? wikiPageViews.items.reduce((sum, d) => sum + d.views, 0) : 0;
     // const totalLanguages = Math.max(...pageViews.map(d => d.num_langs || 0));
     const totalLanguages = 44;
     const lMod = 0.95;
