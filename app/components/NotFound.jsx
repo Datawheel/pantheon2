@@ -120,10 +120,10 @@ const NotFound = ({activateSearch}) => {
               </li>
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
-                  <a href="/profile/occupation/fashion_designer" className="error-photo arts fashion-designer"></a>
+                  <a href="/profile/occupation/fashion-designer" className="error-photo arts fashion-designer"></a>
                 </div>
                 <h4 className="footer-carousel-item-title">
-                  <a href="/profile/occupation/fashion_designer">Fashion Designer</a>
+                  <a href="/profile/occupation/fashion-designer">Fashion Designer</a>
                 </h4>
                 <p>Occupation Rank 70</p>
                 <p>35 Individuals</p>

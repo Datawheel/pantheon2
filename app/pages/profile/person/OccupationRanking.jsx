@@ -18,10 +18,10 @@ class OccupationRanking extends Component {
         worsePeers = null;
 
     if (betterRankedPeers.length) {
-      betterPeers = <span>Before { person.gender ? "him" : "her" } are <AnchorList items={betterRankedPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />. </span>;
+      betterPeers = <span>Before {person.gender === "M" ? "him" : "her"} are <AnchorList items={betterRankedPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />. </span>;
     }
     if (worseRankedPeers.length) {
-      worsePeers = <span>After { person.gender ? "him" : "her" } are <AnchorList items={worseRankedPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />.</span>;
+      worsePeers = <span>After {person.gender === "M" ? "him" : "her"} are <AnchorList items={worseRankedPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />.</span>;
     }
 
     return (

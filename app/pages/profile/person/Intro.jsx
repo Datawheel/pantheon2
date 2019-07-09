@@ -99,8 +99,8 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
                 : `${person.name} is currently ${age} years old.`}
             </p>}
           <p>
-            <React.Fragment>Since 2007, {person.gender ? "his" : "her"} Wikipedia page in English has received more than {FORMATTERS.commas(totalPageViews)} page views. </React.Fragment>
-            <React.Fragment>{person.gender ? "His" : "Her"} biography is available in {person.langs} different languages on Wikipedia making {person.gender ? "him" : "her"} the {FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a></React.Fragment>
+            <React.Fragment>Since 2007, {person.gender === "M" ? "his" : "her"} Wikipedia page in English has received more than {FORMATTERS.commas(totalPageViews)} page views. </React.Fragment>
+            <React.Fragment>{person.gender === "M" ? "His" : "Her"} biography is available in {person.l} different languages on Wikipedia making {person.gender === "M" ? "him" : "her"} the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a></React.Fragment>
             <React.Fragment>{!person.birthcountry ? <span>.</span> : <span> and the {birthcountryRank !== 1 ? FORMATTERS.ordinal(birthcountryRank) : ""} most popular biography from <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>.</span>}</React.Fragment>
           </p>
         </div>
