@@ -67,6 +67,7 @@ module.exports = function(app) {
         }
         else {
           console.log(`[screenshot] ${daysSinceLastGenerated} days old, need to regenerate.`);
+          return res.status(200).send({msg: `[screenshot] ${daysSinceLastGenerated} days old, need to regenerate.`});
         }
       }
       screenshot({url, width, height, page, delay}).then(img => {
@@ -95,7 +96,7 @@ module.exports = function(app) {
               }
               if (!isLocal) xvfb.stopSync();
               console.log(`[screenshot] new screenshot: ${imgPath}`);
-              res.sendFile(imgPath);
+              return res.sendFile(imgPath);
             });
           // .resize(320, 240)
           // .toFile('output.webp', (err, info) => { ... });

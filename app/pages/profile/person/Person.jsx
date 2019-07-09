@@ -38,10 +38,12 @@ class Person extends Component {
     const {id: slug} = this.props.params;
     const {person} = this.props.data;
     if (person !== undefined) {
-      const screenshotUrl = `/api/screenshot/person/${slug}/`;
-      axios.get(screenshotUrl);
-      console.log("--------");
-      console.log("called screenshot service");
+      const screenshotUrl = ;
+      axios.get(screenshotUrl)
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
+      console.log("^^^^^^^^^^^^^");
+      console.log(`screenshot service init: /api/screenshot/person/${slug}/`);
       console.log("∆∆∆∆∆∆∆∆∆∆∆∆∆");
     }
   }
