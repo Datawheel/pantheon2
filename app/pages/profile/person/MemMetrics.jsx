@@ -27,10 +27,10 @@ class MemMetrics extends Component {
   render() {
     const {pageViews, person} = this.props;
     const {vid} = this.state;
-    const totalPageviews = pageViews.items
+    const totalPageviews = pageViews.items ? pageViews.items
       .filter(pv => pv.views)
       .map(pv => pv.views)
-      .reduce((total, newVal) => total + newVal, 0);
+      .reduce((total, newVal) => total + newVal, 0) : 0;
 
     // if (!vid) { vid = {id: {videoId: "XyNlqQId-nk"}}; } // testing
 

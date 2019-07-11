@@ -37,7 +37,10 @@ class Person extends Component {
     if (person !== undefined) {
       const screenshotUrl = `/api/screenshot/person/${slug}/`;
       axios.get(screenshotUrl)
-        .then(response => console.log(response))
+        .then(response => {
+          if (response.status === 200) console.log("Screenshot successful.");
+          else console.log("[Screenshot] error.");
+        })
         .catch(error => console.log(error));
     }
   }
