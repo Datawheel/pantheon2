@@ -255,14 +255,14 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "People",
           accessor: "count",
-          defaultSorted: true,
           minWidth: 60
         },
         {
           Header: "HPI",
           accessor: "hpi",
           Cell: ({value}) => <span>{FORMATTERS.bigNum(value)}</span>,
-          minWidth: 55
+          minWidth: 55,
+          defaultSorted: true
         },
         {
           Header: "Avg. HPI",
