@@ -28,6 +28,12 @@ body {
   }
 }
 
+.app.embed > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 a {
   text-decoration: none;
   outline: none;

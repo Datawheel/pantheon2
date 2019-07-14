@@ -44,9 +44,9 @@ class PlaceControl extends Component {
 
         <select value={country} onChange={this.changeCountry}>
           <option value="all">All Countries</option>
-          {places
+          {places.filter(c => c.country.country_code)
             .map(c =>
-              <option key={`${c.country.country_code}-${c.country.id}`} value={c.country.id} data-countrycode={c.country.country_code}>
+              <option key={`${c.country.country_code}-${c.country.id}`} value={c.country.country_code} data-countrycode={c.country.country_code}>
                 {c.country.country}
               </option>
             )}
@@ -54,9 +54,9 @@ class PlaceControl extends Component {
 
         <select value={city} onChange={this.changeCity}>
           <option value="all">All Cities</option>
-          {country !== "all" && places.length
+          {country !== "all" && places.length && places.find(c => `${c.country.country_code}` === `${country}`)
             ? places
-              .find(c => `${c.country.id}` === `${country}`).cities
+              .find(c => `${c.country.country_code}` === `${country}`).cities
               .filter(c => placeType === "birthplace" ? c.num_born > 0 : c.num_died > 0)
               .map(p =>
                 <option key={p.id} value={p.id} data-slug={p.slug}>
