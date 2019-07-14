@@ -1,7 +1,5 @@
 import React, {Component} from "react";
-import {Link} from "react-router";
 import {connect} from "react-redux";
-import api from "apiConfig";
 import YearControl from "pages/explore/controls/YearControl";
 import PlaceControl from "pages/explore/controls/PlaceControl";
 import OccupationControl from "pages/explore/controls/OccupationControl";
@@ -9,8 +7,7 @@ import ShowControl from "pages/explore/controls/ShowControl";
 import VizControl from "pages/explore/controls/VizControl";
 import AdvancedControl from "pages/explore/controls/AdvancedControl";
 import GenderControl from "pages/explore/controls/GenderControl";
-import YearTypeControl from "pages/explore/controls/YearTypeControl";
-import dataFormatter from "pages/explore/rankings/dataFormatter";
+import fetchPantheonData from "pages/explore/helpers/fetchPantheonData";
 import {SANITIZERS} from "types";
 
 class Controls extends Component {
@@ -34,12 +31,12 @@ class Controls extends Component {
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.props.updateData(Object.assign({data: [], loading: true}, this.state));
+    const {countryLookup, pageType, updateData} = this.props;
+    fetchPantheonData(pageType, countryLookup, this.state, updateData);
   }
 
   componentDidUpdate(prevProps) {
-    // console.log("from controls prevProps:", prevProps);
-    // console.log("from controls this.props:", this.props);
     if (this.props.pageType !== prevProps.pageType) {
       console.log("CONTROL SHOULD UPDATE!");
       // this.props.updateData(Object.assign({data: [], loading: true}, this.state));
@@ -64,7 +61,7 @@ class Controls extends Component {
 
     let queryStr = pageType === "viz" ? `?viz=${viz}&show=${show}&years=${years}` : `?show=${show}&years=${years}`;
     if (country !== "all") {
-      queryStr += `&place=${country}`;
+      queryStr += `&place=${country.toLowerCase()}`;
       if (city !== "all") {
         queryStr += `|${city}`;
       }
@@ -90,66 +87,29 @@ class Controls extends Component {
     }
   }
 
-  fetchData = () => {
-    this.props.updateData(Object.assign({data: [], loading: true}, this.state));
-    const {pageType} = this.props;
-    const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType, placeType} = this.state;
-    const selectFields = "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
-    const apiHeaders = null;
-    const sorting = "&order=hpi.desc.nullslast";
-
-    let placeFilter = "";
-    if (country !== "all") {
-      placeFilter = placeType === "birthplace" ? `&bplace_country=eq.${country}` : `&dplace_country=eq.${country}`;
-      if (city !== "all") {
-        placeFilter = placeType === "birthplace" ? `&bplace_geonameid=eq.${city}` : `&dplace_geonameid=eq.${city}`;
-      }
-    }
-
-    let occupationFilter = "";
-    if (occupation !== "all") {
-      occupationFilter = `&occupation=in.(${occupation})`;
-    }
-
-    let genderFilter = "";
-    if (`${gender}`.toUpperCase() === "M" || `${gender}`.toUpperCase() === "F") {
-      genderFilter = `&gender=eq.${gender.toUpperCase()}`;
-    }
-
-    let metricFilter = "";
-    if (metricType) {
-      metricFilter = `&${metricType}=gte.${metricCutoff}`;
-    }
-
-    const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${sorting}`;
-    console.log("getNewData", dataUrl);
-    api.get(dataUrl, {headers: apiHeaders}).then(res => {
-      const data = pageType === "rankings" ? dataFormatter(res.data, show) : res.data;
-      this.props.updateData(Object.assign({data, loading: false, show, viz}, this.state));
-    });
-  }
-
   updateAndFetchData = (key, val) => {
+    const {countryLookup, pageType, updateData} = this.props;
     this.setState({[key]: val}, () => {
       this.setQueryParams();
-      this.fetchData();
+      fetchPantheonData(pageType, countryLookup, this.state, updateData);
     });
   }
 
   updateManyAndFetchData = newState => {
+    const {countryLookup, pageType, updateData} = this.props;
     this.setState(newState, () => {
       this.setQueryParams();
-      this.fetchData();
+      fetchPantheonData(pageType, countryLookup, this.state, updateData);
     });
   }
 
   update = (key, val) => {
-    const {pathname} = this.props;
+    const {countryLookup, pathname, pageType, updateData} = this.props;
     this.setState({[key]: val}, () => {
       this.setQueryParams();
       if (pathname.includes("explore/rankings")) {
         this.props.update({[key]: val, loading: true, data: []});
-        this.fetchData();
+        fetchPantheonData(pageType, countryLookup, this.state, updateData);
       }
       else {
         this.props.update({[key]: val});

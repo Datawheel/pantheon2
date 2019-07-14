@@ -88,6 +88,15 @@ class App extends Component {
       );
     }
 
+    // conditional for embeds to remove all extraneous design including logo
+    if (this.props.location.pathname.includes("viz/embed")) {
+      return (
+        <div id="App" className={`${page} embed container`}>
+          <div>{children}</div>
+        </div>
+      );
+    }
+
     return (
       <div id="App" className={`${page} container`}>
         {searchActive ? <Search activateSearch={this.activateSearch} /> : null}

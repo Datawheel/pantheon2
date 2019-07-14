@@ -29,6 +29,7 @@ import Contact from "pages/about/Contact";
 // // explore componenets
 import Explore from "pages/explore/Explore";
 import Viz from "pages/explore/viz/Viz";
+import VizEmbed from "pages/explore/viz/VizEmbed";
 import Rankings from "pages/explore/rankings/Rankings";
 
 // data section components
@@ -93,6 +94,7 @@ export default function RouteCreate() {
 
       <Route path="explore" component={Explore}>
         <Route path="viz" component={Viz} pageType={"viz"} />
+        <Route path="viz/embed" component={VizEmbed} pageType={"viz"} />
         <Route path="rankings" component={Rankings} pageType={"rankings"} />
       </Route>
 

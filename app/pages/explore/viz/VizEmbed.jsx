@@ -2,47 +2,46 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import Helmet from "react-helmet";
-import Controls from "pages/explore/controls/Index";
 import VizShell from "pages/explore/viz/VizShell";
 import VizTitle from "pages/explore/viz/VizTitle";
 import {nest} from "d3-collection";
 import {FORMATTERS, HPI_RANGE, LANGS_RANGE} from "types";
-import "pages/explore/Explore.css";
+import fetchPantheonData from "pages/explore/helpers/fetchPantheonData";
+import {SANITIZERS} from "types";
 
-class Viz extends Component {
+import "pages/explore/Explore.css";
+import "pages/explore/Embed.css";
+
+class VizEmbed extends Component {
 
   constructor(props) {
     super(props);
+    const {query: qParams} = this.props.location;
+    const {pageType} = this.props.route;
     this.countryLookup = this.props.data.places.reduce((acc, cur) => ({...acc, [cur.country.country_code]: cur.country}), {});
     this.state = {
       data: [],
       loading: true,
-      viz: "treemap",
-      city: "all",
-      country: "all",
-      filteredData: [],
-      gender: null,
-      nestedOccupations: null,
-      occupation: "all",
-      occupations: null,
-      pageSize: 50,
-      places: null,
-      searching: false,
-      show: "occupations",
-      years: [],
-      yearType: "birthyear"
+      city: SANITIZERS.city(qParams.place) || "all",
+      country: SANITIZERS.country(qParams.place) || "all",
+      gender: SANITIZERS.gender(qParams.viz),
+      occupation: qParams.occupation || "all",
+      placeType: SANITIZERS.placeType(qParams.placeType),
+      show: SANITIZERS.show(qParams.show ? qParams.show : pageType === "viz" ? "occupations" : "people", pageType),
+      viz: pageType === "viz" ? SANITIZERS.vizType(qParams.viz || "Treemap") : null,
+      years: SANITIZERS.years(qParams.years),
+      yearType: SANITIZERS.yearType(qParams.yearType),
+      metricCutoff: qParams.metricCutoff || "4",
+      metricType: qParams.metricType || "hpi"
     };
   }
 
-  componentDidUpdate(prevProps) {
-    // console.log("prevProps", prevProps);
-    // console.log("this.props", this.props);
-    // Typical usage (don't forget to compare props):
-    if (this.props.location.pathname !== prevProps.location.pathname) {
-      // this.fetchData(this.props.userID);
-      // console.log("should update!!!");
-      // this.setState({data: [], loading: true, filteredData: []});
-    }
+  componentDidMount() {
+    // const {places} = this.props.data;
+    // console.log("this.countryLookup!1", );
+    this.updateData(Object.assign({data: [], loading: true}, this.state));
+    const {pageType} = this.props.route;
+    fetchPantheonData(pageType, this.countryLookup, this.state, this.updateData);
   }
 
   updateData = (updatedState, callback) => {
@@ -66,7 +65,6 @@ class Viz extends Component {
 
 
   render() {
-    const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
     const {query: qParams, pathname} = this.props.location;
     const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
@@ -109,16 +107,6 @@ class Viz extends Component {
           {metricSentence ? <p>{metricSentence}</p> : null}
         </div>
         <div className="explore-body">
-          <Controls
-            updateData={this.updateData}
-            countryLookup={this.countryLookup}
-            update={this.update}
-            nestedOccupations={nestedOccupations}
-            pageType={pageType}
-            places={places}
-            pathname={pathname}
-            qParams={qParams}
-          />
           <VizShell
             loading={loading}
             data={data}
@@ -133,7 +121,7 @@ class Viz extends Component {
   }
 }
 
-Viz.need = [
+VizEmbed.need = [
   fetchData("places", "/place?select=id,place,lat,lon,slug,country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died", res => {
     const places = nest()
       .key(d => d.country_id)
@@ -163,4 +151,4 @@ Viz.need = [
   })
 ];
 
-export default connect(state => ({data: state.data}), {})(Viz);
+export default connect(state => ({data: state.data}), {})(VizEmbed);
