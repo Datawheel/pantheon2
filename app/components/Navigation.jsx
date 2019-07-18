@@ -101,10 +101,14 @@ class Navigation extends Component {
               <ul className="sub-items">
                 <li><a href="/data/datasets" className="item-link">Download</a></li>
                 <li><a href="/data/permissions" className="item-link">Permissions</a></li>
+                <li><a href="/data/api" className="item-link">API</a></li>
               </ul>
             </li>
             <li className="item">
-              <Link to="/data/api" className="item-link api-link" activeClassName="active">API</Link>
+              <Link to="/app/yearbook" className="item-link data-link dd" activeClassName="active">Apps</Link>
+              <ul className="sub-items">
+                <li><a href="/app/yearbook" className="item-link">Yearbook</a></li>
+              </ul>
             </li>
             <li className="search-btn">
               <button onClick={activateSearch}>
@@ -159,6 +163,13 @@ class Navigation extends Component {
               <ul className="sub-items">
                 <li><a href="/data/datasets">Download</a></li>
                 <li><a href="/data/permissions">Permissions</a></li>
+                <li><a href="/data/api">API</a></li>
+              </ul>
+            </li>
+            <li className="item" onClick={this.toggleSubNav}>
+              <a className="item-link data-link" onClick={this.toggleSubNavSib}>Apps</a>
+              <ul className="sub-items">
+                <li><a href="/app/yearbook">Yearbook</a></li>
               </ul>
             </li>
             <li className="item">
