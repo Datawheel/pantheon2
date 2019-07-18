@@ -146,7 +146,7 @@ export const SANITIZERS = {
     }
     return {metricType, cutoff};
   },
-  gender: gender => gender === "true" || gender === "false" ? JSON.parse(gender) : null,
+  gender: gender => ["F", "f", "M", "m"].includes(gender) ? gender.toUpperCase() : null,
   yearType: yearType => yearType === "deathyear" ? yearType : "birthyear",
   placeType: placeType => placeType === "deathplace" ? placeType : "birthplace",
   country: place => place ? place.includes("|") ? place.split("|")[0].toLowerCase() : place.toLowerCase() : place,
