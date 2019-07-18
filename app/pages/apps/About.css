@@ -2,7 +2,6 @@
 /* @import "components/common/input"; */
 
 .about-page,
-.yearbook-page,
 .data-page {
   @mixin max-container-width;
   display: flex;
