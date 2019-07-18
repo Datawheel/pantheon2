@@ -24,7 +24,7 @@ class VizEmbed extends Component {
       loading: true,
       city: SANITIZERS.city(qParams.place) || "all",
       country: SANITIZERS.country(qParams.place) || "all",
-      gender: SANITIZERS.gender(qParams.viz),
+      gender: SANITIZERS.gender(qParams.gender),
       occupation: qParams.occupation || "all",
       placeType: SANITIZERS.placeType(qParams.placeType),
       show: SANITIZERS.show(qParams.show ? qParams.show : pageType === "viz" ? "occupations" : "people", pageType),
