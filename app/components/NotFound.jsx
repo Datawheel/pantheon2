@@ -34,7 +34,7 @@ const NotFound = ({activateSearch}) => {
                 <p>United Kingdom</p>
                 <p>Rank 6</p>
               </li>
-              <li className="footer-carousel-item page">
+              {/* <li className="footer-carousel-item page">
                 <div className="footer-carousel-item-photo">
                   <a href="/explore/rankings" className="error-photo"></a>
                 </div>
@@ -42,7 +42,7 @@ const NotFound = ({activateSearch}) => {
                   <a href="/explore/rankings">Pantheon Rankings</a>
                 </h4>
                 <p>How to all 2366 individuals stack up?</p>
-              </li>
+              </li> */}
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
                   <a href="/profile/person/Walt_Disney" className="error-photo disney"></a>
@@ -65,7 +65,7 @@ const NotFound = ({activateSearch}) => {
                 <p>Switzerland</p>
                 <p>Rank 124</p>
               </li>
-              <li className="footer-carousel-item page">
+              {/* <li className="footer-carousel-item page">
                 <div className="footer-carousel-item-photo">
                   <a href="/data/datasets" className="error-photo"></a>
                 </div>
@@ -73,7 +73,7 @@ const NotFound = ({activateSearch}) => {
                   <a href="/data/datasets">Download Datasets</a>
                 </h4>
                 <p>Dive into the data that makes up Pantheon!</p>
-              </li>
+              </li> */}
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
                   <a href="/profile/occupation/racing-driver" className="error-photo sports racing-driver"></a>
@@ -129,7 +129,7 @@ const NotFound = ({activateSearch}) => {
                 <p>35 Individuals</p>
                 <p>Arts Domain</p>
               </li>
-              <li className="footer-carousel-item page">
+              {/* <li className="footer-carousel-item page">
                 <div className="footer-carousel-item-photo">
                   <a href="/explore/viz" className="error-photo"></a>
                 </div>
@@ -137,7 +137,7 @@ const NotFound = ({activateSearch}) => {
                   <a href="/explore/viz">Visualizations</a>
                 </h4>
                 <p>Create custom visualizations using the Pantheon dataset.</p>
-              </li>
+              </li> */}
               <li className="footer-carousel-item">
                 <div className="footer-carousel-item-photo">
                   <a href="/profile/person/Vasco_da_Gama" className="error-photo dagama"></a>
