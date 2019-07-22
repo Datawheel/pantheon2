@@ -1,3 +1,13 @@
+/* sidebar content */
+nav {
+  & ul {
+    & ul.inner-page-items {
+      /* margin: 0 0 0 20px; */
+    }
+  }
+}
+
+/* main content */
 h1 {
   text-align: center;
 }

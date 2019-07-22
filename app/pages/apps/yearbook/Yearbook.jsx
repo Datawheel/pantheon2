@@ -3,10 +3,7 @@ import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import {Link} from "react-router";
 import NotFound from "components/NotFound";
-
-import "pages/about/Misc.css";
-import "pages/about/About.css";
-import "pages/apps/yearbook/Yearbook.css";
+import {FORMATTERS} from "types";
 
 class Yearbook extends Component {
 
@@ -59,10 +56,23 @@ class Yearbook extends Component {
         <section className="top-grid">
           {peopleBornInYear.slice(0, 100).map((person, i) =>
             <div key={person.id}>
-              <span className="grid-portrait-container">
+              <Link to={`/profile/person/${person.slug}`} className="grid-portrait-container">
                 <img src={`/images/profile/people/${person.id}.jpg`} onError={evt => evt.target.style.display = "none"} />
+              </Link>
+              <span>
+                {i + 1}. <Link to={`/profile/person/${person.slug}`}>{person.name}</Link>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td colSpan="2">{person.occupation ? person.occupation.occupation : ""}</td>
+                    </tr>
+                    <tr>
+                      <th>HPI</th>
+                      <td>{FORMATTERS.decimal(person.hpi)}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </span>
-              {i + 1}. <Link to={`/profile/person/${person.slug}`}>{person.name}</Link>
             </div>
           )}
         </section>
