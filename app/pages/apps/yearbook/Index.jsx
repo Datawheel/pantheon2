@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 import Helmet from "react-helmet";
-import {Collapse} from "@blueprintjs/core";
+import {AnchorButton, Collapse} from "@blueprintjs/core";
 
 import "pages/about/Misc.css";
 import "pages/about/About.css";
+import "pages/apps/yearbook/Yearbook.css";
 
 class YearbookIndex extends Component {
 
@@ -16,13 +17,21 @@ class YearbookIndex extends Component {
     };
   }
 
-  componentDidUpdate() {
-    const {year} = this.props.params;
-    console.log("YEARRRRR", year);
+  _ensureYear = year => {
     if (!year) {
       const randomYear = Math.round(Math.random() * (1999 - 1900) + 1900);
       this.props.router.push(`/app/yearbook/${randomYear}`);
     }
+  }
+
+  componentDidMount() {
+    const {year} = this.props.params;
+    this._ensureYear(year);
+  }
+
+  componentDidUpdate() {
+    const {year} = this.props.params;
+    this._ensureYear(year);
   }
 
   handleClick = decade => e => {
@@ -39,9 +48,9 @@ class YearbookIndex extends Component {
         <ul className="page-items">
           {[...Array(10).keys()].reverse().map(decade =>
             <li className="item" key={decade}>
-              <a href="#" onClick={this.handleClick(1900 + decade * 10)}>{1900 + decade * 10}s</a>
+              <AnchorButton text={`${1900 + decade * 10}s`} icon={this.state.openDecade === 1900 + decade * 10 ? "chevron-down" : "chevron-right"} minimal={true} onClick={this.handleClick(1900 + decade * 10)} />
               <Collapse isOpen={this.state.openDecade === 1900 + decade * 10}>
-                <ul className="page-items">
+                <ul className="inner-page-items">
                   {[...Array(10).keys()].reverse().map(yearIndex =>
                     <li key={1900 + decade * 10 + yearIndex}>
                       <Link to={`/app/yearbook/${1900 + decade * 10 + yearIndex}`} className="item-link" activeClassName="is-active">{1900 + decade * 10 + yearIndex}</Link>
