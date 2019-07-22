@@ -39,6 +39,11 @@ import Api from "pages/data/Api";
 import Permissions from "pages/data/Permissions";
 import Faq from "pages/data/Faq";
 
+// apps section components
+import Apps from "pages/apps/Apps";
+import YearbookIndex from "pages/apps/yearbook/Index";
+import Yearbook from "pages/apps/yearbook/Yearbook";
+
 // custom 404 page
 import NotFound from "components/NotFound";
 
@@ -125,6 +130,12 @@ export default function RouteCreate() {
         <Route path="api" component={Api} />
         <Route path="permissions" component={Permissions} />
         <Route path="faq" component={Faq} />
+      </Route>
+
+      <Route path="app" component={Apps}>
+        <Route path="yearbook" component={YearbookIndex}>
+          <Route path=":year" component={Yearbook} />
+        </Route>
       </Route>
 
       <Route path="*" component={NotFound} status={404} />
