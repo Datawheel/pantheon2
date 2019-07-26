@@ -4,22 +4,37 @@ import "pages/profile/common/Header.css";
 import "components/common/mouse.css";
 import {COLORS_DOMAIN} from "types";
 import {plural} from "pluralize";
-import {nest} from "d3-collection";
 import {LinePlot} from "d3plus-react";
+import {min, histogram} from "d3-array";
+import {FORMATTERS} from "types";
+import {ckmeans} from "d3plus-legend";
 
 const Header = ({occupation, people}) => {
+  // determine number of buckets based on count of people
+  let numBuckets = 20;
+  if (people.length < 40) {
+    numBuckets = 10;
+  }
+  if (people.length < 10) {
+    numBuckets = people.length;
+  }
 
-  const yearAndCount = nest()
-    .key(p => p.yearBucket)
-    .rollup(leaves => ({count: leaves.length, yearBucket: leaves[0].yearBucket}))
-    .entries(people.filter(p => p.yearBucket))
-    .sort((a, b) => a.value.yearBucket - b.value.yearBucket)
-    .map(d => Object.assign({}, d.value, {id: "line", txt: `${d.value.count} birth(s) between ${d.value.yearBucket - 49} and ${d.value.yearBucket}`}));
+  // create histogram using ckmeans
+  const b2 = histogram().thresholds(data => ckmeans(data, numBuckets).map(l => min(l)))(people.map(d => d.birthyear));
 
-  const sparkData = yearAndCount.concat([
-    Object.assign({}, yearAndCount[0], {shape: "Circle", id: "circle"}),
-    Object.assign({}, yearAndCount[yearAndCount.length - 1], {shape: "Circle", id: "circle"})
-  ]);
+  // get max top 3 people to show in tooltip
+  const lineChartDataFormat = b2.map(bin => {
+    const topPeople = people
+      .filter(p => (p.birthyear >= bin.x0 || 0) && (p.birthyear < bin.x1 || 0))
+      .sort((a, b) => b.hpi - a.hpi)
+      .slice(0, 3);
+    return {
+      y: bin.length,
+      x: bin.x0 || 0,
+      binName: `${bin.x0 || 0} - ${bin.x1 - 1 || 0}`,
+      topPeople
+    };
+  });
 
   return (
     <header className="hero">
@@ -44,17 +59,11 @@ const Header = ({occupation, people}) => {
         <pre>
           <LinePlot
             config={{
-              data: sparkData,
+              data: lineChartDataFormat,
               height: 100,
-              groupBy: "id",
+              // groupBy: "binName",
               legend: false,
-              on: {
-                "click.shape": () => {},
-                "mouseenter.shape": () => {},
-                "mousemove.shape": () => {},
-                "mouseleave.shape": () => {}
-              },
-              shape: d => d.shape || "Line",
+              shape: "Line",
               shapeConfig: {
                 hoverOpacity: 1,
                 Circle: {
@@ -69,31 +78,34 @@ const Header = ({occupation, people}) => {
               },
               timeline: false,
               tooltipConfig: {
-                body: d => d.txt,
-                title: "Individuals Born"
+                body: d => {
+                  const topPeople = d.topPeople instanceof Array ? d.topPeople : [d.topPeople];
+                  let txt = `<span class='sub'>Top Ranked ${topPeople.length === 1 ? "Person" : "People"}</span>`;
+                  // const peopleNames = d.topPeople.map(d => d.name);
+                  topPeople.forEach(n => {
+                    txt += `<br /><span class="bold">${n.name}</span> b.${FORMATTERS.year(n.birthyear)}`;
+                  });
+                  return txt;
+                },
+                footer: d => `${FORMATTERS.commas(d.y)} Total Births`,
+                title: d => `<span class="center">${d.binName}</span>`,
+                titleStyle: {"text-align": "center"},
+                width: "200px",
+                footerStyle: {
+                  "font-size": "12px",
+                  "text-transform": "none",
+                  "color": "#4B4A48"
+                }
               },
               width: 275,
-              //  xConfig: {
-              //    barConfig: {"stroke-width": 0},
-              //    labels: sparkTicks,
-              //    shapeConfig: {
-              //      fill: "#4B4A48",
-              //      fontColor: "#4B4A48",
-              //      fontSize: () => 8,
-              //      stroke: "#4B4A48"
-              //    },
-              //    ticks: sparkTicks,
-              //    tickSize: 0,
-              //    title: "Count",
-              //    titleConfig: {
-              //      fontColor: "#4B4A48",
-              //      fontFamily: () => "Amiko",
-              //      fontSize: () => 10,
-              //      stroke: "#4B4A48"
-              //    }
-              //  },
-              y: d => d.count,
-              yConfig: {labels: [], ticks: [], title: false}
+              // groupBy: () => "line",
+              xConfig: {
+                tickFormat: s => `${s}`
+              },
+              y: d => d.y,
+              x: d => `${d.x}`,
+              // time: d => d.x,
+              yConfig: {labels: [], ticks: [], title: "Births"}
             }} />
         </pre>
       </div>
