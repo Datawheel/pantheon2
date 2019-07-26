@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import {Link} from "react-router";
+import Helmet from "react-helmet";
+import config from "helmet.js";
 import NotFound from "components/NotFound";
 import {FORMATTERS} from "types";
 
@@ -33,7 +35,20 @@ class Yearbook extends Component {
     const topPersonM = peopleBornInYear.find(d => d.gender === "M");
     const topPersonF = peopleBornInYear.find(d => d.gender === "F");
 
+    const yearbookHeaderMetaTags = config.meta.map(meta => {
+      if (meta.property) {
+        if (meta.property === "og:title") {
+          return {property: "og:title", content: `Pantheon ${year} Yearbook`};
+        }
+        if (meta.property === "og:description") {
+          return {property: "og:description", content: `The most globally famous people born in ${year} include ${peopleBornInYear[0].name}, ${peopleBornInYear[1].name}, ${peopleBornInYear[2].name}, ${peopleBornInYear[3].name} and ${peopleBornInYear[4].name}.`};
+        }
+      }
+      return meta;
+    });
+
     return <div>
+      <Helmet title={`${year} Yearbook`} meta={yearbookHeaderMetaTags} />
       <div className="section long-text">
         <h1>Pantheon {year} Yearbook</h1>
         <div className="portrait-container">

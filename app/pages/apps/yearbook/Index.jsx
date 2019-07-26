@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
-import Helmet from "react-helmet";
 import {AnchorButton, Collapse} from "@blueprintjs/core";
 
 import "pages/about/Misc.css";
@@ -48,7 +47,6 @@ class YearbookIndex extends Component {
     const {year} = this.props.params;
 
     return <div className="yearbook-page">
-      <Helmet title="Pantheon Yearbook" />
       <nav className="page-nav" role="navigation">
         <ul className="page-items">
           {[...Array(10).keys()].reverse().map(decade =>
