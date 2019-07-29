@@ -66,9 +66,14 @@ class YearbookIndex extends Component {
         </ul>
       </nav>
       <nav className="mobile-page-nav" role="navigation">
-        <div className="prev">
-          {parseInt(year, 10) > 1900 ? <Link to={`/app/yearbook/${parseInt(year, 10) - 1}`} className="bp3-button bp3-minimal bp3-icon-chevron-left">{parseInt(year, 10) - 1}</Link> : null}
+        <div className="next">
+          {parseInt(year, 10) < 2000
+            ? <Link to={`/app/yearbook/${parseInt(year, 10) + 1}`} className="bp3-button bp3-minimal bp3-icon-chevron-left">
+              {parseInt(year, 10) + 1}
+            </Link>
+            : null}
         </div>
+
         <div className="drop">
           <select value={year} onChange={this.changeYear}>
             {[...Array(100).keys()].reverse().map(yearIndex =>
@@ -76,13 +81,13 @@ class YearbookIndex extends Component {
             )}
           </select>
         </div>
-        <div className="next">
-          {parseInt(year, 10) < 2000
-            ? <Link to={`/app/yearbook/${parseInt(year, 10) + 1}`} className="bp3-button bp3-minimal">
-              {parseInt(year, 10) + 1}
+
+        <div className="prev">
+          {parseInt(year, 10) > 1900
+            ? <Link to={`/app/yearbook/${parseInt(year, 10) - 1}`} className="bp3-button bp3-minimal">
+              {parseInt(year, 10) - 1}
               <span className="bp3-icon-standard bp3-icon-chevron-right"></span>
-            </Link>
-            : null}
+            </Link> : null}
         </div>
       </nav>
       {children}
