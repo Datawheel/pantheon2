@@ -32,9 +32,13 @@ nav {
 h1 {
   text-align: center;
 }
+.portrait-container-parent {
+  display: flex;
+}
 .portrait-container {
   display: flex;
   justify-content: center;
+  flex: 1;
 
   & > div {
     flex: 1;
@@ -62,6 +66,23 @@ h1 {
       height: 100%;
     }
   }
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    &:first-child {
+      flex-direction: column-reverse;
+    }
+    & .portrait {
+      text-align: center !important;
+      width: auto;
+    }
+    & .portrait-desc {
+      text-align: center !important;
+      & h2 {
+        margin: 0 0 10px 0;
+      }
+    }
+  }
 }
 
 .top-grid {
@@ -79,6 +100,7 @@ h1 {
       background-repeat: no-repeat;
       margin: 0 5px 0 0;
       flex: 0 0 90px;
+      width: 90px;
       & > img {
         width: 90px;
       }
