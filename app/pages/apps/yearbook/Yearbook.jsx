@@ -51,20 +51,24 @@ class Yearbook extends Component {
       <Helmet title={`${year} Yearbook`} meta={yearbookHeaderMetaTags} />
       <div className="section long-text">
         <h1>Pantheon {year} Yearbook</h1>
-        <div className="portrait-container">
-          <div className="portrait-desc">
-            <h2><Link to={`/profile/person/${topPersonF.slug}`}>{topPersonF.name}</Link></h2>
+        <div className="portrait-container-parent">
+          <div className="portrait-container">
+            <div className="portrait-desc">
+              <h2><Link to={`/profile/person/${topPersonF.slug}`}>{topPersonF.name}</Link></h2>
+            </div>
+            <div className="portrait">
+              <img src={`/images/profile/people/${topPersonF.id}.jpg`} />
+              <div className="shadow"></div>
+            </div>
           </div>
-          <div className="portrait">
-            <img src={`/images/profile/people/${topPersonF.id}.jpg`} />
-            <div className="shadow"></div>
-          </div>
-          <div className="portrait">
-            <img src={`/images/profile/people/${topPersonM.id}.jpg`} />
-            <div className="shadow"></div>
-          </div>
-          <div className="portrait-desc">
-            <h2><Link to={`/profile/person/${topPersonM.slug}`}>{topPersonM.name}</Link></h2>
+          <div className="portrait-container">
+            <div className="portrait">
+              <img src={`/images/profile/people/${topPersonM.id}.jpg`} />
+              <div className="shadow"></div>
+            </div>
+            <div className="portrait-desc">
+              <h2><Link to={`/profile/person/${topPersonM.slug}`}>{topPersonM.name}</Link></h2>
+            </div>
           </div>
         </div>
 
