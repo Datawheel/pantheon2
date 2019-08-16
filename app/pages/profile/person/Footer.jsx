@@ -1,4 +1,5 @@
 import React from "react";
+import {FORMATTERS} from "types";
 import "pages/profile/common/Footer.css";
 
 const Footer = ({person, ranking}) => {
@@ -29,7 +30,7 @@ const Footer = ({person, ranking}) => {
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/person/${belowMe.slug}`}>{belowMe.name}</a>
               </h4>
-              <p>Rank {belowMe.occupation_rank}</p>
+              <p>Rank {FORMATTERS.commas(belowMe.occupation_rank)}</p>
             </li>
             : null }
 
@@ -41,7 +42,7 @@ const Footer = ({person, ranking}) => {
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/person/${aboveMe.slug}`}>{aboveMe.name}</a>
               </h4>
-              <p>Rank {aboveMe.occupation_rank}</p>
+              <p>Rank {FORMATTERS.commas(aboveMe.occupation_rank)}</p>
             </li>
             : null }
 
