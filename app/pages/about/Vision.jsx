@@ -4,14 +4,23 @@ const Vision = () =>
   <div className="long-text">
     <div className="big-wave" />
     <h1>About</h1>
-    <p className="intro">
-      Pantheon is a project that aims to create a data driven view of history based on the biographies of the people that have been important enough to be recorded as part of our cultural memory. This visualization tool is part of a much larger project that contemplates the compilation, analysis, and visualization of data to understand historical process by identifying global trends and patterns that might be hidden in narrative descriptions of history. Dive in, visualize, and enjoy.
-    </p>
+    <p className="Vision">
+    <h2>History</h2>Pantheon is a project that compiles and distributes data on human collective memory. This is the second iteration of Pantheon. It includes data on more than 70,000 biographies (up from less than 12,000 in Pantheon 1.0), organized by geography and occupational domain.
+  Pantheon 1.0 was created at the MIT Media Lab in team composed by Amy Yu, Shahar Ronen, Kevin Hu, and lead by Cesar A. Hidalgo. The team also got the design support of Ali Almossawi and Deepak Jagdish.
+  Pantheon 2.0 data is based on a compilation effort started by Cristian Jara Figueroa, at MIT's Collective Learning group, and completed by Marcio Porto at Datawheel. Marcio created the data ingestion pipeline and the backend.The Pantheon's site and front end are the work of Alex Simoes. also from Datawheel. The visual design of Pantheon was done by Melissa Teng, during her time at Datahweel. Pantheon 2.0 was lead and supervised by Cesar A. Hidalgo.
+  </p>
     <h2>Vision</h2>
-    <p>Pantheon is a project by the MIT Media Lab Macro Connection's group that makes available data on memorable biographies through thousands of interactive visualizations. The Pantheon dataset aims to provide a quantitative understanding of our species collective memory. Because of the changing nature of our historical records, Pantheon will always be—by construction—an incomplete resource. This incompleteness, however, is the fuel that drives our team to continue compiling, refining, analyzing, and visualizing new sources of data.</p>
-    <p>Even though Albert Einstein is long gone, physicist use his ideas almost every day. Whenever someone writes the gravitational field equation, or talks about a photon, they are building on top of Einstein’s ideas, and as long as these ideas are passed on, the ghost of Albert Einstein will still be around. In fact, our world is full of ghosts. Newton lives in his theories, Elvis lives in his songs, Picasso lives in his paintings, etc. The goal of Pantheon is to capture these ghosts, and through them, quantify the information that has been able to break the barriers of space, time, and language.</p>
-    <p>What was the most “creative” city in 1400? How has that “creativity” evolved in the past 500 years? What is the role of media? How does memorability correlate with accomplishment? Who was the first physicist? All of these are questions that can be potentially addressed using Pantheon.</p>
-    <p>Pantheon is a live dataset that we are continuously expanding. We appreciate any comments and suggestions you might have to help us improve the value of this resource. You can direct your questions, comments and suggestions to <a href="mailto:pantheon@media.mit.edu">our email address</a>.</p>
+    <p>Pantheon makes available data on memorable biographies through thousands of interactive visualizations. This data can be used to support research on collective memory, success, knowldge diffusion, and fame. 
+      Patheon distributes the data through a data visualiztion engine that facilitates querying and exploring the data.</p> 
+       <h2>Updates</h2> 
+   <p>Pantheon is a live dataset that we are continuously expanding. We plan to update Pantheon every six months </p>
+    <h3>Update Table</h3>
+   <p>Pantheon last update: XXXXX LINK TO VERSION</p>
+   <p>Pantheon nextupdate update: XXXXX</p>
+  
+  
+  <h2>Videos</h2> 
+     <p>Here are some videos from Pantheon 1.0 describingthe original idea of Pantheon</p>
     <h2 className="obj-title">The Ghosts of Information</h2>
     <div className="video-wrapper">
       <iframe src="https://player.vimeo.com/video/89016128" width="100%" height="100%" frameBorder="0" webkitallowfullscreen mozallowfullscreen allowFullScreen />
