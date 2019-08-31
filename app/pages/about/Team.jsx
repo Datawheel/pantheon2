@@ -4,10 +4,8 @@ import "pages/profile/common/Footer.css";
 const Team = () =>
   <div className="team-page">
     <h1>The Pantheon Team</h1>
-    <p>Pantheon is a project by the <span>Collective Learning</span> group at the MIT Media Lab. The Pantheon visualization engine is a collaboration between Collective Learning and Datawheel.</p>
-    <p><a href="http://www.macroconnections.media.mit.edu/">Collective Learning</a> is a research group at the MIT Media Lab focused on studying collective learning—the learning that happens at the group level, such as organizations, regions, countries, and the global community. We are a team of designers, engineers, and scientists that deploy our diverse set of skills to gain a better understanding of the world. Follow us on Twitter <a href="https://twitter.com/macromit">@MacroMIT</a>.</p>
-    <p><a href="http://www.datawheel.us">Datawheel</a> is a small but mighty crew of programmers and designers who are here to make sense of the world’s vast amount of data. They know how to turn any client’s raw data into an interactive interface that is clear, accessible, and beautiful.</p>
-    <p>Pantheon is made possible by the generous support of the <a href="https://www.media.mit.edu/sponsorship/sponsor-list">Media Lab Consortia</a> and the <a href="http://www.knowledgelab.org/">Metaknowledge Network</a> at the University of Chicago.</p>
+    <p>Pantheon 2.0 is a project created by Datawheel built on data and ideas developed at the <span>Collective Learning</span> group at the MIT Media Lab. <a href="http://www.datawheel.us">Datawheel</a> is company specialized in the creation of data distribution platforms. </p>
+    <p>Over the years, Pantheon has received the support of the Templeton Foundation <a href="https://www.media.mit.edu/sponsorship/sponsor-list">The MIT Media Lab Consortia</a> and the <a href="http://www.knowledgelab.org/">Metaknowledge Network</a> at the University of Chicago.</p>
     <div className="p2-authors">
       <ul className="footer-carousel-container">
         <li className="footer-carousel-item">
@@ -17,9 +15,9 @@ const Team = () =>
           <h4 className="footer-carousel-item-title">
             César A. Hidalgo
           </h4>
-          <p>Principal Investigator, Associate Professor, Head of Collective Learning</p>
-          <p>Concept, Data, Design</p>
-          <p>Summer 2012 - Present</p>
+          <p>ANITI Chair, University of Toulouse</p>
+          <p>Honorary Professor, University of Manchester</p>
+          <p>Visiting Professor, Harvard University</p>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
@@ -28,7 +26,7 @@ const Team = () =>
           <h4 className="footer-carousel-item-title">
             Cristian Ignacio Jara Figueroa
           </h4>
-          <p>Lead Researcher, Collective Learning PhD Candidate</p>
+          <p>Collective Learning, MIT </p>PhD Candidate</p>
           <p>Concept, Data, Design</p>
           <p>Summer 2016 - Present</p>
         </li>
@@ -37,7 +35,16 @@ const Team = () =>
             <div className="error-photo about dw" />
           </div>
           <h4 className="footer-carousel-item-title">
-            Datawheel LLC
+            Alex Simoes          </h4>
+          <p>Development Team</p>
+          <p>Design, Data, Development</p>
+          <p>Summer 2016 - Present</p>
+           <li className="footer-carousel-item">
+          <div className="footer-carousel-item-photo">
+            <div className="error-photo about dw" />
+          </div>
+          <h4 className="footer-carousel-item-title">
+            Marcio Porto
           </h4>
           <p>Development Team</p>
           <p>Design, Data, Development</p>
