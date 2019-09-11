@@ -35,7 +35,7 @@ export const calculateYearBucket = (data = [], accessor = d => d.birthyear) => {
     const ago = maxYear - accessorClamp(d);
     const b = !ago ? h[h.length - 1] : h.find(group => group.x0 <= ago);
     d.yearWeight = b.x1 === b.x0 ? 1 / earlyYears : !b.x0 ? 1 / laterYears : 1 / (b.x1 - b.x0);
-    d.yearBucket = h.indexOf(b);
+    d.yearBucket = `${h.indexOf(b)}`;
   });
 
   const labels = h.map(b => FORMATTERS.year(Math.round(maxYear - (b.x0 + (b.x1 - b.x0) / 2))));
