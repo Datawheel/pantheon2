@@ -6,6 +6,8 @@ import HomeGrid from "pages/HomeGrid";
 import {StackedArea} from "d3plus-react";
 import {calculateYearBucket, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
 import Spinner from "components/Spinner";
+import {merge} from "d3plus-common";
+import {nest} from "d3-collection";
 import "pages/Home.css";
 
 class Home extends Component {
@@ -16,6 +18,7 @@ class Home extends Component {
 
   componentDidMount() {
     const dataUrl = "/person?select=birthyear,id,name,occupation(id,domain,occupation)&occupation=neq.null";
+    // const dataUrl = "/person?select=birthyear,id,name,hpi,occupation(id,domain,occupation,industry)&occupation=neq.null";
 
     axios.all([apiClient.get("/occupation?select=id,occupation,industry,domain_slug,domain"), apiClient.get(dataUrl)]).then(res => {
       this.setState({occuData: res[0].data, personData: res[1].data});
@@ -30,8 +33,6 @@ class Home extends Component {
 
     let stackedData = [];
 
-    const [yearBuckets, ticks] = calculateYearBucket(personData);
-
     if (personData) {
       stackedData = personData
         .filter(p => p.birthyear !== null)
@@ -40,9 +41,12 @@ class Home extends Component {
       stackedData.forEach(d => {
         d.occupation_name = d.occupation.occupation;
         d.occupation_id = `${d.occupation.id}`;
-        d.place = d.birthplace;
+        // d.industry = `${d.occupation.industry}`;
+        // d.domain = `${d.occupation.domain}`;
       });
     }
+
+    const [yearBuckets, ticks] = calculateYearBucket(stackedData);
 
     let attrs = false;
 
@@ -52,6 +56,45 @@ class Home extends Component {
         return obj;
       }, {});
     }
+
+    if (stackedData.length) {
+      // console.log("unique doms:", [...new Set(stackedData.map(groupBy(attrs)("domain")))]);
+      // console.log("unique inds:", [...new Set(stackedData.map(groupBy(attrs)("industry")))]);
+    }
+
+    // const uniques = a => {
+    //   const v = Array.from(new Set(a));
+    //   return v.length === 1 ? v[0] : v;
+    // };
+    // const aggs =  {
+    //   name: uniques,
+    //   id: uniques,
+    //   hpi: uniques
+    // };
+
+    // let newData = [];
+
+    // const groupedData = nest()
+    //   .key(d => d.domain)
+    //   .key(d => d.industry)
+    //   .rollup(leaves => merge(leaves, aggs))
+    //   .entries(stackedData);
+
+    // groupedData.forEach(gd => {
+    //   const dom = gd.key;
+    //   const inds = gd.values.map(ind => ({
+    //     domain: dom,
+    //     industry: ind.value.industry,
+    //     top: ind.value.hpi
+    //       .map((hpi, i) => ({
+    //         name: ind.value.name[i],
+    //         hpi
+    //       }))
+    //       .sort((a, b) => b.hpi - a.hpi)
+    //       .slice(0, 5)
+    //   }));
+    //   newData = newData.concat(inds);
+    // });
 
     return (
       <div className="home-container">
@@ -95,7 +138,7 @@ class Home extends Component {
                   tooltipConfig: Object.assign({duration: 0}, groupTooltip(stackedData)),
                   xConfig: {
                     labels: ticks,
-                    tickFormat: d => yearBuckets[d]
+                    tickFormat: d => yearBuckets[parseFloat(d, 10)]
                   },
                   yConfig: {
                     gridConfig: {
