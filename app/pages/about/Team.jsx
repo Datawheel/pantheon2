@@ -26,7 +26,8 @@ const Team = () =>
           <h4 className="footer-carousel-item-title">
             Cristian Ignacio Jara Figueroa
           </h4>
-          <p>Collective Learning, MIT </p>PhD Candidate</p>
+          <p>Collective Learning, MIT </p>
+          <p>PhD Candidate</p>
           <p>Concept, Data, Design</p>
           <p>Summer 2016 - Present</p>
         </li>
@@ -34,12 +35,12 @@ const Team = () =>
           <div className="footer-carousel-item-photo">
             <div className="error-photo about dw" />
           </div>
-          <h4 className="footer-carousel-item-title">
-            Alex Simoes          </h4>
+          <h4 className="footer-carousel-item-title">Alex Simoes</h4>
           <p>Development Team</p>
           <p>Design, Data, Development</p>
           <p>Summer 2016 - Present</p>
-           <li className="footer-carousel-item">
+        </li>
+        <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
             <div className="error-photo about dw" />
           </div>
