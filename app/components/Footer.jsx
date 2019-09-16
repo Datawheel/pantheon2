@@ -55,7 +55,7 @@ const Footer = () =>
 
     <div className="sites right">
       <ul className="items authors">
-        <li>
+        {/* <li>
           <a href="http://macroconnections.media.mit.edu/">
             <img src="/images/logos/logo_collective_learning.png" alt="Collective Learning website" />
           </a>
@@ -64,7 +64,7 @@ const Footer = () =>
           <a href="https://www.media.mit.edu/">
             <img src="/images/logos/logo_media_lab.png" alt="MIT Media Lab" />
           </a>
-        </li>
+        </li> */}
         <li>
           <a href="https://www.datawheel.us/">
             <img src="/images/logos/logo_datawheel.png" alt="Datawheel" />
