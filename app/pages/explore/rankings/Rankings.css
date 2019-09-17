@@ -12,6 +12,16 @@
     }
   }
 
+  & .bp3-popover-wrapper.table-tooltip-trigger {
+    display: block !important;
+    & .bp3-popover-target {
+      display: block;
+    }
+    & .bp3-icon {
+      vertical-align: top;
+    }
+  }
+
   /* prevent page overflow */
   @media (min-width: 751px) {
     padding: 0 0 10px 20px;

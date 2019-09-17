@@ -2,6 +2,7 @@
 import React from "react";
 import AnchorList from "components/utils/AnchorList";
 import {FORMATTERS} from "types";
+import {Icon, Tooltip} from "@blueprintjs/core";
 
 const getColumns = (show, nesting, occupations, places) => {
   const COLUMNS = {
@@ -52,7 +53,7 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "Gender",
           accessor: "gender",
-          Cell: ({value}) => <span>{value === "M" ? "Male" : "Female"}</span>,
+          Cell: ({value}) => <span>{value === "M" ? "Male" : value === "F" ? "Female" : "-"}</span>,
           minWidth: 65
         },
         {
@@ -69,11 +70,46 @@ const getColumns = (show, nesting, occupations, places) => {
           accessor: d => d.dplace_geonameid ? d.dplace_geonameid.place : null,
           Cell: ({value, original}) => value ? <a href={`/profile/place/${original.dplace_geonameid.slug}`}>{value}</a> : <span>-</span>
         },
-        {Header: "L", accessor: "l", minWidth: 45},
-        {Header: "L*", accessor: "l_", Cell: ({value}) => FORMATTERS.decimal(value), minWidth: 50},
-        {Header: "PVne", accessor: "non_en_page_views", Cell: ({value}) => FORMATTERS.bigNum(value), minWidth: 50},
-        {Header: "CV", accessor: "coefficient_of_variation", Cell: ({value}) => FORMATTERS.decimal(value), minWidth: 50},
-        {Header: "HPI", accessor: "hpi", Cell: ({value}) => FORMATTERS.decimal(value), defaultSorted: true, maxWidth: 80}
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Wikipedia language editions"}>
+            <div>L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "l",
+          minWidth: 45
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Effective Wikipedia language editions"}>
+            <div>L* <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "l_",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 50
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Non-english Wikipedia pageviews in the past 6 months"}>
+            <div>PVne <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "non_en_page_views",
+          Cell: ({value}) => FORMATTERS.bigNum(value),
+          minWidth: 50
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Coefficient of variation in Wikipedia Pageviews: to discount characters that have short periods of popularity"}>
+            <div>CV <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "coefficient_of_variation",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 50
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Historical Popularity Index"}>
+            <div>HPI <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "hpi",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          defaultSorted: true,
+          maxWidth: 80
+        }
       ]
     },
     occupations: {

@@ -27,3 +27,6 @@ postgrest.conf
 static/images/profile
 
 .vscode
+
+# for pm2 deployment
+ecosystem.config.js
