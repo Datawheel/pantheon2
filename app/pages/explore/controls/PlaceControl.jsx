@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {COUNTRY_DEPTH, CITY_DEPTH} from "types";
 
 class PlaceControl extends Component {
   constructor(props) {
@@ -7,12 +6,10 @@ class PlaceControl extends Component {
   }
 
   changeCity = e => {
-    console.log(e.target.value);
     this.props.onChange("city", e.target.value);
   }
 
   changeCountry = e => {
-    console.log(e.target.value);
     this.props.onChange("city", "all");
     this.props.onChange("country", e.target.value);
   }
@@ -24,12 +21,6 @@ class PlaceControl extends Component {
 
   render() {
     const {city, country, places, placeType} = this.props;
-
-    places.forEach(p => {
-      if (!p.country) {
-        console.log(p);
-      }
-    });
 
     // console.log("places", places);
     // console.log("placeType", placeType);
@@ -45,6 +36,7 @@ class PlaceControl extends Component {
         <select value={country} onChange={this.changeCountry}>
           <option value="all">All Countries</option>
           {places.filter(c => c.country.country_code)
+            .sort((a, b) => a.country.country.localeCompare(b.country.country))
             .map(c =>
               <option key={`${c.country.country_code}-${c.country.id}`} value={c.country.country_code} data-countrycode={c.country.country_code}>
                 {c.country.country}
