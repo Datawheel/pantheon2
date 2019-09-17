@@ -62,7 +62,7 @@ class Navigation extends Component {
               <Link to="/explore/viz" className="item-link explore-link">Visualizations</Link>
             </li>
             <li className="item">
-              <a href="#" className="item-link profiles-link dd">Rankings</a>
+              <a href="/explore/rankings?show=people" className="item-link profiles-link dd">Rankings</a>
               <ul className="sub-items">
                 <li><a href="/explore/rankings?show=people" className="item-link">People</a></li>
                 <li><a href="/explore/rankings?show=places" className="item-link">Places</a></li>
@@ -104,11 +104,14 @@ class Navigation extends Component {
                 <li><a href="/data/api" className="item-link">API</a></li>
               </ul>
             </li>
-            <li className="item">
+            {/* <li className="item">
               <Link to="/app/yearbook" className="item-link data-link dd" activeClassName="active">Apps</Link>
               <ul className="sub-items">
                 <li><a href="/app/yearbook" className="item-link">Yearbook</a></li>
               </ul>
+            </li> */}
+            <li className="item">
+              <Link to="/app/yearbook" className="item-link explore-link" activeClassName="active">Yearbook</Link>
             </li>
             <li className="search-btn">
               <button onClick={activateSearch}>
@@ -166,11 +169,14 @@ class Navigation extends Component {
                 <li><a href="/data/api">API</a></li>
               </ul>
             </li>
-            <li className="item" onClick={this.toggleSubNav}>
+            {/* <li className="item" onClick={this.toggleSubNav}>
               <a className="item-link data-link" onClick={this.toggleSubNavSib}>Apps</a>
               <ul className="sub-items">
                 <li><a href="/app/yearbook">Yearbook</a></li>
               </ul>
+            </li> */}
+            <li className="item">
+              <a href="/app/yearbook" className="item-link explore-link">Yearbook</a>
             </li>
             <li className="item">
               <a href="/data/api" className="item-link api-link">API</a>

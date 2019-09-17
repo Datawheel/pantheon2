@@ -32,7 +32,7 @@ class OccupationRanking extends Component {
           { worsePeers }
         </p>
         <div className="rank-title">
-          <h3>Top Global {plural(person.occupation.occupation)}</h3>
+          <h3>Most Popular {plural(person.occupation.occupation)} in Wikipedia</h3>
           <Link to={`/explore/rankings?show=people&occupation=${person.occupation.id}`}>Go to all Rankings</Link>
         </div>
         <PhotoCarousel me={person} people={ranking} rankAccessor="occupation_rank_unique" />
