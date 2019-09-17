@@ -9,6 +9,7 @@ import axios from "axios";
 //   baseURL = "https://api.pantheon.world";
 // }
 
+// const baseURL = "http://localhost:3100";
 const baseURL = "https://api.pantheon.world";
 
 export default axios.create({baseURL});
