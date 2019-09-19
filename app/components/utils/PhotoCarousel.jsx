@@ -127,9 +127,9 @@ class PhotoCarousel extends Component {
                   </a>
                 </div>
                 <h2><a href={`/profile/person/${person.slug}/`}>{person.name}</a></h2>
-                <p className="rank-year">{FORMATTERS.year(person.birthyear)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear)}` : "Present"}</p>
+                {person.birthyear ? <p className="rank-year">{FORMATTERS.year(person.birthyear)} - {person.deathyear ? `${FORMATTERS.year(person.deathyear)}` : "Present"}</p> : null}
                 <p className="rank-year"><strong>HPI:</strong> {FORMATTERS.decimal(person.hpi)}</p>
-                {rankAccessor ? <p className="rank-year"><strong>Rank:</strong> {FORMATTERS.commas(person[rankAccessor])}</p> : null}
+                {rankAccessor && person[rankAccessor] ? <p className="rank-year"><strong>Rank:</strong> {FORMATTERS.commas(person[rankAccessor])}</p> : null}
               </li>
             )}
           </ul>

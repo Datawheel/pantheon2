@@ -64,7 +64,7 @@ const Places = ({people, occupation}) => {
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
-              on: on("place", d => d.bplace_country.slug),
+              on: on("country", d => d.bplace_country.slug),
               legendConfig: {
                 label: d => d.borncontinent
               },
@@ -83,7 +83,7 @@ const Places = ({people, occupation}) => {
                 data: tmapDeathData,
                 depth: 1,
                 groupBy: ["diedcontinent", "diedcountry"],
-                on: on("place", d => d.dplace_country.slug),
+                on: on("country", d => d.dplace_country.slug),
                 legendConfig: {
                   label: d => d.diedcontinent
                 },

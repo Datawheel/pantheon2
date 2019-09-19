@@ -57,7 +57,7 @@ const PlacesTime = ({eras, people, occupation}) => {
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
-              on: on("place", d => d.bplace_country.slug),
+              on: on("country", d => d.bplace_country.slug),
               shapeConfig: {fill: d => COLORS_CONTINENT[d.borncontinent]},
               tooltipConfig: groupTooltip(tmapBornData, d => d.bplace_country.slug),
               xConfig: {
@@ -75,7 +75,7 @@ const PlacesTime = ({eras, people, occupation}) => {
                 data: tmapDeathData,
                 depth: 1,
                 groupBy: ["diedcontinent", "diedcountry"],
-                on: on("place", d => d.dplace_country.slug),
+                on: on("country", d => d.dplace_country.slug),
                 shapeConfig: {fill: d => COLORS_CONTINENT[d.diedcontinent]},
                 tooltipConfig: groupTooltip(tmapDeathData, d => d.dplace_country.slug),
                 xConfig: {
