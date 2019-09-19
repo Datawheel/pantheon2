@@ -26,11 +26,11 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
     .sort((a, b) => b.langs - a.langs);
 
   tmapBornData.forEach(d => {
-    d.borncountry = d.bplace_country.country;
-    d.borncontinent = d.bplace_country.continent;
+    d.industry = d.occupation.industry;
+    d.domain = d.occupation.domain;
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
-    d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
+    d.event = "OCCUPATIONS OF FAMOUS PEOPLE BORN IN THIS ERA";
     d.place = d.bplace_geonameid;
   });
 
@@ -43,7 +43,7 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
     d.domain = d.occupation.domain;
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
-    d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
+    d.event = "OCCUPATIONS OF FAMOUS PEOPLE DECEASED IN THIS ERA";
     d.place = d.dplace_geonameid;
   });
 
@@ -51,6 +51,8 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
     obj[d.id] = d;
     return obj;
   }, {});
+
+  console.log("tmapBornData", tmapBornData);
 
   return (
     <section className="profile-section">
@@ -74,7 +76,7 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
-              time: "birthyear",
+              // time: "birthyear",
               tooltipConfig: groupTooltip(tmapBornData, d => d.occupation.occupation_slug)
             }} />
         </VizWrapper>
@@ -88,7 +90,7 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
               groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
               on: on("occupation", d => d.occupation.occupation_slug),
               shapeConfig: shapeConfig(attrs),
-              time: "deathyear",
+              // time: "deathyear",
               tooltipConfig: groupTooltip(tmapDeathData, d => d.occupation.occupation_slug)
             }} />
         </VizWrapper>
