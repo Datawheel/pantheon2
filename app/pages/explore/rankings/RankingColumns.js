@@ -4,6 +4,8 @@ import AnchorList from "components/utils/AnchorList";
 import {FORMATTERS} from "types";
 import {Icon, Tooltip} from "@blueprintjs/core";
 
+const genderOrder = ["M", null, "F"];
+
 const getColumns = (show, nesting, occupations, places) => {
   const COLUMNS = {
     people: {
@@ -54,7 +56,12 @@ const getColumns = (show, nesting, occupations, places) => {
           Header: "Gender",
           accessor: "gender",
           Cell: ({value}) => <span>{value === "M" ? "Male" : value === "F" ? "Female" : "-"}</span>,
-          minWidth: 65
+          minWidth: 65,
+          sortMethod: (a, b) => {
+            const aIndex = genderOrder.indexOf(a);
+            const bIndex = genderOrder.indexOf(b);
+            return bIndex < aIndex ? -1 : bIndex > aIndex ? 1 : 0;
+          }
         },
         {
           id: "bplace_geonameid",
@@ -286,7 +293,7 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "Country",
           accessor: "country_name",
-          Cell: ({value}) => <a href={`/profile/place/${value}`}>{value}</a>
+          Cell: ({value}) => <a href={`/profile/country/${value}`}>{value}</a>
         },
         {
           Header: "People",
