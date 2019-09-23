@@ -64,9 +64,11 @@ class App extends Component {
     }
     // user wants to close the search
     if (searchActive) {
+      document.body.classList.remove("noscroll");
       document.removeEventListener("keydown", this._closeSearchEscKey, false);
     }
     else { // user wants to open the search
+      document.body.classList.add("noscroll");
       document.addEventListener("keydown", this._closeSearchEscKey, false);
     }
     this.setState({searchActive: !searchActive});
