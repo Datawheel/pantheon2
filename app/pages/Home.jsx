@@ -17,8 +17,9 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const dataUrl = "/person?select=birthyear,id,name,occupation(id,domain,occupation)&occupation=neq.null";
+    // const dataUrl = "/person?select=birthyear,id,name,occupation(id,domain,occupation)&occupation=neq.null";
     // const dataUrl = "/person?select=birthyear,id,name,hpi,occupation(id,domain,occupation,industry)&occupation=neq.null";
+    const dataUrl = "/person?select=birthyear,id,occupation&occupation=neq.null&birthyear=not.is.null";
 
     axios.all([apiClient.get("/occupation?select=id,occupation,industry,domain_slug,domain"), apiClient.get(dataUrl)]).then(res => {
       this.setState({occuData: res[0].data, personData: res[1].data});
@@ -31,22 +32,22 @@ class Home extends Component {
     const {activateSearch} = this.context;
     const {occuData, personData} = this.state;
 
-    let stackedData = [];
+    let stackedData = null, ticks = null, yearBuckets = null;
 
     if (personData) {
-      stackedData = personData
-        .filter(p => p.birthyear !== null)
-        .sort((a, b) => b.l - a.l);
 
-      stackedData.forEach(d => {
-        d.occupation_name = d.occupation.occupation;
-        d.occupation_id = `${d.occupation.id}`;
-        // d.industry = `${d.occupation.industry}`;
-        // d.domain = `${d.occupation.domain}`;
-      });
+      // stackedData = personData
+      //   .filter(p => p.birthyear !== null);
+
+      // stackedData.forEach(d => {
+      //   d.occupation_name = d.occupation.occupation;
+      //   d.occupation_id = `${d.occupation.id}`;
+      // d.industry = `${d.occupation.industry}`;
+      // d.domain = `${d.occupation.domain}`;
+      // });
+      stackedData = personData.map(d => ({...d, occupation_name: d.occupation, occupation_id: d.occupation}));
+      [yearBuckets, ticks] = calculateYearBucket(stackedData);
     }
-
-    const [yearBuckets, ticks] = calculateYearBucket(stackedData);
 
     let attrs = false;
 
@@ -57,10 +58,10 @@ class Home extends Component {
       }, {});
     }
 
-    if (stackedData.length) {
-      // console.log("unique doms:", [...new Set(stackedData.map(groupBy(attrs)("domain")))]);
-      // console.log("unique inds:", [...new Set(stackedData.map(groupBy(attrs)("industry")))]);
-    }
+    // if (stackedData.length) {
+    // console.log("unique doms:", [...new Set(stackedData.map(groupBy(attrs)("domain")))]);
+    // console.log("unique inds:", [...new Set(stackedData.map(groupBy(attrs)("industry")))]);
+    // }
 
     // const uniques = a => {
     //   const v = Array.from(new Set(a));
@@ -103,7 +104,7 @@ class Home extends Component {
           <div className="home-head-content">
             <div className="home-search">
               <img src="/images/icons/icon-search.svg" alt="Search" />
-              <a href="#" onClick={activateSearch}>Search people, places, & occupations</a>
+              <a href="#" onClick={activateSearch}>Search people, places, &amp; occupations</a>
             </div>
             <div className="post">
               <p><strong>Pantheon</strong> is a dataset, visualization tool,
@@ -135,7 +136,7 @@ class Home extends Component {
                   },
                   shapeConfig: Object.assign({Area: {label: false}}, shapeConfig(attrs)),
                   timeline: false,
-                  tooltipConfig: Object.assign({duration: 0}, groupTooltip(stackedData)),
+                  // tooltipConfig: Object.assign({duration: 0}, groupTooltip(stackedData)),
                   xConfig: {
                     labels: ticks,
                     tickFormat: d => yearBuckets[parseFloat(d, 10)]
