@@ -26,8 +26,6 @@ class CountryRanking extends Component {
     const betterRankedBirthPeers = ranking.filter(p => p.bplace_country_rank_unique < meBc.bplace_country_rank_unique);
     const worseRankedBirthPeers = ranking.filter(p => p.bplace_country_rank_unique > meBc.bplace_country_rank_unique);
 
-    console.log("betterRankedBirthPeers", betterRankedBirthPeers);
-
     if (betterRankedBirthPeers.length) {
       betterBirthPeers = <span>Before {person.gender === "M" ? "him" : "her"} are {<AnchorList items={betterRankedBirthPeers} name={d => `${d.name} (${d.birthyear})`} url={d => `/profile/person/${d.slug}/`} />}. </span>;
     }

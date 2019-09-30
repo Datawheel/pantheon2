@@ -48,9 +48,6 @@ class Person extends Component {
   render() {
     const {person, occupationRanks, birthYearRanks, deathYearRanks, birthCountryRanks, wikiExtract, wikiPageViews, wikiSummary} = this.props.data;
 
-    console.log("person!!!", person);
-    console.log("birthCountryRanks!!!", birthCountryRanks);
-
     if (person === undefined) {
       return <NotFound />;
     }
@@ -191,7 +188,7 @@ const personURL = "/person?slug=eq.<id>&select=occupation(*),bplace_geonameid(*)
 const occupationRanksURL = "/person?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<person.occupationRankLow>&occupation_rank_unique=lte.<person.occupationRankHigh>&order=occupation_rank_unique&select=occupation(*),bplace_country(*),hpi,l,occupation_rank,occupation_rank_unique,slug,gender,name,id,wp_id,birthyear,deathyear";
 const birthYearRanksURL = "/person?birthyear=eq.<person.birthyear>&birthyear_rank_unique=gte.<person.birthYearRankLow>&birthyear_rank_unique=lte.<person.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation(id,domain,domain_slug),bplace_country(*),l,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,wp_id,birthyear,deathyear";
 const deathYearRanksURL = "/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation(id,domain,domain_slug),dplace_country(*),l,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,wp_id,deathyear,birthyear";
-const birthCountryRanksURL = "/person?bplace_country=eq.<person.bplace_country.country>&bplace_country_rank_unique=gte.<person.bplaceCountryRankLow>&bplace_country_rank_unique=lte.<person.bplaceCountryRankHigh>&order=bplace_country_rank_unique&select=bplace_country(*),l,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,wp_id,deathyear,birthyear";
+const birthCountryRanksURL = "/person?bplace_country=eq.<person.bplaceCountry>&bplace_country_rank_unique=gte.<person.bplaceCountryRankLow>&bplace_country_rank_unique=lte.<person.bplaceCountryRankHigh>&order=bplace_country_rank_unique&select=bplace_country(*),l,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,wp_id,deathyear,birthyear";
 const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=<person.id>&format=json&exlimit=1&origin=*";
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<person.wikiSlug>/monthly/20110101/${year}${month}01`;
 const wikiSummaryURL = "https://en.wikipedia.org/api/rest_v1/page/summary/<person.wikiSlug>";
@@ -211,12 +208,13 @@ Person.preneed = [
     const deathyearId = person.deathyear || "9999";
     const deathyear_rank_unique = person.deathyear_rank_unique || "9999";
 
-    const bplaceCountryRankLow = Math.max(1, parseInt(person.bplace_country_rank_unique, 10) - NUM_RANKINGS_PRE);
-    const bplaceCountryRankHigh = Math.max(NUM_RANKINGS, parseInt(person.bplace_country_rank_unique, 10) + NUM_RANKINGS_POST);
+    const bplaceCountry = person.bplace_country ? person.bplace_country.country : "";
+    const bplaceCountryRankLow = person.bplace_country_rank_unique ? Math.max(1, parseInt(person.bplace_country_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
+    const bplaceCountryRankHigh = person.bplace_country_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.bplace_country_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
 
     const wikiSlug = person.name.replace(/ /g, "_");
 
-    return {...person, wikiSlug, deathyear_rank_unique, deathyearId, occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathYearRankLow, deathYearRankHigh, bplaceCountryRankLow, bplaceCountryRankHigh};
+    return {...person, wikiSlug, deathyear_rank_unique, deathyearId, occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathYearRankLow, deathYearRankHigh, bplaceCountry, bplaceCountryRankLow, bplaceCountryRankHigh};
   })
 ];
 
