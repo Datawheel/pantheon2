@@ -200,6 +200,10 @@
         min-width: 90px;
         padding-left: 20px;
         @mixin searchResults;
+
+        & span:not(:last-child) {
+          margin-right: 0.5em;
+        }
       }
     }
 
@@ -237,6 +241,23 @@
       }
     }
 
+    & .result-country {
+      & a::before {
+        content: '';
+        background: url("/images/icons/icon-country.svg") no-repeat;
+        background-size: contain;
+        background-position: 50%;
+      }
+
+      &.highlighted {
+        & a::before {
+          background: url("/images/icons/icon-country-h.svg") no-repeat;
+          background-size: contain;
+          background-position: 50%;
+        }
+      }
+    }
+
     & .result-place {
       & a::before {
         content: '';
@@ -248,6 +269,23 @@
       &.highlighted {
         & a::before {
           background: url("/images/icons/icon-place-h.svg") no-repeat;
+          background-size: contain;
+          background-position: 50%;
+        }
+      }
+    }
+
+    & .result-era {
+      & a::before {
+        content: '';
+        background: url("/images/icons/icon-era.svg") no-repeat;
+        background-size: contain;
+        background-position: 50%;
+      }
+
+      &.highlighted {
+        & a::before {
+          background: url("/images/icons/icon-era-h.svg") no-repeat;
           background-size: contain;
           background-position: 50%;
         }
