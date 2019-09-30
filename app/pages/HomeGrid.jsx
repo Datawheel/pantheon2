@@ -3,13 +3,14 @@ import "pages/HomeGrid.css";
 
 const HomeGrid = () => {
   const featured = [
+    {cat: "pubfig", id: "greta", name: "Greta Thunberg", url: "/profile/person/Greta_Thunberg"},
     {cat: "scitech", id: "ada", name: "Ada Lovelace", url: "/profile/person/Ada_Lovelace"},
     {cat: "arts", id: "dali", name: "Salvador Dali", url: "/profile/person/Salvador_Dalí"},
     {cat: "inst", id: "tut", name: "Tutankhamun", url: "/profile/person/Tutankhamun"},
     {cat: "sports", id: "ubolt", name: "Usain Bolt", url: "/profile/person/Usain_Bolt"},
     {cat: "print", id: "pubfig", name: "Printing Era", url: "/profile/era/printing"},
     {cat: "", id: "bair", name: "Buenos Aires", url: "/profile/place/buenos-aires"},
-    {cat: "pubfig", id: "krishna", name: "Krishna", url: "/profile/person/Krishna"},
+    {cat: "sports", id: "senna", name: "Ayrton Senna", url: "/profile/person/Ayrton_Senna"},
     {cat: "arts", id: "cara", name: "Cara Delevingne", url: "/profile/person/Cara_Delevingne"},
     {cat: "pubfig", id: "gandhi", name: "Mahatma Gandhi", url: "/profile/person/Mahatma_Gandhi"},
     {cat: "scitech", id: "ein", name: "Albert Einstein", url: "/profile/person/Albert_Einstein"},
@@ -24,7 +25,6 @@ const HomeGrid = () => {
     {cat: "expl", id: "explorers", name: "Explorers", url: "/profile/occupation/explorer"},
     {cat: "", id: "berlin", name: "Berlin", url: "/profile/place/berlin"},
     {cat: "inst", id: "muhammad", name: "Muhammad", url: "/profile/person/Muhammad"},
-    {cat: "scitech", id: "hawk", name: "Stephen Hawking", url: "/profile/person/Stephen_Hawking"},
     {cat: "", id: "tokyo", name: "Tokyo", url: "/profile/place/tokyo"},
     {cat: "arts", id: "evora", name: "Cesária Évora", url: "/profile/person/Cesaria_Evora"},
     {cat: "arts", id: "aish", name: "Aishwarya Rai Bachchan", url: "/profile/person/Aishwarya_Rai_Bachchan"},

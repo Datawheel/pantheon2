@@ -77,6 +77,7 @@
         transition: width 1s, height 1s, background-color 0.5s, background-position 0.5s;
 
         &.ada {background-image:url('/images/profile/people/974.jpg');}
+        &.greta {background-image:url('/images/profile/people/59214935.jpg');}
         &.gandhi {background-image:url('/images/profile/people/19379.jpg');}
         &.tut {background-image:url('/images/profile/people/30437.jpg');}
         &.ubolt {background-image:url('/images/profile/people/4764846.jpg');}
@@ -105,7 +106,7 @@
         &.fdir {background-image:url('/images/profile/people/26683.jpg');}
         &.bair {background-image:url('/images/profile/place/3435910.jpg');}
         &.aung {background-image:url('/images/profile/people/2847.jpg');}
-        &.krishna {background-image:url('/images/profile/people/42154.jpg');}
+        &.senna {background-image:url('/images/profile/people/146638.jpg');}
         &.print {background-image:url('/images/profile/era/2.jpg');}
         &.dali {background-image:url('/images/profile/people/40112.jpg');}
         &.aung {background-image:url('/images/profile/people/2847.jpg');}

@@ -167,7 +167,7 @@ const NotFound = ({activateSearch}) => {
                 <h4 className="footer-carousel-item-title">
                   <a href="/profile/person/Marie_Curie">Marie Curie</a>
                 </h4>
-                <p>Chemist</p>
+                <p>Physicist</p>
                 <p>Poland</p>
                 <p>Rank 64</p>
               </li>
