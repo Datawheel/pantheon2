@@ -64,18 +64,42 @@ const getColumns = (show, nesting, occupations, places) => {
           }
         },
         {
-          id: "bplace_geonameid",
-          Header: "Birth Place",
-          style: {whiteSpace: "unset"},
-          accessor: d => d.bplace_geonameid ? d.bplace_geonameid.place : null,
-          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.bplace_geonameid.slug}`}>{value}</a> : <span>-</span>
+          Header: "Birthplace",
+          columns: [
+            {
+              id: "bplace_geonameid",
+              Header: "City",
+              style: {whiteSpace: "unset"},
+              accessor: d => d.bplace_geonameid ? d.bplace_geonameid.place : null,
+              Cell: ({value, original}) => value ? <a href={`/profile/place/${original.bplace_geonameid.slug}`}>{value}</a> : <span>-</span>
+            },
+            {
+              id: "bplace_country",
+              Header: "Country",
+              style: {whiteSpace: "unset"},
+              accessor: d => d.bplace_country ? d.bplace_country.country : null,
+              Cell: ({value, original}) => value ? <a href={`/profile/country/${original.bplace_country.slug}`}>{value}</a> : <span>-</span>
+            }
+          ]
         },
         {
-          id: "dplace_geonameid",
-          Header: "Death Place",
-          style: {whiteSpace: "unset"},
-          accessor: d => d.dplace_geonameid ? d.dplace_geonameid.place : null,
-          Cell: ({value, original}) => value ? <a href={`/profile/place/${original.dplace_geonameid.slug}`}>{value}</a> : <span>-</span>
+          Header: "Deathplace",
+          columns: [
+            {
+              id: "dplace_geonameid",
+              Header: "City",
+              style: {whiteSpace: "unset"},
+              accessor: d => d.dplace_geonameid ? d.dplace_geonameid.place : null,
+              Cell: ({value, original}) => value ? <a href={`/profile/place/${original.dplace_geonameid.slug}`}>{value}</a> : <span>-</span>
+            },
+            {
+              id: "dplace_country",
+              Header: "Country",
+              style: {whiteSpace: "unset"},
+              accessor: d => d.dplace_country ? d.dplace_country.country : null,
+              Cell: ({value, original}) => value ? <a href={`/profile/country/${original.dplace_country.slug}`}>{value}</a> : <span>-</span>
+            }
+          ]
         },
         {
           Header: () => <Tooltip className="table-tooltip-trigger" content={"Wikipedia language editions"}>
