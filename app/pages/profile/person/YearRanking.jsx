@@ -26,10 +26,10 @@ class YearRanking extends Component {
     const worseRankedBirthPeers = birthYearRanking.filter(p => p.birthyear_rank_unique > meBy.birthyear_rank_unique);
 
     if (betterRankedBirthPeers.length) {
-      betterBirthPeers = <span>Before { person.gender ? "him" : "her" } {betterRankedBirthPeers.length > 1 ? "are" : "is"} {<AnchorList items={betterRankedBirthPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}. </span>;
+      betterBirthPeers = <span>Before {person.gender === "M" ? "him" : "her"} {betterRankedBirthPeers.length > 1 ? "are" : "is"} {<AnchorList items={betterRankedBirthPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}. </span>;
     }
     if (worseRankedBirthPeers.length) {
-      worseBirthPeers = <span>After { person.gender ? "him" : "her" } {worseRankedBirthPeers.length > 1 ? "are" : "is"} {<AnchorList items={worseRankedBirthPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}.</span>;
+      worseBirthPeers = <span>After {person.gender === "M" ? "him" : "her"} {worseRankedBirthPeers.length > 1 ? "are" : "is"} {<AnchorList items={worseRankedBirthPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}.</span>;
     }
 
     // return <div>year ranking to come...</div>;
@@ -38,35 +38,35 @@ class YearRanking extends Component {
       const betterRankedDeathPeers = deathYearRanking.filter(p => p.deathyear_rank_unique < meDy.deathyear_rank_unique);
       const worseRankedDeathPeers = deathYearRanking.filter(p => p.deathyear_rank_unique > meDy.deathyear_rank_unique);
       if (betterRankedDeathPeers.length) {
-        betterDeathPeers = <span>Before { person.gender ? "him" : "her" } {betterRankedDeathPeers.length > 1 ? "are" : "is"} {<AnchorList items={betterRankedDeathPeers} name={d => d.deathcountry ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}. </span>;
+        betterDeathPeers = <span>Before {person.gender === "M" ? "him" : "her"} {betterRankedDeathPeers.length > 1 ? "are" : "is"} {<AnchorList items={betterRankedDeathPeers} name={d => d.deathcountry ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}. </span>;
       }
       if (worseRankedDeathPeers.length) {
-        worseDeathPeers = <span>After { person.gender ? "him" : "her" } {worseRankedDeathPeers.length > 1 ? "are" : "is"} {<AnchorList items={worseRankedDeathPeers} name={d => d.deathcountry ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}.</span>;
+        worseDeathPeers = <span>After {person.gender === "M" ? "him" : "her"} {worseRankedDeathPeers.length > 1 ? "are" : "is"} {<AnchorList items={worseRankedDeathPeers} name={d => d.deathcountry ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />}.</span>;
       }
     }
 
     return (
       <div>
         <p>
-          Among people born in {FORMATTERS.year(person.birthyear.name)}, {person.name} ranks <a>{FORMATTERS.commas(meBy.birthyear_rank)}</a> out of {FORMATTERS.commas(person.birthyear.num_born)}.&nbsp;
+          Among people born in {FORMATTERS.year(person.birthyear)}, {person.name} ranks <a>{FORMATTERS.commas(meBy.birthyear_rank)}</a>.&nbsp;
           { betterBirthPeers }
           { worseBirthPeers }
           { deathYearRanking.length
-            ? <span>&nbsp;Among people deceased in {FORMATTERS.year(person.deathyear.name)}, {person.name} ranks <a>{meDy.deathyear_rank}</a> out of {person.deathyear.num_died}.&nbsp;</span>
+            ? <span>&nbsp;Among people deceased in {FORMATTERS.year(person.deathyear)}, {person.name} ranks <a>{meDy.deathyear_rank}</a>.&nbsp;</span>
             : null}
           { betterDeathPeers }
           { worseDeathPeers }
         </p>
         <div className="rank-title">
-          <h3>Others Born in {FORMATTERS.year(person.birthyear.name)}</h3>
-          <Link to={`/explore/rankings?viz=treemap&show=people&years=${person.birthyear.id},${person.birthyear.id}&yearType=birthyear`}>Go to all Rankings</Link>
+          <h3>Others Born in {FORMATTERS.year(person.birthyear)}</h3>
+          <Link to={`/explore/rankings?viz=treemap&show=people&years=${person.birthyear},${person.birthyear}&yearType=birthyear`}>Go to all Rankings</Link>
         </div>
         <PhotoCarousel me={person} people={birthYearRanking} rankAccessor="birthyear_rank_unique" />
         {deathYearRanking.length
           ? <div className="rank-sec-body">
             <div className="rank-title">
-              <h3>Others Deceased in {FORMATTERS.year(person.deathyear.name)}</h3>
-              <Link to={`/explore/rankings?viz=treemap&show=people&years=${person.deathyear.id},${person.deathyear.id}&yearType=deathyear`}>Go to all Rankings</Link>
+              <h3>Others Deceased in {FORMATTERS.year(person.deathyear)}</h3>
+              <Link to={`/explore/rankings?viz=treemap&show=people&years=${person.deathyear},${person.deathyear}&yearType=deathyear`}>Go to all Rankings</Link>
             </div>
             <PhotoCarousel me={person} people={deathYearRanking} rankAccessor="deathyear_rank_unique" />
           </div>
