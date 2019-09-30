@@ -78,7 +78,7 @@ class PhotoCarousel extends Component {
         }
       }
       else {
-        const datasetFilter = me ? `${filterKey}=eq.${me[filterKey].id}&` : "";
+        const datasetFilter = me ? `${filterKey}=eq.${me[filterKey].id || me[filterKey]}&` : "";
         const morePeopleUrl = `/person?${datasetFilter}${rankAccessor}=gte.${newLowerBound}&${rankAccessor}=lte.${newUpperBound}&select=occupation(*),bplace_country(*),hpi,l,${filterKey}_rank,${rankAccessor},slug,gender,name,id,birthyear,deathyear`;
         console.log("morePeopleUrl", morePeopleUrl);
         api.get(morePeopleUrl).then(newPeopleResults => {

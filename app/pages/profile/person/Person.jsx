@@ -13,7 +13,7 @@ import MemMetrics from "pages/profile/person/MemMetrics";
 import OccupationRanking from "pages/profile/person/OccupationRanking";
 import YearRanking from "pages/profile/person/YearRanking";
 import PageviewsByLang from "pages/profile/person/PageviewsByLang";
-// import CountryRanking from "components/profile/person/CountryRanking";
+import CountryRanking from "pages/profile/person/CountryRanking";
 import NotFound from "components/NotFound";
 // import {activateSearch} from "actions/nav";
 // import {fetchPerson, fetchOccupationRanks, fetchCountryRanks, fetchYearRanks, fetchPageviews, fetchCreationdates} from "actions/person";
@@ -46,7 +46,10 @@ class Person extends Component {
   }
 
   render() {
-    const {person, occupationRanks, birthYearRanks, deathYearRanks, wikiExtract, wikiPageViews, wikiSummary} = this.props.data;
+    const {person, occupationRanks, birthYearRanks, deathYearRanks, birthCountryRanks, wikiExtract, wikiPageViews, wikiSummary} = this.props.data;
+
+    console.log("person!!!", person);
+    console.log("birthCountryRanks!!!", birthCountryRanks);
 
     if (person === undefined) {
       return <NotFound />;
@@ -120,14 +123,13 @@ class Person extends Component {
       {title: `Page views of ${plural(person.name)} by language`, slug: "page-views-by-lang", content: <PageviewsByLang person={person} />},
       {title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />}
     ];
-    // if (person.birthyear) {
-    //   sections.push({title: "Contemporaries", slug: "year_peers", content: <YearRanking person={person} birthYearRanking={birthYearRanks} deathYearRanking={deathYearRanks} />});
-    // }
+    if (person.birthyear) {
+      sections.push({title: "Contemporaries", slug: "year_peers", content: <YearRanking person={person} birthYearRanking={birthYearRanks} deathYearRanking={deathYearRanks} />});
+    }
+    if (person.bplace_country) {
+      sections.push({title: `In ${person.bplace_country.country}`, slug: "country_peers", content: <CountryRanking person={person} ranking={birthCountryRanks} />});
+    }
 
-    //
-    // if (personProfile.person.birthcountry) {
-    //   sections.push({title: `In ${personProfile.person.birthcountry.name}`, slug: "country_peers", content: <CountryRanking person={personProfile.person} ranking={personProfile.countryRank} />});
-    // }
     const pageUrl = this.props.location.href.split("?")[0].replace(/\/$/, "");
     const pageHeaderMetaTags = config.meta.map(meta => {
       if (meta.property) {
@@ -184,11 +186,12 @@ class Person extends Component {
 const dateobj = new Date();
 const year = dateobj.getFullYear();
 const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
-const personURL = "/person?slug=eq.<id>&select=occupation(*),bplace_geonameid(*),dplace_geonameid(*),*";
+const personURL = "/person?slug=eq.<id>&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*";
 // const pageViewsURL = "/indicators?person=eq.<person.id>&order=pageview_date&num_pageviews=not.is.null";
 const occupationRanksURL = "/person?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<person.occupationRankLow>&occupation_rank_unique=lte.<person.occupationRankHigh>&order=occupation_rank_unique&select=occupation(*),bplace_country(*),hpi,l,occupation_rank,occupation_rank_unique,slug,gender,name,id,wp_id,birthyear,deathyear";
 const birthYearRanksURL = "/person?birthyear=eq.<person.birthyear>&birthyear_rank_unique=gte.<person.birthYearRankLow>&birthyear_rank_unique=lte.<person.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation(id,domain,domain_slug),bplace_country(*),l,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,wp_id,birthyear,deathyear";
 const deathYearRanksURL = "/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation(id,domain,domain_slug),dplace_country(*),l,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,wp_id,deathyear,birthyear";
+const birthCountryRanksURL = "/person?bplace_country=eq.<person.bplace_country.country>&bplace_country_rank_unique=gte.<person.bplaceCountryRankLow>&bplace_country_rank_unique=lte.<person.bplaceCountryRankHigh>&order=bplace_country_rank_unique&select=bplace_country(*),l,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,wp_id,deathyear,birthyear";
 const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=<person.id>&format=json&exlimit=1&origin=*";
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<person.wikiSlug>/monthly/20110101/${year}${month}01`;
 const wikiSummaryURL = "https://en.wikipedia.org/api/rest_v1/page/summary/<person.wikiSlug>";
@@ -205,12 +208,15 @@ Person.preneed = [
     const deathYearRankLow = person.deathyear_rank_unique ? Math.max(1, parseInt(person.deathyear_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
     const deathYearRankHigh = person.deathyear_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.deathyear_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
 
-    const deathyearId = person.deathyearId || "9999";
+    const deathyearId = person.deathyear || "9999";
     const deathyear_rank_unique = person.deathyear_rank_unique || "9999";
+
+    const bplaceCountryRankLow = Math.max(1, parseInt(person.bplace_country_rank_unique, 10) - NUM_RANKINGS_PRE);
+    const bplaceCountryRankHigh = Math.max(NUM_RANKINGS, parseInt(person.bplace_country_rank_unique, 10) + NUM_RANKINGS_POST);
 
     const wikiSlug = person.name.replace(/ /g, "_");
 
-    return {...person, wikiSlug, deathyear_rank_unique, deathyearId, occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathYearRankLow, deathYearRankHigh};
+    return {...person, wikiSlug, deathyear_rank_unique, deathyearId, occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathYearRankLow, deathYearRankHigh, bplaceCountryRankLow, bplaceCountryRankHigh};
   })
 ];
 
@@ -223,6 +229,7 @@ Person.need = [
   fetchData("occupationRanks", occupationRanksURL, res => res),
   fetchData("birthYearRanks", birthYearRanksURL, res => res),
   fetchData("deathYearRanks", deathYearRanksURL, res => res),
+  fetchData("birthCountryRanks", birthCountryRanksURL, res => res),
   fetchData("wikiExtract", wikiURL),
   fetchData("wikiPageViews", wikiPageViewsURL),
   fetchData("wikiSummary", wikiSummaryURL)
