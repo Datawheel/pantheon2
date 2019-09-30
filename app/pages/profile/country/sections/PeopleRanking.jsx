@@ -12,7 +12,7 @@ const PeopleRanking = ({country, peopleBorn, peopleDied}) => {
 
   const topRankingBorn = peopleBorn.slice(0, 12);
   const topRankingDied = peopleDied.slice(0, 12);
-  const placeQueryParamId = country.id;
+  const placeQueryParamId = country.country_code || country.id;
 
   return (
     <section className="profile-section">
