@@ -100,9 +100,9 @@ class Navigation extends Component {
               <Link to="/data/faq" className="item-link about-link" activeClassName="active">About</Link>
             </li>
             <li className="item">
-              <Link to="/data/datasets" className="item-link data-link dd" activeClassName="active">Data</Link>
+              <Link to="/data/permissions" className="item-link data-link dd" activeClassName="active">Data</Link>
               <ul className="sub-items">
-                <li><a href="/data/datasets" className="item-link">Download</a></li>
+                {/* <li><a href="/data/datasets" className="item-link">Download</a></li> */}
                 <li><a href="/data/permissions" className="item-link">Permissions</a></li>
                 <li><a href="/data/api" className="item-link">API</a></li>
               </ul>
@@ -170,7 +170,7 @@ class Navigation extends Component {
             <li className="item" onClick={this.toggleSubNav}>
               <a className="item-link data-link" onClick={this.toggleSubNavSib}>Data</a>
               <ul className="sub-items">
-                <li><a href="/data/datasets">Download</a></li>
+                {/* <li><a href="/data/datasets">Download</a></li> */}
                 <li><a href="/data/permissions">Permissions</a></li>
                 <li><a href="/data/api">API</a></li>
               </ul>
