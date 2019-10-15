@@ -12,6 +12,10 @@
     display: block;
     text-align: center;
     font-size: 26px;
+    & a {
+      color: black;
+      text-decoration: underline;
+    }
   }
 
   & .grid-row {

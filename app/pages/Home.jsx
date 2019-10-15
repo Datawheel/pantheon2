@@ -19,11 +19,14 @@ class Home extends Component {
   componentDidMount() {
     // const dataUrl = "/person?select=birthyear,id,name,occupation(id,domain,occupation)&occupation=neq.null";
     // const dataUrl = "/person?select=birthyear,id,name,hpi,occupation(id,domain,occupation,industry)&occupation=neq.null";
-    const dataUrl = "/person?select=birthyear,id,occupation&occupation=neq.null&birthyear=not.is.null";
 
+    /*
+     * Commenting out for performance reasons
+    const dataUrl = "/person?select=birthyear,id,occupation&occupation=neq.null&birthyear=not.is.null";
     axios.all([apiClient.get("/occupation?select=id,occupation,industry,domain_slug,domain"), apiClient.get(dataUrl)]).then(res => {
       this.setState({occuData: res[0].data, personData: res[1].data});
     });
+    */
   }
 
   activateSearch = e => false
@@ -32,7 +35,7 @@ class Home extends Component {
     const {activateSearch} = this.context;
     const {occuData, personData} = this.state;
 
-    let stackedData = null, ticks = null, yearBuckets = null;
+    const stackedData = null, ticks = null, yearBuckets = null;
 
     if (personData) {
 
@@ -45,18 +48,19 @@ class Home extends Component {
       // d.industry = `${d.occupation.industry}`;
       // d.domain = `${d.occupation.domain}`;
       // });
-      stackedData = personData.map(d => ({...d, occupation_name: d.occupation, occupation_id: d.occupation}));
-      [yearBuckets, ticks] = calculateYearBucket(stackedData);
+
+      // stackedData = personData.map(d => ({...d, occupation_name: d.occupation, occupation_id: d.occupation}));
+      // [yearBuckets, ticks] = calculateYearBucket(stackedData);
     }
 
-    let attrs = false;
+    // let attrs = false;
 
-    if (occuData) {
-      attrs = occuData.reduce((obj, d) => {
-        obj[d.id] = d;
-        return obj;
-      }, {});
-    }
+    // if (occuData) {
+    //   attrs = occuData.reduce((obj, d) => {
+    //     obj[d.id] = d;
+    //     return obj;
+    //   }, {});
+    // }
 
     // if (stackedData.length) {
     // console.log("unique doms:", [...new Set(stackedData.map(groupBy(attrs)("domain")))]);
@@ -107,16 +111,12 @@ class Home extends Component {
               <a href="#" onClick={activateSearch}>Search people, places, &amp; occupations</a>
             </div>
             <div className="post">
-              <p><strong>Pantheon</strong> is a dataset, visualization tool,
-              and research effort, that enables you to explore human collective
-              memory. <strong>Pantheon</strong> gathers information on nearly 50,000 biographies to
-              help you understand the <a href="/profile/place">places</a>, <a href="/profile/person">people</a>, <a href="/profile/occupation">occupations</a> and <a href="/profile/era">eras</a>,
-              of human collective memory.</p>
+              <p><strong>Pantheon</strong> is an observatory of human collective memory. With data on more than 70,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet&apos;s history.</p>
             </div>
           </div>
         </div>
 
-        <div className="home-body">
+        {/* <div className="home-body">
           {stackedData && attrs
             ? <div className="viz-container">
               <StackedArea
@@ -179,9 +179,9 @@ class Home extends Component {
             </div>
             : <Spinner />
           }
-        </div>
+        </div> */}
 
-        <div className="ia">
+        {/* <div className="ia">
           <h3>How Pantheon Works</h3>
           <p className="post">Pantheon helps you visually explore data of more than 50,000 biographies with a presence of <strong>14+ language editions</strong> on Wikipedia. You can explore pantheon data by looking at:</p>
           <div className="items ia-top">
@@ -204,7 +204,7 @@ class Home extends Component {
               </p>
             </section>
           </div>
-        </div>
+        </div> */}
 
         <HomeGrid />
 
