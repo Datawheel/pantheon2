@@ -53,10 +53,10 @@ const Intro = ({country, countryRanks, peopleBornHere, peopleDiedHere, wikiSumma
               ? <span> Memorable people who died in {country.country} include <AnchorList items={peopleDiedHere.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
               : null}
             {occupationsBorn
-              ? <span> {country.country} has been the birth place of many <AnchorList items={occupationsBorn} name={d => plural(d.occupation.occupation)} url={d => `/profile/occupation/${d.occupation.occupation_slug}/`} /></span>
+              ? <span> {country.country} has been the birth place of many <AnchorList items={occupationsBorn} name={d => plural(d.occupation.occupation.toLowerCase())} url={d => `/profile/occupation/${d.occupation.occupation_slug}/`} /></span>
               : null}
             {occupationsDied
-              ? <span> and the death place of many <AnchorList items={occupationsDied} name={d => plural(d.occupation.occupation)} url={d => `/profile/occupation/${d.occupation.occupation_slug}/`} />.</span>
+              ? <span> and the death place of many <AnchorList items={occupationsDied} name={d => plural(d.occupation.occupation.toLowerCase())} url={d => `/profile/occupation/${d.occupation.occupation_slug}/`} />.</span>
               : <span>.</span>}
           </p>
           {wikiSentence
