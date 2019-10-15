@@ -99,7 +99,7 @@ const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 const countryURL = "/country?slug=eq.<id>";
 const peopleBornHereURL = "/person?bplace_country=eq.<country.id>&order=hpi.desc.nullslast&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
 const peopleDiedHereURL = "/person?dplace_country=eq.<country.id>&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
-const countryRanksURL = "/place?born_rank_unique=gte.<country.countryRankLow>&born_rank_unique=lte.<country.countryRankHigh>&order=born_rank_unique";
+const countryRanksURL = "/country?born_rank_unique=gte.<country.countryRankLow>&born_rank_unique=lte.<country.countryRankHigh>&order=born_rank_unique";
 const occupationsURL = "/occupation?order=num_born.desc.nullslast";
 const peopleBornHereAliveURL = "/person?bplace_country=eq.<country.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";
 const wikiSummaryUrl = "https://en.wikipedia.org/api/rest_v1/page/summary/<country.country>";
