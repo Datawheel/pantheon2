@@ -372,7 +372,8 @@
     margin-left: 40px;
     @mixin profileSectionTitle;
 
-    &.profiles-link, &.about-link, &.data-link {
+    /* &.profiles-link, &.about-link, &.data-link { */
+    &.profiles-link, &.data-link {
       &::after {
         @mixin dropdownLink;
         width: 16px !important;
