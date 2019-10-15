@@ -54,6 +54,20 @@ import NotFound from "components/NotFound";
  */
 export default function RouteCreate() {
 
+  /* */
+  function checkForCountryId(nextState, replace) {
+    const countryCandidates = ["usa", "gbr", "fra", "deu", "ita", "jpn", "rus", "esp", "bra", "swe", "pol", "chn", "nld", "tur", "ind", "can", "aut", "ukr", "grc", "arg", "bel", "dnk", "aus", "che", "nor", "hun", "egy", "rou", "hrv", "irn", "prt", "irl", "fin", "mex", "srb", "isr", "irq", "bgr", "zaf", "ury", "svk", "blr", "geo", "col", "svn", "est", "sau", "bih", "ltu", "cze", "lva", "chl", "nzl", "nga", "cub", "kaz", "dza", "pak", "syr", "per", "kor", "isl", "tun", "mar", "aze", "jam", "pry", "ven"];
+    const reqestedUrl = nextState.location;
+    console.log("nextState", nextState);
+    console.log("reqestedUrl!!!", reqestedUrl);
+    if (reqestedUrl.pathname === "viz/country" && reqestedUrl.search === "") {
+      const randCountryId = countryCandidates[Math.floor(Math.random() * countryCandidates.length)];
+      const nextUrl = `explore/viz?viz=treemap&show=occupations&years=-3501,2015&place=${randCountryId}`;
+      return replace({pathname: nextUrl});
+    }
+  }
+
+  /* */
   function genRandId(path) {
     let candidates;
     if (path.includes("place")) {
@@ -79,6 +93,7 @@ export default function RouteCreate() {
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
+  /* */
   function checkForId(nextState, replace) {
     if (!nextState.params.id) {
       const reqestedUrl = nextState.location.pathname;
@@ -91,7 +106,6 @@ export default function RouteCreate() {
       return NotFound;
     }
   }
-
 
   return (
     <Route path="/" component={App}>

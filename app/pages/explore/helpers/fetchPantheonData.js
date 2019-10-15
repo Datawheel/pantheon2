@@ -9,7 +9,6 @@ const fetchPantheonData = (pageType, countryLookup, state, dataUpdateCallback) =
 
   let placeFilter = "";
   if (country !== "all") {
-    console.log("countryLookup!!!", countryLookup);
     const countryId = countryLookup[country] ? countryLookup[country].id : "";
     placeFilter = placeType === "birthplace" ? `&bplace_country=eq.${countryId}` : `&dplace_country=eq.${countryId}`;
     if (city !== "all") {
