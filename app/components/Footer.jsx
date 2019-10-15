@@ -82,20 +82,20 @@ const Footer = () =>
           </a>
         </li>
         <li>
-          <a href="https://www.facebook.com/macroconnections">
+          <a href="https://www.facebook.com/datawheel">
             <img src="/images/logos/logo_facebook.svg" alt="Facebook" />
           </a>
         </li>
         <li>
-          <a href="https://twitter.com/MacroMIT">
+          <a href="https://twitter.com/datawheel">
             <img src="/images/logos/logo_twitter.svg" alt="Creative Commons" />
           </a>
         </li>
-        <li>
+        {/* <li>
           <a href="mailto:pantheon@media.mit.edu">
             <img src="/images/logos/logo_email.svg" alt="E-mail" />
           </a>
-        </li>
+        </li> */}
       </ul>
     </div>
   </div>;
