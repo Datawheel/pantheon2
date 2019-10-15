@@ -10,6 +10,8 @@ import GenderControl from "pages/explore/controls/GenderControl";
 import fetchPantheonData from "pages/explore/helpers/fetchPantheonData";
 import {SANITIZERS} from "types";
 
+const countryCandidates = ["usa", "gbr", "fra", "deu", "ita", "jpn", "rus", "esp", "bra", "swe", "pol", "chn", "nld", "tur", "ind", "can", "aut", "ukr", "grc", "arg", "bel", "dnk", "aus", "che", "nor", "hun", "egy", "rou", "hrv", "irn", "prt", "irl", "fin", "mex", "srb", "isr", "irq", "bgr", "zaf", "ury", "svk", "blr", "geo", "col", "svn", "est", "sau", "bih", "ltu", "cze", "lva", "chl", "nzl", "nga", "cub", "kaz", "dza", "pak", "syr", "per", "kor", "isl", "tun", "mar", "aze", "jam", "pry", "ven"];
+
 class Controls extends Component {
 
   constructor(props) {
@@ -17,7 +19,7 @@ class Controls extends Component {
     const {qParams} = props;
     this.state = {
       city: SANITIZERS.city(qParams.place) || "all",
-      country: SANITIZERS.country(qParams.place) || "all",
+      country: SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)],
       gender: SANITIZERS.gender(qParams.gender),
       occupation: qParams.occupation || "all",
       placeType: SANITIZERS.placeType(qParams.placeType),
