@@ -35,10 +35,10 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
     if (countryObj) {
       if (city !== "all") {
         const cityObj = merge(places.map(p => p.cities)).find(c => `${c.id}` === city);
-        fromLocation = ` from ${cityObj.place}, ${countryObj.country}`;
+        fromLocation = ` born in ${cityObj.place}, ${countryObj.country}`;
       }
       else {
-        fromLocation = ` from ${countryObj.country}`;
+        fromLocation = ` born in present day ${countryObj.country}`;
       }
     }
   }
@@ -47,7 +47,7 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
   const predicate = yearType === "birthyear" ? "born" : "die";
 
   const title = show === "occupations"
-    ? `What occupations were held by memorable ${occupationSubject}${fromLocation}?`
+    ? `Occupations of memorable ${occupationSubject}${fromLocation}`
     : `Where ${verb} memorable ${occupationSubject}${fromLocation} ${predicate}?`;
 
   return !loading
