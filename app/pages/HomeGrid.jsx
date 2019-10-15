@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router";
 import "pages/HomeGrid.css";
 
 const HomeGrid = () => {
@@ -42,7 +43,7 @@ const HomeGrid = () => {
   ];
 
   return <div className="profile-grid">
-    <h4 className="grid-title">Explore People, Places, Occupations, and Eras</h4>
+    <h4 className="grid-title">Explore <Link to="/profile/person">People</Link>, <Link to="/profile/place">Places</Link>, <Link to="/profile/occupation">Occupations</Link>, and <Link to="/profile/era">Eras</Link></h4>
     <ul className="grid-row">
       {featured.map(profile =>
         <li className="grid-box" key={profile.id}>
