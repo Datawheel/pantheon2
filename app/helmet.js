@@ -13,8 +13,8 @@ module.exports = {
     {name: "apple-mobile-web-app-title", content: "Pantheon"},
     {property: "og:title", content: "Pantheon"},
     {property: "og:type", content: "article"},
-    {property: "og:image", content: "https://pantheon.media.mit.edu/images/pantheon-share.jpg"},
-    {property: "og:description", content: "Pantheon is a a tool for understanding collective memory."}
+    {property: "og:image", content: "https://pantheon.world/images/pantheon-share.jpg"},
+    {property: "og:description", content: "Pantheon is a a tool for understanding colPantheon is an observatory of human collective memory. With data on more than 70,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet's history."}
   ],
   title: "Pantheon"
 };
