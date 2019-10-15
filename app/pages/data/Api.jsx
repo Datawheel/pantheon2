@@ -13,7 +13,7 @@ const Api = () =>
     <ul className="items">
       <li>
         Fetch data on a specific person: James Joyce
-        <input defaultValue="https://api.pantheon.world/person?slug=eq.james_joyce" />
+        <input defaultValue="https://api.pantheon.world/person?slug=eq.James_Joyce" />
       </li>
       <li>
         Fetch data on a specific city: Dublin, IRL
