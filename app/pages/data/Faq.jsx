@@ -24,6 +24,8 @@ const Faq = () =>
     <h2>Where can I submit a suggestion?</h2>
     <p>You can use the following form to suggest correction to Pantheon’s data. Pantheon’s atomic unit of data is the biography, so all corrections should be communicated as corrections to a biography (everything else is an aggregate). </p>
 
+    <a className="bp3-button bp3-icon-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdHKWwONdugZfwQvCvkSHakG-xeFh_HOZcvK3NqVOv19h0-jQ/viewform" target="_blank" rel="noopener noreferrer">Pantheon Data Correction Form</a>
+
     <h2>Who made Pantheon?</h2>
     <p>Pantheon is a collaboration between multiple people. Pantheon 1.0 (2013-2018) started as a project by MIT’s Collective Learning group, under the supervision of Professor Cesar A. Hidalgo. Pantheon 1.0 was developed by Amy Yu, with the support of Kevin Hu, Ali Almossawi, and Shahar Ronen, among others. Pantheon 2.0 (2019-today) was developed by Datawheel (mainly by Alex Simoes with the support of Marcio Porto). The Pantheone 2.0 data collection script (Johnny 5), was created by Cristian Jara-Figueroa at MIT’s Collective Learning group. Pantheohn 2.0 was also developed under the supervision of Cesar A. Hidalgo.</p>
 

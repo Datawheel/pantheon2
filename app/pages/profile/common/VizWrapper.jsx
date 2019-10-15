@@ -37,7 +37,7 @@ class VizWrapper extends Component {
     const {children} = this.props;
 
     return <div className="section-actions">
-      <button className="section-download" onClick={this.openSave}>
+      {/* <button className="section-download" onClick={this.openSave}>
         Download <img src="/images/icons/icon-download.svg" alt="Download this visualization" />
       </button>
       <Dialog
@@ -50,7 +50,7 @@ class VizWrapper extends Component {
           <button onClick={this.save.bind(this, "svg")} type="button" className="pt-button pt-large pt-icon-media">SVG</button>
           <button onClick={this.save.bind(this, "png")} type="button" className="pt-button pt-large pt-icon-media">PNG</button>
         </div>
-      </Dialog>
+      </Dialog> */}
       <div>{children}</div>
     </div>;
   }
