@@ -84,7 +84,7 @@ class Navigation extends Component {
                 <img className="logo" src="/images/logos/logo_pantheon.svg" alt="Pantheon" />
               </a>
             </li>
-            <li className="item">
+            {/* <li className="item">
               <Link to="/about/vision" className="item-link about-link dd" activeClassName="active">About</Link>
               <ul className="sub-items">
                 <li><a href="/about/vision" className="item-link">Vision</a></li>
@@ -95,6 +95,9 @@ class Navigation extends Component {
                 <li><a href="/about/data_sources" className="item-link">Data Sources</a></li>
                 <li><a href="/about/contact" className="item-link">Contact</a></li>
               </ul>
+            </li> */}
+            <li className="item">
+              <Link to="/data/faq" className="item-link about-link" activeClassName="active">About</Link>
             </li>
             <li className="item">
               <Link to="/data/datasets" className="item-link data-link dd" activeClassName="active">Data</Link>
@@ -149,7 +152,7 @@ class Navigation extends Component {
                 <li><a href="/profile/era">Eras</a></li>
               </ul>
             </li>
-            <li className="item" onClick={this.toggleSubNav}>
+            {/* <li className="item" onClick={this.toggleSubNav}>
               <a className="item-link about-link" onClick={this.toggleSubNavSib}>About</a>
               <ul className="sub-items">
                 <li><a href="/about/vision">Vision</a></li>
@@ -160,6 +163,9 @@ class Navigation extends Component {
                 <li><a href="/about/data_sources">Data Sources</a></li>
                 <li><a href="/about/contact">Contact</a></li>
               </ul>
+            </li> */}
+            <li className="item">
+              <a href="/data/faq" className="item-link about-link">About</a>
             </li>
             <li className="item" onClick={this.toggleSubNav}>
               <a className="item-link data-link" onClick={this.toggleSubNavSib}>Data</a>
