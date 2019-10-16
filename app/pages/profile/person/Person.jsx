@@ -138,7 +138,7 @@ class Person extends Component {
         }
         if (meta.property === "og:description") {
           if (wikiSummary && wikiSummary.description) {
-            const s2 = `${person.gender === "M" ? "His" : "Her"} biography is available in ${person.l} different languages on Wikipedia making ${person.gender === "M" ? "him" : "her"} the ${FORMATTERS.ordinal(person.occupation_rank_unique)} most popular ${person.occupation.occupation}.`;
+            const s2 = `${person.gender === "M" ? "His" : "Her"} biography is available in ${person.l} different languages on Wikipedia making ${person.gender === "M" ? "him" : "her"} the ${FORMATTERS.ordinal(person.occupation_rank_unique)} most popular ${person.occupation.occupation.toLowerCase()}.`;
             return {property: "og:description", content: `Pantheon profile of ${person.name}, ${wikiSummary.description}. ${s2}`};
           }
         }

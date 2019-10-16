@@ -4,6 +4,7 @@ import AnchorList from "components/utils/AnchorList";
 import SectionHead from "pages/profile/common/SectionHead";
 import VizWrapper from "pages/profile/common/VizWrapper";
 import {StackedArea} from "d3plus-react";
+import {plural} from "pluralize";
 import {calculateYearBucket, groupBy, groupTooltip, shapeConfig} from "viz/helpers";
 
 const OccupationTrends = ({attrs, country, peopleBorn, peopleDied, occupations}) => {
@@ -61,10 +62,10 @@ const OccupationTrends = ({attrs, country, peopleBorn, peopleDied, occupations})
       <div>
         {topModern.length
           ? <p>
-            Over the past 100 years the top profession of globally memorable people from present day {country.country} has been {occupationsLookup[topModern[0].key].occupation}, including <AnchorList items={topModern[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />. Whereas throughout history the profession with the most memorable people from {country.country} has been {occupationsLookup[topOverall[0].key].occupation}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />.
+            Over the past 100 years, <a href={`/profile/occupation/${occupationsLookup[topModern[0].key].occupation_slug}`}>{plural(occupationsLookup[topModern[0].key].occupation.toLowerCase())}</a> have been the top profession of globally memorable people born in present day {country.country}, including <AnchorList items={topModern[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />. Whereas, throughout history, <a href={`/profile/occupation/${occupationsLookup[topOverall[0].key].occupation_slug}`}>{plural(occupationsLookup[topOverall[0].key].occupation.toLowerCase())}</a> have been the profession with the most memorable people born in present day {country.country}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />.
           </p>
           : <p>
-            Throughout history the profession with the most memorable people from present day {country.country} has been {occupationsLookup[topOverall[0].key].occupation}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />.
+            Throughout history <a href={`/profile/occupation/${occupationsLookup[topOverall[0].key].occupation_slug}`}>{plural(occupationsLookup[topOverall[0].key].occupation.toLowerCase())}</a> have been the profession with the most memorable people born in present day {country.country}, including <AnchorList items={topOverall[0].values.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}`} />.
           </p>}
       </div>
       <VizWrapper component={this} refKey="viz">

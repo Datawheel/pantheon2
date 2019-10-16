@@ -14,7 +14,7 @@ module.exports = {
     {property: "og:title", content: "Pantheon"},
     {property: "og:type", content: "article"},
     {property: "og:image", content: "https://pantheon.world/images/pantheon-share.jpg"},
-    {property: "og:description", content: "Pantheon is a a tool for understanding colPantheon is an observatory of human collective memory. With data on more than 70,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet's history."}
+    {property: "og:description", content: "Pantheon is an observatory of human collective memory. With data on more than 70,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet's history."}
   ],
   title: "Pantheon"
 };
