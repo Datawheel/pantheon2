@@ -73,7 +73,7 @@ class Viz extends Component {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
     const {query: qParams, pathname} = this.props.location;
-    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType} = this.state;
+    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType, placeType} = this.state;
 
     // if (this.props.router.location.search === "" && window) {
     //   const countryCandidates = ["usa", "gbr", "fra", "deu", "ita", "jpn", "rus", "esp", "bra", "swe", "pol", "chn", "nld", "tur", "ind", "can", "aut", "ukr", "grc", "arg", "bel", "dnk", "aus", "che", "nor", "hun", "egy", "rou", "hrv", "irn", "prt", "irl", "fin", "mex", "srb", "isr", "irq", "bgr", "zaf", "ury", "svk", "blr", "geo", "col", "svn", "est", "sau", "bih", "ltu", "cze", "lva", "chl", "nzl", "nga", "cub", "kaz", "dza", "pak", "syr", "per", "kor", "isl", "tun", "mar", "aze", "jam", "pry", "ven"];
@@ -111,6 +111,7 @@ class Viz extends Component {
             nestedOccupations={nestedOccupations}
             occupation={occupation}
             places={places}
+            placeType={placeType}
             show={show}
             yearType={yearType}
           />

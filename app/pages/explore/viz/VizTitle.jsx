@@ -2,7 +2,7 @@ import React from "react";
 import {merge} from "d3-array";
 import {plural} from "pluralize";
 
-const VizTitle = ({city, country, gender, loading, nestedOccupations, places, occupation, show, yearType}) => {
+const VizTitle = ({city, country, gender, loading, nestedOccupations, places, occupation, show, yearType, placeType}) => {
   let occupationSubject = "";
   let fromLocation = "";
   let thisOcc;
@@ -29,7 +29,7 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
     }
   }
 
-  const bornOrDeceased = yearType === "birthyear" ? "born" : "deceased";
+  const bornOrDeceased = yearType === "deathyear" || placeType === "deathplace" ? "deceased" : "born";
 
   // Locations ---
   if (country !== "all" && places) {

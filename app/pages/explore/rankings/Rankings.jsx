@@ -70,7 +70,7 @@ class Ranking extends Component {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
     const {query: qParams, pathname} = this.props.location;
-    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, page, pageSize, searching, show, viz, years, yearType} = this.state;
+    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, page, pageSize, searching, show, viz, years, yearType, placeType} = this.state;
 
     if (!occupationResponse) {
       return <div>loading...</div>;
@@ -101,6 +101,7 @@ class Ranking extends Component {
             nestedOccupations={nestedOccupations}
             occupation={occupation}
             places={places}
+            placeType={placeType}
             show={show}
             yearType={yearType}
           />
