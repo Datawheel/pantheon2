@@ -20,14 +20,16 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
   else if (nestedOccupations) {
     if (occupation.includes(",")) {
       thisOcc = nestedOccupations.map(no => no.domain).find(no => no.id === occupation).name;
-      occupationSubject = `${genderedPronoun} in ${thisOcc} occupations`;
+      occupationSubject = `${genderedPronoun} in ${thisOcc.toLowerCase()} occupations`;
     }
     else {
       const gendersLookup = {people: "", men: "male", women: "female"};
       thisOcc = merge(nestedOccupations.map(no => no.occupations)).find(no => `${no.id}` === occupation).occupation;
-      occupationSubject = `${gendersLookup[genderedPronoun]} ${plural(thisOcc)}`;
+      occupationSubject = `${gendersLookup[genderedPronoun]} ${plural(thisOcc.toLowerCase())}`;
     }
   }
+
+  const bornOrDeceased = yearType === "birthyear" ? "born" : "deceased";
 
   // Locations ---
   if (country !== "all" && places) {
@@ -38,17 +40,18 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
         fromLocation = ` born in ${cityObj.place}, ${countryObj.country}`;
       }
       else {
-        fromLocation = ` born in present day ${countryObj.country}`;
+        fromLocation = ` ${bornOrDeceased} in present day ${countryObj.country}`;
       }
     }
   }
 
-  const verb = yearType === "birthyear" ? "were" : "did";
-  const predicate = yearType === "birthyear" ? "born" : "die";
-
-  const title = show === "occupations"
-    ? `Occupations of memorable ${occupationSubject}${fromLocation}`
-    : `Where ${verb} memorable ${occupationSubject}${fromLocation} ${predicate}?`;
+  let title = `Memorable ${occupationSubject}${fromLocation}`;
+  if (show === "occupations") {
+    title = `Occupations of memorable ${occupationSubject}${fromLocation}`;
+  }
+  if (show === "places") {
+    title = `Places of memorable ${occupationSubject}${fromLocation}`;
+  }
 
   return !loading
     ? <h1 className="explore-title">

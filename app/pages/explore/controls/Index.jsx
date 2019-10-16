@@ -19,7 +19,7 @@ class Controls extends Component {
     const {qParams} = props;
     this.state = {
       city: SANITIZERS.city(qParams.place) || "all",
-      country: SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)],
+      country: qParams.occupation ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)],
       gender: SANITIZERS.gender(qParams.gender),
       occupation: qParams.occupation || "all",
       placeType: SANITIZERS.placeType(qParams.placeType),
