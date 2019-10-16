@@ -36,7 +36,7 @@ const dataFormatter = (dataArray, show) => {
         langs: sum(leaves, d => d.l),
         top_ranked: leaves.sort((a, b) => b.hpi - a.hpi).slice(0, 3)
       }))
-      .entries(data.filter(d => d.bplace_geonameid))
+      .entries(data.filter(d => d.bplace_geonameid && d.bplace_country))
       .map(d => d.value);
   }
   else {
