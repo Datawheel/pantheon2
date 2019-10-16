@@ -312,12 +312,12 @@ const getColumns = (show, nesting, occupations, places) => {
         {
           Header: "City",
           accessor: "name",
-          Cell: ({value, original}) => <a href={`/profile/place/${original.slug}`}>{value}</a>
+          Cell: ({value, original}) => original.count > 15 ? <a href={`/profile/place/${original.slug}`}>{value}</a> : value
         },
         {
           Header: "Country",
           accessor: "country_name",
-          Cell: ({value}) => <a href={`/profile/country/${value}`}>{value}</a>
+          Cell: ({value, original}) => <a href={`/profile/country/${original.country_slug}`}>{value}</a>
         },
         {
           Header: "People",

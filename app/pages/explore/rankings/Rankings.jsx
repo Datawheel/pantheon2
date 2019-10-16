@@ -91,7 +91,7 @@ class Ranking extends Component {
 
     return (
       <div className="explore">
-        <Helmet title="Viz Explorer" />
+        <Helmet title="Rankings" />
         <div className="explore-head">
           <VizTitle
             city={city}
