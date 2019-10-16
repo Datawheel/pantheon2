@@ -37,8 +37,8 @@ module.exports = function(app) {
     // res.send(`path: ${req.query.path}`);
     // const url = `${req.headers.origin}${req.query.path}`;
     const {profileType, slug} = req.params;
-    const url = `http://localhost:3300/profile/${profileType}/${slug}/screenshot`;
-    // const url = `https://pantheon.world/profile/${profileType}/${slug}/screenshot`;
+    // const url = `http://localhost:3300/profile/${profileType}/${slug}/screenshot`;
+    const url = `https://pantheon.world/profile/${profileType}/${slug}/screenshot`;
     console.log("[screenshot] ---");
     console.log("[screenshot] url:", url);
     const width = 1200;

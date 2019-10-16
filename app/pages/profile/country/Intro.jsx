@@ -44,7 +44,8 @@ const Intro = ({country, countryRanks, peopleBornHere, peopleDiedHere, wikiSumma
           </h3>
           <p>
             {countryRanks
-              ? <span>{country.country} ranks {FORMATTERS.ordinal(country.born_rank_unique)} in number of biographies on Pantheon, behind <AnchorList items={countryRanks.slice(Math.max(0, myIndex - 3), myIndex)} name={d => d.country} url={d => `/profile/country/${d.slug}/`} />. </span>
+              ? <span>
+                {country.country} ranks {FORMATTERS.ordinal(country.born_rank_unique)} in number of biographies on Pantheon{country.born_rank_unique === 1 ? <React.Fragment></React.Fragment> : <React.Fragment>, behind <AnchorList items={countryRanks.slice(Math.max(0, myIndex - 3), myIndex)} name={d => d.country} url={d => `/profile/country/${d.slug}/`} /></React.Fragment>}. </span>
               : null}
             {peopleBornHere.length
               ? <span>Memorable people born in present day {country.country} include <AnchorList items={peopleBornHere.slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
