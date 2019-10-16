@@ -27,7 +27,8 @@ const dataFormatter = (dataArray, show) => {
         id: leaves[0].bplace_geonameid.id,
         name: leaves[0].bplace_geonameid.place,
         slug: leaves[0].bplace_geonameid.slug,
-        country_name: leaves[0].bplace_geonameid.country,
+        country_name: leaves[0].bplace_country.country,
+        country_slug: leaves[0].bplace_country.slug,
         count: leaves.length,
         avg_hpi: mean(leaves, d => d.hpi),
         hpi: sum(leaves, d => d.hpi),
@@ -36,8 +37,7 @@ const dataFormatter = (dataArray, show) => {
         top_ranked: leaves.sort((a, b) => b.hpi - a.hpi).slice(0, 3)
       }))
       .entries(data.filter(d => d.bplace_geonameid))
-      .map(d => d.value)
-      .filter(d => d.count >= 15);
+      .map(d => d.value);
   }
   else {
     data = data.map((d, i) => Object.assign(d, {rank: i + 1}));
