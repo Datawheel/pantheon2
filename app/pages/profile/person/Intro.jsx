@@ -92,7 +92,7 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
           {wikiSentence
             ? <p>{wikiSentence}. <a href={`https://en.wikipedia.org/wiki/${wikiSlug}`} target="_blank" rel="noopener noreferrer">Read more on Wikipedia</a></p>
             : <p>
-              {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation}</a>
+              {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a>
               {!person.birthcountry && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
               {person.deathyear
                 ? `${person.name} died at ${age} years old in ${FORMATTERS.year(person.deathyear.name)}.`
