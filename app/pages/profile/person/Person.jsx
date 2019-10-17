@@ -52,8 +52,8 @@ class Person extends Component {
       return <NotFound />;
     }
 
-    const maxPageViews = wikiPageViews.items ? Math.max(...wikiPageViews.items.map(d => d.views || 0)) : 0;
-    const totalPageViews = wikiPageViews.items ? wikiPageViews.items.reduce((sum, d) => sum + d.views, 0) : 0;
+    const maxPageViews = wikiPageViews && wikiPageViews.items ? Math.max(...wikiPageViews.items.map(d => d.views || 0)) : 0;
+    const totalPageViews = wikiPageViews && wikiPageViews.items ? wikiPageViews.items.reduce((sum, d) => sum + d.views, 0) : 0;
     // const totalLanguages = Math.max(...pageViews.map(d => d.num_langs || 0));
     const totalLanguages = 44;
     const lMod = 0.95;
@@ -234,8 +234,8 @@ Person.need = [
 // //   fetchCreationdates
 ];
 
-// function mapStateToProps(state) {
-//   return {
+// function mapStateToProps(state && state) {
+//   return && return {
 //     personProfile: state.personProfile
 //   };
 // }

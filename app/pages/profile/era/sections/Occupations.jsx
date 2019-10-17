@@ -52,8 +52,6 @@ const Occupations = ({era, peopleBorn, peopleDied, occupations}) => {
     return obj;
   }, {});
 
-  console.log("tmapBornData", tmapBornData);
-
   return (
     <section className="profile-section">
       <SectionHead title="Occupations" index={1} numSections={5} />
