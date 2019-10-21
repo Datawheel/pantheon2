@@ -199,6 +199,7 @@
       & a {
         text-decoration: none;
         outline: none;
+        border: none;
       }
 
       & p {
