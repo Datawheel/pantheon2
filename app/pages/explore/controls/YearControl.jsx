@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {FORMATTERS} from "types";
 
 const ENTER_KEY_CODE = 13;
+const MAX_ALLOWED_YEAR = new Date().getFullYear();
 
 class YearControl extends Component {
 
@@ -31,7 +32,7 @@ class YearControl extends Component {
     if (e.type === "blur" || e.type === "keydown" && e.keyCode === ENTER_KEY_CODE) {
       let sanitizedYear = this.sanitizeYear(tempYear);
       if (e.target.id.includes("end")) {
-        sanitizedYear = Math.min(Math.max(sanitizedYear, years[0]), 2013);
+        sanitizedYear = Math.min(Math.max(sanitizedYear, years[0]), MAX_ALLOWED_YEAR);
         if (sanitizedYear !== years[1]) {
           this.props.changeYears("years", [years[0], sanitizedYear]);
         }
