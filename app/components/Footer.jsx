@@ -38,6 +38,9 @@ const Footer = () =>
       </li> */}
       <li className="item">
         <Link to="/data/faq" className="item-link about-link">About</Link>
+        <ul className="sub-items">
+          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdHKWwONdugZfwQvCvkSHakG-xeFh_HOZcvK3NqVOv19h0-jQ/viewform" className="item-link">Report a problem</a></li>
+        </ul>
       </li>
 
       <li className="item">
