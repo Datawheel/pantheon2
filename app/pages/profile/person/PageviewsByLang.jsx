@@ -24,6 +24,17 @@ const langFamColors = {
   "tai": "#255A7F"
 };
 
+/** turn a date object into a string in YYYYMMDD format. */
+function yyyymmdd(dateIn) {
+  const mm = dateIn.getMonth() + 1; // getMonth() is zero-based
+  const dd = dateIn.getDate();
+
+  return [dateIn.getFullYear(),
+    (mm > 9 ? "" : "0") + mm,
+    (dd > 9 ? "" : "0") + dd
+  ].join("");
+}
+
 class PageviewsByLang extends Component {
 
   constructor(props) {
@@ -46,11 +57,13 @@ class PageviewsByLang extends Component {
               const {langlinks} = personResult;
               langlinks.unshift({"*": person.name, "lang": "en", "langname": "English", "url": `https://en.wikipedia.org/wiki/${person.name}`});
               const langlinksLookup = langlinks.reduce((obj, d) => (obj[d.lang] = d, obj), {});
-              const langReqs = langlinks.map(ll => axios.get(`https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/${ll.lang}.wikipedia/all-access/all-agents/${ll["*"]}/monthly/20150701/20190301`).catch(err => console.log("Page view data fetch error:", err)));
+              const todaysDate = new Date();
+              todaysDate.setMonth(todaysDate.getMonth() - 3);
+              const threeMonthsAgo = yyyymmdd(todaysDate);
+              const langReqs = langlinks.map(ll => axios.get(`https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/${ll.lang}.wikipedia/all-access/all-agents/${ll["*"]}/monthly/20150701/${threeMonthsAgo}`).catch(err => console.log("Page view data fetch error:", err)));
               let langsTs = [];
               axios.all(langReqs)
                 .then(langResults => {
-                  // console.log("langResults", langResults);
                   langResults.forEach(lr => {
                     if (lr && lr.data) {
                       if (lr.data.items) {
