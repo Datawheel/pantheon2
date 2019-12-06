@@ -6,6 +6,7 @@ import axios from "axios";
 import config from "helmet.js";
 import Header from "pages/profile/occupation/Header";
 import {plural} from "pluralize";
+import {toTitleCase} from "viz/helpers";
 import ProfileNav from "pages/profile/common/Nav";
 import Intro from "pages/profile/occupation/Intro";
 import Footer from "pages/profile/occupation/Footer";
@@ -47,7 +48,7 @@ class Occupation extends Component {
     return (
       <div>
         <Helmet
-          title={plural(occupation.occupation)}
+          title={toTitleCase(plural(occupation.occupation))}
           meta={config.meta.map(meta => meta.property && meta.property === "og:title" ? {property: "og:title", content: plural(occupation.occupation)} : meta)}
         />
         <Header occupation={occupation} people={people} />

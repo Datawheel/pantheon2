@@ -2,6 +2,7 @@ import React from "react";
 import AnchorList from "components/utils/AnchorList";
 import "pages/profile/common/Intro.css";
 import {plural} from "pluralize";
+import {toTitleCase} from "viz/helpers";
 import {FORMATTERS} from "types";
 
 const Intro = ({occupation, occupations}) => {
@@ -15,7 +16,7 @@ const Intro = ({occupation, occupations}) => {
             <img src="/images/ui/profile-w.svg" />
           </h3>
           <p>
-            With {FORMATTERS.commas(occupation.num_born)} biographies, {plural(occupation.occupation)} are the { myIndex ? <span>{FORMATTERS.ordinal(myIndex+1)}</span> : <span>are the top ranked profession</span> } most common occupation in Pantheon{ myIndex ? <span>, behind <AnchorList items={occupations.slice(Math.max(0, myIndex - 3), myIndex)} name={o => plural(o.occupation)} url={o => `/profile/occupation/${o.occupation_slug}/`} /></span> : null }.
+            With {FORMATTERS.commas(occupation.num_born)} biographies, {toTitleCase(plural(occupation.occupation))} are the { myIndex ? <span>{FORMATTERS.ordinal(myIndex + 1)}</span> : <span>are the top ranked profession</span> } most common occupation in Pantheon{ myIndex ? <span>, behind <AnchorList items={occupations.slice(Math.max(0, myIndex - 3), myIndex)} name={o => toTitleCase(plural(o.occupation))} url={o => `/profile/occupation/${o.occupation_slug}/`} /></span> : null }.
           </p>
         </div>
       </div>
