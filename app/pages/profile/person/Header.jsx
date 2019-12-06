@@ -62,6 +62,7 @@ const Header = ({person, wikiPageViews}) => {
                 on: {
 
                 },
+                discrete: "x",
                 shape: d => d.shape || "Line",
                 shapeConfig: {
                   hoverOpacity: 1,
