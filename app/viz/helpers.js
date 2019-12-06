@@ -124,3 +124,8 @@ export const shapeConfig = attrs => ({
     return "#ccc";
   }
 });
+
+export const toTitleCase = myStr => myStr.replace(
+  /\w\S*/g,
+  txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+);

@@ -6,7 +6,7 @@ import AnchorList from "components/utils/AnchorList";
 import SectionHead from "pages/profile/common/SectionHead";
 import VizWrapper from "pages/profile/common/VizWrapper";
 import {plural} from "pluralize";
-import {groupTooltip, on} from "viz/helpers";
+import {groupTooltip, on, toTitleCase} from "viz/helpers";
 import {COLORS_CONTINENT} from "types";
 
 const Places = ({people, occupation}) => {
@@ -49,10 +49,10 @@ const Places = ({people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-            Most {plural(occupation.occupation)} were born in <AnchorList items={countriesBorn.slice(0, 3)} name={d => `${d.value.bplace_country.country} (${d.value.num_people})`} url={d => `/profile/country/${d.value.bplace_country.slug}/`} />.
+            Most {plural(occupation.occupation.toLowerCase())} were born in <AnchorList items={countriesBorn.slice(0, 3)} name={d => `${d.value.bplace_country.country} (${d.value.num_people})`} url={d => `/profile/country/${d.value.bplace_country.slug}/`} />.
             By city, the most common birth places were <AnchorList items={placesBorn.slice(0, 3)} name={d => `${d.value.bplace_geonameid.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.bplace_geonameid.slug}/`} />.
             {tmapDeathData.length
-              ? <React.Fragment>The most common death places of {plural(occupation.occupation)} were <AnchorList items={countriesDied.slice(0, 3)} name={d => `${d.value.dplace_country.country} (${d.value.num_people})`} url={d => `/profile/country/${d.value.dplace_country.slug}/`} />. By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.dplace_geonameid.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.dplace_geonameid.slug}/`} />.</React.Fragment>
+              ? <React.Fragment>The most common death places of {plural(occupation.occupation.toLowerCase())} were <AnchorList items={countriesDied.slice(0, 3)} name={d => `${d.value.dplace_country.country} (${d.value.num_people})`} url={d => `/profile/country/${d.value.dplace_country.slug}/`} />. By city, these were <AnchorList items={placesDied.slice(0, 3)} name={d => `${d.value.dplace_geonameid.place} (${d.value.num_people})`} url={d => `/profile/place/${d.value.dplace_geonameid.slug}/`} />.</React.Fragment>
               : null}
           </p>
         </div>
@@ -60,7 +60,7 @@ const Places = ({people, occupation}) => {
           <Treemap
             key="tmap_country1"
             config={{
-              title: `Birth Places of ${plural(occupation.occupation)}`,
+              title: `Birth Places of ${toTitleCase(plural(occupation.occupation))}`,
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
@@ -79,7 +79,7 @@ const Places = ({people, occupation}) => {
             <Treemap
               key="tmap_country2"
               config={{
-                title: `Death Places of ${plural(occupation.occupation)}`,
+                title: `Death Places of ${toTitleCase(plural(occupation.occupation))}`,
                 data: tmapDeathData,
                 depth: 1,
                 groupBy: ["diedcontinent", "diedcountry"],

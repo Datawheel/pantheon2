@@ -3,7 +3,7 @@ import AnchorList from "components/utils/AnchorList";
 import SectionHead from "pages/profile/common/SectionHead";
 import {Tree} from "d3plus-react";
 import {plural} from "pluralize";
-import {shapeConfig, groupTooltip, groupBy, on} from "viz/helpers";
+import {shapeConfig, groupTooltip, groupBy, on, toTitleCase} from "viz/helpers";
 
 const RelatedOccupations = ({peopleInDomain, occupation, occupations}) => {
   const tmapDomainData = peopleInDomain
@@ -28,7 +28,7 @@ const RelatedOccupations = ({peopleInDomain, occupation, occupations}) => {
       <div className="section-body">
         <div>
           <p>
-            {plural(occupation.occupation)} are found within the {occupation.domain} domain which also contains the following occupations <AnchorList items={occupations.filter(p => p.domain_slug === occupation.domain_slug && p.id !== occupation.id).slice(0, 5)} name={d => d.occupation} url={d => `/profile/occupation/${d.occupation_slug}/`} />.
+            {toTitleCase(plural(occupation.occupation))} are found within the {toTitleCase(occupation.domain)} domain which also includes <AnchorList items={occupations.filter(p => p.domain_slug === occupation.domain_slug && p.id !== occupation.id).slice(0, 5)} name={d => toTitleCase(plural(d.occupation))} url={d => `/profile/occupation/${d.occupation_slug}/`} />.
           </p>
         </div>
         {/* <Tree

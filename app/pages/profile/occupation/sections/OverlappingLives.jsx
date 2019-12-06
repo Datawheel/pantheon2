@@ -3,7 +3,7 @@ import SectionHead from "pages/profile/common/SectionHead";
 import VizWrapper from "pages/profile/common/VizWrapper";
 import {Priestley} from "d3plus-react";
 import {plural} from "pluralize";
-import {peopleTooltip, on} from "viz/helpers";
+import {peopleTooltip, on, toTitleCase} from "viz/helpers";
 import {COLORS_CONTINENT} from "types";
 
 const OverlappingLives = ({people, occupation}) => {
@@ -37,7 +37,7 @@ const OverlappingLives = ({people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-            Which {plural(occupation.occupation)} were alive at the same time? This visualization shows the lifespans of the {priestleyData.length} most globally memorable {plural(occupation.occupation)} since 1700.
+            Which {toTitleCase(plural(occupation.occupation))} were alive at the same time? This visualization shows the lifespans of the {priestleyData.length} most globally memorable {toTitleCase(plural(occupation.occupation))} since 1700.
           </p>
         </div>
       </div>
@@ -45,7 +45,7 @@ const OverlappingLives = ({people, occupation}) => {
         <Priestley
           key="priestley1"
           config={{
-            title: `Lifespans of the Top ${priestleyData.length} ${occupation.occupation}s`,
+            title: `Lifespans of the Top ${priestleyData.length} ${toTitleCase(plural(occupation.occupation))}`,
             data: priestleyData,
             depth: 1,
             detectVisible: false,

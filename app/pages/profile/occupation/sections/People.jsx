@@ -4,6 +4,7 @@ import AnchorList from "components/utils/AnchorList";
 import PhotoCarousel from "components/utils/PhotoCarousel";
 import SectionHead from "pages/profile/common/SectionHead";
 import {FORMATTERS} from "types";
+import {toTitleCase} from "viz/helpers";
 import {plural} from "pluralize";
 
 const People = ({people, occupation}) => {
@@ -21,21 +22,21 @@ const People = ({people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-          Pantheon has information on {FORMATTERS.commas(people.length)} {plural(occupation.occupation)} born between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}. {FORMATTERS.share(shareAlive)} or {FORMATTERS.commas(peopleAlive.length)} are still alive.
-          The most famous living {plural(occupation.occupation)} include <AnchorList items={people.filter(p => p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
+          Pantheon has information on {FORMATTERS.commas(people.length)} {plural(occupation.occupation.toLowerCase())} born between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}. {FORMATTERS.commas(peopleAlive.length)} ({FORMATTERS.share(shareAlive)}) of these {plural(occupation.occupation.toLowerCase())} are still alive.
+          The most famous living {plural(occupation.occupation.toLowerCase())} include <AnchorList items={people.filter(p => p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
             {peopleDead.length
-              ? <span> The most famous deceased {plural(occupation.occupation)} include <AnchorList items={people.filter(p => !p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
+              ? <span> The most famous deceased {plural(occupation.occupation.toLowerCase())} include <AnchorList items={people.filter(p => !p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
               : null }
           </p>
           <div className="rank-title">
-            <h3>Living {plural(occupation.occupation)}</h3>
+            <h3>Living {toTitleCase(plural(occupation.occupation))}</h3>
             <Link to={`/explore/rankings?show=people&occupation=${occupation.id}`}>Go to all Rankings</Link>
           </div>
           <PhotoCarousel people={peopleAlive.slice(0, 12)} rankAccessor="occupation_rank_unique" peopleAll={peopleAlive} />
           { peopleDead.length
             ? <div className="rank-sec-body">
               <div className="rank-title">
-                <h3>Deceased {plural(occupation.occupation)}</h3>
+                <h3>Deceased {toTitleCase(plural(occupation.occupation))}</h3>
                 <Link to={`/explore/rankings?show=people&occupation=${occupation.id}`}>Go to all Rankings</Link>
               </div>
               <PhotoCarousel people={peopleDead.slice(0, 12)} rankAccessor="occupation_rank_unique" peopleAll={peopleDead} />

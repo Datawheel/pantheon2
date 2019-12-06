@@ -6,7 +6,7 @@ import {FORMATTERS} from "types";
 import AnchorList from "components/utils/AnchorList";
 import SectionHead from "pages/profile/common/SectionHead";
 import VizWrapper from "pages/profile/common/VizWrapper";
-import {calculateYearBucket, groupTooltip, on} from "viz/helpers";
+import {calculateYearBucket, groupTooltip, on, toTitleCase} from "viz/helpers";
 import {COLORS_CONTINENT} from "types";
 
 const PlacesTime = ({eras, people, occupation}) => {
@@ -44,16 +44,16 @@ const PlacesTime = ({eras, people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-            The first {plural(occupation.occupation)} in Pantheon are <AnchorList items={oldestPeople} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.&nbsp;
-            The concentration of {plural(occupation.occupation)} was largest during the <a href={`/profile/era/${eraWithMostPeople.slug}`}>{eraWithMostPeople.name}</a>, which lasted from {FORMATTERS.year(eraWithMostPeople.start_year)} to {FORMATTERS.year(eraWithMostPeople.end_year)}.
-            Some birth or death locations for earlier {plural(occupation.occupation)} are unknown, which may account for timeline differences below.
+            The first {plural(occupation.occupation.toLowerCase())} in Pantheon are <AnchorList items={oldestPeople} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.&nbsp;
+            The concentration of {plural(occupation.occupation.toLowerCase())} was largest during the <a href={`/profile/era/${eraWithMostPeople.slug}`}>{eraWithMostPeople.name}</a>, which lasted from {FORMATTERS.year(eraWithMostPeople.start_year)} to {FORMATTERS.year(eraWithMostPeople.end_year)}.
+            Some birth or death locations for earlier {plural(occupation.occupation.toLowerCase())} are unknown, which may account for timeline differences below.
           </p>
         </div>
         <VizWrapper component={this} refKey="viz">
           <StackedArea
             key="stacked_country1"
             config={{
-              title: `Birth Places of ${occupation.occupation}s Over Time`,
+              title: `Birth Places of ${toTitleCase(plural(occupation.occupation))} Over Time`,
               data: tmapBornData,
               depth: 1,
               groupBy: ["borncontinent", "borncountry"],
@@ -71,7 +71,7 @@ const PlacesTime = ({eras, people, occupation}) => {
             <StackedArea
               key="stacked_country2"
               config={{
-                title: `Death Places of ${occupation.occupation}s Over Time`,
+                title: `Death Places of ${toTitleCase(plural(occupation.occupation))} Over Time`,
                 data: tmapDeathData,
                 depth: 1,
                 groupBy: ["diedcontinent", "diedcountry"],
