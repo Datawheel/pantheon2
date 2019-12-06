@@ -168,6 +168,7 @@ class PageviewsByLang extends Component {
               data,
               groupBy: ["primary_family_code", "project"],
               depth: 1,
+              discrete: "x",
               shapeConfig: {
                 // fill: d => "red",
                 Line: {
