@@ -60,6 +60,7 @@ const Header = ({occupation, people}) => {
           <LinePlot
             config={{
               data: lineChartDataFormat,
+              discrete: "x",
               height: 100,
               // groupBy: "binName",
               legend: false,

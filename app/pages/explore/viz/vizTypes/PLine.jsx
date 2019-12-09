@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {LinePlot} from "d3plus-react";
+import {sum as D3Sum} from "d3-array";
 import {RESET} from "d3plus-common";
 import {COLORS_CONTINENT} from "types";
 import {nest} from "d3-collection";
@@ -67,24 +68,46 @@ class PLine extends Component {
 
     const [bornBuckets, bornTicks] = calculateYearBucket(stackedData, d => d.birthyear);
     // const [deathBuckets, deathTicks] = calculateYearBucket(stackedData, d => d.deathyear);
+    // console.log("bornBuckets, bornTicks", bornBuckets, bornTicks);
+    // console.log("stackedData!!!", stackedData);
 
     return (
       <LinePlot
         config={{
+          // aggs: {
+          //   yearWeight: d => {
+          //     console.log(D3Sum(d));
+          //     console.log(d);
+          //     return 14
+          //     ;
+          //   }
+          // },
           data: stackedData,
           depth,
+          discrete: "x",
           groupBy: grouping,
           height: RESET,
           shapeConfig: shapeConf,
+          // tooltipConfig: {
+          //   body: (d, i, x) => {
+          //     // console.log(x);
+          //     console.log(d.yearWeight);
+          //     return "test";
+          //   }
+          // },
           tooltipConfig: groupTooltip(stackedData),
-          // x: birthyear,
-          xConfig: {
-            labels: bornTicks,
-            tickFormat: d => bornBuckets[d]
-          }
+          y: d =>
+            // console.log(d.yearWeight);
+            d.yearWeight
+
+
+          // xConfig: {
+          //   labels: bornTicks,
+          //   tickFormat: d => bornBuckets[d]
+          // }
           // y: d => {
-          //   console.log("d!!", d)
-          //   return d.id ? d.id instanceof Array ? d.id.length : 1 : 0;
+          //   console.log("y!!", d.id ? d.id instanceof Array ? d.id.length : 1 : 0);
+          //   d.id ? d.id instanceof Array ? d.id.length : 1 : 0;
           // }
         }}
       />
