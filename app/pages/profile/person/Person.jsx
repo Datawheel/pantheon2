@@ -82,7 +82,7 @@ class Person extends Component {
       {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} />},
       {title: "Related Videos from YouTube", slug: "related", content: <div onClick={e => {
         e.target.childNodes[0].style.pointerEvents = "all";
-      }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation}`} frameBorder="0" max-width="1024" width="100%" height="600" /></div>},
+      }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation.toLowerCase()}`} frameBorder="0" max-width="1024" width="100%" height="600" /></div>},
       // {
       //   title: "Online Attention",
       //   slug: "afterlife",
@@ -131,7 +131,7 @@ class Person extends Component {
     const pageHeaderMetaTags = config.meta.map(meta => {
       if (meta.property) {
         if (meta.property === "og:title") {
-          return {property: "og:title", content: person.name};
+          return {property: "og:title", content: `${person.name} Biography`};
         }
         if (meta.property === "og:image") {
           return {property: "og:image", content: `${pageUrl.replace("http://", "https://").replace("/profile/", "/images/screenshots/")}.jpg`};
