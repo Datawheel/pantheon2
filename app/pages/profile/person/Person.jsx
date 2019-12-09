@@ -151,7 +151,7 @@ class Person extends Component {
     return (
       <div className="person">
         <Helmet
-          title={person.name}
+          title={`${person.name} Biography`}
           meta={pageHeaderMetaTags}
         />
         <Header person={person} wikiPageViews={wikiPageViews} />
