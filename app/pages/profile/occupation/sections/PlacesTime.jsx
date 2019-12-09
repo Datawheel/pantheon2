@@ -44,7 +44,7 @@ const PlacesTime = ({eras, people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-            The first {plural(occupation.occupation.toLowerCase())} in Pantheon are <AnchorList items={oldestPeople} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.&nbsp;
+            The earliest biographies classified as {plural(occupation.occupation.toLowerCase())} in Pantheon are <AnchorList items={oldestPeople} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.&nbsp;
             The concentration of {plural(occupation.occupation.toLowerCase())} was largest during the <a href={`/profile/era/${eraWithMostPeople.slug}`}>{eraWithMostPeople.name}</a>, which lasted from {FORMATTERS.year(eraWithMostPeople.start_year)} to {FORMATTERS.year(eraWithMostPeople.end_year)}.
             Some birth or death locations for earlier {plural(occupation.occupation.toLowerCase())} are unknown, which may account for timeline differences below.
           </p>
