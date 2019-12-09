@@ -22,7 +22,7 @@ const People = ({people, occupation}) => {
       <div className="section-body">
         <div>
           <p>
-          Pantheon has information on {FORMATTERS.commas(people.length)} {plural(occupation.occupation.toLowerCase())} born between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}. {FORMATTERS.commas(peopleAlive.length)} ({FORMATTERS.share(shareAlive)}) of these {plural(occupation.occupation.toLowerCase())} are still alive.
+          Pantheon has {FORMATTERS.commas(people.length)} people classified as {plural(occupation.occupation.toLowerCase())} born between {FORMATTERS.year(oldestBirthyear)} and {FORMATTERS.year(youngestBirthyear)}. Of these {FORMATTERS.commas(people.length)}, {FORMATTERS.commas(peopleAlive.length)} ({FORMATTERS.share(shareAlive)}) of them are still alive today.
           The most famous living {plural(occupation.occupation.toLowerCase())} include <AnchorList items={people.filter(p => p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.
             {peopleDead.length
               ? <span> The most famous deceased {plural(occupation.occupation.toLowerCase())} include <AnchorList items={people.filter(p => !p.alive).slice(0, 3)} name={d => d.name} url={d => `/profile/person/${d.slug}/`} />.</span>
