@@ -39,7 +39,8 @@ class Occupation extends Component {
   }
 
   render() {
-    const {occupation, occupations, people, peopleInDomain, eras} = this.props.data;
+    // const {occupation, occupations, people, peopleInDomain, eras} = this.props.data;
+    const {occupation, occupations, people, eras} = this.props.data;
 
     if (occupation === undefined || occupation.id === null) {
       return <NotFound />;
@@ -61,7 +62,7 @@ class Occupation extends Component {
 
         <PlacesTime eras={eras} people={people} occupation={occupation} />
         <OverlappingLives people={people} occupation={occupation} />
-        <RelatedOccupations peopleInDomain={peopleInDomain} occupation={occupation} occupations={occupations} />
+        <RelatedOccupations occupation={occupation} occupations={occupations} />
         <Footer />
       </div>
     );
@@ -69,11 +70,11 @@ class Occupation extends Component {
 }
 
 const occupationURL = "/occupation?occupation_slug=eq.<id>";
-const allOccupationsURL = "/occupation?order=num_born.desc.nullslast";
+const allOccupationsURL = "/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug";
 const allErasURL = "/era?order=start_year";
-const peopleURL = "/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(*),occupation_id:occupation,*";
+const peopleURL = "/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,occupation_rank_unique,alive";
 const occsInDomainURL = "/occupation?domain_slug=eq.<occupation.domain_slug>&select=id";
-const peopleInDomainURL = "/person?occupation=in.(<domain.occIds>)&order=l.desc&select=occupation(*),occupation_id:occupation,*";
+// const peopleInDomainURL = "/person?occupation=in.(<domain.occIds>)&order=l.desc&select=occupation(*),occupation_id:occupation,*";
 
 Occupation.preneed = [
   fetchData("occupations", allOccupationsURL, res => res),
@@ -89,8 +90,8 @@ Occupation.need = [
   })
 ];
 
-Occupation.postneed = [
-  fetchData("peopleInDomain", peopleInDomainURL, res => res)
-];
+// Occupation.postneed = [
+//   fetchData("peopleInDomain", peopleInDomainURL, res => res)
+// ];
 
 export default connect(state => ({data: state.data}), {})(Occupation);
