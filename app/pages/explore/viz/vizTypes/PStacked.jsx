@@ -52,6 +52,8 @@ class PStacked extends Component {
 
     const [bornBuckets, bornTicks] = calculateYearBucket(stackedData, d => d.birthyear);
     // const [deathBuckets, deathTicks] = calculateYearBucket(stackedData, d => d.deathyear);
+    console.log("bornBuckets, bornTicks", bornBuckets, bornTicks);
+    console.log("stackedData!!!", stackedData);
 
     return (
       <StackedArea

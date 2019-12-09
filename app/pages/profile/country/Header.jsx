@@ -61,8 +61,9 @@ const Header = ({country, people, wikiSummary, wikiPageViews}) => {
             ? <LinePlot
               config={{
                 data: pageViewData,
-                height: 120,
+                discrete: "x",
                 groupBy: "article",
+                height: 120,
                 legend: false,
                 on: {
                   // "click.shape": () => {},

@@ -28,21 +28,6 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
     }
   }
 
-  /**
-   * OLD CODE FOR SPARK LINES
-   */
-  // const yearAndCount = nest()
-  //   .key(p => p.birthyear)
-  //   .rollup(leaves => ({count: leaves.length, birthyear: leaves[0].birthyear}))
-  //   .entries(people.filter(p => p.birthyear))
-  //   .sort((a, b) => a.value.birthyear - b.value.birthyear)
-  //   .map(d => Object.assign({}, d.value, {id: "line", txt: `${d.value.count} birth(s) in ${d.value.birthyear}`}));
-
-  // const sparkData = yearAndCount.concat([
-  //   Object.assign({}, yearAndCount[0], {shape: "Circle", id: "circle"}),
-  //   Object.assign({}, yearAndCount[yearAndCount.length - 1], {shape: "Circle", id: "circle"})
-  // ]);
-
   return (
     <header className="hero">
       <div className="bg-container">
@@ -67,15 +52,10 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
             ? <LinePlot
               config={{
                 data: pageViewData,
+                discrete: "x",
                 height: 120,
                 groupBy: "article",
                 legend: false,
-                on: {
-                  // "click.shape": () => {},
-                  // "mouseenter.shape": () => {},
-                  // "mousemove.shape": () => {},
-                  // "mouseleave.shape": () => {}
-                },
                 shape: d => d.shape || "Line",
                 shapeConfig: {
                   hoverOpacity: 1,
