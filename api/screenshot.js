@@ -1,9 +1,6 @@
 const fs = require("fs");
-const mkdirp = require("mkdirp");
 const path = require("path");
-const Xvfb = require("xvfb");
-const screenshot = require("electron-screenshot-service");
-const sharp = require("sharp");
+const puppeteer = require("puppeteer");
 
 /**
  *
@@ -31,81 +28,57 @@ function daysBetween(date1, date2) {
   return Math.round(differenceMs / oneDay);
 }
 
+/**
+ * Test...
+(async() => {
+  const browser = await puppeteer.launch({args: ["--no-sandbox"], defaultViewport: {width: 1920, height: 1080}});
+  const page = await browser.newPage();
+  await page.goto("https://pantheon.world/profile/person/Leonidas_I/screenshot", {waitUntil: "domcontentloaded"});
+  await page.screenshot({path: "Leonidas_I-example_local.png"});
+
+  await browser.close();
+})();
+*/
+
 module.exports = function(app) {
 
-  app.get("/api/screenshot/:profileType(person|country|place|occupation|era)/:slug", (req, res) => {
-    // res.send(`path: ${req.query.path}`);
-    // const url = `${req.headers.origin}${req.query.path}`;
+  app.get("/api/screenshot/:profileType(person|country|place|occupation|era)/:slug", async(req, res) => {
+    // get vars from URL
     const {profileType, slug} = req.params;
-    // const url = `http://localhost:3300/profile/${profileType}/${slug}/screenshot`;
-    const url = `https://pantheon.world/profile/${profileType}/${slug}/screenshot`;
-    console.log("[screenshot] ---");
-    console.log("[screenshot] url:", url);
-    const width = 1200;
-    const height = 630;
-    const page = true;
-    const delay = 6000;
-    // Give the React page time to load
-    const xvfb = new Xvfb({timeout: delay});
-    // The ubuntu server requires the startSync command, but it breaks localhost
-    const isLocal = ["localhost:3300", "localhost:3000"].includes(req.headers.host);
-    if (!isLocal) xvfb.startSync();
 
+    // url of screenshot for page being requested
+    const url = `https://pantheon.world/profile/${profileType}/${slug}/screenshot`;
+
+    // file path for image to be saved to
     const folder = `/static/images/screenshots/${profileType}`;
-    const folderPath = path.join(process.cwd(), folder);
     const imgPath = path.join(process.cwd(), folder, `${slug}.jpg`);
 
     try {
+
+      // this means the file exists so let's check how old it is
       if (fs.existsSync(imgPath)) {
-        console.log("[screenshot] file exists, checking if it's out of date...");
+        // fetch creation date from file metadata
         const stats = fs.statSync(imgPath);
-        // console.log("stats.mtime", stats.mtime);
         const daysSinceLastGenerated = daysBetween(stats.mtime, new Date());
+        // if it's less than 30 days old, leave it be
         if (daysSinceLastGenerated < 30) {
-          console.log(`[screenshot] ${daysSinceLastGenerated} days old NOT regenerating.`);
           return res.sendFile(imgPath);
         }
-        else {
-          console.log(`[screenshot] ${daysSinceLastGenerated} days old, need to regenerate.`);
-          return res.status(200).send({msg: `[screenshot] ${daysSinceLastGenerated} days old, need to regenerate.`});
-        }
       }
-      screenshot({url, width, height, page, delay}).then(img => {
-        mkdirp(folderPath, err => {
-          if (err) {
-            console.error(`mkdirp err: ${err}`);
-            return res.status(500).send({error: `making directory err: ${err}`});
-          }
-          // fs.writeFile(imgPath, img.data, err => {
-          //   if (err) {
-          //     console.error(`fs.writeFile err: ${err}`);
-          //     res.status(500).send({error: `file write err: ${err}`});
-          //   }
-          //   if (!isLocal) xvfb.stopSync();
-          //   console.log(`[screenshot] new screenshot: ${imgPath}`);
-          //   res.sendFile(imgPath);
-          // });
-          sharp(img.data)
-          // .png({compressionLevel: 9, force: true, quality: 20})
-            .jpeg({force: true, quality: 60})
-            .withMetadata()
-            .toFile(imgPath, err => {
-              if (err) {
-                console.error(`fs.writeFile err: ${err}`);
-                return res.status(500).send({error: `file write err: ${err}`});
-              }
-              if (!isLocal) xvfb.stopSync();
-              console.log(`[screenshot] new screenshot: ${imgPath}`);
-              return res.sendFile(imgPath);
-            });
-          // .resize(320, 240)
-          // .toFile('output.webp', (err, info) => { ... });
-        });
-      });
+
+      // since the file doesn't exist OR it is older than 30 days
+      // fetch the screenshot the save it to the file system
+      const browser = await puppeteer.launch({args: ["--no-sandbox"], defaultViewport: {width: 960, height: 540, deviceScaleFactor: 2}});
+      const page = await browser.newPage();
+      await page.goto(url, {waitUntil: "networkidle0"});
+      await page.screenshot({path: imgPath});
+      await browser.close();
+      return res.status(200).send({msg: "Screenshot complete."});
     }
     catch (err) {
       console.error(`check if file exists err: ${err}`);
       return res.status(500).send({error: `check if file exists err: ${err}`});
     }
   });
+
 };

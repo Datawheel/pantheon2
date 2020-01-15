@@ -102,7 +102,7 @@ const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
                   title: "EN.WIKIPEDIA PAGE VIEWS (PV)",
                   titleConfig: {
                     fontColor: "#4B4A48",
-                    fontFamily: () => "Amiko",
+                    fontFamily: () => ["Amiko", "Arial Narrow", "sans-serif"],
                     fontSize: () => 11,
                     stroke: "#4B4A48"
                   }
