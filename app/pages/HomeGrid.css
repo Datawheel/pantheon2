@@ -7,15 +7,17 @@
   margin: 0 auto;
 
   & .grid-title {
-    margin: 0 auto 50px;
+    margin: 0 auto 5px;
     @mixin sectionTitle;
     display: block;
     text-align: center;
     font-size: 26px;
-    & a {
-      color: black;
-      text-decoration: underline;
-    }
+  }
+  & .grid-subtitle {
+    margin: 0 auto 10px;
+    display: block;
+    text-align: center;
+    font-size: 16px;
   }
 
   & .grid-row {
