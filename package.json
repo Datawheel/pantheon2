@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/MacroConnections/pantheon2.git"
+    "url": "git+ssh://git@github.com/Datawheel/pantheon2.git"
   },
   "keywords": [
     "culture",
@@ -25,11 +25,12 @@
   "author": "Alexander Simoes",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MacroConnections/pantheon2/issues"
+    "url": "https://github.com/Datawheel/pantheon2/issues"
   },
-  "homepage": "https://github.com/MacroConnections/pantheon2#readme",
+  "homepage": "https://github.com/Datawheel/pantheon2#readme",
   "dependencies": {
     "@datawheel/canon-core": "^0.18.1",
+    "async-throttle": "^1.1.0",
     "numeral": "^2.0.6",
     "pluralize": "^8.0.0",
     "puppeteer": "^2.0.0",
