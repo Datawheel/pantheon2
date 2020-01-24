@@ -15,6 +15,9 @@ module.exports = function(app) {
     const topPageViewsJson = await topPageViewsResp.json();
 
     // create API URLs from list of people
+    if (!topPageViewsJson.items || !Array.isArray(topPageViewsJson.items)) {
+      return res.json([]);
+    }
     const trendingPeople = topPageViewsJson.items[0].articles;
     const chunks = trendingPeople.length / 50;
     const trendingPeoplePantheonUrls = [];
