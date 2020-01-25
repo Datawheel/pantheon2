@@ -19,12 +19,12 @@ const HomeGrid = ({bios, trendingLangEdition, changeTrendingLang}) =>
       &nbsp;wikipedia edition
     </p>
     <ul className="grid-row">
-      {bios.map(profile =>
-        <li className="grid-box" key={profile.id}>
+      {bios.sort((a, b) => a.rank - b.rank).map(profile =>
+        <li className="grid-box" key={profile.pid}>
           <a href={`/profile/person/${profile.slug}`}>
             <div className="grid-box-bg-container">
               <div className="grid-box-bg-img-mask">
-                <div className={`grid-box-bg-img ${profile.gender}`} style={{backgroundImage: `url(/images/profile/people/${profile.id}.jpg)`}}></div>
+                <div className={`grid-box-bg-img ${profile.gender}`} style={{backgroundImage: `url(/images/profile/people/${profile.pid}.jpg)`}}></div>
               </div>
             </div>
             <h3>{profile.name}</h3>
