@@ -4,7 +4,6 @@ import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
 import {fetchData} from "@datawheel/canon-core";
 import HomeGrid from "pages/HomeGrid";
-import Spinner from "components/Spinner";
 import axios from "axios";
 import {Link} from "react-router";
 import "pages/Home.css";
@@ -14,6 +13,7 @@ class Home extends Component {
     super();
     this.state = {
       fetchedBios: null,
+      loading: false,
       trendingLangEdition: "en"
     };
   }
@@ -22,16 +22,16 @@ class Home extends Component {
 
   changeTrendingLang = e => {
     const trendingLangEdition = e.target.value;
-    this.setState({trendingLangEdition});
+    this.setState({trendingLangEdition, loading: true});
     axios.get(`/api/wikiTrends?lang=${trendingLangEdition}`).then(trendsResults => {
-      this.setState({fetchedBios: trendsResults.data});
+      this.setState({fetchedBios: trendsResults.data, loading: false});
     });
   }
 
   render() {
     const {activateSearch} = this.context;
     const {trendingBios} = this.props;
-    const {trendingLangEdition, fetchedBios} = this.state;
+    const {fetchedBios, loading, trendingLangEdition} = this.state;
     const biosForGrid = fetchedBios || trendingBios;
 
     return (
@@ -50,7 +50,7 @@ class Home extends Component {
           </div>
         </div>
 
-        <HomeGrid bios={biosForGrid} trendingLangEdition={trendingLangEdition} changeTrendingLang={this.changeTrendingLang} />
+        <HomeGrid bios={biosForGrid} loading={loading} trendingLangEdition={trendingLangEdition} changeTrendingLang={this.changeTrendingLang} />
 
         <div className="floating-content l-1">
           <div className="box"></div>
