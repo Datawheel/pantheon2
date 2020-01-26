@@ -5,7 +5,7 @@ const axios = require("axios");
 module.exports = function(app) {
 
   app.get("/api/wikiTrends", async(req, res) => {
-    const lang = req.query.lang || "en";
+    const lang = ["ar", "zh", "nl", "en", "fr", "de", "it", "ja", "pl", "pt", "ru", "es"].indexOf(req.query.lang) !== -1 ? req.query.lang : "en";
     const dateobj = new Date();
     const year = dateobj.getFullYear();
     const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
@@ -56,7 +56,7 @@ module.exports = function(app) {
         }
         else {
           currentArticlesChunk.forEach(article => {
-            trendingArticlesQuery.push(`slug.eq.${encodeURIComponent(article.article)}`);
+            trendingArticlesQuery.push(`slug.eq."${encodeURIComponent(article.article)}"`);
             trendingArticlesLookup[article.article] = {...article, title: article.article};
           });
           // trendingArticlesQuery = currentArticlesChunk.map(p => `slug.eq.${encodeURIComponent(p.article)}`);
