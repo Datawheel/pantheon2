@@ -75,7 +75,7 @@ class Home extends Component {
 }
 
 Home.need = [
-  fetchData("trendingBios", "https://pantheon.world/api/wikiTrends")
+  fetchData("trendingBios", "https://pantheon.world/api/wikiTrends?lang=en&limit=60")
 ];
 
 Home.contextTypes = {

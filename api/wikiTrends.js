@@ -6,6 +6,7 @@ module.exports = function(app) {
 
   app.get("/api/wikiTrends", async(req, res) => {
     const lang = ["ar", "zh", "nl", "en", "fr", "de", "it", "ja", "pl", "pt", "ru", "es"].indexOf(req.query.lang) !== -1 ? req.query.lang : "en";
+    const limit = parseInt(req.query.limit, 10) || 100;
     const dateobj = new Date();
     const year = dateobj.getFullYear();
     const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
@@ -15,7 +16,7 @@ module.exports = function(app) {
     const todaysBiosFromDb = await todaysBiosFromDbResp.json();
 
     if (todaysBiosFromDb.length) {
-      return res.json(todaysBiosFromDb);
+      return res.json(todaysBiosFromDb.slice(0, limit));
     }
     else {
       const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
@@ -93,7 +94,7 @@ module.exports = function(app) {
         headers: {"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8"}
       });
 
-      return res.json(todaysBiosForDb);
+      return res.json(todaysBiosForDb.slice(0, limit));
     }
   });
 
