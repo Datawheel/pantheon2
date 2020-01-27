@@ -58,9 +58,8 @@ class PageviewsByLang extends Component {
               langlinks.unshift({"*": person.name, "lang": "en", "langname": "English", "url": `https://en.wikipedia.org/wiki/${person.name}`});
               const langlinksLookup = langlinks.reduce((obj, d) => (obj[d.lang] = d, obj), {});
               const todaysDate = new Date();
-              todaysDate.setMonth(todaysDate.getMonth() - 3);
-              const threeMonthsAgo = yyyymmdd(todaysDate);
-              const langReqs = langlinks.map(ll => axios.get(`https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/${ll.lang}.wikipedia/all-access/all-agents/${ll["*"]}/monthly/20150701/${threeMonthsAgo}`).catch(err => console.log("Page view data fetch error:", err)));
+              const thisMonth = yyyymmdd(todaysDate);
+              const langReqs = langlinks.map(ll => axios.get(`https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/${ll.lang}.wikipedia/all-access/all-agents/${ll["*"]}/monthly/20150701/${thisMonth}`).catch(err => console.log("Page view data fetch error:", err)));
               let langsTs = [];
               axios.all(langReqs)
                 .then(langResults => {
