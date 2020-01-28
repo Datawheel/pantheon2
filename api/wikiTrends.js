@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const createThrottle = require("async-throttle");
 const axios = require("axios");
 
@@ -12,17 +11,16 @@ module.exports = function(app) {
     const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
     const day = `${dateobj.getDate() - 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 
-    const todaysBiosFromDbResp = await fetch(`https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}`);
-    const todaysBiosFromDb = await todaysBiosFromDbResp.json();
+    const todaysBiosFromDbResp = await axios.get(`https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}`).catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
+    const todaysBiosFromDb = todaysBiosFromDbResp.data;
 
     if (todaysBiosFromDb.length) {
       return res.json(todaysBiosFromDb.slice(0, limit));
     }
     else {
       const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
-
-      const topPageViewsResp = await fetch(wikiPageViewsURL);
-      const topPageViewsJson = await topPageViewsResp.json();
+      const topPageViewsResp = await axios.get(wikiPageViewsURL).catch(e => (console.log("Wiki Trending Error:", e), {data: []}));
+      const topPageViewsJson = topPageViewsResp.data;
 
       // create API URLs from list of people
       if (!topPageViewsJson.items || !Array.isArray(topPageViewsJson.items)) {
@@ -39,8 +37,8 @@ module.exports = function(app) {
         // validate URLs for non-english slugs
         if (lang !== "en") {
           const wikiLangTitles = currentArticlesChunk.map(p => encodeURIComponent(p.article)).join("|");
-          const wikiLangLinksResp = await fetch(`https://${lang}.wikipedia.org/w/api.php?action=query&titles=${wikiLangTitles}&prop=langlinks&lllimit=500&llprop=url&lllang=en&format=json`);
-          const wikiLangLinksJson = await wikiLangLinksResp.json();
+          const wikiLangLinksResp = await axios.get(`https://${lang}.wikipedia.org/w/api.php?action=query&titles=${wikiLangTitles}&prop=langlinks&lllimit=500&llprop=url&lllang=en&format=json`).catch(e => (console.log("Wiki Langlinks Error:", e), {data: []}));
+          const wikiLangLinksJson = wikiLangLinksResp.data;
 
           currentArticlesChunk.forEach(article => {
             // see if name is normalized
@@ -69,9 +67,8 @@ module.exports = function(app) {
       // throttle API queries to 20 at a time
       const throttle = createThrottle(20);
       const bios = await Promise.all(trendingPeoplePantheonUrls.map(url => throttle(async() => {
-        const res = await fetch(url);
-        const data = await res.json();
-        return data;
+        const res = await axios.get(url).catch(e => (console.log("Batch pantheon person query error:", e), {data: []}));
+        return res.data;
       })));
 
       // filter out people not on pantheon and sort by num languages
