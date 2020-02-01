@@ -7,9 +7,11 @@ module.exports = function(app) {
     const lang = ["ar", "zh", "nl", "en", "fr", "de", "it", "ja", "pl", "pt", "ru", "es"].indexOf(req.query.lang) !== -1 ? req.query.lang : "en";
     const limit = parseInt(req.query.limit, 10) || 100;
     const dateobj = new Date();
+    // set date to yesterday
+    dateobj.setDate(dateobj.getDate() - 1);
     const year = dateobj.getFullYear();
     const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
-    const day = `${dateobj.getDate() - 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
+    const day = `${dateobj.getDate()}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 
     const todaysBiosFromDbResp = await axios.get(`https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}`).catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
     const todaysBiosFromDb = todaysBiosFromDbResp.data;
