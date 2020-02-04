@@ -243,13 +243,13 @@
     "primary_family_name": "Indo-European"
   },
   "bh": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "inc",
+    "family_name": "Indic",
+    "lang_code3": "bho",
     "language": "Bhojpuri",
     "language_local": "\u092d\u094b\u091c\u092a\u0941\u0930\u0940",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "ine",
+    "primary_family_name": "Indo-European"
   },
   "bi": {
     "family_code": "cpe",
@@ -882,13 +882,13 @@
     "primary_family_name": "Sino-Tibetan"
   },
   "haw": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "poz",
+    "family_name": "Malayo-Polynesian",
+    "lang_code3": "haw",
     "language": "Hawaiian",
     "language_local": "Hawai\u02bbi",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "map",
+    "primary_family_name": "Austronesian"
   },
   "he": {
     "family_code": "sem",
@@ -909,13 +909,13 @@
     "primary_family_name": "Indo-European"
   },
   "hif": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "inc",
+    "family_name": "Indic",
+    "lang_code3": "hif",
     "language": "Fiji Hindi",
     "language_local": "Fiji Hindi",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "ine",
+    "primary_family_name": "Indo-European"
   },
   "ho": {
     "family_code": "poz",
@@ -927,13 +927,13 @@
     "primary_family_name": "Austronesian"
   },
   "hr": {
-    "family_code": "",
-    "family_name": "",
+    "family_code": "sla",
+    "family_name": "Slavic",
     "lang_code3": "hrv",
     "language": "Croatian",
     "language_local": "hrvatski",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "ine",
+    "primary_family_name": "Indo-European"
   },
   "hsb": {
     "family_code": "",
@@ -1143,13 +1143,13 @@
     "primary_family_name": ""
   },
   "kab": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "ber",
+    "family_name": "Berber",
+    "lang_code3": "kab",
     "language": "Kabyle",
     "language_local": "Taqbaylit",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "afa",
+    "primary_family_name": "Afro-Asiatic"
   },
   "kbd": {
     "family_code": "",
