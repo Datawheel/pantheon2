@@ -8,22 +8,39 @@ import axios from "axios";
 import {Link} from "react-router";
 import "pages/Home.css";
 
+const getUrlParameter = (qStr, name) => {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  const regex = new RegExp(`[\\?&]${name}=([^&#]*)`);
+  const results = regex.exec(qStr);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+};
+
 class Home extends Component {
-  constructor() {
+  constructor(props) {
     super();
+    const qParams = props.router.location.search;
+    const trendingLang = getUrlParameter(qParams, "tlang");
     this.state = {
       fetchedBios: null,
       loading: false,
-      trendingLangEdition: "en"
+      trendingLangEdition: ["ar", "zh", "nl", "en", "fr", "de", "it", "ja", "pl", "pt", "ru", "es"].indexOf(trendingLang) !== -1 ? trendingLang : "en"
     };
+  }
+
+  componentDidMount() {
+    const {fetchedBios, loading, trendingLangEdition} = this.state;
+    if (fetchedBios === null && !loading && trendingLangEdition !== "en") {
+      this.changeTrendingLang(trendingLangEdition);
+    }
   }
 
   activateSearch = e => false
 
-  changeTrendingLang = e => {
-    const trendingLangEdition = e.target.value;
+  changeTrendingLang = evtOrLang => {
+    const trendingLangEdition = evtOrLang.target ? evtOrLang.target.value : evtOrLang;
     this.setState({trendingLangEdition, loading: true});
     axios.get(`/api/wikiTrends?lang=${trendingLangEdition}`).then(trendsResults => {
+      this.context.router.replace(`?tlang=${trendingLangEdition}`);
       this.setState({fetchedBios: trendsResults.data, loading: false});
     });
   }
@@ -79,7 +96,8 @@ Home.need = [
 ];
 
 Home.contextTypes = {
-  activateSearch: PropTypes.func
+  activateSearch: PropTypes.func,
+  router: PropTypes.object
 };
 
 export default hot(

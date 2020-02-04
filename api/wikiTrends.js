@@ -44,8 +44,11 @@ module.exports = function(app) {
 
           currentArticlesChunk.forEach(article => {
             // see if name is normalized
-            const normForm = wikiLangLinksJson.query.normalized.find(norm => norm.from === article.article);
-            const normalizedArticleTitle = normForm ? normForm.to : article.article;
+            let normalizedArticleTitle = article.article;
+            if (wikiLangLinksJson.query.normalized) {
+              const normForm = wikiLangLinksJson.query.normalized.find(norm => norm.from === article.article);
+              normalizedArticleTitle = normForm ? normForm.to : article.article;
+            }
             const enArticle = Object.values(wikiLangLinksJson.query.pages).find(page => page.title === normalizedArticleTitle);
             if (enArticle && enArticle.langlinks && enArticle.langlinks.length && enArticle.langlinks[0]["*"]) {
               const enSlug = enArticle.langlinks[0].url.replace("https://en.wikipedia.org/wiki/", "");
