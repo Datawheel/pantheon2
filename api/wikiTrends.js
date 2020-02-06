@@ -1,6 +1,18 @@
 const createThrottle = require("async-throttle");
 const axios = require("axios");
 
+const calcRankDeltas = (arrOfBios, day1Ago, day2Ago) => {
+  const day2AgoRanks = arrOfBios
+    .filter(d => d.date === day2Ago)
+    .reduce((obj, item) => {
+      obj[item.slug] = item;
+      return obj;
+    }, {});
+  return arrOfBios
+    .filter(d => d.date === day1Ago)
+    .map(d => Object.assign({}, d, {rank_delta: day2AgoRanks[d.slug] ? day2AgoRanks[d.slug].rank_pantheon - d.rank_pantheon : null}));
+};
+
 module.exports = function(app) {
 
   app.get("/api/wikiTrends", async(req, res) => {
@@ -12,9 +24,13 @@ module.exports = function(app) {
     const year = dateobj.getFullYear();
     const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
     const day = `${dateobj.getDate()}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
+    dateobj.setDate(dateobj.getDate() - 1);
+    const year2DaysAgo = dateobj.getFullYear();
+    const month2DaysAgo = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
+    const day2DaysAgo = `${dateobj.getDate()}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 
-    const todaysBiosFromDbResp = await axios.get(`https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}`).catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
-    const todaysBiosFromDb = todaysBiosFromDbResp.data;
+    const todaysBiosFromDbResp = await axios.get(`https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}`).catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
+    const todaysBiosFromDb = calcRankDeltas(todaysBiosFromDbResp.data, `${year}-${month}-${day}`, `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`);
 
     if (todaysBiosFromDb.length) {
       return res.json(todaysBiosFromDb.slice(0, limit));
