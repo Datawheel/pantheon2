@@ -60,7 +60,7 @@ class CountryRanking extends Component {
         </p>
         <div className="rank-title">
           <h3>Others born in <a href={`/profile/country/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></h3>
-          <a href="/explore/rankings">Go to all Rankings</a>
+          <a href={`/explore/rankings?show=people&place=${person.bplace_country.country_code}`}>Go to all Rankings</a>
         </div>
         <PhotoCarousel me={person} people={ranking} rankAccessor="bplace_country_rank_unique" />
         {/* { ranking.deathcountryPeers.length
