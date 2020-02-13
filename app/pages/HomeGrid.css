@@ -14,7 +14,7 @@
     font-size: 26px;
   }
   & .grid-subtitle {
-    margin: 0 auto 10px;
+    margin: 0 auto 20px;
     display: block;
     text-align: center;
     font-size: 16px;
@@ -65,11 +65,11 @@
       & .rank_delta {
         color: black;
         position: absolute;
-        bottom: 0;
+        top: 0;
         right: 0;
         min-width: 40px;
         height: 30px;
-        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -120,47 +120,20 @@
         background-position: 50% 30%;
         background-size: cover;
         transition: width 1s, height 1s, background-color 0.5s, background-position 0.5s;
-
-        &.ada {background-image:url('/images/profile/people/974.jpg');}
-        &.greta {background-image:url('/images/profile/people/59214935.jpg');}
-        &.gandhi {background-image:url('/images/profile/people/19379.jpg');}
-        &.tut {background-image:url('/images/profile/people/30437.jpg');}
-        &.ubolt {background-image:url('/images/profile/people/4764846.jpg');}
-        &.nap {background-image:url('/images/profile/people/69880.jpg');}
-        &.mao {background-image:url('/images/profile/people/19527.jpg');}
-        &.ein {background-image:url('/images/profile/people/736.jpg');}
-        &.nyc {background-image:url('/images/profile/place/5128581.jpg');}
-        &.london {background-image:url('/images/profile/place/2643743.jpg');}
-        &.hawk {background-image:url('/images/profile/people/19376148.jpg');}
-        &.muhammad {background-image:url('/images/profile/people/18934.jpg');}
-        &.writer {background-image:url('/images/profile/people/16027.jpg');}
-        &.explorers {background-image:url('/images/profile/people/526051.jpg');}
-        &.berlin {background-image:url('/images/profile/place/2950159.jpg');}
-        &.tokyo {background-image:url('/images/profile/place/1850147.jpg');}
-        &.evora {background-image:url('/images/profile/people/8611104.jpg');}
-        &.aish {background-image:url('/images/profile/people/11983273.jpg');}
-        &.mark {background-image:url('/images/profile/people/2844938.jpg');}
-        &.jet {background-image:url('/images/profile/people/16308.jpg');}
-        &.ron {background-image:url('/images/profile/people/66164.jpg');}
-        &.budd {background-image:url('/images/profile/people/3395.jpg');}
-        &.marx {background-image:url('/images/profile/people/16743.jpg');}
-        &.moscow {background-image:url('/images/profile/place/524901.jpg');}
-        &.istanbul {background-image:url('/images/profile/place/745044.jpg');}
-        &.linguist {background-image:url('/images/profile/people/21566.jpg');}
-        &.arch {background-image:url('/images/profile/people/220556.jpg');}
-        &.fdir {background-image:url('/images/profile/people/26683.jpg');}
-        &.bair {background-image:url('/images/profile/place/3435910.jpg');}
-        &.aung {background-image:url('/images/profile/people/2847.jpg');}
-        &.senna {background-image:url('/images/profile/people/146638.jpg');}
-        &.print {background-image:url('/images/profile/era/2.jpg');}
-        &.dali {background-image:url('/images/profile/people/40112.jpg');}
-        &.aung {background-image:url('/images/profile/people/2847.jpg');}
-        &.yulia {background-image:url('/images/profile/people/1246843.jpg');}
-        &.frida {background-image:url('/images/profile/people/162276.jpg');}
-        &.gmr {background-image:url('/images/profile/people/750492.jpg');}
-        &.ban {background-image:url('/images/profile/people/2346975.jpg');}
-        &.cara {background-image:url('/images/profile/people/35189147.jpg');}
       } /* end .grid-box-bg-img */
+
+      & .grid-box-title-container {
+        @mixin priTitle;
+        font-size: var(--sizeMedium);
+        color: var(--colorSlate);
+        background: var(--colorEggshellOverlay) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC) repeat;
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+        padding: 5px 10px;
+        text-align: center;
+        z-index: 2;
+      }
 
       & a:hover {
         text-decoration: none;
@@ -169,7 +142,7 @@
         & .backup-title {display: none;}
 
         & .grid-box-bg-container {
-          &::after {
+          /* &::after {
             content: '';
             width: 100%;
             height: 100%;
@@ -179,10 +152,10 @@
             right: 0;
             bottom: 0;
             background: var(--colorEggshellOverlay) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC) repeat;
-          }
+          } */
         }
         & .grid-box-bg-img-mask {
-          filter: blur(6px) saturate(120%) contrast(130%);
+          /* filter: blur(6px) saturate(120%) contrast(130%); */
         }
 
         & .grid-box-bg-img {
