@@ -34,7 +34,7 @@ class MemMetrics extends Component {
 
     return (
       <div className="metrics-container">
-        <div className="metric-vid">
+        {/* <div className="metric-vid">
           {vid
             ? <iframe
               src={`https://www.youtube.com/embed/${vid.id.videoId}`}
@@ -46,7 +46,7 @@ class MemMetrics extends Component {
             />
             : <button className="press-play" disabled tabIndex="-1"><i /></button>
           }
-        </div>
+        </div> */}
         <ul className="metrics-list">
           <li className="metric">
             <h4>{FORMATTERS.bigNum(totalPageviews)}</h4>
