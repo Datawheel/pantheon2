@@ -80,9 +80,6 @@ class Person extends Component {
 
     const sections = [
       {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} />},
-      {title: "Related Videos from YouTube", slug: "related", content: <div onClick={e => {
-        e.target.childNodes[0].style.pointerEvents = "all";
-      }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation.toLowerCase()}`} frameBorder="0" max-width="1024" width="100%" height="600" /></div>},
       // {
       //   title: "Online Attention",
       //   slug: "afterlife",
@@ -126,6 +123,14 @@ class Person extends Component {
     if (person.bplace_country) {
       sections.push({title: `In ${person.bplace_country.country}`, slug: "country_peers", content: <CountryRanking person={person} ranking={birthCountryRanks} />});
     }
+    // Add YASIV youtube network
+    // sections.push({
+    //   title: "Related Videos from YouTube",
+    //   slug: "related",
+    //   content: <div onClick={e => {
+    //     e.target.childNodes[0].style.pointerEvents = "all";
+    //   }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation.toLowerCase()}`} frameBorder="0" max-width="1024" width="100%" height="600" /></div>
+    // });
 
     const pageUrl = this.props.location.href.split("?")[0].replace(/\/$/, "");
     const pageHeaderMetaTags = config.meta.map(meta => {
