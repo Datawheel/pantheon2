@@ -19,7 +19,7 @@ class Controls extends Component {
     const {qParams} = props;
     this.state = {
       city: SANITIZERS.city(qParams.place) || "all",
-      country: qParams.occupation ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)],
+      country: qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)],
       gender: SANITIZERS.gender(qParams.gender),
       occupation: qParams.occupation || "all",
       placeType: SANITIZERS.placeType(qParams.placeType),
@@ -40,7 +40,7 @@ class Controls extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.pageType !== prevProps.pageType) {
-      console.log("CONTROL SHOULD UPDATE!");
+      // console.log("CONTROL SHOULD UPDATE!");
       // this.props.updateData(Object.assign({data: [], loading: true}, this.state));
 
       // this.props.updateData(Object.assign({data: [], loading: true}, this.state), this.fetchData);
