@@ -8,7 +8,7 @@ import moment from "moment";
 
 import {COLORS_DOMAIN, FORMATTERS} from "types";
 
-const Header = ({person, wikiPageViews}) => {
+const Header = ({person, wikiPageViews, isTrending}) => {
 
   // const viewData = pageViews.map(d => {
   //   d.pageview_date = typeof d.pageview_date === "string" ? new Date(d.pageview_date.replace("Z", "")) : d.pageview_date;
@@ -46,6 +46,9 @@ const Header = ({person, wikiPageViews}) => {
         </div>
       </div>
       <div className="info">
+        {isTrending
+          ? <div className="trending-cont">Trending</div>
+          : null}
         <h2 className="profile-type">{person.occupation ? person.occupation.occupation : ""}</h2>
         <h1 className="profile-name">{person.name}</h1>
         {person.birthyear

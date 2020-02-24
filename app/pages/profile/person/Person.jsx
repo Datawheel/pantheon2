@@ -46,7 +46,9 @@ class Person extends Component {
   }
 
   render() {
-    const {person, occupationRanks, birthYearRanks, deathYearRanks, birthCountryRanks, wikiExtract, wikiPageViews, wikiSummary} = this.props.data;
+    const {person, occupationRanks, birthYearRanks, deathYearRanks, birthCountryRanks,
+      wikiExtract, wikiPageViews, wikiSummary, wikiPageViewsPast30Days} = this.props.data;
+    const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
 
     if (person === undefined) {
       return <NotFound />;
@@ -79,7 +81,7 @@ class Person extends Component {
     //   }, []);
 
     const sections = [
-      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} />},
+      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} wikiPageViewsPast30Days={wikiPageViewsPast30Days} />},
       // {
       //   title: "Online Attention",
       //   slug: "afterlife",
@@ -124,13 +126,13 @@ class Person extends Component {
       sections.push({title: `In ${person.bplace_country.country}`, slug: "country_peers", content: <CountryRanking person={person} ranking={birthCountryRanks} />});
     }
     // Add YASIV youtube network
-    // sections.push({
-    //   title: "Related Videos from YouTube",
-    //   slug: "related",
-    //   content: <div onClick={e => {
-    //     e.target.childNodes[0].style.pointerEvents = "all";
-    //   }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation.toLowerCase()}`} frameBorder="0" max-width="1024" width="100%" height="600" /></div>
-    // });
+    sections.push({
+      title: "Related Videos from YouTube",
+      slug: "related",
+      content: <div onClick={e => {
+        e.target.childNodes[0].style.pointerEvents = "all";
+      }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation.toLowerCase()}`} frameBorder="0" max-width="1024" width="100%" height="600" /></div>
+    });
 
     const pageUrl = this.props.location.href.split("?")[0].replace(/\/$/, "");
     const pageHeaderMetaTags = config.meta.map(meta => {
@@ -159,7 +161,7 @@ class Person extends Component {
           title={`${person.name} Biography`}
           meta={pageHeaderMetaTags}
         />
-        <Header person={person} wikiPageViews={wikiPageViews} />
+        <Header person={person} wikiPageViews={wikiPageViews} isTrending={isTrending} />
         <div className="about-section">
           <ProfileNav sections={sections} />
           <Intro
@@ -197,6 +199,7 @@ const birthCountryRanksURL = "/person?bplace_country=eq.<person.bplaceCountry>&b
 const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=<person.id>&format=json&exlimit=1&origin=*";
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<person.wikiSlug>/monthly/20110101/${year}${month}01`;
 const wikiSummaryURL = "https://en.wikipedia.org/api/rest_v1/page/summary/<person.wikiSlug>";
+const wikiTrendingURL = "https://pantheon.world/api/wikiTrendDetails?pid=<person.id>";
 
 Person.preneed = [
   fetchData("person", personURL, res => {
@@ -235,7 +238,8 @@ Person.need = [
   fetchData("birthCountryRanks", birthCountryRanksURL, res => res),
   fetchData("wikiExtract", wikiURL),
   fetchData("wikiPageViews", wikiPageViewsURL),
-  fetchData("wikiSummary", wikiSummaryURL)
+  fetchData("wikiSummary", wikiSummaryURL),
+  fetchData("wikiPageViewsPast30Days", wikiTrendingURL)
 // //   fetchCreationdates
 ];
 

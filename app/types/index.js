@@ -65,7 +65,7 @@ function slugifyStr(str) {
 
 export const FORMATTERS = {
   commas: format(","),
-  decimal: format(".2f"),
+  decimal: format(",.2f"),
   share: format(",.2%"),
   bigNum: format(".2s"),
   shareWhole: format(",.0%"),
