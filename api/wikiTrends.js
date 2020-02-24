@@ -97,8 +97,13 @@ module.exports = function(app) {
             };
           });
 
+          // UPSERT via "Prefer: resolution=merge-duplicates" header
           await axios.post("https://api.pantheon.world/trend_pageviews", enrichedPageViewsFlat, {
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8"}
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
+              "Prefer": "resolution=merge-duplicates"
+            }
           }).catch(err => (console.log(err), []));
         }
       }
