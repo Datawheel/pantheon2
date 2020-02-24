@@ -58,7 +58,7 @@ class MemMetrics extends Component {
   render() {
     const {pageViews, person, wikiPageViewsPast30Days} = this.props;
     const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
-    const domainColor = COLORS_DOMAIN[person.occupation.domain.toLowerCase().replace(" ", "-")];
+    const domainColor = COLORS_DOMAIN[person.occupation.domain.toLowerCase().replace(/ /g, "-")];
     // console.log(COLORS_DOMAIN, person.occupation.domain.toLowerCase());
     const trendData = wikiPageViewsPast30Days.map((d, i) => ({...d, index: i, color: domainColor}));
     const {vid} = this.state;

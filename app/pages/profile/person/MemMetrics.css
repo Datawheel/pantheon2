@@ -20,6 +20,11 @@
   position: relative;
   flex: 0 0 auto;
   padding: 10px 25px 10px 0;
+
+  @media (max-width: 750px) {
+    padding: 0;
+    width: 100%;
+  }
 }
 
 .metric-vid {
