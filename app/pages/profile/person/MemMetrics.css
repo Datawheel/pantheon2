@@ -14,6 +14,14 @@
   }
 }
 
+.metric-trending {
+  display: inline-block;
+  width: 50%;
+  position: relative;
+  flex: 0 0 auto;
+  padding: 10px 25px 10px 0;
+}
+
 .metric-vid {
   background-color: var(--colorSand);
   display: inline-block;
