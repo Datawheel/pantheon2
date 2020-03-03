@@ -17,6 +17,22 @@ const calcRankDeltas = (arrOfBios, day1Ago, day2Ago) => {
 
 module.exports = function(app) {
 
+  app.get("/api/wikiRelated", async(req, res) => {
+    // wikipedia person ID
+    const wikiSlug = req.query.slug;
+    if (!wikiSlug) return res.json([]);
+
+    const wikiRelatedURL = `https://en.wikipedia.org/api/rest_v1/page/related/${wikiSlug}`;
+    const topRelatedResp = await axios.get(wikiRelatedURL).catch(e => (console.log(`Wiki Related API Error: No page for ${wikiSlug} found.`), {data: []}));
+    const topRelatedJson = topRelatedResp.data;
+
+    if (!topRelatedJson.pages || !topRelatedJson.pages.length) return res.json([]);
+
+    const pantheonPersonQuery = topRelatedJson.pages.map(d => `id.eq.${d.pageid}`);
+    const topRelatedInPantheonResp = await axios.get(`https://api.pantheon.world/person?or=(${pantheonPersonQuery})&select=id,birthyear,name,hpi,slug,occupation.occupation_name`).catch(e => (console.log(`Pantheon Related Error: No bios for ${wikiSlug} found.`), {data: []}));
+    return res.json(topRelatedInPantheonResp.data);
+  });
+
   app.get("/api/wikiTrendDetails", async(req, res) => {
     // wikipedia person ID
     const wikiId = parseInt(req.query.pid, 10);
