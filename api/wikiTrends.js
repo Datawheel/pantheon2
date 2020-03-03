@@ -30,7 +30,11 @@ module.exports = function(app) {
 
     const pantheonPersonQuery = topRelatedJson.pages.map(d => `id.eq.${d.pageid}`);
     const topRelatedInPantheonResp = await axios.get(`https://api.pantheon.world/person?or=(${pantheonPersonQuery})&select=id,birthyear,name,hpi,slug,occupation.occupation_name`).catch(e => (console.log(`Pantheon Related Error: No bios for ${wikiSlug} found.`), {data: []}));
-    return res.json(topRelatedInPantheonResp.data);
+    const enrichedPantheonBios = topRelatedInPantheonResp.data.map(d => {
+      const wikiData = topRelatedJson.pages.find(p => `${p.pageid}` === `${d.id}`);
+      return wikiData ? {...d, description: wikiData.description, extract: wikiData.extract} : d;
+    });
+    return res.json(enrichedPantheonBios);
   });
 
   app.get("/api/wikiTrendDetails", async(req, res) => {

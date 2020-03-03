@@ -1,5 +1,7 @@
 import React from "react";
 import {FORMATTERS} from "types";
+import {toTitleCase} from "viz/helpers";
+import {Tooltip} from "@blueprintjs/core";
 import "pages/profile/common/Footer.css";
 
 const Footer = ({person, ranking, wikiRelated}) => {
@@ -75,12 +77,12 @@ const Footer = ({person, ranking, wikiRelated}) => {
             ? wikiRelated.map(relatedBio =>
               <li className="footer-carousel-item" key={relatedBio.id}>
                 <div className="footer-carousel-item-photo">
-                  <a href={`/profile/person/${relatedBio.slug}`} style={{backgroundImage: `url(/images/profile/people/${relatedBio.id}.jpg)`}}></a>
+                  <Tooltip content={relatedBio.extract}><a href={`/profile/person/${relatedBio.slug}`} style={{backgroundImage: `url(/images/profile/people/${relatedBio.id}.jpg)`}}></a></Tooltip>
                 </div>
                 <h4 className="footer-carousel-item-title">
                   <a href={`/profile/person/${relatedBio.slug}`}>{relatedBio.name}</a>
                 </h4>
-                <p>{relatedBio.occupation.toLowerCase()}</p>
+                <p>{toTitleCase(relatedBio.description)}</p>
               </li>
             )
             : null}
