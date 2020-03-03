@@ -47,7 +47,7 @@ class Person extends Component {
 
   render() {
     const {person, occupationRanks, birthYearRanks, deathYearRanks, birthCountryRanks,
-      wikiExtract, wikiPageViews, wikiSummary, wikiPageViewsPast30Days} = this.props.data;
+      wikiExtract, wikiPageViews, wikiSummary, wikiPageViewsPast30Days, wikiRelated} = this.props.data;
     const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
 
     if (person === undefined) {
@@ -181,7 +181,7 @@ class Person extends Component {
             {section.viz ? <div className="viz">{section.viz}</div> : null}
           </Section>
         )}
-        <Footer person={person} ranking={occupationRanks} />
+        <Footer person={person} ranking={occupationRanks} wikiRelated={wikiRelated} />
       </div>
     );
   }
@@ -200,6 +200,7 @@ const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&e
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<person.wikiSlug>/monthly/20110101/${year}${month}01`;
 const wikiSummaryURL = "https://en.wikipedia.org/api/rest_v1/page/summary/<person.wikiSlug>";
 const wikiTrendingURL = "https://pantheon.world/api/wikiTrendDetails?pid=<person.id>";
+const wikiRelatedURL = "https://pantheon.world/api/wikiRelated?slug=<person.wikiSlug>";
 
 Person.preneed = [
   fetchData("person", personURL, res => {
@@ -239,7 +240,8 @@ Person.need = [
   fetchData("wikiExtract", wikiURL),
   fetchData("wikiPageViews", wikiPageViewsURL),
   fetchData("wikiSummary", wikiSummaryURL),
-  fetchData("wikiPageViewsPast30Days", wikiTrendingURL)
+  fetchData("wikiPageViewsPast30Days", wikiTrendingURL),
+  fetchData("wikiRelated", wikiRelatedURL)
 // //   fetchCreationdates
 ];
 

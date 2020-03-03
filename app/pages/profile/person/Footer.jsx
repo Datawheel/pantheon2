@@ -2,7 +2,7 @@ import React from "react";
 import {FORMATTERS} from "types";
 import "pages/profile/common/Footer.css";
 
-const Footer = ({person, ranking}) => {
+const Footer = ({person, ranking, wikiRelated}) => {
   const me = ranking.findIndex(p => p.wp_id === person.wp_id);
   const aboveMe = ranking[me + 1];
   const belowMe = ranking[me - 1];
@@ -70,6 +70,20 @@ const Footer = ({person, ranking}) => {
               <p>{person.birthcountry.num_born} Individuals</p>
             </li>
             : null }
+
+          {wikiRelated.length
+            ? wikiRelated.map(relatedBio =>
+              <li className="footer-carousel-item" key={relatedBio.id}>
+                <div className="footer-carousel-item-photo">
+                  <a href={`/profile/person/${relatedBio.slug}`} style={{backgroundImage: `url(/images/profile/people/${relatedBio.id}.jpg)`}}></a>
+                </div>
+                <h4 className="footer-carousel-item-title">
+                  <a href={`/profile/person/${relatedBio.slug}`}>{relatedBio.name}</a>
+                </h4>
+                <p>{relatedBio.occupation.toLowerCase()}</p>
+              </li>
+            )
+            : null}
 
         </ul>
       </div>
