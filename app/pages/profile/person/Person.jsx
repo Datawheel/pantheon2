@@ -10,6 +10,7 @@ import Header from "pages/profile/person/Header";
 import Intro from "pages/profile/person/Intro";
 import Footer from "pages/profile/person/Footer";
 import MemMetrics from "pages/profile/person/MemMetrics";
+import News from "pages/profile/person/News";
 import OccupationRanking from "pages/profile/person/OccupationRanking";
 import YearRanking from "pages/profile/person/YearRanking";
 import PageviewsByLang from "pages/profile/person/PageviewsByLang";
@@ -47,12 +48,13 @@ class Person extends Component {
 
   render() {
     const {person, occupationRanks, birthYearRanks, deathYearRanks, birthCountryRanks,
-      wikiExtract, wikiPageViews, wikiSummary, wikiPageViewsPast30Days, wikiRelated} = this.props.data;
+      wikiExtract, wikiPageViews, wikiSummary, wikiPageViewsPast30Days, wikiRelated, newsArticles} = this.props.data;
     const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
 
     if (person === undefined) {
       return <NotFound />;
     }
+    // console.log("newsArticles!", newsArticles);
 
     const maxPageViews = wikiPageViews && wikiPageViews.items ? Math.max(...wikiPageViews.items.map(d => d.views || 0)) : 0;
     const totalPageViews = wikiPageViews && wikiPageViews.items ? wikiPageViews.items.reduce((sum, d) => sum + d.views, 0) : 0;
@@ -81,44 +83,13 @@ class Person extends Component {
     //   }, []);
 
     const sections = [
-      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} wikiPageViewsPast30Days={wikiPageViewsPast30Days} />},
-      // {
-      //   title: "Online Attention",
-      //   slug: "afterlife",
-      //   viz: <LinePlot
-      //     config={{
-      //       height: 600,
-      //       data: lineData,
-      //       shapeConfig: {
-      //         fill: d => d.color,
-      //         Line: {
-      //           fill: "none",
-      //           stroke: d => {
-      //             while (d.__d3plus__) d = d.data;
-      //             return d.color;
-      //           },
-      //           strokeWidth: 2
-      //         }
-      //       },
-      //       time: "x",
-      //       timeline: false,
-      //       tooltipConfig: {
-      //         body: d => {
-      //           let date = d.x instanceof Array ? extent(d.x) : [d.x];
-      //           date = date.map(FORMATTERS.month);
-      //           return `<span class="large">${FORMATTERS.commas(d.langs || d.views)}</span><br />${date.join(" to ")}`;
-      //         },
-      //         footer: ""
-      //       },
-      //       x: "x",
-      //       xConfig: {tickFormat: d => FORMATTERS.year(new Date(d).getFullYear())},
-      //       y: "y",
-      //       yConfig: {tickFormat: () => "", title: false}
-      //     }} />
-      // },
-      {title: `Page views of ${plural(person.name)} by language`, slug: "page-views-by-lang", content: <PageviewsByLang person={person} />},
-      {title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />}
+      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} wikiPageViewsPast30Days={wikiPageViewsPast30Days} />}
     ];
+    if (newsArticles.length && newsArticles[0].results.articles.length) {
+      sections.push({title: "In the news", slug: "news_articles", content: <News person={person} newsArticles={newsArticles} />});
+    }
+    sections.push({title: `Page views of ${plural(person.name)} by language`, slug: "page-views-by-lang", content: <PageviewsByLang person={person} />});
+    sections.push({title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />});
     if (person.birthyear) {
       sections.push({title: "Contemporaries", slug: "year_peers", content: <YearRanking person={person} birthYearRanking={birthYearRanks} deathYearRanking={deathYearRanks} />});
     }
@@ -201,6 +172,7 @@ const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/pe
 const wikiSummaryURL = "https://en.wikipedia.org/api/rest_v1/page/summary/<person.wikiSlug>";
 const wikiTrendingURL = "https://pantheon.world/api/wikiTrendDetails?pid=<person.id>";
 const wikiRelatedURL = "https://pantheon.world/api/wikiRelated?slug=<person.wikiSlug>";
+const newsArticlesURL = "https://pantheon.world/api/news?pid=<person.id>";
 
 Person.preneed = [
   fetchData("person", personURL, res => {
@@ -241,7 +213,8 @@ Person.need = [
   fetchData("wikiPageViews", wikiPageViewsURL),
   fetchData("wikiSummary", wikiSummaryURL),
   fetchData("wikiPageViewsPast30Days", wikiTrendingURL),
-  fetchData("wikiRelated", wikiRelatedURL)
+  fetchData("wikiRelated", wikiRelatedURL),
+  fetchData("newsArticles", newsArticlesURL)
 // //   fetchCreationdates
 ];
 
