@@ -31,7 +31,9 @@ class News extends Component {
                   <div className="description">{article.description}</div>
                 </div>
                 <div className="info-footer">
-                  <div className="author"><Icon icon="person" iconSize={12} /> {article.author}</div>
+                  {article.author
+                    ? <div className="author"><Icon icon="person" iconSize={12} /> {article.author}</div>
+                    : null}
                   <div className="date"><Icon icon="calendar" iconSize={12} /> {new Date(article.publishedAt).toLocaleDateString("en-US", {weekday: "long", year: "numeric", month: "long", day: "numeric"})}</div>
                 </div>
               </a>
