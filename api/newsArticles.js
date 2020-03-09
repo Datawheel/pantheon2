@@ -30,6 +30,7 @@ module.exports = function(app) {
     if (!trendFromDbResp.data.length) {
       return res.json([]);
     }
+
     const {slug, name} = trendFromDbResp.data[0];
 
     // NEXT check if it's already in the db...
@@ -39,9 +40,9 @@ module.exports = function(app) {
       return res.json(todaysNewsFromDbResp.data);
     }
 
-    const newApiUrl = `http://newsapi.org/v2/everything?qInTitle=${name}&from=${daysAgo2}&sortBy=relevancy&pageSize=5&apiKey=${newsApiKey}`;
+    const newApiUrl = `http://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(name)}&from=${daysAgo2}&sortBy=relevancy&pageSize=5&apiKey=${newsApiKey}`;
 
-    const newsResp = await axios.get(newApiUrl);
+    const newsResp = await axios.get(newApiUrl).catch(e => (console.log("newsapi.org Error:", name), {data: {articles: []}}));
     const newsResults = newsResp.data;
 
     // newsResults.articles.slice(0, 5).forEach(article => {

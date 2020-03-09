@@ -22,7 +22,7 @@ module.exports = function(app) {
     const wikiSlug = req.query.slug;
     if (!wikiSlug) return res.json([]);
 
-    const wikiRelatedURL = `https://en.wikipedia.org/api/rest_v1/page/related/${wikiSlug}`;
+    const wikiRelatedURL = `https://en.wikipedia.org/api/rest_v1/page/related/${encodeURIComponent(wikiSlug)}`;
     const topRelatedResp = await axios.get(wikiRelatedURL).catch(e => (console.log(`Wiki Related API Error: No page for ${wikiSlug} found.`), {data: []}));
     const topRelatedJson = topRelatedResp.data;
 
