@@ -11,6 +11,7 @@ import Intro from "pages/profile/person/Intro";
 import Footer from "pages/profile/person/Footer";
 import MemMetrics from "pages/profile/person/MemMetrics";
 import News from "pages/profile/person/News";
+import Movies from "pages/profile/person/Movies";
 import OccupationRanking from "pages/profile/person/OccupationRanking";
 import YearRanking from "pages/profile/person/YearRanking";
 import PageviewsByLang from "pages/profile/person/PageviewsByLang";
@@ -87,6 +88,12 @@ class Person extends Component {
     ];
     if (newsArticles.length && newsArticles[0].results.articles.length) {
       sections.push({title: "In the news", slug: "news_articles", content: <News person={person} newsArticles={newsArticles} />});
+    }
+    if (["ACTOR", "COMEDIAN"].includes(person.occupation.id)) {
+      sections.push({title: "Television and Movie Roles", slug: "movies", content: <Movies person={person} />});
+    }
+    if (["FILM DIRECTOR"].includes(person.occupation.id)) {
+      sections.push({title: "Filmography", slug: "movies", content: <Movies person={person} />});
     }
     sections.push({title: `Page views of ${plural(person.name)} by language`, slug: "page-views-by-lang", content: <PageviewsByLang person={person} />});
     sections.push({title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />});

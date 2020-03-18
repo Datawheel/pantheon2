@@ -18,9 +18,9 @@ class News extends Component {
     return (
       <div className="news-container">
         {newsArticles[0].results.articles.length
-          ? <div className="news-articles-list">
+          ? <div className="card-list">
             {newsArticles[0].results.articles.map(article =>
-              <a href={article.url} className="card" key={article.url} target="_blank" rel="noopener">
+              <a href={article.url} className="news-card" key={article.url} target="_blank" rel="noopener">
                 <div className="thumb" style={article.urlToImage ? {backgroundImage: `url('${article.urlToImage}')`} : {}}>
                   {article.source
                     ? <div className="src">{article.source.name}</div>
