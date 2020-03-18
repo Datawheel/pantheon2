@@ -33,7 +33,7 @@ class Movies extends Component {
                   const directedMovies = res.data.crew
                     .filter(d => d.department === "Directing" && d.vote_count)
                     .sort((a, b) => b.vote_average * b.vote_count - a.vote_average * a.vote_count)
-                    .slice(0, 5);
+                    .slice(0, 6);
                   // console.log("directedMovies!!!", directedMovies);
                   this.setState({data: directedMovies});
                 }
