@@ -2538,13 +2538,13 @@
     "primary_family_name": ""
   },
   "vep": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "urj",
+    "family_name": "Uralic",
+    "lang_code3": "vep",
     "language": "Vepsian",
     "language_local": "veps\u00e4n kel\u2019",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "urj",
+    "primary_family_name": "Uralic"
   },
   "vi": {
     "family_code": "aav",
