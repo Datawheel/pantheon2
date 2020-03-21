@@ -65,7 +65,7 @@ module.exports = function(app) {
     }
 
     // try to get daily pageview data from db
-    const monthAgoPvFromDbResp = await axios.get(`https://api.pantheon.world/trend_pageviews?date=eq.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}`).catch(e => (console.log("Pantheon DB trends read Error:", e), {data: []}));
+    const monthAgoPvFromDbResp = await axios.get(`https://api.pantheon.world/trend_pageviews?date=eq.${year}-${month}-${day}&pid=eq.${wikiId}`).catch(e => (console.log("Pantheon DB trends read Error:", e), {data: []}));
     if (monthAgoPvFromDbResp.data.length) {
       const pastMonthPvFromDbResp = await axios.get(`https://api.pantheon.world/trend_pageviews?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}`).catch(e => (console.log("Pantheon DB trends read Error:", e), {data: []}));
       enrichedPageViewsFlat = pastMonthPvFromDbResp.data;
