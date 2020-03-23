@@ -33,10 +33,19 @@ class Person extends Component {
   }
 
   componentDidMount() {
-    // generate screenshot on page load
     const {id: slug} = this.props.params;
     const {person} = this.props.data;
     if (person !== undefined) {
+      // fetch books by author
+      console.log(person);
+      if (person.occupation.id === "WRITER") {
+        axios.get(`/api/books?id=${person.id}`)
+          .then(response => {
+            if (response.status === 200) console.log("Fetch books successful.");
+          })
+          .catch(error => console.log("Fetch books error:", error));
+      }
+      // generate screenshot on page load
       const screenshotUrl = `/api/screenshot/person/${slug}/`;
       axios.get(screenshotUrl)
         .then(response => {
@@ -169,11 +178,12 @@ const dateobj = new Date();
 const year = dateobj.getFullYear();
 const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 const personURL = "/person?slug=eq.<id>&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*";
+const personRanksURL = "/person_ranks?slug=eq.<id>";
 // const pageViewsURL = "/indicators?person=eq.<person.id>&order=pageview_date&num_pageviews=not.is.null";
-const occupationRanksURL = "/person?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<person.occupationRankLow>&occupation_rank_unique=lte.<person.occupationRankHigh>&order=occupation_rank_unique&select=occupation(*),bplace_country(*),hpi,l,occupation_rank,occupation_rank_unique,slug,gender,name,id,wp_id,birthyear,deathyear";
-const birthYearRanksURL = "/person?birthyear=eq.<person.birthyear>&birthyear_rank_unique=gte.<person.birthYearRankLow>&birthyear_rank_unique=lte.<person.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation(id,domain,domain_slug),bplace_country(*),l,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,wp_id,birthyear,deathyear";
-const deathYearRanksURL = "/person?deathyear=eq.<person.deathyearId>&deathyear_rank_unique=gte.<person.deathYearRankLow>&deathyear_rank_unique=lte.<person.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation(id,domain,domain_slug),dplace_country(*),l,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,wp_id,deathyear,birthyear";
-const birthCountryRanksURL = "/person?bplace_country=eq.<person.bplaceCountry>&bplace_country_rank_unique=gte.<person.bplaceCountryRankLow>&bplace_country_rank_unique=lte.<person.bplaceCountryRankHigh>&order=bplace_country_rank_unique&select=bplace_country(*),l,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,wp_id,deathyear,birthyear";
+const occupationRanksURL = "/person_ranks?occupation=eq.<person.occupation.id>&occupation_rank_unique=gte.<personRanks.occupationRankLow>&occupation_rank_unique=lte.<personRanks.occupationRankHigh>&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear";
+const birthYearRanksURL = "/person_ranks?birthyear=eq.<person.birthyear>&birthyear_rank_unique=gte.<personRanks.birthYearRankLow>&birthyear_rank_unique=lte.<personRanks.birthYearRankHigh>&order=birthyear_rank_unique&select=occupation,bplace_country,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear";
+const deathYearRanksURL = "/person_ranks?deathyear=eq.<personRanks.deathyearId>&deathyear_rank_unique=gte.<personRanks.deathYearRankLow>&deathyear_rank_unique=lte.<personRanks.deathYearRankHigh>&order=deathyear_rank_unique&select=occupation,dplace_country,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear";
+const birthCountryRanksURL = "/person_ranks?bplace_country=eq.<personRanks.bplaceCountry>&bplace_country_rank_unique=gte.<personRanks.bplaceCountryRankLow>&bplace_country_rank_unique=lte.<personRanks.bplaceCountryRankHigh>&order=bplace_country_rank_unique&select=bplace_country,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,deathyear,birthyear";
 const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=<person.id>&format=json&exlimit=1&origin=*";
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<person.wikiSlug>/monthly/20110101/${year}${month}01`;
 const wikiSummaryURL = "https://en.wikipedia.org/api/rest_v1/page/summary/<person.wikiSlug>";
@@ -182,27 +192,32 @@ const wikiRelatedURL = "https://pantheon.world/api/wikiRelated?slug=<person.wiki
 const newsArticlesURL = "https://pantheon.world/api/news?pid=<person.id>";
 
 Person.preneed = [
-  fetchData("person", personURL, res => {
+  fetchData("personRanks", personRanksURL, res => {
     const person = res[0];
+    // Calculate min/max for occupation peers
     const occupationRankLow = Math.max(1, parseInt(person.occupation_rank_unique, 10) - NUM_RANKINGS_PRE);
     const occupationRankHigh = Math.max(NUM_RANKINGS, parseInt(person.occupation_rank_unique, 10) + NUM_RANKINGS_POST);
-
+    // Calculate min/max for birthyear peers
     const birthYearRankLow = Math.max(1, parseInt(person.birthyear_rank_unique, 10) - NUM_RANKINGS_PRE);
     const birthYearRankHigh = Math.max(NUM_RANKINGS, parseInt(person.birthyear_rank_unique, 10) + NUM_RANKINGS_POST);
-
+    // Calculate min/max for deathyear peers
     const deathYearRankLow = person.deathyear_rank_unique ? Math.max(1, parseInt(person.deathyear_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
     const deathYearRankHigh = person.deathyear_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.deathyear_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
-
+    // postgrest API will break if given NULLs, and since NULLs can be expected
+    // we need to give a fallback numeric value here
     const deathyearId = person.deathyear || "9999";
-    const deathyear_rank_unique = person.deathyear_rank_unique || "9999";
-
-    const bplaceCountry = person.bplace_country ? person.bplace_country.country : "";
+    const deathyearRankUnique = person.deathyear_rank_unique || "9999";
+    // Calculate min/max for birth country peers
     const bplaceCountryRankLow = person.bplace_country_rank_unique ? Math.max(1, parseInt(person.bplace_country_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
     const bplaceCountryRankHigh = person.bplace_country_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.bplace_country_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
-
+    // ensure birthcountry is non NULL
+    const bplaceCountry = person.bplace_country || "";
+    return {occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathyearRankUnique, deathyearId, deathYearRankLow, deathYearRankHigh, bplaceCountry, bplaceCountryRankLow, bplaceCountryRankHigh};
+  }),
+  fetchData("person", personURL, res => {
+    const person = res[0];
     const wikiSlug = person.name.replace(/ /g, "_");
-
-    return {...person, wikiSlug, deathyear_rank_unique, deathyearId, occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathYearRankLow, deathYearRankHigh, bplaceCountry, bplaceCountryRankLow, bplaceCountryRankHigh};
+    return {...person, wikiSlug};
   })
 ];
 
