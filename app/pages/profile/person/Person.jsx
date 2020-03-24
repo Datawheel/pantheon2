@@ -37,7 +37,6 @@ class Person extends Component {
     const {person} = this.props.data;
     if (person !== undefined) {
       // fetch books by author
-      console.log(person);
       if (person.occupation.id === "WRITER") {
         axios.get(`/api/books?id=${person.id}`)
           .then(response => {
