@@ -40,7 +40,7 @@ module.exports = function(app) {
       return res.json(todaysNewsFromDbResp.data);
     }
 
-    const newApiUrl = `http://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(name)}&from=${daysAgo2}&sortBy=relevancy&pageSize=5&apiKey=${newsApiKey}`;
+    const newApiUrl = `http://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(name)}&from=${daysAgo2}&sortBy=relevancy&pageSize=5&apiKey=${newsApiKey}&language=en&excludeDomains=youtube.com`;
 
     const newsResp = await axios.get(newApiUrl).catch(e => (console.log("newsapi.org Error:", name), {data: {articles: []}}));
     const newsResults = newsResp.data;
@@ -48,31 +48,34 @@ module.exports = function(app) {
     // newsResults.articles.slice(0, 5).forEach(article => {
     //   console.log("len of desc:", article.description.length);
     // });
-    newsResults.articles = newsResults.articles.slice(0, 4).map(article => ({
-      source: article.source,
-      author: article.author,
-      title: article.title,
-      description: article.description,
-      url: article.url,
-      urlToImage: article.urlToImage,
-      publishedAt: article.publishedAt
-    }));
-
-    const todaysNewsForDb = {
+    const allArticles = newsResults.articles.slice(0, 4).map(article => ({
       name,
       pid: wikiId,
       slug,
-      results: newsResults
-    };
+      article: {
+        source: article.source,
+        author: article.author,
+        title: article.title,
+        description: article.description,
+        url: article.url,
+        urlToImage: article.urlToImage,
+        publishedAt: article.publishedAt
+      }
+    }));
 
-    await axios.post("https://api.pantheon.world/news", [todaysNewsForDb], {
-      headers: {"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8"}
-    }).catch(e => {
-      console.error("Pantheon DB insert error (trending news articles)");
-      return res.json([todaysNewsForDb]);
-    });
+    const newsPosts = allArticles.map(newsItem => axios.post("https://api.pantheon.world/news?columns=name,pid,slug,article", newsItem, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
+        "Prefer": "resolution=merge-duplicates"
+      }
+    }).catch(err => {
+      console.log(`[News API] unable to post news item about ${name} to db.`);
+      return {error: err};
+    }));
+    await Promise.all(newsPosts);
 
-    return res.json([todaysNewsForDb]);
+    return res.json(allArticles);
 
   });
 

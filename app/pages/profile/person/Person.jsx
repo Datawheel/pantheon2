@@ -95,7 +95,7 @@ class Person extends Component {
     const sections = [
       {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} wikiPageViewsPast30Days={wikiPageViewsPast30Days} />}
     ];
-    if (newsArticles.length && newsArticles[0].results.articles.length) {
+    if (newsArticles.length) {
       sections.push({title: "In the news", slug: "news_articles", content: <News person={person} newsArticles={newsArticles} />});
     }
     if (["ACTOR", "COMEDIAN"].includes(person.occupation.id)) {
