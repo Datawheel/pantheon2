@@ -13,30 +13,31 @@ class News extends Component {
 
   render() {
     const {person, newsArticles} = this.props;
-    // console.log("newsArticles[0].results.articles!", newsArticles[0].results.articles, newsArticles[0].results.articles.length);
 
     return (
       <div className="news-container">
-        {newsArticles[0].results.articles.length
+        {newsArticles.length
           ? <div className="card-list">
-            {newsArticles[0].results.articles.map(article =>
-              <a href={article.url} className="news-card" key={article.url} target="_blank" rel="noopener">
-                <div className="thumb" style={article.urlToImage ? {backgroundImage: `url('${article.urlToImage}')`} : {}}>
-                  {article.source
-                    ? <div className="src">{article.source.name}</div>
-                    : null}
-                </div>
-                <div className="info-group">
-                  <div className="title">{article.title}</div>
-                  <div className="description">{article.description}</div>
-                </div>
-                <div className="info-footer">
-                  {article.author
-                    ? <div className="author"><Icon icon="person" iconSize={12} /> {article.author}</div>
-                    : null}
-                  <div className="date"><Icon icon="calendar" iconSize={12} /> {new Date(article.publishedAt).toLocaleDateString("en-US", {weekday: "long", year: "numeric", month: "long", day: "numeric"})}</div>
-                </div>
-              </a>
+            {newsArticles.map(news =>
+              news.article
+                ? <a href={news.article.url} className="news-card" key={news.article.url} target="_blank" rel="noopener">
+                  <div className="thumb" style={{backgroundImage: news.article.urlToImage ? `url('${news.article.urlToImage}')` : "url('/images/not-found/news-article-no-image.jpg')"}}>
+                    {news.article.source
+                      ? <div className="src">{news.article.source.name}</div>
+                      : null}
+                  </div>
+                  <div className="info-group">
+                    <div className="title">{news.article.title}</div>
+                    <div className="description">{news.article.description}</div>
+                  </div>
+                  <div className="info-footer">
+                    {news.article.author
+                      ? <div className="author"><Icon icon="person" iconSize={12} /> {news.article.author}</div>
+                      : null}
+                    <div className="date"><Icon icon="calendar" iconSize={12} /> {new Date(news.article.publishedAt).toLocaleDateString("en-US", {weekday: "long", year: "numeric", month: "long", day: "numeric"})}</div>
+                  </div>
+                </a>
+                : null
             )}
           </div>
           : null}
