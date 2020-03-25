@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import axios from "axios";
 import moment from "moment";
-import "pages/profile/person/Movies.css";
+import "pages/profile/person/Works.css";
 
 class Movies extends Component {
 
@@ -57,7 +57,7 @@ class Movies extends Component {
         {data.length
           ? <div className="card-list">
             {data.map(movie =>
-              <div href="#" className="movie-card" key={movie.id}>
+              <div href="#" className="work-card" key={movie.id}>
                 <div className="thumb" style={movie.poster_path ? {backgroundImage: `url('https://image.tmdb.org/t/p/original${movie.poster_path}')`} : {}}>
                 </div>
                 <div className="info-group">
