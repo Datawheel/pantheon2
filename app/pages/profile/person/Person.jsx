@@ -12,6 +12,7 @@ import Footer from "pages/profile/person/Footer";
 import MemMetrics from "pages/profile/person/MemMetrics";
 import News from "pages/profile/person/News";
 import Movies from "pages/profile/person/Movies";
+import Books from "pages/profile/person/Books";
 import OccupationRanking from "pages/profile/person/OccupationRanking";
 import YearRanking from "pages/profile/person/YearRanking";
 import PageviewsByLang from "pages/profile/person/PageviewsByLang";
@@ -36,14 +37,6 @@ class Person extends Component {
     const {id: slug} = this.props.params;
     const {person} = this.props.data;
     if (person !== undefined) {
-      // fetch books by author
-      if (person.occupation.id === "WRITER") {
-        axios.get(`/api/books?id=${person.id}`)
-          .then(response => {
-            if (response.status === 200) console.log("Fetch books successful.");
-          })
-          .catch(error => console.log("Fetch books error:", error));
-      }
       // generate screenshot on page load
       const screenshotUrl = `/api/screenshot/person/${slug}/`;
       axios.get(screenshotUrl)
@@ -102,6 +95,9 @@ class Person extends Component {
     }
     if (["FILM DIRECTOR"].includes(person.occupation.id)) {
       sections.push({title: "Filmography", slug: "movies", content: <Movies person={person} />});
+    }
+    if (person.occupation.id === "WRITER") {
+      sections.push({title: "Notable Works", slug: "books", content: <Books person={person} />});
     }
     sections.push({title: `Page views of ${plural(person.name)} by language`, slug: "page-views-by-lang", content: <PageviewsByLang person={person} />});
     sections.push({title: `Among ${plural(person.occupation.occupation)}`, slug: "occupation_peers", content: <OccupationRanking person={person} ranking={occupationRanks} />});
