@@ -125,7 +125,9 @@ export const shapeConfig = attrs => ({
   }
 });
 
-export const toTitleCase = myStr => myStr.replace(
-  /\w\S*/g,
-  txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-);
+export const toTitleCase = myStr => typeof myStr === "string"
+  ? myStr.replace(
+    /\w\S*/g,
+    txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  )
+  : myStr;
