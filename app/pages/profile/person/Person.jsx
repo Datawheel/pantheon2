@@ -50,8 +50,8 @@ class Person extends Component {
 
   render() {
     const {person, occupationRanks, birthYearRanks, deathYearRanks, birthCountryRanks,
-      wikiExtract, wikiPageViews, wikiSummary, wikiPageViewsPast30Days, wikiRelated, newsArticles} = this.props.data;
-    const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
+      wikiExtract, wikiPageViews, wikiSummary, wikiRelated, newsArticles} = this.props.data;
+    // const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
 
     if (person === undefined) {
       return <NotFound />;
@@ -85,7 +85,7 @@ class Person extends Component {
     //   }, []);
 
     const sections = [
-      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} wikiPageViewsPast30Days={wikiPageViewsPast30Days} />}
+      {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} />}
     ];
     if (newsArticles.length) {
       sections.push({title: "In the news", slug: "news_articles", content: <News person={person} newsArticles={newsArticles} />});
@@ -143,7 +143,7 @@ class Person extends Component {
           title={`${person.name} Biography`}
           meta={pageHeaderMetaTags}
         />
-        <Header person={person} wikiPageViews={wikiPageViews} isTrending={isTrending} />
+        <Header person={person} wikiPageViews={wikiPageViews} />
         <div className="about-section">
           <ProfileNav sections={sections} />
           <Intro
@@ -182,9 +182,9 @@ const birthCountryRanksURL = "/person_ranks?bplace_country=eq.<personRanks.bplac
 const wikiURL = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=<person.id>&format=json&exlimit=1&origin=*";
 const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/<person.wikiSlug>/monthly/20110101/${year}${month}01`;
 const wikiSummaryURL = "https://en.wikipedia.org/api/rest_v1/page/summary/<person.wikiSlug>";
-const wikiTrendingURL = "https://pantheon.world/api/wikiTrendDetails?pid=<person.id>";
 const wikiRelatedURL = "https://pantheon.world/api/wikiRelated?slug=<person.wikiSlug>";
 const newsArticlesURL = "https://pantheon.world/api/news?pid=<person.id>";
+// const wikiTrendingURL = "https://pantheon.world/api/wikiTrendDetails?pid=<person.id>";
 
 Person.preneed = [
   fetchData("personRanks", personRanksURL, res => {
@@ -229,7 +229,7 @@ Person.need = [
   fetchData("wikiExtract", wikiURL),
   fetchData("wikiPageViews", wikiPageViewsURL),
   fetchData("wikiSummary", wikiSummaryURL),
-  fetchData("wikiPageViewsPast30Days", wikiTrendingURL),
+  // fetchData("wikiPageViewsPast30Days", wikiTrendingURL),
   fetchData("wikiRelated", wikiRelatedURL),
   fetchData("newsArticles", newsArticlesURL)
 // //   fetchCreationdates
