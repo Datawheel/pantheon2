@@ -40,11 +40,16 @@ class MemMetrics extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {vid: null};
+    this.state = {vid: null, wikiPageViewsPast30Days: []};
   }
 
   componentDidMount() {
-    // const {env, person} = this.props;
+    const {person} = this.props;
+    const wikiTrendingURL = `https://pantheon.world/api/wikiTrendDetails?pid=${person.id}`;
+    axios.get(wikiTrendingURL)
+      .then(res => {
+        this.setState({wikiPageViewsPast30Days: res.data});
+      });
     // Note: this key is restricted to Pantheon domains, if you want to use this in your
     // codebase, please generate a key: https://developers.google.com/youtube/v3/docs/
     // const apiKey = env.YOUTUBE_API_KEY;
@@ -56,12 +61,12 @@ class MemMetrics extends Component {
   }
 
   render() {
-    const {pageViews, person, wikiPageViewsPast30Days} = this.props;
+    const {pageViews, person} = this.props;
+    const {wikiPageViewsPast30Days} = this.state;
     const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
     const domainColor = COLORS_DOMAIN[person.occupation.domain.toLowerCase().replace("& ", "").replace(/ /g, "-")];
     // console.log(person, COLORS_DOMAIN, person.occupation.domain.toLowerCase().replace("& ", "").replace(/ /g, "-"));
     const trendData = wikiPageViewsPast30Days.map((d, i) => ({...d, index: i, color: domainColor}));
-    const {vid} = this.state;
     const totalPageviews = pageViews && pageViews.items ? pageViews.items
       .filter(pv => pv.views)
       .map(pv => pv.views)
