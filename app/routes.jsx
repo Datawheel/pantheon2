@@ -43,6 +43,7 @@ import Faq from "pages/data/Faq";
 import Apps from "pages/apps/Apps";
 import YearbookIndex from "pages/apps/yearbook/Index";
 import Yearbook from "pages/apps/yearbook/Yearbook";
+import Trivia from "pages/apps/trivia/Trivia";
 
 // custom 404 page
 import NotFound from "components/NotFound";
@@ -150,6 +151,7 @@ export default function RouteCreate() {
         <Route path="yearbook" component={YearbookIndex}>
           <Route path=":year" component={Yearbook} />
         </Route>
+        <Route path="trivia" component={Trivia} />
       </Route>
 
       <Route path="*" component={NotFound} status={404} />
