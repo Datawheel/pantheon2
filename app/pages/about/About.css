@@ -2,8 +2,8 @@
 /* @import "components/common/input"; */
 
 .about-page,
-.yearbook-page,
-.data-page {
+.data-page,
+.yearbook-page {
   @mixin max-container-width;
   display: flex;
   flex-direction: row;
