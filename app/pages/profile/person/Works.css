@@ -45,6 +45,7 @@
   flex: 1;
   & .title {
     font-size: 20px;
+    font-weight: normal;
     line-height: 24px;
     margin: 0;
     max-height: 24px;
@@ -67,6 +68,7 @@
   }
   & .subtitle {
     font-size: 14px;
+    font-weight: normal;
     margin: 0 0 6px 0;
   }
   & .description {
@@ -94,6 +96,7 @@
   & .info-group-footer {
     display: flex;
     font-size: 11px;
+    font-weight: normal;
     justify-content: space-between;
     margin: 10px 0 0 0;
   }
