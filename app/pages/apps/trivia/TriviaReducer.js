@@ -42,7 +42,8 @@ function TriviaReducer(state, action) {
         currentQuestion: 0,
         currentAnswer: "",
         showResults: false,
-        error: ""
+        error: "",
+        questions: action.questions
       };
     default:
       return state;

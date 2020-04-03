@@ -32,78 +32,125 @@ module.exports = function(app) {
       console.warn(`No books in Open Library for ${person.name}`);
       return res.json([]);
     }
-    // const todaysDate = new Date();
-    const openLibBooks = openLibJson.docs
-      .filter(book => book.isbn || book.oclc)
-      .slice(0, 6)
-      .map(book => ({
-        title: book.title || book.title_suggest,
-        cover: `http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`,
-        isbn: book.isbn ? book.isbn.slice(0, 5) : null,
-        oclc: book.oclc ? book.oclc.slice(0, 5) : null,
-        gid: book.id_google ? book.id_google.slice(0, 5) : null,
-        editions: book.edition_count,
-        first_published: book.first_publish_year,
-        last_fetch: new Date().toISOString().substring(0, 10),
+    // keep only top 6 by edition count
+    const topBooks = openLibJson.docs.filter(b => b.key).sort((a, b) => b.edition_count - a.edition_count).slice(0, 6);
+    const openLibWorksReqs = topBooks.map(b => axios.get(`https://openlibrary.org${b.key}`, {headers: {Accept: "application/json"}}));
+    const detailedWorksData = await axios.all(openLibWorksReqs).then(axios.spread((...responses) =>
+      responses.map(r => r.data)
+      // use/access the results
+    )).catch(errors => {
+      console.log("ERRORS!", errors);
+    });
+    // return res.json(detailedWorksData);
+    const cleanedBooksData = detailedWorksData.map(book => {
+      const bookData = topBooks.find(b => b.key === book.key);
+      return {
         pid: id,
-        slug: person.slug
-      }));
-    // return res.json(openLibBooks);
+        slug: person.slug,
+        title: book.title,
+        cover: book.covers && book.covers.length ? `http://covers.openlibrary.org/b/id/${book.covers[0]}-L.jpg` : null,
+        isbn: bookData.isbn && bookData.isbn.length ? bookData.isbn.slice(0, 10) : null,
+        oclc: bookData.oclc && bookData.oclc.length ? bookData.oclc.slice(0, 10) : null,
+        editions: bookData.edition_count || null,
+        first_published: bookData.first_publish_year || null,
+        categories: book.subjects && book.subjects.length ? book.subjects.slice(0, 10) : null,
+        description: book.description ? book.description.value || book.description : null,
+        gid: bookData.id_google && bookData.id_google.length ? bookData.id_google.slice(0, 10) : null,
+        id: book.key,
+        links: book.links && book.links.length ? book.links.map(l => l.url) : null
+      };
+    });
 
-    let books = [];
-    for (let i = 0; i < openLibBooks.length; i++) {
-      const book = openLibBooks[i];
-      let gbookResult = {};
+    const bookPosts = cleanedBooksData.map(book =>
+      axios.post("https://api.pantheon.world/book?columns=pid,slug,title,cover,isbn,oclc,editions,first_published,categories,description,gid,key",
+        book,
+        {headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
+          "Prefer": "resolution=merge-duplicates"
+        }}
+      ).catch(err => {
+        console.log(`[Books API] unable to post book by ${person.name} to db.`);
+        console.log(err);
+        return {error: err};
+      })
+    );
 
-      const gBooksApiUrls = book.gid
-        ? book.gid.slice(0, 5).map(gid => `https://www.googleapis.com/books/v1/volumes/${gid}`)
-        : book.oclc
-          ? book.oclc.slice(0, 5).map(oclc => `https://www.googleapis.com/books/v1/volumes?q=oclc:${oclc}`)
-          : book.isbn.slice(0, 5).map(isbn => `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-      // throttle API queries to 20 at a time
-      const throttle = createThrottle(1);
-      let thisGBookResults = await Promise.all(gBooksApiUrls.map(url => throttle(async() => {
-        const res = await axios.get(url).catch(() => ({data: {items: []}}));
-        // return res.data && res.data.items && res.data.items.length ? res.data.items[0] : null;
-        if (res.data && res.data.items && res.data.items.length) {
-          return res.data.items[0];
-        }
-        else if (res.data && !res.data.items) {
-          return res.data;
-        }
-        return null;
-      })));
-      thisGBookResults = thisGBookResults.filter(Boolean).filter(b => b.volumeInfo && b.volumeInfo.language ? b.volumeInfo.language === "en" : true);
-
-      if (thisGBookResults.length) {
-        gbookResult = thisGBookResults[0];
-      }
-
-      books.push({
-        ...book,
-        gbooks_api_url: gbookResult.selfLink || null,
-        description: gbookResult.volumeInfo ? gbookResult.volumeInfo.description || null : null,
-        page_count: gbookResult.volumeInfo ? gbookResult.volumeInfo.pageCount || null : null,
-        categories: gbookResult.volumeInfo ? gbookResult.volumeInfo.categories || null : null,
-        average_rating: gbookResult.volumeInfo ? gbookResult.volumeInfo.averageRating || null : null,
-        rating_count: gbookResult.volumeInfo ? gbookResult.volumeInfo.ratingsCount || null : null,
-        snippet: gbookResult.searchInfo ? gbookResult.searchInfo.textSnippet || null : null
-      });
-    }
-    books = books.filter(Boolean);
-
-    // UPSERT via "Prefer: resolution=merge-duplicates" header
-    const bookPosts = books.map(book => axios.post("https://api.pantheon.world/book", book, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
-        "Prefer": "resolution=merge-duplicates"
-      }
-    }).catch(err => {
-      console.log(`[Books API] unable to post book by ${person.name} to db.`);
-      return {error: err};
-    }));
     await Promise.all(bookPosts);
-    return res.json(books);
+    return res.json(cleanedBooksData);
+
+    // const todaysDate = new Date();
+    // const openLibBooks = openLibJson.docs
+    //   .filter(book => book.isbn || book.oclc)
+    //   .slice(0, 6)
+    //   .map(book => ({
+    //     title: book.title || book.title_suggest,
+    //     cover: `http://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`,
+    //     isbn: book.isbn ? book.isbn.slice(0, 5) : null,
+    //     oclc: book.oclc ? book.oclc.slice(0, 5) : null,
+    //     gid: book.id_google ? book.id_google.slice(0, 5) : null,
+    //     editions: book.edition_count,
+    //     first_published: book.first_publish_year,
+    //     last_fetch: new Date().toISOString().substring(0, 10),
+    //     pid: id,
+    //     slug: person.slug
+    //   }));
+    // // return res.json(openLibBooks);
+
+    // let books = [];
+    // for (let i = 0; i < openLibBooks.length; i++) {
+    //   const book = openLibBooks[i];
+    //   let gbookResult = {};
+
+    //   const gBooksApiUrls = book.gid
+    //     ? book.gid.slice(0, 5).map(gid => `https://www.googleapis.com/books/v1/volumes/${gid}`)
+    //     : book.oclc
+    //       ? book.oclc.slice(0, 5).map(oclc => `https://www.googleapis.com/books/v1/volumes?q=oclc:${oclc}`)
+    //       : book.isbn.slice(0, 5).map(isbn => `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+    //   // throttle API queries to 20 at a time
+    //   const throttle = createThrottle(1);
+    //   let thisGBookResults = await Promise.all(gBooksApiUrls.map(url => throttle(async() => {
+    //     const res = await axios.get(url).catch(() => ({data: {items: []}}));
+    //     // return res.data && res.data.items && res.data.items.length ? res.data.items[0] : null;
+    //     if (res.data && res.data.items && res.data.items.length) {
+    //       return res.data.items[0];
+    //     }
+    //     else if (res.data && !res.data.items) {
+    //       return res.data;
+    //     }
+    //     return null;
+    //   })));
+    //   thisGBookResults = thisGBookResults.filter(Boolean).filter(b => b.volumeInfo && b.volumeInfo.language ? b.volumeInfo.language === "en" : true);
+
+    //   if (thisGBookResults.length) {
+    //     gbookResult = thisGBookResults[0];
+    //   }
+
+    //   books.push({
+    //     ...book,
+    //     gbooks_api_url: gbookResult.selfLink || null,
+    //     description: gbookResult.volumeInfo ? gbookResult.volumeInfo.description || null : null,
+    //     page_count: gbookResult.volumeInfo ? gbookResult.volumeInfo.pageCount || null : null,
+    //     categories: gbookResult.volumeInfo ? gbookResult.volumeInfo.categories || null : null,
+    //     average_rating: gbookResult.volumeInfo ? gbookResult.volumeInfo.averageRating || null : null,
+    //     rating_count: gbookResult.volumeInfo ? gbookResult.volumeInfo.ratingsCount || null : null,
+    //     snippet: gbookResult.searchInfo ? gbookResult.searchInfo.textSnippet || null : null
+    //   });
+    // }
+    // books = books.filter(Boolean);
+
+    // // UPSERT via "Prefer: resolution=merge-duplicates" header
+    // const bookPosts = books.map(book => axios.post("https://api.pantheon.world/book", book, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
+    //     "Prefer": "resolution=merge-duplicates"
+    //   }
+    // }).catch(err => {
+    //   console.log(`[Books API] unable to post book by ${person.name} to db.`);
+    //   return {error: err};
+    // }));
+    // await Promise.all(bookPosts);
+    // return res.json(books);
   });
 };
