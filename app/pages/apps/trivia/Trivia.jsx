@@ -1,5 +1,8 @@
 import React, {useReducer} from "react";
+import axios from "axios";
+import {connect} from "react-redux";
 import {hot} from "react-hot-loader/root";
+import {fetchData} from "@datawheel/canon-core";
 import Helmet from "react-helmet";
 import Progress from "pages/apps/trivia/Progress";
 import Question from "pages/apps/trivia/Question";
@@ -19,39 +22,39 @@ import {
 import "pages/about/About.css";
 import "pages/apps/trivia/Trivia.css";
 
-const Trivia = () => {
-  const questions = [
-    {
-      id: 1,
-      question: "What year was Tom Cruise born?",
-      answer_a: "1962",
-      answer_b: "1955",
-      answer_c: "1971",
-      answer_d: "1965",
-      correct_answer: "a"
-    },
-    {
-      id: 2,
-      question: "Where was Boris Johnson born?",
-      answer_a: "London, United Kingdom",
-      answer_b: "Leeds, United Kingdom",
-      answer_c: "Belfast, United Kingdom",
-      answer_d: "New York City, USA",
-      correct_answer: "d"
-    },
-    {
-      id: 3,
-      question: "Which of the following Musicians died in 1981?",
-      answer_a: "John Lennon",
-      answer_b: "Bob Marley",
-      answer_c: "Muddy Waters",
-      answer_d: "Keith Moon",
-      correct_answer: "b"
-    }
-  ];
+const Trivia = props => {
+  // const questions = [
+  //   {
+  //     id: 1,
+  //     question: "What year was Tom Cruise born?",
+  //     answer_a: "1962",
+  //     answer_b: "1955",
+  //     answer_c: "1971",
+  //     answer_d: "1965",
+  //     correct_answer: "a"
+  //   },
+  //   {
+  //     id: 2,
+  //     question: "Where was Boris Johnson born?",
+  //     answer_a: "London, United Kingdom",
+  //     answer_b: "Leeds, United Kingdom",
+  //     answer_c: "Belfast, United Kingdom",
+  //     answer_d: "New York City, USA",
+  //     correct_answer: "d"
+  //   },
+  //   {
+  //     id: 3,
+  //     question: "Which of the following Musicians died in 1981?",
+  //     answer_a: "John Lennon",
+  //     answer_b: "Bob Marley",
+  //     answer_c: "Muddy Waters",
+  //     answer_d: "Keith Moon",
+  //     correct_answer: "b"
+  //   }
+  // ];
 
   const initialState = {
-    questions,
+    questions: props.data.questions,
     currentQuestion: 0,
     currentAnswer: "",
     answers: [],
@@ -60,7 +63,7 @@ const Trivia = () => {
   };
 
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
-  const {currentQuestion, currentAnswer, answers, showResults, error} = state;
+  const {questions, currentQuestion, currentAnswer, answers, showResults, error} = state;
 
   const question = questions[currentQuestion];
 
@@ -93,7 +96,11 @@ const Trivia = () => {
   });
 
   const restart = () => {
-    dispatch({type: RESET_QUIZ});
+    axios.get("/api/trivia/getQuestions")
+      .then(resp => {
+        console.log("resp.data!!!", resp.data);
+        dispatch({type: RESET_QUIZ, questions: resp.data});
+      });
   };
 
   const next = () => {
@@ -148,4 +155,8 @@ const Trivia = () => {
   </TriviaContext.Provider>;
 };
 
-export default hot(Trivia);
+Trivia.need = [
+  fetchData("questions", "http://localhost:3300/api/trivia/getQuestions")
+];
+
+export default connect(state => ({data: state.data}), {})(hot(Trivia));
