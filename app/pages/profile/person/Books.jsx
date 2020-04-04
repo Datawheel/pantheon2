@@ -43,7 +43,9 @@ class Books extends Component {
                 <div className="info-group">
                   <div className="title" title={book.title}>{book.title}</div>
                   {book.categories
-                    ? <div className="subtitle">{book.categories}</div>
+                    ? <div className="subtitle">{book.categories.slice(0, 3).map((category, index) =>
+                      <span key={`category_${index}`}>{(index ? ", " : "") + category}</span>
+                    )}</div>
                     : null}
                   {book.description
                     ? <div className="description">{book.description}</div>
