@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {strip, trim} from "d3plus-text";
+import {NonIdealState} from "@blueprintjs/core";
 import api from "apiConfig";
 import "components/Search.css";
 
@@ -8,14 +9,17 @@ class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      results: []
+      results: null,
+      query: null
     };
   }
 
   onChange(e) {
     const userQuery = e.target.value;
-    if (userQuery.length < 3) return;
-    if (userQuery.length === 0) this.setState({professionResults: [], placeResults: [], personResults: []});
+    if (userQuery.length < 3) {
+      this.setState({results: null});
+      return;
+    }
 
     let userQueryCleaned = trim(userQuery).split(" ");
     userQueryCleaned = userQueryCleaned.map(strip);
@@ -26,8 +30,11 @@ class Search extends Component {
     api.get(`/search?document=fts.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
       .then(queryResults => {
         const results = queryResults.data;
-        if (results) {
-          this.setState({results});
+        if (results.length) {
+          this.setState({results, query: userQuery});
+        }
+        else {
+          this.setState({results: [], query: userQuery});
         }
       });
   }
@@ -77,6 +84,7 @@ class Search extends Component {
 
   render() {
     const {activateSearch} = this.props;
+    const {query, results} = this.state;
 
     return (
       <div className="search">
@@ -97,17 +105,27 @@ class Search extends Component {
               <input type="text" ref={el => this._searchInput = el} onChange={this.onChange.bind(this)} />
             </React.Fragment>
           </label>
-          <ul className="results-list">
-            {this.state.results.map(result =>
-              <li key={`person_${result.slug}`} className={`result-${result.profile_type}`}>
-                <a href={`/profile/${result.profile_type}/${result.slug}`}>{result.name}</a>
-                <sub>
-                  {result.primary_meta ? <span>{result.primary_meta}</span> : null}
-                  {result.secondary_meta ? <span>{result.secondary_meta}</span> : null}
-                </sub>
-              </li>
-            )}
-          </ul>
+          {results
+            ? results.length
+              ? <ul className="results-list">
+                {results.map(result =>
+                  <li key={`person_${result.slug}`} className={`result-${result.profile_type}`}>
+                    <a href={`/profile/${result.profile_type}/${result.slug}`}>{result.name}</a>
+                    <sub>
+                      {result.primary_meta ? <span>{result.primary_meta}</span> : null}
+                      {result.secondary_meta ? <span>{result.secondary_meta}</span> : null}
+                    </sub>
+                  </li>
+                )}
+              </ul>
+              : <NonIdealState
+                icon="search"
+                title="No results found"
+                description={<div>Unable to find results for &ldquo;<code>{query}</code>&rdquo;.</div>}
+                action={undefined}
+              />
+            : null
+          }
         </div>
       </div>
     );
