@@ -34,6 +34,7 @@ module.exports = function(app) {
     }
     // keep only top 6 by edition count
     const topBooks = openLibJson.docs.filter(b => b.key).sort((a, b) => b.edition_count - a.edition_count).slice(0, 6);
+    // return res.json(topBooks);
     const openLibWorksReqs = topBooks.map(b => axios.get(`https://openlibrary.org${b.key}`, {headers: {Accept: "application/json"}}));
     const detailedWorksData = await axios.all(openLibWorksReqs).then(axios.spread((...responses) =>
       responses.map(r => r.data)
