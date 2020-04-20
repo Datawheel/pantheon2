@@ -20,7 +20,7 @@ class News extends Component {
           ? <div className="card-list">
             {newsArticles.map(news =>
               news.article
-                ? <a href={news.article.url} className="news-card" key={news.article.url} target="_blank" rel="noopener">
+                ? <a href={news.article.url} className="news-card" key={news.article.url} target="_blank" rel="noopener noreferrer">
                   <div className="thumb" style={{backgroundImage: news.article.urlToImage ? `url('${news.article.urlToImage}')` : "url('/images/not-found/news-article-no-image.jpg')"}}>
                     {news.article.source
                       ? <div className="src">{news.article.source.name}</div>

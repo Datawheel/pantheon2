@@ -36,6 +36,6 @@
     "puppeteer": "^2.1.1",
     "react-scroll": "^1.7.14",
     "react-table": "^6.10.3",
-    "twit": "^2.2.11"
+    "twitter-lite": "^0.9.4"
   }
 }
