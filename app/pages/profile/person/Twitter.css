@@ -1,0 +1,130 @@
+@import "components/common/mixins";
+
+.twitter-section {
+
+  & .tw-banner {
+    background-size: cover;
+    height: 200px;
+  }
+
+  & .tw-userinfo {
+    display: flex;
+    align-items: flex-end;
+    margin: -10px 0 0 10px;
+
+    & img {
+      border: 5px solid #ffffff;
+      border-radius: 5px;
+      box-shadow: 0px 0px 5px 0px rgba(51,3,0,0.2);
+      margin: -30px 0 0 0;
+    }
+    & h3 {
+      font-size: 20px;
+      font-weight: normal;
+      line-height: 16px;
+      margin:  0 0 10px 10px;
+      @media (max-width: 450px) {
+        margin:  0 0 0 5px;
+      }
+      & a {
+        color: var(--colorStone);
+        font-size: 14px;
+        font-weight: normal;
+        text-decoration: none;
+        border: none;
+      }
+    }
+  }
+
+  & .tw-userstats {
+    margin:  10px 0 0 10px;
+  }
+
+}
+
+.tw-feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.inner-body {
+  display: flex;
+  flex-direction: row;
+}
+
+.tweet-body {
+  display: flex;
+  /* flex-direction: column; */
+  /* width: 566px; */
+  /* height: 170px; */
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  /* background-color: #15202a; */
+  /* margin-left: 25rem; */
+  padding: 10px 0 10px 0;
+  margin: 10px 0 0 0;
+}
+
+.tweet-body:hover {
+  /* background-color: #11171d; */
+  border: #ffffff;
+}
+
+.picture {
+  flex: 0 0 48px;
+  border: 2px solid #ffffff;
+  box-shadow: 0px 0px 5px 0px rgba(51,3,0,0.2);
+  margin-left: 10px;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+
+.name {
+  display: flex;
+  flex-direction: row;
+  margin-left: 15px;
+  /* min-width: 85px; */
+  /* height: 15px; */
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.handle {
+  color: var(--colorTan);
+  margin-left: 10px;
+  /* min-width: 128px; */
+  /* height: 14px; */
+  font-size: 12px;
+}
+
+.time {
+  margin-left: 10px;
+  /* min-width: 128px; */
+  /* height: 14px; */
+  font-size: 12px;
+}
+
+.tweet {
+  margin-left: 15px;
+  margin-top: 7px;
+
+  font-size: 14px;
+  /* color: #ffffff; */
+}
+
+.tw-link {
+  background-color: var(--colorMatza);
+  color: var(--colorTan);
+  display: block;
+  font-weight: normal;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  margin: 20px 0 0 0;
+  padding: 5px;
+}

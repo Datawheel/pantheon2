@@ -12,6 +12,7 @@ import Footer from "pages/profile/person/Footer";
 import MemMetrics from "pages/profile/person/MemMetrics";
 import News from "pages/profile/person/News";
 import Movies from "pages/profile/person/Movies";
+import Twitter from "pages/profile/person/Twitter";
 import Books from "pages/profile/person/Books";
 import OccupationRanking from "pages/profile/person/OccupationRanking";
 import YearRanking from "pages/profile/person/YearRanking";
@@ -83,12 +84,14 @@ class Person extends Component {
     //     });
     //     return arr;
     //   }, []);
-
     const sections = [
       {title: "Memorability Metrics", slug: "metrics", content: <MemMetrics pageViews={wikiPageViews} person={person} />}
     ];
     if (newsArticles.length) {
       sections.push({title: "In the news", slug: "news_articles", content: <News person={person} newsArticles={newsArticles} />});
+    }
+    if (person.twitter) {
+      sections.push({title: "Twitter Activity", slug: "twitter", content: <Twitter person={person} />});
     }
     if (["ACTOR", "COMEDIAN"].includes(person.occupation.id)) {
       sections.push({title: "Television and Movie Roles", slug: "movies", content: <Movies person={person} />});

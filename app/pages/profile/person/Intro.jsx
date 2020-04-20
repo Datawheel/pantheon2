@@ -12,8 +12,8 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
   let age = 0;
   if (person.birthyear) {
     age = person.deathyear !== null
-      ? person.deathyear.id - person.birthyear.id
-      : new Date().getFullYear() - person.birthyear.id;
+      ? person.deathyear - person.birthyear
+      : new Date().getFullYear() - person.birthyear;
   }
 
   let fromSentence, wikiSentence, wikiSlug;
@@ -24,12 +24,12 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
         sergej_barbarez (w/o country)
     */
     const birthplace = person.bplace_name ? `${person.bplace_name}, ` : "";
-    const birthcountry = person.birthcountry ? <span> in {birthplace}<a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a></span> : ` in ${birthplace.replace(", ", "")}`;
-    fromSentence = person.birthyear ? <span>born in {FORMATTERS.year(person.birthyear.name)}{birthcountry}. </span> : null;
+    const birthcountry = person.bplace_country ? <span> in {birthplace}<a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></span> : ` in ${birthplace.replace(", ", "")}`;
+    fromSentence = person.birthyear ? <span>born in {FORMATTERS.year(person.birthyear)}{birthcountry}. </span> : null;
   }
   else if (person.geacron_name !== person.birthcountry.name) {
     fromSentence = person.birthyear
-      ? <span>born in {FORMATTERS.year(person.birthyear.name)} in {person.bplace_name}, {person.geacron_name} which is now part of modern day <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>. </span>
+      ? <span>born in {FORMATTERS.year(person.birthyear)} in {person.bplace_name}, {person.geacron_name} which is now part of modern day <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>. </span>
       : null;
   }
   else {
@@ -60,7 +60,7 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
   if (wikiExtract) {
     if (wikiExtract.query) {
       if (wikiExtract.query.pages) {
-        if (wikiExtract.query.pages[`${person.id}`]) {
+        if (wikiExtract.query.pages[`${person.id}`] && wikiExtract.query.pages[`${person.id}`].extract) {
           wikiSentence = wikiExtract.query.pages[`${person.id}`].extract;
           // take up until last full sentence
           wikiSentence = wikiSentence.slice(0, wikiSentence.lastIndexOf(". "));
