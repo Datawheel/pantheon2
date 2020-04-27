@@ -30,23 +30,43 @@ module.exports = function(app) {
 
     const timelineResp = await app.get("statuses/user_timeline", {
       screen_name: twScreenName,
-      count: 3
+      count: 5,
+      tweet_mode: "extended"
     }).catch(errors => errors);
     if (timelineResp.errors) {
       console.log("[tw timeline api error] ", timelineResp.errors);
       return res.json([]);
     }
+    // return res.json(timelineResp);
 
-    const retTimeline = timelineResp.map(d => ({
-      created_at: d.created_at,
-      id: d.id,
-      text: d.text,
-      user: {
-        name: d.user.name,
-        screen_name: d.user.screen_name,
-        profile_image_url_https: d.user.profile_image_url_https
+    const retTimeline = timelineResp.map(d => {
+      let quote = false;
+      if (d.is_quote_status) {
+        quote = {
+          retweeted: d.quoted_status.retweeted_status ? true : false,
+          created_at: d.quoted_status.retweeted_status && d.quoted_status.retweeted_status.created_at ? d.quoted_status.retweeted_status.created_at : d.quoted_status.created_at,
+          id: d.quoted_status.retweeted_status && d.quoted_status.retweeted_status.id ? d.quoted_status.retweeted_status.id : d.quoted_status.id,
+          text: d.quoted_status.retweeted_status && d.quoted_status.retweeted_status.full_text ? d.quoted_status.retweeted_status.full_text : d.quoted_status.full_text,
+          user: {
+            name: d.quoted_status.retweeted_status && d.quoted_status.retweeted_status.user && d.quoted_status.retweeted_status.user.name ? d.quoted_status.retweeted_status.user.name : d.quoted_status.user.name,
+            screen_name: d.quoted_status.retweeted_status && d.quoted_status.retweeted_status.user && d.quoted_status.retweeted_status.user.screen_name ? d.quoted_status.retweeted_status.user.screen_name : d.quoted_status.user.screen_name,
+            profile_image_url_https: d.quoted_status.retweeted_status && d.quoted_status.retweeted_status.user && d.quoted_status.retweeted_status.user.profile_image_url_https ? d.retweeted_status.user.profile_image_url_https : d.quoted_status.user.profile_image_url_https
+          }
+        };
       }
-    }));
+      return {
+        retweeted: d.retweeted_status ? true : false,
+        created_at: d.retweeted_status && d.retweeted_status.created_at ? d.retweeted_status.created_at : d.created_at,
+        id: d.retweeted_status && d.retweeted_status.id ? d.retweeted_status.id : d.id,
+        text: d.retweeted_status && d.retweeted_status.full_text ? d.retweeted_status.full_text : d.full_text,
+        user: {
+          name: d.retweeted_status && d.retweeted_status.user && d.retweeted_status.user.name ? d.retweeted_status.user.name : d.user.name,
+          screen_name: d.retweeted_status && d.retweeted_status.user && d.retweeted_status.user.screen_name ? d.retweeted_status.user.screen_name : d.user.screen_name,
+          profile_image_url_https: d.retweeted_status && d.retweeted_status.user && d.retweeted_status.user.profile_image_url_https ? d.retweeted_status.user.profile_image_url_https : d.user.profile_image_url_https
+        },
+        quote
+      };
+    });
 
     const userResp = await app.get("users/show", {
       screen_name: twScreenName
