@@ -59,22 +59,46 @@ class Twitter extends Component {
             </div>
             <div className="tw-feed">
               {timeline.map(d =>
-                <div key={d.id} className="tweet-body">
-                  <img src={d.user.profile_image_url_https} alt="Logo" className="picture" />
-                  <div className="body">
-                    <div className="inner-body">
-                      <div className="name">
-                        {d.user.name}
+                <div className="tweet-outer" key={d.id}>
+                  {d.retweeted ? <div className="retweeted"><Icon icon="refresh" iconSize={12} />&nbsp; Retweeted by {user.name}</div> : null}
+                  <div className="tweet-body">
+                    <img src={d.user.profile_image_url_https} alt="Logo" className="picture" />
+                    <div className="body">
+                      <div className="inner-body">
+                        <div className="name">
+                          {d.user.name}
+                        </div>
+                        <div className="handle">
+                          @{d.user.screen_name}
+                        </div>
+                        <div className="time">
+                          {this.renderTweetDate(d.created_at)}
+                        </div>
                       </div>
-                      <div className="handle">
-                        @{d.user.screen_name}
+                      <div className="tweet">
+                        {d.text}
                       </div>
-                      <div className="time">
-                        {this.renderTweetDate(d.created_at)}
-                      </div>
-                    </div>
-                    <div className="tweet">
-                      {d.text}
+                      {d.quote
+                        ? <div className="tweet-body">
+                          <img src={d.quote.user.profile_image_url_https} alt="Logo" className="picture" />
+                          <div className="body">
+                            <div className="inner-body">
+                              <div className="name">
+                                {d.quote.user.name}
+                              </div>
+                              <div className="handle">
+                              @{d.quote.user.screen_name}
+                              </div>
+                              <div className="time">
+                                {this.renderTweetDate(d.quote.created_at)}
+                              </div>
+                            </div>
+                            <div className="tweet">
+                              {d.quote.text}
+                            </div>
+                          </div>
+                        </div>
+                        : null}
                     </div>
                   </div>
                 </div>
