@@ -41,7 +41,8 @@ class PageviewsByLang extends Component {
     super(props);
     this.state = {
       loading: true,
-      data: []
+      timeSeriesData: [],
+      numLangs: 0
     };
   }
 
@@ -61,11 +62,13 @@ class PageviewsByLang extends Component {
               const thisMonth = yyyymmdd(todaysDate);
               const langReqs = langlinks.map(ll => axios.get(`https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/${ll.lang}.wikipedia/all-access/all-agents/${ll["*"]}/monthly/20150701/${thisMonth}`).catch(err => console.log("Page view data fetch error:", err)));
               let langsTs = [];
+              let numLangs = 0;
               axios.all(langReqs)
                 .then(langResults => {
                   langResults.forEach(lr => {
                     if (lr && lr.data) {
                       if (lr.data.items) {
+                        numLangs++;
                         const wikiLangCode = lr.data.items[0].project.split(".")[0];
                         const langFamily = langFamilies[wikiLangCode] || {family_code: "", family_name: "", lang_code3: "", language: "", language_local: "", primary_family_code: "", primary_family_name: ""};
                         const localUrl = langlinksLookup[wikiLangCode] || {url: ""};
@@ -77,7 +80,7 @@ class PageviewsByLang extends Component {
                       }
                     }
                   });
-                  this.setState({loading: false, data: langsTs});
+                  this.setState({loading: false, timeSeriesData: langsTs, numLangs});
                 });
             }
           }
@@ -87,14 +90,14 @@ class PageviewsByLang extends Component {
 
   genText = () => {
     const {person} = this.props;
-    const {data} = this.state;
+    const {timeSeriesData} = this.state;
 
     // get most recent month
-    const latestDate = D3Max(data, d => moment(d.date, "YYYY/MM/DD"));
+    const latestDate = D3Max(timeSeriesData, d => moment(d.date, "YYYY/MM/DD"));
 
     // get prev year, and 2 years ago for year bounds
-    const dataPastYear = data.filter(d => moment(d.date, "YYYY/MM/DD") > latestDate.clone().subtract(1, "year"));
-    const dataPrevPastYear = data.filter(d => moment(d.date, "YYYY/MM/DD") > latestDate.clone().subtract(2, "year") && moment(d.date, "YYYY/MM/DD") <= latestDate.clone().subtract(1, "year"));
+    const dataPastYear = timeSeriesData.filter(d => moment(d.date, "YYYY/MM/DD") > latestDate.clone().subtract(1, "year"));
+    const dataPrevPastYear = timeSeriesData.filter(d => moment(d.date, "YYYY/MM/DD") > latestDate.clone().subtract(2, "year") && moment(d.date, "YYYY/MM/DD") <= latestDate.clone().subtract(1, "year"));
 
     // group past year (and year previous) by wiki edition
     const dataPastYearAgg = nest()
@@ -152,30 +155,37 @@ class PageviewsByLang extends Component {
 
   render() {
     const {person} = this.props;
-    const {data} = this.state;
+    const {numLangs, timeSeriesData} = this.state;
+    // Whether or not we should show the labels on the lines
+    // depends on how many unique languages we have. If there are
+    // more than 30 the chart becomes too cluttered with the labels.
+    const lineLabels = numLangs <= 30;
 
     return (
       <div>
-        {data.length
+        {timeSeriesData.length
           ? this.genText()
           : null}
         <br />
-        {data.length
+        {timeSeriesData.length
           ? <LinePlot
             config={{
               height: 600,
-              data,
+              data: timeSeriesData,
               groupBy: ["primary_family_code", "project"],
               depth: 1,
               discrete: "x",
               shapeConfig: {
-                // fill: d => "red",
                 Line: {
                   // fill: "none",
                   stroke: d => langFamColors[d.primary_family_code],
-                  strokeWidth: 2
+                  strokeWidth: 2,
+                  labelConfig: {
+                    fontColor: d => langFamColors[d.primary_family_code]
+                  }
                 }
               },
+              label: d => d.language || d.project,
               legendConfig: {
                 label: d => Array.isArray(d.primary_family_name) ? d.primary_family_name.filter(Boolean).join(", ") : d.primary_family_name
               },
@@ -183,6 +193,7 @@ class PageviewsByLang extends Component {
                 title: d => Array.isArray(d.primary_family_name) ? d.primary_family_name.filter(Boolean).join(", ") : d.primary_family_name,
                 tbody: []
               },
+              lineLabels,
               time: "date",
               timeline: false,
               tooltipConfig: {
@@ -205,8 +216,8 @@ class PageviewsByLang extends Component {
                       <span>page views</span>
                     </li>
                     <li class="large">
-                      ${projectTxt}
-                      <span>${Array.isArray(d.language) ? d.language.join(", ") : d.language}</span>
+                      ${Array.isArray(d.language) ? d.language.join(", ") : d.language}
+                      <span>${projectTxt}</span>
                     </li>
                   </ul>`;
                 }
