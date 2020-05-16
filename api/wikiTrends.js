@@ -166,7 +166,6 @@ module.exports = function(app) {
       const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
       const topPageViewsResp = await axios.get(wikiPageViewsURL).catch(e => (console.log("Wiki Trending Error:", e), {data: []}));
       const topPageViewsJson = topPageViewsResp.data;
-
       // create API URLs from list of people
       if (!topPageViewsJson.items || !Array.isArray(topPageViewsJson.items)) {
         return res.json([]);
