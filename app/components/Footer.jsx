@@ -39,7 +39,9 @@ const Footer = () =>
       <li className="item">
         <Link to="/data/faq" className="item-link about-link">About</Link>
         <ul className="sub-items">
-          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdHKWwONdugZfwQvCvkSHakG-xeFh_HOZcvK3NqVOv19h0-jQ/viewform" className="item-link">Report a problem</a></li>
+          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdHKWwONdugZfwQvCvkSHakG-xeFh_HOZcvK3NqVOv19h0-jQ/viewform" target="_blank" rel="noopener noreferrer" className="item-link">Report Data Error</a></li>
+          <li><Link to="/about/privacy" className="item-link about-link">Privacy Policy</Link></li>
+          <li><Link to="/about/terms" className="item-link about-link">Terms of Service</Link></li>
         </ul>
       </li>
 
@@ -62,43 +64,28 @@ const Footer = () =>
 
     <div className="sites right">
       <ul className="items authors">
-        {/* <li>
-          <a href="http://macroconnections.media.mit.edu/">
-            <img src="/images/logos/logo_collective_learning.png" alt="Collective Learning website" />
-          </a>
-        </li>
         <li>
-          <a href="https://www.media.mit.edu/">
-            <img src="/images/logos/logo_media_lab.png" alt="MIT Media Lab" />
-          </a>
-        </li> */}
-        <li>
-          <a href="https://www.datawheel.us/">
+          <a href="https://www.datawheel.us/" target="_blank" rel="noopener noreferrer">
             <img src="/images/logos/logo_datawheel.png" alt="Datawheel" />
           </a>
         </li>
       </ul>
       <ul className="items share">
         <li>
-          <a href="https://creativecommons.org/licenses/by-sa/4.0/">
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">
             <img src="/images/logos/logo_creative_commons.png" alt="Creative Commons" />
           </a>
         </li>
         <li>
-          <a href="https://www.facebook.com/datawheel">
+          <a href="https://www.facebook.com/datawheel" target="_blank" rel="noopener noreferrer">
             <img src="/images/logos/logo_facebook.svg" alt="Facebook" />
           </a>
         </li>
         <li>
-          <a href="https://twitter.com/datawheel">
+          <a href="https://twitter.com/PantheonW" target="_blank" rel="noopener noreferrer">
             <img src="/images/logos/logo_twitter.svg" alt="Creative Commons" />
           </a>
         </li>
-        {/* <li>
-          <a href="mailto:pantheon@media.mit.edu">
-            <img src="/images/logos/logo_email.svg" alt="E-mail" />
-          </a>
-        </li> */}
       </ul>
     </div>
   </div>;

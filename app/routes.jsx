@@ -25,8 +25,10 @@ import Team from "pages/about/Team";
 import Publications from "pages/about/Publications";
 import DataSources from "pages/about/DataSources";
 import Contact from "pages/about/Contact";
+import PrivacyPolicy from "pages/about/PrivacyPolicy";
+import TermsOfService from "pages/about/TermsOfService";
 
-// // explore componenets
+// explore componenets
 import Explore from "pages/explore/Explore";
 import Viz from "pages/explore/viz/Viz";
 import VizEmbed from "pages/explore/viz/VizEmbed";
@@ -125,6 +127,8 @@ export default function RouteCreate() {
         <Route path="publications" component={Publications} />
         <Route path="data_sources" component={DataSources} />
         <Route path="contact" component={Contact} />
+        <Route path="privacy" component={PrivacyPolicy} />
+        <Route path="terms" component={TermsOfService} />
       </Route>
 
       <Route path="profile" component={Profile}>
