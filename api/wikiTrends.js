@@ -160,7 +160,7 @@ module.exports = function(app) {
     const todaysBiosFromDb = calcRankDeltas(todaysBiosFromDbResp.data, `${year}-${month}-${day}`, `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`);
 
     if (todaysBiosFromDb.length) {
-      return res.json(todaysBiosFromDb.slice(0, limit));
+      return res.json([...todaysBiosFromDb].sort((a, b) => a.rank_pantheon - b.rank_pantheon).slice(0, limit));
     }
     else {
       const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
