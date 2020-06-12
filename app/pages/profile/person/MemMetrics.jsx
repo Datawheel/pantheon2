@@ -44,7 +44,7 @@ class MemMetrics extends Component {
   }
 
   componentDidMount() {
-    const {person} = this.props;
+    const {env, person} = this.props;
     const wikiTrendingURL = `https://pantheon.world/api/wikiTrendDetails?pid=${person.id}`;
     axios.get(wikiTrendingURL)
       .then(res => {
@@ -52,17 +52,17 @@ class MemMetrics extends Component {
       });
     // Note: this key is restricted to Pantheon domains, if you want to use this in your
     // codebase, please generate a key: https://developers.google.com/youtube/v3/docs/
-    // const apiKey = env.YOUTUBE_API_KEY;
-    // axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=${apiKey}`)
-    //   .then(res => {
-    //     const vid = res.data.items[0];
-    //     this.setState({vid});
-    //   });
+    const apiKey = env.YOUTUBE_API_KEY;
+    axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=${apiKey}`)
+      .then(res => {
+        const vid = res.data.items[0];
+        this.setState({vid});
+      });
   }
 
   render() {
     const {pageViews, person} = this.props;
-    const {wikiPageViewsPast30Days} = this.state;
+    const {vid, wikiPageViewsPast30Days} = this.state;
     const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
     const domainColor = COLORS_DOMAIN[person.occupation.domain.toLowerCase().replace("& ", "").replace(/ /g, "-")];
     // console.log(person, COLORS_DOMAIN, person.occupation.domain.toLowerCase().replace("& ", "").replace(/ /g, "-"));
@@ -81,7 +81,7 @@ class MemMetrics extends Component {
 
     return (
       <div className="metrics-container">
-        {/* <div className="metric-vid">
+        <div className="metric-vid">
           {vid
             ? <iframe
               src={`https://www.youtube.com/embed/${vid.id.videoId}`}
@@ -93,7 +93,7 @@ class MemMetrics extends Component {
             />
             : <button className="press-play" disabled tabIndex="-1"><i /></button>
           }
-        </div> */}
+        </div>
         {isTrending
           ? <div className="metric-trending">
             <AreaPlot config={{

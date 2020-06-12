@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
 
   @media (max-width: 970px) {
     flex-direction: column;
@@ -16,9 +17,8 @@
 
 .metric-trending {
   display: inline-block;
-  width: 50%;
   position: relative;
-  flex: 0 0 auto;
+  flex: 1 0 40%;
   padding: 10px 25px 10px 0;
 
   @media (max-width: 750px) {
@@ -31,9 +31,8 @@
   background-color: var(--colorSand);
   display: inline-block;
   padding-top: 56%; /* set height */
-  width: 100%;
   position: relative;
-  flex: 0 0 auto;
+  flex: 1 0 40%;
 
   & > iframe {
     @add-mixin absolute-expand;
@@ -43,7 +42,6 @@
   @media (min-width: 971px) {
     margin-right: 40px;
     padding-top: 26.666%; /* set height */
-    width: calc(50% - 20px);
   }
 
   & .press-play {
@@ -86,13 +84,14 @@ iframe.yasiv-youtube {
 }
 
 .metrics-list {
+  columns: 5;
+  column-width: 12rem;
+  column-gap: 40px;
+  flex: 1 0 40%;
   list-style-type: none;
   margin: 0;
   padding: 0;
   width: 100%;
-  columns: 5;
-  column-width: 12rem;
-  column-gap: 40px;
 
   & .metric {
     break-inside: avoid;
