@@ -50,14 +50,14 @@ import Trivia from "pages/apps/trivia/Trivia";
 // custom 404 page
 import NotFound from "components/NotFound";
 
-/*
+/**
  * @param {Redux Store}
  * We require store as an argument here because we wish to get
  * state from the store after it has been authenticated.
  */
 export default function RouteCreate() {
 
-  /* */
+  /** */
   function checkForCountryId(nextState, replace) {
     const countryCandidates = ["usa", "gbr", "fra", "deu", "ita", "jpn", "rus", "esp", "bra", "swe", "pol", "chn", "nld", "tur", "ind", "can", "aut", "ukr", "grc", "arg", "bel", "dnk", "aus", "che", "nor", "hun", "egy", "rou", "hrv", "irn", "prt", "irl", "fin", "mex", "srb", "isr", "irq", "bgr", "zaf", "ury", "svk", "blr", "geo", "col", "svn", "est", "sau", "bih", "ltu", "cze", "lva", "chl", "nzl", "nga", "cub", "kaz", "dza", "pak", "syr", "per", "kor", "isl", "tun", "mar", "aze", "jam", "pry", "ven"];
     const reqestedUrl = nextState.location;
@@ -70,7 +70,7 @@ export default function RouteCreate() {
     }
   }
 
-  /* */
+  /** */
   function genRandId(path) {
     let candidates;
     if (path.includes("place")) {
@@ -96,7 +96,7 @@ export default function RouteCreate() {
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
-  /* */
+  /** */
   function checkForId(nextState, replace) {
     if (!nextState.params.id) {
       const reqestedUrl = nextState.location.pathname;
