@@ -1,6 +1,7 @@
-import React, {useReducer} from "react";
+import React, {useReducer, useEffect} from "react";
 import axios from "axios";
 import {connect} from "react-redux";
+import {Icon} from "@blueprintjs/core";
 import {hot} from "react-hot-loader/root";
 import {fetchData} from "@datawheel/canon-core";
 import Helmet from "react-helmet";
@@ -53,6 +54,18 @@ const Trivia = props => {
   //   }
   // ];
 
+  /**
+   * Debug 'RESULTS' state with:
+   const initialState = {
+    answers: [
+      {questionId: 1, answer: "d"},
+      {questionId: 2, answer: "c"},
+      {questionId: 3, answer: "a"}
+    ],
+    showResults: false,
+   }
+   */
+
   const initialState = {
     questions: props.data.questions,
     currentQuestion: 0,
@@ -75,30 +88,41 @@ const Trivia = props => {
     return <div className="error">{error}</div>;
   };
 
-  const renderResultMark = (question, answer) => {
-    if (question.correct_answer === answer.answer) {
-      return <span className="correct">Correct</span>;
-    }
-
-    return <span className="failed">Failed</span>;
-  };
-
   const renderResultsData = () => answers.map(answer => {
     const question = questions.find(
       question => question.id === answer.questionId
     );
+    const isCorrect = question.correct_answer === answer.answer;
 
     return (
-      <div key={question.id}>
-        {question.question} - {renderResultMark(question, answer)}
+      <div className={isCorrect ? "result-question q-correct" : "result-question q-incorrect"} key={question.id}>
+        <div className="result-question-title">{question.question}</div>
+        <div className="result-question-answer a-correct">
+          <Icon icon="tick" iconSize={12} /> {question[`answer_${question.correct_answer}`]}
+        </div>
+        {!isCorrect
+          ? <div className="result-question-answer a-incorrect">
+            <Icon icon="cross" iconSize={12} /> {question[`answer_${answer.answer}`]} <span className="a-yours">(your answer)</span>
+          </div>
+          : null}
       </div>
     );
   });
 
+  const renderScore = () => {
+    const correctAnswers = answers.filter(answer => {
+      const question = questions.find(
+        question => question.id === answer.questionId
+      );
+      return question.correct_answer === answer.answer;
+    });
+    return <span>{correctAnswers.length} / {answers.length} correct</span>;
+  };
+
   const restart = () => {
     axios.get("/api/trivia/getQuestions")
       .then(resp => {
-        console.log("resp.data!!!", resp.data);
+        // console.log("resp.data!!!", resp.data);
         dispatch({type: RESET_QUIZ, questions: resp.data});
       });
   };
@@ -126,17 +150,38 @@ const Trivia = props => {
     dispatch({type: SET_SHOW_RESULTS, showResults: true});
   };
 
+  useEffect(() => {
+    const keyPressHandler = e => {
+      if (e.key === "Enter") {
+        dispatch({type: SET_ERROR, error: ""});
+        next();
+      }
+      if (["a", "b", "c", "d"].includes(e.key)) {
+        dispatch({
+          type: SET_CURRENT_ANSWER,
+          currentAnswer: e.key
+        });
+        dispatch({type: SET_ERROR, error: ""});
+      }
+    };
+
+    window.addEventListener("keydown", keyPressHandler);
+    return () => {
+      window.removeEventListener("keydown", keyPressHandler);
+    };
+  }, [currentAnswer]);
+
   return <TriviaContext.Provider value={{state, dispatch}}>
     <Helmet title="Trivia" />
-    <div className="trivia-page">
+    <div className={showResults ? "trivia-page trivia-results" : "trivia-page"}>
       {/* <h1 className="trivia-title">Trivia</h1> */}
       {showResults
         ? <div className="results">
-          <h2>Results</h2>
-          <ul>{renderResultsData()}</ul>
-          <button className="btn btn-primary" onClick={restart}>
-                      Restart
-          </button>
+          <h2>Results: {renderScore()}</h2>
+          <div>{renderResultsData()}</div>
+          <div className="continue">
+            <button className="btn-continue" onClick={restart}>Restart</button>
+          </div>
         </div>
         : <div className="quiz">
           <Question />
@@ -147,7 +192,7 @@ const Trivia = props => {
           {renderError()}
           <Answers />
           <div className="continue">
-            <button className="btn btn-primary" onClick={next}>Confirm and Continue</button>
+            <button className={currentAnswer ? "btn-continue" : "btn-continue btn-disabled"} onClick={next}>Confirm and Continue</button>
           </div>
         </div>
       }
@@ -156,7 +201,7 @@ const Trivia = props => {
 };
 
 Trivia.need = [
-  fetchData("questions", "http://localhost:3300/api/trivia/getQuestions")
+  fetchData("questions", "https://pantheon.world/api/trivia/getQuestions")
 ];
 
 export default connect(state => ({data: state.data}), {})(hot(Trivia));
