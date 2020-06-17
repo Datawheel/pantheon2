@@ -48,8 +48,8 @@ const Footer = () =>
       <li className="item">
         <Link to="/data/permissions" className="item-link data-link">Data</Link>
         <ul className="sub-items">
-          {/* <li><a href="/data/datasets" className="item-link">Download</a></li> */}
           <li><a href="/data/permissions" className="item-link">Permissions</a></li>
+          <li><a href="/data/datasets" className="item-link">Download</a></li>
           <Link to="/data/api" className="item-link api-link">API</Link>
         </ul>
       </li>
