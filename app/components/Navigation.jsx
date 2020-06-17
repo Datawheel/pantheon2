@@ -102,8 +102,8 @@ class Navigation extends Component {
             <li className="item">
               <Link to="/data/permissions" className="item-link data-link dd" activeClassName="active">Data</Link>
               <ul className="sub-items">
-                {/* <li><a href="/data/datasets" className="item-link">Download</a></li> */}
                 <li><a href="/data/permissions" className="item-link">Permissions</a></li>
+                <li><a href="/data/datasets" className="item-link">Download</a></li>
                 <li><a href="/data/api" className="item-link">API</a></li>
               </ul>
             </li>

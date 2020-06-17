@@ -307,3 +307,14 @@
 .andrew {
   background-image: url("/images/about/team/andrew_mao.png");
 }
+
+dl.download-dl {
+  & dt, & dd {
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.05em;
+    & a {
+      color: var(--colorDark);
+    }
+  }
+}
