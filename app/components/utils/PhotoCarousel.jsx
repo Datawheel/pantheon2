@@ -78,8 +78,14 @@ class PhotoCarousel extends Component {
         }
       }
       else {
-        const datasetFilter = me ? `${filterKey}=eq.${me[filterKey].id || me[filterKey]}&` : "";
-        const morePeopleUrl = `/person?${datasetFilter}${rankAccessor}=gte.${newLowerBound}&${rankAccessor}=lte.${newUpperBound}&select=occupation(*),bplace_country(*),hpi,l,${filterKey}_rank,${rankAccessor},slug,gender,name,id,birthyear,deathyear`;
+        let datasetFilter = "";
+        if (rankAccessor === "bplace_country_occupation_rank_unique") {
+          datasetFilter = me ? `bplace_country=eq.${me.bplace_country.id}&occupation=eq.${me.occupation.id}&` : "";
+        }
+        else {
+          datasetFilter = me ? `${filterKey}=eq.${me[filterKey].id || me[filterKey]}&` : "";
+        }
+        const morePeopleUrl = `/person_ranks?${datasetFilter}${rankAccessor}=gte.${newLowerBound}&${rankAccessor}=lte.${newUpperBound}&select=occupation,bplace_country,hpi,${rankAccessor.replace("_unique", "")},${rankAccessor},slug,gender,name,id,birthyear,deathyear`;
         console.log("morePeopleUrl", morePeopleUrl);
         api.get(morePeopleUrl).then(newPeopleResults => {
           const replacementPeople = newPeopleResults.data.sort((personA, personB) => personA[rankAccessor] - personB[rankAccessor]);
