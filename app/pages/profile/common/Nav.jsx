@@ -8,6 +8,7 @@ const Nav = ({sections}) =>
       {sections.map(section =>
         <li className="profile-nav-item" key={section.slug}>
           <AnchorLink to={section.slug} className={`profile-nav-link ${section.slug}`}>
+            <span className="profile-nav-link-roman-numeral"></span>
             <span className="profile-nav-link-title">{section.title}</span>
             <span className="jump-to-text" aria-hidden>Jump to</span>
           </AnchorLink>

@@ -21,7 +21,8 @@
   margin: 0 auto;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
 
   @media (max-width: 750px) {
     width: 100%;
@@ -42,17 +43,6 @@
     padding: 3px;
     margin: 0 0 0 5px;
   }
-
-  /* numeral */
-  &::before {
-    content: counter(li, upper-roman) ". ";
-    counter-increment: li;
-    @mixin profileNav;
-    color: var(--colorMatza);
-    background-color: var(--colorDark);
-    display: inline-block;
-    min-width: 2em;
-  }
 }
 
 /* link base style */
@@ -62,6 +52,8 @@
   padding: 5px 5px 5px 0;
   @mixin profileNav;
   color: var(--colorEggshell);
+  display: flex;
+  width: 100%;
 
   /* interactions */
   &:hover, &:focus {
@@ -71,6 +63,18 @@
     & .jump-to-text {
       color: inherit;
     }
+  }
+
+  /* numeral */
+  & .profile-nav-link-roman-numeral::before {
+    content: counter(li, upper-roman) ". ";
+    counter-increment: li;
+    @mixin profileNav;
+    color: var(--colorMatza);
+    background-color: var(--colorDark);
+    display: inline-block;
+    min-width: 2em;
+    margin: 0 4px 0 0;
   }
 }
 
@@ -108,9 +112,9 @@
 
   /* container for link text and jump text */
   .profile-nav-link {
-    display: inline-flex; /* next to number */
-    width: calc(100% - 2em);
-    justify-content: space-between; /* space out link text and jump text */
+    display: flex; /* next to number */
+    width: 100%;
+    justify-content: flex-start; /* space out link text and jump text */
   }
 
   /* hide the dots with bg color */
@@ -132,11 +136,11 @@
     display: inline-block;
     min-width: 5.25em; /* fudged */
     padding-left: 0.5em;
-    right: -0.875em; /* fudged */
-    position: relative;
     z-index: 1;
-    float: right;
     border-bottom: none;
+    justify-self: flex-end;
+    margin-left: auto;
+    text-align: right;
 
     /* override bodyLink mixin, probably */
     &:hover, &:focus {
