@@ -33,7 +33,7 @@
     "async-throttle": "^1.1.0",
     "numeral": "^2.0.6",
     "pluralize": "^8.0.0",
-    "puppeteer": "^3.0.1",
+    "puppeteer": "^5.2.1",
     "react-scroll": "^1.7.14",
     "react-table": "^6.10.3",
     "twitter-lite": "^0.9.4"
