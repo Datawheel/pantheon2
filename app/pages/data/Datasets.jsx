@@ -13,15 +13,15 @@ const Datasets = () =>
     <br />
     <h2>Pantheon 1.0 datasets</h2>
     <dl className="download-dl">
-      <dt><a href="http://pantheon.media.mit.edu/pantheon.tsv">pantheon.tsv</a></dt>
+      <dt><a href="https://pantheon.world/data/files/pantheon.tsv.bz2">pantheon.tsv</a></dt>
       <dd>A tab delimited file containing a row of data per person found in the Panthon 1.0 dataset.</dd>
     </dl>
     <dl className="download-dl">
-      <dt><a href="http://pantheon.media.mit.edu/wikilangs.tsv">wikilangs.tsv</a></dt>
+      <dt><a href="https://pantheon.world/data/files/wikilangs.tsv.bz2">wikilangs.tsv</a></dt>
       <dd>A tab delimited file of all the different Wikipedia language editions that each biography has a presence in.</dd>
     </dl>
     <dl className="download-dl">
-      <dt><a href="http://pantheon.media.mit.edu/pageviews_2008-2013.tsv">pageviews_2008-2013.tsv</a></dt>
+      <dt><a href="https://pantheon.world/data/files/pageviews_2008-2013.tsv.bz2">pageviews_2008-2013.tsv</a></dt>
       <dd>A file containing the monthly pageview data for each individual, for all the Wikipedia language editions in which they have a presence.</dd>
     </dl>
     <p className="outro">Please refer to the <a href="/about/methods">methods</a> section for more information on how this data was created. For detailed descriptions of these datasets, please refer to our <a href="https://arxiv.org/abs/1502.07310">data descriptor paper</a>.</p>
