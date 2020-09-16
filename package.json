@@ -29,8 +29,9 @@
   },
   "homepage": "https://github.com/Datawheel/pantheon2#readme",
   "dependencies": {
-    "@datawheel/canon-core": "^0.18.8",
+    "@datawheel/canon-core": "^0.19.1",
     "async-throttle": "^1.1.0",
+    "d3plus-react": "^0.6.0",
     "numeral": "^2.0.6",
     "pluralize": "^8.0.0",
     "puppeteer": "^5.2.1",
