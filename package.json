@@ -34,9 +34,9 @@
     "d3plus-react": "^0.6.0",
     "numeral": "^2.0.6",
     "pluralize": "^8.0.0",
-    "puppeteer": "^5.2.1",
+    "puppeteer": "^5.3.0",
     "react-scroll": "^1.7.14",
     "react-table": "^6.10.3",
-    "twitter-lite": "^0.9.4"
+    "twitter-lite": "^0.14.0"
   }
 }
