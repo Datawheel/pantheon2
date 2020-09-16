@@ -54,7 +54,7 @@ module.exports = function(app) {
         }
       });
     const movieIds = movieDbPerson.movies.map(m => m.id);
-    // return res.json(movieDbPerson);
+    const movieMediaTypeIds = movieDbPerson.movies.map(m => [m.id, m.media_type]);
 
     const movieRoles = await axios.get(`https://api.themoviedb.org/3/person/${movieDbPerson.id}/combined_credits?api_key=${apiKey}&language=en-US`)
       .then(res => {
@@ -75,8 +75,7 @@ module.exports = function(app) {
           }
         }
       });
-    // return res.json({movieDbPerson, movieRoles});
-    const tmdbMovieApiUrls = movieIds.map(mid => axios.get(`https://api.themoviedb.org/3/movie/${mid}?api_key=${apiKey}&language=en-US`));
+    const tmdbMovieApiUrls = movieMediaTypeIds.map(mtype_id => axios.get(`https://api.themoviedb.org/3/${mtype_id[1]}/${mtype_id[0]}?api_key=${apiKey}&language=en-US`));
     const movieData = await axios.all(tmdbMovieApiUrls).then(axios.spread((...responses) =>
       responses.map(r => r.data)
       // use/access the results
