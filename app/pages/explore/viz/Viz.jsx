@@ -146,33 +146,47 @@ class Viz extends Component {
 }
 
 Viz.need = [
-  fetchData("places", "/place?select=id,place,lat,lon,slug,country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died", res => {
-    const places = nest()
-      .key(d => d.country_id)
-      .entries(res)
-      .map(countryData => ({
-        country: countryData.values[0].country,
-        cities: countryData.values.sort((cityA, cityB) => cityA.place.localeCompare(cityB.place))
-      }))
-      .filter(countryData => countryData.country)
-      .sort((countryA, countryB) => countryA.country.country.localeCompare(countryB.country.country));
-    return places;
-  }),
-  fetchData("occupationResponse", "/occupation", res => {
-    const nestedOccupations = nest()
-      .key(d => d.domain_slug)
-      .entries(res)
-      .map(occData => ({
-        domain: {
-          id: `${occData.values.map(o => o.id)}`,
-          slug: occData.values[0].domain_slug,
-          name: occData.values[0].domain
-        },
-        occupations: occData.values
-      }));
+  fetchData(
+    "places",
+    "/place?select=id,place,lat,lon,slug,country:country_fk(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died&num_born=gte.15",
+    {
+      format: res => {
+        const places = nest()
+          .key(d => d.country_id)
+          .entries(res)
+          .map(countryData => ({
+            country: countryData.values[0].country,
+            cities: countryData.values.sort((cityA, cityB) => cityA.place.localeCompare(cityB.place))
+          }))
+          .filter(countryData => countryData.country)
+          .sort((countryA, countryB) => countryA.country.country.localeCompare(countryB.country.country));
+        return places;
+      },
+      useParams: false
+    }
+  ),
+  fetchData(
+    "occupationResponse",
+    "/occupation",
+    {
+      format: res => {
+        const nestedOccupations = nest()
+          .key(d => d.domain_slug)
+          .entries(res)
+          .map(occData => ({
+            domain: {
+              id: `${occData.values.map(o => o.id)}`,
+              slug: occData.values[0].domain_slug,
+              name: occData.values[0].domain
+            },
+            occupations: occData.values
+          }));
 
-    return {nestedOccupations, occupations: res};
-  })
+        return {nestedOccupations, occupations: res};
+      },
+      useParams: false
+    }
+  )
 ];
 
 export default connect(state => ({data: state.data}), {})(Viz);

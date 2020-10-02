@@ -2,10 +2,11 @@ import {FORMATTERS} from "types/index";
 // import {merge} from "d3-array";
 import {default as topojson} from "json/world-50m.json";
 
-const uniques = a => {
-  const v = Array.from(new Set(a));
+const uniques = (a, cb) => {
+  const v = Array.from(new Set(a.map(cb)));
   return v.length === 1 ? v[0] : v;
 };
+
 
 export default {
 
@@ -14,7 +15,7 @@ export default {
     bucketyear: uniques,
     deathyear: uniques,
     id: uniques,
-    langs: a => Math.max(...a),
+    langs: a => Math.max(...a.map(cb)),
     logyear: uniques,
     occupation_id: uniques,
     yearBucket: uniques
