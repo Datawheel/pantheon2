@@ -119,7 +119,9 @@ export const shapeConfig = attrs => ({
     else if (d.occupation_id !== undefined) {
       let occ = d.occupation_id.constructor === Array ? d.occupation_id[0] : d.occupation_id;
       if (occ instanceof Array) occ = occ[0];
-      return COLORS_DOMAIN[attrs[occ].domain_slug];
+      if(attrs[occ]) {
+        return COLORS_DOMAIN[attrs[occ].domain_slug];
+      }
     }
     return "#ccc";
   }
