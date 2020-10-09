@@ -134,10 +134,19 @@ const getColumns = (show, nesting, occupations, places) => {
         },
         {
           Header: () => <Tooltip className="table-tooltip-trigger" content={"Historical Popularity Index"}>
-            <div>HPI <Icon icon="info-sign" iconSize={10} /></div>
+            <div>HPI 2020<Icon icon="info-sign" iconSize={10} /></div>
           </Tooltip>,
           accessor: "hpi",
           Cell: ({value}) => FORMATTERS.decimal(value),
+          defaultSorted: true,
+          maxWidth: 80
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Historical Popularity Index"}>
+            <div>HPI 2019<Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "hpi_prev",
+          Cell: ({value}) => value ? FORMATTERS.decimal(value) : "-",
           defaultSorted: true,
           maxWidth: 80
         }
