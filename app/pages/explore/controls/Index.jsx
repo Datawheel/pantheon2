@@ -17,9 +17,16 @@ class Controls extends Component {
   constructor(props) {
     super(props);
     const {qParams} = props;
+    const canUseDOM = !!(
+      (typeof window !== 'undefined' &&
+      window.document && window.document.createElement)
+    );
+    const country = canUseDOM
+      ? qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)]
+      : qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place)
     this.state = {
       city: SANITIZERS.city(qParams.place) || "all",
-      country: qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)],
+      country,
       gender: SANITIZERS.gender(qParams.gender),
       occupation: qParams.occupation || "all",
       placeType: SANITIZERS.placeType(qParams.placeType),
@@ -35,7 +42,14 @@ class Controls extends Component {
   componentDidMount() {
     this.props.updateData(Object.assign({data: [], loading: true}, this.state));
     const {countryLookup, pageType, updateData} = this.props;
-    fetchPantheonData(pageType, countryLookup, this.state, updateData);
+    const canUseDOM = !!(
+      (typeof window !== 'undefined' &&
+      window.document && window.document.createElement)
+    );
+    if(canUseDOM) {
+      fetchPantheonData(pageType, countryLookup, this.state, updateData);
+      this.setQueryParams()
+    }
   }
 
   componentDidUpdate(prevProps) {
