@@ -3,7 +3,7 @@ import dataFormatter from "pages/explore/helpers/dataFormatter";
 
 const fetchPantheonData = (pageType, countryLookup, state, dataUpdateCallback) => {
   const {city, country, gender, metricCutoff, metricType, occupation, show, viz, years, yearType, placeType} = state;
-  const selectFields = "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
+  const selectFields = "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
   const apiHeaders = null;
   const sorting = "&order=hpi.desc.nullslast";
 
