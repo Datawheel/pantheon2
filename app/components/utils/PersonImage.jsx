@@ -1,37 +1,13 @@
-import React, {Component} from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import "components/utils/PersonImage.css";
 
-class PersonImage extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.fallback = () => {
-      if (this.props.fallbackSrc) {
-        this.setState({failed: true});
-      }
-    };
-  }
-
-  render() {
-    if (this.state.failed) {
-      return <img src={this.props.fallbackSrc} />;
-    }
-    else {
-      return <img src={this.props.src} onError={this.fallback} />;
-    }
-  }
-
+const PersonImage = ({alt, src, fallbackSrc}) => {
+  return (<div
+    className="image"
+    dangerouslySetInnerHTML={{
+      __html: `<img src="${src}" alt="${alt}" data-fallback=${fallbackSrc} onerror="this.onerror=null;this.src=this.dataset.fallback;" />`
+    }}
+  />)
 }
-
-PersonImage.propTypes = {
-  fallbackSrc: PropTypes.string,
-  src: PropTypes.string.isRequired
-};
-
-PersonImage.defaultProps = {
-  fallbackSrc: ""
-};
 
 export default PersonImage;
