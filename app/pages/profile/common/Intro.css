@@ -70,7 +70,7 @@
     }
   }
 
-  & .intro-content > img {
+  & .intro-content > .image {
     @media (max-width: 750px) {
       position: absolute;
       top: 0;

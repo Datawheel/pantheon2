@@ -6,6 +6,8 @@ import SectionHead from "pages/profile/common/SectionHead";
 import {FORMATTERS} from "types/index";
 
 const PeopleRanking = ({country, peopleBorn, peopleDied}) => {
+  const newPeopleBorn = peopleBorn.filter(p => !p.hpi_prev).sort((personA, personB) => personB.hpi - personA.hpi);
+  const newPeopleDied = peopleDied.filter(p => !p.hpi_prev).sort((personA, personB) => personB.hpi - personA.hpi);
   const youngestBirthyear = Math.max(...peopleBorn.map(r => r.birthyear));
   const oldestBirthyear = Math.min(...peopleBorn.map(r => r.birthyear));
   const moreDeaths = peopleDied.length > peopleBorn.length ? true : false;
@@ -31,6 +33,15 @@ const PeopleRanking = ({country, peopleBorn, peopleDied}) => {
               <PhotoCarousel people={topRankingBorn} rankAccessor={"bplace_country_rank_unique"} peopleAll={peopleBorn} />
             </div>
             : null}
+          {newPeopleBorn.length
+            ? <div className="rank-sec-body">
+              <div className="rank-title">
+                <h3>Newly Added People Born in Present Day {country.country}</h3>
+                <Link to={`/explore/rankings?show=people&place=${placeQueryParamId}`}>Go to all Rankings</Link>
+              </div>
+              <PhotoCarousel people={newPeopleBorn.slice(0, 12)} rankAccessor={"bplace_country_rank_unique"} peopleAll={newPeopleBorn} />
+            </div>
+            : null}
           {topRankingDied.length
             ? <div className="rank-sec-body">
               <div className="rank-title">
@@ -39,6 +50,15 @@ const PeopleRanking = ({country, peopleBorn, peopleDied}) => {
               </div>
               <PhotoCarousel people={topRankingDied} rankAccessor={"dplace_country_rank_unique"} peopleAll={peopleDied} />
             </div> : null}
+          {newPeopleDied.length
+            ? <div className="rank-sec-body">
+              <div className="rank-title">
+                <h3>Newly Added People Deceased in Present Day {country.country}</h3>
+                <Link to={`/explore/rankings?show=people&place=${placeQueryParamId}`}>Go to all Rankings</Link>
+              </div>
+              <PhotoCarousel people={newPeopleDied.slice(0, 12)} rankAccessor={"dplace_country_rank_unique"} peopleAll={newPeopleDied} />
+            </div>
+            : null}
         </div>
       </div>
     </section>

@@ -84,7 +84,7 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
         </div>
       </div>
       <div className="intro-content">
-        <PersonImage src={`/images/profile/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} />
+        <PersonImage fallbackSrc="/images/icons/icon-person.svg" src={`/images/profile/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} />
         <div className="intro-text">
           <h3>
             <img src="/images/ui/profile-w.svg" /> {person.name}
