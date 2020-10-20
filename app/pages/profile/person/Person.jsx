@@ -53,7 +53,7 @@ class Person extends Component {
 
   render() {
     const {person, occupationRanks, birthYearRanks, deathYearRanks, birthCountryRanks, birthCountryOccupationRanks,
-      wikiExtract, wikiPageViews, wikiSummary, wikiRelated, newsArticles} = this.props.data;
+      personRanks, wikiExtract, wikiPageViews, wikiSummary, wikiRelated, newsArticles} = this.props.data;
     // const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
 
     if (person === undefined) {
@@ -154,6 +154,7 @@ class Person extends Component {
           <ProfileNav sections={sections} />
           <Intro
             person={person}
+            personRanks={personRanks}
             totalPageViews={totalPageViews}
             wikiExtract={wikiExtract} />
         </div>
@@ -197,12 +198,15 @@ Person.preneed = [
   fetchData("personRanks", personRanksURL, res => {
     const person = res[0];
     // Calculate min/max for occupation peers
+    const occupationRank = person.occupation_rank_unique;
     const occupationRankLow = Math.max(1, parseInt(person.occupation_rank_unique, 10) - NUM_RANKINGS_PRE);
     const occupationRankHigh = Math.max(NUM_RANKINGS, parseInt(person.occupation_rank_unique, 10) + NUM_RANKINGS_POST);
     // Calculate min/max for birthyear peers
+    const birthYearRank = person.birthyear_rank_unique;
     const birthYearRankLow = Math.max(1, parseInt(person.birthyear_rank_unique, 10) - NUM_RANKINGS_PRE);
     const birthYearRankHigh = Math.max(NUM_RANKINGS, parseInt(person.birthyear_rank_unique, 10) + NUM_RANKINGS_POST);
     // Calculate min/max for deathyear peers
+    const deathYearRank = person.deathyear_rank_unique;
     const deathYearRankLow = person.deathyear_rank_unique ? Math.max(1, parseInt(person.deathyear_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
     const deathYearRankHigh = person.deathyear_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.deathyear_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
     // postgrest API will break if given NULLs, and since NULLs can be expected
@@ -210,14 +214,20 @@ Person.preneed = [
     const deathyearId = person.deathyear || "9999";
     const deathyearRankUnique = person.deathyear_rank_unique || "9999";
     // Calculate min/max for birth country peers
+    const bplaceCountryRank = person.bplace_country_rank;
     const bplaceCountryRankLow = person.bplace_country_rank_unique ? Math.max(1, parseInt(person.bplace_country_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
     const bplaceCountryRankHigh = person.bplace_country_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.bplace_country_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
     // ensure birthcountry is non NULL
     const bplaceCountry = person.bplace_country || "";
     //
+    const bplaceCountryOccupationRank = person.bplace_country_occupation_rank_unique;
     const bplaceCountryOccupationRankLow = person.bplace_country_occupation_rank_unique ? Math.max(1, parseInt(person.bplace_country_occupation_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
     const bplaceCountryOccupationRankHigh = person.bplace_country_occupation_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.bplace_country_occupation_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
-    return {occupationRankLow, occupationRankHigh, birthYearRankLow, birthYearRankHigh, deathyearRankUnique, deathyearId, deathYearRankLow, deathYearRankHigh, bplaceCountry, bplaceCountryRankLow, bplaceCountryRankHigh, bplaceCountryOccupationRankLow, bplaceCountryOccupationRankHigh};
+    return {occupationRank, occupationRankLow, occupationRankHigh,
+      birthYearRank, birthYearRankLow, birthYearRankHigh,
+      deathYearRank, deathyearRankUnique, deathyearId, deathYearRankLow, deathYearRankHigh,
+      bplaceCountry, bplaceCountryRank, bplaceCountryRankLow, bplaceCountryRankHigh,
+      bplaceCountryOccupationRank, bplaceCountryOccupationRankLow, bplaceCountryOccupationRankHigh};
   }),
   fetchData("person", personURL, res => {
     const person = res[0];
