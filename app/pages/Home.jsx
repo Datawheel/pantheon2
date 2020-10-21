@@ -6,6 +6,7 @@ import {fetchData} from "@datawheel/canon-core";
 import HomeGrid from "pages/HomeGrid";
 import axios from "axios";
 import {Link} from "react-router";
+import Spinner from "components/Spinner";
 import "pages/Home.css";
 
 const getUrlParameter = (qStr, name) => {
@@ -61,13 +62,35 @@ class Home extends Component {
               <a href="#" onClick={activateSearch}>Search people, places, &amp; occupations</a>
             </div>
             <div className="post">
-              <p><strong>Pantheon</strong> is an observatory of human collective memory. With data on more than 70,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet&apos;s history.</p>
+              <p><strong>Pantheon</strong> is an observatory of human collective memory. With data on more than 85,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet&apos;s history.</p>
             </div>
             <h2 className="home-explore-links">Explore <Link to="/profile/person">People</Link>, <Link to="/profile/place">Places</Link>, <Link to="/profile/occupation">Occupations</Link>, and <Link to="/profile/era">Eras</Link></h2>
           </div>
         </div>
 
-        <HomeGrid bios={biosForGrid} loading={loading} trendingLangEdition={trendingLangEdition} changeTrendingLang={this.changeTrendingLang} />
+        <div className="profile-grid">
+          <h3 className="grid-title">Trending Profiles Today</h3>
+          <p className="grid-subtitle">
+            Top profiles by pageviews for the&nbsp;
+            <select onChange={this.changeTrendingLang} value={trendingLangEdition}>
+              <option value="ar">Arabic</option>
+              <option value="zh">Chinese</option>
+              <option value="nl">Dutch</option>
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="it">Italian</option>
+              <option value="ja">Japanese</option>
+              <option value="pt">Portuguese</option>
+              <option value="ru">Russian</option>
+              <option value="es">Spanish</option>
+            </select>
+            &nbsp;wikipedia edition
+          </p>
+          {!loading
+            ? <HomeGrid bios={biosForGrid} />
+            : <div className="loading-trends"><Spinner /></div>}
+        </div>
 
         <div className="floating-content l-1">
           <div className="box"></div>
