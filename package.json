@@ -28,6 +28,19 @@
     "url": "https://github.com/Datawheel/pantheon2/issues"
   },
   "homepage": "https://github.com/Datawheel/pantheon2#readme",
+  "devDependencies": {
+    "@datawheel/eslint-config": "latest",
+    "babel-eslint": ">=6",
+    "eslint": ">=3",
+    "eslint-plugin-react": ">=7"
+  },
+  "eslintConfig": {
+    "extends": "@datawheel",
+    "globals": {
+      "__DEV__": true,
+      "__SERVER__": true
+    }
+  },
   "dependencies": {
     "@datawheel/canon-core": "^0.19.2",
     "async-throttle": "^1.1.0",
