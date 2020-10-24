@@ -8,8 +8,6 @@ import axios from "axios";
 // if (process.env.NODE_ENV === "production") {
 //   baseURL = "https://api.pantheon.world";
 // }
-
-const baseURL = "http://localhost:3100";
-// const baseURL = "https://api.pantheon.world";
+const baseURL = process.env.CANON_API || "http://localhost:3100";
 
 export default axios.create({baseURL});

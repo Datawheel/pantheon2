@@ -7,6 +7,8 @@ import HomeGrid from "pages/HomeGrid";
 import axios from "axios";
 import {Link} from "react-router";
 import Spinner from "components/Spinner";
+import api from "apiConfig";
+import {plural} from "pluralize";
 import "pages/Home.css";
 
 const getUrlParameter = (qStr, name) => {
@@ -22,15 +24,20 @@ class Home extends Component {
     const qParams = props.router.location.search;
     const trendingLang = getUrlParameter(qParams, "tlang");
     this.state = {
-      fetchedBios: null,
-      loading: false,
+      activeCountry: "all",
+      activeOccupation: "all",
+      fetchedTrendingBios: null,
+      fetchedCountryBios: null,
+      loadingTrendingBios: false,
+      loadingCountryBios: false,
+      loadingOccupationBios: false,
       trendingLangEdition: ["ar", "zh", "nl", "en", "fr", "de", "it", "ja", "pl", "pt", "ru", "es"].indexOf(trendingLang) !== -1 ? trendingLang : "en"
     };
   }
 
   componentDidMount() {
-    const {fetchedBios, loading, trendingLangEdition} = this.state;
-    if (fetchedBios === null && !loading && trendingLangEdition !== "en") {
+    const {fetchedTrendingBios, loadingTrendingBios, trendingLangEdition} = this.state;
+    if (fetchedTrendingBios === null && !loadingTrendingBios && trendingLangEdition !== "en") {
       this.changeTrendingLang(trendingLangEdition);
     }
   }
@@ -39,18 +46,38 @@ class Home extends Component {
 
   changeTrendingLang = evtOrLang => {
     const trendingLangEdition = evtOrLang.target ? evtOrLang.target.value : evtOrLang;
-    this.setState({trendingLangEdition, loading: true});
+    this.setState({trendingLangEdition, loadingTrendingBios: true});
     axios.get(`/api/wikiTrends?lang=${trendingLangEdition}`).then(trendsResults => {
       this.context.router.replace(`?tlang=${trendingLangEdition}`);
-      this.setState({fetchedBios: trendsResults.data, loading: false});
+      this.setState({fetchedTrendingBios: trendsResults.data, loadingTrendingBios: false});
+    });
+  }
+
+  changeCountry = evtOrCountry => {
+    const requestedCountry = evtOrCountry.target ? evtOrCountry.target.value : evtOrCountry;
+    this.setState({activeCountry: requestedCountry, loadingCountryBios: true});
+    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&bplace_country=eq.${requestedCountry}`).then(countryBiosRes => {
+      // this.context.router.replace(`?tlang=${trendingLangEdition}`);
+      this.setState({fetchedCountryBios: countryBiosRes.data, loadingCountryBios: false});
+    });
+  }
+
+  changeOccupation = evtOrOccupation => {
+    const requestedOccupation = evtOrOccupation.target ? evtOrOccupation.target.value : evtOrOccupation;
+    this.setState({activeOccupation: requestedOccupation, loadingOccupationBios: true});
+    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&occupation=eq.${requestedOccupation}`).then(occupationBiosRes => {
+      // this.context.router.replace(`?tlang=${trendingLangEdition}`);
+      this.setState({fetchedOccupationBios: occupationBiosRes.data, loadingOccupationBios: false});
     });
   }
 
   render() {
     const {activateSearch} = this.context;
-    const {trendingBios} = this.props;
-    const {fetchedBios, loading, trendingLangEdition} = this.state;
-    const biosForGrid = fetchedBios || trendingBios;
+    const {countryList, countryBios, occupationBios, occupationList, trendingBios} = this.props;
+    const {activeCountry, activeOccupation, fetchedTrendingBios, fetchedCountryBios, fetchedOccupationBios, loadingCountryBios, loadingOccupationBios, loadingTrendingBios, trendingLangEdition} = this.state;
+    const trendingBiosForGrid = fetchedTrendingBios || trendingBios;
+    const countryBiosForGrid = fetchedCountryBios || countryBios;
+    const occupationBiosForGrid = fetchedOccupationBios || occupationBios;
 
     return (
       <div className="home-container">
@@ -66,6 +93,38 @@ class Home extends Component {
             </div>
             <h2 className="home-explore-links">Explore <Link to="/profile/person">People</Link>, <Link to="/profile/place">Places</Link>, <Link to="/profile/occupation">Occupations</Link>, and <Link to="/profile/era">Eras</Link></h2>
           </div>
+        </div>
+
+        <div className="profile-grid">
+          <h3 className="grid-title">New Profiles By Country</h3>
+          <p className="grid-subtitle">
+            Most recent profiles added from&nbsp;
+            <select onChange={this.changeCountry} value={activeCountry}>
+              <option value="all">all countries</option>
+              {countryList.map(country =>
+                <option value={country.country}>{country.country}</option>
+              )}
+            </select>
+          </p>
+          {!loadingCountryBios
+            ? <HomeGrid bios={countryBiosForGrid} />
+            : <div className="loading-trends"><Spinner /></div>}
+        </div>
+
+        <div className="profile-grid">
+        <h3 className="grid-title">New Profiles By Occupation</h3>
+          <p className="grid-subtitle">
+            Most recent profiles added of&nbsp;
+            <select onChange={this.changeOccupation} value={activeOccupation}>
+              <option value="all">all occupations</option>
+              {occupationList.map(occupation =>
+                <option value={occupation.occupation}>{plural(occupation.occupation.toLowerCase())}</option>
+              )}
+            </select>
+          </p>
+          {!loadingOccupationBios
+            ? <HomeGrid bios={occupationBiosForGrid} />
+            : <div className="loading-trends"><Spinner /></div>}
         </div>
 
         <div className="profile-grid">
@@ -87,8 +146,8 @@ class Home extends Component {
             </select>
             &nbsp;wikipedia edition
           </p>
-          {!loading
-            ? <HomeGrid bios={biosForGrid} />
+          {!loadingTrendingBios
+            ? <HomeGrid bios={trendingBiosForGrid.sort((a, b) => a.rank - b.rank)} />
             : <div className="loading-trends"><Spinner /></div>}
         </div>
 
@@ -115,6 +174,10 @@ class Home extends Component {
 }
 
 Home.need = [
+  fetchData("countryList", "/country?select=country&num_born=gte.100&order=country", {format: res => res, useParams: false}),
+  fetchData("occupationList", "/occupation?select=occupation&order=occupation", {format: res => res, useParams: false}),
+  fetchData("countryBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16", {format: res => res, useParams: false}),
+  fetchData("occupationBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&offset=16", {format: res => res, useParams: false}),
   fetchData("trendingBios", "https://pantheon.world/api/wikiTrends?lang=en&limit=60")
 ];
 
@@ -125,6 +188,10 @@ Home.contextTypes = {
 
 export default hot(
   connect(state => ({
+    countryBios: state.data.countryBios,
+    countryList: state.data.countryList,
+    occupationBios: state.data.occupationBios,
+    occupationList: state.data.occupationList,
     trendingBios: state.data.trendingBios
   }))(Home)
 );
