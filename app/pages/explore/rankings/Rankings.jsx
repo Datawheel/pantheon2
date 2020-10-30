@@ -11,6 +11,8 @@ import {animateScroll as scroll} from "react-scroll";
 import {plural} from "pluralize";
 import "pages/explore/Explore.css";
 import VizTitle from "pages/explore/viz/VizTitle";
+import {initRankings} from "actions/vb";
+import {SANITIZERS} from "types";
 
 class Ranking extends Component {
 
@@ -36,6 +38,20 @@ class Ranking extends Component {
       years: [],
       yearType: "birthyear"
     };
+  }
+
+  componentDidMount() {
+    console.log(" me can haz new data? ");
+    const {location, initRankings} = this.props;
+    const {query: qParams} = location;
+    const country = SANITIZERS.country(qParams.place) || "all";
+    const city = SANITIZERS.city(qParams.place) || "all";
+    const gender = SANITIZERS.gender(qParams.gender);
+    const occupation = qParams.occupation || "all";
+    const years = SANITIZERS.years(qParams.years);
+    const metricCutoff = SANITIZERS.metric(qParams.l ? "l" : "hpi", qParams.l || qParams.hpi || 0).cutoff;
+    const metricType = qParams.l ? "l" : "hpi";
+    initRankings({country, city, gender, metricCutoff, metricType, occupation, years});
   }
 
   componentDidUpdate(prevProps) {
@@ -122,13 +138,14 @@ class Ranking extends Component {
             qParams={qParams}
           />
           <RankingTable
-            data={searching ? filteredData : data}
             changePageSize={this.update}
-            loading={loading}
+            countryLookup={this.countryLookup}
+            // data={searching ? filteredData : data}
+            // loading={loading}
             occupations={occupations}
-            places={places}
             page={page}
             pageSize={pageSize}
+            places={places}
             onPageChange={page => {
               scroll.scrollToTop();
               this.setState({page});
@@ -147,7 +164,7 @@ class Ranking extends Component {
 Ranking.need = [
   fetchData(
     "places",
-    "/place?select=id,place,lat,lon,slug,country:country_fk(id,country,slug,country_num,country_code,continent,region),country_id:country",
+    "/place?select=id,place,lat,lon,slug,country:country_fk(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died",
     {
       format: res => {
         const places = nest()
@@ -187,4 +204,12 @@ Ranking.need = [
   )
 ];
 
-export default connect(state => ({data: state.data}), {})(Ranking);
+const mapDispatchToProps = {initRankings};
+
+const mapStateToProps = state => ({
+  data: state.data
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Ranking);
+// export default connect(state => ({data: state.data}), {})(Ranking);
+

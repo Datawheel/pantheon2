@@ -31,7 +31,11 @@ const fetchPantheonData = (pageType, countryLookup, state, dataUpdateCallback) =
     metricFilter = `&${metricType}=gte.${metricCutoff}`;
   }
 
-  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${sorting}`;
+  let limitOffset = "";
+  if (pageType === "rankings") {
+    limitOffset = "&limit=50&offset=0";
+  }
+  const dataUrl = `/person?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${sorting}${limitOffset}`;
   console.log("[fetchData]: ", dataUrl);
   api.get(dataUrl, {headers: apiHeaders}).then(res => {
     const data = pageType === "rankings" ? dataFormatter(res.data, show, placeType) : res.data;

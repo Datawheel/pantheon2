@@ -372,7 +372,13 @@ const getColumns = (show, nesting, occupations, places) => {
     }
   };
 
-  return COLUMNS[show][nesting];
+  const initialColumns = COLUMNS[show][nesting];
+
+  if (show === "people") {
+    // enrich columns with proper ranks
+  }
+
+  return initialColumns;
 };
 
 export default getColumns;

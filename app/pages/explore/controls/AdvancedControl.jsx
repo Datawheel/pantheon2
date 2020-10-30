@@ -1,48 +1,30 @@
-import React, {Component} from "react";
+import React from "react";
+import {connect} from "react-redux";
 import {HPI_RANGE, LANGS_RANGE} from "types";
+import {updateMetricType, updateMetricCutoff} from "actions/vb";
 
-class AdvancedControl extends Component {
+const AdvancedControl = ({metricType, updateMetricType, metricCutoff, updateMetricCutoff}) => {
+  const metricVals = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  return (
+    <div className="flat-options">
+      <ul className="items options flat-options filter">
+        <li><a onClick={e => (e.preventDefault(), updateMetricType("hpi"))} href="#" id="hpi" className={metricType === "hpi" ? "active metric" : "metric"}>HPI</a></li>
+        <li><a onClick={e => (e.preventDefault(), updateMetricType("l"))} href="#" id="langs" className={metricType === "l" ? "active metric" : "metric"}>L</a></li>
+      </ul>
+      <span />
+      <select value={metricCutoff} onChange={e => updateMetricCutoff(e.target.value)}>
+        {metricVals.map(v => <option key={v} value={v}>{v}</option>)}
+      </select>
+    </div>
+  );
+};
 
-  changeCurrentFilter(newFilter, e) {
-    e.preventDefault();
-    this.setState({currentFilter: newFilter});
-  }
+const mapDispatchToProps = {updateMetricType, updateMetricCutoff};
 
-  changeCutoff = e => {
-    // const {metricType} = this.props.explore.metric;
-    // const currentFilter = this.state.currentFilter === undefined ? metricType || "" : this.state.currentFilter;
-    this.props.changeMetric("metricCutoff", e.target.value);
-  }
+const mapStateToProps = state => ({
+  metricType: state.vb.metricType,
+  metricCutoff: state.vb.metricCutoff
+});
 
-  changeMetricType = e => {
-    e.preventDefault();
-    this.props.changeMetric("metricType", e.target.id);
-  }
-
-  render() {
-    const {metricType, matricCutoff} = this.props;
-    // const changeCutoff = this.changeCutoff.bind(this);
-    // const currentFilter = this.state.currentFilter === undefined ? metricType || "" : this.state.currentFilter;
-    const metricVals = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
-
-    return (
-      <div className="flat-options">
-        <ul className="items options flat-options filter">
-          <li><a onClick={this.changeMetricType} href="#" id="hpi" className={metricType === "hpi" ? "active metric" : "metric"}>HPI</a></li>
-          <li><a onClick={this.changeMetricType} href="#" id="langs" className={metricType === "langs" ? "active metric" : "metric"}>L</a></li>
-        </ul>
-        <span />
-        <select value={matricCutoff} onChange={this.changeCutoff}>
-          {metricVals.map(v => <option key={v} value={v}>{v}</option>)}
-        </select>
-      </div>
-    );
-  }
-}
-
-export default AdvancedControl;
+export default connect(mapStateToProps, mapDispatchToProps)(AdvancedControl);
