@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import Spinner from "components/Spinner";
 import PTreemap from "pages/explore/viz/vizTypes/PTreemap";
 import PStacked from "pages/explore/viz/vizTypes/PStacked";
@@ -14,15 +15,15 @@ class VizShell extends Component {
   }
 
   render() {
-    const {data, loading, occupations, show, viz, yearType} = this.props;
+    const {data, occupations, show, viz, yearType} = this.props;
 
-    if (loading) {
+    if (data.loading) {
       return <div className="explore-viz-container">
         <Spinner />
       </div>;
     }
 
-    if (!data.length) {
+    if (!data.data.length) {
       return <div className="explore-viz-container">
         <div className="loading-img">
           <p>No data found.</p>
@@ -50,12 +51,16 @@ class VizShell extends Component {
 
     return (
       <div className="explore-viz-container">
-        {data.length
-          ? <MyViz data={data} show={show} occupations={occupations} yearType={yearType} />
+        {data.data.length
+          ? <MyViz data={data.data} show={show} occupations={occupations} yearType={yearType} />
           : null}
       </div>
     );
   }
 }
 
-export default VizShell;
+const mapStateToProps = state => ({
+  data: state.vb.data
+});
+
+export default connect(mapStateToProps)(VizShell);

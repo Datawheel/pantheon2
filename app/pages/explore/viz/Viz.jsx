@@ -132,8 +132,6 @@ class Viz extends Component {
             qParams={qParams}
           />
           <VizShell
-            loading={loading}
-            data={data}
             occupations={occupations}
             show={show}
             viz={viz}

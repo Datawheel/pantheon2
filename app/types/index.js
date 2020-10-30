@@ -17,12 +17,12 @@ export const OCCUPATION_DEPTH = "OCCUPATION";
 export const INDUSTRY_DEPTH = "INDUSTRY";
 export const DOMAIN_DEPTH = "DOMAIN";
 
-export const HPI_RANGE = range(4, 27);
+export const HPI_RANGE = range(0, 100, 10);
 export const LANGS_RANGE = range(15, 20).concat(range(20, 50, 5)).concat(range(50, 100, 15)).concat(range(100, 225, 25));
-export const YEAR_RANGE = [-3501, 2015];
+export const YEAR_RANGE = [-3501, 2020];
 
 // for rankings pages
-export const RANKINGS_RESULTS_PER_PAGE = 100;
+export const RANKINGS_RESULTS_PER_PAGE = 50;
 
 export const COLORS_DOMAIN = {
   "sports": "#BB3B57",

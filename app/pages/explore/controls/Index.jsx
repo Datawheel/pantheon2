@@ -18,19 +18,22 @@ class Controls extends Component {
     super(props);
     const {qParams} = props;
     const canUseDOM = !!(
-      (typeof window !== 'undefined' &&
-      window.document && window.document.createElement)
+      typeof window !== "undefined" &&
+      window.document && window.document.createElement
     );
-    const country = canUseDOM
+    const show = SANITIZERS.show(qParams.show ? qParams.show : props.pageType === "viz" ? "occupations" : "people", props.pageType);
+    // const country = canUseDOM && show === "people"
+    const country = canUseDOM && props.pageType === "viz"
       ? qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)]
-      : qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place)
+      : qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || "all";
+    // const country = qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || "all";
     this.state = {
       city: SANITIZERS.city(qParams.place) || "all",
       country,
       gender: SANITIZERS.gender(qParams.gender),
       occupation: qParams.occupation || "all",
       placeType: SANITIZERS.placeType(qParams.placeType),
-      show: SANITIZERS.show(qParams.show ? qParams.show : props.pageType === "viz" ? "occupations" : "people", props.pageType),
+      show,
       viz: props.pageType === "viz" ? SANITIZERS.vizType(qParams.viz || "Treemap") : null,
       years: SANITIZERS.years(qParams.years),
       yearType: SANITIZERS.yearType(qParams.yearType),
@@ -43,12 +46,12 @@ class Controls extends Component {
     this.props.updateData(Object.assign({data: [], loading: true}, this.state));
     const {countryLookup, pageType, updateData} = this.props;
     const canUseDOM = !!(
-      (typeof window !== 'undefined' &&
-      window.document && window.document.createElement)
+      typeof window !== "undefined" &&
+      window.document && window.document.createElement
     );
-    if(canUseDOM) {
-      fetchPantheonData(pageType, countryLookup, this.state, updateData);
-      this.setQueryParams()
+    if (canUseDOM) {
+      // fetchPantheonData(pageType, countryLookup, this.state, updateData);
+      this.setQueryParams();
     }
   }
 
@@ -158,7 +161,8 @@ class Controls extends Component {
 
         <section className="control-group">
           <GenderControl gender={gender} changeGender={this.updateAndFetchData} />
-          <YearControl years={years} changeYears={this.updateAndFetchData} yearType={yearType} />
+          {/* <YearControl years={years} changeYears={this.updateAndFetchData} yearType={yearType} /> */}
+          <YearControl />
           {places ? <PlaceControl city={city} country={country} onChange={this.updateAndFetchData} places={places} placeType={placeType} /> : null}
           <OccupationControl nestedOccupations={nestedOccupations} occupation={occupation} changeOccupation={this.updateAndFetchData} />
         </section>
