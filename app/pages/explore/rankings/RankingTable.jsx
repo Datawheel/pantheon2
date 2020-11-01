@@ -438,7 +438,7 @@ const RankingTable = ({countryLookup, changePageSize, data, fetchData, occupatio
           | Go to page:{" "}
           <input
             type="number"
-            defaultValue={pageIndex + 1}
+            // defaultValue={pageIndex + 1}
             onKeyDown={e => {
               if (e.key === "Enter") {
                 const page = e.target.value ? Number(e.target.value) - 1 : 0;
@@ -446,7 +446,7 @@ const RankingTable = ({countryLookup, changePageSize, data, fetchData, occupatio
               }
             }}
             style={{width: "100px"}}
-            // value={pageIndex + 1}
+            value={pageIndex + 1}
           />
         </span>{" "}
         <select

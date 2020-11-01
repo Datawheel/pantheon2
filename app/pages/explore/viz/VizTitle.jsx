@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 import {merge} from "d3-array";
 import {plural} from "pluralize";
 
@@ -9,7 +10,7 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
   let genderedPronoun = "people";
 
   // Gender ---
-  if (gender === true || gender === false) {
+  if (gender === "F" || gender === "M") {
     genderedPronoun = gender === true ? "men" : "women";
   }
 
@@ -17,15 +18,16 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
   if (occupation === "all") {
     occupationSubject = genderedPronoun;
   }
-  else if (nestedOccupations) {
+  else {
     if (occupation.includes(",")) {
       thisOcc = nestedOccupations.map(no => no.domain).find(no => no.id === occupation).name;
       occupationSubject = `${genderedPronoun} in ${thisOcc.toLowerCase()} occupations`;
+      // occupationSubject = `${genderedPronoun} in ${occupation.toLowerCase()} occupations`;
     }
     else {
       const gendersLookup = {people: "", men: "male", women: "female"};
-      thisOcc = merge(nestedOccupations.map(no => no.occupations)).find(no => `${no.id}` === occupation).occupation;
-      occupationSubject = `${gendersLookup[genderedPronoun]} ${plural(thisOcc.toLowerCase())}`;
+      // thisOcc = merge(nestedOccupations.map(no => no.occupations)).find(no => `${no.id}` === occupation).occupation;
+      occupationSubject = `${gendersLookup[genderedPronoun]} ${plural(occupation.toLowerCase())}`;
     }
   }
 
@@ -60,4 +62,17 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
     : null;
 };
 
-export default VizTitle;
+const mapStateToProps = state => ({
+  data: state.vb.data,
+  city: state.vb.city,
+  country: state.vb.country,
+  gender: state.vb.gender,
+  nestedOccupations: state.data.occupationResponse.nestedOccupations,
+  occupation: state.vb.occupation,
+  show: state.vb.show,
+  yearType: state.vb.yearType,
+  places: state.data.places,
+  placeType: state.vb.placeType
+});
+
+export default connect(mapStateToProps)(VizTitle);
