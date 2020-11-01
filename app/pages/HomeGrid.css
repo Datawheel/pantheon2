@@ -12,21 +12,14 @@
     display: block;
     text-align: center;
     font-size: 26px;
-  }
+  } /* end .grid-title */
+
   & .grid-subtitle {
     margin: 0 auto 20px;
     display: block;
     text-align: center;
     font-size: 16px;
-  }
-
-  & .loading-trends {
-    margin: 0 auto;
-    min-height: 400px;
-    padding: 30px 0;
-    position: relative;
-    width: 100%;
-  }
+  } /* end .grid-subtitle */
 
   & .grid-row {
     list-style: none;
@@ -182,6 +175,22 @@
       }
     } /* end .grid-box */
   } /* end .grid-row */
+
+  & .loading-trends {
+    margin: 0 auto;
+    min-height: 400px;
+    padding: 30px 0;
+    position: relative;
+    width: 100%;
+  }
+
+  & .view-more {
+    lost-utility: clearfix;
+    font-size: 18px;
+    margin: 30px auto;
+    max-width: 1024px;
+    text-align: right;
+  }
 }
 
 

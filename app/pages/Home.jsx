@@ -25,6 +25,7 @@ class Home extends Component {
     const trendingLang = getUrlParameter(qParams, "tlang");
     this.state = {
       activeCountry: "all",
+      activeCountryCode: "all",
       activeOccupation: "all",
       fetchedTrendingBios: null,
       fetchedCountryBios: null,
@@ -55,8 +56,10 @@ class Home extends Component {
 
   changeCountry = evtOrCountry => {
     const requestedCountry = evtOrCountry.target ? evtOrCountry.target.value : evtOrCountry;
-    this.setState({activeCountry: requestedCountry, loadingCountryBios: true});
-    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&bplace_country=eq.${requestedCountry}`).then(countryBiosRes => {
+    const requestedCountryCode = evtOrCountry.target ? evtOrCountry.target[evtOrCountry.target.selectedIndex].dataset.countrycode : evtOrCountry;
+    this.setState({activeCountry: requestedCountry, activeCountryCode: requestedCountryCode, loadingCountryBios: true});
+    const countryFilter = requestedCountry === "all" ? "" : `&bplace_country=eq.${requestedCountry}`;
+    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16${countryFilter}`).then(countryBiosRes => {
       // this.context.router.replace(`?tlang=${trendingLangEdition}`);
       this.setState({fetchedCountryBios: countryBiosRes.data, loadingCountryBios: false});
     });
@@ -65,7 +68,8 @@ class Home extends Component {
   changeOccupation = evtOrOccupation => {
     const requestedOccupation = evtOrOccupation.target ? evtOrOccupation.target.value : evtOrOccupation;
     this.setState({activeOccupation: requestedOccupation, loadingOccupationBios: true});
-    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&occupation=eq.${requestedOccupation}`).then(occupationBiosRes => {
+    const occupationFilter = requestedOccupation === "all" ? "&offset=16" : `&occupation=eq.${requestedOccupation}`;
+    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16${occupationFilter}`).then(occupationBiosRes => {
       // this.context.router.replace(`?tlang=${trendingLangEdition}`);
       this.setState({fetchedOccupationBios: occupationBiosRes.data, loadingOccupationBios: false});
     });
@@ -74,7 +78,7 @@ class Home extends Component {
   render() {
     const {activateSearch} = this.context;
     const {countryList, countryBios, occupationBios, occupationList, trendingBios} = this.props;
-    const {activeCountry, activeOccupation, fetchedTrendingBios, fetchedCountryBios, fetchedOccupationBios, loadingCountryBios, loadingOccupationBios, loadingTrendingBios, trendingLangEdition} = this.state;
+    const {activeCountry, activeCountryCode, activeOccupation, fetchedTrendingBios, fetchedCountryBios, fetchedOccupationBios, loadingCountryBios, loadingOccupationBios, loadingTrendingBios, trendingLangEdition} = this.state;
     const trendingBiosForGrid = fetchedTrendingBios || trendingBios;
     const countryBiosForGrid = fetchedCountryBios || countryBios;
     const occupationBiosForGrid = fetchedOccupationBios || occupationBios;
@@ -102,29 +106,35 @@ class Home extends Component {
             <select onChange={this.changeCountry} value={activeCountry}>
               <option value="all">all countries</option>
               {countryList.map(country =>
-                <option value={country.country}>{country.country}</option>
+                <option key={country.country} value={country.country} data-countrycode={country.country_code}>{country.country}</option>
               )}
             </select>
           </p>
           {!loadingCountryBios
             ? <HomeGrid bios={countryBiosForGrid} />
             : <div className="loading-trends"><Spinner /></div>}
+          <div className="view-more">
+            <a href={activeCountry === "all" ? "/explore/rankings?show=people&years=-3501,2020&new=true" : `/explore/rankings?show=people&years=-3501,2020&place=${activeCountryCode}&new=true`}>{activeCountry === "all" ? "View all new profiles »" : `View all new profiles from ${activeCountry} »`}</a>
+          </div>
         </div>
 
         <div className="profile-grid">
-        <h3 className="grid-title">New Profiles By Occupation</h3>
+          <h3 className="grid-title">New Profiles By Occupation</h3>
           <p className="grid-subtitle">
             Most recent profiles added of&nbsp;
             <select onChange={this.changeOccupation} value={activeOccupation}>
               <option value="all">all occupations</option>
               {occupationList.map(occupation =>
-                <option value={occupation.occupation}>{plural(occupation.occupation.toLowerCase())}</option>
+                <option key={occupation.occupation} value={occupation.occupation}>{plural(occupation.occupation.toLowerCase())}</option>
               )}
             </select>
           </p>
           {!loadingOccupationBios
             ? <HomeGrid bios={occupationBiosForGrid} />
             : <div className="loading-trends"><Spinner /></div>}
+          <div className="view-more">
+            <a href={activeOccupation === "all" ? "/explore/rankings?show=people&years=-3501,2020&new=true" : `/explore/rankings?show=people&years=-3501,2020&occupation=${activeOccupation}&new=true`}>{activeOccupation === "all" ? "View all new profiles »" : `View all new profiles of ${plural(activeOccupation.toLowerCase())} »`}</a>
+          </div>
         </div>
 
         <div className="profile-grid">
@@ -174,7 +184,7 @@ class Home extends Component {
 }
 
 Home.need = [
-  fetchData("countryList", "/country?select=country&num_born=gte.100&order=country", {format: res => res, useParams: false}),
+  fetchData("countryList", "/country?select=country,country_code&num_born=gte.100&order=country", {format: res => res, useParams: false}),
   fetchData("occupationList", "/occupation?select=occupation&order=occupation", {format: res => res, useParams: false}),
   fetchData("countryBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16", {format: res => res, useParams: false}),
   fetchData("occupationBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&offset=16", {format: res => res, useParams: false}),

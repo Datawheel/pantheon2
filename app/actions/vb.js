@@ -113,10 +113,10 @@ export const resetNewData = () => dispatch => {
 };
 
 const setQueryArgs = state => {
-  const {city, country, gender, metricType, metricCutoff, occupation, onlyShowNew, show, viz, years, yearType, placeType} = state.vb;
-  const pageType = state.location.pathname.includes("rankings") ? "rankings" : "viz";
+  const {city, country, gender, metricType, metricCutoff, occupation, onlyShowNew, page, placeType, show, viz, years, yearType} = state.vb;
+  // const pageType = state.location.pathname.includes("rankings") ? "rankings" : "viz";
 
-  let queryStr = pageType === "viz" ? `?viz=${viz}&show=${show.type}&years=${years}` : `?show=${show.type}&years=${years}`;
+  let queryStr = page === "viz" ? `?viz=${viz}&show=${show.type}&years=${years}` : `?show=${show.type}&years=${years}`;
   if (country !== "all") {
     queryStr += `&place=${country.toLowerCase()}`;
     if (city !== "all") {
