@@ -21,10 +21,10 @@ class CountryOccupationRanking extends Component {
     const worseRankedBirthPeers = ranking.filter(p => p.bplace_country_occupation_rank_unique > meBc.bplace_country_occupation_rank_unique);
 
     if (betterRankedBirthPeers.length) {
-      betterBirthPeers = <span>Before {person.gender === "M" ? "him" : "her"} are {<AnchorList items={betterRankedBirthPeers} name={d => `${d.name} (${d.birthyear})`} url={d => `/profile/person/${d.slug}/`} />}. </span>;
+      betterBirthPeers = <span>Before {person.gender ? person.gender === "M" ? "him" : "her" : "them"} are {<AnchorList items={betterRankedBirthPeers} name={d => `${d.name} (${d.birthyear})`} url={d => `/profile/person/${d.slug}/`} />}. </span>;
     }
     if (worseRankedBirthPeers.length) {
-      worseBirthPeers = <span>After {person.gender === "M" ? "him" : "her"} are {<AnchorList items={worseRankedBirthPeers} name={d => `${d.name} (${d.birthyear})`} url={d => `/profile/person/${d.slug}/`} />}.</span>;
+      worseBirthPeers = <span>After {person.gender ? person.gender === "M" ? "him" : "her" : "them"} are {<AnchorList items={worseRankedBirthPeers} name={d => `${d.name} (${d.birthyear})`} url={d => `/profile/person/${d.slug}/`} />}.</span>;
     }
 
     return (
