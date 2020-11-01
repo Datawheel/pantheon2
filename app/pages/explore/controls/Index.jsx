@@ -5,7 +5,8 @@ import PlaceControl from "pages/explore/controls/PlaceControl";
 import OccupationControl from "pages/explore/controls/OccupationControl";
 import ShowControl from "pages/explore/controls/ShowControl";
 import VizControl from "pages/explore/controls/VizControl";
-import AdvancedControl from "pages/explore/controls/AdvancedControl";
+import MetricCutoffControl from "pages/explore/controls/MetricCutoffControl";
+import OnlyShowNewControl from "pages/explore/controls/OnlyShowNewControl";
 import GenderControl from "pages/explore/controls/GenderControl";
 import fetchPantheonData from "pages/explore/helpers/fetchPantheonData";
 import {SANITIZERS} from "types";
@@ -169,7 +170,8 @@ class Controls extends Component {
 
         <section className="control-group advanced-group">
           <h3>Advanced Options</h3>
-          <AdvancedControl metricType={metricType} metricCutoff={metricCutoff} changeMetric={this.updateAndFetchData} />
+          <MetricCutoffControl />
+          <OnlyShowNewControl />
         </section>
 
         {/* TODO: add sharing and uncomment */}

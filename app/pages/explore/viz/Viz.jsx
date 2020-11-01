@@ -13,25 +13,25 @@ class Viz extends Component {
 
   constructor(props) {
     super(props);
-    this.countryLookup = this.props.data.places.reduce((acc, cur) => ({...acc, [cur.country.country_code]: cur.country}), {});
-    this.state = {
-      data: [],
-      loading: true,
-      viz: "treemap",
-      city: "all",
-      country: "all",
-      filteredData: [],
-      gender: null,
-      nestedOccupations: null,
-      occupation: "all",
-      occupations: null,
-      pageSize: 50,
-      places: null,
-      searching: false,
-      show: "occupations",
-      years: [],
-      yearType: "birthyear"
-    };
+    // this.countryLookup = this.props.data.places.reduce((acc, cur) => ({...acc, [cur.country.country_code]: cur.country}), {});
+    // this.state = {
+    //   data: [],
+    //   loading: true,
+    //   viz: "treemap",
+    //   city: "all",
+    //   country: "all",
+    //   filteredData: [],
+    //   gender: null,
+    //   nestedOccupations: null,
+    //   occupation: "all",
+    //   occupations: null,
+    //   pageSize: 50,
+    //   places: null,
+    //   searching: false,
+    //   show: "occupations",
+    //   years: [],
+    //   yearType: "birthyear"
+    // };
   }
 
   // UNSAFE_componentWillMount() {

@@ -13,35 +13,35 @@ import "pages/explore/Explore.css";
 import VizTitle from "pages/explore/viz/VizTitle";
 import {initRankings} from "actions/vb";
 import {SANITIZERS} from "types";
+import Spinner from "components/Spinner";
 
 class Ranking extends Component {
 
   constructor(props) {
     super(props);
-    this.countryLookup = this.props.data.places.reduce((acc, cur) => ({...acc, [cur.country.country_code]: cur.country}), {});
-    this.state = {
-      data: [],
-      loading: true,
-      viz: "treemap",
-      city: "all",
-      country: "all",
-      filteredData: [],
-      gender: null,
-      nestedOccupations: null,
-      occupation: "all",
-      occupations: null,
-      page: 0,
-      pageSize: 50,
-      places: null,
-      searching: false,
-      show: "occupations",
-      years: [],
-      yearType: "birthyear"
-    };
+    // this.countryLookup = this.props.data.places.reduce((acc, cur) => ({...acc, [cur.country.country_code]: cur.country}), {});
+    // this.state = {
+    //   data: [],
+    //   loading: true,
+    //   viz: "treemap",
+    //   city: "all",
+    //   country: "all",
+    //   filteredData: [],
+    //   gender: null,
+    //   nestedOccupations: null,
+    //   occupation: "all",
+    //   occupations: null,
+    //   page: 0,
+    //   pageSize: 50,
+    //   places: null,
+    //   searching: false,
+    //   show: "occupations",
+    //   years: [],
+    //   yearType: "birthyear"
+    // };
   }
 
   componentDidMount() {
-    console.log(" me can haz new data? ");
     const {location, initRankings} = this.props;
     const {query: qParams} = location;
     const country = SANITIZERS.country(qParams.place) || "all";
@@ -51,7 +51,8 @@ class Ranking extends Component {
     const years = SANITIZERS.years(qParams.years);
     const metricCutoff = SANITIZERS.metric(qParams.l ? "l" : "hpi", qParams.l || qParams.hpi || 0).cutoff;
     const metricType = qParams.l ? "l" : "hpi";
-    initRankings({country, city, gender, metricCutoff, metricType, occupation, years});
+    const onlyShowNew = qParams.new === "true";
+    initRankings({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "rankings", occupation, years});
   }
 
   componentDidUpdate(prevProps) {
@@ -86,7 +87,8 @@ class Ranking extends Component {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
     const {query: qParams, pathname} = this.props.location;
-    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, page, pageSize, searching, show, viz, years, yearType, placeType} = this.state;
+    const {metricCutoff, metricType, rankingData, onlyShowNew, years} = this.props;
+    // const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, page, pageSize, searching, show, viz, years, yearType, placeType} = this.state;
 
     if (!occupationResponse) {
       return <div>loading...</div>;
@@ -96,20 +98,26 @@ class Ranking extends Component {
 
     const metricRange = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
     let metricSentence;
+
     if (metricCutoff > metricRange[0]) {
+      metricSentence = onlyShowNew ? "Only showing newly added biographies (as of 2020)" : "Only showing biographies";
       if (metricType === "hpi") {
-        metricSentence = `Showing people with a Historical Popularity Index (HPI) greater than ${metricCutoff}.`;
+        metricSentence = `${metricSentence} with a Historical Popularity Index (HPI) greater than ${metricCutoff}.`;
       }
       else {
-        metricSentence = `Showing people with more than ${metricCutoff} Wikipedia language editions.`;
+        metricSentence = `${metricSentence} with more than ${metricCutoff} Wikipedia language editions.`;
       }
+    }
+    else if (onlyShowNew) {
+      metricSentence = "Only showing newly added biographies (as of 2020)";
     }
 
     return (
       <div className="explore">
         <Helmet title="Rankings" />
         <div className="explore-head">
-          <VizTitle
+          <VizTitle />
+          {/* <VizTitle
             city={city}
             country={country}
             gender={gender}
@@ -120,7 +128,7 @@ class Ranking extends Component {
             placeType={placeType}
             show={show}
             yearType={yearType}
-          />
+          /> */}
           {years.length
             ? <h3 className="explore-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
             : null}
@@ -137,24 +145,27 @@ class Ranking extends Component {
             pathname={pathname}
             qParams={qParams}
           />
-          <RankingTable
+          {rankingData.data
+            ? <RankingTable />
+            : <Spinner />}
+          {/* <RankingTable
             changePageSize={this.update}
-            countryLookup={this.countryLookup}
+            // countryLookup={this.countryLookup}
             // data={searching ? filteredData : data}
             // loading={loading}
-            occupations={occupations}
-            page={page}
-            pageSize={pageSize}
-            places={places}
-            onPageChange={page => {
-              scroll.scrollToTop();
-              this.setState({page});
-            }}
+            // occupations={occupations}
+            // page={page}
+            // pageSize={pageSize}
+            // places={places}
+            // onPageChange={page => {
+            //   scroll.scrollToTop();
+            //   this.setState({page});
+            // }}
             search={this.search}
-            show={show}
-            viz={viz}
-            yearType={yearType}
-          />
+            // show={show}
+            // viz={viz}
+            // yearType={yearType}
+          /> */}
         </div>
       </div>
     );
@@ -207,7 +218,12 @@ Ranking.need = [
 const mapDispatchToProps = {initRankings};
 
 const mapStateToProps = state => ({
-  data: state.data
+  data: state.data,
+  rankingData: state.vb.data,
+  years: state.vb.years,
+  metricCutoff: state.vb.metricCutoff,
+  metricType: state.vb.metricType,
+  onlyShowNew: state.vb.onlyShowNew
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Ranking);

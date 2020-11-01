@@ -8,12 +8,15 @@ const rankingTypes = [
   {id: "occupations", name: "Occupations"}
 ];
 
-const ShowControl = ({pathname, showDepth, updateShowDepth, showType, updateShowType}) => {
+const ShowControl = ({page, updateShowDepth, show}) => {
   let pageRankingTypes = rankingTypes;
 
-  if (pathname.includes("/viz")) {
+  if (page === "viz") {
     pageRankingTypes = pageRankingTypes.slice(1, pageRankingTypes.length);
   }
+  const {type: showType, depth: showDepth} = show;
+  console.log("showType", showType);
+  console.log("show", show);
 
   return (
     <div className="filter">
@@ -33,7 +36,7 @@ const ShowControl = ({pathname, showDepth, updateShowDepth, showType, updateShow
           </li>
         )}
       </ul>
-      { showType === "occupations" && pathname.includes("rankings")
+      { showType === "occupations" && page === "rankings"
         ? <div className="options filter">
           <h3>Data Depth</h3>
           <ul className="items options viztype-options">
@@ -43,7 +46,7 @@ const ShowControl = ({pathname, showDepth, updateShowDepth, showType, updateShow
           </ul>
         </div>
         : null}
-      { showType === "places" && pathname.includes("rankings")
+      { showType === "places" && page === "rankings"
         ? <div className="options filter">
           <h3>Data Depth</h3>
           <ul className="items options viztype-options">
@@ -59,9 +62,8 @@ const ShowControl = ({pathname, showDepth, updateShowDepth, showType, updateShow
 const mapDispatchToProps = {updateShowDepth, updateShowType};
 
 const mapStateToProps = state => ({
-  showDepth: state.vb.showDepth,
-  showType: state.vb.showType,
-  pathname: state.location.pathname
+  page: state.vb.page,
+  show: state.vb.show
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowControl);
