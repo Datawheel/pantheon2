@@ -100,7 +100,7 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
             </p>}
           <p>
             <React.Fragment>Since 2007, the English Wikipedia page of {person.name} has received more than {FORMATTERS.commas(totalPageViews)} page views. </React.Fragment>
-            <React.Fragment>{person.gender === "M" ? "His" : "Her"} biography is available in {person.l} different languages on Wikipedia making {person.gender === "M" ? "him" : "her"} the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a></React.Fragment>
+            <React.Fragment>{person.gender ? person.gender === "M" ? "His" : "Her" : "Their"} biography is available in {person.l} different languages on Wikipedia making {person.gender ? person.gender === "M" ? "him" : "her" : "them"} the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a></React.Fragment>
             <React.Fragment>{!person.bplace_country ? <span>.</span> : <span> and the {bplaceCountryRank !== 1 ? FORMATTERS.ordinal(bplaceCountryRank) : ""} most popular biography from <a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a>.</span>}</React.Fragment>
           </p>
         </div>
