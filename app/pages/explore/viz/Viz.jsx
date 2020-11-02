@@ -7,6 +7,8 @@ import VizShell from "pages/explore/viz/VizShell";
 import VizTitle from "pages/explore/viz/VizTitle";
 import {nest} from "d3-collection";
 import {FORMATTERS, HPI_RANGE, LANGS_RANGE} from "types";
+import {initRankingsAndViz} from "actions/vb";
+import {SANITIZERS} from "types";
 import "pages/explore/Explore.css";
 
 class Viz extends Component {
@@ -32,6 +34,22 @@ class Viz extends Component {
     //   years: [],
     //   yearType: "birthyear"
     // };
+  }
+
+  componentDidMount() {
+    const {location, initRankingsAndViz} = this.props;
+    const {query: qParams} = location;
+    const country = SANITIZERS.country(qParams.place) || "all";
+    const city = SANITIZERS.city(qParams.place) || "all";
+    const gender = SANITIZERS.gender(qParams.gender);
+    const occupation = qParams.occupation || "all";
+    const years = SANITIZERS.years(qParams.years);
+    const metricCutoff = SANITIZERS.metric(qParams.l ? "l" : "hpi", qParams.l || qParams.hpi || 0).cutoff;
+    const metricType = qParams.l ? "l" : "hpi";
+    const onlyShowNew = qParams.new === "true";
+    const show = "occupations";
+    const viz = SANITIZERS.vizType(qParams.viz) || "treemap";
+    initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "viz", occupation, show, viz, years});
   }
 
   // UNSAFE_componentWillMount() {
@@ -73,7 +91,7 @@ class Viz extends Component {
     const {pageType} = this.props.route;
     const {places, occupationResponse} = this.props.data;
     const {query: qParams, pathname} = this.props.location;
-    const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, pageSize, searching, show, viz, years, yearType, placeType} = this.state;
+    const {metricCutoff, metricType, rankingData, onlyShowNew, years} = this.props;
 
     // if (this.props.router.location.search === "" && window) {
     //   const countryCandidates = ["usa", "gbr", "fra", "deu", "ita", "jpn", "rus", "esp", "bra", "swe", "pol", "chn", "nld", "tur", "ind", "can", "aut", "ukr", "grc", "arg", "bel", "dnk", "aus", "che", "nor", "hun", "egy", "rou", "hrv", "irn", "prt", "irl", "fin", "mex", "srb", "isr", "irq", "bgr", "zaf", "ury", "svk", "blr", "geo", "col", "svn", "est", "sau", "bih", "ltu", "cze", "lva", "chl", "nzl", "nga", "cub", "kaz", "dza", "pak", "syr", "per", "kor", "isl", "tun", "mar", "aze", "jam", "pry", "ven"];
@@ -103,40 +121,15 @@ class Viz extends Component {
       <div className="explore">
         <Helmet title="Viz Explorer" />
         <div className="explore-head">
-          <VizTitle
-            city={city}
-            country={country}
-            gender={gender}
-            loading={loading}
-            nestedOccupations={nestedOccupations}
-            occupation={occupation}
-            places={places}
-            placeType={placeType}
-            show={show}
-            yearType={yearType}
-          />
+          <VizTitle />
           {years.length
             ? <h3 className="explore-date">{FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}</h3>
             : null}
           {metricSentence ? <p>{metricSentence}</p> : null}
         </div>
         <div className="explore-body">
-          <Controls
-            updateData={this.updateData}
-            countryLookup={this.countryLookup}
-            update={this.update}
-            nestedOccupations={nestedOccupations}
-            pageType={pageType}
-            places={places}
-            pathname={pathname}
-            qParams={qParams}
-          />
-          <VizShell
-            occupations={occupations}
-            show={show}
-            viz={viz}
-            yearType={yearType}
-          />
+          <Controls />
+          <VizShell />
         </div>
       </div>
     );
@@ -187,4 +180,15 @@ Viz.need = [
   )
 ];
 
-export default connect(state => ({data: state.data}), {})(Viz);
+const mapDispatchToProps = {initRankingsAndViz};
+
+const mapStateToProps = state => ({
+  data: state.data,
+  rankingData: state.vb.data,
+  years: state.vb.years,
+  metricCutoff: state.vb.metricCutoff,
+  metricType: state.vb.metricType,
+  onlyShowNew: state.vb.onlyShowNew
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Viz);

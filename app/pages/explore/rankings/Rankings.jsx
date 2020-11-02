@@ -11,7 +11,7 @@ import {animateScroll as scroll} from "react-scroll";
 import {plural} from "pluralize";
 import "pages/explore/Explore.css";
 import VizTitle from "pages/explore/viz/VizTitle";
-import {initRankings} from "actions/vb";
+import {initRankingsAndViz} from "actions/vb";
 import {SANITIZERS} from "types";
 import Spinner from "components/Spinner";
 
@@ -42,7 +42,7 @@ class Ranking extends Component {
   }
 
   componentDidMount() {
-    const {location, initRankings} = this.props;
+    const {location, initRankingsAndViz} = this.props;
     const {query: qParams} = location;
     const country = SANITIZERS.country(qParams.place) || "all";
     const city = SANITIZERS.city(qParams.place) || "all";
@@ -52,7 +52,7 @@ class Ranking extends Component {
     const metricCutoff = SANITIZERS.metric(qParams.l ? "l" : "hpi", qParams.l || qParams.hpi || 0).cutoff;
     const metricType = qParams.l ? "l" : "hpi";
     const onlyShowNew = qParams.new === "true";
-    initRankings({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "rankings", occupation, years});
+    initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "rankings", occupation, years});
   }
 
   componentDidUpdate(prevProps) {
@@ -88,7 +88,6 @@ class Ranking extends Component {
     const {places, occupationResponse} = this.props.data;
     const {query: qParams, pathname} = this.props.location;
     const {metricCutoff, metricType, rankingData, onlyShowNew, years} = this.props;
-    // const {city, country, data, filteredData, gender, metricCutoff, metricType, loading, occupation, page, pageSize, searching, show, viz, years, yearType, placeType} = this.state;
 
     if (!occupationResponse) {
       return <div>loading...</div>;
@@ -215,7 +214,7 @@ Ranking.need = [
   )
 ];
 
-const mapDispatchToProps = {initRankings};
+const mapDispatchToProps = {initRankingsAndViz};
 
 const mapStateToProps = state => ({
   data: state.data,

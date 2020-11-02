@@ -15,7 +15,8 @@ class VizShell extends Component {
   }
 
   render() {
-    const {data, occupations, show, viz, yearType} = this.props;
+    const {data, occupationResponse, show, viz, yearType} = this.props;
+    const {occupations} = occupationResponse;
 
     if (data.loading) {
       return <div className="explore-viz-container">
@@ -60,7 +61,10 @@ class VizShell extends Component {
 }
 
 const mapStateToProps = state => ({
-  data: state.vb.data
+  data: state.vb.data,
+  occupationResponse: state.data.occupationResponse,
+  viz: state.vb.viz,
+  show: state.vb.show.type
 });
 
 export default connect(mapStateToProps)(VizShell);

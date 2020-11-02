@@ -40,7 +40,8 @@ const mapDispatchToProps = {updateCity, updateCountry, updatePlaceType};
 const mapStateToProps = state => ({
   city: state.vb.city,
   country: state.vb.country,
-  placeType: state.vb.placeType
+  placeType: state.vb.placeType,
+  places: state.data.places
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaceControl);
