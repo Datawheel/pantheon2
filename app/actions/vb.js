@@ -2,7 +2,7 @@ import api from "apiConfig";
 const DEFAULT_PAGE_SIZE = 50;
 import {HPI_RANGE, LANGS_RANGE} from "types";
 
-export const initRankings = initialState => dispatch  => {
+export const initRankingsAndViz = initialState => dispatch  => {
   console.log("initialState", initialState);
   dispatch({type: "VB_UPDATE_COUNTRY", country: initialState.country});
   dispatch({type: "VB_UPDATE_CITY", city: initialState.city});
@@ -13,8 +13,16 @@ export const initRankings = initialState => dispatch  => {
   dispatch({type: "VB_UPDATE_ONLY_SHOW_NEW", onlyShowNew: initialState.onlyShowNew});
   dispatch({type: "VB_UPDATE_OCCUPATION", occupation: initialState.occupation});
   dispatch({type: "VB_UPDATE_YEARS", years: initialState.years});
+  if (initialState.show) {
+    dispatch({type: "VB_UPDATE_SHOW_TYPE", showType: initialState.show});
+    dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: initialState.show});
+  }
+  if (initialState.viz) {
+    dispatch({type: "VB_UPDATE_VIZ", viz: initialState.viz});
+  }
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE, false, []));
 };
+// {type: "people", depth: "people"}
 
 export const updateCity = newCity => dispatch => {
   dispatch({type: "VB_UPDATE_CITY", city: newCity});
@@ -65,6 +73,12 @@ export const updateShowDepth = newShowDepth => dispatch => {
 
 export const updateShowType = newShowType => dispatch => {
   dispatch({type: "VB_UPDATE_SHOW_TYPE", showType: newShowType});
+  dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: newShowType});
+  dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
+};
+
+export const updateViz = newViz => dispatch => {
+  dispatch({type: "VB_UPDATE_VIZ", viz: newViz});
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 

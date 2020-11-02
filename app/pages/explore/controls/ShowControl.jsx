@@ -15,8 +15,6 @@ const ShowControl = ({page, updateShowDepth, show}) => {
     pageRankingTypes = pageRankingTypes.slice(1, pageRankingTypes.length);
   }
   const {type: showType, depth: showDepth} = show;
-  console.log("showType", showType);
-  console.log("show", show);
 
   return (
     <div className="filter">

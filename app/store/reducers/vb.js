@@ -145,10 +145,23 @@ const show = (
   switch (action.type) {
     case "INIT_EXPLORE":
       return {type: action.show.type, depth: action.show.depth};
-    case "CHANGE_EXPLORE_SHOW_TYPE":
+    case "VB_UPDATE_SHOW_TYPE":
       return {type: action.showType, depth: state.data};
-    case "CHANGE_EXPLORE_SHOW_DEPTH":
+    case "VB_UPDATE_SHOW_DEPTH":
       return {type: state.type, depth: action.showDepth};
+    default:
+      return state;
+  }
+};
+
+const viz = (
+  state = "treemap",
+  action
+) => {
+  switch (action.type) {
+    case "INIT_EXPLORE":
+    case "VB_UPDATE_VIZ":
+      return action.viz;
     default:
       return state;
   }
@@ -192,6 +205,7 @@ const vbReducer = combineReducers({
   page,
   placeType,
   show,
+  viz,
   years,
   yearType
 });

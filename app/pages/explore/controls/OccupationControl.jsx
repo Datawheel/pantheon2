@@ -2,8 +2,9 @@ import React from "react";
 import {connect} from "react-redux";
 import {updateOccupation} from "actions/vb";
 
-const OccupationControl = ({occupation, updateOccupation, nestedOccupations}) =>
-  <div className="filter prof-control">
+const OccupationControl = ({occupation, updateOccupation, occupationResponse}) => {
+  const {nestedOccupations} = occupationResponse;
+  return <div className="filter prof-control">
     <div className="">
       <h3>Working in</h3>
     </div>
@@ -28,10 +29,12 @@ const OccupationControl = ({occupation, updateOccupation, nestedOccupations}) =>
       </select>
     </div>
   </div>;
+};
 
 const mapDispatchToProps = {updateOccupation};
 
 const mapStateToProps = state => ({
+  occupationResponse: state.data.occupationResponse,
   occupation: state.vb.occupation
 });
 
