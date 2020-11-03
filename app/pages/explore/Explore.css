@@ -293,9 +293,7 @@
       }
 
       &.disabled {
-        cursor: not-allowed;
-        opacity: 0.7;
-        pointer-events: none;
+        @mixin disabledLink;
       }
     }
   }
@@ -316,6 +314,10 @@
 
       &:last-child:after {
         content: "";
+      }
+
+      & a.disabled {
+        @mixin disabledLink;
       }
     }
   }
