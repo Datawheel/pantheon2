@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {updateOccupation} from "actions/vb";
 
-const OccupationControl = ({occupation, updateOccupation, occupationResponse}) => {
+const OccupationControl = ({loading, occupation, updateOccupation, occupationResponse}) => {
   const {nestedOccupations} = occupationResponse;
   return <div className="filter prof-control">
     <div className="">
@@ -10,7 +10,7 @@ const OccupationControl = ({occupation, updateOccupation, occupationResponse}) =
     </div>
 
     <div>
-      <select value={occupation} onChange={e => updateOccupation(e.target.value)}>
+      <select disabled={loading} value={occupation} onChange={e => updateOccupation(e.target.value)}>
         <option value="all" data-occupations="all">All Occupations</option>
         {nestedOccupations
           ? nestedOccupations.map(domain =>
@@ -34,6 +34,7 @@ const OccupationControl = ({occupation, updateOccupation, occupationResponse}) =
 const mapDispatchToProps = {updateOccupation};
 
 const mapStateToProps = state => ({
+  loading: state.vb.data.loading,
   occupationResponse: state.data.occupationResponse,
   occupation: state.vb.occupation
 });

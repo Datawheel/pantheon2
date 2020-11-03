@@ -2,14 +2,29 @@ import React from "react";
 import {connect} from "react-redux";
 import {updateCity, updateCountry, updatePlaceType} from "actions/vb";
 
-const PlaceControl = ({city, updateCity, country, updateCountry, placeType, updatePlaceType, places}) =>
+const getClassName = (placetype, activePlaceType, loading) => {
+  if (placetype === activePlaceType) {
+    if (loading) {
+      return `active disabled ${placetype}`;
+    }
+    return `active ${placetype}`;
+  }
+  else if (loading) {
+    return `disabled ${placetype}`;
+  }
+  else {
+    return placetype;
+  }
+};
+
+const PlaceControl = ({city, updateCity, country, updateCountry, loading, placeType, updatePlaceType, places}) =>
   <div className="filter place-control">
     <ul className="items options flat-options filter">
-      <li><a onClick={e => (e.preventDefault(), updatePlaceType("birthplace"))} href="#" id="birthplace" className={placeType === "birthplace" ? "active birthplace" : "birthplace"}>Born in</a></li>
-      <li><a onClick={e => (e.preventDefault(), updatePlaceType("deathplace"))} href="#" id="deathplace" className={placeType === "deathplace" ? "active deathplace" : "deathplace"}>Died in</a></li>
+      <li><a onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updatePlaceType("birthplace"))} href="#" id="birthplace" className={getClassName("birthplace", placeType, loading)}>Born in</a></li>
+      <li><a onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updatePlaceType("deathplace"))} href="#" id="deathplace" className={getClassName("deathplace", placeType, loading)}>Died in</a></li>
     </ul>
 
-    <select value={country} onChange={e => updateCountry(e.target.value)}>
+    <select disabled={loading} value={country} onChange={e => updateCountry(e.target.value)}>
       <option value="all">All Countries</option>
       {places.filter(c => c.country.country_code)
         .sort((a, b) => a.country.country.localeCompare(b.country.country))
@@ -20,7 +35,7 @@ const PlaceControl = ({city, updateCity, country, updateCountry, placeType, upda
         )}
     </select>
 
-    <select value={city} onChange={e => updateCity(e.target.value)}>
+    <select disabled={loading} value={city} onChange={e => updateCity(e.target.value)}>
       <option value="all">All Cities</option>
       {country !== "all" && places.length && places.find(c => `${c.country.country_code}` === `${country}`)
         ? places
@@ -40,6 +55,7 @@ const mapDispatchToProps = {updateCity, updateCountry, updatePlaceType};
 const mapStateToProps = state => ({
   city: state.vb.city,
   country: state.vb.country,
+  loading: state.vb.data.loading,
   placeType: state.vb.placeType,
   places: state.data.places
 });

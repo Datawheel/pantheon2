@@ -61,6 +61,21 @@ class YearControl extends Component {
     this.props.updateYearType(newYearType);
   }
 
+  getClasName = (yearType, activeYearType, loading) => {
+    if (yearType === activeYearType) {
+      if (loading) {
+        return `active disabled ${yearType}`;
+      }
+      return `active ${yearType}`;
+    }
+    else if (loading) {
+      return `disabled ${yearType}`;
+    }
+    else {
+      return yearType;
+    }
+  };
+
   render() {
     // const timelineMarks = {
     //   "-4000": "4000 BC",
@@ -68,19 +83,19 @@ class YearControl extends Component {
     //   "2013": "2013"
     // };
     // const {years} = this.props.explore;
-    const {years, yearType} = this.props;
+    const {loading, years, yearType} = this.props;
     const {tempYearStart, tempYearEnd} = this.state;
 
     return (
       <div className="year-control filter">
         <ul className="items options flat-options filter">
-          <li><a onClick={e => this.changeYearType("birthyear", e)} href="#" id="birthyear" className={yearType === "birthyear" ? "active birthyear" : "birthyear"}>Born</a></li>
-          <li><a onClick={e => this.changeYearType("deathyear", e)} href="#" id="deathyear" className={yearType === "deathyear" ? "active deathyear" : "deathyear"}>Died</a></li>
+          <li><a onClick={e => loading ? null : this.changeYearType("birthyear", e)} href="#" id="birthyear" className={this.getClasName("birthyear", yearType, loading)}>Born</a></li>
+          <li><a onClick={e => loading ? null : this.changeYearType("deathyear", e)} href="#" id="deathyear" className={this.getClasName("deathyear", yearType, loading)}>Died</a></li>
         </ul>
         <div className="year-inputs">
-          <input type="text" id="startYear" value={tempYearStart !== null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={this.yearChange} onKeyDown={this.yearChange} onBlur={this.yearChange} />
+          <input disabled={loading} type="text" id="startYear" value={tempYearStart !== null && !tempYearEnd ? tempYearStart : FORMATTERS.year(years[0])} onChange={this.yearChange} onKeyDown={this.yearChange} onBlur={this.yearChange} />
           <span>and</span>
-          <input type="text" id="endYear" value={!tempYearStart && tempYearEnd !== null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={this.yearChange} onKeyDown={this.yearChange} onBlur={this.yearChange} />
+          <input disabled={loading} type="text" id="endYear" value={!tempYearStart && tempYearEnd !== null ? tempYearEnd : FORMATTERS.year(years[1])} onChange={this.yearChange} onKeyDown={this.yearChange} onBlur={this.yearChange} />
         </div>
       </div>
     );
@@ -90,6 +105,7 @@ class YearControl extends Component {
 const mapDispatchToProps = {updateYearType, updateYears};
 
 const mapStateToProps = state => ({
+  loading: state.vb.data.loading,
   yearType: state.vb.yearType,
   years: state.vb.years
 });
