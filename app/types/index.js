@@ -127,8 +127,8 @@ export const SANITIZERS = {
     type = types.includes(type) ? type : types[0];
     depth = depths.includes(depth) ? depth : null;
     // console.log("type, depth", type, depth)
-    // return {type, depth};
-    return type;
+    return {type, depth};
+    // return type;
   },
   years: yearStr => {
     if (!yearStr || !yearStr.includes(",")) return YEAR_RANGE;

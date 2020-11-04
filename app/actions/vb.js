@@ -5,12 +5,10 @@ const DEFAULT_PAGE_SIZE = 50;
 import {HPI_RANGE, LANGS_RANGE} from "types";
 
 export const initRankingsAndViz = initialState => dispatch  => {
-  console.log("initialState", initialState);
   if (initialState.page === "viz") {
     dispatch({type: "VB_INIT_VIZ"});
   }
   if (initialState.page === "rankings") {
-    console.log("VB_INIT_RANKINGS");
     dispatch({type: "VB_INIT_RANKINGS"});
   }
   dispatch({type: "VB_UPDATE_COUNTRY", country: initialState.country});
@@ -23,8 +21,8 @@ export const initRankingsAndViz = initialState => dispatch  => {
   dispatch({type: "VB_UPDATE_OCCUPATION", occupation: initialState.occupation});
   dispatch({type: "VB_UPDATE_YEARS", years: initialState.years});
   if (initialState.show) {
-    dispatch({type: "VB_UPDATE_SHOW_TYPE", showType: initialState.show});
-    dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: initialState.show});
+    dispatch({type: "VB_UPDATE_SHOW_TYPE", showType: initialState.show.type || initialState.show});
+    dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: initialState.show.depth || initialState.show.type || initialState.show});
   }
   if (initialState.viz) {
     dispatch({type: "VB_UPDATE_VIZ", viz: initialState.viz});
@@ -79,8 +77,11 @@ export const updatePlaceType = newPlaceType => dispatch => {
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updateShowDepth = newShowDepth => dispatch => {
+export const updateShowDepth = (newShowDepth, page) => dispatch => {
   dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: newShowDepth});
+  if (page === "rankings") {
+    dispatch({type: "VB_CLEAR_DATA"});
+  }
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
@@ -88,6 +89,7 @@ export const updateShowType = (newShowType, page) => dispatch => {
   dispatch({type: "VB_UPDATE_SHOW_TYPE", showType: newShowType});
   dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: newShowType});
   if (page === "rankings") {
+    dispatch({type: "VB_CLEAR_DATA"});
     dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
   }
 };
@@ -136,7 +138,6 @@ function receiveVbData(pageIndex, pageSize, range, count, data, newData) {
 }
 
 export const resetNewData = () => dispatch => {
-  console.log("\n\n\nRESSETTTTT\n\n\n");
   dispatch({type: "VB_RESET_NEW_DATA"});
 };
 
@@ -144,7 +145,7 @@ const setQueryArgs = state => {
   const {city, country, gender, metricType, metricCutoff, occupation, onlyShowNew, page, placeType, show, viz, years, yearType} = state.vb;
   // const pageType = state.location.pathname.includes("rankings") ? "rankings" : "viz";
 
-  let queryStr = page === "viz" ? `?viz=${viz}&show=${show.type}&years=${years}` : `?show=${show.type}&years=${years}`;
+  let queryStr = page === "viz" ? `?viz=${viz}&show=${show.type}${show.depth === show.type ? "" : `|${show.depth}`}&years=${years}` : `?show=${show.type}${show.depth === show.type ? "" : `|${show.depth}`}&years=${years}`;
   if (country !== "all") {
     queryStr += `&place=${country.toLowerCase()}`;
     if (city !== "all") {
@@ -185,7 +186,7 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
-  console.log("[action] FETCH DATA pageIndex, pageSize, newData, sortBy!!!", pageIndex, pageSize, newData, sortBy);
+  // console.log("[action] FETCH DATA pageIndex, pageSize, newData, sortBy!!!", pageIndex, pageSize, newData, sortBy);
 
   return function(dispatch, getState) {
     // First dispatch: the app state is updated to inform
@@ -195,7 +196,7 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
     const {city, country, gender, metricCutoff, metricType, occupation, onlyShowNew, page, placeType, show, years, yearType} = vb;
     const apiHeaders = {Prefer: "count=estimated"};
     const pageSize = 50;
-    let selectFields = "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
+    let selectFields = "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
     let sorting = "&order=hpi.desc.nullslast";
 
     let placeFilter = "";
@@ -256,8 +257,12 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
       .then(
         response => {
           const range = response.headers["content-range"] ? response.headers["content-range"].split("/")[0] : null;
-          const count = response.headers["content-range"] ? parseInt(response.headers["content-range"].split("/")[1], 10) : null;
-          const respData = page === "rankings" ? dataFormatter(response.data, show.type, placeType) : response.data;
+          let count = response.headers["content-range"] ? parseInt(response.headers["content-range"].split("/")[1], 10) : null;
+          let respData = page === "rankings" ? dataFormatter(response.data, show.type, show.depth, placeType) : response.data;
+          if (page === "rankings" && show.type !== "people") {
+            count = respData.length;
+            respData = respData.slice(pageSize * pageIndex, pageSize * pageIndex + pageSize);
+          }
           dispatch(receiveVbData(pageIndex, pageSize, range, count, respData, newData));
           setQueryArgs(getState());
         }
@@ -265,10 +270,5 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
         // should be handled by React Error Boundaries
         // https://reactjs.org/docs/error-boundaries.html
       );
-    // .then(json =>
-    //   // We can dispatch many times!
-    //   // Here, we update the app state with the results of the API call.
-    //
-    // );
   };
 }

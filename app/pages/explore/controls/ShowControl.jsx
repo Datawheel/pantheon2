@@ -15,6 +15,7 @@ const ShowControl = ({loading, page, updateShowDepth, show, updateShowType}) => 
     pageRankingTypes = pageRankingTypes.slice(1, pageRankingTypes.length);
   }
   const {type: showType, depth: showDepth} = show;
+  console.log("show!!!", show, showDepth, showDepth === "countries");
 
   return (
     <div className="filter">
@@ -27,7 +28,7 @@ const ShowControl = ({loading, page, updateShowDepth, show, updateShowType}) => 
                 href="#"
                 data-id={rt.id}
                 onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateShowType(rt.id.toLowerCase(), page))}
-                className={`${rt.id} ${loading ? "disabled" : null} ${!showType || showType === rt.id  ? "active" : null}`}>
+                className={`${rt.id} ${loading ? "disabled" : null} ${!showType || showType === rt.id  ? "active" : ""}`}>
                 {rt.name}
               </a>
             </h4>
@@ -38,9 +39,9 @@ const ShowControl = ({loading, page, updateShowDepth, show, updateShowType}) => 
         ? <div className="options filter">
           <h3>Data Depth</h3>
           <ul className="items options viztype-options">
-            <li><h4><a href="#" id="occupations" onClick={updateShowDepth} className={`d-3 ${!showDepth || showDepth === "occupations"  ? "active" : null}`}>Occupation</a></h4></li>
-            <li><h4><a href="#" id="industries" onClick={updateShowDepth} className={`d-2 ${showDepth === "industries" ? "active" : null}`}>Industry</a></h4></li>
-            <li><h4><a href="#" id="domains" onClick={updateShowDepth} className={`d-1 ${showDepth === "domains" ? "active" : null}`}>Domain</a></h4></li>
+            <li><h4><a href="#" id="occupations" onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateShowDepth("occupations", page))} className={`d-3 ${!showDepth || showDepth === "occupations"  ? "active" : ""}`}>Occupation</a></h4></li>
+            <li><h4><a href="#" id="industries" onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateShowDepth("industries", page))} className={`d-2 ${showDepth === "industries" ? "active" : ""}`}>Industry</a></h4></li>
+            <li><h4><a href="#" id="domains" onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateShowDepth("domains", page))} className={`d-1 ${showDepth === "domains" ? "active" : ""}`}>Domain</a></h4></li>
           </ul>
         </div>
         : null}
@@ -48,8 +49,8 @@ const ShowControl = ({loading, page, updateShowDepth, show, updateShowType}) => 
         ? <div className="options filter">
           <h3>Data Depth</h3>
           <ul className="items options viztype-options">
-            <li><h4><a href="#" id="places" onClick={updateShowDepth} className={`d-2 ${!showDepth || showDepth === "places" ? "active" : null}`}>City</a></h4></li>
-            <li><h4><a href="#" id="countries" onClick={updateShowDepth} className={`d-1 ${showDepth === "countries" ? "active" : null}`}>Country</a></h4></li>
+            <li><h4><a href="#" id="places" onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateShowDepth("places", page))} className={`d-2 ${!showDepth || showDepth === "places" ? "active" : ""}`}>City</a></h4></li>
+            <li><h4><a href="#" id="countries" onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateShowDepth("countries", page))} className={`d-1 ${showDepth === "countries" ? "active" : ""}`}>Country</a></h4></li>
           </ul>
         </div>
         : null}
