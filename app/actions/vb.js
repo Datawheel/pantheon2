@@ -1,9 +1,18 @@
 import api from "apiConfig";
+import dataFormatter from "pages/explore/helpers/dataFormatter";
+
 const DEFAULT_PAGE_SIZE = 50;
 import {HPI_RANGE, LANGS_RANGE} from "types";
 
 export const initRankingsAndViz = initialState => dispatch  => {
   console.log("initialState", initialState);
+  if (initialState.page === "viz") {
+    dispatch({type: "VB_INIT_VIZ"});
+  }
+  if (initialState.page === "rankings") {
+    console.log("VB_INIT_RANKINGS");
+    dispatch({type: "VB_INIT_RANKINGS"});
+  }
   dispatch({type: "VB_UPDATE_COUNTRY", country: initialState.country});
   dispatch({type: "VB_UPDATE_CITY", city: initialState.city});
   dispatch({type: "VB_UPDATE_GENDER", gender: initialState.gender});
@@ -23,6 +32,10 @@ export const initRankingsAndViz = initialState => dispatch  => {
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE, false, []));
 };
 // {type: "people", depth: "people"}
+
+export const unmountRankingsAndViz = () => dispatch  => {
+  dispatch({type: "VB_CLEAR_DATA"});
+};
 
 export const updateCity = newCity => dispatch => {
   dispatch({type: "VB_UPDATE_CITY", city: newCity});
@@ -71,15 +84,16 @@ export const updateShowDepth = newShowDepth => dispatch => {
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updateShowType = newShowType => dispatch => {
+export const updateShowType = (newShowType, page) => dispatch => {
   dispatch({type: "VB_UPDATE_SHOW_TYPE", showType: newShowType});
   dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: newShowType});
-  dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
+  if (page === "rankings") {
+    dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
+  }
 };
 
 export const updateViz = newViz => dispatch => {
   dispatch({type: "VB_UPDATE_VIZ", viz: newViz});
-  dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
 export const updateYears = newYears => dispatch => {
@@ -178,7 +192,7 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
     // that the API call is starting.
     dispatch(requestVbData(pageIndex, pageSize));
     const {data, vb} = getState();
-    const {city, country, gender, metricCutoff, metricType, occupation, onlyShowNew, page, placeType, years, yearType} = vb;
+    const {city, country, gender, metricCutoff, metricType, occupation, onlyShowNew, page, placeType, show, years, yearType} = vb;
     const apiHeaders = {Prefer: "count=estimated"};
     const pageSize = 50;
     let selectFields = "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)";
@@ -212,7 +226,9 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
     let limitOffset = "";
     let table = "person";
     if (page === "rankings") {
-      limitOffset = `&limit=50&offset=${pageSize * pageIndex}`;
+      if (show.type === "people") {
+        limitOffset = `&limit=50&offset=${pageSize * pageIndex}`;
+      }
       table = "person_ranks";
       selectFields = `${selectFields},occupation_rank,occupation_rank_prev,occupation_rank_delta,bplace_country_rank,bplace_country_rank_prev,bplace_country_rank_delta`;
       if (sortBy && sortBy.length) {
@@ -239,10 +255,10 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
     return api.get(dataUrl, {headers: apiHeaders})
       .then(
         response => {
-          console.log(response.headers);
           const range = response.headers["content-range"] ? response.headers["content-range"].split("/")[0] : null;
           const count = response.headers["content-range"] ? parseInt(response.headers["content-range"].split("/")[1], 10) : null;
-          dispatch(receiveVbData(pageIndex, pageSize, range, count, response.data, newData));
+          const respData = page === "rankings" ? dataFormatter(response.data, show.type, placeType) : response.data;
+          dispatch(receiveVbData(pageIndex, pageSize, range, count, respData, newData));
           setQueryArgs(getState());
         }
         // Do not use catch, because errors occured during rendering

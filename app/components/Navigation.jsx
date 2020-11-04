@@ -59,7 +59,7 @@ class Navigation extends Component {
               </span>
             </li>
             <li className="item">
-              <Link to="/explore/viz" className="item-link explore-link">Visualizations</Link>
+              <a href="/explore/viz" className="item-link explore-link">Visualizations</a>
             </li>
             <li className="item">
               <a href="/explore/rankings?show=people" className="item-link profiles-link dd">Rankings</a>

@@ -77,7 +77,7 @@ class PTreemap extends Component {
           height: RESET,
           shapeConfig: shapeConf,
           // time: "birthyear",
-          tooltipConfig: groupTooltip(merge(ttData), d => show === "places" ? d.bplace_country.slug : d.occupation.occupation_slug),
+          // tooltipConfig: groupTooltip(merge(ttData), d => show === "places" ? d.bplace_country.slug : d.occupation.occupation_slug),
           sum: d => d.id ? d.id instanceof Array ? d.id.length : 1 : 0
         }}
       />

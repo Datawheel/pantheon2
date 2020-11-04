@@ -8,7 +8,7 @@ const rankingTypes = [
   {id: "occupations", name: "Occupations"}
 ];
 
-const ShowControl = ({loading, page, updateShowDepth, show}) => {
+const ShowControl = ({loading, page, updateShowDepth, show, updateShowType}) => {
   let pageRankingTypes = rankingTypes;
 
   if (page === "viz") {
@@ -26,7 +26,7 @@ const ShowControl = ({loading, page, updateShowDepth, show}) => {
               <a
                 href="#"
                 data-id={rt.id}
-                onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateShowType(rt.id.toLowerCase()))}
+                onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateShowType(rt.id.toLowerCase(), page))}
                 className={`${rt.id} ${loading ? "disabled" : null} ${!showType || showType === rt.id  ? "active" : null}`}>
                 {rt.name}
               </a>

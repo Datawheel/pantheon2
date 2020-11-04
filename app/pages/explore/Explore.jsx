@@ -30,6 +30,10 @@ class Explore extends Component {
     return occupationStr.split("|");
   }
 
+  componentDidUpdate(prevProps) {
+    console.log("\n\n---------explore comp did update!!!\n---------------\n\n\n");
+  }
+
   componentWillMount() {
     // const queryParams = this.props.location.query;
     // const years = this.sanitizeQueryYears(queryParams.years);

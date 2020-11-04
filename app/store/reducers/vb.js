@@ -32,6 +32,11 @@ const data = (
   action
 ) => {
   switch (action.type) {
+    case "VB_INIT_RANKINGS":
+      return {data: null, loading: true, count: 0, offset: 0, page: 1, pageIndex: 0, pageSize: 50, new: false};
+    case "VB_INIT_VIZ":
+    case "VB_CLEAR_DATA":
+      return Object.assign({}, state, {data: null, loading: true, pageIndex: action.pageIndex});
     case "FETCH_VB_DATA":
       return Object.assign({}, state, {loading: true, pageIndex: action.pageIndex});
       // return {data: [], loading: true};

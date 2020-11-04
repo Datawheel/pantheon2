@@ -7,7 +7,7 @@ import VizShell from "pages/explore/viz/VizShell";
 import VizTitle from "pages/explore/viz/VizTitle";
 import {nest} from "d3-collection";
 import {FORMATTERS, HPI_RANGE, LANGS_RANGE} from "types";
-import {initRankingsAndViz} from "actions/vb";
+import {initRankingsAndViz, unmountRankingsAndViz} from "actions/vb";
 import {SANITIZERS} from "types";
 import "pages/explore/Explore.css";
 
@@ -36,7 +36,7 @@ class Viz extends Component {
     // };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const {location, initRankingsAndViz} = this.props;
     const {query: qParams} = location;
     const country = SANITIZERS.country(qParams.place) || "all";
@@ -47,25 +47,29 @@ class Viz extends Component {
     const metricCutoff = SANITIZERS.metric(qParams.l ? "l" : "hpi", qParams.l || qParams.hpi || 0).cutoff;
     const metricType = qParams.l ? "l" : "hpi";
     const onlyShowNew = qParams.new === "true";
-    const show = "occupations";
-    const viz = SANITIZERS.vizType(qParams.viz) || "treemap";
+    const show = qParams.show ? SANITIZERS.show(qParams.show, "viz") : "occupations";
+    const viz = qParams.viz ? SANITIZERS.vizType(qParams.viz) : "treemap";
     initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "viz", occupation, show, viz, years});
+  }
+
+  componentWillUnmount() {
+    this.props.unmountRankingsAndViz();
   }
 
   // UNSAFE_componentWillMount() {
   //   console.log("UNSAFE_componentWillMount porps", this.props);
   // }
 
-  componentDidUpdate(prevProps) {
-    // console.log("prevProps", prevProps);
-    // console.log("this.props", this.props);
-    // Typical usage (don't forget to compare props):
-    if (this.props.location.pathname !== prevProps.location.pathname) {
-      // this.fetchData(this.props.userID);
-      // console.log("should update!!!");
-      // this.setState({data: [], loading: true, filteredData: []});
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   // console.log("prevProps", prevProps);
+  //   // console.log("this.props", this.props);
+  //   // Typical usage (don't forget to compare props):
+  //   // if (this.props.location.pathname !== prevProps.location.pathname) {
+  //   // this.fetchData(this.props.userID);
+  //   // console.log("\n\n---------should update!!!\n---------------\n\n\n");
+  //   // this.setState({data: [], loading: true, filteredData: []});
+  //   // }
+  // }
 
   updateData = (updatedState, callback) => {
     if (callback) {
@@ -88,10 +92,8 @@ class Viz extends Component {
 
 
   render() {
-    const {pageType} = this.props.route;
-    const {places, occupationResponse} = this.props.data;
-    const {query: qParams, pathname} = this.props.location;
-    const {metricCutoff, metricType, rankingData, onlyShowNew, years} = this.props;
+    const {metricCutoff, metricType, years} = this.props;
+    // return <div>nada...</div>;
 
     // if (this.props.router.location.search === "" && window) {
     //   const countryCandidates = ["usa", "gbr", "fra", "deu", "ita", "jpn", "rus", "esp", "bra", "swe", "pol", "chn", "nld", "tur", "ind", "can", "aut", "ukr", "grc", "arg", "bel", "dnk", "aus", "che", "nor", "hun", "egy", "rou", "hrv", "irn", "prt", "irl", "fin", "mex", "srb", "isr", "irq", "bgr", "zaf", "ury", "svk", "blr", "geo", "col", "svn", "est", "sau", "bih", "ltu", "cze", "lva", "chl", "nzl", "nga", "cub", "kaz", "dza", "pak", "syr", "per", "kor", "isl", "tun", "mar", "aze", "jam", "pry", "ven"];
@@ -99,12 +101,6 @@ class Viz extends Component {
     //   const newUrl = `explore/viz?viz=treemap&show=occupations&years=-3501,2015&place=${randCountryId}`;
     //   window.history.pushState({path: newUrl}, "", newUrl);
     // }
-
-    if (!occupationResponse) {
-      return <div>loading...</div>;
-    }
-
-    const {nestedOccupations, occupations} = occupationResponse;
 
     const metricRange = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
     let metricSentence;
@@ -139,7 +135,7 @@ class Viz extends Component {
 Viz.need = [
   fetchData(
     "places",
-    "/place?select=id,place,lat,lon,slug,country:country_fk(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died&num_born=gte.15",
+    "/place?select=id,place,slug,country:country_fk(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died&num_born=gte.15",
     {
       format: res => {
         const places = nest()
@@ -180,15 +176,12 @@ Viz.need = [
   )
 ];
 
-const mapDispatchToProps = {initRankingsAndViz};
+const mapDispatchToProps = {initRankingsAndViz, unmountRankingsAndViz};
 
 const mapStateToProps = state => ({
-  data: state.data,
-  rankingData: state.vb.data,
   years: state.vb.years,
   metricCutoff: state.vb.metricCutoff,
-  metricType: state.vb.metricType,
-  onlyShowNew: state.vb.onlyShowNew
+  metricType: state.vb.metricType
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Viz);
