@@ -119,6 +119,8 @@ export default function RouteCreate() {
         <Route path="viz/embed" component={VizEmbed} pageType={"viz"} />
         <Route path="rankings" component={Rankings} pageType={"rankings"} />
       </Route>
+      {/* <Route path="explore/viz" component={Viz} pageType={"viz"} />
+      <Route path="explore/rankings" component={Rankings} pageType={"rankings"} /> */}
 
       <Route path="about" component={About}>
         <Route path="vision" component={Vision} />

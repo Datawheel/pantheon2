@@ -24,7 +24,7 @@ class VizShell extends Component {
       </div>;
     }
 
-    if (!data.data.length) {
+    if (data.data && !data.data.length) {
       return <div className="explore-viz-container">
         <div className="loading-img">
           <p>No data found.</p>
@@ -63,8 +63,9 @@ class VizShell extends Component {
 const mapStateToProps = state => ({
   data: state.vb.data,
   occupationResponse: state.data.occupationResponse,
+  show: state.vb.show.type,
   viz: state.vb.viz,
-  show: state.vb.show.type
+  yearType: state.vb.yearType
 });
 
 export default connect(mapStateToProps)(VizShell);

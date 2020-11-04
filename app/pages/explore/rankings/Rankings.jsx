@@ -11,7 +11,7 @@ import {animateScroll as scroll} from "react-scroll";
 import {plural} from "pluralize";
 import "pages/explore/Explore.css";
 import VizTitle from "pages/explore/viz/VizTitle";
-import {initRankingsAndViz} from "actions/vb";
+import {initRankingsAndViz, unmountRankingsAndViz} from "actions/vb";
 import {SANITIZERS} from "types";
 import Spinner from "components/Spinner";
 
@@ -41,7 +41,7 @@ class Ranking extends Component {
     // };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const {location, initRankingsAndViz} = this.props;
     const {query: qParams} = location;
     const country = SANITIZERS.country(qParams.place) || "all";
@@ -52,7 +52,12 @@ class Ranking extends Component {
     const metricCutoff = SANITIZERS.metric(qParams.l ? "l" : "hpi", qParams.l || qParams.hpi || 0).cutoff;
     const metricType = qParams.l ? "l" : "hpi";
     const onlyShowNew = qParams.new === "true";
-    initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "rankings", occupation, years});
+    const show = qParams.show ? SANITIZERS.show(qParams.show, "rankings") : "people";
+    initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "rankings", occupation, show, years});
+  }
+
+  componentWillUnmount() {
+    this.props.unmountRankingsAndViz();
   }
 
   componentDidUpdate(prevProps) {
@@ -214,7 +219,7 @@ Ranking.need = [
   )
 ];
 
-const mapDispatchToProps = {initRankingsAndViz};
+const mapDispatchToProps = {initRankingsAndViz, unmountRankingsAndViz};
 
 const mapStateToProps = state => ({
   data: state.data,
