@@ -5,8 +5,8 @@ import {FORMATTERS} from "types";
 import {COLORS_DOMAIN} from "types";
 
 const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
-  const occupationRank = personRanks.occupationRank;
-  const bplaceCountryRank = personRanks.bplaceCountryRank ? personRanks.bplaceCountryRank : null;
+  const {occupationRank, occupationRankPrev, bplaceCountryRank, bplaceCountryRankPrev} = personRanks;
+  // const bplaceCountryRank = personRanks.bplaceCountryRank ? personRanks.bplaceCountryRank : null;
   const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug];
   const decoLines = 14;
   let age = 0;
@@ -100,8 +100,9 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
             </p>}
           <p>
             <React.Fragment>Since 2007, the English Wikipedia page of {person.name} has received more than {FORMATTERS.commas(totalPageViews)} page views. </React.Fragment>
-            <React.Fragment>{person.gender ? person.gender === "M" ? "His" : "Her" : "Their"} biography is available in {person.l} different languages on Wikipedia making {person.gender ? person.gender === "M" ? "him" : "her" : "them"} the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a></React.Fragment>
-            <React.Fragment>{!person.bplace_country ? <span>.</span> : <span> and the {bplaceCountryRank !== 1 ? FORMATTERS.ordinal(bplaceCountryRank) : ""} most popular biography from <a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a>.</span>}</React.Fragment>
+            <React.Fragment>{person.gender ? person.gender === "M" ? "His" : "Her" : "Their"} biography is available in {person.l} different languages on Wikipedia{person.l_prev && person.l !== person.l_prev ? ` (${person.l > person.l_prev ? "up" : "down"} from ${person.l_prev} in 2019)` : ""}. </React.Fragment>
+            <React.Fragment>{person.name} is the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a>{occupationRankPrev && occupationRankPrev !== occupationRank ? ` (${occupationRank < occupationRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(occupationRankPrev)} in 2019)` : ""}</React.Fragment>
+            <React.Fragment>{!person.bplace_country ? <span>.</span> : <span> and the {bplaceCountryRank !== 1 ? FORMATTERS.ordinal(bplaceCountryRank) : ""} most popular biography from <a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></span>}{bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank ? ` (${bplaceCountryRank < bplaceCountryRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(bplaceCountryRankPrev)} in 2019).` : "."}</React.Fragment>
           </p>
         </div>
       </div>

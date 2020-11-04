@@ -199,6 +199,7 @@ Person.preneed = [
     const person = res[0];
     // Calculate min/max for occupation peers
     const occupationRank = person.occupation_rank_unique;
+    const occupationRankPrev = person.occupation_rank_prev;
     const occupationRankLow = Math.max(1, parseInt(person.occupation_rank_unique, 10) - NUM_RANKINGS_PRE);
     const occupationRankHigh = Math.max(NUM_RANKINGS, parseInt(person.occupation_rank_unique, 10) + NUM_RANKINGS_POST);
     // Calculate min/max for birthyear peers
@@ -215,6 +216,7 @@ Person.preneed = [
     const deathyearRankUnique = person.deathyear_rank_unique || "9999";
     // Calculate min/max for birth country peers
     const bplaceCountryRank = person.bplace_country_rank;
+    const bplaceCountryRankPrev = person.bplace_country_rank_prev;
     const bplaceCountryRankLow = person.bplace_country_rank_unique ? Math.max(1, parseInt(person.bplace_country_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
     const bplaceCountryRankHigh = person.bplace_country_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.bplace_country_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
     // ensure birthcountry is non NULL
@@ -223,10 +225,10 @@ Person.preneed = [
     const bplaceCountryOccupationRank = person.bplace_country_occupation_rank_unique;
     const bplaceCountryOccupationRankLow = person.bplace_country_occupation_rank_unique ? Math.max(1, parseInt(person.bplace_country_occupation_rank_unique, 10) - NUM_RANKINGS_PRE) : "9999";
     const bplaceCountryOccupationRankHigh = person.bplace_country_occupation_rank_unique ? Math.max(NUM_RANKINGS, parseInt(person.bplace_country_occupation_rank_unique, 10) + NUM_RANKINGS_POST) : "9999";
-    return {occupationRank, occupationRankLow, occupationRankHigh,
+    return {occupationRank, occupationRankLow, occupationRankHigh, occupationRankPrev,
       birthYearRank, birthYearRankLow, birthYearRankHigh,
       deathYearRank, deathyearRankUnique, deathyearId, deathYearRankLow, deathYearRankHigh,
-      bplaceCountry, bplaceCountryRank, bplaceCountryRankLow, bplaceCountryRankHigh,
+      bplaceCountry, bplaceCountryRank, bplaceCountryRankLow, bplaceCountryRankHigh, bplaceCountryRankPrev,
       bplaceCountryOccupationRank, bplaceCountryOccupationRankLow, bplaceCountryOccupationRankHigh};
   }),
   fetchData("person", personURL, res => {
