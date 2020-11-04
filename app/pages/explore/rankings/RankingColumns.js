@@ -7,7 +7,7 @@ import PersonImage from "components/utils/PersonImage";
 
 const genderOrder = ["M", null, "F"];
 
-const getColumns = (show, nesting, occupations, places) => {
+const getColumns = (show, nesting, countOffset) => {
   const COLUMNS = {
     people: {
       people: [
@@ -18,8 +18,8 @@ const getColumns = (show, nesting, occupations, places) => {
               disableSortBy: true,
               Header: "#",
               id: "row",
-              // accessor: (_d, i) => i + 1 + controlledPageIndex * 50,
-              accessor: (_d, i) => i + 1,
+              accessor: (_d, i) => i + 1 + countOffset,
+              // accessor: (_d, i) => i + 1,
               maxWidth: 45
             },
             {
@@ -226,175 +226,440 @@ const getColumns = (show, nesting, occupations, places) => {
     occupations: {
       occupations: [
         {
-          Header: "",
+          disableSortBy: true,
+          Header: "#",
           id: "row",
-          maxWidth: 45,
-          filterable: false,
-          Cell: row => <div>{row.viewIndex + 1 + row.pageSize * row.page}</div>
-        },
-        {
-          Header: "",
-          accessor: "slug",
-          Cell: ({value}) => <div className="ranking-thumbnail" style={{backgroundImage: `url('/images/profile/occupation/${value}.jpg')`}}></div>,
-          maxWidth: 70
+          accessor: (_d, i) => i + 1 + countOffset,
+          maxWidth: 45
         },
         {
           Header: "Occupation",
           accessor: "name",
-          Cell: ({value, original}) => <a href={`/profile/occupation/${original.slug}`}>{value}</a>
+          style: {whiteSpace: "unset"},
+          Cell: ({value, row: {original}}) => <a href={`/profile/occupation/${original.slug}`}>{value}</a>
         },
         {
           Header: "Industry",
-          accessor: "id",
-          Cell: ({value}) => {
-            const occ = occupations.find(o => o.id === value);
-            return <span>{occ.industry}</span>;
-          }
+          accessor: "industry"
         },
         {
           Header: "Domain",
-          accessor: "id",
-          Cell: ({value}) => {
-            const occ = occupations.find(o => o.id === value);
-            return <span>{occ.domain}</span>;
-          }
+          accessor: "domain"
         },
         {
           Header: "People",
           accessor: "count",
-          defaultSorted: true,
-          minWidth: 55
+          minWidth: 60,
+          className: "cell_numeric"
         },
         {
-          Header: "HPI",
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Historical Popularity Index"}>
+            <div>HPI 2020 <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
           accessor: "hpi",
-          Cell: ({value}) => <span>{FORMATTERS.bigNum(value)}</span>,
-          minWidth: 55
+          Cell: ({value}) => FORMATTERS.bigNum(value),
+          defaultSorted: true,
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
         },
         {
-          Header: "Avg. HPI",
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Average Historical Popularity Index"}>
+            <div>Avg HPI <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
           accessor: "avg_hpi",
-          Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
-          minWidth: 55
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
         },
         {
-          Header: "L",
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Count of Wikipedia Language Editions"}>
+            <div>L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
           accessor: "langs",
-          Cell: ({value}) => <span>{FORMATTERS.commas(value)}</span>,
-          minWidth: 55
+          Cell: ({value}) => FORMATTERS.commas(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
         },
         {
-          Header: "Avg. L",
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Average Count of Wikipedia Language Editions"}>
+            <div>Avg L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
           accessor: "avg_langs",
-          Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
-          minWidth: 55
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
         },
         {
           Header: "Top 3",
           accessor: "top_ranked",
-          style: {whiteSpace: "unset"},
           Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
         }
-        // {
-        //   header: "% Women",
-        //   accessor: "num_born_women",
-        //   minWidth: 72,
-        //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
-        // }
       ],
       industries: [
         {
-          header: "#",
-          accessor: "num_born",
-          minWidth: 30,
-          render: ({index}) => <span>{index + 1}</span>
+          disableSortBy: true,
+          Header: "#",
+          id: "row",
+          accessor: (_d, i) => i + 1 + countOffset,
+          maxWidth: 45
         },
         {
-          header: "Industry",
-          accessor: "occupation",
-          render: ({value}) => <span>{value.industry}</span>
+          Header: "Industry",
+          accessor: "industry"
         },
         {
-          header: "Domain",
-          accessor: "occupation",
-          render: ({value}) => <span>{value.domain}</span>
+          Header: "Domain",
+          accessor: "domain"
         },
         {
-          header: "People",
-          accessor: "num_born",
-          sort: "desc"
+          Header: "People",
+          accessor: "count",
+          minWidth: 60,
+          className: "cell_numeric"
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Historical Popularity Index"}>
+            <div>HPI 2020 <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "hpi",
+          Cell: ({value}) => FORMATTERS.bigNum(value),
+          defaultSorted: true,
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Average Historical Popularity Index"}>
+            <div>Avg HPI <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "avg_hpi",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Count of Wikipedia Language Editions"}>
+            <div>L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "langs",
+          Cell: ({value}) => FORMATTERS.commas(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Average Count of Wikipedia Language Editions"}>
+            <div>Avg L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "avg_langs",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: "Top 3",
+          accessor: "top_ranked",
+          Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
         }
-        // {
-        //   header: "% Women",
-        //   accessor: "num_born_women",
-        //   minWidth: 72,
-        //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
-        // }
       ],
       domains: [
         {
-          header: "#",
-          accessor: "num_born",
-          render: ({index}) => <span>{index + 1}</span>
+          disableSortBy: true,
+          Header: "#",
+          id: "row",
+          accessor: (_d, i) => i + 1 + countOffset,
+          maxWidth: 45
         },
         {
-          header: "Domain",
-          accessor: "occupation",
-          render: ({value}) => <span>{value.domain}</span>
+          Header: "Domain",
+          accessor: "domain"
         },
         {
-          header: "People",
-          accessor: "num_born",
-          sort: "desc"
+          Header: "People",
+          accessor: "count",
+          minWidth: 60,
+          className: "cell_numeric"
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Historical Popularity Index"}>
+            <div>HPI 2020 <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "hpi",
+          Cell: ({value}) => FORMATTERS.bigNum(value),
+          defaultSorted: true,
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Average Historical Popularity Index"}>
+            <div>Avg HPI <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "avg_hpi",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Count of Wikipedia Language Editions"}>
+            <div>L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "langs",
+          Cell: ({value}) => FORMATTERS.commas(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Average Count of Wikipedia Language Editions"}>
+            <div>Avg L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "avg_langs",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: "Top 3",
+          accessor: "top_ranked",
+          Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
         }
-        // {
-        //   header: "% Women",
-        //   accessor: "num_born_women",
-        //   minWidth: 72,
-        //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
-        // }
       ]
     },
+    // occupations: {
+    //   occupations: [
+    //     {
+    //       Header: "",
+    //       id: "row",
+    //       maxWidth: 45,
+    //       filterable: false,
+    //       Cell: row => <div>{row.viewIndex + 1 + row.pageSize * row.page}</div>
+    //     },
+    //     {
+    //       Header: "",
+    //       accessor: "slug",
+    //       Cell: ({value}) => <div className="ranking-thumbnail" style={{backgroundImage: `url('/images/profile/occupation/${value}.jpg')`}}></div>,
+    //       maxWidth: 70
+    //     },
+    //     {
+    //       Header: "Occupation",
+    //       accessor: "name",
+    //       Cell: ({value, original}) => <a href={`/profile/occupation/${original.slug}`}>{value}</a>
+    //     },
+    //     {
+    //       Header: "Industry",
+    //       accessor: "id",
+    //       Cell: ({value}) => {
+    //         const occ = occupations.find(o => o.id === value);
+    //         return <span>{occ.industry}</span>;
+    //       }
+    //     },
+    //     {
+    //       Header: "Domain",
+    //       accessor: "id",
+    //       Cell: ({value}) => {
+    //         const occ = occupations.find(o => o.id === value);
+    //         return <span>{occ.domain}</span>;
+    //       }
+    //     },
+    //     {
+    //       Header: "People",
+    //       accessor: "count",
+    //       defaultSorted: true,
+    //       minWidth: 55
+    //     },
+    //     {
+    //       Header: "HPI",
+    //       accessor: "hpi",
+    //       Cell: ({value}) => <span>{FORMATTERS.bigNum(value)}</span>,
+    //       minWidth: 55
+    //     },
+    //     {
+    //       Header: "Avg. HPI",
+    //       accessor: "avg_hpi",
+    //       Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+    //       minWidth: 55
+    //     },
+    //     {
+    //       Header: "L",
+    //       accessor: "langs",
+    //       Cell: ({value}) => <span>{FORMATTERS.commas(value)}</span>,
+    //       minWidth: 55
+    //     },
+    //     {
+    //       Header: "Avg. L",
+    //       accessor: "avg_langs",
+    //       Cell: ({value}) => <span>{FORMATTERS.decimal(value)}</span>,
+    //       minWidth: 55
+    //     },
+    //     {
+    //       Header: "Top 3",
+    //       accessor: "top_ranked",
+    //       style: {whiteSpace: "unset"},
+    //       Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
+    //     }
+    //     // {
+    //     //   header: "% Women",
+    //     //   accessor: "num_born_women",
+    //     //   minWidth: 72,
+    //     //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
+    //     // }
+    //   ],
+    //   industries: [
+    //     {
+    //       header: "#",
+    //       accessor: "num_born",
+    //       minWidth: 30,
+    //       render: ({index}) => <span>{index + 1}</span>
+    //     },
+    //     {
+    //       header: "Industry",
+    //       accessor: "occupation",
+    //       render: ({value}) => <span>{value.industry}</span>
+    //     },
+    //     {
+    //       header: "Domain",
+    //       accessor: "occupation",
+    //       render: ({value}) => <span>{value.domain}</span>
+    //     },
+    //     {
+    //       header: "People",
+    //       accessor: "num_born",
+    //       sort: "desc"
+    //     }
+    //     // {
+    //     //   header: "% Women",
+    //     //   accessor: "num_born_women",
+    //     //   minWidth: 72,
+    //     //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
+    //     // }
+    //   ],
+    //   domains: [
+    //     {
+    //       header: "#",
+    //       accessor: "num_born",
+    //       render: ({index}) => <span>{index + 1}</span>
+    //     },
+    //     {
+    //       header: "Domain",
+    //       accessor: "occupation",
+    //       render: ({value}) => <span>{value.domain}</span>
+    //     },
+    //     {
+    //       header: "People",
+    //       accessor: "num_born",
+    //       sort: "desc"
+    //     }
+    //     // {
+    //     //   header: "% Women",
+    //     //   accessor: "num_born_women",
+    //     //   minWidth: 72,
+    //     //   render: ({value, row}) => <span>{value ? FORMATTERS.shareWhole(value/row["num_born"]) : "0%"}</span>
+    //     // }
+    //   ]
+    // },
     places: {
       countries: [
         {
-          header: "#",
-          accessor: "born_rank_unique",
-          render: ({value, index}) => <span>{value ? value : index + 1}</span>
+          disableSortBy: true,
+          Header: "#",
+          id: "row",
+          accessor: (_d, i) => i + 1 + countOffset,
+          maxWidth: 45
         },
         {
-          header: "Country",
-          accessor: "country",
-          render: ({value}) => <a href={`/profile/place/${value.slug}`}>{value.name}</a>
+          Header: "Country",
+          accessor: "country_name",
+          style: {whiteSpace: "unset"},
+          Cell: ({value, row: {original}}) => <a href={`/profile/country/${original.country_slug}`}>{value}</a>
         },
         {
-          header: "Region",
-          accessor: "country",
-          render: ({value}) => <span>{value.region}</span>
+          Header: "People",
+          accessor: "count",
+          minWidth: 60,
+          className: "cell_numeric"
         },
         {
-          header: "Continent",
-          accessor: "country",
-          render: ({value}) => <span>{value.continent}</span>
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Historical Popularity Index"}>
+            <div>HPI 2020 <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "hpi",
+          Cell: ({value}) => FORMATTERS.bigNum(value),
+          defaultSorted: true,
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
         },
         {
-          header: "Births",
-          accessor: "num_born",
-          minWidth: 60
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Average Historical Popularity Index"}>
+            <div>Avg HPI <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "avg_hpi",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
         },
         {
-          header: "Deaths",
-          accessor: "num_died",
-          minWidth: 60
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Count of Wikipedia Language Editions"}>
+            <div>L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "langs",
+          Cell: ({value}) => FORMATTERS.commas(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: () => <Tooltip className="table-tooltip-trigger" content={"Average Count of Wikipedia Language Editions"}>
+            <div>Avg L <Icon icon="info-sign" iconSize={10} /></div>
+          </Tooltip>,
+          accessor: "avg_langs",
+          Cell: ({value}) => FORMATTERS.decimal(value),
+          minWidth: 55,
+          className: "cell_numeric",
+          sortDescFirst: true
+        },
+        {
+          Header: "Top 3",
+          accessor: "top_ranked",
+          Cell: ({value}) => <AnchorList items={value} name={d => d.name} url={d => `/profile/person/${d.slug}/`} noAnd />
         }
+        // {
+        //   header: "Region",
+        //   accessor: "country",
+        //   render: ({value}) => <span>{value.region}</span>
+        // },
+        // {
+        //   header: "Continent",
+        //   accessor: "country",
+        //   render: ({value}) => <span>{value.continent}</span>
+        // },
+        // {
+        //   header: "Births",
+        //   accessor: "num_born",
+        //   minWidth: 60
+        // },
+        // {
+        //   header: "Deaths",
+        //   accessor: "num_died",
+        //   minWidth: 60
+        // }
       ],
       places: [
         {
           disableSortBy: true,
           Header: "#",
           id: "row",
-          // accessor: (_d, i) => i + 1 + controlledPageIndex * 50,
-          accessor: (_d, i) => i + 1,
+          accessor: (_d, i) => i + 1 + countOffset,
           maxWidth: 45
         },
         {

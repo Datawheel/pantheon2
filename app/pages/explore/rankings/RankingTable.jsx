@@ -14,25 +14,24 @@ import {FORMATTERS} from "types";
 import {Icon, Tooltip} from "@blueprintjs/core";
 const genderOrder = ["M", null, "F"];
 
-const RankingTable = ({data, show}) => {
+const RankingTable = ({data, fetchData, show}) => {
   // console.log("myPageSize!!", myPageSize);
   // console.log("myPage!!", myPage);
   // console.log("data!", data);
   // return <div>table here</div>;
-  const showDepth = show;
-  const showColumns = getColumns(show.type, show.depth);
   // const sortCol = columns.find(c => c.defaultSorted);
   const controlledPageCount = data.data && data.data.length ? Math.ceil(data.count / 50) : 1;
-  // const controlledPageIndex = data.data && data.data.length ? data.pageIndex : 0;
   const controlledPageIndex = data.data && data.data.length ? data.pageIndex : 0;
 
+  // const [controlledPageIndex, setControlledPage] = React.useState(0);
+
   const columns = React.useMemo(
-    () => showColumns,
+    () => getColumns(show.type, show.depth, controlledPageIndex * 50),
     // [controlledPageIndex]
     [controlledPageIndex, show.type]
   );
 
-  console.log("!!!showColumns!!!", showColumns);
+  // console.log("!!!showColumns!!!", showColumns);
 
   const {
     getTableProps,
@@ -64,8 +63,7 @@ const RankingTable = ({data, show}) => {
       // pageCount.
       manualSortBy: true,
       pageCount: controlledPageCount,
-      useControlledState: state => {
-        const f = "tset";
+      useControlledState: state =>
         //         console.log(`\n\n---------------------------------
         // INSIDE CONTROL (data.new changed!)
         // ---------------------------------`);
@@ -74,23 +72,30 @@ const RankingTable = ({data, show}) => {
         //         console.log(`---------------------------------
         // END INSIDE CONTROL
         // ---------------------------------\n`);
-        console.log(`\n\nINSIDE CONTROL: ${state.pageIndex} || data.pageIndex: ${data.pageIndex} || controlledPageIndex: ${controlledPageIndex} || data.new: ${data.new}\n\n`);
+        // console.log(`\n\nINSIDE CONTROL: ${state.pageIndex} || data.pageIndex: ${data.pageIndex} || controlledPageIndex: ${controlledPageIndex} || data.new: ${data.new}\n\n`);
         // console.log(`\n\nINSIDE CONTROL: ${state.pageIndex} || data.pageIndex: ${data.pageIndex} || controlledPageIndex: ${controlledPageIndex} || data.new: ${data.new}\n\n`);
         // return {...state, pageIndex: data.new ? data.pageIndex : state.pageIndex};
-        return React.useMemo(
-          () => {
-            let newState = {
-              ...state,
-              pageIndex: state.pageIndex
-            };
-            if (data.new) {
-              newState = {...state, pageIndex: data.pageIndex};
-            }
-            return newState;
-          },
-          [state, data.new]
-        );
-      }
+      //   return React.useMemo(
+      //     () => {
+      //       let newState = {
+      //         ...state,
+      //         pageIndex: state.pageIndex
+      //       };
+      //       if (data.new) {
+      //         newState = {...state, pageIndex: data.pageIndex};
+      //       }
+      //       return newState;
+      //     },
+      //     [state, data.new]
+      //   );
+        React.useMemo(
+          () => ({
+            ...state,
+            pageIndex: controlledPageIndex
+          }),
+          [state, controlledPageIndex]
+        )
+
     },
     useSortBy,
     usePagination
@@ -156,7 +161,7 @@ const RankingTable = ({data, show}) => {
           <thead>
             {headerGroups.map(headerGroup =>
             // console.log(headerGroup.getHeaderGroupProps());
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <tr key={null} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => {
                   const headerClassName = column.isSorted
                     ? column.isSortedDesc
@@ -209,16 +214,16 @@ const RankingTable = ({data, show}) => {
         </table>
       </div>
       <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+        <button onClick={() => fetchData(0, 50)} disabled={!canPreviousPage}>
           {"<<"}
         </button>{" "}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <button onClick={() => fetchData(controlledPageIndex - 1, 50)} disabled={!canPreviousPage}>
           {"<"}
         </button>{" "}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        <button onClick={() => fetchData(controlledPageIndex + 1, 50)} disabled={!canNextPage}>
           {">"}
         </button>{" "}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        <button onClick={() => fetchData(pageCount - 1, 50)} disabled={!canNextPage}>
           {">>"}
         </button>{" "}
         <span>

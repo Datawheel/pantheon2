@@ -53,6 +53,7 @@ class Ranking extends Component {
     const metricType = qParams.l ? "l" : "hpi";
     const onlyShowNew = qParams.new === "true";
     const show = qParams.show ? SANITIZERS.show(qParams.show, "rankings") : "people";
+    // console.log("show!!!", show);
     initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "rankings", occupation, show, years});
   }
 
