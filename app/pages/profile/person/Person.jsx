@@ -92,15 +92,6 @@ class Person extends Component {
     if (newsArticles.length) {
       sections.push({title: "In the news", slug: "news_articles", content: <News person={person} newsArticles={newsArticles} />});
     }
-    if (person.twitter) {
-      sections.push({title: "Twitter Activity", slug: "twitter", content: <Twitter person={person} />});
-    }
-    if (["ACTOR", "COMEDIAN"].includes(person.occupation.id)) {
-      sections.push({title: "Television and Movie Roles", slug: "movies", content: <Movies person={person} />});
-    }
-    if (["FILM DIRECTOR"].includes(person.occupation.id)) {
-      sections.push({title: "Filmography", slug: "movies", content: <Movies person={person} />});
-    }
     if (person.occupation.id === "WRITER") {
       sections.push({title: "Notable Works", slug: "books", content: <Books person={person} />});
     }
@@ -112,6 +103,15 @@ class Person extends Component {
     if (person.bplace_country) {
       sections.push({title: `In ${person.bplace_country.country}`, slug: "country_peers", content: <CountryRanking person={person} ranking={birthCountryRanks} />});
       sections.push({title: `Among ${plural(person.occupation.occupation)} In ${person.bplace_country.country}`, slug: "country_occupation_peers", content: <CountryOccupationRanking person={person} ranking={birthCountryOccupationRanks} />});
+    }
+    if (person.twitter) {
+      sections.push({title: "Twitter Activity", slug: "twitter", content: <Twitter person={person} />});
+    }
+    if (["ACTOR", "COMEDIAN"].includes(person.occupation.id)) {
+      sections.push({title: "Television and Movie Roles", slug: "movies", content: <Movies person={person} />});
+    }
+    if (["FILM DIRECTOR"].includes(person.occupation.id)) {
+      sections.push({title: "Filmography", slug: "movies", content: <Movies person={person} />});
     }
     // Add YASIV youtube network
     // sections.push({
