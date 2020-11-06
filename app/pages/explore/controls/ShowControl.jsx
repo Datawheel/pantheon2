@@ -15,7 +15,7 @@ const ShowControl = ({loading, page, updateShowDepth, show, updateShowType}) => 
     pageRankingTypes = pageRankingTypes.slice(1, pageRankingTypes.length);
   }
   const {type: showType, depth: showDepth} = show;
-  console.log("show!!!", show, showDepth, showDepth === "countries");
+  // console.log("show!!!", show, showDepth, showDepth === "countries");
 
   return (
     <div className="filter">

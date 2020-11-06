@@ -23,7 +23,7 @@ const RankingTable = ({data, fetchData, show}) => {
   const controlledPageCount = data.data && data.data.length ? Math.ceil(data.count / 50) : 1;
   const controlledPageIndex = data.data && data.data.length ? data.pageIndex : 0;
 
-  // const [controlledPageIndex, setControlledPage] = React.useState(0);
+  const [pageInputVal, setPageInputVal] = React.useState(controlledPageIndex);
 
   const columns = React.useMemo(
     () => getColumns(show.type, show.depth, controlledPageIndex * 50),
@@ -113,20 +113,29 @@ const RankingTable = ({data, fetchData, show}) => {
   // Listen for changes in pagination and use the state to fetch our new data
   // console.log("[pageIndex, pageSize, sortBy]", [pageIndex, pageSize, sortBy]);
   useEffect(() => {
-    if (!data.new && !firstUpdate.current) {
-      // console.log("------- fetching new data --------");
-      const newData = false;
-      fetchData(pageIndex, pageSize, newData, sortBy);
-    }
-    else {
-      // console.log("!!!!!!!!! NOT fetching new data !!!!!!!!!");
-      resetNewData();
-    }
+    console.log("------- fetching new data --------");
+    const newData = false;
+    fetchData(pageIndex, pageSize, newData, sortBy);
+    // if (!data.new && !firstUpdate.current) {
+    //   console.log("------- fetching new data --------");
+    //   const newData = false;
+    //   fetchData(pageIndex, pageSize, newData, sortBy);
+    // }
+    // else {
+    //   // console.log("!!!!!!!!! NOT fetching new data !!!!!!!!!");
+    //   resetNewData();
+    // }
+
     // console.log("fetch data here!, pageIndex, pageSize:", pageIndex, pageSize);
     // console.log("sortBy:", sortBy);
     // fetchPantheonData("rankings", countryLookup);
   // }, [fetchData, pageIndex, pageSize]);
-  }, [pageIndex, pageSize, sortBy]);
+  // }, [pageIndex, pageSize, sortBy]);
+  }, [sortBy]);
+
+  useEffect(() => {
+    setPageInputVal(controlledPageIndex);
+  }, [controlledPageIndex]);
 
   // <ReactTable
   //       className="-striped -highlight"
@@ -214,16 +223,16 @@ const RankingTable = ({data, fetchData, show}) => {
         </table>
       </div>
       <div className="pagination">
-        <button onClick={() => fetchData(0, 50)} disabled={!canPreviousPage}>
+        <button onClick={() => (setPageInputVal(0), fetchData(0, 50, false, sortBy))} disabled={!canPreviousPage || data.loading}>
           {"<<"}
         </button>{" "}
-        <button onClick={() => fetchData(controlledPageIndex - 1, 50)} disabled={!canPreviousPage}>
+        <button onClick={() => (setPageInputVal(controlledPageIndex - 1), fetchData(controlledPageIndex - 1, 50, false, sortBy))} disabled={!canPreviousPage || data.loading}>
           {"<"}
         </button>{" "}
-        <button onClick={() => fetchData(controlledPageIndex + 1, 50)} disabled={!canNextPage}>
+        <button onClick={() => (setPageInputVal(controlledPageIndex + 1), fetchData(controlledPageIndex + 1, 50, false, sortBy))} disabled={!canNextPage || data.loading}>
           {">"}
         </button>{" "}
-        <button onClick={() => fetchData(pageCount - 1, 50)} disabled={!canNextPage}>
+        <button onClick={() => (setPageInputVal(pageCount - 1), fetchData(pageCount - 1, 50, false, sortBy))} disabled={!canNextPage || data.loading}>
           {">>"}
         </button>{" "}
         <span>
@@ -237,14 +246,25 @@ const RankingTable = ({data, fetchData, show}) => {
           <input
             type="number"
             // defaultValue={pageIndex + 1}
+            onChange={e => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              setPageInputVal(page);
+            }}
             onKeyDown={e => {
+              let page = e.target.value ? Number(e.target.value) - 1 : 0;
               if (e.key === "Enter") {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                gotoPage(page);
+                if (page > pageCount - 1) {
+                  page = pageCount - 1;
+                }
+                if (page < 0) {
+                  page = 0;
+                }
+                fetchData(page, 50, false, sortBy);
+                setPageInputVal(page);
               }
             }}
             style={{width: "100px"}}
-            value={pageIndex + 1}
+            value={pageInputVal + 1}
           />
         </span>{" "}
         <select
