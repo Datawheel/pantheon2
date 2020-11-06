@@ -19,6 +19,14 @@
     display: block;
     text-align: center;
     font-size: 16px;
+
+    & a.shuffle {
+      margin: 0 0 0 10px;
+      & img {
+        width: 20px;
+        vertical-align: middle;
+      }
+    }
   } /* end .grid-subtitle */
 
   & .grid-row {
