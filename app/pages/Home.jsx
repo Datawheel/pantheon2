@@ -55,8 +55,8 @@ class Home extends Component {
   }
 
   changeCountry = evtOrCountry => {
-    const requestedCountry = evtOrCountry.target ? evtOrCountry.target.value : evtOrCountry;
-    const requestedCountryCode = evtOrCountry.target ? evtOrCountry.target[evtOrCountry.target.selectedIndex].dataset.countrycode : evtOrCountry;
+    const requestedCountry = evtOrCountry.target ? evtOrCountry.target.value : evtOrCountry.country;
+    const requestedCountryCode = evtOrCountry.target ? evtOrCountry.target[evtOrCountry.target.selectedIndex].dataset.countrycode : evtOrCountry.countrycode;
     this.setState({activeCountry: requestedCountry, activeCountryCode: requestedCountryCode, loadingCountryBios: true});
     const countryFilter = requestedCountry === "all" ? "" : `&bplace_country=eq.${requestedCountry}`;
     api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16${countryFilter}`).then(countryBiosRes => {
@@ -73,6 +73,18 @@ class Home extends Component {
       // this.context.router.replace(`?tlang=${trendingLangEdition}`);
       this.setState({fetchedOccupationBios: occupationBiosRes.data, loadingOccupationBios: false});
     });
+  }
+
+  setRandom = countryOrOccupation => {
+    const {countryList, occupationList} = this.props;
+    if (countryOrOccupation === "country") {
+      const randomCountry = countryList[Math.floor(Math.random() * countryList.length)];
+      this.changeCountry({country: randomCountry.country, countrycode: randomCountry.country_code});
+    }
+    if (countryOrOccupation === "occupation") {
+      const randomOccupation = occupationList[Math.floor(Math.random() * occupationList.length)];
+      this.changeOccupation(randomOccupation.occupation);
+    }
   }
 
   render() {
@@ -109,6 +121,7 @@ class Home extends Component {
                 <option key={country.country} value={country.country} data-countrycode={country.country_code}>{country.country}</option>
               )}
             </select>
+            <a className="shuffle" href="#" onClick={e => (e.preventDefault(), this.setRandom("country"))}><img src="/images/icons/icon-shuffle.svg" alt="Random" /></a>
           </p>
           {!loadingCountryBios
             ? <HomeGrid bios={countryBiosForGrid} />
@@ -128,6 +141,7 @@ class Home extends Component {
                 <option key={occupation.occupation} value={occupation.occupation}>{plural(occupation.occupation.toLowerCase())}</option>
               )}
             </select>
+            <a className="shuffle" href="#" onClick={e => (e.preventDefault(), this.setRandom("occupation"))}><img src="/images/icons/icon-shuffle.svg" alt="Random" /></a>
           </p>
           {!loadingOccupationBios
             ? <HomeGrid bios={occupationBiosForGrid} />
