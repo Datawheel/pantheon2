@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import {Link} from "react-router";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import config from "helmet.js";
 import NotFound from "components/NotFound";
 import {FORMATTERS} from "types";

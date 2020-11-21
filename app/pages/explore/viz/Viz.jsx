@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import Controls from "pages/explore/controls/Index";
 import VizShell from "pages/explore/viz/VizShell";
 import VizTitle from "pages/explore/viz/VizTitle";

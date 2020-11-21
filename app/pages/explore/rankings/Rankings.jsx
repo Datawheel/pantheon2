@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import Controls from "pages/explore/controls/Index";
 import RankingTable from "pages/explore/rankings/RankingTable";
 import {nest} from "d3-collection";

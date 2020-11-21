@@ -42,8 +42,9 @@
     }
   },
   "dependencies": {
-    "@datawheel/canon-core": "^0.19.5",
+    "@datawheel/canon-core": "^0.20.1",
     "async-throttle": "^1.1.0",
+    "countryjs": "^1.8.0",
     "d3plus-react": "^0.6.0",
     "numeral": "^2.0.6",
     "pluralize": "^8.0.0",

@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Icon} from "@blueprintjs/core";
 import {hot} from "react-hot-loader/root";
 import {fetchData} from "@datawheel/canon-core";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import Progress from "pages/apps/trivia/Progress";
 import Question from "pages/apps/trivia/Question";
 import Answers from "pages/apps/trivia/Answers";

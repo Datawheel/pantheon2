@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {hot} from "react-hot-loader/root";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import {fetchData} from "@datawheel/canon-core";
 import axios from "axios";
 import config from "helmet.js";
