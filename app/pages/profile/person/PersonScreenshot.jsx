@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import {fetchData} from "@datawheel/canon-core";
 
 import config from "helmet.js";

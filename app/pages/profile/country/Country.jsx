@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import axios from "axios";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import config from "helmet.js";
 import Header from "pages/profile/country/Header";
 import ProfileNav from "pages/profile/common/Nav";
