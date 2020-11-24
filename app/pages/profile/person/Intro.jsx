@@ -1,13 +1,14 @@
 import React from "react";
 import "pages/profile/common/Intro.css";
 import PersonImage from "components/utils/PersonImage";
+import {toTitleCase} from "viz/helpers";
 import {FORMATTERS} from "types";
 import {COLORS_DOMAIN} from "types";
 
 const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
   console.log("person!", person, personRanks);
   // return <div>intro here...</div>;
-  const {occupationRank, occupationRankPrev, bplaceCountryRank, bplaceCountryRankPrev} = personRanks;
+  const {occupationRank, occupationRankPrev, bplaceCountryRank, bplaceCountryRankPrev, bplaceCountryOccupationRank} = personRanks;
   // const bplaceCountryRank = personRanks.bplaceCountryRank ? personRanks.bplaceCountryRank : null;
   const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug];
   const decoLines = 14;
@@ -106,7 +107,7 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
             <React.Fragment>Since 2007, the English Wikipedia page of {person.name} has received more than {FORMATTERS.commas(totalPageViews)} page views. </React.Fragment>
             <React.Fragment>{person.gender ? person.gender === "M" ? "His" : "Her" : "Their"} biography is available in {person.l} different languages on Wikipedia{person.l_prev && person.l !== person.l_prev ? ` (${person.l > person.l_prev ? "up" : "down"} from ${person.l_prev} in 2019)` : ""}. </React.Fragment>
             <React.Fragment>{person.name} is the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a>{occupationRankPrev && occupationRankPrev !== occupationRank ? ` (${occupationRank < occupationRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(occupationRankPrev)} in 2019)` : ""}</React.Fragment>
-            <React.Fragment>{!person.bplace_country ? <span>.</span> : <span> and the {bplaceCountryRank !== 1 ? FORMATTERS.ordinal(bplaceCountryRank) : ""} most popular biography from <a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></span>}{bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank ? ` (${bplaceCountryRank < bplaceCountryRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(bplaceCountryRankPrev)} in 2019).` : !person.bplace_country ? "" : "."}</React.Fragment>
+            <React.Fragment>{!person.bplace_country ? <span>.</span> : <span>, the {bplaceCountryRank !== 1 ? FORMATTERS.ordinal(bplaceCountryRank) : ""} most popular biography from <a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></span>}{bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank ? ` (${bplaceCountryRank < bplaceCountryRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(bplaceCountryRankPrev)} in 2019)` : !person.bplace_country ? "" : ""} and the {bplaceCountryOccupationRank !== 1 ? FORMATTERS.ordinal(bplaceCountryOccupationRank) : ""} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}/country/${person.bplace_country.slug}`}>{person.bplace_country.demonym} {toTitleCase(person.occupation.occupation)}</a>.</React.Fragment>
           </p>
         </div>
       </div>
