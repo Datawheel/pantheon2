@@ -16,6 +16,7 @@ import Occupation from "pages/profile/occupation/Occupation";
 import OccupationScreenshot from "pages/profile/occupation/OccupationScreenshot";
 import Era from "pages/profile/era/Era";
 import EraScreenshot from "pages/profile/era/EraScreenshot";
+import OccupationCountry from "pages/profile/occupation-country/OccupationCountry";
 
 // about components
 import About from "pages/about/About";
@@ -144,6 +145,7 @@ export default function RouteCreate() {
         <Route path="occupation/:id/screenshot" component={OccupationScreenshot} />
         <Route path="era(/:id)" component={Era} onEnter={checkForId} />
         <Route path="era/:id/screenshot" component={EraScreenshot} />
+        <Route path="occupation/:occupationSlug/country/:countrySlug" component={OccupationCountry} />
       </Route>
 
       <Route path="data" component={Data}>
