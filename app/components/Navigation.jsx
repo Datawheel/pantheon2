@@ -76,6 +76,7 @@ class Navigation extends Component {
                 <li><a href="/profile/place" className="item-link">Places</a></li>
                 <li><a href="/profile/country" className="item-link">Countries</a></li>
                 <li><a href="/profile/occupation" className="item-link">Occupations</a></li>
+                <li><a href="/profile/select-occupation-country" className="item-link">Occupation / Country</a></li>
                 <li><a href="/profile/era" className="item-link">Eras</a></li>
               </ul>
             </li>
@@ -149,6 +150,7 @@ class Navigation extends Component {
                 <li><a href="/profile/place">Places</a></li>
                 <li><a href="/profile/country">Countries</a></li>
                 <li><a href="/profile/occupation">Occupations</a></li>
+                <li><a href="/profile/select-occupation-country">Occupation / Country</a></li>
                 <li><a href="/profile/era">Eras</a></li>
               </ul>
             </li>

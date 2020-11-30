@@ -24,6 +24,18 @@
   height: 100%;
 }
 
+@define-mixin absolute-vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+@define-mixin hide-scrollbars {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Centered elements, the dumb but sometimes useful way */
 @define-mixin absolute-center {
   position: absolute;
@@ -298,3 +310,108 @@
   opacity: 0.7;
   pointer-events: none;
 }
+
+/* -----------------------------------
+resets
+----------------------------------- */
+
+/* list reset */
+@define-mixin list-reset {
+  list-style-type: none; /* remove bullets */
+  padding-left: 0; /* thanks blueprint */
+  margin-top: 0; /* thanks blueprint */
+  margin-bottom: 0; /* thanks blueprint */
+}
+
+/* remove background & border from buttons */
+/* NOTE: there's also border radius, padding, and box shadow */
+@define-mixin button-reset {
+  background: none;
+  border: none;
+}
+
+
+/* -----------------------------------
+breakpoints
+----------------------------------- */
+
+/* mobile first */
+@define-mixin min-xxl { @media (min-width: 1640px) { @mixin-content; } }
+@define-mixin min-xl  { @media (min-width: 1400px) { @mixin-content; } }
+@define-mixin min-lg  { @media (min-width: 1200px) { @mixin-content; } }
+@define-mixin min-md  { @media (min-width: 992px)  { @mixin-content; } }
+@define-mixin min-sm  { @media (min-width: 768px)  { @mixin-content; } }
+@define-mixin min-xs  { @media (min-width: 480px)  { @mixin-content; } }
+@define-mixin min-xxs { @media (min-width: 400px)  { @mixin-content; } }
+
+/* max-width first */
+@define-mixin max-xl  { @media (max-width: 1399px) { @mixin-content; } }
+@define-mixin max-lg  { @media (max-width: 1199px) { @mixin-content; } }
+@define-mixin max-md  { @media (max-width: 991px)  { @mixin-content; } }
+@define-mixin max-sm  { @media (max-width: 767px)  { @mixin-content; } }
+@define-mixin max-xs  { @media (max-width: 479px)  { @mixin-content; } }
+@define-mixin max-xxs { @media (max-width: 399px)  { @mixin-content; } }
+
+/* target IE 11+ */
+/* NOTE: since this is a media query, it can't be nested in a traaditional media query */
+@define-mixin ie-only {
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    @mixin-content;
+  }
+}
+
+/* -----------------------------------
+accessibility
+----------------------------------- */
+
+.u-visually-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+/* -----------------------------------
+typography
+----------------------------------- */
+
+/* typography */
+.u-font-xxs  { font-size: var(--sizeXXS);  }
+.u-font-xs   { font-size: var(--sizeXS);   }
+.u-font-sm   { font-size: var(--sizeSmall);   }
+.u-font-md   { font-size: var(--sizeMedium);   }
+.u-font-lg   { font-size: var(--sizeLarge);   }
+.u-font-xl   { font-size: var(--sizeXL);   }
+.u-font-xxl  { font-size: var(--sizeXXL);  }
+
+/* -----------------------------------
+layout
+----------------------------------- */
+
+/* vertical margin */
+.u-margin-top-xs  { margin-top: var(--gutter-xs) !important; }
+.u-margin-top-sm  { margin-top: var(--gutter-sm) !important; }
+.u-margin-top-md  { margin-top: var(--gutter-md) !important; }
+.u-margin-top-lg  { margin-top: var(--gutter-lg) !important; }
+.u-margin-top-xl  { margin-top: var(--gutter-xl) !important; }
+.u-margin-top-off { margin-top: 0 !important; }
+.u-margin-top-off-children > * { margin-top: 0 !important; }
+
+.u-margin-bottom-xs { margin-bottom: var(--gutter-xs) !important; }
+.u-margin-bottom-sm { margin-bottom: var(--gutter-sm) !important; }
+.u-margin-bottom-md { margin-bottom: var(--gutter-md) !important; }
+.u-margin-bottom-lg { margin-bottom: var(--gutter-lg) !important; }
+.u-margin-bottom-xl { margin-bottom: var(--gutter-xl) !important; }
+.u-margin-bottom-off { margin-bottom: 0 !important; }
+.u-margin-bottom-off-children > * { margin-bottom: 0 !important; }
+
+/* show/hide content */
+.u-hide-above-lg { @mixin min-lg { display: none !important; } }
+.u-hide-below-lg { @mixin max-lg { display: none !important; } }
+.u-hide-above-md { @mixin min-md { display: none !important; } }
+.u-hide-below-md { @mixin max-md { display: none !important; } }
+.u-hide-above-sm { @mixin min-sm { display: none !important; } }
+.u-hide-below-sm { @mixin max-sm { display: none !important; } }
+.u-hide-above-xs { @mixin min-xs { display: none !important; } }
+.u-hide-below-xs { @mixin max-xs { display: none !important; } }

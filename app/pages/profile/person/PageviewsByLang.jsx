@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import {FORMATTERS} from "types/index";
-import {LinePlot} from "d3plus-react";
+import {LinePlot, StackedArea} from "d3plus-react";
 import {max as D3Max, mean as D3Mean, sum as D3Sum} from "d3-array";
 import {nest} from "d3-collection";
 import langFamilies from "json/langFamilies.json";
@@ -168,7 +168,7 @@ class PageviewsByLang extends Component {
           : null}
         <br />
         {timeSeriesData.length
-          ? <LinePlot
+          ? <StackedArea
             config={{
               height: 600,
               data: timeSeriesData,
@@ -226,8 +226,19 @@ class PageviewsByLang extends Component {
               // xConfig: {tickFormat: d => FORMATTERS.year(new Date(d).getFullYear())},
               y: "views",
               yConfig: {
-                scale: "log",
-                title: "Count of pageviews by language edition"
+                // scale: "log",
+                title: "Pageviews by language edition",
+                titleConfig: {
+                  fontSize: () => 18
+                },
+                labelConfig: {
+                  fontSize: () => 18
+                },
+                shapeConfig: {
+                  labelConfig: {
+                    fontSize: () => 20
+                  }
+                }
               }
             }} /> : null}
       </div>

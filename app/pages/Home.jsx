@@ -9,6 +9,7 @@ import {Link} from "react-router";
 import Spinner from "components/Spinner";
 import api from "apiConfig";
 import {plural} from "pluralize";
+import Select from "pages/profile/common/Select";
 import "pages/Home.css";
 
 const getUrlParameter = (qStr, name) => {
@@ -59,7 +60,7 @@ class Home extends Component {
     const requestedCountryCode = evtOrCountry.target ? evtOrCountry.target[evtOrCountry.target.selectedIndex].dataset.countrycode : evtOrCountry.countrycode;
     this.setState({activeCountry: requestedCountry, activeCountryCode: requestedCountryCode, loadingCountryBios: true});
     const countryFilter = requestedCountry === "all" ? "" : `&bplace_country=eq.${requestedCountry}`;
-    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16${countryFilter}`).then(countryBiosRes => {
+    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12${countryFilter}`).then(countryBiosRes => {
       // this.context.router.replace(`?tlang=${trendingLangEdition}`);
       this.setState({fetchedCountryBios: countryBiosRes.data, loadingCountryBios: false});
     });
@@ -69,7 +70,7 @@ class Home extends Component {
     const requestedOccupation = evtOrOccupation.target ? evtOrOccupation.target.value : evtOrOccupation;
     this.setState({activeOccupation: requestedOccupation, loadingOccupationBios: true});
     const occupationFilter = requestedOccupation === "all" ? "&offset=16" : `&occupation=eq.${requestedOccupation}`;
-    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16${occupationFilter}`).then(occupationBiosRes => {
+    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12${occupationFilter}`).then(occupationBiosRes => {
       // this.context.router.replace(`?tlang=${trendingLangEdition}`);
       this.setState({fetchedOccupationBios: occupationBiosRes.data, loadingOccupationBios: false});
     });
@@ -97,32 +98,87 @@ class Home extends Component {
 
     return (
       <div className="home-container">
-        <div className="home-head">
-          <h1><img src="/images/logos/logo_pantheon.svg" alt="Pantheon" /></h1>
-          <div className="home-head-content">
-            <div className="home-search">
-              <img src="/images/icons/icon-search.svg" alt="Search" />
-              <a href="#" onClick={activateSearch}>Search people, places, &amp; occupations</a>
+        <img className="bg-design" src="/images/home/printing.png" />
+        <img className="bg-design bg-design-r" src="/images/home/film.png" />
+
+
+        <div className="home-head-container">
+          <div className="home-head">
+            <div className="home-head-title">
+              <h1><img src="/images/logos/logo_pantheon.svg" alt="Pantheon" /></h1>
+              <div className="home-search">
+                <img src="/images/icons/icon-search.svg" alt="Search" />
+                <a href="#" onClick={activateSearch}>Search people, places, &amp; occupations</a>
+              </div>
             </div>
-            <div className="post">
-              <p><strong>Pantheon</strong> is an observatory of human collective memory. With data on more than 85,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet&apos;s history.</p>
+            <div className="home-head-content">
+              {/* <p><strong>Pantheon</strong> is an observatory of human collective memory. With data on more than 85,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet&apos;s history.</p>
+              <h2 className="home-explore-links">Explore <Link to="/profile/person">People</Link>, <Link to="/profile/place">Places</Link>, <Link to="/profile/occupation">Occupations</Link>, and <Link to="/profile/era">Eras</Link></h2> */}
+              <h2>Explore human collective memory!</h2>
+              <p>Pantheon helps you discover the geography and dynamics of our planet's history.</p>
+              <h3 className="home-explore-links">Explore <Link to="/profile/person">People</Link>, <Link to="/profile/place">Places</Link>, <Link to="/profile/occupation">Occupations</Link>, and <Link to="/profile/era">Eras</Link></h3>
             </div>
-            <h2 className="home-explore-links">Explore <Link to="/profile/person">People</Link>, <Link to="/profile/place">Places</Link>, <Link to="/profile/occupation">Occupations</Link>, and <Link to="/profile/era">Eras</Link></h2>
           </div>
         </div>
 
         <div className="profile-grid">
-          <h3 className="grid-title">New Profiles By Country</h3>
-          <p className="grid-subtitle">
-            Most recent profiles added from&nbsp;
-            <select onChange={this.changeCountry} value={activeCountry}>
-              <option value="all">all countries</option>
-              {countryList.map(country =>
-                <option key={country.country} value={country.country} data-countrycode={country.country_code}>{country.country}</option>
-              )}
-            </select>
-            <a className="shuffle" href="#" onClick={e => (e.preventDefault(), this.setRandom("country"))}><img src="/images/icons/icon-shuffle.svg" alt="Random" /></a>
+          <div className="grid-title-container">
+            <h3 className="grid-title">Trending Profiles Today</h3>
+            <p className="grid-subtitle">
+              <span className="grid-select-label">Top profiles by pageviews for the </span>
+              <Select
+                label=""
+                className="home-select"
+                fontSize="sm"
+                onChange={this.changeTrendingLang}
+                value={trendingLangEdition}
+              >
+                <option value="ar">Arabic</option>
+                <option value="zh">Chinese</option>
+                <option value="nl">Dutch</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="ja">Japanese</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="es">Spanish</option>
+              </Select>
+              <span className="grid-select-label"> wikipedia edition</span>
+            </p>
+          </div>
+          {!loadingTrendingBios
+            ? <HomeGrid bios={trendingBiosForGrid.sort((a, b) => a.rank - b.rank).slice(0, 12)} />
+            : <div className="loading-trends"><Spinner /></div>}
+        </div>
+
+        <div className="profile-grid">
+          <p className="post">
+            <strong>Pantheon</strong> is an observatory of collective memory focused on biographies with a presence in at least <strong>15 languages</strong> in Wikipedia. We have data on more than 85,000 biographies, organized by countries, cities, occupations, and eras. Explore this data to learn about the characters that shape human culture. <strong>Pantheon</strong> began as a project at the Collective Learning group at MIT. Today is developed by Datawheel, a company specialized in the creation of data distribution and visualization solutions.
           </p>
+        </div>
+
+        <div className="profile-grid">
+          <div className="grid-title-container">
+            <h3 className="grid-title">New Profiles By Country</h3>
+            <p className="grid-subtitle">
+              <span className="grid-select-label">Most recent profiles added from </span>
+              <Select
+                label=""
+                className="home-select"
+                fontSize="sm"
+                onChange={this.changeCountry}
+                value={activeCountry}
+              >
+                <option value="all">all countries</option>
+                {countryList.map(country =>
+                  <option key={country.country} value={country.country} data-countrycode={country.country_code}>{country.country}</option>
+                )}
+              </Select>
+              <a className="shuffle" href="#" onClick={e => (e.preventDefault(), this.setRandom("country"))}><img src="/images/icons/icon-shuffle.svg" alt="Random" /></a>
+            </p>
+          </div>
           {!loadingCountryBios
             ? <HomeGrid bios={countryBiosForGrid} />
             : <div className="loading-trends"><Spinner /></div>}
@@ -132,47 +188,31 @@ class Home extends Component {
         </div>
 
         <div className="profile-grid">
-          <h3 className="grid-title">New Profiles By Occupation</h3>
-          <p className="grid-subtitle">
-            Most recent profiles added of&nbsp;
-            <select onChange={this.changeOccupation} value={activeOccupation}>
-              <option value="all">all occupations</option>
-              {occupationList.map(occupation =>
-                <option key={occupation.occupation} value={occupation.occupation}>{plural(occupation.occupation.toLowerCase())}</option>
-              )}
-            </select>
-            <a className="shuffle" href="#" onClick={e => (e.preventDefault(), this.setRandom("occupation"))}><img src="/images/icons/icon-shuffle.svg" alt="Random" /></a>
-          </p>
+          <div className="grid-title-container">
+            <h3 className="grid-title">New Profiles By Occupation</h3>
+            <p className="grid-subtitle">
+              <span className="grid-select-label">Most recent profiles added of </span>
+              <Select
+                label=""
+                className="home-select"
+                fontSize="sm"
+                onChange={this.changeOccupation}
+                value={activeOccupation}
+              >
+                <option value="all">all occupations</option>
+                {occupationList.map(occupation =>
+                  <option key={occupation.occupation} value={occupation.occupation}>{plural(occupation.occupation.toLowerCase())}</option>
+                )}
+              </Select>
+              <a className="shuffle" href="#" onClick={e => (e.preventDefault(), this.setRandom("occupation"))}><img src="/images/icons/icon-shuffle.svg" alt="Random" /></a>
+            </p>
+          </div>
           {!loadingOccupationBios
             ? <HomeGrid bios={occupationBiosForGrid} />
             : <div className="loading-trends"><Spinner /></div>}
           <div className="view-more">
             <a href={activeOccupation === "all" ? "/explore/rankings?show=people&years=-3501,2020&new=true" : `/explore/rankings?show=people&years=-3501,2020&occupation=${activeOccupation}&new=true`}>{activeOccupation === "all" ? "View all new profiles »" : `View all new profiles of ${plural(activeOccupation.toLowerCase())} »`}</a>
           </div>
-        </div>
-
-        <div className="profile-grid">
-          <h3 className="grid-title">Trending Profiles Today</h3>
-          <p className="grid-subtitle">
-            Top profiles by pageviews for the&nbsp;
-            <select onChange={this.changeTrendingLang} value={trendingLangEdition}>
-              <option value="ar">Arabic</option>
-              <option value="zh">Chinese</option>
-              <option value="nl">Dutch</option>
-              <option value="en">English</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
-              <option value="it">Italian</option>
-              <option value="ja">Japanese</option>
-              <option value="pt">Portuguese</option>
-              <option value="ru">Russian</option>
-              <option value="es">Spanish</option>
-            </select>
-            &nbsp;wikipedia edition
-          </p>
-          {!loadingTrendingBios
-            ? <HomeGrid bios={trendingBiosForGrid.sort((a, b) => a.rank - b.rank)} />
-            : <div className="loading-trends"><Spinner /></div>}
         </div>
 
         <div className="floating-content l-1">
@@ -200,8 +240,8 @@ class Home extends Component {
 Home.need = [
   fetchData("countryList", "/country?select=country,country_code&num_born=gte.100&order=country", {format: res => res, useParams: false}),
   fetchData("occupationList", "/occupation?select=occupation&order=occupation", {format: res => res, useParams: false}),
-  fetchData("countryBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16", {format: res => res, useParams: false}),
-  fetchData("occupationBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&offset=16", {format: res => res, useParams: false}),
+  fetchData("countryBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12", {format: res => res, useParams: false}),
+  fetchData("occupationBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&offset=12", {format: res => res, useParams: false}),
   fetchData("trendingBios", "https://pantheon.world/api/wikiTrends?lang=en&limit=60")
 ];
 

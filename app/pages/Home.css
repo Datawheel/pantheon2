@@ -1,57 +1,124 @@
 @import "components/common/mixins";
 
-.home-head {
-  margin: 0 auto;
-  text-align: center;
-  padding: 76px 0 0;
+.bg-design {
+  left: -50px;
+  opacity: 0.5;
+  position: absolute;
+  top: 20px;
+  width: 240px;
+  &.bg-design-r {
+    left: auto;
+    right: -20px;
+    top: 30px;
+    width: 190px;
+  }
+}
 
+.home-head-container {
+  /* background-image: url('/images/explore/occupations.svg'); */
+  /* background-position: 50% 0; */
+  background: rgb(244,244,241);
+  background: linear-gradient(0deg, rgba(244,244,241,1) 0%, rgba(208,201,191,1) 100%);
+  /* text-align: center; */
+  padding: 76px 0 0;
   @media (min-width: 751px) {
     padding: 120px 0 10px;
   }
+}
+
+.home-head {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1024px;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+  }
 
   & h1 {
-    margin: 0 auto;
+    /* margin: 0 auto; */
+    text-align: left;
+    @media (max-width: 750px) {
+      text-align: center;
+    }
 
     & img {
-      width: 266px;
+      width: 348px;
       max-width: 66.666vw;
     }
   }
 
-  & h3 {
+  & h2 {
+    /* @mixin priLabel; */
+    font-size: 18px;
+    margin: 10px 0 10px 20px;
+  }
+
+  /* } */
+  & h3.home-explore-links {
+    /* color: red !important; */
+    @mixin sectionTitle;
+    margin: 10px 0 20px 20px;
+    /* display: block; */
+    /* text-align: center; */
     @mixin priLabel;
-    margin: 5px auto 25px;
+    /* font-size: 18px; */
+    & a {
+      color: black;
+      text-decoration: underline;
+      &:hover {
+        color: black;
+        text-decoration: none;
+      }
+    }
   }
 
   & p {
-    text-align: center;
+    @mixin bodyText;
+    line-height: calc(1.4rem * 1.4);
+    margin: 0 0 0 20px;
   }
 }
 
+.home-head-title {
+  margin: 0 0 0 10px;
+  z-index: 9;
+}
+
 .home-head-content {
-  z-index: 200;
   display: flex;
   flex-direction: column;
+  text-align: left;
+  z-index: 9;
+
+  @media (max-width: 750px) {
+    text-align: center;
+  }
 }
 
 .home-search {
   position: relative;
   width: 380px;
   max-width: calc(100% - 30px);
-  margin: 25px auto;
+  margin: 25px 0;
   text-align: left;
   z-index: 20;
+
+  @media (max-width: 750px) {
+    margin: 25px auto;
+  }
 
   & img {
     position: absolute;
     width: 16px;
 
     @media (max-width: 750px) {
-      margin: 11px 5px 6px 11px
+      margin: 11px 5px 6px 11px;
     }
 
     @media (min-width: 751px) {
-      margin: 11px 5px 6px 11px
+      margin: 11px 5px 6px 11px;
     }
   }
 
@@ -152,6 +219,7 @@
 
   @media (max-width: 750px) {
     margin-top: 13px;
+    width: 90%;
   }
 
   @media (min-width: 751px) {
@@ -165,23 +233,6 @@
     @mixin bodyLink;
     font-weight: 400;
     border-bottom: 1px dotted var(--colorSand);
-  }
-}
-
-.home-explore-links {
-  /* color: red !important; */
-  @mixin sectionTitle;
-  margin: 5px 0 0 0;
-  /* display: block; */
-  /* text-align: center; */
-  font-size: 18px;
-  & a {
-    color: black;
-    text-decoration: underline;
-    &:hover {
-      color: black;
-      text-decoration: none;
-    }
   }
 }
 
@@ -550,7 +601,7 @@
   & h3 {
     @mixin profileVizTitle;
     color: var(--colorEggshell);
-    font-size: 26px;
+    font-size: 22px;
   }
 
   & p {
@@ -750,5 +801,13 @@
         z-index: 1;
       }
     }
+  }
+}
+
+.home-select {
+  display: inline-block;
+
+  & .cp-select {
+    display: inline;
   }
 }
