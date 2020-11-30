@@ -155,7 +155,7 @@ class Home extends Component {
 
         <div className="profile-grid">
           <p className="post">
-            <strong>Pantheon</strong> is an observatory of collective memory focused on biographies with a presence in at least <strong>15 languages</strong> in Wikipedia. We have data on more than 85,000 biographies, organized by countries, cities, occupations, and eras. Explore this data to learn about the characters that shape human culture. <strong>Pantheon</strong> began as a project at the Collective Learning group at MIT. Today is developed by Datawheel, a company specialized in the creation of data distribution and visualization solutions.
+            <strong>Pantheon</strong> is an observatory of collective memory focused on biographies with a presence in at least <strong>15 languages</strong> in Wikipedia. We have data on more than 85,000 biographies, organized by countries, cities, occupations, and eras. Explore this data to learn about the characters that shape human culture. <strong>Pantheon</strong> began as a project at the Collective Learning group at MIT. Today it is developed by <a href="https://datawheel.us/" target="_blank" rel="noopener noreferrer" className="item-link feedback-link">Datawheel</a>, a company specialized in the creation of data distribution and visualization solutions.
           </p>
         </div>
 
