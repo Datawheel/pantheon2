@@ -51,7 +51,7 @@ const Footer = () =>
         <ul className="sub-items">
           <li><a href="/data/permissions" className="item-link">Permissions</a></li>
           <li><a href="/data/datasets" className="item-link">Download</a></li>
-          <Link to="/data/api" className="item-link api-link">API</Link>
+          <li><Link to="/data/api" className="item-link api-link">API</Link></li>
         </ul>
       </li>
 
