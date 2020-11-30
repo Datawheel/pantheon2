@@ -55,7 +55,7 @@ const Intro = ({place, country, placeRanks, peopleBornHere, peopleDiedHere, wiki
       <div className="intro-content">
         <div className="intro-text">
           <h3>
-            <img src="/images/ui/profile-w.svg" />
+            <img src="/images/ui/profile-w.svg" alt="Icon of place" />
             {place.place}
           </h3>
           <p>

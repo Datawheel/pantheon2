@@ -91,7 +91,7 @@ class MemMetrics extends Component {
               frameBorder="0"
               allowFullScreen
             />
-            : <button className="press-play" disabled tabIndex="-1"><i /></button>
+            : <button className="press-play" aria-label="Press to play video" disabled tabIndex="-1"><i /></button>
           }
         </div>
         {isTrending

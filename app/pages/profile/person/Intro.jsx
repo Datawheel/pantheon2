@@ -91,7 +91,7 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
         <PersonImage fallbackSrc="/images/icons/icon-person.svg" src={`/images/profile/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} />
         <div className="intro-text">
           <h3>
-            <img src="/images/ui/profile-w.svg" /> {person.name}
+            <img src="/images/ui/profile-w.svg" alt="Icon of person" /> {person.name}
           </h3>
           {wikiSentence
             ? <p>{wikiSentence}. <a href={`https://en.wikipedia.org/wiki/${wikiSlug}`} target="_blank" rel="noopener noreferrer">Read more on Wikipedia</a></p>

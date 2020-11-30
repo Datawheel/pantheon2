@@ -39,7 +39,7 @@ const Intro = ({country, countryRanks, peopleBornHere, peopleDiedHere, wikiSumma
       <div className="intro-content">
         <div className="intro-text">
           <h3>
-            <img src="/images/ui/profile-w.svg" />
+            <img src="/images/ui/profile-w.svg" alt="Icon of country" />
             {country.country}
           </h3>
           <p>

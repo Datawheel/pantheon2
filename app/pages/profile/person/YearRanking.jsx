@@ -48,11 +48,11 @@ class YearRanking extends Component {
     return (
       <div>
         <p>
-          Among people born in {FORMATTERS.year(person.birthyear)}, {person.name} ranks <a>{FORMATTERS.commas(meBy.birthyear_rank)}</a>.&nbsp;
+          Among people born in {FORMATTERS.year(person.birthyear)}, {person.name} ranks <strong>{FORMATTERS.commas(meBy.birthyear_rank)}</strong>.&nbsp;
           { betterBirthPeers }
           { worseBirthPeers }
           { deathYearRanking.length
-            ? <span>&nbsp;Among people deceased in {FORMATTERS.year(person.deathyear)}, {person.name} ranks <a>{meDy.deathyear_rank}</a>.&nbsp;</span>
+            ? <span>&nbsp;Among people deceased in {FORMATTERS.year(person.deathyear)}, {person.name} ranks <strong>{meDy.deathyear_rank}</strong>.&nbsp;</span>
             : null}
           { betterDeathPeers }
           { worseDeathPeers }

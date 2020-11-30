@@ -46,7 +46,7 @@ class CountryRanking extends Component {
     return (
       <div>
         <p>
-          Among people born in <a href={`/profile/country/${person.bplace_country.slug}`}>{person.bplace_country.country}</a>, {person.name} ranks <a>{FORMATTERS.commas(meBc.bplace_country_rank_unique)}</a> out of {FORMATTERS.commas(person.bplace_country.num_born)}.&nbsp;
+          Among people born in <a href={`/profile/country/${person.bplace_country.slug}`}>{person.bplace_country.country}</a>, {person.name} ranks <strong>{FORMATTERS.commas(meBc.bplace_country_rank_unique)}</strong> out of {FORMATTERS.commas(person.bplace_country.num_born)}.&nbsp;
           { betterBirthPeers }
           { worseBirthPeers }
           {/* { ranking.deathcountryPeers.length
