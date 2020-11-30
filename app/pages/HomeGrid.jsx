@@ -21,7 +21,7 @@ const HomeGrid = ({bios}) =>
           <div className="grid-box-bg-container">
             <PersonImage src={`/images/profile/people/${profile.pid || profile.id}.jpg`} alt={`Photo of ${profile.name}`} fallbackSrc="/images/icons/icon-person.svg" />
             {/* <div className="grid-box-bg-img-mask"> */}
-              {/* <div className={`grid-box-bg-img ${profile.gender}`} style={{backgroundImage: `url(/images/profile/people/${profile.pid || profile.id}.jpg)`}}></div> */}
+            {/* <div className={`grid-box-bg-img ${profile.gender}`} style={{backgroundImage: `url(/images/profile/people/${profile.pid || profile.id}.jpg)`}}></div> */}
             {/* </div> */}
           </div>
           <div className="grid-box-title-container">

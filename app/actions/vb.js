@@ -231,7 +231,8 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
         limitOffset = `&limit=50&offset=${pageSize * pageIndex}`;
       }
       table = "person_ranks";
-      selectFields = `${selectFields},occupation_rank,occupation_rank_prev,occupation_rank_delta,bplace_country_rank,bplace_country_rank_prev,bplace_country_rank_delta`;
+      // selectFields = `${selectFields},rank,rank_prev,rank_delta,occupation_rank,occupation_rank_prev,occupation_rank_delta,bplace_country_rank,bplace_country_rank_prev,bplace_country_rank_delta`;
+      selectFields = `${selectFields},rank,rank_prev,rank_delta`;
       if (sortBy && sortBy.length) {
         sorting = sortBy.map((sortCol, i) => {
           let sortingColumn = sortCol.id;

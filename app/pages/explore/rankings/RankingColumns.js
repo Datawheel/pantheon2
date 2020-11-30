@@ -170,57 +170,76 @@ const getColumns = (show, nesting, countOffset) => {
               minWidth: 105,
               className: "cell_numeric",
               sortDescFirst: true
-            }
-          ]
-        },
-        {
-          Header: "Occupation Ranking",
-          columns: [
+            },
             {
-              Header: "2020",
-              accessor: "occupation_rank",
+              Header: "Rank 2020",
+              accessor: "rank",
               minWidth: 45,
               className: "cell_numeric"
             },
             {
-              Header: "2019",
-              accessor: "occupation_rank_prev",
+              Header: "Rank 2019",
+              accessor: "rank_prev",
               minWidth: 45,
               className: "cell_numeric"
             },
             {
               Header: "∆",
-              accessor: "occupation_rank_delta",
+              accessor: "rank_delta",
               minWidth: 45,
-              className: "cell_numeric",
-              Cell: ({value}) => value ? value > 0 ? <span className="u-positive-text u-positive-arrow">{`+${value}`}</span> : <span className="u-negative-text u-negative-arrow">{value}</span> : "-"
-            }
-          ]
-        },
-        {
-          Header: "Birth Country Ranking",
-          columns: [
-            {
-              Header: "2020",
-              accessor: "bplace_country_rank",
-              minWidth: 45,
-              className: "cell_numeric"
-            },
-            {
-              Header: "2019",
-              accessor: "bplace_country_rank_prev",
-              minWidth: 45,
-              className: "cell_numeric"
-            },
-            {
-              Header: "∆",
-              accessor: "bplace_country_rank_delta",
-              minWidth: 85,
               className: "cell_numeric",
               Cell: ({value}) => value ? value > 0 ? <span className="u-positive-text u-positive-arrow">{`+${value}`}</span> : <span className="u-negative-text u-negative-arrow">{value}</span> : "-"
             }
           ]
         }
+        // {
+        //   Header: "Occupation Ranking",
+        //   columns: [
+        //     {
+        //       Header: "2020",
+        //       accessor: "occupation_rank",
+        //       minWidth: 45,
+        //       className: "cell_numeric"
+        //     },
+        //     {
+        //       Header: "2019",
+        //       accessor: "occupation_rank_prev",
+        //       minWidth: 45,
+        //       className: "cell_numeric"
+        //     },
+        //     {
+        //       Header: "∆",
+        //       accessor: "occupation_rank_delta",
+        //       minWidth: 45,
+        //       className: "cell_numeric",
+        //       Cell: ({value}) => value ? value > 0 ? <span className="u-positive-text u-positive-arrow">{`+${value}`}</span> : <span className="u-negative-text u-negative-arrow">{value}</span> : "-"
+        //     }
+        //   ]
+        // },
+        // {
+        //   Header: "Birth Country Ranking",
+        //   columns: [
+        //     {
+        //       Header: "2020",
+        //       accessor: "bplace_country_rank",
+        //       minWidth: 45,
+        //       className: "cell_numeric"
+        //     },
+        //     {
+        //       Header: "2019",
+        //       accessor: "bplace_country_rank_prev",
+        //       minWidth: 45,
+        //       className: "cell_numeric"
+        //     },
+        //     {
+        //       Header: "∆",
+        //       accessor: "bplace_country_rank_delta",
+        //       minWidth: 85,
+        //       className: "cell_numeric",
+        //       Cell: ({value}) => value ? value > 0 ? <span className="u-positive-text u-positive-arrow">{`+${value}`}</span> : <span className="u-negative-text u-negative-arrow">{value}</span> : "-"
+        //     }
+        //   ]
+        // }
       ]
     },
     occupations: {
