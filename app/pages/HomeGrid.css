@@ -10,6 +10,10 @@
   & .grid-title-container {
     display: flex;
     justify-content: space-between;
+    padding: 10px;
+    @media (max-width: 480px) {
+      flex-direction: column;
+    }
   }
 
   & .grid-title {
@@ -28,6 +32,11 @@
     display: block;
     text-align: right;
     font-size: 16px;
+
+    @media (max-width: 480px) {
+      margin: 0 0 5px;
+      text-align: left;
+    }
 
     & .grid-select-label {
       @media (max-width: 750px) {
@@ -119,8 +128,10 @@
 
         & img {
           display: block;
-          width: 231px;
-          height: 198px;
+          /* width: 231px;
+          height: 198px; */
+          width: 100%;
+          height: 100%;
           object-fit: cover;
         }
       }

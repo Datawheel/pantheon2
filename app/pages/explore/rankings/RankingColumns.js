@@ -5,7 +5,7 @@ import {FORMATTERS} from "types";
 import {Icon, Tooltip} from "@blueprintjs/core";
 import PersonImage from "components/utils/PersonImage";
 
-const genderOrder = ["M", null, "F"];
+const genderOrder = ["M", null, "F", "Non-binary"];
 
 const getColumns = (show, nesting, countOffset) => {
   const COLUMNS = {
@@ -56,7 +56,7 @@ const getColumns = (show, nesting, countOffset) => {
             {
               Header: "Gender",
               accessor: "gender",
-              Cell: ({value}) => <span>{value === "M" ? "Male" : value === "F" ? "Female" : "-"}</span>,
+              Cell: ({value}) => <span>{value === "M" ? "Male" : value === "F" ? "Female" : "Non-binary"}</span>,
               minWidth: 65,
               sortMethod: (a, b) => {
                 const aIndex = genderOrder.indexOf(a);
