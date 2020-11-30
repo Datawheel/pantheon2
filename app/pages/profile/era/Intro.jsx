@@ -29,7 +29,7 @@ const Intro = ({era, eras, peopleBorn, peopleDied}) => {
     <div className="intro-content">
       <div className="intro-text">
         <h3>
-          <img src="/images/ui/profile-w.svg" />
+          <img src="/images/ui/profile-w.svg" alt="Icon of era" />
         </h3>
         <p>
           The {era.name} took place between {FORMATTERS.year(era.start_year)} and {FORMATTERS.year(era.end_year)}.

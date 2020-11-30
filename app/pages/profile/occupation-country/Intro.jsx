@@ -25,7 +25,7 @@ const Intro = ({country, occupation, allCountriesInOccupation, allOccupationsInC
       <div className="intro-content">
         <div className="intro-text">
           <h3>
-            <img src="/images/ui/profile-w.svg" />
+            <img src="/images/ui/profile-w.svg" alt="Icon of occuation in country" />
           </h3>
           <p>
             This page contains a list of the greatest {country.demonym} {toTitleCase(plural(occupation.occupation))}.

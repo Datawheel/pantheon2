@@ -28,7 +28,7 @@ class OccupationRanking extends Component {
     return (
       <div>
         <p>
-          Among {plural(person.occupation.occupation.toLowerCase())}, {person.name} ranks <a>{FORMATTERS.commas(me.occupation_rank)}</a> out of {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
+          Among {plural(person.occupation.occupation.toLowerCase())}, {person.name} ranks <strong>{FORMATTERS.commas(me.occupation_rank)}</strong> out of {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
           { betterPeers }
           { worsePeers }
         </p>

@@ -30,7 +30,7 @@ class CountryOccupationRanking extends Component {
     return (
       <div>
         <p>
-          Among {plural(person.occupation.occupation.toLowerCase())} born in <a href={`/profile/country/${person.bplace_country.slug}`}>{person.bplace_country.country}</a>, {person.name} ranks <a>{FORMATTERS.commas(meBc.bplace_country_occupation_rank_unique)}</a>.&nbsp;
+          Among {plural(person.occupation.occupation.toLowerCase())} born in <a href={`/profile/country/${person.bplace_country.slug}`}>{person.bplace_country.country}</a>, {person.name} ranks <strong>{FORMATTERS.commas(meBc.bplace_country_occupation_rank_unique)}</strong>.&nbsp;
           { betterBirthPeers }
           { worseBirthPeers }
         </p>
