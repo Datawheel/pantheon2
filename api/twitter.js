@@ -41,7 +41,7 @@ module.exports = function(app) {
 
     const retTimeline = timelineResp.map(d => {
       let quote = false;
-      if (d.is_quote_status) {
+      if (d.is_quote_status && d.quoted_status) {
         quote = {
           retweeted: d.quoted_status.retweeted_status ? true : false,
           created_at: d.quoted_status.retweeted_status && d.quoted_status.retweeted_status.created_at ? d.quoted_status.retweeted_status.created_at : d.quoted_status.created_at,
