@@ -43,3 +43,20 @@ do
         sudo rm $file_path
     fi
 done
+
+if [[ -z "${CFLARE_EMAIL}" ]]; then
+    echo "Must set CFLARE_EMAIL env var to clear cloudflare cache"
+    exit 1
+else
+    if [[ -z "${CFLARE_KEY}" ]]; then
+        echo "Must set CFLARE_KEY env var to clear cloudflare cache"
+        exit 1
+    else
+        curl -X POST "https://api.cloudflare.com/client/v4/zones/27fdf411163aa475b413e1f8b8f8ac2c/purge_cache" \
+            -H "X-Auth-Email: ${CFLARE_EMAIL}" \
+            -H "X-Auth-Key: ${CFLARE_KEY}" \
+            -H "Content-Type: application/json" \
+            --data "{\"files\":[\"https://pantheon.world/profile/person/$SLUG\"]}";
+
+    fi
+fi
