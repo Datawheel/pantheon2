@@ -18,7 +18,7 @@ fi
 
 nxcacheof () {
   local url=$(echo -n "$1" | md5sum)
-  echo "/home/deploy/caches/pantheon/${url:31:1}/${url:29:2}/${url:0:32}"
+  echo "/home/deploy/cache/pantheon/${url:31:1}/${url:29:2}/${url:0:32}"
 }
 
 ARGS=$1
