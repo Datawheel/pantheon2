@@ -192,7 +192,7 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
     dispatch(requestVbData(pageIndex, pageSize));
-    const {data, vb} = getState();
+    const {data, env, vb} = getState();
     const {city, country, gender, metricCutoff, metricType, occupation, onlyShowNew, page, placeType, show, years, yearType} = vb;
     const apiHeaders = {Prefer: "count=estimated"};
     const pageSize = 50;
@@ -254,7 +254,7 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
 
     const dataUrl = `/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
     console.log("[fetchData]: ", dataUrl);
-    return api.get(dataUrl, {headers: apiHeaders})
+    return api(env).get(dataUrl, {headers: apiHeaders})
       .then(
         response => {
           const range = response.headers["content-range"] ? response.headers["content-range"].split("/")[0] : null;

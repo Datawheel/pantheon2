@@ -27,9 +27,10 @@ class SelectOccupationCountry extends Component {
   }
 
   setOccupation = e => {
+    const {env} = this.props;
     const {selection2} = this.state;
     this.setState({selection1: e.target.value});
-    api.get(`/occupation_country?occupation_slug=eq.${e.target.value}&order=num_people.desc.nullslast`)
+    api(env).get(`/occupation_country?occupation_slug=eq.${e.target.value}&order=num_people.desc.nullslast`)
       .then(occupationCountryResults => {
         const countries = occupationCountryResults.data;
         if (countries.length) {
@@ -201,4 +202,4 @@ SelectOccupationCountry.preneed = [
   fetchData("occupationsInCountry", allOccupationsInCountryURL)
 ];
 
-export default connect(state => ({data: state.data}), {})(hot(SelectOccupationCountry));
+export default connect(state => ({data: state.data, env: state.env}), {})(hot(SelectOccupationCountry));
