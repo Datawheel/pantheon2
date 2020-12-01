@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import {strip, trim} from "d3plus-text";
 import {NonIdealState} from "@blueprintjs/core";
 import api from "apiConfig";
@@ -15,6 +16,7 @@ class Search extends Component {
   }
 
   onChange(e) {
+    const {env} = this.props;
     const userQuery = e.target.value;
     if (userQuery.length < 3) {
       this.setState({results: null});
@@ -27,7 +29,7 @@ class Search extends Component {
     userQueryCleaned[userQueryCleaned.length - 1] = `${lastItem}:*`;
     userQueryCleaned = userQueryCleaned.join("%26");
 
-    api.get(`/search?document=fts.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
+    api(env).get(`/search?document=fts.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`)
       .then(queryResults => {
         const results = queryResults.data;
         if (results.length) {
@@ -132,4 +134,4 @@ class Search extends Component {
   }
 }
 
-export default Search;
+export default connect(state => ({env: state.env}), {})(Search);

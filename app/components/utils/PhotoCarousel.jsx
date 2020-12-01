@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
 import api from "apiConfig";
 import PersonImage from "components/utils/PersonImage";
 import {COLORS_DOMAIN, FORMATTERS} from "types/index";
@@ -20,6 +21,7 @@ class PhotoCarousel extends Component {
   }
 
   scroll(e) {
+    const {env} = this.props;
     // prevent default action (navigating to link)
     e.preventDefault();
     const {me, people, rankAccessor, peopleAll} = this.props;
@@ -65,7 +67,7 @@ class PhotoCarousel extends Component {
         const firstPersonId = replacementPeople.length ? replacementPeople[0].id : people[0].id;
         const firstPersonIndex = peopleAll.findIndex(d => d.id === firstPersonId);
 
-        const lastPersonId = replacementPeople.length ? replacementPeople[replacementPeople.length -1].id : people[people.length -1].id;
+        const lastPersonId = replacementPeople.length ? replacementPeople[replacementPeople.length - 1].id : people[people.length - 1].id;
         const lastPersonIndex = peopleAll.findIndex(d => d.id === lastPersonId);
         console.log("firstPersonIndex, lastPersonIndex", firstPersonIndex, lastPersonIndex);
 
@@ -92,7 +94,7 @@ class PhotoCarousel extends Component {
         }
         const morePeopleUrl = `/person_ranks?${datasetFilter}${rankAccessor}=gte.${newLowerBound}&${rankAccessor}=lte.${newUpperBound}&select=occupation,bplace_country,hpi,${rankAccessor.replace("_unique", "")},${rankAccessor},slug,gender,name,id,birthyear,deathyear`;
         console.log("morePeopleUrl", morePeopleUrl);
-        api.get(morePeopleUrl).then(newPeopleResults => {
+        api(env).get(morePeopleUrl).then(newPeopleResults => {
           const replacementPeople = newPeopleResults.data.sort((personA, personB) => personA[rankAccessor] - personB[rankAccessor]);
           // lastly set the offset to the former last item is still in view
           const diffx = lowerBound - newLowerBound;
@@ -151,4 +153,4 @@ class PhotoCarousel extends Component {
   }
 }
 
-export default PhotoCarousel;
+export default connect(state => ({env: state.env}), {})(PhotoCarousel);

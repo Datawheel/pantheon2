@@ -56,21 +56,23 @@ class Home extends Component {
   }
 
   changeCountry = evtOrCountry => {
+    const {env} = this.props;
     const requestedCountry = evtOrCountry.target ? evtOrCountry.target.value : evtOrCountry.country;
     const requestedCountryCode = evtOrCountry.target ? evtOrCountry.target[evtOrCountry.target.selectedIndex].dataset.countrycode : evtOrCountry.countrycode;
     this.setState({activeCountry: requestedCountry, activeCountryCode: requestedCountryCode, loadingCountryBios: true});
     const countryFilter = requestedCountry === "all" ? "" : `&bplace_country=eq.${requestedCountry}`;
-    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12${countryFilter}`).then(countryBiosRes => {
+    api(env).get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12${countryFilter}`).then(countryBiosRes => {
       // this.context.router.replace(`?tlang=${trendingLangEdition}`);
       this.setState({fetchedCountryBios: countryBiosRes.data, loadingCountryBios: false});
     });
   }
 
   changeOccupation = evtOrOccupation => {
+    const {env} = this.props;
     const requestedOccupation = evtOrOccupation.target ? evtOrOccupation.target.value : evtOrOccupation;
     this.setState({activeOccupation: requestedOccupation, loadingOccupationBios: true});
     const occupationFilter = requestedOccupation === "all" ? "&offset=16" : `&occupation=eq.${requestedOccupation}`;
-    api.get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12${occupationFilter}`).then(occupationBiosRes => {
+    api(env).get(`/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12${occupationFilter}`).then(occupationBiosRes => {
       // this.context.router.replace(`?tlang=${trendingLangEdition}`);
       this.setState({fetchedOccupationBios: occupationBiosRes.data, loadingOccupationBios: false});
     });
@@ -252,6 +254,7 @@ Home.contextTypes = {
 
 export default hot(
   connect(state => ({
+    env: state.env,
     countryBios: state.data.countryBios,
     countryList: state.data.countryList,
     occupationBios: state.data.occupationBios,
