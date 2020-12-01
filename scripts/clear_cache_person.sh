@@ -44,6 +44,11 @@ do
     fi
 done
 
+echo ""
+echo "Deleting screenshot..."
+rm /home/deploy/pantheon-site/static/images/screenshots/person/$SLUG.jpg
+echo ""
+
 if [[ -z "${CFLARE_EMAIL}" ]]; then
     echo "Must set CFLARE_EMAIL env var to clear cloudflare cache"
     exit 1
