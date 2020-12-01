@@ -28,6 +28,8 @@ SLUG=$(echo $ARGS | cut -f2 -d',')
 URL1="/person?slug=eq.$SLUG&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*";
 URL2="/person_ranks?slug=eq.$SLUG";
 URL3="/profile/person/$SLUG"
+URL4="/api/screenshot/person/$SLUG/"
+
 
 
 declare -a URLS=($URL1 $URL2 $URL3)
@@ -61,7 +63,7 @@ else
             -H "X-Auth-Email: ${CFLARE_EMAIL}" \
             -H "X-Auth-Key: ${CFLARE_KEY}" \
             -H "Content-Type: application/json" \
-            --data "{\"files\":[\"https://pantheon.world/profile/person/$SLUG\"]}";
+            --data "{\"files\":[\"https://pantheon.world/profile/person/$SLUG\",\"https://pantheon.world/api/screenshot/person/$SLUG/\",\"https://pantheon.world/images/screenshots/person/$SLUG.jpg\"]}";
 
     fi
 fi
