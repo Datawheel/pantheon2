@@ -46,7 +46,7 @@ class Twitter extends Component {
               ? {backgroundImage: `url('${user.profile_banner_url}')`}
               : {backgroundColor: "#9E978D", height: "100px"}}></div>
             <div className="tw-userinfo">
-              <img src={user.profile_image_url} />
+              <img src={user.profile_image_url} alt={`${user.screen_name} twitter profile picture`} />
               <h3>{user.name} <a href={`https://twitter.com/${user.screen_name}`} target="_blank" rel="noopener noreferrer">@{user.screen_name}</a></h3>
             </div>
             <div className="tw-userstats">
