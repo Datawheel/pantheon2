@@ -35,7 +35,7 @@ class CountryOccupationRanking extends Component {
           { worseBirthPeers }
         </p>
         <div className="rank-title">
-          <h3>{toTitleCase(plural(person.occupation.occupation.toLowerCase()))} Born in <a href={`/profile/country/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></h3>
+          <h3><a href={`/profile/occupation/${person.occupation.occupation_slug}/country/${person.bplace_country.slug}`}>{person.bplace_country.demonym} born {toTitleCase(plural(person.occupation.occupation.toLowerCase()))}</a></h3>
           <a href={`/explore/rankings?show=people&place=${person.bplace_country.country_code}&occupation=${person.occupation.id}`}>Go to all Rankings</a>
         </div>
         <PhotoCarousel me={person} people={ranking} rankAccessor="bplace_country_occupation_rank_unique" />

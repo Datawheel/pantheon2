@@ -134,10 +134,10 @@
 
     & h3 {
       @mixin profileVizTitle;
-      margin: 0;
+      margin: 0 0 5px;
     }
 
-    & a {
+    & > a {
       @mixin smallCaps;
       &::after {
         content: '';

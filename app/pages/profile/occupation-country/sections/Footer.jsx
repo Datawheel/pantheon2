@@ -11,7 +11,7 @@ const Footer = ({allCountriesInOccupation, allOccupationsInCountry}) =>
         {allCountriesInOccupation.slice(0, 3).map(countryOccupation =>
           <li className="footer-carousel-item" key={countryOccupation.country}>
             <div className="footer-carousel-item-photo">
-              <a href={`/profile/occupation/${countryOccupation.occupation_slug}/country/${countryOccupation.country_slug}`} style={{backgroundImage: `url(/images/profile/country/${countryOccupation.country_slug}.jpg)`}}>
+              <a aria-label={`Top ${toTitleCase(plural(countryOccupation.occupation))} from ${countryOccupation.country}`} href={`/profile/occupation/${countryOccupation.occupation_slug}/country/${countryOccupation.country_slug}`} style={{backgroundImage: `url(/images/profile/country/${countryOccupation.country_slug}.jpg)`}}>
               </a>
             </div>
             <h4 className="footer-carousel-item-title">
@@ -23,7 +23,7 @@ const Footer = ({allCountriesInOccupation, allOccupationsInCountry}) =>
         {allOccupationsInCountry.slice(0, 3).map(occupationCountry =>
           <li className="footer-carousel-item" key={occupationCountry.country}>
             <div className="footer-carousel-item-photo">
-              <a href={`/profile/occupation/${occupationCountry.occupation_slug}/country/${occupationCountry.country_slug}`} style={{backgroundImage: `url(/images/profile/occupation/${occupationCountry.occupation_slug}.jpg)`}}>
+              <a aria-label={`Top ${toTitleCase(plural(occupationCountry.occupation))} from ${occupationCountry.country}`} href={`/profile/occupation/${occupationCountry.occupation_slug}/country/${occupationCountry.country_slug}`} style={{backgroundImage: `url(/images/profile/occupation/${occupationCountry.occupation_slug}.jpg)`}}>
               </a>
             </div>
             <h4 className="footer-carousel-item-title">
