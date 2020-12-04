@@ -363,7 +363,7 @@ class Home extends Component {
 }
 
 Home.preneed = [
-  fetchData("trendingBios", "http://localhost:3300/api/wikiTrends?lang=en&limit=12")
+  fetchData("trendingBios", "https://pantheon.world/api/wikiTrends?lang=en&limit=12")
 ];
 
 Home.need = [
@@ -371,9 +371,9 @@ Home.need = [
   // fetchData("occupationList", "/occupation?select=occupation&order=occupation", {format: res => res, useParams: false}),
   // fetchData("countryBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12", {format: res => res, useParams: false}),
   // fetchData("occupationBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&offset=12", {format: res => res, useParams: false}),
-  fetchData("trendingBiosActor", "http://localhost:3300/api/wikiTrends?lang=en&limit=12&occupation=ACTOR"),
-  fetchData("trendingBiosSoccer", "http://localhost:3300/api/wikiTrends?lang=en&limit=12&occupation=SOCCER+PLAYER"),
-  fetchData("trendingBiosSinger", "http://localhost:3300/api/wikiTrends?lang=en&limit=12&occupation=SINGER")
+  fetchData("trendingBiosActor", "https://pantheon.world/api/wikiTrends?lang=en&limit=12&occupation=ACTOR"),
+  fetchData("trendingBiosSoccer", "https://pantheon.world/api/wikiTrends?lang=en&limit=12&occupation=SOCCER+PLAYER"),
+  fetchData("trendingBiosSinger", "https://pantheon.world/api/wikiTrends?lang=en&limit=12&occupation=SINGER")
 ];
 
 Home.contextTypes = {
