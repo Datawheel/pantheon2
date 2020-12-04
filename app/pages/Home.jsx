@@ -33,6 +33,15 @@ class Home extends Component {
       loadingTrendingBios: false,
       loadingCountryBios: false,
       loadingOccupationBios: false,
+      fetchedTrendingBiosACTOR: null,
+      loadingTrendingBiosACTOR: false,
+      trendingLangEditionACTOR: "en",
+      fetchedTrendingBiosSOCCER: null,
+      loadingTrendingBiosSOCCER: false,
+      trendingLangEditionSOCCER: "en",
+      fetchedTrendingBiosSINGER: null,
+      loadingTrendingBiosSINGER: false,
+      trendingLangEditionSINGER: "en",
       trendingLangEdition: ["ar", "zh", "nl", "en", "fr", "de", "it", "ja", "pl", "pt", "ru", "es"].indexOf(trendingLang) !== -1 ? trendingLang : "en"
     };
   }
@@ -54,6 +63,20 @@ class Home extends Component {
       this.setState({fetchedTrendingBios: trendsResults.data, loadingTrendingBios: false});
     });
   }
+
+  handleLangChange = occupation => evt => {
+    const selectedTrendingLang = evt.target.value;
+    this.setState({
+      [`trendingLangEdition${occupation.split(" ")[0]}`]: selectedTrendingLang,
+      [`loadingTrendingBios${occupation.split(" ")[0]}`]: true
+    });
+    axios.get(`/api/wikiTrends?lang=${selectedTrendingLang}&occupation=${occupation}`).then(trendsResults => {
+      this.setState({
+        [`fetchedTrendingBios${occupation.split(" ")[0]}`]: trendsResults.data,
+        [`loadingTrendingBios${occupation.split(" ")[0]}`]: false
+      });
+    });
+  };
 
   changeCountry = evtOrCountry => {
     const {env} = this.props;
@@ -92,11 +115,15 @@ class Home extends Component {
 
   render() {
     const {activateSearch} = this.context;
-    const {countryList, countryBios, occupationBios, occupationList, trendingBios} = this.props;
-    const {activeCountry, activeCountryCode, activeOccupation, fetchedTrendingBios, fetchedCountryBios, fetchedOccupationBios, loadingCountryBios, loadingOccupationBios, loadingTrendingBios, trendingLangEdition} = this.state;
+    const {trendingBios, trendingBiosActor, trendingBiosSoccer, trendingBiosSinger} = this.props;
+    const {fetchedTrendingBios, loadingTrendingBios, trendingLangEdition,
+      trendingLangEditionACTOR, fetchedTrendingBiosACTOR, loadingTrendingBiosACTOR,
+      trendingLangEditionSOCCER, fetchedTrendingBiosSOCCER, loadingTrendingBiosSOCCER,
+      trendingLangEditionSINGER, fetchedTrendingBiosSINGER, loadingTrendingBiosSINGER} = this.state;
     const trendingBiosForGrid = fetchedTrendingBios || trendingBios;
-    const countryBiosForGrid = fetchedCountryBios || countryBios;
-    const occupationBiosForGrid = fetchedOccupationBios || occupationBios;
+    const trendingBiosActorForGrid = fetchedTrendingBiosACTOR || trendingBiosActor;
+    const trendingBiosSoccerForGrid = fetchedTrendingBiosSOCCER || trendingBiosSoccer;
+    const trendingBiosSingerForGrid = fetchedTrendingBiosSINGER || trendingBiosSinger;
 
     return (
       <div className="home-container">
@@ -163,6 +190,102 @@ class Home extends Component {
 
         <div className="profile-grid">
           <div className="grid-title-container">
+            <h3 className="grid-title">Trending Actors Today</h3>
+            <p className="grid-subtitle">
+              <span className="grid-select-label">Top actors by pageviews for the </span>
+              <Select
+                label=""
+                className="home-select"
+                fontSize="sm"
+                onChange={this.handleLangChange("ACTOR")}
+                value={trendingLangEditionACTOR}
+              >
+                <option value="ar">Arabic</option>
+                <option value="zh">Chinese</option>
+                <option value="nl">Dutch</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="ja">Japanese</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="es">Spanish</option>
+              </Select>
+              <span className="grid-select-label"> wikipedia edition</span>
+            </p>
+          </div>
+          {!loadingTrendingBiosACTOR
+            ? <HomeGrid bios={trendingBiosActorForGrid.sort((a, b) => a.rank - b.rank).slice(0, 12)} />
+            : <div className="loading-trends"><Spinner /></div>}
+        </div>
+
+        <div className="profile-grid">
+          <div className="grid-title-container">
+            <h3 className="grid-title">Trending Soccer Players Today</h3>
+            <p className="grid-subtitle">
+              <span className="grid-select-label">Top soccer players by pageviews for the </span>
+              <Select
+                label=""
+                className="home-select"
+                fontSize="sm"
+                onChange={this.handleLangChange("SOCCER PLAYER")}
+                value={trendingLangEditionSOCCER}
+              >
+                <option value="ar">Arabic</option>
+                <option value="zh">Chinese</option>
+                <option value="nl">Dutch</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="ja">Japanese</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="es">Spanish</option>
+              </Select>
+              <span className="grid-select-label"> wikipedia edition</span>
+            </p>
+          </div>
+          {!loadingTrendingBiosSOCCER
+            ? <HomeGrid bios={trendingBiosSoccerForGrid.sort((a, b) => a.rank - b.rank).slice(0, 12)} />
+            : <div className="loading-trends"><Spinner /></div>}
+        </div>
+
+        <div className="profile-grid">
+          <div className="grid-title-container">
+            <h3 className="grid-title">Trending Singers Today</h3>
+            <p className="grid-subtitle">
+              <span className="grid-select-label">Top singers by pageviews for the </span>
+              <Select
+                label=""
+                className="home-select"
+                fontSize="sm"
+                onChange={this.handleLangChange("SINGER")}
+                value={trendingLangEditionSINGER}
+              >
+                <option value="ar">Arabic</option>
+                <option value="zh">Chinese</option>
+                <option value="nl">Dutch</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="ja">Japanese</option>
+                <option value="pt">Portuguese</option>
+                <option value="ru">Russian</option>
+                <option value="es">Spanish</option>
+              </Select>
+              <span className="grid-select-label"> wikipedia edition</span>
+            </p>
+          </div>
+          {!loadingTrendingBiosSINGER
+            ? <HomeGrid bios={trendingBiosSingerForGrid.sort((a, b) => a.rank - b.rank).slice(0, 12)} />
+            : <div className="loading-trends"><Spinner /></div>}
+        </div>
+
+        {/* <div className="profile-grid">
+          <div className="grid-title-container">
             <h3 className="grid-title">New Profiles By Country</h3>
             <p className="grid-subtitle">
               <span className="grid-select-label">Most recent profiles added from </span>
@@ -215,7 +338,7 @@ class Home extends Component {
           <div className="view-more">
             <a href={activeOccupation === "all" ? "/explore/rankings?show=people&years=-3501,2020&new=true" : `/explore/rankings?show=people&years=-3501,2020&occupation=${activeOccupation}&new=true`}>{activeOccupation === "all" ? "View all new profiles »" : `View all new profiles of ${plural(activeOccupation.toLowerCase())} »`}</a>
           </div>
-        </div>
+        </div> */}
 
         <div className="floating-content l-1">
           <div className="box"></div>
@@ -239,12 +362,18 @@ class Home extends Component {
   }
 }
 
+Home.preneed = [
+  fetchData("trendingBios", "http://localhost:3300/api/wikiTrends?lang=en&limit=12")
+];
+
 Home.need = [
-  fetchData("countryList", "/country?select=country,country_code&num_born=gte.100&order=country", {format: res => res, useParams: false}),
-  fetchData("occupationList", "/occupation?select=occupation&order=occupation", {format: res => res, useParams: false}),
-  fetchData("countryBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12", {format: res => res, useParams: false}),
-  fetchData("occupationBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&offset=12", {format: res => res, useParams: false}),
-  fetchData("trendingBios", "https://pantheon.world/api/wikiTrends?lang=en&limit=60")
+  // fetchData("countryList", "/country?select=country,country_code&num_born=gte.100&order=country", {format: res => res, useParams: false}),
+  // fetchData("occupationList", "/occupation?select=occupation&order=occupation", {format: res => res, useParams: false}),
+  // fetchData("countryBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=12", {format: res => res, useParams: false}),
+  // fetchData("occupationBios", "/person?hpi_prev=is.null&order=hpi.desc.nullslast&select=name,slug,id,hpi&order=hpi.desc&limit=16&offset=12", {format: res => res, useParams: false}),
+  fetchData("trendingBiosActor", "http://localhost:3300/api/wikiTrends?lang=en&limit=12&occupation=ACTOR"),
+  fetchData("trendingBiosSoccer", "http://localhost:3300/api/wikiTrends?lang=en&limit=12&occupation=SOCCER+PLAYER"),
+  fetchData("trendingBiosSinger", "http://localhost:3300/api/wikiTrends?lang=en&limit=12&occupation=SINGER")
 ];
 
 Home.contextTypes = {
@@ -255,10 +384,13 @@ Home.contextTypes = {
 export default hot(
   connect(state => ({
     env: state.env,
-    countryBios: state.data.countryBios,
-    countryList: state.data.countryList,
-    occupationBios: state.data.occupationBios,
-    occupationList: state.data.occupationList,
-    trendingBios: state.data.trendingBios
+    // countryBios: state.data.countryBios,
+    // countryList: state.data.countryList,
+    // occupationBios: state.data.occupationBios,
+    // occupationList: state.data.occupationList,
+    trendingBios: state.data.trendingBios,
+    trendingBiosActor: state.data.trendingBiosActor,
+    trendingBiosSoccer: state.data.trendingBiosSoccer,
+    trendingBiosSinger: state.data.trendingBiosSinger
   }))(Home)
 );
