@@ -164,10 +164,13 @@ module.exports = function(app) {
     if (todaysBiosFromDb.length) {
       return res.json([...todaysBiosFromDb].sort((a, b) => a.rank_pantheon - b.rank_pantheon).slice(0, limit));
     }
-    else if (occupation) {
-      return res.json([]);
-    }
     else {
+      if (occupation) {
+        const todaysBiosFromDbCheck = await axios.get(`https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`).catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
+        if (todaysBiosFromDbCheck.data.length) {
+          return res.json([]);
+        }
+      }
       const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
       const topPageViewsResp = await axios.get(wikiPageViewsURL).catch(e => (console.log("Wiki Trending Error:", e), {data: []}));
       const topPageViewsJson = topPageViewsResp.data;
