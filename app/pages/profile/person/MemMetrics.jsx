@@ -1,10 +1,8 @@
 import React, {Component} from "react";
-import {connect} from "react-redux";
 import axios from "axios";
 import {FORMATTERS} from "types/index";
 import {AreaPlot} from "d3plus-react";
 import {colorLighter} from "d3plus-color";
-import {min as D3Min} from "d3-array";
 import moment from "moment";
 import {COLORS_DOMAIN} from "types";
 import "pages/profile/person/MemMetrics.css";
@@ -44,19 +42,11 @@ class MemMetrics extends Component {
   }
 
   componentDidMount() {
-    const {env, person} = this.props;
-    const wikiTrendingURL = `https://pantheon.world/api/wikiTrendDetails?pid=${person.id}`;
+    const {person} = this.props;
+    const wikiTrendingURL = `/api/wikiTrendDetails?pid=${person.id}`;
     axios.get(wikiTrendingURL)
       .then(res => {
         this.setState({wikiPageViewsPast30Days: res.data});
-      });
-    // Note: this key is restricted to Pantheon domains, if you want to use this in your
-    // codebase, please generate a key: https://developers.google.com/youtube/v3/docs/
-    const apiKey = env.YOUTUBE_API_KEY;
-    axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=${apiKey}`)
-      .then(res => {
-        const vid = res.data.items[0];
-        this.setState({vid});
       });
   }
 
@@ -168,4 +158,4 @@ class MemMetrics extends Component {
   }
 }
 
-export default connect(state => ({env: state.env}), {})(MemMetrics);
+export default MemMetrics;
