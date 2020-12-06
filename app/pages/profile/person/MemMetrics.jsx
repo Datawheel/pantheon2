@@ -38,7 +38,10 @@ class MemMetrics extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {vid: null, wikiPageViewsPast30Days: []};
+    this.state = {
+      youtubeId: null,
+      wikiPageViewsPast30Days: []
+    };
   }
 
   componentDidMount() {
@@ -48,11 +51,19 @@ class MemMetrics extends Component {
       .then(res => {
         this.setState({wikiPageViewsPast30Days: res.data});
       });
+    if (!person.youtube) {
+      axios.get(`/api/youtube/${person.id}`)
+        .then(res => {
+          if (res.data && res.data.youtube) {
+            this.setState({youtubeId: res.data.youtube});
+          }
+        });
+    }
   }
 
   render() {
     const {pageViews, person} = this.props;
-    const {vid, wikiPageViewsPast30Days} = this.state;
+    const {wikiPageViewsPast30Days} = this.state;
     const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
     const domainColor = COLORS_DOMAIN[person.occupation.domain.toLowerCase().replace("& ", "").replace(/ /g, "-")];
     // console.log(person, COLORS_DOMAIN, person.occupation.domain.toLowerCase().replace("& ", "").replace(/ /g, "-"));
@@ -68,13 +79,14 @@ class MemMetrics extends Component {
       // console.log("slope, intercept and r-square!!!", [slope, intercept, rSquare]);
       trendLineData2 = trendData.map((d, i) => ({date: d.date, views: Math.max(slope * i + intercept, 0), pid: "Slope", color: colorLighter(domainColor, 0.5)}));
     }
+    const youtubeId = this.state.youtubeId || person.youtube;
 
     return (
       <div className="metrics-container">
         <div className="metric-vid">
-          {vid
+          {youtubeId
             ? <iframe
-              src={`https://www.youtube.com/embed/${vid.id.videoId}`}
+              src={`https://www.youtube.com/embed/${youtubeId}`}
               max-width="560"
               width="100%"
               height="100%"
