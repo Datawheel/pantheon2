@@ -30,7 +30,6 @@ class Books extends Component {
   render() {
     const {person} = this.props;
     const {data} = this.state;
-    console.log("noable works data:", data);
 
     return (
       <div>
