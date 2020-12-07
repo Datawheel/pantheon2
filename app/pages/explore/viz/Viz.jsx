@@ -11,6 +11,8 @@ import {initRankingsAndViz, unmountRankingsAndViz} from "actions/vb";
 import {SANITIZERS} from "types";
 import "pages/explore/Explore.css";
 
+const COUNTRY_LIST = ["cze", "geo", "rou", "mkd", "civ", "ury", "arg", "lva", "bgr", "blr", "egy", "nzl", "gha", "irq", "chl", "rus", "ecu", "tur", "jpn", "fin", "bra", "pol", "che", "mex", "nld", "ita", "ind", "usa", "nor", "chn", "aut", "prt", "deu", "grc", "esp", "can", "dnk", "hun", "bel", "fra", "isr", "swe", "gbr", "lbn", "dza", "isl", "aus", "tha", "pak", "zaf", "arm", "tun", "hrv", "syr", "ukr", "irn", "vnm", "irl", "svk", "svn", "col", "est", "cub", "sau", "per", "ven", "mar", "ltu", "afg", "srb", "ken", "jam", "pry", "nga", "kaz", "mne", "uzb", "bih", "aze", "cmr", "kor"];
+
 class Viz extends Component {
 
   constructor(props) {
@@ -39,7 +41,7 @@ class Viz extends Component {
   componentWillMount() {
     const {location, initRankingsAndViz} = this.props;
     const {query: qParams} = location;
-    const country = SANITIZERS.country(qParams.place) || "all";
+    const country = SANITIZERS.country(qParams.place) || COUNTRY_LIST[Math.floor(Math.random() * COUNTRY_LIST.length)];
     const city = SANITIZERS.city(qParams.place) || "all";
     const gender = SANITIZERS.gender(qParams.gender);
     const occupation = qParams.occupation || "all";
