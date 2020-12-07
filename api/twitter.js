@@ -37,6 +37,10 @@ module.exports = function(app) {
       console.log("[tw timeline api error] ", timelineResp.errors);
       return res.json([]);
     }
+    if (!timelineResp) {
+      console.log("[tw timelineresp error] ");
+      return res.json([]);
+    }
     // return res.json(timelineResp);
 
     const retTimeline = timelineResp.map(d => {
