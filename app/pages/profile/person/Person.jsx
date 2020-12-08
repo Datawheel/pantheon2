@@ -122,11 +122,13 @@ class Person extends Component {
     //   }}><iframe className="yasiv-youtube" src={`https://yasiv.com/youtube#?q=${person.name}%20${person.occupation.occupation.toLowerCase()}`} frameBorder="0" max-width="1024" width="100%" height="600" /></div>
     // });
 
+    let titleContent = `${person.name} Biography`;
     const pageUrl = this.props.location.href.split("?")[0].replace(/\/$/, "");
     const pageHeaderMetaTags = config.meta.map(meta => {
       if (meta.property) {
         if (meta.property === "og:title") {
-          return {property: "og:title", content: `${person.name} Biography`};
+          titleContent = wikiSummary && wikiSummary.description ? `${person.name} Biography - ${wikiSummary.description}` : titleContent;
+          return {property: "og:title", content: titleContent};
         }
         if (meta.property === "og:image") {
           return {property: "og:image", content: `${pageUrl.replace("http://", "https://").replace("/profile/", "/images/screenshots/")}.jpg`};
@@ -146,7 +148,7 @@ class Person extends Component {
     return (
       <div className="person">
         <Helmet
-          title={`${person.name} Biography`}
+          title={titleContent}
           meta={pageHeaderMetaTags}
         />
         <Header person={person} wikiPageViews={wikiPageViews} />
