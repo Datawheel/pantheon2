@@ -20,8 +20,8 @@ class SelectOccupationCountry extends Component {
     super(props);
     this.state = {
       countries: [],
-      selection1: null,
-      selection2: null,
+      selection1: "soccer-player",
+      selection2: "united-states",
       selection2Entity: "product"
     };
   }
@@ -45,9 +45,10 @@ class SelectOccupationCountry extends Component {
   }
 
   render() {
-    const {countries, selection1, selection2, selection2Entity} = this.state;
+    const {selection1, selection2, selection2Entity} = this.state;
     const {data, router} = this.props;
     const {countries: countryList, occupations} = data;
+    const countries = this.state.countries.length ? this.state.countries : countryList;
 
     const countryIconPath = "/images/icons/country";
     const productIconPath = "/images/icons/product";
@@ -124,7 +125,8 @@ class SelectOccupationCountry extends Component {
               </div>
 
               {/* entity 2 */}
-              <div className="welcome-form-select-wrapper" disabled={selection1 === null}>
+              {/* <div className="welcome-form-select-wrapper" disabled={selection1 === null}> */}
+              <div className="welcome-form-select-wrapper" disabled={false}>
                 <img
                   src={selection2Entity === "product"
                     ? selection2 === "unspecified"
@@ -143,8 +145,8 @@ class SelectOccupationCountry extends Component {
                 >
                   <option disabled={true}>Select a country</option>
                   {countries.map(country =>
-                    <option value={country.country_slug} key={country.country_slug}>
-                      {country.country} ({FORMATTERS.commas(country.num_people)})
+                    <option value={country.country_slug || country.slug} key={country.country_slug || country.slug}>
+                      {country.num_people ? `${country.country} (${FORMATTERS.commas(country.num_people)})` : country.country}
                     </option>
                   )}
                 </Select>
