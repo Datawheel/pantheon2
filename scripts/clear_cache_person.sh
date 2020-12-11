@@ -64,7 +64,7 @@ else
             -H "X-Auth-Email: ${CFLARE_EMAIL}" \
             -H "X-Auth-Key: ${CFLARE_KEY}" \
             -H "Content-Type: application/json" \
-            --data "{\"files\":[\"https://pantheon.world/profile/person/$SLUG\",\"https://pantheon.world/api/screenshot/person/$SLUG/\",\"https://pantheon.world/images/screenshots/person/$SLUG.jpg\"]}";
+            --data "{\"files\":[\"https://pantheon.world/person?slug=eq.$SLUG&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*\",\"https://pantheon.world/profile/person/$SLUG\",\"https://pantheon.world/profile/person/$SLUG/\",\"https://pantheon.world/api/screenshot/person/$SLUG/\",\"https://pantheon.world/images/screenshots/person/$SLUG.jpg\"]}";
 
     fi
 fi
