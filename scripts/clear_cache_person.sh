@@ -28,11 +28,12 @@ SLUG=$(echo $ARGS | cut -f2 -d',')
 URL1="/person?slug=eq.$SLUG&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*";
 URL2="/person_ranks?slug=eq.$SLUG";
 URL3="/profile/person/$SLUG"
-URL4="/api/screenshot/person/$SLUG/"
+URL4="/profile/person/$SLUG/"
+URL5="/api/screenshot/person/$SLUG/"
 
 
 
-declare -a URLS=($URL1 $URL2 $URL3)
+declare -a URLS=($URL1 $URL2 $URL3 $URL4 $URL5)
 
 for url in "${URLS[@]}"
 do
