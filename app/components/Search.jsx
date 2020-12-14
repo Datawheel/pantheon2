@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {strip, trim} from "d3plus-text";
-import {NonIdealState} from "@blueprintjs/core";
+import {Icon, NonIdealState} from "@blueprintjs/core";
 import api from "apiConfig";
 import "components/Search.css";
 
@@ -11,15 +11,20 @@ class Search extends Component {
     super(props);
     this.state = {
       results: null,
-      query: null
+      query: null,
+      showTrending: true
     };
   }
 
   onChange(e) {
     const {env} = this.props;
     const userQuery = e.target.value;
+    if (userQuery === "") {
+      this.showTrending();
+      return;
+    }
     if (userQuery.length < 3) {
-      this.setState({results: null});
+      this.setState({results: null, showTrending: false});
       return;
     }
 
@@ -33,10 +38,10 @@ class Search extends Component {
       .then(queryResults => {
         const results = queryResults.data;
         if (results.length) {
-          this.setState({results, query: userQuery});
+          this.setState({results, query: userQuery, showTrending: false});
         }
         else {
-          this.setState({results: [], query: userQuery});
+          this.setState({results: [], query: userQuery, showTrending: false});
         }
       });
   }
@@ -75,7 +80,23 @@ class Search extends Component {
     }
   }
 
+  showTrending = () => {
+    const {env} = this.props;
+    api(env).get("https://pantheon.world/api/wikiTrends?lang=en&limit=12")
+      .then(queryResults => {
+        const results = queryResults.data.map(d => ({
+          name: d.name,
+          profile_type: "person",
+          primary_meta: d.occupation,
+          slug: d.slug
+        }));
+        console.log("results", results);
+        this.setState({results, query: "", showTrending: true});
+      });
+  }
+
   componentDidMount() {
+    this.showTrending();
     this._searchInput.focus();
     window.addEventListener("keydown", this.handleKeyDown);
   }
@@ -86,7 +107,7 @@ class Search extends Component {
 
   render() {
     const {activateSearch} = this.props;
-    const {query, results} = this.state;
+    const {query, results, showTrending} = this.state;
 
     return (
       <div className="search">
@@ -107,6 +128,11 @@ class Search extends Component {
               <input type="text" ref={el => this._searchInput = el} onChange={this.onChange.bind(this)} />
             </React.Fragment>
           </label>
+          {showTrending
+            ? <div className="trending-text">
+              <Icon icon="trending-up" iconSize={20} /> Trending Searches...
+            </div>
+            : null}
           {results
             ? results.length
               ? <ul className="results-list">
