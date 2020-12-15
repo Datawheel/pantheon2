@@ -1,7 +1,9 @@
 import React from "react";
+import {Helmet} from "react-helmet-async";
 
 const Datasets = () =>
   <div>
+    <Helmet title="Data Downloads" />
     <h1>Download Data</h1>
     <h2>Pantheon 2.0 datasets</h2>
     <dl className="download-dl">
