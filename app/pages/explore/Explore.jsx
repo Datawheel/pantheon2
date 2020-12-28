@@ -34,16 +34,6 @@ class Explore extends Component {
     console.log("\n\n---------explore comp did update!!!\n---------------\n\n\n");
   }
 
-  componentWillMount() {
-    // const queryParams = this.props.location.query;
-    // const years = this.sanitizeQueryYears(queryParams.years);
-    // const [type, typeNesting] = this.sanitizeQueryType(queryParams.type);
-    // const country = this.sanitizeQueryCountry(queryParams.country);
-    // const city = this.sanitizeQueryCity(queryParams.city);
-    // const occupation = this.sanitizeQueryOccupation(queryParams.occupation);
-    // this.props.initExplore(years);
-  }
-
   render() {
     const {children} = this.props;
     return (

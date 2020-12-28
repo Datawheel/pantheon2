@@ -19,30 +19,7 @@ class Ranking extends Component {
 
   constructor(props) {
     super(props);
-    // this.countryLookup = this.props.data.places.reduce((acc, cur) => ({...acc, [cur.country.country_code]: cur.country}), {});
-    // this.state = {
-    //   data: [],
-    //   loading: true,
-    //   viz: "treemap",
-    //   city: "all",
-    //   country: "all",
-    //   filteredData: [],
-    //   gender: null,
-    //   nestedOccupations: null,
-    //   occupation: "all",
-    //   occupations: null,
-    //   page: 0,
-    //   pageSize: 50,
-    //   places: null,
-    //   searching: false,
-    //   show: "occupations",
-    //   years: [],
-    //   yearType: "birthyear"
-    // };
-  }
-
-  componentWillMount() {
-    const {location, initRankingsAndViz} = this.props;
+    const {location, initRankingsAndViz} = props;
     const {query: qParams} = location;
     const country = SANITIZERS.country(qParams.place) || "all";
     const city = SANITIZERS.city(qParams.place) || "all";
@@ -53,7 +30,6 @@ class Ranking extends Component {
     const metricType = qParams.l ? "l" : "hpi";
     const onlyShowNew = qParams.new === "true";
     const show = qParams.show ? SANITIZERS.show(qParams.show, "rankings") : "people";
-    // console.log("show!!!", show);
     initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "rankings", occupation, show, years});
   }
 
@@ -232,5 +208,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Ranking);
-// export default connect(state => ({data: state.data}), {})(Ranking);
-

@@ -17,29 +17,7 @@ class Viz extends Component {
 
   constructor(props) {
     super(props);
-    // this.countryLookup = this.props.data.places.reduce((acc, cur) => ({...acc, [cur.country.country_code]: cur.country}), {});
-    // this.state = {
-    //   data: [],
-    //   loading: true,
-    //   viz: "treemap",
-    //   city: "all",
-    //   country: "all",
-    //   filteredData: [],
-    //   gender: null,
-    //   nestedOccupations: null,
-    //   occupation: "all",
-    //   occupations: null,
-    //   pageSize: 50,
-    //   places: null,
-    //   searching: false,
-    //   show: "occupations",
-    //   years: [],
-    //   yearType: "birthyear"
-    // };
-  }
-
-  componentWillMount() {
-    const {location, initRankingsAndViz} = this.props;
+    const {location, initRankingsAndViz} = props;
     const {query: qParams} = location;
     const country = SANITIZERS.country(qParams.place) || COUNTRY_LIST[Math.floor(Math.random() * COUNTRY_LIST.length)];
     const city = SANITIZERS.city(qParams.place) || "all";
@@ -57,21 +35,6 @@ class Viz extends Component {
   componentWillUnmount() {
     this.props.unmountRankingsAndViz();
   }
-
-  // UNSAFE_componentWillMount() {
-  //   console.log("UNSAFE_componentWillMount porps", this.props);
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   // console.log("prevProps", prevProps);
-  //   // console.log("this.props", this.props);
-  //   // Typical usage (don't forget to compare props):
-  //   // if (this.props.location.pathname !== prevProps.location.pathname) {
-  //   // this.fetchData(this.props.userID);
-  //   // console.log("\n\n---------should update!!!\n---------------\n\n\n");
-  //   // this.setState({data: [], loading: true, filteredData: []});
-  //   // }
-  // }
 
   updateData = (updatedState, callback) => {
     if (callback) {

@@ -49,13 +49,6 @@ class YearControl extends Component {
     }
   }
 
-  // componentWillMount() {
-  //   const {years} = this.props;
-  //   if (years) {
-  //     this.changeYears(years, false);
-  //   }
-  // }
-
   changeYearType = (newYearType, e) => {
     e.preventDefault();
     this.props.updateYearType(newYearType);
