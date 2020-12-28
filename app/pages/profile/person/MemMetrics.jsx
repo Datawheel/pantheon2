@@ -51,14 +51,14 @@ class MemMetrics extends Component {
       .then(res => {
         this.setState({wikiPageViewsPast30Days: res.data});
       });
-    // if (!person.youtube) {
-    //   axios.get(`/api/youtube/${person.id}`)
-    //     .then(res => {
-    //       if (res.data && res.data.youtube) {
-    //         this.setState({youtubeId: res.data.youtube});
-    //       }
-    //     });
-    // }
+    if (!person.youtube) {
+      axios.get(`/api/youtube/${person.id}`)
+        .then(res => {
+          if (res.data && res.data.youtube) {
+            this.setState({youtubeId: res.data.youtube});
+          }
+        });
+    }
   }
 
   render() {
