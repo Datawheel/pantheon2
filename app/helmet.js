@@ -5,7 +5,7 @@ module.exports = {
   meta: [
     {charset: "utf-8"},
     {"http-equiv": "X-UA-Compatible", "content": "IE=edge"},
-    {name: "description", content: "A tool for understanding collective memory."},
+    {name: "description", content: "An observatory of human collective memory"},
     {name: "mobile-web-app-capable", content: "yes"},
     {name: "viewport", content: "width=device-width, initial-scale=1"},
     {name: "apple-mobile-web-app-capable", content: "yes"},
@@ -14,7 +14,7 @@ module.exports = {
     {property: "og:title", content: "Pantheon"},
     {property: "og:type", content: "article"},
     {property: "og:image", content: "https://pantheon.world/images/pantheon-share.jpg"},
-    {property: "og:description", content: "Pantheon is an observatory of human collective memory. With data on more than 70,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet's history."}
+    {property: "og:description", content: "Pantheon is an observatory of human collective memory. With data on more than 85,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet's history."}
   ],
   title: "Pantheon"
 };
