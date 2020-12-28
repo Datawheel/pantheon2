@@ -26,7 +26,7 @@ module.exports = function(app) {
     // Note: this key is restricted to Pantheon domains, if you want to use this in your
     // codebase, please generate a key: https://developers.google.com/youtube/v3/docs/
     errorMsg = "error: unable to find youtube video for this person";
-    const ytData = await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${pantheonData.name}%20${pantheonData.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=${ytApiKey}`)
+    const ytData = await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${pantheonData.name}&maxResults=1&type=video&videoEmbeddable=true&key=${ytApiKey}`)
       .then(res => {
         const vid = res.data.items && res.data.items.length ? res.data.items[0] : null;
         return vid;
