@@ -2,8 +2,12 @@ import React from "react";
 import {connect} from "react-redux";
 import {merge} from "d3-array";
 import {plural} from "pluralize";
+import {Helmet} from "react-helmet-async";
+import {toTitleCase} from "viz/helpers";
 
-const VizTitle = ({city, country, gender, loading, nestedOccupations, places, occupation, show, yearType, placeType}) => {
+const lowerFirstLetter = str => str.charAt(0).toLocaleLowerCase() + str.slice(1);
+
+const VizTitle = ({city, country, gender, loading, nestedOccupations, page, places, placeType, occupation, show, viz, yearType}) => {
   let occupationSubject = "";
   let fromLocation = "";
   let thisOcc;
@@ -48,15 +52,31 @@ const VizTitle = ({city, country, gender, loading, nestedOccupations, places, oc
   }
 
   let title = `Memorable ${occupationSubject}${fromLocation}`;
-  if (show === "occupations") {
+  if (show.type === "occupations") {
     title = `Occupations of memorable ${occupationSubject}${fromLocation}`;
   }
-  if (show === "places") {
-    title = `Places of memorable ${occupationSubject}${fromLocation}`;
+  if (show.type === "places") {
+    const placeType = yearType === "deathyear" ? "Death places" : "Birth places";
+    title = `${placeType} of memorable ${occupationSubject}${fromLocation}`;
+  }
+
+  let headTitle = `Ranking of ${lowerFirstLetter(title)}`;
+  if (page === "viz") {
+    let vizName = toTitleCase(viz);
+    if (viz === "stackedarea") {
+      vizName = "Stacked area chart";
+    }
+    if (viz === "linechart") {
+      vizName = "Line chart";
+    }
+    headTitle = `${vizName} of ${lowerFirstLetter(title)}`;
   }
 
   return !loading
     ? <h1 className="explore-title">
+      <Helmet
+        title={headTitle}
+      />
       {title}
     </h1>
     : null;
@@ -69,10 +89,12 @@ const mapStateToProps = state => ({
   gender: state.vb.gender,
   nestedOccupations: state.data.occupationResponse.nestedOccupations,
   occupation: state.vb.occupation,
+  page: state.vb.page,
   show: state.vb.show,
   yearType: state.vb.yearType,
   places: state.data.places,
-  placeType: state.vb.placeType
+  placeType: state.vb.placeType,
+  viz: state.vb.viz
 });
 
 export default connect(mapStateToProps)(VizTitle);
