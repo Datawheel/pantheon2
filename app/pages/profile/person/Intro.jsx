@@ -108,6 +108,9 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
             <React.Fragment>{person.name} is the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a>{occupationRankPrev && occupationRankPrev !== occupationRank ? ` (${occupationRank < occupationRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(occupationRankPrev)} in 2019)` : ""}</React.Fragment>
             <React.Fragment>{!person.bplace_country ? <span>.</span> : <span>, the {bplaceCountryRank !== 1 ? FORMATTERS.ordinal(bplaceCountryRank) : ""} most popular biography from <a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></span>}{bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank ? ` (${bplaceCountryRank < bplaceCountryRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(bplaceCountryRankPrev)} in 2019)` : !person.bplace_country ? "" : ""}{bplaceCountryOccupationRank ? <span> and the {bplaceCountryOccupationRank !== 1 ? FORMATTERS.ordinal(bplaceCountryOccupationRank) : ""} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}/country/${person.bplace_country.slug}`}>{person.bplace_country.demonym} {toTitleCase(person.occupation.occupation)}</a>.</span> : ""}</React.Fragment>
           </p>
+          {person.famous_for
+            ? <p>{person.famous_for}</p>
+            : null}
         </div>
       </div>
     </section>
