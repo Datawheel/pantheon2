@@ -4,7 +4,7 @@ import {AnchorButton, Collapse} from "@blueprintjs/core";
 
 import "pages/about/Misc.css";
 import "pages/about/About.css";
-import "pages/apps/yearbook/Yearbook.css";
+import "pages/game/yearbook/Yearbook.css";
 
 class YearbookIndex extends Component {
 
@@ -19,7 +19,7 @@ class YearbookIndex extends Component {
   _ensureYear = year => {
     if (!year) {
       const randomYear = Math.round(Math.random() * (1999 - 1900) + 1900);
-      this.props.router.push(`/app/yearbook/${randomYear}`);
+      this.props.router.push(`/game/yearbook/${randomYear}`);
     }
   }
 
@@ -39,7 +39,7 @@ class YearbookIndex extends Component {
   };
 
   changeYear = e => {
-    this.props.router.push(`/app/yearbook/${e.target.value}`);
+    this.props.router.push(`/game/yearbook/${e.target.value}`);
   }
 
   render() {
@@ -56,7 +56,7 @@ class YearbookIndex extends Component {
                 <ul className="inner-page-items">
                   {[...Array(10).keys()].reverse().map(yearIndex =>
                     <li key={1900 + decade * 10 + yearIndex}>
-                      <Link to={`/app/yearbook/${1900 + decade * 10 + yearIndex}`} className="item-link" activeClassName="is-active">{1900 + decade * 10 + yearIndex}</Link>
+                      <Link to={`/game/yearbook/${1900 + decade * 10 + yearIndex}`} className="item-link" activeClassName="is-active">{1900 + decade * 10 + yearIndex}</Link>
                     </li>
                   )}
                 </ul>
@@ -68,7 +68,7 @@ class YearbookIndex extends Component {
       <nav className="mobile-page-nav" role="navigation">
         <div className="next">
           {parseInt(year, 10) < 2000
-            ? <Link to={`/app/yearbook/${parseInt(year, 10) + 1}`} className="bp3-button bp3-minimal bp3-icon-chevron-left">
+            ? <Link to={`/game/yearbook/${parseInt(year, 10) + 1}`} className="bp3-button bp3-minimal bp3-icon-chevron-left">
               {parseInt(year, 10) + 1}
             </Link>
             : null}
@@ -84,7 +84,7 @@ class YearbookIndex extends Component {
 
         <div className="prev">
           {parseInt(year, 10) > 1900
-            ? <Link to={`/app/yearbook/${parseInt(year, 10) - 1}`} className="bp3-button bp3-minimal">
+            ? <Link to={`/game/yearbook/${parseInt(year, 10) - 1}`} className="bp3-button bp3-minimal">
               {parseInt(year, 10) - 1}
               <span className="bp3-icon-standard bp3-icon-chevron-right"></span>
             </Link> : null}

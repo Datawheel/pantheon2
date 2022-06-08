@@ -41,10 +41,14 @@ import Api from "pages/data/Api";
 import Permissions from "pages/data/Permissions";
 import Faq from "pages/data/Faq";
 
+// game section components
+import Game from "./pages/game/Game";
+import YearbookIndex from "pages/game/yearbook/Index";
+import Yearbook from "pages/game/yearbook/Yearbook";
+import Birthle from "./pages/game/birthle/Birthle";
+
 // apps section components
 import Apps from "pages/apps/Apps";
-import YearbookIndex from "pages/apps/yearbook/Index";
-import Yearbook from "pages/apps/yearbook/Yearbook";
 import Trivia from "pages/apps/trivia/Trivia";
 
 // custom 404 page
@@ -151,10 +155,14 @@ export default function RouteCreate() {
         <Route path="faq" component={Faq} />
       </Route>
 
-      <Route path="app" component={Apps}>
+      <Route path="game" component={Game}>
         <Route path="yearbook" component={YearbookIndex}>
           <Route path=":year" component={Yearbook} />
         </Route>
+        <Route path="birthle" component={Birthle} />
+      </Route>
+
+      <Route path="app" component={Apps}>
         <Route path="trivia" component={Trivia} />
       </Route>
 

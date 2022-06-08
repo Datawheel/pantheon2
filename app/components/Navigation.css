@@ -27,7 +27,7 @@
       display: inline-block;
     }
 
-    &.explore-link::before {
+    &.explore-link::before, &.game-link::before {
       background: url('/images/nav/explore.svg') no-repeat;
       background-size: contain;
     }
@@ -373,7 +373,7 @@
     @mixin profileSectionTitle;
 
     /* &.profiles-link, &.about-link, &.data-link { */
-    &.profiles-link, &.data-link {
+    &.profiles-link, &.data-link, &.game-link {
       &::after {
         @mixin dropdownLink;
         width: 16px !important;

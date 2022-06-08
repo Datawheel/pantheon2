@@ -28,7 +28,7 @@ class Yearbook extends Component {
   render() {
     const {peopleBornInYear} = this.props.data;
     const {year} = this.props.params;
-
+    console.log(this.props.data);
     if (!peopleBornInYear || !peopleBornInYear.length) {
       return <NotFound />;
     }
@@ -47,7 +47,7 @@ class Yearbook extends Component {
       return meta;
     });
 
-    return <div>
+    return (<div>
       <Helmet title={`${year} Yearbook`} meta={yearbookHeaderMetaTags} />
       <div className="section long-text">
         <h1>Pantheon {year} Yearbook</h1>
@@ -96,7 +96,7 @@ class Yearbook extends Component {
           )}
         </section>
       </div>
-    </div>;
+    </div>);
   }
 
 }

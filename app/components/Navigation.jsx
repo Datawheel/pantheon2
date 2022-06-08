@@ -107,14 +107,14 @@ class Navigation extends Component {
                 <li><a href="/data/api" className="item-link">API</a></li>
               </ul>
             </li>
-            {/* <li className="item">
-              <Link to="/app/yearbook" className="item-link data-link dd" activeClassName="active">Apps</Link>
-              <ul className="sub-items">
-                <li><a href="/app/yearbook" className="item-link">Yearbook</a></li>
-              </ul>
-            </li> */}
             <li className="item">
-              <Link to="/app/yearbook" className="item-link explore-link" activeClassName="active">Yearbook</Link>
+              <Link to="/game/yearbook" className="item-link explore-link dd" activeClassName="active">Games</Link>
+              <ul className="sub-items">
+                <li>
+                  <Link to="/game/yearbook" className="item-link">Yearbook</Link>
+                </li>
+                <li><a href="/game/birthle" className="item-link">Birthle</a></li>
+              </ul>
             </li>
             <li className="search-btn">
               <button onClick={activateSearch}>
@@ -181,8 +181,14 @@ class Navigation extends Component {
                 <li><a href="/app/yearbook">Yearbook</a></li>
               </ul>
             </li> */}
-            <li className="item">
-              <a href="/app/yearbook" className="item-link explore-link">Yearbook</a>
+            <li className="item" onClick={this.toggleSubNav}>
+              <a className="item-link game-link" onClick={this.toggleSubNavSib}>Games</a>
+              <ul className="sub-items">
+                <li>
+                  <Link to="/game/yearbook" className="item-link">Yearbook</Link>
+                </li>
+                <li><a href="/game/birthle" className="item-link">Birthle</a></li>
+              </ul>
             </li>
             <li className="item">
               <a href="/data/api" className="item-link api-link">API</a>
