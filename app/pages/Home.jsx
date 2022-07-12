@@ -467,7 +467,7 @@ class Home extends Component {
             ? <HomeGrid bios={countryBiosForGrid} />
             : <div className="loading-trends"><Spinner /></div>}
           <div className="view-more">
-            <a href={activeCountry === "all" ? "/explore/rankings?show=people&years=-3501,2020&new=true" : `/explore/rankings?show=people&years=-3501,2020&place=${activeCountryCode}&new=true`}>{activeCountry === "all" ? "View all new profiles »" : `View all new profiles from ${activeCountry} »`}</a>
+            <a href={activeCountry === "all" ? "/explore/rankings?show=people&years=-3501,2022&new=true" : `/explore/rankings?show=people&years=-3501,2022&place=${activeCountryCode}&new=true`}>{activeCountry === "all" ? "View all new profiles »" : `View all new profiles from ${activeCountry} »`}</a>
           </div>
         </div>
 
@@ -495,7 +495,7 @@ class Home extends Component {
             ? <HomeGrid bios={occupationBiosForGrid} />
             : <div className="loading-trends"><Spinner /></div>}
           <div className="view-more">
-            <a href={activeOccupation === "all" ? "/explore/rankings?show=people&years=-3501,2020&new=true" : `/explore/rankings?show=people&years=-3501,2020&occupation=${activeOccupation}&new=true`}>{activeOccupation === "all" ? "View all new profiles »" : `View all new profiles of ${plural(activeOccupation.toLowerCase())} »`}</a>
+            <a href={activeOccupation === "all" ? "/explore/rankings?show=people&years=-3501,2022&new=true" : `/explore/rankings?show=people&years=-3501,2022&occupation=${activeOccupation}&new=true`}>{activeOccupation === "all" ? "View all new profiles »" : `View all new profiles of ${plural(activeOccupation.toLowerCase())} »`}</a>
           </div>
         </div> */}
 
