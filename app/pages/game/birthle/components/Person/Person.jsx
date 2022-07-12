@@ -13,8 +13,6 @@ export default function Person({ data, onClick, isBoardItem, dataKey }) {
     };
   });
 
-  console.log(dataKey ? `${dataKey}-${data.id}` : data.id);
-
   return (
     <li
       className={`${isBoardItem ? "board-row-list-item" : "panel-list-item"}`}

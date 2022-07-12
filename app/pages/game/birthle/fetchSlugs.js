@@ -1,7 +1,7 @@
 export default async function fetchSlugs() {
   const currDate = new Date();
   return await fetch(
-    `http://localhost:3300/api/indexes?date=${currDate.getFullYear()}-${
+    `/api/indexes?date=${currDate.getFullYear()}-${
       currDate.getMonth() + 1
     }-${currDate.getDate()}`
   )
