@@ -2,109 +2,128 @@ import api from "apiConfig";
 import dataFormatter from "pages/explore/helpers/dataFormatter";
 
 const DEFAULT_PAGE_SIZE = 50;
-import {HPI_RANGE, LANGS_RANGE} from "types";
+import { HPI_RANGE, LANGS_RANGE } from "types";
 
-export const initRankingsAndViz = initialState => dispatch  => {
+export const initRankingsAndViz = (initialState) => (dispatch) => {
   if (initialState.page === "viz") {
-    dispatch({type: "VB_INIT_VIZ"});
+    dispatch({ type: "VB_INIT_VIZ" });
   }
   if (initialState.page === "rankings") {
-    dispatch({type: "VB_INIT_RANKINGS"});
+    dispatch({ type: "VB_INIT_RANKINGS" });
   }
-  dispatch({type: "VB_UPDATE_COUNTRY", country: initialState.country});
-  dispatch({type: "VB_UPDATE_CITY", city: initialState.city});
-  dispatch({type: "VB_UPDATE_GENDER", gender: initialState.gender});
-  dispatch({type: "VB_UPDATE_METRIC_TYPE", metricType: initialState.metricType});
-  dispatch({type: "VB_UPDATE_METRIC_CUTOFF", metricCutoff: initialState.metricCutoff});
-  dispatch({type: "VB_UPDATE_PAGE", page: initialState.page});
-  dispatch({type: "VB_UPDATE_ONLY_SHOW_NEW", onlyShowNew: initialState.onlyShowNew});
-  dispatch({type: "VB_UPDATE_OCCUPATION", occupation: initialState.occupation});
-  dispatch({type: "VB_UPDATE_YEARS", years: initialState.years});
+  dispatch({ type: "VB_UPDATE_COUNTRY", country: initialState.country });
+  dispatch({ type: "VB_UPDATE_CITY", city: initialState.city });
+  dispatch({ type: "VB_UPDATE_GENDER", gender: initialState.gender });
+  dispatch({
+    type: "VB_UPDATE_METRIC_TYPE",
+    metricType: initialState.metricType,
+  });
+  dispatch({
+    type: "VB_UPDATE_METRIC_CUTOFF",
+    metricCutoff: initialState.metricCutoff,
+  });
+  dispatch({ type: "VB_UPDATE_PAGE", page: initialState.page });
+  dispatch({
+    type: "VB_UPDATE_ONLY_SHOW_NEW",
+    onlyShowNew: initialState.onlyShowNew,
+  });
+  dispatch({
+    type: "VB_UPDATE_OCCUPATION",
+    occupation: initialState.occupation,
+  });
+  dispatch({ type: "VB_UPDATE_YEARS", years: initialState.years });
   if (initialState.show) {
-    dispatch({type: "VB_UPDATE_SHOW_TYPE", showType: initialState.show.type || initialState.show});
-    dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: initialState.show.depth || initialState.show.type || initialState.show});
+    dispatch({
+      type: "VB_UPDATE_SHOW_TYPE",
+      showType: initialState.show.type || initialState.show,
+    });
+    dispatch({
+      type: "VB_UPDATE_SHOW_DEPTH",
+      showDepth:
+        initialState.show.depth || initialState.show.type || initialState.show,
+    });
   }
   if (initialState.viz) {
-    dispatch({type: "VB_UPDATE_VIZ", viz: initialState.viz});
+    dispatch({ type: "VB_UPDATE_VIZ", viz: initialState.viz });
   }
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE, false, []));
 };
 // {type: "people", depth: "people"}
 
-export const unmountRankingsAndViz = () => dispatch  => {
-  dispatch({type: "VB_CLEAR_DATA"});
+export const unmountRankingsAndViz = () => (dispatch) => {
+  dispatch({ type: "VB_CLEAR_DATA" });
 };
 
-export const updateCity = newCity => dispatch => {
-  dispatch({type: "VB_UPDATE_CITY", city: newCity});
+export const updateCity = (newCity) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_CITY", city: newCity });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updateCountry = newCountry => dispatch => {
-  dispatch({type: "VB_UPDATE_COUNTRY", country: newCountry});
-  dispatch({type: "VB_UPDATE_CITY", city: "all"});
+export const updateCountry = (newCountry) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_COUNTRY", country: newCountry });
+  dispatch({ type: "VB_UPDATE_CITY", city: "all" });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE, true));
 };
 
-export const updateGender = newGender => dispatch => {
-  dispatch({type: "VB_UPDATE_GENDER", gender: newGender});
+export const updateGender = (newGender) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_GENDER", gender: newGender });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updateMetricType = newMetricType => dispatch => {
+export const updateMetricType = (newMetricType) => (dispatch) => {
   const metricRange = newMetricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
-  dispatch({type: "VB_UPDATE_METRIC_TYPE", metricType: newMetricType});
-  dispatch({type: "VB_UPDATE_METRIC_CUTOFF", metricCutoff: metricRange[0]});
+  dispatch({ type: "VB_UPDATE_METRIC_TYPE", metricType: newMetricType });
+  dispatch({ type: "VB_UPDATE_METRIC_CUTOFF", metricCutoff: metricRange[0] });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
-export const updateMetricCutoff = newMetricCutoff => dispatch => {
-  dispatch({type: "VB_UPDATE_METRIC_CUTOFF", metricCutoff: newMetricCutoff});
-  dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
-};
-
-export const updateOccupation = newOccupation => dispatch => {
-  dispatch({type: "VB_UPDATE_OCCUPATION", occupation: newOccupation});
+export const updateMetricCutoff = (newMetricCutoff) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_METRIC_CUTOFF", metricCutoff: newMetricCutoff });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updateOnlyShowNew = newOnlyShowNew => dispatch => {
-  dispatch({type: "VB_UPDATE_ONLY_SHOW_NEW", onlyShowNew: newOnlyShowNew});
+export const updateOccupation = (newOccupation) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_OCCUPATION", occupation: newOccupation });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updatePlaceType = newPlaceType => dispatch => {
-  dispatch({type: "VB_UPDATE_PLACE_TYPE", placeType: newPlaceType});
+export const updateOnlyShowNew = (newOnlyShowNew) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_ONLY_SHOW_NEW", onlyShowNew: newOnlyShowNew });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updateShowDepth = (newShowDepth, page) => dispatch => {
-  dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: newShowDepth});
+export const updatePlaceType = (newPlaceType) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_PLACE_TYPE", placeType: newPlaceType });
+  dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
+};
+
+export const updateShowDepth = (newShowDepth, page) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_SHOW_DEPTH", showDepth: newShowDepth });
   if (page === "rankings") {
-    dispatch({type: "VB_CLEAR_DATA"});
+    dispatch({ type: "VB_CLEAR_DATA" });
   }
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updateShowType = (newShowType, page) => dispatch => {
-  dispatch({type: "VB_UPDATE_SHOW_TYPE", showType: newShowType});
-  dispatch({type: "VB_UPDATE_SHOW_DEPTH", showDepth: newShowType});
+export const updateShowType = (newShowType, page) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_SHOW_TYPE", showType: newShowType });
+  dispatch({ type: "VB_UPDATE_SHOW_DEPTH", showDepth: newShowType });
   if (page === "rankings") {
-    dispatch({type: "VB_CLEAR_DATA"});
+    dispatch({ type: "VB_CLEAR_DATA" });
     dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
   }
 };
 
-export const updateViz = newViz => dispatch => {
-  dispatch({type: "VB_UPDATE_VIZ", viz: newViz});
+export const updateViz = (newViz) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_VIZ", viz: newViz });
 };
 
-export const updateYears = newYears => dispatch => {
-  dispatch({type: "VB_UPDATE_YEARS", years: newYears});
+export const updateYears = (newYears) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_YEARS", years: newYears });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
-export const updateYearType = newYearType => dispatch => {
-  dispatch({type: "VB_UPDATE_YEAR_TYPE", yearType: newYearType});
+export const updateYearType = (newYearType) => (dispatch) => {
+  dispatch({ type: "VB_UPDATE_YEAR_TYPE", yearType: newYearType });
   dispatch(fetchData(0, DEFAULT_PAGE_SIZE));
 };
 
@@ -116,7 +135,7 @@ function requestVbData(pageIndex, pageSize) {
     loading: true,
     pageIndex,
     pageSize,
-    type: FETCH_VB_DATA
+    type: FETCH_VB_DATA,
   };
 }
 
@@ -133,19 +152,40 @@ function receiveVbData(pageIndex, pageSize, range, count, data, newData) {
     pageSize,
     range,
     receivedAt: Date.now(),
-    type: FETCH_VB_DATA_SUCCESS
+    type: FETCH_VB_DATA_SUCCESS,
   };
 }
 
-export const resetNewData = () => dispatch => {
-  dispatch({type: "VB_RESET_NEW_DATA"});
+export const resetNewData = () => (dispatch) => {
+  dispatch({ type: "VB_RESET_NEW_DATA" });
 };
 
-const setQueryArgs = state => {
-  const {city, country, gender, metricType, metricCutoff, occupation, onlyShowNew, page, placeType, show, viz, years, yearType} = state.vb;
+const setQueryArgs = (state) => {
+  const {
+    city,
+    country,
+    gender,
+    metricType,
+    metricCutoff,
+    occupation,
+    onlyShowNew,
+    page,
+    placeType,
+    show,
+    viz,
+    years,
+    yearType,
+  } = state.vb;
   // const pageType = state.location.pathname.includes("rankings") ? "rankings" : "viz";
 
-  let queryStr = page === "viz" ? `?viz=${viz}&show=${show.type}${show.depth === show.type ? "" : `|${show.depth}`}&years=${years}` : `?show=${show.type}${show.depth === show.type ? "" : `|${show.depth}`}&years=${years}`;
+  let queryStr =
+    page === "viz"
+      ? `?viz=${viz}&show=${show.type}${
+          show.depth === show.type ? "" : `|${show.depth}`
+        }&years=${years}`
+      : `?show=${show.type}${
+          show.depth === show.type ? "" : `|${show.depth}`
+        }&years=${years}`;
   if (country !== "all") {
     queryStr += `&place=${country.toLowerCase()}`;
     if (city !== "all") {
@@ -176,7 +216,7 @@ const setQueryArgs = state => {
   if (typeof history !== "undefined" && history.pushState) {
     const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}${queryStr}`;
     if (window) {
-      window.history.pushState({path: newurl}, "", newurl);
+      window.history.pushState({ path: newurl }, "", newurl);
     }
   }
 };
@@ -188,24 +228,46 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
   // thus making it able to dispatch actions itself.
   // console.log("[action] FETCH DATA pageIndex, pageSize, newData, sortBy!!!", pageIndex, pageSize, newData, sortBy);
 
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
     dispatch(requestVbData(pageIndex, pageSize));
-    const {data, env, vb} = getState();
-    const {city, country, gender, metricCutoff, metricType, occupation, onlyShowNew, page, placeType, show, years, yearType} = vb;
-    const apiHeaders = {Prefer: "count=estimated"};
+    const { data, env, vb } = getState();
+    const {
+      city,
+      country,
+      gender,
+      metricCutoff,
+      metricType,
+      occupation,
+      onlyShowNew,
+      page,
+      placeType,
+      show,
+      years,
+      yearType,
+    } = vb;
+    const apiHeaders = { Prefer: "count=estimated" };
     const pageSize = 50;
-    let selectFields = "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
+    let selectFields =
+      "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
     let sorting = "&order=hpi.desc.nullslast";
 
     let placeFilter = "";
     if (country !== "all") {
-      const countryObj = data.places.find(d => d.country.country_code === country);
+      const countryObj = data.places.find(
+        (d) => d.country.country_code === country
+      );
       const countryId = countryObj ? countryObj.country.id : "";
-      placeFilter = placeType === "birthplace" ? `&bplace_country=eq.${countryId}` : `&dplace_country=eq.${countryId}`;
+      placeFilter =
+        placeType === "birthplace"
+          ? `&bplace_country=eq.${countryId}`
+          : `&dplace_country=eq.${countryId}`;
       if (city !== "all") {
-        placeFilter = placeType === "birthplace" ? `&bplace_geonameid=eq.${city}` : `&dplace_geonameid=eq.${city}`;
+        placeFilter =
+          placeType === "birthplace"
+            ? `&bplace_geonameid=eq.${city}`
+            : `&dplace_geonameid=eq.${city}`;
       }
     }
 
@@ -215,7 +277,10 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
     }
 
     let genderFilter = "";
-    if (`${gender}`.toUpperCase() === "M" || `${gender}`.toUpperCase() === "F") {
+    if (
+      `${gender}`.toUpperCase() === "M" ||
+      `${gender}`.toUpperCase() === "F"
+    ) {
       genderFilter = `&gender=eq.${gender.toUpperCase()}`;
     }
 
@@ -245,7 +310,11 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
           if (sortingColumn === "dplace_geonameid") {
             sortingColumn = "dplace_name";
           }
-          return i ? `${sortingColumn}.${sortCol.desc ? "desc" : "asc"}.nullslast` : `&order=${sortingColumn}.${sortCol.desc ? "desc" : "asc"}.nullslast`;
+          return i
+            ? `${sortingColumn}.${sortCol.desc ? "desc" : "asc"}.nullslast`
+            : `&order=${sortingColumn}.${
+                sortCol.desc ? "desc" : "asc"
+              }.nullslast`;
         });
       }
     }
@@ -253,18 +322,30 @@ export function fetchData(pageIndex, pageSize, newData, sortBy) {
     const onlyShowNewFilter = onlyShowNew ? "&hpi_prev=is.null" : "";
 
     const dataUrl = `/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
-    console.log("[fetchData]: ", dataUrl);
-    return api(env).get(dataUrl, {headers: apiHeaders})
+    return api(env)
+      .get(dataUrl, { headers: apiHeaders })
       .then(
-        response => {
-          const range = response.headers["content-range"] ? response.headers["content-range"].split("/")[0] : null;
-          let count = response.headers["content-range"] ? parseInt(response.headers["content-range"].split("/")[1], 10) : null;
-          let respData = page === "rankings" ? dataFormatter(response.data, show.type, show.depth, placeType) : response.data;
+        (response) => {
+          const range = response.headers["content-range"]
+            ? response.headers["content-range"].split("/")[0]
+            : null;
+          let count = response.headers["content-range"]
+            ? parseInt(response.headers["content-range"].split("/")[1], 10)
+            : null;
+          let respData =
+            page === "rankings"
+              ? dataFormatter(response.data, show.type, show.depth, placeType)
+              : response.data;
           if (page === "rankings" && show.type !== "people") {
             count = respData.length;
-            respData = respData.slice(pageSize * pageIndex, pageSize * pageIndex + pageSize);
+            respData = respData.slice(
+              pageSize * pageIndex,
+              pageSize * pageIndex + pageSize
+            );
           }
-          dispatch(receiveVbData(pageIndex, pageSize, range, count, respData, newData));
+          dispatch(
+            receiveVbData(pageIndex, pageSize, range, count, respData, newData)
+          );
           setQueryArgs(getState());
         }
         // Do not use catch, because errors occured during rendering
