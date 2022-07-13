@@ -273,7 +273,7 @@ const getColumns = (show, nesting, countOffset) => {
                   content={"Historical Popularity Index"}
                 >
                   <div>
-                    HPI 2022 <Icon icon="info-sign" iconSize={10} />
+                    HPI 2020 <Icon icon="info-sign" iconSize={10} />
                   </div>
                 </Tooltip>
               ),
@@ -291,7 +291,7 @@ const getColumns = (show, nesting, countOffset) => {
               className: "cell_numeric",
             },
             {
-              Header: "Rank 2019",
+              Header: "Rank 2020",
               accessor: "rank_prev",
               minWidth: 45,
               className: "cell_numeric",
