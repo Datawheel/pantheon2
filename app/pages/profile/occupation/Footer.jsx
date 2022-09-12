@@ -8,7 +8,7 @@ const Footer = () =>
       <ul className="footer-carousel-container">
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a href="/profile/person/Isaac_Newton/" className="newton">
+            <a aria-label={"Profile of Isaac Newton"} href="/profile/person/Isaac_Newton/" className="newton">
             </a>
           </div>
           <h4 className="footer-carousel-item-title">
@@ -18,7 +18,7 @@ const Footer = () =>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a href="/profile/person/Roger_Federer/" className="federer">
+            <a aria-label={"Profile of Roger Federer"} href="/profile/person/Roger_Federer/" className="federer">
             </a>
           </div>
           <h4 className="footer-carousel-item-title">
@@ -28,7 +28,7 @@ const Footer = () =>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a href="/profile/person/Marie_Curie/" className="curie">
+            <a aria-label={"Profile of Marie Curie"} href="/profile/person/Marie_Curie/" className="curie">
             </a>
           </div>
           <h4 className="footer-carousel-item-title">
@@ -38,7 +38,7 @@ const Footer = () =>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a href="/profile/person/Walt_Disney/" className="disney">
+            <a aria-label={"Profile of Walt Disney"} href="/profile/person/Walt_Disney/" className="disney">
             </a>
           </div>
           <h4 className="footer-carousel-item-title">
@@ -48,7 +48,7 @@ const Footer = () =>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a href="/profile/person/Laozi" className="laozi">
+            <a aria-label={"Profile of Laozi"} href="/profile/person/Laozi" className="laozi">
             </a>
           </div>
           <h4 className="footer-carousel-item-title">
@@ -58,7 +58,7 @@ const Footer = () =>
         </li>
         <li className="footer-carousel-item">
           <div className="footer-carousel-item-photo">
-            <a href="/profile/person/Vincent_van_Gogh" className="vangogh">
+            <a aria-label={"Profile of Van Gogh"} href="/profile/person/Vincent_van_Gogh" className="vangogh">
             </a>
           </div>
           <h4 className="footer-carousel-item-title">

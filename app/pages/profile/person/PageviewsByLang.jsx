@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import {FORMATTERS} from "types/index";
-import {LinePlot} from "d3plus-react";
+import {LinePlot, StackedArea} from "d3plus-react";
 import {max as D3Max, mean as D3Mean, sum as D3Sum} from "d3-array";
 import {nest} from "d3-collection";
 import langFamilies from "json/langFamilies.json";
@@ -150,7 +150,7 @@ class PageviewsByLang extends Component {
     // console.log("dataPrevPastYearAgg", dataPrevPastYearAgg);
     // console.log("dataProjectGrowth", dataProjectGrowth);
 
-    return <p>Over the past year {person.name} has had the most page views in the <Tooltip content={`${dataPastYearAgg[0].language} (${dataPastYearAgg[0].language_local}) is a ${dataPastYearAgg[0].family_name} language in the ${dataPastYearAgg[0].primary_family_name} family of languages.`}><a href={dataPastYearAgg[0].pageUrl}>{dataPastYearAgg[0].language} wikipedia edition</a></Tooltip> with {FORMATTERS.commas(dataPastYearAgg[0].views)} views, followed by <AnchorList items={dataPastYearAgg.slice(1, 3)} name={d => `${d.language} (${FORMATTERS.commas(d.views)})`} url={d => d.pageUrl} tooltip={d => `${d.language} (${d.language_local}) is a ${d.family_name} language in the ${d.primary_family_name} family of languages.`} newWindow={true} />. In terms of yearly growth of page views the top 3 wikpedia editions are <AnchorList items={dataProjectGrowth.slice(0, 3)} name={d => `${d.language} (${FORMATTERS.share(d.growthPct)})`} url={d => d.pageUrl} tooltip={d => `${d.language} (${d.language_local}) is a ${d.family_name} language in the ${d.primary_family_name} family of languages.`} newWindow={true} /></p>;
+    return <p>Over the past year {person.name} has had the most page views in the <Tooltip content={`${dataPastYearAgg[0].language} (${dataPastYearAgg[0].language_local}) is a ${dataPastYearAgg[0].family_name} language in the ${dataPastYearAgg[0].primary_family_name} family of languages.`}><a href={dataPastYearAgg[0].pageUrl} target="_blank" rel="noopener">{dataPastYearAgg[0].language} wikipedia edition</a></Tooltip> with {FORMATTERS.commas(dataPastYearAgg[0].views)} views, followed by <AnchorList items={dataPastYearAgg.slice(1, 3)} name={d => `${d.language} (${FORMATTERS.commas(d.views)})`} url={d => d.pageUrl} tooltip={d => `${d.language} (${d.language_local}) is a ${d.family_name} language in the ${d.primary_family_name} family of languages.`} newWindow={true} />. In terms of yearly growth of page views the top 3 wikpedia editions are <AnchorList items={dataProjectGrowth.slice(0, 3)} name={d => `${d.language} (${FORMATTERS.share(d.growthPct)})`} url={d => d.pageUrl} tooltip={d => `${d.language} (${d.language_local}) is a ${d.family_name} language in the ${d.primary_family_name} family of languages.`} newWindow={true} /></p>;
   }
 
   render() {
@@ -168,7 +168,7 @@ class PageviewsByLang extends Component {
           : null}
         <br />
         {timeSeriesData.length
-          ? <LinePlot
+          ? <StackedArea
             config={{
               height: 600,
               data: timeSeriesData,
@@ -226,8 +226,19 @@ class PageviewsByLang extends Component {
               // xConfig: {tickFormat: d => FORMATTERS.year(new Date(d).getFullYear())},
               y: "views",
               yConfig: {
-                scale: "log",
-                title: "Count of pageviews by language edition"
+                // scale: "log",
+                title: "Pageviews by language edition",
+                titleConfig: {
+                  fontSize: () => 18
+                },
+                labelConfig: {
+                  fontSize: () => 18
+                },
+                shapeConfig: {
+                  labelConfig: {
+                    fontSize: () => 20
+                  }
+                }
               }
             }} /> : null}
       </div>

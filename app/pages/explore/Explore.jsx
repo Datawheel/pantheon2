@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 
 class Explore extends Component {
 
@@ -28,16 +28,6 @@ class Explore extends Component {
   sanitizeQueryOccupation(occupationStr) {
     if (!occupationStr || !occupationStr.includes("|")) return null;
     return occupationStr.split("|");
-  }
-
-  componentWillMount() {
-    // const queryParams = this.props.location.query;
-    // const years = this.sanitizeQueryYears(queryParams.years);
-    // const [type, typeNesting] = this.sanitizeQueryType(queryParams.type);
-    // const country = this.sanitizeQueryCountry(queryParams.country);
-    // const city = this.sanitizeQueryCity(queryParams.city);
-    // const occupation = this.sanitizeQueryOccupation(queryParams.occupation);
-    // this.props.initExplore(years);
   }
 
   render() {

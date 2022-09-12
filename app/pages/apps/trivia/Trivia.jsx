@@ -1,10 +1,9 @@
-import React, {useReducer, useEffect} from "react";
+import React, { useReducer, useEffect } from "react";
 import axios from "axios";
-import {connect} from "react-redux";
-import {Icon} from "@blueprintjs/core";
-import {hot} from "react-hot-loader/root";
-import {fetchData} from "@datawheel/canon-core";
-import Helmet from "react-helmet";
+import { connect } from "react-redux";
+import { Icon } from "@blueprintjs/core";
+import { fetchData } from "@datawheel/canon-core";
+import { Helmet } from "react-helmet-async";
 import Progress from "pages/apps/trivia/Progress";
 import Question from "pages/apps/trivia/Question";
 import Answers from "pages/apps/trivia/Answers";
@@ -17,13 +16,13 @@ import {
   SET_CURRENT_ANSWER,
   SET_ERROR,
   SET_SHOW_RESULTS,
-  RESET_QUIZ
+  RESET_QUIZ,
 } from "pages/apps/trivia/reducerTypes.js";
 
 import "pages/about/About.css";
 import "pages/apps/trivia/Trivia.css";
 
-const Trivia = props => {
+const Trivia = (props) => {
   // const questions = [
   //   {
   //     id: 1,
@@ -72,11 +71,18 @@ const Trivia = props => {
     currentAnswer: "",
     answers: [],
     showResults: false,
-    error: ""
+    error: "",
   };
 
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
-  const {questions, currentQuestion, currentAnswer, answers, showResults, error} = state;
+  const {
+    questions,
+    currentQuestion,
+    currentAnswer,
+    answers,
+    showResults,
+    error,
+  } = state;
 
   const question = questions[currentQuestion];
 
@@ -88,80 +94,94 @@ const Trivia = props => {
     return <div className="error">{error}</div>;
   };
 
-  const renderResultsData = () => answers.map(answer => {
-    const question = questions.find(
-      question => question.id === answer.questionId
-    );
-    const isCorrect = question.correct_answer === answer.answer;
+  const renderResultsData = () =>
+    answers.map((answer) => {
+      const question = questions.find(
+        (question) => question.id === answer.questionId
+      );
+      const isCorrect = question.correct_answer === answer.answer;
 
-    return (
-      <div className={isCorrect ? "result-question q-correct" : "result-question q-incorrect"} key={question.id}>
-        <div className="result-question-title">{question.question}</div>
-        <div className="result-question-answer a-correct">
-          <Icon icon="tick" iconSize={12} /> {question[`answer_${question.correct_answer}`]}
-        </div>
-        {!isCorrect
-          ? <div className="result-question-answer a-incorrect">
-            <Icon icon="cross" iconSize={12} /> {question[`answer_${answer.answer}`]} <span className="a-yours">(your answer)</span>
+      return (
+        <div
+          className={
+            isCorrect
+              ? "result-question q-correct"
+              : "result-question q-incorrect"
+          }
+          key={question.id}
+        >
+          <div className="result-question-title">{question.question}</div>
+          <div className="result-question-answer a-correct">
+            <Icon icon="tick" iconSize={12} />{" "}
+            {question[`answer_${question.correct_answer}`]}
           </div>
-          : null}
-      </div>
-    );
-  });
+          {!isCorrect ? (
+            <div className="result-question-answer a-incorrect">
+              <Icon icon="cross" iconSize={12} />{" "}
+              {question[`answer_${answer.answer}`]}{" "}
+              <span className="a-yours">(your answer)</span>
+            </div>
+          ) : null}
+        </div>
+      );
+    });
 
   const renderScore = () => {
-    const correctAnswers = answers.filter(answer => {
+    const correctAnswers = answers.filter((answer) => {
       const question = questions.find(
-        question => question.id === answer.questionId
+        (question) => question.id === answer.questionId
       );
       return question.correct_answer === answer.answer;
     });
-    return <span>{correctAnswers.length} / {answers.length} correct</span>;
+    return (
+      <span>
+        {correctAnswers.length} / {answers.length} correct
+      </span>
+    );
   };
 
   const restart = () => {
-    axios.get("/api/trivia/getQuestions")
-      .then(resp => {
-        // console.log("resp.data!!!", resp.data);
-        dispatch({type: RESET_QUIZ, questions: resp.data});
-      });
+    axios.get("/api/trivia/getQuestions").then((resp) => {
+      // console.log("resp.data!!!", resp.data);
+      dispatch({ type: RESET_QUIZ, questions: resp.data });
+    });
   };
 
   const next = () => {
-    const answer = {questionId: question.id, answer: currentAnswer};
+    const answer = { questionId: question.id, answer: currentAnswer };
 
     if (!currentAnswer) {
-      dispatch({type: SET_ERROR, error: "Please select an option"});
+      dispatch({ type: SET_ERROR, error: "Please select an option" });
       return;
     }
 
     answers.push(answer);
-    dispatch({type: SET_ANSWERS, answers});
-    dispatch({type: SET_CURRENT_ANSWER, currentAnswer: ""});
+    dispatch({ type: SET_ANSWERS, answers });
+    dispatch({ type: SET_CURRENT_ANSWER, currentAnswer: "" });
 
     if (currentQuestion + 1 < questions.length) {
       dispatch({
         type: SET_CURRENT_QUESTION,
-        currentQuestion: currentQuestion + 1
+        currentQuestion: currentQuestion + 1,
       });
       return;
     }
 
-    dispatch({type: SET_SHOW_RESULTS, showResults: true});
+    dispatch({ type: SET_SHOW_RESULTS, showResults: true });
   };
 
   useEffect(() => {
-    const keyPressHandler = e => {
+    const keyPressHandler = (e) => {
       if (e.key === "Enter") {
-        dispatch({type: SET_ERROR, error: ""});
+        dispatch({ type: SET_ERROR, error: "" });
         next();
       }
       if (["a", "b", "c", "d"].includes(e.key)) {
         dispatch({
           type: SET_CURRENT_ANSWER,
-          currentAnswer: e.key
+          currentAnswer: e.key,
         });
-        dispatch({type: SET_ERROR, error: ""});
+        dispatch({ type: SET_ERROR, error: "" });
       }
     };
 
@@ -171,37 +191,48 @@ const Trivia = props => {
     };
   }, [currentAnswer]);
 
-  return <TriviaContext.Provider value={{state, dispatch}}>
-    <Helmet title="Trivia" />
-    <div className={showResults ? "trivia-page trivia-results" : "trivia-page"}>
-      {/* <h1 className="trivia-title">Trivia</h1> */}
-      {showResults
-        ? <div className="results">
-          <h2>Results: {renderScore()}</h2>
-          <div>{renderResultsData()}</div>
-          <div className="continue">
-            <button className="btn-continue" onClick={restart}>Restart</button>
+  return (
+    <TriviaContext.Provider value={{ state, dispatch }}>
+      <Helmet title="Trivia" />
+      <div
+        className={showResults ? "trivia-page trivia-results" : "trivia-page"}
+      >
+        {/* <h1 className="trivia-title">Trivia</h1> */}
+        {showResults ? (
+          <div className="results">
+            <h2>Results: {renderScore()}</h2>
+            <div>{renderResultsData()}</div>
+            <div className="continue">
+              <button className="btn-continue" onClick={restart}>
+                Restart
+              </button>
+            </div>
           </div>
-        </div>
-        : <div className="quiz">
-          <Question />
-          <Progress
-            total={questions.length}
-            current={currentQuestion + 1}
-          />
-          {renderError()}
-          <Answers />
-          <div className="continue">
-            <button className={currentAnswer ? "btn-continue" : "btn-continue btn-disabled"} onClick={next}>Confirm and Continue</button>
+        ) : (
+          <div className="quiz">
+            <Question />
+            <Progress total={questions.length} current={currentQuestion + 1} />
+            {renderError()}
+            <Answers />
+            <div className="continue">
+              <button
+                className={
+                  currentAnswer ? "btn-continue" : "btn-continue btn-disabled"
+                }
+                onClick={next}
+              >
+                Confirm and Continue
+              </button>
+            </div>
           </div>
-        </div>
-      }
-    </div>
-  </TriviaContext.Provider>;
+        )}
+      </div>
+    </TriviaContext.Provider>
+  );
 };
 
 Trivia.need = [
-  fetchData("questions", "https://pantheon.world/api/trivia/getQuestions")
+  fetchData("questions", "https://pantheon.world/api/trivia/getQuestions"),
 ];
 
-export default connect(state => ({data: state.data}), {})(hot(Trivia));
+export default connect((state) => ({ data: state.data }), {})(Trivia);

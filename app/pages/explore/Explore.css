@@ -206,6 +206,17 @@
     }
   }
 
+  & .flat-options {
+    & label {
+      margin: 10px 0 0 0;
+      @mixin exploreControlTitles;
+      &.active {
+        color: var(--colorDark);
+        font-weight: 700;
+      }
+    }
+  }
+
   & .options {
     padding-left: 1px;
 
@@ -280,6 +291,10 @@
         background-size: 5px 5px;
         background-position: 50% 50%;
       }
+
+      &.disabled {
+        @mixin disabledLink;
+      }
     }
   }
 
@@ -299,6 +314,10 @@
 
       &:last-child:after {
         content: "";
+      }
+
+      & a.disabled {
+        @mixin disabledLink;
       }
     }
   }

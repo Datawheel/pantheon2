@@ -20,7 +20,7 @@ class App extends Component {
     return {activateSearch: this.activateSearch};
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let page;
     if (this.props.location.pathname === "/") {
       page = "app home";
@@ -35,9 +35,7 @@ class App extends Component {
       page = "app";
     }
     this.setState({page});
-  }
 
-  componentDidMount() {
     document.addEventListener("keydown", () => {
       // 's' key
       if (event.keyCode === 83) {

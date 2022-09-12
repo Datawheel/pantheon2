@@ -134,7 +134,7 @@
     color: var(--colorSand);
     text-transform: none;
     display: inline-block;
-    min-width: 5.25em; /* fudged */
+    /* min-width: 5.25em; */ /* fudged */
     padding-left: 0.5em;
     z-index: 1;
     border-bottom: none;

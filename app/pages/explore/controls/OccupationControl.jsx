@@ -1,66 +1,42 @@
-import React, {Component} from "react";
+import React from "react";
 import {connect} from "react-redux";
+import {updateOccupation} from "actions/vb";
 
-class OccupationControl extends Component {
+const OccupationControl = ({loading, occupation, updateOccupation, occupationResponse}) => {
+  const {nestedOccupations} = occupationResponse;
+  return <div className="filter prof-control">
+    <div className="">
+      <h3>Working in</h3>
+    </div>
 
-  constructor(props) {
-    super(props);
-  }
-
-  changeOccupation = e => {
-    e.preventDefault();
-    this.props.changeOccupation("occupation", e.target.value);
-  }
-
-  render() {
-    const {occupation, nestedOccupations} = this.props;
-
-    return (
-      <div className="filter prof-control">
-        <div className="">
-          <h3>Working in</h3>
-        </div>
-
-        <div>
-          <select value={occupation} onChange={this.changeOccupation}>
-            <option value="all" data-occupations="all">All Occupations</option>
-            {nestedOccupations
-              ? nestedOccupations.map(domain =>
-                <optgroup key={domain.domain.slug} label={domain.domain.name}>
-                  <option value={domain.domain.id} data-occupations={domain.domain.occupations}>
+    <div>
+      <select disabled={loading} value={occupation} onChange={e => updateOccupation(e.target.value)}>
+        <option value="all" data-occupations="all">All Occupations</option>
+        {nestedOccupations
+          ? nestedOccupations.map(domain =>
+            <optgroup key={domain.domain.slug} label={domain.domain.name}>
+              <option value={domain.domain.id} data-occupations={domain.domain.occupations}>
                     All {domain.domain.name} occupations
-                  </option>
-                  {domain.occupations.map(occ =>
-                    <option key={occ.occupation_slug} value={occ.id} data-occupations={occ.id}>
-                      {occ.occupation}
-                    </option>
-                  )}
-                </optgroup>
-              )
-              : null}
-          </select>
-        </div>
-      </div>
-    );
-  }
-}
+              </option>
+              {domain.occupations.map(occ =>
+                <option key={occ.occupation_slug} value={occ.id} data-occupations={occ.id}>
+                  {occ.occupation}
+                </option>
+              )}
+            </optgroup>
+          )
+          : null}
+      </select>
+    </div>
+  </div>;
+};
 
+const mapDispatchToProps = {updateOccupation};
 
-function mapStateToProps(state) {
-  return {
-    explore: state.explore
-  };
-}
-
-const mapDispatchToProps = dispatch => ({
-  // changeOccupations: (eventOrOccupationName, occupationId) => {
-  //   const selectedOccupation = eventOrOccupationName.target ? eventOrOccupationName.target.value : eventOrOccupationName;
-  //   const occupationList = occupationId || eventOrOccupationName.target.options[eventOrOccupationName.target.selectedIndex].dataset.occupations;
-  //   dispatch(changeOccupations(selectedOccupation, occupationList, true));
-  // },
-  // changeOccupationDepth: depth => {
-  //   dispatch(changeOccupationDepth(depth));
-  // }
+const mapStateToProps = state => ({
+  loading: state.vb.data.loading,
+  occupationResponse: state.data.occupationResponse,
+  occupation: state.vb.occupation
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OccupationControl);

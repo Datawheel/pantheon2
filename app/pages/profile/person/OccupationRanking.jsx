@@ -19,16 +19,16 @@ class OccupationRanking extends Component {
         worsePeers = null;
 
     if (betterRankedPeers.length) {
-      betterPeers = <span>Before {person.gender === "M" ? "him" : "her"} are <AnchorList items={betterRankedPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />. </span>;
+      betterPeers = <span>Before {person.gender ? person.gender === "M" ? "him" : "her" : "them"} are <AnchorList items={betterRankedPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />. </span>;
     }
     if (worseRankedPeers.length) {
-      worsePeers = <span>After {person.gender === "M" ? "him" : "her"} are <AnchorList items={worseRankedPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />.</span>;
+      worsePeers = <span>After {person.gender ? person.gender === "M" ? "him" : "her" : "them"} are <AnchorList items={worseRankedPeers} name={d => d.birthcountry ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})` : d.name} url={d => `/profile/person/${d.slug}/`} />.</span>;
     }
 
     return (
       <div>
         <p>
-          Among {plural(person.occupation.occupation.toLowerCase())}, {person.name} ranks <a>{FORMATTERS.commas(me.occupation_rank)}</a> out of {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
+          Among {plural(person.occupation.occupation.toLowerCase())}, {person.name} ranks <strong>{FORMATTERS.commas(me.occupation_rank)}</strong> out of {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
           { betterPeers }
           { worsePeers }
         </p>

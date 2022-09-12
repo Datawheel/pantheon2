@@ -20,6 +20,7 @@ const Footer = () =>
           <li><a href="/profile/place" className="item-link">Places</a></li>
           <li><a href="/profile/country" className="item-link">Countries</a></li>
           <li><a href="/profile/occupation" className="item-link">Occupations</a></li>
+          <li><a href="/profile/select-occupation-country" className="item-link">Occupations / Countries</a></li>
           <li><a href="/profile/era" className="item-link">Eras</a></li>
         </ul>
       </li>
@@ -50,7 +51,7 @@ const Footer = () =>
         <ul className="sub-items">
           <li><a href="/data/permissions" className="item-link">Permissions</a></li>
           <li><a href="/data/datasets" className="item-link">Download</a></li>
-          <Link to="/data/api" className="item-link api-link">API</Link>
+          <li><Link to="/data/api" className="item-link api-link">API</Link></li>
         </ul>
       </li>
 

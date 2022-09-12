@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/*.birthle{
+  background: linear-gradient(180deg, #d1cac0 0%, #f4f4f1 100%);
+}*/
+
+.btn-list {
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn {
+  box-sizing: border-box;
+  width: 132px;
+  height: 43px;
+  background: #ffffff;
+  border: 0.5px solid #000000;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
+  padding: 12px;
+
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 17px;
+  letter-spacing: 0.195em;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  background: #d3cdc3;
+  border: 0.5px solid #000000;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
+}
+
+.btn:disabled{
+  cursor: default;
+}

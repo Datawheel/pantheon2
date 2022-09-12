@@ -93,9 +93,24 @@
   & .search-results {
     margin: 0 34px;
     box-sizing: border-box;
+
+    & .trending-text {
+      color: var(--colorSand);
+      font-size: 16px;
+      margin: 0 0 5px -32px;
+      text-align: left;
+      text-transform: uppercase;
+
+      & span {
+        margin: 0 5px 0 0;
+      }
+    }
   }
 
+  /* label */
   & .search-result-input {
+    display: block;
+    margin: 0 0 15px 0;
     position: relative;
 
     & .search-mg {
@@ -103,7 +118,7 @@
       position: absolute;
       width: 30px;
       height: 30px;
-      top: -1px;
+      top: 17px;
       left: -50px;
       transition: all 0.5s;
 
@@ -163,7 +178,7 @@
 
   & .results-list {
     margin: 0;
-    padding: 20px 0;
+    padding: 0 0 20px;
     list-style-type: none;
 
     & li {
@@ -326,8 +341,11 @@
       padding: 0;
     }
     /* scale down and reposition magnifying glass icon */
-    & .search-mg {
-      transform: scale(0.666) translate(16px, -6px);
+    & .search-result-input {
+      & .search-mg {
+        transform: scale(0.666) translate(16px, -6px);
+        top: 7px;
+      }
     }
     /* don't show meta info next to names on mobile */
     & .search-results .results-list sub {

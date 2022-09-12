@@ -1,10 +1,8 @@
 import React, {Component} from "react";
-import {connect} from "react-redux";
 import axios from "axios";
 import {FORMATTERS} from "types/index";
 import {AreaPlot} from "d3plus-react";
 import {colorLighter} from "d3plus-color";
-import {min as D3Min} from "d3-array";
 import moment from "moment";
 import {COLORS_DOMAIN} from "types";
 import "pages/profile/person/MemMetrics.css";
@@ -40,29 +38,32 @@ class MemMetrics extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {vid: null, wikiPageViewsPast30Days: []};
+    this.state = {
+      youtubeId: null,
+      wikiPageViewsPast30Days: []
+    };
   }
 
   componentDidMount() {
-    const {env, person} = this.props;
-    const wikiTrendingURL = `https://pantheon.world/api/wikiTrendDetails?pid=${person.id}`;
+    const {person} = this.props;
+    const wikiTrendingURL = `/api/wikiTrendDetails?pid=${person.id}`;
     axios.get(wikiTrendingURL)
       .then(res => {
         this.setState({wikiPageViewsPast30Days: res.data});
       });
-    // Note: this key is restricted to Pantheon domains, if you want to use this in your
-    // codebase, please generate a key: https://developers.google.com/youtube/v3/docs/
-    const apiKey = env.YOUTUBE_API_KEY;
-    axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${person.name}%20${person.occupation.occupation}&maxResults=1&type=video&videoEmbeddable=true&key=${apiKey}`)
-      .then(res => {
-        const vid = res.data.items[0];
-        this.setState({vid});
-      });
+    if (!person.youtube) {
+      axios.get(`/api/youtube/${person.id}`)
+        .then(res => {
+          if (res.data && res.data.youtube) {
+            this.setState({youtubeId: res.data.youtube});
+          }
+        });
+    }
   }
 
   render() {
     const {pageViews, person} = this.props;
-    const {vid, wikiPageViewsPast30Days} = this.state;
+    const {wikiPageViewsPast30Days} = this.state;
     const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
     const domainColor = COLORS_DOMAIN[person.occupation.domain.toLowerCase().replace("& ", "").replace(/ /g, "-")];
     // console.log(person, COLORS_DOMAIN, person.occupation.domain.toLowerCase().replace("& ", "").replace(/ /g, "-"));
@@ -78,20 +79,21 @@ class MemMetrics extends Component {
       // console.log("slope, intercept and r-square!!!", [slope, intercept, rSquare]);
       trendLineData2 = trendData.map((d, i) => ({date: d.date, views: Math.max(slope * i + intercept, 0), pid: "Slope", color: colorLighter(domainColor, 0.5)}));
     }
+    const youtubeId = this.state.youtubeId || person.youtube;
 
     return (
       <div className="metrics-container">
         <div className="metric-vid">
-          {vid
+          {youtubeId
             ? <iframe
-              src={`https://www.youtube.com/embed/${vid.id.videoId}`}
+              src={`https://www.youtube.com/embed/${youtubeId}`}
               max-width="560"
               width="100%"
               height="100%"
               frameBorder="0"
               allowFullScreen
             />
-            : <button className="press-play" disabled tabIndex="-1"><i /></button>
+            : <button className="press-play" aria-label="Press to play video" disabled tabIndex="-1"><i /></button>
           }
         </div>
         {isTrending
@@ -168,4 +170,4 @@ class MemMetrics extends Component {
   }
 }
 
-export default connect(state => ({env: state.env}), {})(MemMetrics);
+export default MemMetrics;

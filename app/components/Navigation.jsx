@@ -1,9 +1,8 @@
-import React, {Component} from "react";
-import {Link} from "react-router";
+import React, { Component } from "react";
+import { Link } from "react-router";
 import "components/Navigation.css";
 
 class Navigation extends Component {
-
   constructor(props) {
     super(props);
   }
@@ -11,7 +10,7 @@ class Navigation extends Component {
   toggleSubNav(e) {
     const itemChildren = e.target.childNodes;
     e.target.classList.toggle("o");
-    itemChildren.forEach(child => {
+    itemChildren.forEach((child) => {
       if (child.nodeType === 1 && child.tagName === "UL") {
         child.classList.toggle("open");
       }
@@ -34,54 +33,113 @@ class Navigation extends Component {
     document.body.classList.remove("frozen");
 
     const subItems = document.getElementsByClassName("sub-items");
-    [].forEach.call(subItems, el => {
+    [].forEach.call(subItems, (el) => {
       el.classList.remove("open");
     });
 
     const items = document.getElementsByClassName("item");
-    [].forEach.call(items, el => {
+    [].forEach.call(items, (el) => {
       el.classList.remove("o");
     });
   }
 
   render() {
-    const {activateSearch} = this.props;
+    const { activateSearch } = this.props;
 
     return (
       <nav>
         <div id="navigation" className="global-nav" role="navigation">
           <ul className="items">
-            <li className="nav-btn" onClick={() => {
-              document.querySelector("#m-navigation").classList.add("open");
-            }}>
+            <li
+              className="nav-btn"
+              onClick={() => {
+                document.querySelector("#m-navigation").classList.add("open");
+              }}
+            >
               <span>
                 <img src="/images/icons/icon-nav.svg" alt="Open navigation." />
               </span>
             </li>
             <li className="item">
-              <Link to="/explore/viz" className="item-link explore-link">Visualizations</Link>
+              <a href="/explore/viz" className="item-link explore-link">
+                Visualizations
+              </a>
             </li>
             <li className="item">
-              <a href="/explore/rankings?show=people" className="item-link profiles-link dd">Rankings</a>
+              <a
+                href="/explore/rankings?show=people"
+                className="item-link profiles-link dd"
+              >
+                Rankings
+              </a>
               <ul className="sub-items">
-                <li><a href="/explore/rankings?show=people" className="item-link">People</a></li>
-                <li><a href="/explore/rankings?show=places" className="item-link">Places</a></li>
-                <li><a href="/explore/rankings?show=occupations" className="item-link">Occupations</a></li>
+                <li>
+                  <a href="/explore/rankings?show=people" className="item-link">
+                    People
+                  </a>
+                </li>
+                <li>
+                  <a href="/explore/rankings?show=places" className="item-link">
+                    Places
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/explore/rankings?show=occupations"
+                    className="item-link"
+                  >
+                    Occupations
+                  </a>
+                </li>
               </ul>
             </li>
             <li className="item">
-              <a href="/profile/person" className="item-link profiles-link dd">Profiles</a>
+              <a href="/profile/person" className="item-link profiles-link dd">
+                Profiles
+              </a>
               <ul className="sub-items">
-                <li><a href="/profile/person" className="item-link">People</a></li>
-                <li><a href="/profile/place" className="item-link">Places</a></li>
-                <li><a href="/profile/country" className="item-link">Countries</a></li>
-                <li><a href="/profile/occupation" className="item-link">Occupations</a></li>
-                <li><a href="/profile/era" className="item-link">Eras</a></li>
+                <li>
+                  <a href="/profile/person" className="item-link">
+                    People
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile/place" className="item-link">
+                    Places
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile/country" className="item-link">
+                    Countries
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile/occupation" className="item-link">
+                    Occupations
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/profile/select-occupation-country"
+                    className="item-link"
+                  >
+                    Occupation / Country
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile/era" className="item-link">
+                    Eras
+                  </a>
+                </li>
               </ul>
             </li>
             <li className="item home-link">
               <a href="/" className="home">
-                <img className="logo" src="/images/logos/logo_pantheon.svg" alt="Pantheon" />
+                <img
+                  className="logo"
+                  src="/images/logos/logo_pantheon.svg"
+                  alt="Pantheon"
+                />
               </a>
             </li>
             {/* <li className="item">
@@ -97,24 +155,69 @@ class Navigation extends Component {
               </ul>
             </li> */}
             <li className="item">
-              <Link to="/data/faq" className="item-link about-link" activeClassName="active">About</Link>
+              <Link
+                to="/data/faq"
+                className="item-link about-link"
+                activeClassName="active"
+              >
+                About
+              </Link>
             </li>
             <li className="item">
-              <Link to="/data/permissions" className="item-link data-link dd" activeClassName="active">Data</Link>
+              <Link
+                to="/data/permissions"
+                className="item-link data-link dd"
+                activeClassName="active"
+              >
+                Data
+              </Link>
               <ul className="sub-items">
-                <li><a href="/data/permissions" className="item-link">Permissions</a></li>
-                <li><a href="/data/datasets" className="item-link">Download</a></li>
-                <li><a href="/data/api" className="item-link">API</a></li>
+                <li>
+                  <a href="/data/permissions" className="item-link">
+                    Permissions
+                  </a>
+                </li>
+                <li>
+                  <a href="/data/datasets" className="item-link">
+                    Download
+                  </a>
+                </li>
+                <li>
+                  <a href="/data/api" className="item-link">
+                    API
+                  </a>
+                </li>
               </ul>
             </li>
-            {/* <li className="item">
-              <Link to="/app/yearbook" className="item-link data-link dd" activeClassName="active">Apps</Link>
-              <ul className="sub-items">
-                <li><a href="/app/yearbook" className="item-link">Yearbook</a></li>
-              </ul>
-            </li> */}
             <li className="item">
-              <Link to="/app/yearbook" className="item-link explore-link" activeClassName="active">Yearbook</Link>
+              <Link
+                to="/game/yearbook"
+                className="item-link explore-link dd"
+                activeClassName="active"
+              >
+                Games
+              </Link>
+              <ul className="sub-items">
+                <li>
+                  <Link to="/game/yearbook" className="item-link">
+                    Yearbook
+                  </Link>
+                </li>
+                <li>
+                  <a href="/game/birthle" className="item-link">
+                    Birthle
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li className="item">
+              <Link
+                to="/app/yearbook"
+                className="item-link explore-link"
+                activeClassName="active"
+              >
+                Yearbook
+              </Link>
             </li>
             <li className="search-btn">
               <button onClick={activateSearch}>
@@ -126,7 +229,11 @@ class Navigation extends Component {
         <div id="m-navigation" className="global-nav">
           <div className="logo-container">
             <a href="/" className="home">
-              <img className="logo" src="/images/logos/logo_pantheon.svg" alt="Pantheon" />
+              <img
+                className="logo"
+                src="/images/logos/logo_pantheon.svg"
+                alt="Pantheon"
+              />
             </a>
             <span className="close-btn" onClick={this.closeMobileNav}>
               <img src="/images/icons/icon-close.svg" alt="Close navigation." />
@@ -134,22 +241,48 @@ class Navigation extends Component {
           </div>
           <ul className="items">
             <li className="item">
-              <a href="/" className="item-link home-link">Home</a>
+              <a href="/" className="item-link home-link">
+                Home
+              </a>
             </li>
             <li className="item">
-              <a href="/explore/viz" className="item-link explore-link">Visualizations</a>
+              <a href="/explore/viz" className="item-link explore-link">
+                Visualizations
+              </a>
             </li>
             <li className="item">
-              <a href="/explore/rankings" className="item-link rankings-link">Rankings</a>
+              <a href="/explore/rankings" className="item-link rankings-link">
+                Rankings
+              </a>
             </li>
             <li className="item" onClick={this.toggleSubNav}>
-              <a className="item-link profiles-link" onClick={this.toggleSubNavSib}>Profiles</a>
+              <a
+                className="item-link profiles-link"
+                onClick={this.toggleSubNavSib}
+              >
+                Profiles
+              </a>
               <ul className="sub-items">
-                <li><a href="/profile/person">People</a></li>
-                <li><a href="/profile/place">Places</a></li>
-                <li><a href="/profile/country">Countries</a></li>
-                <li><a href="/profile/occupation">Occupations</a></li>
-                <li><a href="/profile/era">Eras</a></li>
+                <li>
+                  <a href="/profile/person">People</a>
+                </li>
+                <li>
+                  <a href="/profile/place">Places</a>
+                </li>
+                <li>
+                  <a href="/profile/country">Countries</a>
+                </li>
+                <li>
+                  <a href="/profile/occupation">Occupations</a>
+                </li>
+                <li>
+                  <a href="/profile/select-occupation-country">
+                    Occupation / Country
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile/era">Eras</a>
+                </li>
               </ul>
             </li>
             {/* <li className="item" onClick={this.toggleSubNav}>
@@ -165,14 +298,22 @@ class Navigation extends Component {
               </ul>
             </li> */}
             <li className="item">
-              <a href="/data/faq" className="item-link about-link">About</a>
+              <a href="/data/faq" className="item-link about-link">
+                About
+              </a>
             </li>
             <li className="item" onClick={this.toggleSubNav}>
-              <a className="item-link data-link" onClick={this.toggleSubNavSib}>Data</a>
+              <a className="item-link data-link" onClick={this.toggleSubNavSib}>
+                Data
+              </a>
               <ul className="sub-items">
                 {/* <li><a href="/data/datasets">Download</a></li> */}
-                <li><a href="/data/permissions">Permissions</a></li>
-                <li><a href="/data/api">API</a></li>
+                <li>
+                  <a href="/data/permissions">Permissions</a>
+                </li>
+                <li>
+                  <a href="/data/api">API</a>
+                </li>
               </ul>
             </li>
             {/* <li className="item" onClick={this.toggleSubNav}>
@@ -181,26 +322,54 @@ class Navigation extends Component {
                 <li><a href="/app/yearbook">Yearbook</a></li>
               </ul>
             </li> */}
-            <li className="item">
-              <a href="/app/yearbook" className="item-link explore-link">Yearbook</a>
+            <li className="item" onClick={this.toggleSubNav}>
+              <a className="item-link game-link" onClick={this.toggleSubNavSib}>
+                Games
+              </a>
+              <ul className="sub-items">
+                <li>
+                  <Link to="/game/yearbook" className="item-link">
+                    Yearbook
+                  </Link>
+                </li>
+                <li>
+                  <a href="/game/birthle" className="item-link">
+                    Birthle
+                  </a>
+                </li>
+              </ul>
             </li>
             <li className="item">
-              <a href="/data/api" className="item-link api-link">API</a>
+              <a href="/data/api" className="item-link api-link">
+                API
+              </a>
             </li>
-            <li className="item search-link item-link" onClick={activateSearch}>Search</li>
+            <li className="item search-link item-link" onClick={activateSearch}>
+              Search
+            </li>
             <li className="item">
-              <a href="http://bit.ly/QWSKoc" target="_blank" rel="noopener noreferrer" className="item-link feedback-link">Give Feedback</a>
+              <a
+                href="http://bit.ly/QWSKoc"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="item-link feedback-link"
+              >
+                Give Feedback
+              </a>
             </li>
             <li className="item item-link citation-link">
               Usage Citation
-              <input readOnly type="text" value="Yu, A. Z., et al. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific Data 2:150075. doi: 10.1038/sdata.2015.75" />
+              <input
+                readOnly
+                type="text"
+                value="Yu, A. Z., et al. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific Data 2:150075. doi: 10.1038/sdata.2015.75"
+              />
             </li>
           </ul>
         </div>
       </nav>
     );
   }
-
 }
 
 export default Navigation;

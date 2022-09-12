@@ -10,7 +10,7 @@ const Nav = ({sections}) =>
           <AnchorLink to={section.slug} className={`profile-nav-link ${section.slug}`}>
             <span className="profile-nav-link-roman-numeral"></span>
             <span className="profile-nav-link-title">{section.title}</span>
-            <span className="jump-to-text" aria-hidden>Jump to</span>
+            <span className="jump-to-text" aria-hidden> »</span>
           </AnchorLink>
         </li>
       )}

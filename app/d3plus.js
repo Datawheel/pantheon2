@@ -2,8 +2,13 @@ import {FORMATTERS} from "types/index";
 // import {merge} from "d3-array";
 import {default as topojson} from "json/world-50m.json";
 
-const uniques = a => {
-  const v = Array.from(new Set(a));
+// All "aggs" functions receive an array of OBJECTS (and not
+// just the values as of latest d3plus) along with the callback
+// func that returns the specified key. For this reason we need to
+// call our "cb" func on each element of our array before finding
+// the unique values.
+const uniques = (a, cb) => {
+  const v = Array.from(new Set(a.map(cb)));
   return v.length === 1 ? v[0] : v;
 };
 
@@ -14,7 +19,7 @@ export default {
     bucketyear: uniques,
     deathyear: uniques,
     id: uniques,
-    langs: a => Math.max(...a),
+    langs: a => Math.max(...a.map(cb)),
     logyear: uniques,
     occupation_id: uniques,
     yearBucket: uniques

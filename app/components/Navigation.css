@@ -27,7 +27,7 @@
       display: inline-block;
     }
 
-    &.explore-link::before {
+    &.explore-link::before, &.game-link::before {
       background: url('/images/nav/explore.svg') no-repeat;
       background-size: contain;
     }
@@ -99,6 +99,7 @@
 
     /* icons only layout */
     @media (max-width: 800px) {
+      height: var(--nav-height);
       max-width: 100%;
       margin: 0;
       padding: 0;
@@ -134,7 +135,7 @@
       &.home-link {
         @mixin absolute-horizontal-center;
         position: fixed;
-        margin: 21px 0 0 0;
+        margin: 0;
       }
     }
 
@@ -373,7 +374,7 @@
     @mixin profileSectionTitle;
 
     /* &.profiles-link, &.about-link, &.data-link { */
-    &.profiles-link, &.data-link {
+    &.profiles-link, &.data-link, &.game-link {
       &::after {
         @mixin dropdownLink;
         width: 16px !important;
