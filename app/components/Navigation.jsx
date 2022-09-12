@@ -208,6 +208,11 @@ class Navigation extends Component {
                     Birthle
                   </a>
                 </li>
+                <li>
+                  <a href="/app/trivia" className="item-link">
+                    Trivia
+                  </a>
+                </li>
               </ul>
             </li>
             <li className="item">
@@ -335,6 +340,11 @@ class Navigation extends Component {
                 <li>
                   <a href="/game/birthle" className="item-link">
                     Birthle
+                  </a>
+                </li>
+                <li>
+                  <a href="/app/trivia" className="item-link">
+                    Trivia
                   </a>
                 </li>
               </ul>
