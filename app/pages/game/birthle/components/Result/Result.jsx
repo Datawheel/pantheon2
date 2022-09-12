@@ -25,7 +25,7 @@ export default function Result({
           {isWin.get() ? (
             <div className="result-title_success">You won!!!</div>
           ) : (
-            <div className="result-title_fail">Correct order:</div>
+            <div className="result-title_fail">The correct order:</div>
           )}
           <div>
             <ul className="result-links-list">
