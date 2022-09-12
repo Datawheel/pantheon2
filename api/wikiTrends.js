@@ -144,6 +144,7 @@ module.exports = function(app) {
 
   app.get("/api/wikiTrends", async(req, res) => {
     const lang = ["ar", "zh", "nl", "en", "fr", "de", "it", "ja", "pl", "pt", "ru", "es"].indexOf(req.query.lang) !== -1 ? req.query.lang : "en";
+    const occupation = ["SOCCER PLAYER", "POLITICIAN", "ACTOR", "WRITER", "SINGER", "ATHLETE", "MUSICIAN", "SNOOKER"].indexOf(req.query.occupation) !== -1 ? req.query.occupation : null;
     const limit = parseInt(req.query.limit, 10) || 100;
     const dateobj = new Date();
     // set date to yesterday
@@ -156,13 +157,20 @@ module.exports = function(app) {
     const month2DaysAgo = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
     const day2DaysAgo = `${dateobj.getDate()}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 
-    const todaysBiosFromDbResp = await axios.get(`https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}`).catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
+    const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
+    const todaysBiosFromDbResp = await axios.get(`https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`).catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
     const todaysBiosFromDb = calcRankDeltas(todaysBiosFromDbResp.data, `${year}-${month}-${day}`, `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`);
 
     if (todaysBiosFromDb.length) {
       return res.json([...todaysBiosFromDb].sort((a, b) => a.rank_pantheon - b.rank_pantheon).slice(0, limit));
     }
     else {
+      if (occupation) {
+        const todaysBiosFromDbCheck = await axios.get(`https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`).catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
+        if (todaysBiosFromDbCheck.data.length) {
+          return res.json([]);
+        }
+      }
       const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
       const topPageViewsResp = await axios.get(wikiPageViewsURL).catch(e => (console.log("Wiki Trending Error:", e), {data: []}));
       const topPageViewsJson = topPageViewsResp.data;
@@ -208,7 +216,7 @@ module.exports = function(app) {
           // trendingArticlesQuery = currentArticlesChunk.map(p => `slug.eq.${encodeURIComponent(p.article)}`);
         }
 
-        trendingPeoplePantheonUrls.push(`https://api.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug`);
+        trendingPeoplePantheonUrls.push(`https://api.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug,occupation`);
       }
 
       // throttle API queries to 20 at a time
@@ -237,6 +245,10 @@ module.exports = function(app) {
       await axios.post("https://api.pantheon.world/trend", todaysBiosForDb, {
         headers: {"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8"}
       });
+
+      if (occupation) {
+        return res.json(todaysBiosForDb.filter(d => d.occupation === occupation).slice(0, limit));
+      }
 
       return res.json(todaysBiosForDb.slice(0, limit));
     }
