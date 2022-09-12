@@ -31,7 +31,94 @@
 }
 
 .ranking-table {
-  width: 100%;
+  overflow: hidden;
+  position: relative;
+  max-width: 100%;
+  overflow-x: auto;
+
+  & table {
+    /* width: 100%; */
+    border-spacing: 0;
+    border: 1px solid rgba(0,0,0,0.05);
+
+    & tr {
+      &:last-child {
+        & td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    & th,
+    & td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: solid 1px rgba(0,0,0,0.05);
+      border-right: solid 1px rgba(0,0,0,0.05);
+      text-align: left;
+      vertical-align: top;
+
+      & :last-child {
+        border-right: 0;
+      }
+
+      &.cell_numeric {
+        text-align: right;
+      }
+
+      &.nowrap {
+        white-space: nowrap;
+      }
+
+      & .u-positive-text {
+        color: #10B28A !important;
+      }
+      & .u-negative-text {
+        color: #B03B3B !important;
+      }
+      /* :before icons */
+      /* & .u-positive-arrow:before {
+        padding-right: 0.25em;
+        position: relative;
+        top: -0.125em;
+        display: inline-block;
+        content: '↑';
+      }
+      & .u-negative-arrow:before {
+        padding-right: 0.25em;
+        position: relative;
+        top: -0.125em;
+        display: inline-block;
+        content: '↓';
+      } */
+    }
+
+    & thead {
+      box-shadow: 0 2px 15px 0 rgba(0,0,0,0.15);
+      & tr {
+        & th {
+          font-weight: normal;
+          &.col-sort-asc {
+            box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.6);
+          }
+          &.col-sort-desc {
+            box-shadow: inset 0 3px 0 0 rgba(0,0,0,0.6);
+          }
+        }
+        &:first-child {
+          background: rgba(0,0,0,0.03);
+          border-bottom: 1px solid rgba(0,0,0,0.05);
+          & th {
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    & tbody tr:nth-child(odd) {
+      background-color: rgba(0,0,0,0.03);
+    }
+  }
 
   & .rt-th {}
 
@@ -57,6 +144,7 @@
 .ranking-thumbnail {
   background-size: cover;
   background-repeat: no-repeat;
+  object-fit: cover;
   width: 50px;
   height: 50px;
 }

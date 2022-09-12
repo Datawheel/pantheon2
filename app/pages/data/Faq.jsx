@@ -1,7 +1,9 @@
 import React from "react";
+import {Helmet} from "react-helmet-async";
 
 const Faq = () =>
   <div className="data-faq-container">
+    <Helmet title="About Pantheon and FAQs" />
     <h1>Pantheon Frequently Asked Questions</h1>
 
     <h2>What is Pantheon?</h2>

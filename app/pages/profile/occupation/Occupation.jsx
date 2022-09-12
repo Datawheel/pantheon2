@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import axios from "axios";
 import config from "helmet.js";
 import Header from "pages/profile/occupation/Header";
@@ -72,7 +72,7 @@ class Occupation extends Component {
 const occupationURL = "/occupation?occupation_slug=eq.<id>";
 const allOccupationsURL = "/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug";
 const allErasURL = "/era?order=start_year";
-const peopleURL = "/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,occupation_rank_unique,alive";
+const peopleURL = "/person?occupation=eq.<occupation.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev";
 const occsInDomainURL = "/occupation?domain_slug=eq.<occupation.domain_slug>&select=id";
 // const peopleInDomainURL = "/person?occupation=in.(<domain.occIds>)&order=l.desc&select=occupation(*),occupation_id:occupation,*";
 

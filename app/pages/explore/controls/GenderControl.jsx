@@ -1,30 +1,38 @@
-import React, {Component} from "react";
+import React from "react";
+import {connect} from "react-redux";
+import {updateGender} from "actions/vb";
 
-class GenderControl extends Component {
-
-  constructor(props) {
-    super(props);
+const getClassName = (genderId, genderName, currentGender, loading) => {
+  if (genderId === currentGender) {
+    if (loading) {
+      return `active disabled ${genderName}`;
+    }
+    return `active ${genderName}`;
   }
-
-  changeCurrentGender = (newGender, e) => {
-    e.preventDefault();
-    this.props.changeGender("gender", newGender);
+  else if (loading) {
+    return `disabled ${genderName}`;
   }
-
-  render() {
-    const {gender} = this.props;
-
-    return (
-      <div className="filter">
-        <h3>Filtered By</h3>
-        <ul className="items options flat-options filter">
-          <li><a onClick={e => this.changeCurrentGender(null, e)} href="#" id="allgender" className={gender === null ? "active allgender" : "allgender"}>All</a></li>
-          <li><a onClick={e => this.changeCurrentGender("F", e)} href="#" id="femalegender" className={gender === "F" ? "active femalegender" : "femalegender"}>Females</a></li>
-          <li><a onClick={e => this.changeCurrentGender("M", e)} href="#" id="malegender" className={gender === "M" ? "active malegender" : "malegender"}>Males</a></li>
-        </ul>
-      </div>
-    );
+  else {
+    return genderName;
   }
-}
+};
 
-export default GenderControl;
+const GenderControl = ({gender, loading, updateGender}) =>
+  <div className="filter">
+    <h3>Filtered By</h3>
+    <ul className="items options flat-options filter">
+      <li><a onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateGender(null))} href="#" id="allgender" className={getClassName(null, "allgender", gender, loading)}>All</a></li>
+      <li><a onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateGender("F"))} href="#" id="femalegender" className={getClassName("F", "femalegender", gender, loading)}>Females</a></li>
+      <li><a onClick={e => loading ? e.preventDefault() : (e.preventDefault(), updateGender("M"))} href="#" id="malegender" className={getClassName("M", "malegender", gender, loading)}>Males</a></li>
+    </ul>
+  </div>
+;
+
+const mapDispatchToProps = {updateGender};
+
+const mapStateToProps = state => ({
+  gender: state.vb.gender,
+  loading: state.vb.data.loading
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(GenderControl);

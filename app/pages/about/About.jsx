@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 
 import "pages/about/Misc.css";
 import "pages/about/About.css";

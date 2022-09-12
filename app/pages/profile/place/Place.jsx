@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
 import axios from "axios";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import config from "helmet.js";
 import Header from "pages/profile/place/Header";
 import ProfileNav from "pages/profile/common/Nav";
@@ -45,7 +45,8 @@ class Place extends Component {
   }
 
   render() {
-    const {place, country, peopleBornHere, peopleDiedHere, placeRanks, occupations, peopleBornHereAlive, wikiExtract, wikiSummary, wikiImg, wikiPageViews} = this.props.data;
+    const {place, country, placeRanks, occupations, peopleBornHereAlive, wikiExtract, wikiSummary, wikiImg, wikiPageViews} = this.props.data;
+    let {peopleBornHere, peopleDiedHere} = this.props.data;
     if (place === undefined) {
       return <NotFound />;
     }
@@ -67,6 +68,17 @@ class Place extends Component {
       }
       return meta;
     });
+
+    // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
+    // we calculate and add them...
+    peopleBornHere = !peopleBornHere
+      || peopleBornHere
+          .sort((personA, personB) => personB.hpi - personA.hpi)
+          .map((d, i) => ({...d, bplace_name_rank: i+1}))
+    peopleDiedHere = !peopleDiedHere
+      || peopleDiedHere
+          .sort((personA, personB) => personB.hpi - personA.hpi)
+          .map((d, i) => ({...d, dplace_name_rank: i+1}))
 
     return (
       <div>
@@ -99,9 +111,9 @@ const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
 const placeURL = "/place?slug=eq.<id>";
 const countryURL = "/country?id=eq.<place.country>";
 // const peopleBornHereURL = "/person?<place.birthPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=birthplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
-const peopleBornHereURL = "/person?bplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+const peopleBornHereURL = "/person?bplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive";
 // const peopleDiedHereURL = "/person?<place.deathPlaceColumn>=eq.<place.id>&order=hpi.desc.nullslast&select=deathplace(id,name,slug,lat_lon),occupation(*),occupation_id:occupation,*";
-const peopleDiedHereURL = "/person?dplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*";
+const peopleDiedHereURL = "/person?dplace_geonameid=eq.<place.id>&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive";
 const placeRanksURL = "/place?born_rank_unique=gte.<place.placeRankLow>&born_rank_unique=lte.<place.placeRankHigh>&order=born_rank_unique";
 const occupationsURL = "/occupation?order=num_born.desc.nullslast";
 const peopleBornHereAliveURL = "/person?bplace_geonameid=eq.<place.id>&limit=3&order=hpi.desc.nullslast&alive=is.true";

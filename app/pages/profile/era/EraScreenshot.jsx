@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {fetchData} from "@datawheel/canon-core";
-import Helmet from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import config from "helmet.js";
 import Header from "pages/profile/era/Header";
 import "pages/profile/common/Structure.css";

@@ -1,8 +1,10 @@
 import React from "react";
+import {Helmet} from "react-helmet-async";
 // import "css/common/plane";
 
 const Api = () =>
   <div className="api-container">
+    <Helmet title="API Documentation" />
     <div className="flying-plane"></div>
     <h1>API</h1>
     <p className="intro">

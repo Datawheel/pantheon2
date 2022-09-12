@@ -5,7 +5,8 @@ import PlaceControl from "pages/explore/controls/PlaceControl";
 import OccupationControl from "pages/explore/controls/OccupationControl";
 import ShowControl from "pages/explore/controls/ShowControl";
 import VizControl from "pages/explore/controls/VizControl";
-import AdvancedControl from "pages/explore/controls/AdvancedControl";
+import MetricCutoffControl from "pages/explore/controls/MetricCutoffControl";
+import OnlyShowNewControl from "pages/explore/controls/OnlyShowNewControl";
 import GenderControl from "pages/explore/controls/GenderControl";
 import fetchPantheonData from "pages/explore/helpers/fetchPantheonData";
 import {SANITIZERS} from "types";
@@ -16,26 +17,43 @@ class Controls extends Component {
 
   constructor(props) {
     super(props);
-    const {qParams} = props;
-    this.state = {
-      city: SANITIZERS.city(qParams.place) || "all",
-      country: qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)],
-      gender: SANITIZERS.gender(qParams.gender),
-      occupation: qParams.occupation || "all",
-      placeType: SANITIZERS.placeType(qParams.placeType),
-      show: SANITIZERS.show(qParams.show ? qParams.show : props.pageType === "viz" ? "occupations" : "people", props.pageType),
-      viz: props.pageType === "viz" ? SANITIZERS.vizType(qParams.viz || "Treemap") : null,
-      years: SANITIZERS.years(qParams.years),
-      yearType: SANITIZERS.yearType(qParams.yearType),
-      metricCutoff: qParams.metricCutoff || "4",
-      metricType: qParams.metricType || "hpi"
-    };
+    // const {qParams} = props;
+    // const canUseDOM = !!(
+    //   typeof window !== "undefined" &&
+    //   window.document && window.document.createElement
+    // );
+    // const show = SANITIZERS.show(qParams.show ? qParams.show : props.pageType === "viz" ? "occupations" : "people", props.pageType);
+    // // const country = canUseDOM && show === "people"
+    // const country = canUseDOM && props.pageType === "viz"
+    //   ? qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || countryCandidates[Math.floor(Math.random() * countryCandidates.length)]
+    //   : qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || "all";
+    // // const country = qParams.occupation || qParams.years ? SANITIZERS.country(qParams.place) || "all" : SANITIZERS.country(qParams.place) || "all";
+    // this.state = {
+    //   city: SANITIZERS.city(qParams.place) || "all",
+    //   country,
+    //   gender: SANITIZERS.gender(qParams.gender),
+    //   occupation: qParams.occupation || "all",
+    //   placeType: SANITIZERS.placeType(qParams.placeType),
+    //   show,
+    //   viz: props.pageType === "viz" ? SANITIZERS.vizType(qParams.viz || "Treemap") : null,
+    //   years: SANITIZERS.years(qParams.years),
+    //   yearType: SANITIZERS.yearType(qParams.yearType),
+    //   metricCutoff: qParams.metricCutoff || "4",
+    //   metricType: qParams.metricType || "hpi"
+    // };
   }
 
   componentDidMount() {
-    this.props.updateData(Object.assign({data: [], loading: true}, this.state));
-    const {countryLookup, pageType, updateData} = this.props;
-    fetchPantheonData(pageType, countryLookup, this.state, updateData);
+    // this.props.updateData(Object.assign({data: [], loading: true}, this.state));
+    // const {countryLookup, pageType, updateData} = this.props;
+    const canUseDOM = !!(
+      typeof window !== "undefined" &&
+      window.document && window.document.createElement
+    );
+    if (canUseDOM) {
+      // fetchPantheonData(pageType, countryLookup, this.state, updateData);
+      // this.setQueryParams();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -120,8 +138,7 @@ class Controls extends Component {
   }
 
   render() {
-    const {city, country, gender, metricCutoff, metricType, occupation, placeType, show, viz, years, yearType} = this.state;
-    const {pageType, nestedOccupations, places} = this.props;
+    const {page, show} = this.props;
 
     return (
       <div className="explore-controls viz-explorer" id="side-panel">
@@ -131,27 +148,29 @@ class Controls extends Component {
         </div>
         {/* mobile toggle */}
         <button className="control-header mobile" onClick={this.toggleSidePanel}>
-          <h2 className="viz-explorer"><span className="helper-text">Open </span>{pageType === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text"> Panel</span></h2>
+          <h2 className="viz-explorer"><span className="helper-text">Open </span>{page === "rankings" ? "Rankings" : "Visualizations"}<span className="helper-text"> Panel</span></h2>
           <i className="control-icon" />
         </button>
 
         <section className="control-group main-selector">
-          {pageType === "viz"
-            ? <VizControl viz={viz} changeViz={this.update} />
+          {page === "viz"
+            ? <VizControl />
             : null}
-          <ShowControl page={pageType} show={show} update={this.update} updateManyAndFetchData={this.updateManyAndFetchData} />
+          <ShowControl />
         </section>
 
         <section className="control-group">
-          <GenderControl gender={gender} changeGender={this.updateAndFetchData} />
-          <YearControl years={years} changeYears={this.updateAndFetchData} yearType={yearType} />
-          {places ? <PlaceControl city={city} country={country} onChange={this.updateAndFetchData} places={places} placeType={placeType} /> : null}
-          <OccupationControl nestedOccupations={nestedOccupations} occupation={occupation} changeOccupation={this.updateAndFetchData} />
+          <GenderControl />
+          {/* <YearControl years={years} changeYears={this.updateAndFetchData} yearType={yearType} /> */}
+          <YearControl />
+          {show.type !== "places" ? <PlaceControl /> : null}
+          <OccupationControl />
         </section>
 
         <section className="control-group advanced-group">
           <h3>Advanced Options</h3>
-          <AdvancedControl metricType={metricType} metricCutoff={metricCutoff} changeMetric={this.updateAndFetchData} />
+          <MetricCutoffControl />
+          <OnlyShowNewControl />
         </section>
 
         {/* TODO: add sharing and uncomment */}
@@ -171,7 +190,8 @@ class Controls extends Component {
 
 
 const mapStateToProps = state => ({
-  location: state.location
+  page: state.vb.page,
+  show: state.vb.show
 });
 
 export default connect(mapStateToProps)(Controls);

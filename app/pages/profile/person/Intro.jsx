@@ -1,12 +1,13 @@
 import React from "react";
 import "pages/profile/common/Intro.css";
 import PersonImage from "components/utils/PersonImage";
+import {toTitleCase} from "viz/helpers";
 import {FORMATTERS} from "types";
 import {COLORS_DOMAIN} from "types";
 
-const Intro = ({person, totalPageViews, wikiExtract}) => {
-  const occupationRank = person.occupation_rank_unique;
-  const birthcountryRank = person.birthcountry_rank_unique ? person.birthcountry_rank_unique : null;
+const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
+  const {occupationRank, occupationRankPrev, bplaceCountryRank, bplaceCountryRankPrev, bplaceCountryOccupationRank} = personRanks;
+  // const bplaceCountryRank = personRanks.bplaceCountryRank ? personRanks.bplaceCountryRank : null;
   const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug];
   const decoLines = 14;
   let age = 0;
@@ -17,42 +18,44 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
   }
 
   let fromSentence, wikiSentence, wikiSlug;
-  if (!person.birthplace) {
-
-    /* Example test case person:
-        pope_pius_ii
-        sergej_barbarez (w/o country)
-    */
-    const birthplace = person.bplace_name ? `${person.bplace_name}, ` : "";
-    const birthcountry = person.bplace_country ? <span> in {birthplace}<a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></span> : ` in ${birthplace.replace(", ", "")}`;
-    fromSentence = person.birthyear ? <span>born in {FORMATTERS.year(person.birthyear)}{birthcountry}. </span> : null;
-  }
-  else if (person.geacron_name !== person.birthcountry.name) {
-    fromSentence = person.birthyear
-      ? <span>born in {FORMATTERS.year(person.birthyear)} in {person.bplace_name}, {person.geacron_name} which is now part of modern day <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}</a>, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>. </span>
-      : null;
-  }
-  else {
-    const birthplace = person.birthplace.state
-      ? <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}, {person.birthplace.state}</a>
-      : <a href={`/profile/place/${person.birthplace.slug}`}>{person.birthplace.place}</a>;
-    if (person.bplace_name !== person.birthplace.place) {
+  if (person.bplace_country) {
+    if (!person.bplace_geonameid) {
 
       /* Example test case person:
-          jack_nicholson (w/ state)
-          jack_nicholson (w/o state)
+          pope_pius_ii
+          sergej_barbarez (w/o country)
       */
-      fromSentence = <span>born in {FORMATTERS.year(person.birthyear.name)} in {person.bplace_name}, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a> which is near {birthplace}. </span>;
+      const birthplace = person.bplace_name ? `${person.bplace_name}, ` : "";
+      const birthcountry = person.bplace_country ? <span> in {birthplace}<a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></span> : ` in ${birthplace.replace(", ", "")}`;
+      fromSentence = person.birthyear ? <span>born in {FORMATTERS.year(person.birthyear)}{birthcountry}. </span> : null;
+    }
+    else if (person.bplace_country && person.geacron_name !== person.bplace_country.country) {
+      fromSentence = person.birthyear
+        ? <span>born in {FORMATTERS.year(person.birthyear)} in {person.bplace_name}, {person.geacron_name} which is now part of modern day <a href={`/profile/place/${person.bplace_geonameid.slug}`}>{person.bplace_geonameid.place}</a>, <a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a>. </span>
+        : null;
     }
     else {
+      const birthplace = person.bplace_geonameid.state
+        ? <a href={`/profile/place/${person.bplace_geonameid.slug}`}>{person.bplace_geonameid.place}, {person.bplace_geonameid.state}</a>
+        : <a href={`/profile/place/${person.bplace_geonameid.slug}`}>{person.bplace_geonameid.place}</a>;
+      if (person.bplace_name !== person.bplace_geonameid.place) {
 
-      /* Example test case person:
-          ada_lovelace (w/ state)
-          bud_spencer (w/o state)
-      */
-      fromSentence = person.birthyear
-        ? <span>born in {FORMATTERS.year(person.birthyear.name)} in {birthplace}, <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>. </span>
-        : null;
+        /* Example test case person:
+            jack_nicholson (w/ state)
+            jack_nicholson (w/o state)
+        */
+        fromSentence = <span>born in {FORMATTERS.year(person.birthyear.name)} in {person.bplace_name}, <a href={`/profile/country/${person.bplace_country.slug}`}>{person.bplace_country.country}</a> which is near {birthplace}. </span>;
+      }
+      else {
+
+        /* Example test case person:
+            ada_lovelace (w/ state)
+            bud_spencer (w/o state)
+        */
+        fromSentence = person.birthyear
+          ? <span>born in {FORMATTERS.year(person.birthyear.name)} in {birthplace}, <a href={`/profile/country/${person.bplace_country.slug}`}>{person.bplace_country.country}</a>. </span>
+          : null;
+      }
     }
   }
 
@@ -75,6 +78,7 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
       }
     }
   }
+  // return <div>another new intro here...</div>;
 
   return (
     <section className="intro-section person">
@@ -84,25 +88,29 @@ const Intro = ({person, totalPageViews, wikiExtract}) => {
         </div>
       </div>
       <div className="intro-content">
-        <PersonImage src={`/images/profile/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} />
+        <PersonImage fallbackSrc="/images/icons/icon-person.svg" src={`/images/profile/people/${person.id}.jpg`} alt={`Photo of ${person.name}`} />
         <div className="intro-text">
           <h3>
-            <img src="/images/ui/profile-w.svg" /> {person.name}
+            <img src="/images/ui/profile-w.svg" alt="Icon of person" /> {person.name}
           </h3>
           {wikiSentence
             ? <p>{wikiSentence}. <a href={`https://en.wikipedia.org/wiki/${wikiSlug}`} target="_blank" rel="noopener noreferrer">Read more on Wikipedia</a></p>
             : <p>
               {person.name} {person.deathyear ? "was" : "is"} a <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a>
-              {!person.birthcountry && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
+              {!person.bplace_country && !person.bplace_name ? <span>. </span> : <span> {fromSentence}</span>}
               {person.deathyear
                 ? `${person.name} died at ${age} years old in ${FORMATTERS.year(person.deathyear.name)}.`
                 : `${person.name} is currently ${age} years old.`}
             </p>}
           <p>
             <React.Fragment>Since 2007, the English Wikipedia page of {person.name} has received more than {FORMATTERS.commas(totalPageViews)} page views. </React.Fragment>
-            <React.Fragment>{person.gender === "M" ? "His" : "Her"} biography is available in {person.l} different languages on Wikipedia making {person.gender === "M" ? "him" : "her"} the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a></React.Fragment>
-            <React.Fragment>{!person.birthcountry ? <span>.</span> : <span> and the {birthcountryRank !== 1 ? FORMATTERS.ordinal(birthcountryRank) : ""} most popular biography from <a href={`/profile/place/${person.birthcountry.slug}`}>{person.birthcountry.name}</a>.</span>}</React.Fragment>
+            <React.Fragment>{person.gender ? person.gender === "M" ? "His" : "Her" : "Their"} biography is available in {person.l} different languages on Wikipedia{person.l_prev && person.l !== person.l_prev ? ` (${person.l > person.l_prev ? "up" : "down"} from ${person.l_prev} in 2019)` : ""}. </React.Fragment>
+            <React.Fragment>{person.name} is the {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}`}>{person.occupation.occupation.toLowerCase()}</a>{occupationRankPrev && occupationRankPrev !== occupationRank ? ` (${occupationRank < occupationRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(occupationRankPrev)} in 2019)` : ""}</React.Fragment>
+            <React.Fragment>{!person.bplace_country ? <span>.</span> : <span>, the {bplaceCountryRank !== 1 ? FORMATTERS.ordinal(bplaceCountryRank) : ""} most popular biography from <a href={`/profile/place/${person.bplace_country.slug}`}>{person.bplace_country.country}</a></span>}{bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank ? ` (${bplaceCountryRank < bplaceCountryRankPrev ? "up" : "down"} from ${FORMATTERS.ordinal(bplaceCountryRankPrev)} in 2019)` : !person.bplace_country ? "" : ""}{bplaceCountryOccupationRank ? <span> and the {bplaceCountryOccupationRank !== 1 ? FORMATTERS.ordinal(bplaceCountryOccupationRank) : ""} most popular <a href={`/profile/occupation/${person.occupation.occupation_slug}/country/${person.bplace_country.slug}`}>{person.bplace_country.demonym} {toTitleCase(person.occupation.occupation)}</a>.</span> : ""}</React.Fragment>
           </p>
+          {person.famous_for
+            ? <p>{person.famous_for}</p>
+            : null}
         </div>
       </div>
     </section>
