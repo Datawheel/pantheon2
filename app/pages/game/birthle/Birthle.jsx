@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import { useEffect, useRef, useState } from "react";
 import "./Birthle.css";
 import fetchSlugs from "./fetchSlugs";
@@ -6,6 +6,15 @@ import fetchPersons from "./fetchPersons";
 import Result from "./components/Result/Result";
 import Game from "./components/Game/Game";
 import useTrait from "./useTrait";
+import ConsentForm from "./components/ConsentForm/ConsentForm";
+import DemographicForm from "./components/DemographicForm/DemographicForm"
+import {v4 as uuidv4} from "uuid";
+import { translate } from "react-i18next";
+import {GoogleReCaptchaProvider} from "react-google-recaptcha-v3";
+
+function convertTZ(date, tzString) {
+  return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+}
 
 const N_PERSONS = 5;
 const MAX_ATTEMPTS = 4;
@@ -20,10 +29,13 @@ const boardDefault = (() =>
     Array.from({ length: N_PERSONS }, () => boardCellDefault)
   ))();
 
-function Birthle() {
+function Birthle(props) {
+
+
+  const { t, i18n } = props;
+
   const [persons, setPersons] = useState([]);
   const [sortedPersons, setSortedPersons] = useState([]);
-
   const fetchError = useTrait(false);
   const selectedPersons = useTrait([]);
   const board = useTrait(boardDefault);
@@ -31,16 +43,38 @@ function Birthle() {
   const attempt = useTrait(0);
   const isWin = useTrait(false);
   const resultToShare = useTrait("");
+  const [isOpenConsentForm, setIsOpenConsentForm] = useState(undefined);
+  const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(undefined);
+  const [userId, setUserId]= useState(undefined);
+  const [education, setEducation] = useState({id: 99, name: t("text.game.popup.skip")});
+  const [countryCode, setCountryCode] = useState(undefined);
+  const [usaStates, setUsaStates] = useState(undefined);
+  const [lang, setLang]= useState("en");
+  const [languages, setLanguages] = useState([]);
+  const [age, setAge] = useState({id: 99, name: t("text.game.popup.skip")});
+  const [sex, setSex] = useState({id: 99, name: t("text.game.popup.skip")});
+  const [saveConsent, setSaveConsent] = useState(true);
+  const [saveDemo, setSaveDemo] = useState(true);
+  const [correctPersons, setCorrectPersons] = useState(undefined);
 
   const resultBlockRef = useRef(0);
   const gameBlockRef = useRef(0);
   const cancelBtnRef = useRef(0);
   const checkBtnRef = useRef(0);
 
+  const date = convertTZ(new Date(), "Europe/Paris");
+  const year = date.getFullYear();
+  const day = date.getDate();
+  const hour = date.getHours();
+  const month = date.getMonth() + 1;
+  const gameNumber = 1; // (hour >= 2 && hour < 14) ? 1 : 2;
+  const gameDate = `${year}-${month}-${day}`; // 2022-5-25
+  
+  
   const fetchData = async () => {
     const slugs = await fetchSlugs();
     const persons = await fetchPersons(slugs);
-
+    
     setPersons(persons);
 
     setSortedPersons(() =>
@@ -55,9 +89,29 @@ function Birthle() {
         return a.birthyear - b.birthyear;
       })
     );
-  };
 
+    const savePersons = [...persons].sort((a, b) => {
+      if (a.birthyear === b.birthyear) {
+        const dateA = new Date(a.birthdate);
+        const dateB = new Date();
+
+        return dateA - dateB;
+      }
+
+      return a.birthyear - b.birthyear;
+    })
+    
+  };
+  
   useEffect(() => {
+
+    const token = localStorage.getItem("mptoken");
+    if (!token) {
+      localStorage.setItem("mptoken", uuidv4());
+      token = localStorage.getItem("mptoken");
+    }
+    setUserId(token);
+
     board.set(boardDefault);
     selectedPersons.set([]);
     setSortedPersons([]);
@@ -66,10 +120,44 @@ function Birthle() {
     fetchData().catch(() => {
       fetchError.set(true);
     });
+
   }, []);
 
-  return (
+ 
+
+  return (<GoogleReCaptchaProvider
+    reCaptchaKey="6Lf_KPMeAAAAAKa96e7sRWReZYgYYurmIQ2YlOUi"
+  >
     <div className="birthle">
+      <DemographicForm 
+        isOpenDemographicForm={isOpenDemographicForm}
+        setIsOpenDemographicForm={setIsOpenDemographicForm}
+        userId={userId}
+        sex={sex}
+        setSex={setSex}
+        countryCode={countryCode}
+        setCountryCode={setCountryCode}
+        age={age}
+        setAge={setAge}
+        languages={languages}
+        setLanguages={setLanguages}
+        education={education}
+        setEducation={setEducation}
+        saveDemo = {saveDemo}
+        setSaveDemo = {setSaveDemo}
+        usaStates = {usaStates}
+        setUsaStates = {setUsaStates}
+        lang = {lang}
+        t = {t}
+        />
+      <ConsentForm 
+      isOpen={isOpenConsentForm} 
+      setIsOpenConsentForm ={setIsOpenConsentForm}
+      userId={userId}
+      universe={"birthle"}
+      saveConsent = {saveConsent}
+      setSaveConsent = {setSaveConsent}
+      /> 
       <Game
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         N_PERSONS={N_PERSONS}
@@ -88,6 +176,11 @@ function Birthle() {
         cancelBtnRef={cancelBtnRef}
         resultBlockRef={resultBlockRef}
         gameBlockRef={gameBlockRef}
+        gameDate = {gameDate}
+        gameNumber = {gameNumber}
+        userId={userId}
+        correctPersons = {correctPersons}
+        setCorrectPersons = {setCorrectPersons}
       />
       <Result
         MAX_ATTEMPTS={MAX_ATTEMPTS}
@@ -97,8 +190,9 @@ function Birthle() {
         resultToShare={resultToShare}
         resultBlockRef={resultBlockRef}
       />
-    </div>
+    </div></GoogleReCaptchaProvider>
   );
+  
 }
 
-export default Birthle;
+export default translate()(Birthle);

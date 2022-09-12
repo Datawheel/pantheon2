@@ -20,7 +20,13 @@ export default function Game({
   cancelBtnRef,
   resultBlockRef,
   gameBlockRef,
+  gameDate,
+  gameNumber,
+  // localStorage,
+  correctPersons,
+  setCorrectPersons
 }) {
+  
   const onPersonClick = (event) => {
     const id = event.target.parentNode.id;
     const person = persons.find((person) => person.id === id);
@@ -37,6 +43,60 @@ export default function Game({
     cancelBtnRef.current.disabled = false;
   };
 
+  var saveInformation = async function(correctPersonsAux){
+    const savePersons = [...persons].sort((a, b) => {
+      if (a.birthyear === b.birthyear) {
+        const dateA = new Date(a.birthdate);
+        const dateB = new Date();
+
+        return dateA - dateB;
+      }
+
+      return a.birthyear - b.birthyear;
+    })
+
+    const gameDataSave = {
+      user_id: localStorage.getItem("mptoken"),
+      game_date: gameDate, 
+      game_number: gameNumber,
+      sorted_person_1: savePersons[0].slug, 
+      sorted_person_2: savePersons[1].slug, 
+      sorted_person_3: savePersons[2].slug, 
+      sorted_person_4 :savePersons[3].slug, 
+      sorted_person_5: savePersons[4].slug
+    }
+
+    const requestOptions = {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(gameDataSave)
+    };
+
+    const gameDB = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
+    if (gameDB.length == 0){
+      await fetch("/api/createGame", requestOptions);
+      await fetch("/api/getGame", requestOptions).then(resp => resp.json());
+    }
+    const gameDB2 = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
+    if (correctPersonsAux !== undefined){
+      const proposal = {
+        game_id: gameDB2[0].id,
+        trials: correctPersonsAux,
+        solved :  isWin.get()? 1: 0,
+        user_id : localStorage.getItem("mptoken"),
+        level :attempt.get()
+      };
+  
+      const requestOptions2 = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(proposal)
+      };
+      fetch("/api/createGameParticipation", requestOptions2);
+    }
+    
+  }
+
   const onCheckClick = () => {
     const newPersons = [...persons];
 
@@ -45,24 +105,25 @@ export default function Game({
 
     const cells = document.querySelectorAll(".card");
     const newBoard = [...board.get()];
-    const correctPersons = [];
+    const correctPersonsAux = [];
 
     newBoard[attempt.get()].map((cell, i) => {
       if (selectedPersons.get()[i].id === sortedPersons[i].id) {
         cell.isCorrect = true;
-        correctPersons.push(true);
+        correctPersonsAux.push(true);
         cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
           "card correct";
         resultToShare.set(resultToShare.get() + "🟩");
       } else {
-        correctPersons.push(false);
+        correctPersonsAux.push(false);
         cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
           "card wrong";
         resultToShare.set(resultToShare.get() + "🟥");
       }
     });
 
-    isWin.set(correctPersons.every((el) => el === true));
+    setCorrectPersons(correctPersonsAux)
+    isWin.set(correctPersonsAux.every((el) => el === true));
 
     if (isWin.get()) {
       resultBlockRef.current.style.display = "block";
@@ -80,6 +141,9 @@ export default function Game({
 
     checkBtnRef.current.disabled = true;
     cancelBtnRef.current.disabled = true;
+
+    saveInformation(correctPersonsAux);
+
   };
 
   const selectPerson = (person) => {
