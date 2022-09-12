@@ -1,0 +1,49 @@
+
+.gamealert2{
+    position: sticky;
+    display: inline;
+    
+}  
+
+.gamealert2inside{
+    margin-left: 10%;
+}
+
+.textgame{
+    color:whitesmoke;
+    z-index:120;
+}
+
+.gamealert{
+    padding-bottom:5px;
+    padding-top:5px;
+    top:0;
+    width: 100%;
+    display: inline;
+    background-color: #a89e91;
+    color:whitesmoke;
+    font-family: 'Arial';
+    font-style: normal;
+    font-size: 18px;
+    line-height: 15px;
+    position: fixed;
+    z-index:10;
+
+    @media (max-width: 800px) {
+        font-size: 16px;
+        margin-top: 40px;
+        margin-bottom: 2px;
+        
+    }
+}
+
+  
+.buttongamealert{
+    font-family: 'Arial';
+    color:whitesmoke;
+    background-color:#4b4a48be;
+    font-style: normal;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+    z-index:15;
+}

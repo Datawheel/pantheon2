@@ -5,6 +5,7 @@ import Footer from "components/Footer";
 import Search from "components/Search";
 import "./App.css";
 import "components/common/tooltip.css";
+import GameAlert from "./pages/banner/GameAlert";
 
 class App extends Component {
 
@@ -98,11 +99,14 @@ class App extends Component {
     }
 
     return (
-      <div id="App" className={`${page} container`}>
-        {searchActive ? <Search activateSearch={this.activateSearch} /> : null}
-        <Navigation activateSearch={this.activateSearch} />
-        <div>{children}</div>
-        <Footer />
+      <div>
+        <GameAlert />
+        <div id="App" className={`${page} container`}>
+          {searchActive ? <Search activateSearch={this.activateSearch} /> : null}
+          <Navigation activateSearch={this.activateSearch} />
+          <div>{children}</div>
+          <Footer />
+        </div>
       </div>
     );
   }
