@@ -108,9 +108,8 @@ function Birthle(props) {
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
-      token = localStorage.getItem("mptoken");
     }
-    setUserId(token);
+    setUserId(localStorage.getItem("mptoken"));
 
     board.set(boardDefault);
     selectedPersons.set([]);

@@ -27,7 +27,7 @@
     font-size: 18px;
     line-height: 15px;
     position: fixed;
-    z-index:10;
+    z-index:100;
 
     @media (max-width: 800px) {
         font-size: 16px;
