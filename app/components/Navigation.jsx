@@ -195,7 +195,7 @@ class Navigation extends Component {
                 className="item-link explore-link dd"
                 activeClassName="active"
               >
-                Games
+                ◼Games
               </Link>
               <ul className="sub-items">
                 <li>
@@ -205,12 +205,12 @@ class Navigation extends Component {
                 </li>
                 <li>
                   <a href="/game/birthle" className="item-link">
-                    Birthle
+                  ◼Birthle
                   </a>
                 </li>
                 <li>
                   <a href="/app/trivia" className="item-link">
-                    Trivia
+                  ◼Trivia
                   </a>
                 </li>
               </ul>
