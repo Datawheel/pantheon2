@@ -75,24 +75,24 @@ export default function Game({
     const gameDB = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
     if (gameDB.length == 0){
       await fetch("/api/createGame", requestOptions);
-      await fetch("/api/getGame", requestOptions).then(resp => resp.json());
     }
     const gameDB2 = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
-    if (correctPersonsAux !== undefined){
-      const proposal = {
-        game_id: gameDB2[0].id,
-        trials: correctPersonsAux,
-        solved :  isWin.get()? 1: 0,
-        user_id : localStorage.getItem("mptoken"),
-        level :attempt.get()
-      };
-  
-      const requestOptions2 = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(proposal)
-      };
-      fetch("/api/createGameParticipation", requestOptions2);
+    if (gameDB2.length > 0){
+        const proposal = {
+          game_id: gameDB2[0].id,
+          trials: correctPersonsAux,
+          solved :  isWin.get()? 1: 0,
+          user_id : localStorage.getItem("mptoken"),
+          level :attempt.get()
+        };
+    
+        const requestOptions2 = {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(proposal)
+        };
+        fetch("/api/createGameParticipation", requestOptions2);
+      
     }
     
   }
