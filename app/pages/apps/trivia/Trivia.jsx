@@ -493,15 +493,21 @@ const Trivia = (props) => {
 
       if (question.correct_answer === answer.answer){
         resultToShare = resultToShare + "🟩";
-      }else{
-        resultToShare = resultToShare + "🟥";
       }
-      if ((resultToShare.length === Math.ceil(questions.length/2)) || (resultToShare.length === questions.length)){
-        resultToShare = resultToShare + "\n";
-      }
+      // if ((resultToShare.length === Math.ceil(questions.length/2)) || (resultToShare.length === questions.length)){
+      //   resultToShare = resultToShare + "\n";
+      // }
       
       return question.correct_answer === answer.answer;
     });
+    console.log(resultToShare.length);
+    while(resultToShare.length !== 20) {
+      resultToShare = resultToShare + "🟥";
+    }
+
+    const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`09/13/2022 00:00:00`), "Europe/Paris");
+    const gameIdShare = Math.ceil(difference/ (1000 * 60 * 60 * 24));
+
     return (
       <span>
         {correctAnswers.length} / {answers.length} correct
@@ -509,9 +515,9 @@ const Trivia = (props) => {
         {/* {resultToShare}
         <br/> */}
         <button classname="sharebutton" onClick = {() => {
-            copyToClipboard(resultToShare + 
-              "\nI got " + correctAnswers.length + " right from "+answers.length +
-              "\non https://pantheon.world/.\n" + "What about you?");
+            copyToClipboard(resultToShare + correctAnswers.length + "0%" +
+            "\nPantheon Trivia "+ gameIdShare +
+              "\nhttps://pantheon.world/app/trivia" +"\n#pantheon #trivia" +"\nWhat about you?");
             addToast({
               message: "Copied",
               intent: Intent.SUCCESS
