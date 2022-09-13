@@ -515,8 +515,7 @@ const Trivia = (props) => {
         {/* {resultToShare}
         <br/> */}
         <button classname="sharebutton" onClick = {() => {
-            copyToClipboard(resultToShare + correctAnswers.length + "0%" +
-            "\nPantheon Trivia "+ gameIdShare +
+            copyToClipboard("Pantheon Trivia "+ gameIdShare + "\n"+ resultToShare + correctAnswers.length + "0%" +
               "\nhttps://pantheon.world/app/trivia" +"\n#pantheon #trivia" +"\nWhat about you?");
             addToast({
               message: "Copied",

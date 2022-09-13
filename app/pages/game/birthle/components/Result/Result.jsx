@@ -51,23 +51,19 @@ export default function Result({
             </ul>
           </div>
           <div className="btn-list">
-            {isWin.get() ? (
-              <div>
-                <CopyToClipboard
-                // ${attempt.get() + 1}/${MAX_ATTEMPTS}\n${resultToShare.get()}
-                  text={`Pantheon Birthle ${gameIdShare} \n${resultToShare.get()}\nhttps://pantheon.world/game/birthle \n#pantheon #birthle \nWhat about you?`}
-                  onCopy={onShareBtnCLick}
-                >
-                  <button className="btn">
-                    <span className="btn-share" ref={shareBtn}>
-                      Share
-                    </span>
-                  </button>
-                </CopyToClipboard>
-              </div>
-            ) : (
-              <></>
-            )}
+            <div>
+              <CopyToClipboard
+              // ${attempt.get() + 1}/${MAX_ATTEMPTS}\n${resultToShare.get()}
+                text={`Pantheon Birthle ${gameIdShare} \n${resultToShare.get()}\nhttps://pantheon.world/game/birthle \n#pantheon #birthle \nWhat about you?`}
+                onCopy={onShareBtnCLick}
+              >
+                <button className="btn">
+                  <span className="btn-share" ref={shareBtn}>
+                    Share
+                  </span>
+                </button>
+              </CopyToClipboard>
+            </div>
           </div>
         </div>
       </div>
