@@ -11,7 +11,6 @@ import TriviaContext from "pages/apps/trivia/TriviaContext.js";
 import TriviaReducer from "pages/apps/trivia/TriviaReducer.js";
 import {Classes, Dialog} from "@blueprintjs/core";
 import classNames from "classnames";
-import {v4 as uuidv4} from "uuid";
 
 import {
   SET_ANSWERS,
@@ -217,6 +216,12 @@ const Trivia = (props) => {
 
   const fetchDB = async () => {
 
+    const token = localStorage.getItem("mptoken");
+    if (!token) {
+      localStorage.setItem("mptoken", uuidv4());
+      token = localStorage.getItem("mptoken");
+    }
+
     const now = convertTZ(new Date(), "Europe/Paris");
     const dateDB = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`
     const getGame = {
@@ -244,51 +249,47 @@ const Trivia = (props) => {
     }
 
     const gameDBid = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-    if (gameDBid.length === 0){
-      const getQuestion = {
-        game_id: gameDBid[0].id,
-        text: question.question,
-        answer_a : question.answer_a,
-        answer_b : question.answer_b,
-        answer_c : question.answer_c,
-        answer_d : question.answer_d,
-        correct_answer : question.correct_answer,
-      };
 
-      const requestOptionsQ = {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(getQuestion)
-      };
+    const getQuestion = {
+      game_id: gameDBid[0].id,
+      text: question.question,
+      answer_a : question.answer_a,
+      answer_b : question.answer_b,
+      answer_c : question.answer_c,
+      answer_d : question.answer_d,
+      correct_answer : question.correct_answer,
+    };
 
-      const gameDBaux = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-
-      if (gameDBaux.length === 0){
-        await fetch("/api/createTriviaQuestion", requestOptionsQ);
-        const gameDBaux = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-        dispatch({ type: GET_QUESTION_ID, questionId: gameDBaux[0].id });
-      }
-
-      const gameDBaux2= await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-      
-      const token2 = localStorage.getItem("mptoken");
-      
-      const questionScore = {
-        user_id : token2,
-        game_id: gameDBid[0].id,
-        question_id: gameDBaux2[0].id, 
-        answer: question[`answer_${question.correct_answer}`],
-        correct_answer: question.correct_answer
-      };
-
-      const requestOptionsS = {
+    const requestOptionsQ = {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(questionScore)
+        body: JSON.stringify(getQuestion)
     };
-      
-      fetch("/api/createTriviaScore", requestOptionsS);
+
+    const gameDBaux = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
+
+    if (gameDBaux.length === 0){
+      await fetch("/api/createTriviaQuestion", requestOptionsQ);
+      const gameDBaux = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
+      dispatch({ type: GET_QUESTION_ID, questionId: gameDBaux[0].id });
     }
+
+    const gameDBaux2= await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
+    const questionScore = {
+      user_id : token,
+      game_id: gameDBid[0].id,
+      question_id: gameDBaux2[0].id, 
+      answer: question[`answer_${question.correct_answer}`],
+      correct_answer: question.correct_answer
+    };
+
+    const requestOptionsS = {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(questionScore)
+  };
+    
+    fetch("/api/createTriviaScore", requestOptionsS);
 
   }
 
@@ -329,13 +330,14 @@ const Trivia = (props) => {
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
+      token = localStorage.getItem("mptoken");
     }
 
     const requestOptions = {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-          user_id: localStorage.getItem("mptoken")
+          user_id: token
         })
       };
 
@@ -429,13 +431,14 @@ const Trivia = (props) => {
       const token = localStorage.getItem("mptoken");
       if (!token) {
         localStorage.setItem("mptoken", uuidv4());
+        token = localStorage.getItem("mptoken");
       }
 
       dispatch({ type: UPDATE_CONSENT, isOpen: false });
       dispatch({ type: SAVE_CONSENT, saveConsent: false });
 
       const data = {
-        user_id: localStorage.getItem("mptoken"),
+        user_id: token,
         locale: "en",
         universe: "trivia",
         url: window.location.href
@@ -536,7 +539,7 @@ const Trivia = (props) => {
 
   return (
     <TriviaContext.Provider value={{ state, dispatch }}>
-      <Consent />
+      {/* <Consent /> */}
       <Helmet title="Trivia" />
       <div
         // className={showResults ? "trivia-page trivia-results" : "trivia-page"}
