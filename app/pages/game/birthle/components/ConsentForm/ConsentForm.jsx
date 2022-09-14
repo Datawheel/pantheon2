@@ -18,24 +18,22 @@ export default function ConsentForm({
 
   const acceptClick = () => {
 
-    if (saveConsent){
-      const data = {
-        user_id: userId,
-        locale: "en",
-        universe: universe,
-        url: window.location.href
-      };
-      console.log(data);
-      const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-      };
-      fetch("/api/createConsent", requestOptions);
-    }
-
     setIsOpenConsentForm(false);
     setSaveConsent(false);
+
+    const data = {
+      user_id: userId,
+      locale: "en",
+      universe: universe,
+      url: window.location.href
+    };
+    console.log(data);
+    const requestOptions = {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data)
+    };
+    fetch("/api/createConsent", requestOptions);
 
   }
 
