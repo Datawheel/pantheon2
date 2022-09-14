@@ -30,6 +30,11 @@ function csvJSON(csv, delimiter = "\t") {
   return result;
 }
 
+function capitalizeFirstLetter(text) {
+  return text[0].toUpperCase() + text.slice(1);
+}
+
+
 module.exports = function (app) {
   app.get("/api/trivia/getQuestionsCSV", async function (req, res, next) {
     // const date = req.query.date;
@@ -49,18 +54,18 @@ module.exports = function (app) {
     jsonData.forEach(function(obj, ind, arr) {
         const random_position = Math.floor(Math.random() * 4);
         const correct_answer_ = letters[random_position];
-        const other_answers = [obj[0],obj[1],obj[2]]
+        const other_answers = [capitalizeFirstLetter(obj[0]),capitalizeFirstLetter(obj[1]),capitalizeFirstLetter(obj[2])]
         questions.push({
             question: obj.question,
-            answer_a: correct_answer_==="a"? obj["correct_answer"] : other_answers.pop(),
-            answer_b: correct_answer_==="b"? obj["correct_answer"] : other_answers.pop(),
-            answer_c: correct_answer_==="c"? obj["correct_answer"] : other_answers.pop(),
-            answer_d: correct_answer_==="d"? obj["correct_answer"] : other_answers.pop(),
+            answer_a: correct_answer_==="a"? capitalizeFirstLetter(obj["correct_answer"]) : other_answers.pop(),
+            answer_b: correct_answer_==="b"? capitalizeFirstLetter(obj["correct_answer"]) : other_answers.pop(),
+            answer_c: correct_answer_==="c"? capitalizeFirstLetter(obj["correct_answer"]) : other_answers.pop(),
+            answer_d: correct_answer_==="d"? capitalizeFirstLetter(obj["correct_answer"]) : other_answers.pop(),
             correct_answer: correct_answer_
           });
         
     });
-    
+    // str[0].toUpperCase() + str.slice(1)
     const shuffledQuestions = shuffleArray(questions).slice(0,16).map((q, i) => ({...q, id: i + 1}));
     console.log(shuffledQuestions);
     res.status(200).json(shuffledQuestions);

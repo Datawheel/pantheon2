@@ -17,7 +17,7 @@ function convertTZ(date, tzString) {
 }
 
 const N_PERSONS = 5;
-const MAX_ATTEMPTS = 4;
+const MAX_ATTEMPTS = 3;
 
 const boardCellDefault = {
   person: null,

@@ -12,7 +12,7 @@ import {connect, useDispatch} from "react-redux";
 import i18next from 'i18next';
 import { initReactI18next, withNamespaces } from "react-i18next";
 import Backend from 'i18next-http-backend';
-
+import {v4 as uuidv4} from "uuid";
 
 const range = (start, end) => Array(end - start + 1).fill().map((_, idx) => start + idx);
 const filterItemCountries = (query, item) => {
@@ -135,10 +135,9 @@ export default function DemographicForm({
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
-      token = localStorage.getItem("mptoken");
     }
     const gameDataSave = {
-      user_id: token
+      user_id: localStorage.getItem("mptoken")
     }
     const requestOptions = {
         method: "POST",

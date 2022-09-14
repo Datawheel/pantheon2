@@ -3,7 +3,7 @@ import React from "react";
 import {Classes, Dialog} from "@blueprintjs/core";
 import classNames from "classnames";
 import styles from "./ConsentForm.module.scss";
-
+import {v4 as uuidv4} from "uuid";
 
 export default function ConsentForm({
   isOpen,
@@ -43,11 +43,10 @@ export default function ConsentForm({
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
-      token = localStorage.getItem("mptoken");
     }
     
     const gameDataSave = {
-      user_id: token
+      user_id: localStorage.getItem("mptoken", uuidv4())
     }
     const requestOptions = {
         method: "POST",
