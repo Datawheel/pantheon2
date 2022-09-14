@@ -23,8 +23,8 @@ const GameAlert = () => {
     //   </div>
     // </Dialog>    
     <div className="gamealert" isopen={openAlert}>
-      Welcome to Pantheon! Do you want to play our games? Try them out! We have 
-      <a href="/app/trivia" className="textgame" onClick={event =>  window.location.href='/app/trivia'}> Trivia</a> and <a href="/game/birthle" className="textgame" onClick={event =>  window.location.href='/game/birthle'}>Birthle</a>.
+      New games! Play  
+      <a href="/app/trivia" className="textgame" onClick={event =>  window.location.href='/app/trivia'}>Trivia</a> and<a href="/game/birthle" className="textgame" onClick={event =>  window.location.href='/game/birthle'}>Birthle</a>.
       {/* <button className="buttongamealert" onClick={event =>  window.location.href='/app/trivia'}>Trivia</button>
       and
       <button className="buttongamealert" onClick={event =>  window.location.href='/game/birthle'}>Birthle</button>. */}

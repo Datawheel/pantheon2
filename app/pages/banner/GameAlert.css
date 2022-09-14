@@ -10,18 +10,22 @@
 }
 
 .textgame{
-    color:whitesmoke;
+    color:black;
     z-index:120;
+    text-decoration: underline;
+    margin-left: 4px;
 }
 
 .gamealert{
+    
+    text-align: center;
     padding-bottom:5px;
     padding-top:5px;
     top:0;
     width: 100%;
     display: inline;
-    background-color: #a89e91;
-    color:whitesmoke;
+    background-color: #fad52e;
+    color:black;
     font-family: 'Arial';
     font-style: normal;
     font-size: 18px;
@@ -36,6 +40,7 @@
         
     }
 }
+
 
   
 .buttongamealert{
