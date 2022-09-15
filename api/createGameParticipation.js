@@ -34,8 +34,8 @@ module.exports = function(app) {
     const hashIp = hmacSHA512(publicIpV4, REACT_APP_GAME_SECRET_KEY).toString();
     
     pool.query(
-      "INSERT INTO game_participation (user_id, ip_hash, game_id, trials, solved, level) VALUES ($1, $2, $3, $4, $5, $6)", 
-      [user_id, hashIp, game_id, trials, solved, level], 
+      "INSERT INTO game_participation (user_id, ip_hash, game_id, trials, solved, level, universe) VALUES ($1, $2, $3, $4, $5, $6, $7)", 
+      [user_id, hashIp, game_id, trials, solved, level, 0], 
       (error, result) => {
         if (error) {
           console.log(error);
