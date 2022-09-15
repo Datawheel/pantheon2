@@ -533,7 +533,7 @@ const Trivia = (props) => {
       resultToShare = resultToShare + "🟥";
     }
 
-    const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`09/13/2022 00:00:00`), "Europe/Paris");
+    const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`09/15/2022 00:00:00`), "Europe/Paris");
     const gameIdShare = Math.ceil(difference/ (1000 * 60 * 60 * 24));
 
     return (
