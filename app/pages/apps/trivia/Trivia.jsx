@@ -11,6 +11,7 @@ import TriviaContext from "pages/apps/trivia/TriviaContext.js";
 import TriviaReducer from "pages/apps/trivia/TriviaReducer.js";
 import {Classes, Dialog} from "@blueprintjs/core";
 import classNames from "classnames";
+import {v4 as uuidv4} from "uuid";
 
 import {
   SET_ANSWERS,
@@ -97,6 +98,7 @@ const Trivia = (props) => {
 
   const [time, setTime] = useState(15);
   const timer = useRef(null);
+  const [openConsent, setOpenConsent] = useState(false);
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
   const refHandlers = useRef();
   const {
@@ -219,7 +221,6 @@ const Trivia = (props) => {
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
-      token = localStorage.getItem("mptoken");
     }
 
     const now = convertTZ(new Date(), "Europe/Paris");
@@ -235,17 +236,12 @@ const Trivia = (props) => {
         body: JSON.stringify(getGame)
     };
 
-    if (gameId === undefined) {
-  
-      const gameDBAux = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-      if (gameDBAux.length === 0){
-        await fetch("/api/createTriviaGame", requestOptions);
-        const gameDBAux = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-        dispatch({ type: GET_GAME_ID, gameId: gameDBAux[0].id });
-      }else{
-        dispatch({ type: GET_GAME_ID, gameId: gameDBAux[0].id });
-      }
-      
+    const gameDBAux = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
+    console.log("gameDBAux", gameDBAux);
+
+    if (gameDBAux.length === 0){
+      console.log("gameDBAux.length", gameDBAux.length);
+      await fetch("/api/createTriviaGame", requestOptions);
     }
 
     const gameDBid = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
@@ -276,7 +272,7 @@ const Trivia = (props) => {
 
     const gameDBaux2= await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
     const questionScore = {
-      user_id : token,
+      user_id : localStorage.getItem("mptoken"),
       game_id: gameDBid[0].id,
       question_id: gameDBaux2[0].id, 
       answer: question[`answer_${question.correct_answer}`],
@@ -329,22 +325,26 @@ const Trivia = (props) => {
 
     const token = localStorage.getItem("mptoken");
     if (!token) {
-      localStorage.setItem("mptoken", uuidv4());
-      token = localStorage.getItem("mptoken");
+      localStorage.setItem("mptoken", uuidv4());;
     }
 
     const requestOptions = {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-          user_id: token
+          user_id: localStorage.getItem("mptoken")
         })
       };
 
     const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
+    
     if (consent.length > 0) {
       dispatch({ type: UPDATE_CONSENT, isOpen: false });
       dispatch({ type: SAVE_CONSENT, saveConsent: false });
+      setOpenConsent(false);
+
+    }else{
+      setOpenConsent(true);
     }
 
   }
@@ -401,7 +401,7 @@ const Trivia = (props) => {
     //| t("text.game.consent");
 
     return <Dialog
-        isOpen={isOpen}
+        isOpen={openConsent}
         id="dialogpopup"
         isCloseButtonShown={false}
         title={""}
@@ -426,19 +426,19 @@ const Trivia = (props) => {
 
   const acceptClick = async () => {
 
-    if (saveConsent){
+    if (openConsent){
 
-      const token = localStorage.getItem("mptoken");
-      if (!token) {
+      setOpenConsent(false);
+
+      if (!localStorage.getItem("mptoken")) {
         localStorage.setItem("mptoken", uuidv4());
-        token = localStorage.getItem("mptoken");
       }
 
       dispatch({ type: UPDATE_CONSENT, isOpen: false });
       dispatch({ type: SAVE_CONSENT, saveConsent: false });
 
       const data = {
-        user_id: token,
+        user_id: localStorage.getItem("mptoken"),
         locale: "en",
         universe: "trivia",
         url: window.location.href
@@ -539,7 +539,7 @@ const Trivia = (props) => {
 
   return (
     <TriviaContext.Provider value={{ state, dispatch }}>
-      {/* <Consent /> */}
+      {Consent()}
       <Helmet title="Trivia" />
       <div
         // className={showResults ? "trivia-page trivia-results" : "trivia-page"}
