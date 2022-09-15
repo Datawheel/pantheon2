@@ -6,6 +6,7 @@ import Search from "components/Search";
 import "./App.css";
 import "components/common/tooltip.css";
 import GameAlert from "./pages/banner/GameAlert";
+import {GoogleReCaptchaProvider, useGoogleReCaptcha} from "react-google-recaptcha-v3";
 
 class App extends Component {
 
@@ -104,7 +105,11 @@ class App extends Component {
         <div id="App" className={`${page} container`}>
           {searchActive ? <Search activateSearch={this.activateSearch} /> : null}
           <Navigation activateSearch={this.activateSearch} />
+          <GoogleReCaptchaProvider
+    reCaptchaKey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
+  >
           <div>{children}</div>
+          </GoogleReCaptchaProvider>
           <Footer />
         </div>
       </div>

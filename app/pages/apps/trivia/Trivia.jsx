@@ -15,6 +15,7 @@ import classNames from "classnames";
 import {v4 as uuidv4} from "uuid";
 import { translate } from "react-i18next";
 
+
 import {
   SET_ANSWERS,
   SET_CURRENT_QUESTION,
@@ -104,6 +105,7 @@ const Trivia = (props) => {
   const timer = useRef(null);
   const [openConsent, setOpenConsent] = useState(false);
   const [openDemo, setOpenDemo] = useState(false);
+  const [firstOpen, setFirstOpen] = useState(false);
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
   const refHandlers = useRef();
   const {
@@ -345,8 +347,10 @@ const Trivia = (props) => {
     const socioConsent = await fetch("/api/getParticipant", requestOptions).then(resp => resp.json());
     if (socioConsent.length > 0) {
       setOpenDemo(false);
+      setFirstOpen(false);
     }else{
       setOpenDemo(true);
+      setFirstOpen(true);
     }
 
     const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
@@ -355,13 +359,11 @@ const Trivia = (props) => {
       dispatch({ type: UPDATE_CONSENT, isOpen: false });
       dispatch({ type: SAVE_CONSENT, saveConsent: false });
       setOpenConsent(false);
-
+      setFirstOpen(false);
     }else{
       setOpenConsent(true);
+      setFirstOpen(true);
     }
-
-
-    
 
   }
 
@@ -452,10 +454,11 @@ const Trivia = (props) => {
   }
 
   const acceptClick = async () => {
-
+    
     if (openConsent){
 
       setOpenConsent(false);
+      setTime(15);
 
       if (!localStorage.getItem("mptoken")) {
         localStorage.setItem("mptoken", uuidv4());

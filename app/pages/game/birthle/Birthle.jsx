@@ -10,7 +10,7 @@ import ConsentForm from "./components/ConsentForm/ConsentForm";
 import DemographicForm from "./components/DemographicForm/DemographicForm"
 import {v4 as uuidv4} from "uuid";
 import { translate } from "react-i18next";
-import {GoogleReCaptchaProvider} from "react-google-recaptcha-v3";
+import {GoogleReCaptchaProvider, useGoogleReCaptcha} from "react-google-recaptcha-v3";
 
 function convertTZ(date, tzString) {
   return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
@@ -117,9 +117,7 @@ function Birthle(props) {
 
  
 
-  return (<GoogleReCaptchaProvider
-    reCaptchaKey="6Lf_KPMeAAAAAKa96e7sRWReZYgYYurmIQ2YlOUi"
-  >
+  return (
     <div className="birthle">
       <DemographicForm 
         setIsOpenDemographicForm={setIsOpenDemographicForm}
@@ -167,7 +165,7 @@ function Birthle(props) {
         resultToShare={resultToShare}
         resultBlockRef={resultBlockRef}
       />
-    </div></GoogleReCaptchaProvider>
+    </div>
   );
   
 }

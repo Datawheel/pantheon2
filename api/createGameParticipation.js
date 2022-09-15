@@ -38,10 +38,10 @@ module.exports = function(app) {
       [user_id, hashIp, game_id, trials, solved, level, 0], 
       (error, result) => {
         if (error) {
-          console.log(error);
+          // console.log(error);
           return res.status(404).json({message: "error"});
         };
-        console.log("createGameParticipation: ok");
+        // console.log("createGameParticipation: ok");
         return res.status(200).json({message: "ok"});
       });
   })

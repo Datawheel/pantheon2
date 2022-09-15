@@ -75,26 +75,10 @@ export default function DemographicForm({
   universe,
   isOpenDemographicForm,
   setIsOpenDemographicForm,
-  // userId,
-  // sex,
-  // setSex,
-  // countryCode,
-  // setCountryCode,
-  // age,
-  // setAge,
-  // languages,
-  // setLanguages,
-  // education,
-  // setEducation,
-  // saveDemo,
-  // setSaveDemo,
-  // usaStates,
-  // setUsaStates,
-  // lang,
   t
 }) {
-    
-
+  
+  const {executeRecaptcha} = useGoogleReCaptcha();
   const [education, setEducation] = useState({id: 99, name: t("text.game.popup.skip")});
   const [countryCode, setCountryCode] = useState(undefined);
   const [usaStates, setUsaStates] = useState(undefined);
@@ -125,9 +109,6 @@ export default function DemographicForm({
   }
   
   const addToast = (toast, callback) => {
-    // toast.className = "toast-success";
-    // toast.timeout = 5000;
-    // toast.intent = Intent.SUCCESS;
     
     const defaultToast = {
       className: "toast-sucess",
@@ -303,9 +284,6 @@ export default function DemographicForm({
   }
 
   return (
-    <GoogleReCaptchaProvider
-      reCaptchaKey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
-    >
     <Dialog 
     className={styles.popupwrapper}
     isOpen={isOpenDemographicForm}
@@ -459,9 +437,8 @@ export default function DemographicForm({
             }
 
             const locationId = usaStates === undefined ? 99 : usaStates.id * 1;
+            const recap = await executeRecaptcha("selfreported");
             
-            // const {executeRecaptcha} = useGoogleReCaptcha();
-            // const recap = await executeRecaptcha("selfreported");
 
             const token = localStorage.getItem("mptoken");
             if (!token) {
@@ -477,7 +454,7 @@ export default function DemographicForm({
               languages: languageIds,
               education_id: education.id * 1,
               lang: lang,
-              token: "executeRecaptcha",
+              token: recap,
               universe: universe
             };
             // lang, location_id, education_id, country_id, age_id, sex_id, languages, user_id, token, universe
@@ -502,5 +479,5 @@ export default function DemographicForm({
         /> */}
       </Toaster>
     </div>
-  </Dialog></GoogleReCaptchaProvider>)
+  </Dialog>)
 };
