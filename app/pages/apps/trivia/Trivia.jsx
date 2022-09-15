@@ -98,7 +98,7 @@ const Trivia = (props) => {
     error: ""
   };
 
-  console.log(props);
+
   const { t, i18n } = props;
   const [time, setTime] = useState(15);
   const timer = useRef(null);
@@ -214,7 +214,7 @@ const Trivia = (props) => {
     //   dispatch({ type: RESET_QUIZ, questions: resp.data });
     // });
     axios.get("/api/trivia/getQuestionsCSV").then((resp) => {
-      console.log("resp.data!!!", resp.data);
+      // console.log("resp.data!!!", resp.data);
       dispatch({ type: RESET_QUIZ, questions: resp.data });
     });
     
@@ -242,15 +242,15 @@ const Trivia = (props) => {
     };
 
     const gameDBAux = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-    console.log("gameDBAux", gameDBAux);
+    // console.log("gameDBAux", gameDBAux);
 
     if (gameDBAux.length === 0){
-      console.log("gameDBAux.length", gameDBAux.length);
+      // console.log("gameDBAux.length", gameDBAux.length);
       await fetch("/api/createTriviaGame", requestOptions);
     }
 
     const gameDBid = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-    console.log("gameDBid.length", gameDBid.length);
+    // console.log("gameDBid.length", gameDBid.length);
 
     const getQuestion = {
       game_id: gameDBid[0].id,
@@ -277,7 +277,7 @@ const Trivia = (props) => {
     }
 
     const gameDBaux2= await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-    console.log("gameDBaux2.length", gameDBaux2.length);
+    // console.log("gameDBaux2.length", gameDBaux2.length);
 
     const questionScore = {
       user_id : localStorage.getItem("mptoken"),
@@ -299,17 +299,15 @@ const Trivia = (props) => {
 
   const next = () => {
 
-    setTime(15);
-    const answer = { questionId: question.id, answer: currentAnswer };
-    
-    if (time === 0){
-      answer.answer = "No answer";
-    }else{
+    if (time > 0){
       if (!currentAnswer) {
         dispatch({ type: SET_ERROR, error: "Please select an option" });
         return;
       }
     }
+
+    setTime(15);
+    const answer = { questionId: question.id, answer: currentAnswer };
 
     answers.push(answer);
     
@@ -527,7 +525,7 @@ const Trivia = (props) => {
       
       return question.correct_answer === answer.answer;
     });
-    console.log(resultToShare.length);
+
     while(resultToShare.length !== 20) {
       resultToShare = resultToShare + "🟥";
     }
