@@ -43,18 +43,11 @@ function Birthle(props) {
   const attempt = useTrait(0);
   const isWin = useTrait(false);
   const resultToShare = useTrait("");
+
   const [isOpenConsentForm, setIsOpenConsentForm] = useState(undefined);
   const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(undefined);
   const [userId, setUserId]= useState(undefined);
-  const [education, setEducation] = useState({id: 99, name: t("text.game.popup.skip")});
-  const [countryCode, setCountryCode] = useState(undefined);
-  const [usaStates, setUsaStates] = useState(undefined);
-  const [lang, setLang]= useState("en");
-  const [languages, setLanguages] = useState([]);
-  const [age, setAge] = useState({id: 99, name: t("text.game.popup.skip")});
-  const [sex, setSex] = useState({id: 99, name: t("text.game.popup.skip")});
   const [saveConsent, setSaveConsent] = useState(true);
-  const [saveDemo, setSaveDemo] = useState(true);
   const [correctPersons, setCorrectPersons] = useState(undefined);
 
   const resultBlockRef = useRef(0);
@@ -129,24 +122,9 @@ function Birthle(props) {
   >
     <div className="birthle">
       <DemographicForm 
-        isOpenDemographicForm={isOpenDemographicForm}
         setIsOpenDemographicForm={setIsOpenDemographicForm}
-        userId={userId}
-        sex={sex}
-        setSex={setSex}
-        countryCode={countryCode}
-        setCountryCode={setCountryCode}
-        age={age}
-        setAge={setAge}
-        languages={languages}
-        setLanguages={setLanguages}
-        education={education}
-        setEducation={setEducation}
-        saveDemo = {saveDemo}
-        setSaveDemo = {setSaveDemo}
-        usaStates = {usaStates}
-        setUsaStates = {setUsaStates}
-        lang = {lang}
+        isOpenDemographicForm = {isOpenDemographicForm}
+        universe = {"birthle"}
         t = {t}
         />
       <ConsentForm 

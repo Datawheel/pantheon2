@@ -9,9 +9,11 @@ import Question from "pages/apps/trivia/Question";
 import Answers from "pages/apps/trivia/Answers";
 import TriviaContext from "pages/apps/trivia/TriviaContext.js";
 import TriviaReducer from "pages/apps/trivia/TriviaReducer.js";
+import DemographicForm from "../../game/birthle/components/DemographicForm/DemographicForm"
 import {Classes, Dialog} from "@blueprintjs/core";
 import classNames from "classnames";
 import {v4 as uuidv4} from "uuid";
+import { translate } from "react-i18next";
 
 import {
   SET_ANSWERS,
@@ -96,9 +98,12 @@ const Trivia = (props) => {
     error: ""
   };
 
+  console.log(props);
+  const { t, i18n } = props;
   const [time, setTime] = useState(15);
   const timer = useRef(null);
   const [openConsent, setOpenConsent] = useState(false);
+  const [openDemo, setOpenDemo] = useState(false);
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
   const refHandlers = useRef();
   const {
@@ -245,6 +250,7 @@ const Trivia = (props) => {
     }
 
     const gameDBid = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
+    console.log("gameDBid.length", gameDBid.length);
 
     const getQuestion = {
       game_id: gameDBid[0].id,
@@ -271,6 +277,8 @@ const Trivia = (props) => {
     }
 
     const gameDBaux2= await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
+    console.log("gameDBaux2.length", gameDBaux2.length);
+
     const questionScore = {
       user_id : localStorage.getItem("mptoken"),
       game_id: gameDBid[0].id,
@@ -336,6 +344,13 @@ const Trivia = (props) => {
         })
       };
 
+    const socioConsent = await fetch("/api/getParticipant", requestOptions).then(resp => resp.json());
+    if (socioConsent.length > 0) {
+      setOpenDemo(false);
+    }else{
+      setOpenDemo(true);
+    }
+
     const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
     
     if (consent.length > 0) {
@@ -346,6 +361,9 @@ const Trivia = (props) => {
     }else{
       setOpenConsent(true);
     }
+
+
+    
 
   }
 
@@ -424,6 +442,17 @@ const Trivia = (props) => {
       </Dialog>
   }
 
+  function Demographic (){
+    if (openDemo === true){
+      return <DemographicForm 
+        isOpenDemographicForm = {openDemo}
+        setIsOpenDemographicForm = {setOpenDemo}
+        universe = {"trivia"}
+        t = {t}
+      />
+    }
+  }
+
   const acceptClick = async () => {
 
     if (openConsent){
@@ -451,8 +480,6 @@ const Trivia = (props) => {
       };
       
       await fetch("/api/createConsent", requestOptions);
-
-      
 
     }
     
@@ -539,6 +566,7 @@ const Trivia = (props) => {
 
   return (
     <TriviaContext.Provider value={{ state, dispatch }}>
+      {Demographic()}
       {Consent()}
       <Helmet title="Trivia" />
       <div
@@ -589,4 +617,4 @@ Trivia.need = [
   // fetchData("questions", "https://pantheon.world/api/getTriviaQuestion"),
 ];
 
-export default connect((state) => ({ data: state.data }), {})(Trivia);
+export default translate()(connect((state) => ({ data: state.data }), {})(Trivia));
