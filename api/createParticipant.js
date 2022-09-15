@@ -25,6 +25,7 @@ module.exports = function(app) {
     const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
     const recaptchaV3 = await axios.get(url).then((resp) => resp.data);
     const {success, challenge_ts, hostname, score, action} = recaptchaV3;
+    console.log("score", score);
 
     const publicIpV4 = req.headers["x-forwarded-for"] ||
       req.socket.remoteAddress ||
@@ -34,8 +35,8 @@ module.exports = function(app) {
     const hashIp = hmacSHA512(publicIpV4, REACT_APP_GAME_SECRET_KEY).toString();
     
     pool.query(
-      "INSERT INTO participant (user_id, ip_hash, sex_id, country_id, location_id, age_id, language_ids, education_id, locale, universe) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", 
-      [user_id, hashIp, sex_id, country_id, location_id, age_id, languages, education_id, lang, universe], 
+      "INSERT INTO participant (user_id, ip_hash, sex_id, country_id, location_id, age_id, language_ids, education_id, locale, universe, score_bot) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)", 
+      [user_id, hashIp, sex_id, country_id, location_id, age_id, languages, education_id, lang, universe, score], 
       (error, result) => {
         if (error) {
           console.log(error);
