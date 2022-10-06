@@ -16,19 +16,6 @@ module.exports = {
             require("./db/trivia_game.js"),
             require("./db/trivia_question.js"),
             require("./db/trivia_score.js")
-            // require("./api/createConsent.js"),
-            // require("./api/createGame.js"),
-            // require("./api/createGameParticipation.js"),
-            // require("./api/createParticipant.js"),
-            // require("./api/createTriviaGame.js"),
-            // require("./api/createTriviaQuestion.js"),
-            // require("./api/createTriviaScore.js"),
-            // require("./api/getConsent.js"),
-            // require("./api/getGame.js"),
-            // require("./api/getGameParticipation.js"),
-            // require("./api/getParticipant.js"),
-            // require("./api/getTriviaGame.js"),
-            // require("./api/getTriviaQuestion.js")
         ]
         }
       ]
