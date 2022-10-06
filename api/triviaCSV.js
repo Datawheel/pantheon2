@@ -1,5 +1,5 @@
 const axios = require("axios");
-const REACT_APP_TRIVIA_GAME = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHT1BETBC-ma5aSJiyQB3e1zORdHyIwbJfJqu5cRvjT3ACUspj47ktCtajiPPB9w/pub?gid=1095196046&single=true&output=tsv";
+const REACT_APP_TRIVIA_GAME = process.env.REACT_APP_TRIVIA_GAME;
 
 function isNumeric(value) {
   return /^-?\d+$/.test(value);
@@ -37,7 +37,6 @@ function capitalizeFirstLetter(text) {
 
 module.exports = function (app) {
   app.get("/api/trivia/getQuestionsCSV", async function (req, res, next) {
-    // const date = req.query.date;
     const currDate = new Date();
     const date = `${currDate.getFullYear()}-${currDate.getMonth() + 1}-${currDate.getDate()}`
     const data = await axios.get(REACT_APP_TRIVIA_GAME).then((resp) => resp.data);
@@ -67,7 +66,7 @@ module.exports = function (app) {
     });
     // str[0].toUpperCase() + str.slice(1)
     const shuffledQuestions = shuffleArray(questions).slice(0,16).map((q, i) => ({...q, id: i + 1}));
-    console.log(shuffledQuestions);
+
     res.status(200).json(shuffledQuestions);
   });
 };
