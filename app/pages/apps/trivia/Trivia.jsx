@@ -9,12 +9,12 @@ import Question from "pages/apps/trivia/Question";
 import Answers from "pages/apps/trivia/Answers";
 import TriviaContext from "pages/apps/trivia/TriviaContext.js";
 import TriviaReducer from "pages/apps/trivia/TriviaReducer.js";
-import DemographicForm from "../../game/birthle/components/DemographicForm/DemographicForm"
+import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm"
 import {Classes, Dialog} from "@blueprintjs/core";
 import classNames from "classnames";
 import {v4 as uuidv4} from "uuid";
 import { translate } from "react-i18next";
-
+import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
 
 import {
   SET_ANSWERS,
@@ -22,11 +22,7 @@ import {
   SET_CURRENT_ANSWER,
   SET_ERROR,
   SET_SHOW_RESULTS,
-  RESET_QUIZ,
-  GET_GAME_ID,
-  GET_QUESTION_ID,
-  UPDATE_CONSENT,
-  SAVE_CONSENT
+  RESET_QUIZ
 } from "pages/apps/trivia/reducerTypes.js";
 
 import "pages/about/About.css";
@@ -41,52 +37,9 @@ function Countdown(props) {
 }
 
 const Trivia = (props) => {
-  // const questions = [
-  //   {
-  //     id: 1,
-  //     question: "What year was Tom Cruise born?",
-  //     answer_a: "1962",
-  //     answer_b: "1955",
-  //     answer_c: "1971",
-  //     answer_d: "1965",
-  //     correct_answer: "a"
-  //   },
-  //   {
-  //     id: 2,
-  //     question: "Where was Boris Johnson born?",
-  //     answer_a: "London, United Kingdom",
-  //     answer_b: "Leeds, United Kingdom",
-  //     answer_c: "Belfast, United Kingdom",
-  //     answer_d: "New York City, USA",
-  //     correct_answer: "d"
-  //   },
-  //   {
-  //     id: 3,
-  //     question: "Which of the following Musicians died in 1981?",
-  //     answer_a: "John Lennon",
-  //     answer_b: "Bob Marley",
-  //     answer_c: "Muddy Waters",
-  //     answer_d: "Keith Moon",
-  //     correct_answer: "b"
-  //   }
-  // ];
 
-  /**
-   * Debug 'RESULTS' state with:
-   const initialState = {
-    answers: [
-      {questionId: 1, answer: "d"},
-      {questionId: 2, answer: "c"},
-      {questionId: 3, answer: "a"}
-    ],
-    showResults: false,
-   }
-   */
   
-
   const initialState = {
-    gameId: undefined,
-    questionId: undefined,
     questions: props.data.questions,
     currentQuestion: 0,
     currentAnswer: "",
@@ -94,8 +47,6 @@ const Trivia = (props) => {
     showResults: false,
     timeLeft: undefined,
     currentDate: new Date(),
-    isOpen: true,
-    saveConsent: true,
     error: ""
   };
 
@@ -107,10 +58,11 @@ const Trivia = (props) => {
   const [openDemo, setOpenDemo] = useState(false);
   const [firstOpen, setFirstOpen] = useState(false);
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
+  const [recap, setRecap] = useState(undefined);
+  const [gameId, setGameId] = useState(undefined);
+
   const refHandlers = useRef();
   const {
-    gameId,
-    questionId,
     questions,
     currentQuestion,
     currentAnswer,
@@ -119,8 +71,6 @@ const Trivia = (props) => {
     timeLeft,
     currentDate,
     error,
-    isOpen,
-    saveConsent
   } = state;
 
   const question = questions[currentQuestion];
@@ -137,46 +87,11 @@ const Trivia = (props) => {
     return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
   }
 
-  const calculateTimeLeft = () => {
-    
-    let year = currentDate.getFullYear();
-    const day = currentDate.getDate();
-    const hours = currentDate.getHours();
-    const month = currentDate.getMonth();
-    const minutes = currentDate.getMinutes();
-    const seconds = currentDate.getSeconds();
+  const verifyCallback = (recaptchaToken) => {
+    setRecap(recaptchaToken);
+  }
 
-    if (timeLeft === undefined){
-      return {
-        days: day,
-        month: month,
-        hours: hours,
-        minutes: minutes,
-        seconds: seconds, 
-        spentTime: 0
-      };
-    }
-  
-    const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`${timeLeft.month}/${timeLeft.day}/${timeLeft.year} ${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`), "Europe/Paris");
-    // console.log(difference);
-
-    if (difference > 0) {
-      return {
-        days: day,
-        month: month,
-        hours: hours,
-        minutes: minutes,
-        seconds: seconds, 
-        spentTime: difference
-      };
-    }
-
-    return timeLeft;
-  };
-
-  
   const renderResultsData = () =>
-    
     answers.map((answer) => {
       const question = questions.find(
         (question) => question.id === answer.questionId
@@ -211,30 +126,32 @@ const Trivia = (props) => {
   
 
   const restart = () => {
-    // axios.get("/api/trivia/getQuestions").then((resp) => {
-    //   console.log("resp.data!!!", resp.data);
-    //   dispatch({ type: RESET_QUIZ, questions: resp.data });
-    // });
     axios.get("/api/trivia/getQuestionsCSV").then((resp) => {
-      // console.log("resp.data!!!", resp.data);
       dispatch({ type: RESET_QUIZ, questions: resp.data });
     });
     
   };
 
 
-  const fetchDB = async () => {
+
+  const updateUserID = async () => {
 
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
 
+  }
+
+  const saveGameDB = async () => {
+
     const now = convertTZ(new Date(), "Europe/Paris");
-    const dateDB = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`
+    const dateDB = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+
     const getGame = {
       date : dateDB,
-      game_number: 1
+      game_number: 1,
+      token: recap
     };
 
     const requestOptions = {
@@ -244,56 +161,50 @@ const Trivia = (props) => {
     };
 
     const gameDBAux = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-    // console.log("gameDBAux", gameDBAux);
-
     if (gameDBAux.length === 0){
-      // console.log("gameDBAux.length", gameDBAux.length);
       await fetch("/api/createTriviaGame", requestOptions);
+      const gameDBid = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
+      setGameId(gameDBid[0].id);
+    }else {
+      setGameId(gameDBAux[0].id);
     }
+    
+  }
 
-    const gameDBid = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-    // console.log("gameDBid.length", gameDBid.length);
+  const saveInformation = () => {
+    answers.map((answer) => {
+      callDB(answer);
+    });
+  }
 
-    const getQuestion = {
-      game_id: gameDBid[0].id,
-      text: question.question,
-      answer_a : question.answer_a,
-      answer_b : question.answer_b,
-      answer_c : question.answer_c,
-      answer_d : question.answer_d,
-      correct_answer : question.correct_answer,
-    };
-
+  const callDB = async (getQuestion) => {
     const requestOptionsQ = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(getQuestion)
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(getQuestion)
     };
-
     const gameDBaux = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-
     if (gameDBaux.length === 0){
       await fetch("/api/createTriviaQuestion", requestOptionsQ);
-      const gameDBaux = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-      dispatch({ type: GET_QUESTION_ID, questionId: gameDBaux[0].id });
     }
 
-    const gameDBaux2= await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-    // console.log("gameDBaux2.length", gameDBaux2.length);
+    const gameDBaux2 = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
+    console.log("gameDBaux2",gameDBaux2[0].id);
 
     const questionScore = {
       user_id : localStorage.getItem("mptoken"),
-      game_id: gameDBid[0].id,
+      game_id: gameId,
       question_id: gameDBaux2[0].id, 
-      answer: question[`answer_${question.correct_answer}`],
-      correct_answer: question.correct_answer
+      answer: getQuestion.answer,
+      correct_answer: getQuestion.correct_answer,
+      token: recap
     };
 
     const requestOptionsS = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(questionScore)
-  };
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(questionScore)
+    };
     
     fetch("/api/createTriviaScore", requestOptionsS);
 
@@ -309,7 +220,19 @@ const Trivia = (props) => {
     }
 
     setTime(15);
-    const answer = { questionId: question.id, answer: currentAnswer };
+    const answer = { 
+                      questionId: question.id, 
+                      answer: currentAnswer,
+                      game_id: gameId,
+                      text: question.question,
+                      answer_a : question.answer_a,
+                      answer_b : question.answer_b,
+                      answer_c : question.answer_c,
+                      answer_d : question.answer_d,
+                      correct_answer : question.correct_answer,
+                      token: recap 
+                    };
+    
 
     answers.push(answer);
     
@@ -326,15 +249,13 @@ const Trivia = (props) => {
     }
     
     dispatch({ type: SET_SHOW_RESULTS, showResults: true });
+    if (answers.length === 10) {
+      saveInformation();
+    }
 
   };
 
   const checkConsent = async () => {
-
-    const token = localStorage.getItem("mptoken");
-    if (!token) {
-      localStorage.setItem("mptoken", uuidv4());;
-    }
 
     const requestOptions = {
         method: "POST",
@@ -345,6 +266,7 @@ const Trivia = (props) => {
       };
 
     const socioConsent = await fetch("/api/getParticipant", requestOptions).then(resp => resp.json());
+  
     if (socioConsent.length > 0) {
       setOpenDemo(false);
       setFirstOpen(false);
@@ -354,10 +276,8 @@ const Trivia = (props) => {
     }
 
     const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
-    
+
     if (consent.length > 0) {
-      dispatch({ type: UPDATE_CONSENT, isOpen: false });
-      dispatch({ type: SAVE_CONSENT, saveConsent: false });
       setOpenConsent(false);
       setFirstOpen(false);
     }else{
@@ -386,8 +306,11 @@ const Trivia = (props) => {
 
   useEffect(() => {
 
+    updateUserID();
+    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
     checkConsent();
-    fetchDB();
+    saveGameDB();
+
     const keyPressHandler = (e) => {
       if (e.key === "Enter") {
         dispatch({ type: SET_ERROR, error: "" });
@@ -413,11 +336,6 @@ const Trivia = (props) => {
   
   function Consent() {
     
-    const noacceptBtn = "Do not accept"; // | t("text.game.no-accept");
-    const acceptBtn = "Accept" // | t("text.game.accept");
-    const consentFormContent = "<p>Welcome to Pantheon.world. By participating in our online games, you agree that your participation is voluntary and that the information you provide can be used for research purposes. The goal of this project is to understand human collective memory. </p> <p>If you agree to participate, we will collect data on your answers, and you will have the option to answer a demographic questionnaire (age, gender, location, education, and languages). The data collected will be anonymized at the moment of collection using a one-way (irreversible) hashing method. Participation data will be stored in pantheon.world servers. Anonymized data may be released publicly in the future for research purposes. As a user you can decide to end your participation in the study at any moment (no minimum participation time is required). You will not be paid for playing these online games. New games will be made available on a daily basis.</p> <p>This proposal has been reviewed and approved by the TSE-IAST Review Board for Ethical Standards in Research.</p> <p>In case of questions, contact <a href=\"mailto:hello@centerforcollectivelearning.org\">hello@centerforcollectivelearning.org</a> </p> <p>Agree and Continue</p>" 
-    //| t("text.game.consent");
-
     return <Dialog
         isOpen={openConsent}
         id="dialogpopup"
@@ -425,17 +343,33 @@ const Trivia = (props) => {
         title={""}
       >
         <div className={classNames(Classes.DIALOG_BODY, "consent.consentform")}>
-          <div dangerouslySetInnerHTML={{__html: consentFormContent}} />
+
+          <div><p>Welcome to Pantheon.world. By participating in our online games, you agree that your participation is 
+            voluntary and that the information you provide can be used for research purposes. The goal of this 
+            project is to understand human collective memory. </p> 
+            <p>If you agree to participate, we will
+               collect data on your answers, and you will have the option to answer a demographic questionnaire
+                (age, gender, location, education, and languages). The data collected will be anonymized at the
+                 moment of collection using a one-way (irreversible) hashing method. Participation data will be 
+                 stored in pantheon.world servers. Anonymized data may be released publicly in the future for research 
+                 purposes. As a user you can decide to end your participation in the study at any moment (no minimum participation 
+                 time is required). You will not be paid for playing these online games. New games will be made available on a daily basis.</p> 
+                 <p>This proposal has been reviewed and approved by the TSE-IAST Review Board for Ethical Standards in Research.</p> 
+                 <p>In case of questions, contact 
+                  <a href="mailto:hello@centerforcollectivelearning.org">hello@centerforcollectivelearning.org</a>
+                  </p> 
+                  <p>Agree and Continue</p>
+          </div>
 
           <div className={"consent.options"}>
           <button
           className={classNames("consent.button", "consent.lite")}
           onClick={event =>  window.location.href='/data/faq'}
-          >{noacceptBtn}</button>
+          >Do not accept</button>
             <button
               className={"consent.button"}
               onClick={acceptClick}
-            >{acceptBtn}</button>
+            >Accept</button>
           </div>
         </div>
 
@@ -444,34 +378,34 @@ const Trivia = (props) => {
 
   function Demographic (){
     if (openDemo === true){
+
+      // setTime(15);
       return <DemographicForm 
         isOpenDemographicForm = {openDemo}
         setIsOpenDemographicForm = {setOpenDemo}
         universe = {"trivia"}
+        recap = {recap}
+        setRecap = {setRecap}
         t = {t}
       />
+
     }
   }
 
   const acceptClick = async () => {
-    
+
     if (openConsent){
 
+      updateUserID();
       setOpenConsent(false);
       setTime(15);
-
-      if (!localStorage.getItem("mptoken")) {
-        localStorage.setItem("mptoken", uuidv4());
-      }
-
-      dispatch({ type: UPDATE_CONSENT, isOpen: false });
-      dispatch({ type: SAVE_CONSENT, saveConsent: false });
 
       const data = {
         user_id: localStorage.getItem("mptoken"),
         locale: "en",
         universe: "trivia",
-        url: window.location.href
+        url: window.location.href,
+        token: recap
       };
 
       const requestOptions = {
@@ -533,7 +467,7 @@ const Trivia = (props) => {
       resultToShare = resultToShare + "🟥";
     }
 
-    const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`09/15/2022 00:00:00`), "Europe/Paris");
+    const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`10/06/2022 00:00:00`), "Europe/Paris");
     const gameIdShare = Math.ceil(difference/ (1000 * 60 * 60 * 24));
 
     return (
@@ -553,13 +487,7 @@ const Trivia = (props) => {
           <Toaster ref={refHandlers} usePortal={false} position={Position.BOTTOM} >
           </Toaster>
       </span>
-      // <button onClick={() => {
-      //   copyToClipboard(resultToShare + "\nhttps://pantheon.world/");
-        // addToast({
-        //   message: t("text.copied"),
-        //   intent: Intent.SUCCESS
-        // }, undefined);
-      // }}>{"Copied!"}</button>
+      
     );
 
     
@@ -567,12 +495,14 @@ const Trivia = (props) => {
 
   return (
     <TriviaContext.Provider value={{ state, dispatch }}>
+      <ReCaptcha
+        sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
+        verifyCallback={verifyCallback}
+      />
       {Demographic()}
       {Consent()}
       <Helmet title="Trivia" />
-      <div
-        // className={showResults ? "trivia-page trivia-results" : "trivia-page"}
-      >
+      <div>
         <h1 className="trivia-title">Trivia</h1>
         {showResults ? (
           <div className="results">
@@ -614,8 +544,6 @@ const Trivia = (props) => {
 
 Trivia.need = [
   fetchData("questions", "http://localhost:3300/api/trivia/getQuestionsCSV"),
-  // fetchData("questions", "http://localhost:3300/api/trivia/getQuestions"),
-  // fetchData("questions", "https://pantheon.world/api/getTriviaQuestion"),
 ];
 
 export default translate()(connect((state) => ({ data: state.data }), {})(Trivia));

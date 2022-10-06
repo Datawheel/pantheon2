@@ -3,16 +3,11 @@ import React from "react";
 import classNames from "classnames";
 import {Button, ButtonGroup, Classes, Dialog, Icon, Intent, Checkbox,  MenuItem, Position, Radio, RadioGroup, Slider, Toaster} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/select";
-import { MenuItem2 } from "@blueprintjs/popover2";
 import styles from "./DemographicForm.module.scss";
 import countries from "../../../../../../static/jsons/countries.json";
 import allUsaStates from "../../../../../../static/jsons/usastates.json";
-import {GoogleReCaptchaProvider, useGoogleReCaptcha} from "react-google-recaptcha-v3";
-import {connect, useDispatch} from "react-redux";
-import i18next from 'i18next';
-import { initReactI18next, withNamespaces } from "react-i18next";
-import Backend from 'i18next-http-backend';
 import {v4 as uuidv4} from "uuid";
+import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
 
 const range = (start, end) => Array(end - start + 1).fill().map((_, idx) => start + idx);
 const filterItemCountries = (query, item) => {
@@ -70,15 +65,16 @@ function CustomSelect(datap) {
     />
   </Select>;
 }
-
 export default function DemographicForm({
   universe,
   isOpenDemographicForm,
   setIsOpenDemographicForm,
+  recap,
+  setRecap,
   t
 }) {
   
-  const {executeRecaptcha} = useGoogleReCaptcha();
+  
   const [education, setEducation] = useState({id: 99, name: t("text.game.popup.skip")});
   const [countryCode, setCountryCode] = useState(undefined);
   const [usaStates, setUsaStates] = useState(undefined);
@@ -97,15 +93,8 @@ export default function DemographicForm({
 
   }
 
-  const saveInformation = (data) => {
-    const requestOptions = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(data)
-    };
-
-    const response = fetch("/api/createParticipant", requestOptions);
-    closeDemo();
+  const verifyCallback = (recaptchaToken) => {
+    setRecap(recaptchaToken);
   }
   
   const addToast = (toast, callback) => {
@@ -290,6 +279,10 @@ export default function DemographicForm({
     onClose={() => setIsOpenDemographicForm(false)}
     title={popupTitle}
   >
+    <ReCaptcha
+        sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
+        verifyCallback={verifyCallback}
+      />
     <div className={classNames(Classes.DIALOG_BODY, styles.popup, styles.popupwrapper)}>
       <p>{popupDescription}</p>
       <Question
@@ -377,6 +370,7 @@ export default function DemographicForm({
           filterable={false}
           resetOnSelect= {true}
           inputProps={{placeholder: popupFilter}}
+          defaultItem = {{id: 999, name: t("text.game.popup.skip")}}
           onItemSelect={countriesFiltered}
           // itemPredicate={filterItemCountries}
           onQueryChange={e => setCountryCode(e)}
@@ -437,14 +431,14 @@ export default function DemographicForm({
             }
 
             const locationId = usaStates === undefined ? 99 : usaStates.id * 1;
-            const recap = await executeRecaptcha("selfreported");
-            
-
+  
             const token = localStorage.getItem("mptoken");
             if (!token) {
               localStorage.setItem("mptoken", uuidv4());
             }
 
+            loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
+            
             const data = {
               user_id: localStorage.getItem("mptoken"),
               country_id: countryCode.id * 1,
@@ -458,7 +452,16 @@ export default function DemographicForm({
               universe: universe
             };
             // lang, location_id, education_id, country_id, age_id, sex_id, languages, user_id, token, universe
-            saveInformation(data);
+            
+            const requestOptions = {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify(data)
+            };
+        
+            await fetch("/api/createParticipant", requestOptions);
+            closeDemo();
+            
           }
           else {
             addToast({

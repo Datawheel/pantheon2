@@ -24,7 +24,8 @@ export default function Game({
   gameNumber,
   // localStorage,
   correctPersons,
-  setCorrectPersons
+  setCorrectPersons,
+  recap
 }) {
   
   const onPersonClick = (event) => {
@@ -63,7 +64,8 @@ export default function Game({
       sorted_person_2: savePersons[1].slug, 
       sorted_person_3: savePersons[2].slug, 
       sorted_person_4 :savePersons[3].slug, 
-      sorted_person_5: savePersons[4].slug
+      sorted_person_5: savePersons[4].slug,
+      token: recap
     }
 
     const requestOptions = {
@@ -77,13 +79,16 @@ export default function Game({
       await fetch("/api/createGame", requestOptions);
     }
     const gameDB2 = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
+    
     if (gameDB2.length > 0){
+
         const proposal = {
           game_id: gameDB2[0].id,
           trials: correctPersonsAux,
           solved :  isWin.get()? 1: 0,
           user_id : localStorage.getItem("mptoken"),
-          level :attempt.get()
+          level : attempt.get(),
+          token: recap
         };
     
         const requestOptions2 = {
@@ -91,7 +96,7 @@ export default function Game({
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(proposal)
         };
-        fetch("/api/createGameParticipation", requestOptions2);
+        await fetch("/api/createGameParticipation", requestOptions2);
       
     }
     
