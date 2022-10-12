@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from "react";
 import React from "react";
 import Person from "../Person/Person";
 import "./Game.css";
-import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
 
 export default function Game({
   MAX_ATTEMPTS,
@@ -22,24 +20,7 @@ export default function Game({
   cancelBtnRef,
   resultBlockRef,
   gameBlockRef,
-  gameDate,
-  gameNumber,
-  // localStorage,
-  correctPersons,
-  setCorrectPersons
 }) {
-  
-  const [recap, setRecap] = useState(undefined);
-  const [rKey, setRKey] = useState(10000);
-
-  const verifyCallback = (recaptchaToken) => {
-    setRecap(recaptchaToken);
-  }
-
-  useEffect(() => {
-    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
-  }, []);
-
   const onPersonClick = (event) => {
     const id = event.target.parentNode.id;
     const person = persons.find((person) => person.id === id);
@@ -56,65 +37,6 @@ export default function Game({
     cancelBtnRef.current.disabled = false;
   };
 
-  var saveInformation = async function(correctPersonsAux){
-    const savePersons = [...persons].sort((a, b) => {
-      if (a.birthyear === b.birthyear) {
-        const dateA = new Date(a.birthdate);
-        const dateB = new Date();
-
-        return dateA - dateB;
-      }
-
-      return a.birthyear - b.birthyear;
-    })
-
-    const gameDataSave = {
-      user_id: localStorage.getItem("mptoken"),
-      game_date: gameDate, 
-      game_number: gameNumber,
-      sorted_person_1: savePersons[0].slug, 
-      sorted_person_2: savePersons[1].slug, 
-      sorted_person_3: savePersons[2].slug, 
-      sorted_person_4 :savePersons[3].slug, 
-      sorted_person_5: savePersons[4].slug,
-      token: recap
-    }
-
-    const requestOptions = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(gameDataSave)
-    };
-
-    const gameDB = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
-    if (gameDB.length === 0){
-      await fetch("/api/createGame", requestOptions);
-    }
-    
-    const gameDB2 = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
-    
-    if (gameDB2.length > 0){
-
-        const proposal = {
-          game_share_id: gameDB2[0].id,
-          trials: correctPersonsAux,
-          solved :  isWin.get()? 1: 0,
-          user_id : localStorage.getItem("mptoken"),
-          level : attempt.get(),
-          token: recap
-        };
-    
-        const requestOptions2 = {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(proposal)
-        };
-        await fetch("/api/createGameParticipation", requestOptions2);
-      
-    }
-    
-  }
-
   const onCheckClick = () => {
     const newPersons = [...persons];
 
@@ -123,25 +45,24 @@ export default function Game({
 
     const cells = document.querySelectorAll(".card");
     const newBoard = [...board.get()];
-    const correctPersonsAux = [];
+    const correctPersons = [];
 
     newBoard[attempt.get()].map((cell, i) => {
       if (selectedPersons.get()[i].id === sortedPersons[i].id) {
         cell.isCorrect = true;
-        correctPersonsAux.push(true);
+        correctPersons.push(true);
         cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
           "card correct";
         resultToShare.set(resultToShare.get() + "🟩");
       } else {
-        correctPersonsAux.push(false);
+        correctPersons.push(false);
         cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
           "card wrong";
         resultToShare.set(resultToShare.get() + "🟥");
       }
     });
 
-    setCorrectPersons(correctPersonsAux)
-    isWin.set(correctPersonsAux.every((el) => el === true));
+    isWin.set(correctPersons.every((el) => el === true));
 
     if (isWin.get()) {
       resultBlockRef.current.style.display = "block";
@@ -159,10 +80,6 @@ export default function Game({
 
     checkBtnRef.current.disabled = true;
     cancelBtnRef.current.disabled = true;
-
-    setRKey(rKey+1);
-    saveInformation(correctPersonsAux);
-
   };
 
   const selectPerson = (person) => {
@@ -203,11 +120,6 @@ export default function Game({
 
   return (
     <main className="game" ref={gameBlockRef}>
-      <ReCaptcha
-        key={rKey}
-        sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
-        verifyCallback={verifyCallback}
-      />
       <div className="game-header">
         <div className="game-name">Who was born first?</div>
         <div className="game-goal">Guess the correct order</div>

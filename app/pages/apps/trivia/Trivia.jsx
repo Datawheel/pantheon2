@@ -1,7 +1,7 @@
-import React, { useReducer, useEffect, useRef, useState } from "react";
+import React, { useReducer, useEffect } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { Icon, Intent, Toaster, Position } from "@blueprintjs/core";
+import { Icon } from "@blueprintjs/core";
 import { fetchData } from "@datawheel/canon-core";
 import { Helmet } from "react-helmet-async";
 import Progress from "pages/apps/trivia/Progress";
@@ -9,11 +9,6 @@ import Question from "pages/apps/trivia/Question";
 import Answers from "pages/apps/trivia/Answers";
 import TriviaContext from "pages/apps/trivia/TriviaContext.js";
 import TriviaReducer from "pages/apps/trivia/TriviaReducer.js";
-import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm"
-import ConsentForm from "pages/game/birthle/components/ConsentForm/ConsentForm"
-import {v4 as uuidv4} from "uuid";
-import { translate } from "react-i18next";
-import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
 
 import {
   SET_ANSWERS,
@@ -21,61 +16,71 @@ import {
   SET_CURRENT_ANSWER,
   SET_ERROR,
   SET_SHOW_RESULTS,
-  RESET_QUIZ
+  RESET_QUIZ,
 } from "pages/apps/trivia/reducerTypes.js";
 
 import "pages/about/About.css";
 import "pages/apps/trivia/Trivia.css";
 
-function Countdown(props) {
-  
-  const {time} = props;
-    
-  return <div className="countdown.label"><img src="../images/icons/oec-trivia-timer.svg" />{time}</div>;
-  
-}
-
 const Trivia = (props) => {
+  // const questions = [
+  //   {
+  //     id: 1,
+  //     question: "What year was Tom Cruise born?",
+  //     answer_a: "1962",
+  //     answer_b: "1955",
+  //     answer_c: "1971",
+  //     answer_d: "1965",
+  //     correct_answer: "a"
+  //   },
+  //   {
+  //     id: 2,
+  //     question: "Where was Boris Johnson born?",
+  //     answer_a: "London, United Kingdom",
+  //     answer_b: "Leeds, United Kingdom",
+  //     answer_c: "Belfast, United Kingdom",
+  //     answer_d: "New York City, USA",
+  //     correct_answer: "d"
+  //   },
+  //   {
+  //     id: 3,
+  //     question: "Which of the following Musicians died in 1981?",
+  //     answer_a: "John Lennon",
+  //     answer_b: "Bob Marley",
+  //     answer_c: "Muddy Waters",
+  //     answer_d: "Keith Moon",
+  //     correct_answer: "b"
+  //   }
+  // ];
 
-  
+  /**
+   * Debug 'RESULTS' state with:
+   const initialState = {
+    answers: [
+      {questionId: 1, answer: "d"},
+      {questionId: 2, answer: "c"},
+      {questionId: 3, answer: "a"}
+    ],
+    showResults: false,
+   }
+   */
+
   const initialState = {
     questions: props.data.questions,
     currentQuestion: 0,
     currentAnswer: "",
     answers: [],
     showResults: false,
-    timeLeft: undefined,
-    currentDate: new Date(),
-    error: ""
+    error: "",
   };
 
-
-  const { t, i18n } = props;
-  const [time, setTime] = useState(15);
-  const timer = useRef(null);
-  const [openConsent, setOpenConsent] = useState(false);
-  const [oldScore, setOldScore] = useState(undefined);
-  const [saveConsent, setSaveConsent] = useState(false);
-  const [openDemo, setOpenDemo] = useState(false);
-  const [firstOpen, setFirstOpen] = useState(false);
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
-  const [recap, setRecap] = useState(undefined);
-  const [rKey, setRKey] = useState(10);
-  const recaptchaRef = useRef();
-  const refHandlers = useRef();
-  const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`10/06/2022 00:00:00`), "Europe/Paris");
-  const gameIdShare = Math.ceil(difference/ (1000 * 60 * 60 * 24));
-
-
-  
   const {
     questions,
     currentQuestion,
     currentAnswer,
     answers,
     showResults,
-    timeLeft,
-    currentDate,
     error,
   } = state;
 
@@ -89,24 +94,13 @@ const Trivia = (props) => {
     return <div className="error">{error}</div>;
   };
 
-  function convertTZ(date, tzString) {
-    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
-  }
-
-  const verifyCallback = (recaptchaToken) => {
-    setRecap(recaptchaToken);
-  }
-
-
-  
-
   const renderResultsData = () =>
     answers.map((answer) => {
       const question = questions.find(
-        (question) => question.id === answer.qid
+        (question) => question.id === answer.questionId
       );
-      const isCorrect = question.correct_answer === answer.ao;
-      clearTimeout(timer.current);
+      const isCorrect = question.correct_answer === answer.answer;
+
       return (
         <div
           className={
@@ -124,7 +118,7 @@ const Trivia = (props) => {
           {!isCorrect ? (
             <div className="result-question-answer a-incorrect">
               <Icon icon="cross" iconSize={12} />{" "}
-              {question[`answer_${answer.ao}`]}{" "}
+              {question[`answer_${answer.answer}`]}{" "}
               <span className="a-yours">(your answer)</span>
             </div>
           ) : null}
@@ -132,142 +126,51 @@ const Trivia = (props) => {
       );
     });
 
-  
+  const renderScore = () => {
+    const correctAnswers = answers.filter((answer) => {
+      const question = questions.find(
+        (question) => question.id === answer.questionId
+      );
+      return question.correct_answer === answer.answer;
+    });
+    return (
+      <span>
+        {correctAnswers.length} / {answers.length} correct
+      </span>
+    );
+  };
 
   const restart = () => {
-
-    axios.get("/api/trivia/getQuestionsCSV").then((resp) => {
+    axios.get("/api/trivia/getQuestions").then((resp) => {
+      // console.log("resp.data!!!", resp.data);
       dispatch({ type: RESET_QUIZ, questions: resp.data });
     });
-    
   };
-
-
-
-  const updateUserID = async () => {
-
-    const token = localStorage.getItem("mptoken");
-    if (!token) {
-      localStorage.setItem("mptoken", uuidv4());
-    }
-
-  }
-
-  const saveGameDB = async () => {
-
-    const now = convertTZ(new Date(), "Europe/Paris");
-    const dateDB = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-
-    const getGame = {
-      game_share_id: gameIdShare,
-      date : dateDB,
-      game_number: 1,
-      questions: questions
-    };
-
-    const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(getGame)
-    };
-
-    const triviaGame =  await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-    
-    if (triviaGame.length === 0) {
-      await fetch("/api/createTriviaGame", requestOptions);
-    }
-
-  }
-  
-  const callDB = async () => {
-
-    const questionScore = {
-      user_id : localStorage.getItem("mptoken"),
-      game_share_id: gameIdShare,
-      token: recap,
-      answers: answers
-    };
-
-    const requestOptionsS = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(questionScore)
-    };
-
-    await fetch("/api/createTriviaScore", requestOptionsS);
-
-  }
 
   const next = () => {
+    const answer = { questionId: question.id, answer: currentAnswer };
 
-    if (answers.length < 10) {
-
-      if (time > 0){
-        if (!currentAnswer) {
-          dispatch({ type: SET_ERROR, error: "Please select an option" });
-          return;
-        }
-      }
-
-      setRKey(rKey+1);
-      const answer = {
-        qid: question.id,
-        quid: question.questionUid,
-        ao : currentAnswer,
-        at : question[`answer_${currentAnswer}`],
-        cao : question.correct_answer,
-        cat : question[`answer_${question.correct_answer}`]
-      };
-
-      answers.push(answer);
-      setTime(15);
-      
-      dispatch({ type: SET_ANSWERS, answers });
-      dispatch({ type: SET_CURRENT_ANSWER, currentAnswer: "" });
-      
-      if (currentQuestion + 1 < questions.length) {
-        dispatch({
-          type: SET_CURRENT_QUESTION,
-          currentQuestion: currentQuestion + 1,
-        });
-        return;
-      }
-      
-      dispatch({ type: SET_SHOW_RESULTS, showResults: true });
-
-      if (answers.length === 10) {
-        callDB();
-      }
-    
+    if (!currentAnswer) {
+      dispatch({ type: SET_ERROR, error: "Please select an option" });
+      return;
     }
 
-    
+    answers.push(answer);
+    dispatch({ type: SET_ANSWERS, answers });
+    dispatch({ type: SET_CURRENT_ANSWER, currentAnswer: "" });
 
+    if (currentQuestion + 1 < questions.length) {
+      dispatch({
+        type: SET_CURRENT_QUESTION,
+        currentQuestion: currentQuestion + 1,
+      });
+      return;
+    }
+
+    dispatch({ type: SET_SHOW_RESULTS, showResults: true });
   };
 
-  useEffect(
-    () => {
-      timer.current = setTimeout(() => {
-        setTime(time - 1);
-        if (time === 0){
-          next();
-        }
-      }, 1 * 1000);
-
-      
-      return () => {
-        clearTimeout(timer.current);
-      };
-    },
-    [time]
-  );
-
   useEffect(() => {
-
-    updateUserID();
-    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
-    saveGameDB();
-
     const keyPressHandler = (e) => {
       if (e.key === "Enter") {
         dispatch({ type: SET_ERROR, error: "" });
@@ -286,161 +189,27 @@ const Trivia = (props) => {
     return () => {
       window.removeEventListener("keydown", keyPressHandler);
     };
-
-    
-
   }, [currentAnswer]);
-  
-  function Consent() {
 
-    return <ConsentForm 
-      isOpen={openConsent} 
-      setIsOpenConsentForm ={setOpenConsent}
-      universe={"trivia"}
-      saveConsent = {saveConsent}
-      setSaveConsent = {setSaveConsent}
-      t = {t}
-      />
-  }
-
-  function Demographic () {
-
-    return <DemographicForm 
-      isOpenDemographicForm = {openDemo}
-      setIsOpenDemographicForm = {setOpenDemo}
-      isOpen={openConsent}
-      universe = {"trivia"}
-      t = {t}
-    />
-    
-  }
-
-
-  const acceptClick = async () => {
-
-    if (openConsent){
-
-      updateUserID();
-      setOpenConsent(false);
-      setTime(15);
-
-      
-      const data = {
-        user_id: localStorage.getItem("mptoken"),
-        locale: "en",
-        universe: "trivia",
-        url: window.location.href,
-        token: recap
-      };
-      
-      const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-      };
-      
-      await fetch("/api/createConsent", requestOptions);
-
-    }
-    
-  }
-
-  function copyToClipboard(text) {
-    let dummy = document.createElement("textarea");
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand("copy");
-    document.body.removeChild(dummy);
-  }
-
-  const addToast = (toast, callback) => {
-    
-    const defaultToast = {
-      className: "toast-sucess",
-      timeout: 5000,
-      intent: Intent.SUCCESS,
-      position: Position.BOTTOM
-    };
-
-    const toastOutput = Object.assign(defaultToast, toast);
-    refHandlers.current.show(toastOutput);
-  };
-
-  const renderScore = () => {
-    let resultToShare = "";
-    const correctAnswers = answers.filter((answer) => {
-      const question = questions.find(
-        (question) => question.id === answer.qid
-      );
-
-      if (question.correct_answer === answer.ao){
-        resultToShare = resultToShare + "🟩";
-      }
-      
-      return question.correct_answer === answer.ao;
-    });
-
-    while(resultToShare.length !== 20) {
-      resultToShare = resultToShare + "🟥";
-    }
-
-    return (
-      <span>
-        {correctAnswers.length} / {answers.length} correct
-        <br/>
-        {/* {resultToShare}
-        <br/> */}
-        <button classname="sharebutton" onClick = {() => {
-            copyToClipboard("Pantheon Trivia "+ gameIdShare + "\n"+ resultToShare + correctAnswers.length + "0%" +
-              "\nhttps://pantheon.world/app/trivia" +"\n#pantheon #trivia" +"\nWhat about you?");
-            addToast({
-              message: "Copied",
-              intent: Intent.SUCCESS
-            }, undefined);
-          }}>Share</button>
-          <Toaster ref={refHandlers} usePortal={false} position={Position.BOTTOM} >
-          </Toaster>
-      </span>
-      
-    );
-
-    
-  };
-
-  function getRecaptcha() {
-  
-    return <ReCaptcha 
-      key={rKey}
-      ref={recaptchaRef} 
-      sitekey={'6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D'} 
-      verifyCallback={verifyCallback} />
-  }
-  
   return (
     <TriviaContext.Provider value={{ state, dispatch }}>
-
-
-      {getRecaptcha()}
-      {Demographic()}
-      {Consent()}
       <Helmet title="Trivia" />
-      <div>
-        <h1 className="trivia-title">Trivia</h1>
+      <div
+        className={showResults ? "trivia-page trivia-results" : "trivia-page"}
+      >
+        {/* <h1 className="trivia-title">Trivia</h1> */}
         {showResults ? (
           <div className="results">
             <h2>Results: {renderScore()}</h2>
             <div>{renderResultsData()}</div>
-            {/* <div className="continue">
+            <div className="continue">
               <button className="btn-continue" onClick={restart}>
                 Restart
               </button>
-            </div> */}
+            </div>
           </div>
         ) : (
           <div className="quiz">
-            <div className="countdown">
-            <Countdown time={time} />
             <Question />
             <Progress total={questions.length} current={currentQuestion + 1} />
             {renderError()}
@@ -454,18 +223,16 @@ const Trivia = (props) => {
               >
                 Confirm and Continue
               </button>
-              </div>
             </div>
           </div>
         )}
       </div>
-      <br/> <br/> <br/>
     </TriviaContext.Provider>
   );
 };
 
 Trivia.need = [
-  fetchData("questions", "http://localhost:3300/api/trivia/getQuestionsCSV"),
+  fetchData("questions", "https://pantheon.world/api/trivia/getQuestions"),
 ];
 
-export default translate()(connect((state) => ({ data: state.data }), {})(Trivia));
+export default connect((state) => ({ data: state.data }), {})(Trivia);

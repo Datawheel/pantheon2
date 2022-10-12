@@ -6,9 +6,6 @@
   box-sizing: border-box;
 }
 
-.logoCL{
-  width:45px;
-}
 .global-footer {
   @mixin max-container-width;
   display: flex;

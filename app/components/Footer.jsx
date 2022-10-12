@@ -69,9 +69,6 @@ const Footer = () =>
           <a href="https://www.datawheel.us/" target="_blank" rel="noopener noreferrer">
             <img src="/images/logos/logo_datawheel.png" alt="Datawheel" />
           </a>
-          <a href="https://centerforcollectivelearning.org/" target="_blank" rel="noopener noreferrer">
-            <img className="logoCL" src="/images/logos/logo_CL.svg" alt="CL" />
-          </a>
         </li>
       </ul>
       <ul className="items share">

@@ -218,7 +218,6 @@ class Home extends Component {
 
     return (
       <div className="home-container">
-        
         <img className="bg-design" src="/images/home/printing.png" />
         <img className="bg-design bg-design-r" src="/images/home/film.png" />
 
@@ -252,7 +251,7 @@ class Home extends Component {
             </div>
           </div>
         </div>
-        
+
         <div className="profile-grid">
           <div className="grid-title-container">
             <h3 className="grid-title">Trending Profiles Today</h3>
