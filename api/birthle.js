@@ -1,6 +1,5 @@
 const axios = require("axios");
-const CSV_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_eevfm1sY1Y9nBgzsE7uCHfL3P4HyRd93Q9MCYH3HTce6TV7WUfTnWlvIRCm7_vSCDUOGo5isu-gK/pub?output=tsv";
+const CSV_URL = process.env.REACT_APP_GAME_CSV_URL;
 
 function isNumeric(value) {
   return /^-?\d+$/.test(value);

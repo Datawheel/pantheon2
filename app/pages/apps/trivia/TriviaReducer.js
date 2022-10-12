@@ -7,6 +7,10 @@ import {
   RESET_QUIZ
 } from "pages/apps/trivia/reducerTypes.js";
 
+function convertTZ(date, tzString) {
+  return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+}
+
 /** */
 function TriviaReducer(state, action) {
   switch (action.type) {
@@ -36,12 +40,26 @@ function TriviaReducer(state, action) {
         answers: action.answers
       };
     case RESET_QUIZ:
+      const date = convertTZ(new Date(), "Europe/Paris");
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+      const month = date.getMonth();
       return {
         ...state,
         answers: [],
         currentQuestion: 0,
         currentAnswer: "",
         showResults: false,
+        timeLeft: {
+          days: day,
+          month: month,
+          hours: hours,
+          minutes: minutes,
+          seconds: seconds,
+          spentTime : 0
+        },
         error: "",
         questions: action.questions
       };
