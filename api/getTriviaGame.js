@@ -5,12 +5,12 @@ module.exports = function(app) {
 
     const {db} = app.settings;
 
-    app.get("/api/getTriviaGame", async(req, res) => {
+    app.post("/api/getTriviaGame", async(req, res) => {
         
         const {date, game_number} = req.body;
 
-        const trivia_game = (await db.trivia_game.findAll({where: {"date": date, "game_number" :game_number}})).map(item => item.toJSON());
-        res.json({trivia_game});
+        const trivia_game = await db.trivia_game.findAll({where: {"date": date, "game_number" :game_number}});
+        res.status(200).json(trivia_game);
 
     });
   

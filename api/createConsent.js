@@ -9,7 +9,7 @@ module.exports = function(app) {
   app.post("/api/createConsent", async(req, res) => {
       
       const {user_id, universe, locale, url, token} = req.body;
-
+      
       const publicIpV4 = req.headers["x-forwarded-for"] ||
           req.socket.remoteAddress ||
           null;

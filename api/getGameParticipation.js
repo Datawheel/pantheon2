@@ -5,7 +5,7 @@ module.exports = function(app) {
 
     const {db} = app.settings;
 
-    app.get("/api/getGameParticipation", async(req, res) => {
+    app.post("/api/getGameParticipation", async(req, res) => {
         
         const {user_id} = req.body;
 
@@ -15,8 +15,8 @@ module.exports = function(app) {
 
         const ip_hash = hmacSHA512(publicIpV4, REACT_APP_GAME_SECRET_KEY).toString();
 
-        const game_participation = (await db.game_participation.findAll({where: {"user_id": user_id, "ip_hash" :ip_hash}})).map(item => item.toJSON());
-        res.json({game_participation});
+        const game_participation = await db.game_participation.findAll({where: {"user_id": user_id, "ip_hash" :ip_hash}});
+        res.status(200).json(game_participation);
 
     });
   

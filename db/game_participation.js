@@ -22,7 +22,7 @@ module.exports = function(sequelize, db) {
             type: db.INTEGER
         },
         trials : {
-            type: db.STRING
+            type: db.JSON
         },
         solved : {
             type: db.INTEGER
@@ -42,7 +42,7 @@ module.exports = function(sequelize, db) {
       {
         updatedAt: false,
         freezeTableName: true,
-        tableName: "game_participant"
+        tableName: "game_participation"
       }
     );
   

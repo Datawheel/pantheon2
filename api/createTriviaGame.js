@@ -8,14 +8,9 @@ module.exports = function(app) {
 
   app.post('/api/createTriviaGame', async function (req, res) {
   
-    const {date, game_number, token} = req.body;
+    const {date, game_number} = req.body;
 
-    const secretKey = process.env.REACT_APP_GAME_RECAPTCHA_SECRET_KEY_V3;
-    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
-    const recaptchaV3 = await axios.get(url).then((resp) => resp.data);
-    const {success, challenge_ts, hostname, score, action} = recaptchaV3;
-
-    await db.trivia_game.create({"date": date, "game_number" :game_number, "score_bot": score}).catch(err => {
+    await db.trivia_game.create({"date": date, "game_number" :game_number}).catch(err => {
       console.error(err);
       res.status(500).json({
         success: false
