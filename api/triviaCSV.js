@@ -35,8 +35,12 @@ function capitalizeFirstLetter(text) {
 }
 
 
-module.exports = function (app) {
+module.exports = function(app) {
+
+  const {db} = app.settings;
+
   app.get("/api/trivia/getQuestionsCSV", async function (req, res, next) {
+
     const currDate = new Date();
     const date = `${currDate.getFullYear()}-${currDate.getMonth() + 1}-${currDate.getDate()}`
     const data = await axios.get(REACT_APP_TRIVIA_GAME).then((resp) => resp.data);
@@ -66,7 +70,6 @@ module.exports = function (app) {
     });
     // str[0].toUpperCase() + str.slice(1)
     const shuffledQuestions = shuffleArray(questions).slice(0,16).map((q, i) => ({...q, id: i + 1}));
-
     res.status(200).json(shuffledQuestions);
   });
 };

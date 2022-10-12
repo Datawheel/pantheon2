@@ -20,7 +20,7 @@ module.exports = function(app) {
     const recaptchaV3 = await axios.get(url).then((resp) => resp.data);
     const {success, challenge_ts, hostname, score, action} = recaptchaV3;
     
-    await db.game_participation.create({"user_id": user_id, "ip_hash": ip_hash, "game_id" :game_id, "question_id": question_id, "answer": answer, "correct_answer": correct_answer, "score_bot": score}).catch(err => {
+    await db.trivia_score.create({"user_id": user_id, "ip_hash": ip_hash, "game_id" :game_id, "question_id": question_id, "answer": answer, "correct_answer": correct_answer, "score_bot": score}).catch(err => {
       console.error(err);
       res.status(500).json({
         success: false

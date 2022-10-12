@@ -1,9 +1,10 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import React from "react";
 import {Classes, Dialog} from "@blueprintjs/core";
 import classNames from "classnames";
 import styles from "./ConsentForm.module.scss";
 import {v4 as uuidv4} from "uuid";
+import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
 
 export default function ConsentForm({
   isOpen,
@@ -13,14 +14,22 @@ export default function ConsentForm({
   universe,
   saveConsent,
   setSaveConsent,
-  recap,
   t
 }) {
 
+  const [recap, setRecap] = useState(undefined);
+  const [rKey, setRKey] = useState(0);
   const consentText = t("text.game.popup.consent-form");
+
+  const verifyCallback = (recaptchaToken) => {
+    setRecap(recaptchaToken);
+  }
 
   const acceptClick = async () => {
 
+    setRKey(rKey+1);
+    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
+    
     setIsOpenConsentForm(false);
     setSaveConsent(false);
 
@@ -43,6 +52,7 @@ export default function ConsentForm({
   }
 
   const fetchDB = async () => {
+
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
@@ -58,7 +68,7 @@ export default function ConsentForm({
       };
 
     const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
-    
+
     if (consent.length > 0) {
       setSaveConsent(false);
       setIsOpenConsentForm(false);
@@ -69,7 +79,8 @@ export default function ConsentForm({
   }
 
   useEffect(() => {
-    
+
+    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
     fetchDB();
 
   }, []);
@@ -81,6 +92,11 @@ export default function ConsentForm({
       isCloseButtonShown={false}
       title={""}
     >
+      <ReCaptcha
+        key={rKey}
+        sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
+        verifyCallback={verifyCallback}
+      />
       <div className={classNames(Classes.DIALOG_BODY, styles.consentform)}>
       <div className={styles.description} dangerouslySetInnerHTML={{__html:consentText}} />
 

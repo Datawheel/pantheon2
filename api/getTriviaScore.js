@@ -5,9 +5,9 @@ module.exports = function(app) {
 
     const {db} = app.settings;
 
-    app.post("/api/getParticipant", async(req, res) => {
+    app.post("/api/getTriviaScore", async(req, res) => {
         
-        const {user_id} = req.body;
+        const {user_id, question_id, answer} = req.body;
 
         const publicIpV4 = req.headers["x-forwarded-for"] ||
             req.socket.remoteAddress ||
@@ -15,8 +15,8 @@ module.exports = function(app) {
 
         const ip_hash = hmacSHA512(publicIpV4, REACT_APP_GAME_SECRET_KEY).toString();
 
-        const participant = await db.participant.findAll({where: {"user_id": user_id, "ip_hash" :ip_hash}});
-        res.status(200).json(participant);
+        const trivia_score = await db.trivia_score.findAll({where: {"user_id": user_id, "ip_hash" :ip_hash, "question_id": question_id, "answer": answer}});
+        res.status(200).json(trivia_score);
 
 
     });

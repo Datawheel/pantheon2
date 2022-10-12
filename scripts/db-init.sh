@@ -17,9 +17,10 @@ sudo nano /etc/postgresql/12/main/pg_hba.conf
 ALTER USER user_p2 PASSWORD 'p@nth30_db_2022';
 CREATE ROLE user_p2 WITH ENCRYPTED PASSWORD 'p@nth30_db_2022';
 CREATE DATABASE db_pantheon_games OWNER user_p2;
-GRANT ALL PRIVILEGES ON DATABASE db_project_jd TO user_jd;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user_jd;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO user_jd;
+
+GRANT ALL PRIVILEGES ON DATABASE db_pantheon_games TO user_p2;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user_p2;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO user_p2;
 
 createdb db_pantheon_games
 psql -d db_pantheon_games
@@ -104,7 +105,6 @@ CREATE TABLE IF NOT EXISTS trivia_game(
     id SERIAL PRIMARY KEY,
     date VARCHAR NOT NULL,
     game_number INT,
-    score_bot DECIMAL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS trivia_game(
 CREATE TABLE IF NOT EXISTS trivia_score(
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
+    ip_hash VARCHAR NOT NULL,
     game_id INT,
     question_id INT,
     answer VARCHAR NOT NULL,
@@ -131,7 +132,6 @@ CREATE TABLE IF NOT EXISTS trivia_question(
     answer_c VARCHAR NOT NULL,
     answer_d VARCHAR NOT NULL,
     correct_answer VARCHAR NOT NULL,
-    score_bot DECIMAL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -148,3 +148,14 @@ DELETE FROM trivia_score;
 DELETE FROM trivia_question;
 
 pg_dump -d db_pantheon_games -h 127.0.0.1 -U user_p2 -Fc -f db.sql
+
+
+DROP TABLE participant;
+DROP TABLE consent;
+
+DROP TABLE game;
+DROP TABLE game_participation;
+
+DROP TABLE trivia_game;
+DROP TABLE trivia_score;
+DROP TABLE trivia_question;

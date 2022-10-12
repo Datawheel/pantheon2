@@ -1,6 +1,6 @@
 module.exports = function(sequelize, db) {
 
-    return sequelize.define("trivia_score",
+    return sequelize.define("trivia_question",
       {
         id: {
           type: db.INTEGER,
@@ -27,10 +27,6 @@ module.exports = function(sequelize, db) {
         },
         correct_answer : {
           type: db.TEXT
-        }, 
-        score_bot: {
-            allowNull: false,
-            type: db.FLOAT
         },
         createdAt: {
           field: 'created_at',

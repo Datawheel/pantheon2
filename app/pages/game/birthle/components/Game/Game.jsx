@@ -1,6 +1,8 @@
+import { useEffect, useRef, useState } from "react";
 import React from "react";
 import Person from "../Person/Person";
 import "./Game.css";
+import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
 
 export default function Game({
   MAX_ATTEMPTS,
@@ -24,10 +26,20 @@ export default function Game({
   gameNumber,
   // localStorage,
   correctPersons,
-  setCorrectPersons,
-  recap
+  setCorrectPersons
 }) {
   
+  const [recap, setRecap] = useState(undefined);
+  const [rKey, setRKey] = useState(10000);
+
+  const verifyCallback = (recaptchaToken) => {
+    setRecap(recaptchaToken);
+  }
+
+  useEffect(() => {
+    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
+  }, []);
+
   const onPersonClick = (event) => {
     const id = event.target.parentNode.id;
     const person = persons.find((person) => person.id === id);
@@ -75,10 +87,12 @@ export default function Game({
     };
 
     const gameDB = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
-    if (gameDB.length == 0){
+    if (gameDB.length === 0){
       await fetch("/api/createGame", requestOptions);
     }
+    
     const gameDB2 = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
+    console.log("game_id", gameDB2[0].id);
     
     if (gameDB2.length > 0){
 
@@ -90,6 +104,7 @@ export default function Game({
           level : attempt.get(),
           token: recap
         };
+        console.log("proposal", proposal);
     
         const requestOptions2 = {
           method: "POST",
@@ -147,6 +162,7 @@ export default function Game({
     checkBtnRef.current.disabled = true;
     cancelBtnRef.current.disabled = true;
 
+    setRKey(rKey+1);
     saveInformation(correctPersonsAux);
 
   };
@@ -189,6 +205,11 @@ export default function Game({
 
   return (
     <main className="game" ref={gameBlockRef}>
+      <ReCaptcha
+        key={rKey}
+        sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
+        verifyCallback={verifyCallback}
+      />
       <div className="game-header">
         <div className="game-name">Who was born first?</div>
         <div className="game-goal">Guess the correct order</div>

@@ -2,14 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import "./Birthle.css";
 import fetchSlugs from "./fetchSlugs";
 import fetchPersons from "./fetchPersons";
-import Result from "pages/game/birthle/components/Result/Result";
-import Game from "pages/game/birthle//components/Game/Game";
 import useTrait from "./useTrait";
-import ConsentForm from "pages/game/birthle/components/ConsentForm/ConsentForm";
-import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm"
 import {v4 as uuidv4} from "uuid";
 import { translate } from "react-i18next";
-import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
+
+import Result from "pages/game/birthle/components/Result/Result";
+import Game from "pages/game/birthle/components/Game/Game";
+import ConsentForm from "pages/game/birthle/components/ConsentForm/ConsentForm";
+import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm"
+
 
 function convertTZ(date, tzString) {
   return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
@@ -35,7 +36,6 @@ function Birthle(props) {
 
   const [persons, setPersons] = useState([]);
   const [sortedPersons, setSortedPersons] = useState([]);
-  const [recap, setRecap] = useState(undefined);
   const fetchError = useTrait(false);
   const selectedPersons = useTrait([]);
   const board = useTrait(boardDefault);
@@ -63,10 +63,6 @@ function Birthle(props) {
   const gameNumber = 1; // (hour >= 2 && hour < 14) ? 1 : 2;
   const gameDate = `${year}-${month}-${day}`; // 2022-5-25
   
-  const verifyCallback = (recaptchaToken) => {
-    setRecap(recaptchaToken);
-  }
-
   const fetchData = async () => {
     const slugs = await fetchSlugs();
     const persons = await fetchPersons(slugs);
@@ -106,7 +102,6 @@ function Birthle(props) {
       localStorage.setItem("mptoken", uuidv4());
     }
     setUserId(localStorage.getItem("mptoken"));
-    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
 
     board.set(boardDefault);
     selectedPersons.set([]);
@@ -123,17 +118,12 @@ function Birthle(props) {
 
   return (
     <div className="birthle">
-      <ReCaptcha
-        sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
-        verifyCallback={verifyCallback}
-      />
       <DemographicForm 
         setIsOpenDemographicForm={setIsOpenDemographicForm}
         isOpenDemographicForm = {isOpenDemographicForm}
+        isOpen={isOpenConsentForm} 
         universe = {"birthle"}
         t = {t}
-        recap = {recap}
-        setRecap = {setRecap}
         />
       <ConsentForm 
       isOpen={isOpenConsentForm} 
@@ -142,9 +132,8 @@ function Birthle(props) {
       universe={"birthle"}
       saveConsent = {saveConsent}
       setSaveConsent = {setSaveConsent}
-      recap = {recap}
       t = {t}
-      /> 
+      />
       <Game
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         N_PERSONS={N_PERSONS}
@@ -168,8 +157,7 @@ function Birthle(props) {
         userId={userId}
         correctPersons = {correctPersons}
         setCorrectPersons = {setCorrectPersons}
-        recap = {recap}
-      />
+      /> 
       <Result
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         sortedPersons={sortedPersons}

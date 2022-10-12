@@ -28,7 +28,7 @@ module.exports = function(sequelize, db) {
             type: db.INTEGER
         },
         language_ids : {
-            type: db.STRING
+            type: db.JSON
         },
         education_id : {
             type: db.INTEGER

@@ -4,8 +4,8 @@ import classNames from "classnames";
 import {Button, ButtonGroup, Classes, Dialog, Icon, Intent, Checkbox,  MenuItem, Position, Radio, RadioGroup, Slider, Toaster} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/select";
 import styles from "./DemographicForm.module.scss";
-import countries from "../../../../../../static/jsons/countries.json";
-import allUsaStates from "../../../../../../static/jsons/usastates.json";
+import countries from "static/jsons/countries.json";
+import allUsaStates from "static/jsons/usastates.json";
 import {v4 as uuidv4} from "uuid";
 import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
 
@@ -69,8 +69,7 @@ export default function DemographicForm({
   universe,
   isOpenDemographicForm,
   setIsOpenDemographicForm,
-  recap,
-  setRecap,
+  isOpen,
   t
 }) {
   
@@ -78,8 +77,10 @@ export default function DemographicForm({
   const [education, setEducation] = useState({id: 99, name: t("text.game.popup.skip")});
   const [countryCode, setCountryCode] = useState(undefined);
   const [usaStates, setUsaStates] = useState(undefined);
+  const [recap, setRecap] = useState(undefined);
   const [lang, setLang]= useState("en");
   const [languages, setLanguages] = useState([]);
+  const [rKey, setRKey] = useState(5);
   const [age, setAge] = useState({id: 99, name: t("text.game.popup.skip")});
   const [sex, setSex] = useState({id: 99, name: t("text.game.popup.skip")});
 
@@ -112,11 +113,12 @@ export default function DemographicForm({
   };
 
   const fetchDB = async () => {
-
+    setRKey(rKey+1);
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
+
     const gameDataSave = {
       user_id: localStorage.getItem("mptoken")
     }
@@ -125,15 +127,17 @@ export default function DemographicForm({
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(gameDataSave)
       };
+    
     const socioConsent = await fetch("/api/getParticipant", requestOptions).then(resp => resp.json());
-    if (socioConsent.length > 0) {
-      setIsOpenDemographicForm(false);
-    }else{
+    if (socioConsent.length === 0 && !isOpen) {
       setIsOpenDemographicForm(true);
+    }else{
+      setIsOpenDemographicForm(false);
     }
   }
   useEffect(() => {
 
+    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
     fetchDB();
 
   }, []);
@@ -204,7 +208,6 @@ export default function DemographicForm({
   const USAstatesFiltered = usaStates ?
   USAtmpLocation.filter(d => filterItemCountries(usaStates, d.name) || filterItemCountries(usaStates, d.name)).slice(0, 200) :
   USAtmpLocation.slice(0, 200);
-
     
 
   const refHandlers = useRef();
@@ -280,6 +283,7 @@ export default function DemographicForm({
     title={popupTitle}
   >
     <ReCaptcha
+      key={rKey}
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />
@@ -452,15 +456,16 @@ export default function DemographicForm({
               universe: universe
             };
             // lang, location_id, education_id, country_id, age_id, sex_id, languages, user_id, token, universe
-            
+
             const requestOptions = {
               method: "POST",
               headers: {"Content-Type": "application/json"},
               body: JSON.stringify(data)
             };
-        
-            await fetch("/api/createParticipant", requestOptions);
+            
             closeDemo();
+            await fetch("/api/createParticipant", requestOptions);
+            
             
           }
           else {
