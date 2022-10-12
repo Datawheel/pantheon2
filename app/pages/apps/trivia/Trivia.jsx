@@ -11,8 +11,6 @@ import TriviaContext from "pages/apps/trivia/TriviaContext.js";
 import TriviaReducer from "pages/apps/trivia/TriviaReducer.js";
 import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm"
 import ConsentForm from "pages/game/birthle/components/ConsentForm/ConsentForm"
-import {Classes, Dialog} from "@blueprintjs/core";
-import classNames from "classnames";
 import {v4 as uuidv4} from "uuid";
 import { translate } from "react-i18next";
 import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
