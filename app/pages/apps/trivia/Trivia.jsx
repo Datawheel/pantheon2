@@ -174,7 +174,6 @@ const Trivia = (props) => {
     };
 
     const triviaGame =  await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-    console.log("triviaGame", triviaGame.length);
     
     if (triviaGame.length === 0) {
       await fetch("/api/createTriviaGame", requestOptions);
@@ -196,7 +195,7 @@ const Trivia = (props) => {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(questionScore)
     };
-    console.log("questionScore", questionScore);
+
     await fetch("/api/createTriviaScore", requestOptionsS);
 
   }
@@ -350,11 +349,7 @@ const Trivia = (props) => {
 
   function copyToClipboard(text) {
     let dummy = document.createElement("textarea");
-    // to avoid breaking orgain page when copying more words
-    // cant copy when adding below this code
-    // dummy.style.display = 'none'
     document.body.appendChild(dummy);
-    //Be careful if you use texarea. setAttribute('value', value), which works with "input" does not work with "textarea". – Eduard
     dummy.value = text;
     dummy.select();
     document.execCommand("copy");
@@ -384,9 +379,6 @@ const Trivia = (props) => {
       if (question.correct_answer === answer.ao){
         resultToShare = resultToShare + "🟩";
       }
-      // if ((resultToShare.length === Math.ceil(questions.length/2)) || (resultToShare.length === questions.length)){
-      //   resultToShare = resultToShare + "\n";
-      // }
       
       return question.correct_answer === answer.ao;
     });
