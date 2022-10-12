@@ -1,6 +1,3 @@
-const hmacSHA512 = require("crypto-js/hmac-sha512");
-const {PANTHEON_PGURI,REACT_APP_GAME_SECRET_KEY} = process.env;
-
 module.exports = function(app) {
 
     const {db} = app.settings;
@@ -9,13 +6,7 @@ module.exports = function(app) {
         
         const {user_id} = req.body;
 
-        const publicIpV4 = req.headers["x-forwarded-for"] ||
-            req.socket.remoteAddress ||
-            null;
-
-        const ip_hash = hmacSHA512(publicIpV4, REACT_APP_GAME_SECRET_KEY).toString();
-
-        const game_participation = await db.game_participation.findAll({where: {"user_id": user_id, "ip_hash" :ip_hash}});
+        const game_participation = await db.game_participation.findAll({where: {"user_id": user_id}});
         res.status(200).json(game_participation);
 
     });

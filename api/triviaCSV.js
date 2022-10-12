@@ -59,6 +59,7 @@ module.exports = function(app) {
         const correct_answer_ = letters[random_position];
         const other_answers = [capitalizeFirstLetter(obj[0]),capitalizeFirstLetter(obj[1]),capitalizeFirstLetter(obj[2])]
         questions.push({
+            questionUid: obj.id,
             question: obj.question,
             answer_a: correct_answer_==="a"? capitalizeFirstLetter(obj["correct_answer"]) : other_answers.pop(),
             answer_b: correct_answer_==="b"? capitalizeFirstLetter(obj["correct_answer"]) : other_answers.pop(),
@@ -69,7 +70,7 @@ module.exports = function(app) {
         
     });
     // str[0].toUpperCase() + str.slice(1)
-    const shuffledQuestions = shuffleArray(questions).slice(0,16).map((q, i) => ({...q, id: i + 1}));
+    const shuffledQuestions = shuffleArray(questions).slice(0,10).map((q, i) => ({...q, id: i + 1}));
     res.status(200).json(shuffledQuestions);
   });
 };

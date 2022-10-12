@@ -15,18 +15,12 @@ module.exports = function(sequelize, db) {
             allowNull: false,
             type: db.STRING
         },
-        game_id : {
+        game_share_id : {
             type: db.INTEGER
         },
-        question_id : {
-            type: db.INTEGER
+        answers : {
+            type: db.JSON
         },
-        answer : {
-            type: db.TEXT
-        },
-        correct_answer : {
-          type: db.TEXT
-        }, 
         score_bot: {
             allowNull: false,
             type: db.FLOAT
