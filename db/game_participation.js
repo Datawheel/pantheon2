@@ -18,7 +18,7 @@ module.exports = function(sequelize, db) {
         universe: {
             type: db.STRING
         },
-        game_id : {
+        game_share_id : {
             type: db.INTEGER
         },
         trials : {

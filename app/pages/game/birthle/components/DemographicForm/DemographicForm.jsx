@@ -129,7 +129,7 @@ export default function DemographicForm({
       };
     
     const socioConsent = await fetch("/api/getParticipant", requestOptions).then(resp => resp.json());
-    if (socioConsent.length === 0 && !isOpen) {
+    if (socioConsent.length === 0) {
       setIsOpenDemographicForm(true);
     }else{
       setIsOpenDemographicForm(false);
@@ -196,7 +196,6 @@ export default function DemographicForm({
   const tmpLocation = countries
     ? countries.concat([{id: 998, name: t("text.game.popup.outside")}, {id: 999, name: t("text.game.popup.skip")}])
     : [];
-  // console.log("tmpLocation", tmpLocation);
   const countriesFiltered = countryCode ?
   tmpLocation.filter(d => filterItemCountries(countryCode, d.name) || filterItemCountries(countryCode, d.name)).slice(0, 200) :
   tmpLocation.slice(0, 200);
@@ -204,7 +203,6 @@ export default function DemographicForm({
   const USAtmpLocation = allUsaStates
     ? allUsaStates.concat([{id: 998, name: t("text.game.popup.outside")}, {id: 999, name: t("text.game.popup.skip")}])
     : [];
-  // console.log("USAtmpLocation", USAtmpLocation);
   const USAstatesFiltered = usaStates ?
   USAtmpLocation.filter(d => filterItemCountries(usaStates, d.name) || filterItemCountries(usaStates, d.name)).slice(0, 200) :
   USAtmpLocation.slice(0, 200);
@@ -216,7 +214,6 @@ export default function DemographicForm({
   const sexTitle = t("text.game.popup.sex-title");
   const agetTitle = t("text.game.popup.age-title");
   const educationTitle = t("text.game.popup.education-title");
-  // "What languages do you speak?";
   const languageTitle = t("text.game.popup.language-title");
   const countryTitle = t("text.game.popup.country-title");
   const popupFilter = t("text.game.popup.filter");

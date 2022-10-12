@@ -14,7 +14,6 @@ module.exports = {
             require("./db/game.js"),
             require("./db/participant.js"),
             require("./db/trivia_game.js"),
-            require("./db/trivia_question.js"),
             require("./db/trivia_score.js")
         ]
         }

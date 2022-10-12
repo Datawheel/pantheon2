@@ -10,7 +10,6 @@ export default function ConsentForm({
   isOpen,
   setIsOpenConsentForm,
   acceptBtnRef,
-  userId,
   universe,
   saveConsent,
   setSaveConsent,
@@ -34,13 +33,13 @@ export default function ConsentForm({
     setSaveConsent(false);
 
     const data = {
-      user_id: userId,
+      user_id: localStorage.getItem("mptoken"),
       locale: "en",
       universe: universe,
       url: window.location.href,
       token: recap
     };
-    console.log(data);
+
     const requestOptions = {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -59,7 +58,7 @@ export default function ConsentForm({
     }
     
     const gameDataSave = {
-      user_id: localStorage.getItem("mptoken", uuidv4())
+      user_id: localStorage.getItem("mptoken")
     }
     const requestOptions = {
         method: "POST",

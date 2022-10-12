@@ -13,6 +13,12 @@ module.exports = function(sequelize, db) {
         game_number : {
             type: db.INTEGER
         },
+        game_share_id: {
+          type: db.INTEGER
+        },
+        questions: {
+          type: db.JSON
+        },
         createdAt: {
           field: 'created_at',
           type: db.DATE,

@@ -92,19 +92,17 @@ export default function Game({
     }
     
     const gameDB2 = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
-    console.log("game_id", gameDB2[0].id);
     
     if (gameDB2.length > 0){
 
         const proposal = {
-          game_id: gameDB2[0].id,
+          game_share_id: gameDB2[0].id,
           trials: correctPersonsAux,
           solved :  isWin.get()? 1: 0,
           user_id : localStorage.getItem("mptoken"),
           level : attempt.get(),
           token: recap
         };
-        console.log("proposal", proposal);
     
         const requestOptions2 = {
           method: "POST",

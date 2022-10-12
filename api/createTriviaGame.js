@@ -8,9 +8,9 @@ module.exports = function(app) {
 
   app.post('/api/createTriviaGame', async function (req, res) {
   
-    const {date, game_number} = req.body;
+    const {date, game_number, game_share_id, questions} = req.body;
 
-    await db.trivia_game.create({"date": date, "game_number" :game_number}).catch(err => {
+    await db.trivia_game.create({"date": date, "game_number" :game_number, "game_share_id" :game_share_id, questions: questions}).catch(err => {
       console.error(err);
       res.status(500).json({
         success: false

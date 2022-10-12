@@ -56,15 +56,18 @@ const Trivia = (props) => {
   const [time, setTime] = useState(15);
   const timer = useRef(null);
   const [openConsent, setOpenConsent] = useState(false);
+  const [oldScore, setOldScore] = useState(undefined);
   const [saveConsent, setSaveConsent] = useState(false);
   const [openDemo, setOpenDemo] = useState(false);
   const [firstOpen, setFirstOpen] = useState(false);
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
   const [recap, setRecap] = useState(undefined);
-  const [gameId, setGameId] = useState(undefined);
   const [rKey, setRKey] = useState(10);
   const recaptchaRef = useRef();
   const refHandlers = useRef();
+  const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`10/06/2022 00:00:00`), "Europe/Paris");
+  const gameIdShare = Math.ceil(difference/ (1000 * 60 * 60 * 24));
+
 
   
   const {
@@ -102,9 +105,9 @@ const Trivia = (props) => {
   const renderResultsData = () =>
     answers.map((answer) => {
       const question = questions.find(
-        (question) => question.id === answer.questionId
+        (question) => question.id === answer.qid
       );
-      const isCorrect = question.correct_answer === answer.answer;
+      const isCorrect = question.correct_answer === answer.ao;
       clearTimeout(timer.current);
       return (
         <div
@@ -123,7 +126,7 @@ const Trivia = (props) => {
           {!isCorrect ? (
             <div className="result-question-answer a-incorrect">
               <Icon icon="cross" iconSize={12} />{" "}
-              {question[`answer_${answer.answer}`]}{" "}
+              {question[`answer_${answer.ao}`]}{" "}
               <span className="a-yours">(your answer)</span>
             </div>
           ) : null}
@@ -134,6 +137,7 @@ const Trivia = (props) => {
   
 
   const restart = () => {
+
     axios.get("/api/trivia/getQuestionsCSV").then((resp) => {
       dispatch({ type: RESET_QUIZ, questions: resp.data });
     });
@@ -157,8 +161,10 @@ const Trivia = (props) => {
     const dateDB = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
 
     const getGame = {
+      game_share_id: gameIdShare,
       date : dateDB,
-      game_number: 1
+      game_number: 1,
+      questions: questions
     };
 
     const requestOptions = {
@@ -167,52 +173,22 @@ const Trivia = (props) => {
         body: JSON.stringify(getGame)
     };
 
-    
     const triviaGame =  await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-
+    console.log("triviaGame", triviaGame.length);
+    
     if (triviaGame.length === 0) {
       await fetch("/api/createTriviaGame", requestOptions);
-      const gameDBid = await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-      setGameId(gameDBid[0].id);
-    }else {
-      setGameId(triviaGame[0].id);
     }
-    
-  }
 
-  const saveInformation = () => {
-    answers.map((answer) => {
-      setRKey(rKey+1);
-      callDB(answer);
-    }); 
-    
   }
-
   
-  const callDB = async (getQuestion) => {
+  const callDB = async () => {
 
-    const requestOptionsQ = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(getQuestion)
-    };
-   
-    const gameDBaux = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-    if (gameDBaux.length === 0){
-      await fetch("/api/createTriviaQuestion", requestOptionsQ);
-    }
-
-    console.log("create", gameDBaux,gameDBaux.length);
-
-    const gameDBaux2 = await fetch("/api/getTriviaQuestion", requestOptionsQ).then(resp => resp.json());
-    
     const questionScore = {
       user_id : localStorage.getItem("mptoken"),
-      game_id: gameId,
-      question_id: gameDBaux2[0].id, 
-      answer: getQuestion.answer,
-      correct_answer: getQuestion.correct_answer,
-      token: recap
+      game_share_id: gameIdShare,
+      token: recap,
+      answers: answers
     };
 
     const requestOptionsS = {
@@ -220,98 +196,57 @@ const Trivia = (props) => {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(questionScore)
     };
-
-    const myTriviaScore = await fetch("/api/getTriviaScore", requestOptionsS).then(resp => resp.json());
-    console.log("myTriviaScore", myTriviaScore);
-    if (myTriviaScore.length === 0){
-      await fetch("/api/createTriviaScore", requestOptionsS);
-    }
+    console.log("questionScore", questionScore);
+    await fetch("/api/createTriviaScore", requestOptionsS);
 
   }
 
   const next = () => {
 
-    if (time > 0){
-      if (!currentAnswer) {
-        dispatch({ type: SET_ERROR, error: "Please select an option" });
-        return;
+    if (answers.length < 10) {
+
+      if (time > 0){
+        if (!currentAnswer) {
+          dispatch({ type: SET_ERROR, error: "Please select an option" });
+          return;
+        }
       }
-    }
 
-    setRKey(rKey+1);
-    const answer = { 
-      questionId: question.id, 
-      answer: currentAnswer,
-      game_id: gameId,
-      text: question.question,
-      answer_a : question.answer_a,
-      answer_b : question.answer_b,
-      answer_c : question.answer_c,
-      answer_d : question.answer_d,
-      correct_answer : question.correct_answer,
-      token: recap 
-    };
-    
-    callDB(answer);
-    setTime(15);
-
-    answers.push(answer);
-    
-    dispatch({ type: SET_ANSWERS, answers });
-    dispatch({ type: SET_CURRENT_ANSWER, currentAnswer: "" });
-    
-    if (currentQuestion + 1 < questions.length) {
-      dispatch({
-        type: SET_CURRENT_QUESTION,
-        currentQuestion: currentQuestion + 1,
-      });
-      return;
-    }
-    
-    dispatch({ type: SET_SHOW_RESULTS, showResults: true });
-    
-
-    if (answers.length === 10) {
-      saveInformation();
-      
-    }
-
-
-
-  };
-
-  const checkConsent = async () => {
-
-    updateUserID();
-
-    const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          user_id: localStorage.getItem("mptoken")
-        })
+      setRKey(rKey+1);
+      const answer = {
+        qid: question.id,
+        quid: question.questionUid,
+        ao : currentAnswer,
+        at : question[`answer_${currentAnswer}`],
+        cao : question.correct_answer,
+        cat : question[`answer_${question.correct_answer}`]
       };
 
-    const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
+      answers.push(answer);
+      setTime(15);
+      
+      dispatch({ type: SET_ANSWERS, answers });
+      dispatch({ type: SET_CURRENT_ANSWER, currentAnswer: "" });
+      
+      if (currentQuestion + 1 < questions.length) {
+        dispatch({
+          type: SET_CURRENT_QUESTION,
+          currentQuestion: currentQuestion + 1,
+        });
+        return;
+      }
+      
+      dispatch({ type: SET_SHOW_RESULTS, showResults: true });
 
-    if (consent.length > 0) {
-      setOpenConsent(false);
-      setFirstOpen(false);
-    }else{
-      setOpenConsent(true);
-      setFirstOpen(true);
+      if (answers.length === 10) {
+        callDB();
+      }
+    
     }
-    const socioConsent = await fetch("/api/getParticipant", requestOptions).then(resp => resp.json());
-    if (socioConsent.length === 0 && !openConsent) {
-      setOpenDemo(true);
-      setFirstOpen(true);
-    }else{
-      setOpenDemo(false);
-      setFirstOpen(false);
-    }
+
     
 
-  }
+  };
 
   useEffect(
     () => {
@@ -332,9 +267,8 @@ const Trivia = (props) => {
 
   useEffect(() => {
 
-    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
     updateUserID();
-    // checkConsent();
+    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
     saveGameDB();
 
     const keyPressHandler = (e) => {
@@ -361,56 +295,27 @@ const Trivia = (props) => {
   }, [currentAnswer]);
   
   function Consent() {
-    
-    // const consentText = t("text.game.popup.consent-form");
-    console.log(localStorage.getItem("mptoken"));
+
     return <ConsentForm 
       isOpen={openConsent} 
       setIsOpenConsentForm ={setOpenConsent}
-      userId={localStorage.getItem("mptoken")}
       universe={"trivia"}
       saveConsent = {saveConsent}
       setSaveConsent = {setSaveConsent}
       t = {t}
       />
-
-    // return <Dialog
-    //     isOpen={openConsent}
-    //     id="dialogpopup"
-    //     isCloseButtonShown={false}
-    //     title={""}
-    //   >
-    //     <div className={classNames(Classes.DIALOG_BODY, "consent.consentform")}>
-    //     <div className={"consent.description"} dangerouslySetInnerHTML={{__html:consentText}} />
-
-    //     <div className={"consent.options"}>
-    //       <button
-    //       className={classNames("consent.button", "consent.lite")}
-    //       onClick={event =>  window.location.href='/data/faq'}
-    //       >Do not accept</button>
-    //         <button
-    //           className={"consent.button"}
-    //           onClick={acceptClick}
-    //         >Accept</button>
-    //       </div>
-    //     </div>
-
-    //   </Dialog>
   }
 
   function Demographic () {
 
-    if (openDemo === true){
-
-      return <DemographicForm 
-        isOpenDemographicForm = {openDemo}
-        setIsOpenDemographicForm = {setOpenDemo}
-        isOpen={openConsent}
-        universe = {"trivia"}
-        t = {t}
-      />
-
-    }
+    return <DemographicForm 
+      isOpenDemographicForm = {openDemo}
+      setIsOpenDemographicForm = {setOpenDemo}
+      isOpen={openConsent}
+      universe = {"trivia"}
+      t = {t}
+    />
+    
   }
 
 
@@ -473,25 +378,22 @@ const Trivia = (props) => {
     let resultToShare = "";
     const correctAnswers = answers.filter((answer) => {
       const question = questions.find(
-        (question) => question.id === answer.questionId
+        (question) => question.id === answer.qid
       );
 
-      if (question.correct_answer === answer.answer){
+      if (question.correct_answer === answer.ao){
         resultToShare = resultToShare + "🟩";
       }
       // if ((resultToShare.length === Math.ceil(questions.length/2)) || (resultToShare.length === questions.length)){
       //   resultToShare = resultToShare + "\n";
       // }
       
-      return question.correct_answer === answer.answer;
+      return question.correct_answer === answer.ao;
     });
 
     while(resultToShare.length !== 20) {
       resultToShare = resultToShare + "🟥";
     }
-
-    const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`10/06/2022 00:00:00`), "Europe/Paris");
-    const gameIdShare = Math.ceil(difference/ (1000 * 60 * 60 * 24));
 
     return (
       <span>
@@ -539,12 +441,11 @@ const Trivia = (props) => {
           <div className="results">
             <h2>Results: {renderScore()}</h2>
             <div>{renderResultsData()}</div>
-            <div className="continue">
+            {/* <div className="continue">
               <button className="btn-continue" onClick={restart}>
                 Restart
               </button>
-              
-            </div>
+            </div> */}
           </div>
         ) : (
           <div className="quiz">

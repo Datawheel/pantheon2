@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS game_participation(
     user_id UUID NOT NULL,
     ip_hash VARCHAR NOT NULL,
     universe VARCHAR NOT NULL,
-    game_id INT NOT NULL,
+    game_share_id INT NOT NULL,
     trials VARCHAR NOT NULL,
     solved INT NOT NULL,
     level INT NOT NULL,
@@ -105,6 +105,8 @@ CREATE TABLE IF NOT EXISTS trivia_game(
     id SERIAL PRIMARY KEY,
     date VARCHAR NOT NULL,
     game_number INT,
+    game_share_id INT,
+    questions VARCHAR NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -114,24 +116,10 @@ CREATE TABLE IF NOT EXISTS trivia_score(
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
     ip_hash VARCHAR NOT NULL,
-    game_id INT,
+    game_share_id INT,
     question_id INT,
-    answer VARCHAR NOT NULL,
-    correct_answer VARCHAR NOT NULL,
+    answers VARCHAR NOT NULL,
     score_bot DECIMAL NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
-
-CREATE TABLE IF NOT EXISTS trivia_question(
-    id SERIAL PRIMARY KEY,
-    game_id INT,
-    text VARCHAR NOT NULL,
-    answer_a VARCHAR NOT NULL,
-    answer_b VARCHAR NOT NULL,
-    answer_c VARCHAR NOT NULL,
-    answer_d VARCHAR NOT NULL,
-    correct_answer VARCHAR NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -145,7 +133,6 @@ DELETE FROM game_participation;
 
 DELETE FROM trivia_game;
 DELETE FROM trivia_score;
-DELETE FROM trivia_question;
 
 pg_dump -d db_pantheon_games -h 127.0.0.1 -U user_p2 -Fc -f db.sql
 
@@ -158,4 +145,3 @@ DROP TABLE game_participation;
 
 DROP TABLE trivia_game;
 DROP TABLE trivia_score;
-DROP TABLE trivia_question;

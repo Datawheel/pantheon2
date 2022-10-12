@@ -7,9 +7,9 @@ module.exports = function(app) {
 
     app.post("/api/getTriviaGame", async(req, res) => {
         
-        const {date, game_number} = req.body;
+        const {date, game_share_id} = req.body;
 
-        const trivia_game = await db.trivia_game.findAll({where: {"date": date, "game_number" :game_number}});
+        const trivia_game = await db.trivia_game.findAll({where: {"date": date, "game_share_id" :game_share_id}});
         res.status(200).json(trivia_game);
 
     });
