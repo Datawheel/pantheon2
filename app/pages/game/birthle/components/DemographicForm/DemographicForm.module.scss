@@ -1,0 +1,129 @@
+.popupwrapper {
+  color: $font-color;
+}
+
+.popup {
+  padding: 20px;
+  font-size: 1.4rem;
+  .title {
+    margin: 1rem 0rem 0.5rem 0rem;
+    font-size: 1.8rem;
+  }
+  .bp4-button {
+    overflow-y: auto;
+    min-width: 60 px;
+  }
+  .bp4-slider-progress {
+    background-color: $accent-1;
+    &.bp3-intent-primary {
+      background-color: $accent-1;
+    }
+  }
+  .bp4-slider-handle {
+    background-color: $primary;
+    border-radius: 99px;
+    background-image: none;
+    .bp4-slider-label {
+      display: none;
+    }
+  }
+
+}
+
+.bp4-menu{
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+
+
+.question-wrapper {
+  margin-bottom: 30px;
+  popup-select2{
+    max-height: 400px;
+    .button {
+      width: 200px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .popup-select {
+    .button {
+      width: 200px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  label {
+    font-size: 1.4rem;
+  }
+  .bp4-button-group {
+    width: 100%;
+    .bp4-button {
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      &.selected {
+        background: $primary;
+      }
+      .bp3-button-text {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.options {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+
+  .button {
+    background-color: $primary;
+    background-image: none;
+    box-shadow: none;
+    border-radius: 0px;
+    padding: 0.5rem 1rem;
+    font-family: $text-font;
+    font-size: 1.4rem;
+    color: $white;
+    &:hover {
+      border: 1px solid $primary;
+      color: $black;
+    }
+    &.lite {
+      background-color: transparent;
+      border: 1px solid $primary;
+      color: $black;
+    }
+  }
+}
+
+.button-group {
+  display: flex;
+  margin-bottom: 0.5rem;
+  .button {
+    background-image: none !important;
+    box-shadow: none !important;
+    font-family: $text-font, sans-serif;
+    border: 1px solid $primary;
+    border-radius: 0px;
+    flex: 1;
+    text-align: center;
+    font-size: 1.4rem;
+    &.selected {
+      background-color: $primary;
+      color: $white;
+    }
+  }
+}
+
+.select-button {
+  background-image: none !important;
+  box-shadow: none !important;
+  font-family: $text-font, sans-serif;
+  border: 1px solid $primary;
+  border-radius: 0px;
+  font-size: 1.4rem;
+  padding: 0.5rem 1rem;
+}

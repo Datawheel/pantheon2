@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router";
 import "components/Navigation.css";
+import {v4 as uuidv4} from "uuid";
 
 class Navigation extends Component {
   constructor(props) {
@@ -195,7 +196,7 @@ class Navigation extends Component {
                 className="item-link explore-link dd"
                 activeClassName="active"
               >
-                Games
+                ◼Games
               </Link>
               <ul className="sub-items">
                 <li>
@@ -205,7 +206,12 @@ class Navigation extends Component {
                 </li>
                 <li>
                   <a href="/game/birthle" className="item-link">
-                    Birthle
+                  ◼Birthle
+                  </a>
+                </li>
+                <li>
+                  <a href="/app/trivia" className="item-link">
+                  ◼Trivia
                   </a>
                 </li>
               </ul>
@@ -335,6 +341,11 @@ class Navigation extends Component {
                 <li>
                   <a href="/game/birthle" className="item-link">
                     Birthle
+                  </a>
+                </li>
+                <li>
+                  <a href="/app/trivia" className="item-link">
+                    Trivia
                   </a>
                 </li>
               </ul>

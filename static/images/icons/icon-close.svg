@@ -5,14 +5,14 @@
     <desc>Created with Sketch.</desc>
     <defs>
         <rect id="path-1" x="0" y="0" width="22" height="22"></rect>
-        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="22" height="22" fill="white">
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="22" height="22" fill="none">
             <use xlink:href="#path-1"></use>
         </mask>
     </defs>
-    <g id="main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="MENU-M---all,-opened" transform="translate(-341.000000, -12.000000)" stroke="#363636">
+    <g id="main" stroke="grey" stroke-width="2" fill="none" fill-rule="evenodd">
+        <g id="MENU-M---all,-opened" transform="translate(-341.000000, -12.000000)" stroke="grey">
             <g id="header-mobile-home-copy" transform="translate(341.000000, 12.000000)">
-                <use id="Rectangle-3" mask="url(#mask-2)" stroke-width="2" fill="#F4F4F1" xlink:href="#path-1"></use>
+                <use id="Rectangle-3" mask="url(#mask-2)" stroke-width="2" fill="none" xlink:href="#path-1"></use>
                 <g id="icon-x" transform="translate(5.789474, 5.789474)" stroke-linecap="round" stroke-linejoin="round">
                     <g id="Group-2" transform="translate(0.250000, 0.250000)">
                         <path d="M7.85046229e-17,0 L11.3137085,11.3137085" id="Line"></path>
