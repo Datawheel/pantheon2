@@ -163,13 +163,17 @@ export default function DemographicForm({
     {id: 3, name: t("text.game.popup.spanish")},
     {id: 4, name: t("text.game.popup.italian")},
     {id: 5, name: t("text.game.popup.french")},
-    {id: 6, name: t("text.game.popup.germany")},
+    {id: 6, name: t("text.game.popup.german")},
     {id: 7, name: t("text.game.popup.chinese")},
     {id: 7, name: t("text.game.popup.japanese")},
     {id: 8, name: t("text.game.popup.hindi")},
     {id: 9, name: t("text.game.popup.russian")},
     {id: 10, name: t("text.game.popup.polish")},
     {id: 11, name: t("text.game.popup.mandarin")},
+    {id: 12, name: t("text.game.popup.arabic")},
+    {id: 13, name: t("text.game.popup.bengali")},
+    {id: 14, name: t("text.game.popup.indonesian")},
+    {id: 15, name: t("text.game.popup.korean")},
     {id: 98, name: t("text.game.popup.other")},
     {id: 99, name: t("text.game.popup.skip")}
   ];
