@@ -277,7 +277,7 @@ export default function DemographicForm({
     className={styles.popupwrapper}
     isOpen={isOpenDemographicForm}
     onClose={() => setIsOpenDemographicForm(false)}
-    title={popupTitle}
+    title={""}
   >
     <ReCaptcha
       key={rKey}

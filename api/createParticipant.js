@@ -1,5 +1,5 @@
 const hmacSHA512 = require("crypto-js/hmac-sha512");
-const {PANTHEON_PGURI,REACT_APP_GAME_SECRET_KEY} = process.env;
+const {REACT_APP_GAME_SECRET_KEY} = process.env;
 const axios = require("axios");
 
 module.exports = function(app) {
