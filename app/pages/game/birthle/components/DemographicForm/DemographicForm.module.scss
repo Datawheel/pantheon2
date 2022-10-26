@@ -2,6 +2,20 @@
   color: $font-color;
 }
 
+@media (max-width: 600px) {
+  .bp3-dialog{
+    margin: 70px 0;
+    width: 380px;
+    overflow: hidden;
+  }
+}
+
+.bp3-popover-content{
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+
 .popup {
   padding: 20px;
   font-size: 1.4rem;

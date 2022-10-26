@@ -45,9 +45,11 @@ export default function Game({
     const person = persons.find((person) => person.id === id);
 
     if (personPos.get() < N_PERSONS) {
-      if (person.selected === false) {
-        selectPerson(person);
-        personPos.set(personPos.get() + 1);
+      if (person !== undefined) {
+        if (person.selected === false) {
+          selectPerson(person);
+          personPos.set(personPos.get() + 1);
+        }
       }
     }
 
@@ -116,53 +118,57 @@ export default function Game({
   }
 
   const onCheckClick = () => {
-    const newPersons = [...persons];
 
-    newPersons.forEach((person) => (person.selected = false));
-    setPersons(newPersons);
+    if (personPos.get() === 5){
+      const newPersons = [...persons];
 
-    const cells = document.querySelectorAll(".card");
-    const newBoard = [...board.get()];
-    const correctPersonsAux = [];
+      newPersons.forEach((person) => (person.selected = false));
+      setPersons(newPersons);
 
-    newBoard[attempt.get()].map((cell, i) => {
-      if (selectedPersons.get()[i].id === sortedPersons[i].id) {
-        cell.isCorrect = true;
-        correctPersonsAux.push(true);
-        cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
-          "card correct";
-        resultToShare.set(resultToShare.get() + "🟩");
+      const cells = document.querySelectorAll(".card");
+      const newBoard = [...board.get()];
+      const correctPersonsAux = [];
+
+      newBoard[attempt.get()].map((cell, i) => {
+        if (selectedPersons.get()[i].id === sortedPersons[i].id) {
+          cell.isCorrect = true;
+          correctPersonsAux.push(true);
+          cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
+            "card correct";
+          resultToShare.set(resultToShare.get() + "🟩");
+        } else {
+          correctPersonsAux.push(false);
+          cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
+            "card wrong";
+          resultToShare.set(resultToShare.get() + "🟥");
+        }
+      });
+
+      setCorrectPersons(correctPersonsAux)
+      isWin.set(correctPersonsAux.every((el) => el === true));
+
+      if (isWin.get()) {
+        resultBlockRef.current.style.display = "block";
+        gameBlockRef.current.style.display = "none";
+      } else if (attempt.get() === MAX_ATTEMPTS - 1) {
+        resultBlockRef.current.style.display = "block";
+        gameBlockRef.current.style.display = "none";
       } else {
-        correctPersonsAux.push(false);
-        cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
-          "card wrong";
-        resultToShare.set(resultToShare.get() + "🟥");
+        board.set(newBoard);
+        personPos.set(0);
+        attempt.set(attempt.get() + 1);
+        selectedPersons.set([]);
+        resultToShare.set(resultToShare.get() + "\n");
       }
-    });
 
-    setCorrectPersons(correctPersonsAux)
-    isWin.set(correctPersonsAux.every((el) => el === true));
+      checkBtnRef.current.disabled = true;
+      cancelBtnRef.current.disabled = true;
 
-    if (isWin.get()) {
-      resultBlockRef.current.style.display = "block";
-      gameBlockRef.current.style.display = "none";
-    } else if (attempt.get() === MAX_ATTEMPTS - 1) {
-      resultBlockRef.current.style.display = "block";
-      gameBlockRef.current.style.display = "none";
-    } else {
-      board.set(newBoard);
-      personPos.set(0);
-      attempt.set(attempt.get() + 1);
-      selectedPersons.set([]);
-      resultToShare.set(resultToShare.get() + "\n");
+      setRKey(rKey+1);
+      saveInformation(correctPersonsAux);
+
     }
-
-    checkBtnRef.current.disabled = true;
-    cancelBtnRef.current.disabled = true;
-
-    setRKey(rKey+1);
-    saveInformation(correctPersonsAux);
-
+    
   };
 
   const selectPerson = (person) => {
@@ -173,31 +179,34 @@ export default function Game({
     board.set(newBoard);
 
     selectedPersons.set([...selectedPersons.get(), person]);
-  };
+
+  }
 
   const onCancelClick = () => {
-    const id = selectedPersons.get()[selectedPersons.get().length - 1].id;
-    const newBoard = board.get();
+    if (selectedPersons.get().length > 0){
+      const id = selectedPersons.get()[selectedPersons.get().length - 1].id;
+      const newBoard = board.get();
 
-    newBoard[attempt.get()][personPos.get() - 1] = boardCellDefault;
+      newBoard[attempt.get()][personPos.get() - 1] = boardCellDefault;
 
-    const newPersons = persons.map((person) => {
-      if (person.id === id) person.selected = false;
+      const newPersons = persons.map((person) => {
+        if (person.id === id) person.selected = false;
 
-      return person;
-    });
+        return person;
+      });
 
-    setPersons(newPersons);
+      setPersons(newPersons);
 
-    const newSelectedPersons = selectedPersons.get();
+      const newSelectedPersons = selectedPersons.get();
 
-    newSelectedPersons.pop();
-    selectedPersons.set(newSelectedPersons);
+      newSelectedPersons.pop();
+      selectedPersons.set(newSelectedPersons);
 
-    personPos.set(personPos.get() - 1);
+      personPos.set(personPos.get() - 1);
 
-    if (+personPos.get() === 0) {
-      cancelBtnRef.current.disabled = true;
+      if (+personPos.get() === 0) {
+        cancelBtnRef.current.disabled = true;
+      }
     }
   };
 
