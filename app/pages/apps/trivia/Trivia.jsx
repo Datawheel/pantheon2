@@ -411,7 +411,8 @@ const Trivia = (props) => {
   function getRecaptcha() {
   
     return <ReCaptcha 
-      key={rKey}
+      id = "trivia"
+      key={"trivia"+rKey.toString()}
       ref={recaptchaRef} 
       sitekey={'6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D'} 
       verifyCallback={verifyCallback} />

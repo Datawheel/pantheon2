@@ -284,7 +284,8 @@ export default function DemographicForm({
     title={""}
   >
     <ReCaptcha
-        key={rKey.toString()}
+        id="demo"
+        key={"demo"+rKey.toString()}
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />
