@@ -25,7 +25,7 @@ module.exports = function(app) {
     const participant = {"user_id": user_id, "ip_hash" :ip_hash, "sex_id": sex_id, "country_id": country_id, "location_id": location_id, "age_id": age_id, "language_ids": languages, "education_id": education_id, "locale": lang, "universe": universe, "score_bot": score};
 
     await db.participant.create(participant).catch(err => {
-      console.error(err);
+      // console.error(err);
       res.status(500).json({
         success: false
       });
