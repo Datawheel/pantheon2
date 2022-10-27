@@ -22,7 +22,7 @@ module.exports = function(app) {
     const {success, challenge_ts, hostname, score, action} = recaptchaV3;
 
     await db.game_participation.create({"user_id": user_id, "ip_hash" :ip_hash, "game_share_id": game_share_id, "trials": trials, "solved": solved, "level": level, "universe": 0, "score_bot": score}).catch(err => {
-      console.error(err);
+      // console.error(err);
       res.status(500).json({
         success: false
       });
