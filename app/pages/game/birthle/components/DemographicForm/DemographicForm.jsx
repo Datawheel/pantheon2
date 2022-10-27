@@ -80,7 +80,7 @@ export default function DemographicForm({
   const [recap, setRecap] = useState(undefined);
   const [lang, setLang]= useState("en");
   const [languages, setLanguages] = useState([]);
-  const [rKey, setRKey] = useState(5);
+  const [rKey, setRKey] = useState(Math.random() * (10 - 0) + 0);
   const [age, setAge] = useState({id: 99, name: t("text.game.popup.skip")});
   const [sex, setSex] = useState({id: 99, name: t("text.game.popup.skip")});
 
@@ -165,15 +165,15 @@ export default function DemographicForm({
     {id: 5, name: t("text.game.popup.french")},
     {id: 6, name: t("text.game.popup.german")},
     {id: 7, name: t("text.game.popup.chinese")},
-    {id: 7, name: t("text.game.popup.japanese")},
-    {id: 8, name: t("text.game.popup.hindi")},
-    {id: 9, name: t("text.game.popup.russian")},
-    {id: 10, name: t("text.game.popup.polish")},
-    {id: 11, name: t("text.game.popup.mandarin")},
-    {id: 12, name: t("text.game.popup.arabic")},
-    {id: 13, name: t("text.game.popup.bengali")},
-    {id: 14, name: t("text.game.popup.indonesian")},
-    {id: 15, name: t("text.game.popup.korean")},
+    {id: 8, name: t("text.game.popup.japanese")},
+    {id: 9, name: t("text.game.popup.hindi")},
+    {id: 10, name: t("text.game.popup.russian")},
+    {id: 11, name: t("text.game.popup.polish")},
+    {id: 12, name: t("text.game.popup.mandarin")},
+    {id: 13, name: t("text.game.popup.arabic")},
+    {id: 14, name: t("text.game.popup.bengali")},
+    {id: 15, name: t("text.game.popup.indonesian")},
+    {id: 16, name: t("text.game.popup.korean")},
     {id: 98, name: t("text.game.popup.other")},
     {id: 99, name: t("text.game.popup.skip")}
   ];
@@ -284,7 +284,7 @@ export default function DemographicForm({
     title={""}
   >
     <ReCaptcha
-      key={rKey}
+        key={rKey.toString()}
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />
@@ -404,9 +404,7 @@ export default function DemographicForm({
 
       <Question
         title={languageTitle}> 
-      <div
-        inline={true}
-      >
+      <div>
         {languageOptions.map(d => <Checkbox
           key={`${"language"}_${d.id}`}
           label={d.name}

@@ -30,7 +30,7 @@ export default function Game({
 }) {
   
   const [recap, setRecap] = useState(undefined);
-  const [rKey, setRKey] = useState(10000);
+  const [rKey, setRKey] = useState((Math.random() * (15000 - 150) + 150));
 
   const verifyCallback = (recaptchaToken) => {
     setRecap(recaptchaToken);
@@ -213,7 +213,7 @@ export default function Game({
   return (
     <main className="game" ref={gameBlockRef}>
       <ReCaptcha
-        key={rKey}
+        key={rKey.toString()}
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />

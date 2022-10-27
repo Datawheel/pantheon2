@@ -17,7 +17,7 @@ export default function ConsentForm({
 }) {
 
   const [recap, setRecap] = useState(undefined);
-  const [rKey, setRKey] = useState(0);
+  const [rKey, setRKey] = useState(Math.random() * (100 - 50) + 50);
   const consentText = t("text.game.popup.consent-form");
 
   const verifyCallback = (recaptchaToken) => {
@@ -92,7 +92,7 @@ export default function ConsentForm({
       title={""}
     >
       <ReCaptcha
-        key={rKey}
+        key={rKey.toString()}
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />
