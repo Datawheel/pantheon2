@@ -92,7 +92,8 @@ export default function ConsentForm({
       title={""}
     >
       <ReCaptcha
-        key={rKey.toString()}
+        id="consent"
+        key={"consent"+rKey.toString()}
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />

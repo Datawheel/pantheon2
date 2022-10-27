@@ -133,7 +133,7 @@ function Birthle(props) {
       saveConsent = {saveConsent}
       setSaveConsent = {setSaveConsent}
       t = {t}
-      />
+      /> 
       <Game
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         N_PERSONS={N_PERSONS}
