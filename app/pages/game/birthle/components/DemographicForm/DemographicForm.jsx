@@ -17,59 +17,20 @@ const filterItemCountries = (query, item) => {
 const filterItem = (query, item) => {
   return item.toString().toLowerCase().indexOf(query.toLowerCase()) >= 0;
 }
-function Question(datap) {
-  const {customClasses, children, title} = datap;
-  return <div className={classNames(customClasses, styles["question-wrapper"])}>
+function QuestionDemo(datap) {
+  const {customClasses, children, title, getkey} = datap;
+  return <div key={getkey} className={classNames(customClasses, styles["question-wrapper"])}>
     <h6 className={styles.title}>{title}</h6>
     {children}
   </div>;
 }
 
-function CustomRadioGroup(datap) {
-  const {data, defaultItem, identifier, setState} = datap;
-  return <RadioGroup
-    inline={true}
-    onChange={e => setState(e.target.value)}
-    selectedValue={defaultItem}
-  >
-    {data.map(d => <Radio
-      key={`${identifier}_${d.id}`}
-      label={d.name}
-      value={d.id}
-    />)}
-  </RadioGroup>;
-}
-
-function CustomSelect(datap) {
-
-  const {data, defaultItem, setState, popupFilter, popupNoResults, popupSelect} = datap;
-
-  return <Select
-    className={styles["popup-select"]}
-    items={data}
-    filterable={false}
-    inputProps={{placeholder: popupFilter}}
-    itemPredicate={filterItem}
-    itemRenderer={(d, active) => <MenuItem 
-      active={defaultItem?.id === d.id}
-      key={`${d.name}`}
-      onClick={() => setState(d)}
-      text={d.name}
-    />}
-    noResults={<MenuItem disabled={true} text={popupNoResults} />}
-  >
-    <Button 
-      className={styles["select-button"]}
-      rightIcon="chevron-down" 
-      text={defaultItem?.name || popupSelect}
-    />
-  </Select>;
-}
 export default function DemographicForm({
   universe,
   isOpenDemographicForm,
   setIsOpenDemographicForm,
-  isOpen,
+  scoreDB,
+  setScoreDB,
   t
 }) {
   
@@ -80,18 +41,17 @@ export default function DemographicForm({
   const [recap, setRecap] = useState(undefined);
   const [lang, setLang]= useState("en");
   const [languages, setLanguages] = useState([]);
-  const [rKey, setRKey] = useState(Math.random() * (10 - 0) + 0);
   const [age, setAge] = useState({id: 99, name: t("text.game.popup.skip")});
   const [sex, setSex] = useState({id: 99, name: t("text.game.popup.skip")});
+  const recaptchaRef = useRef();
+  const isMounted = React.useRef(true);
 
   const translating = (text) => {
       return text;
       }
 
   const closeDemo = () => {
-
     setIsOpenDemographicForm(false);
-
   }
 
   const verifyCallback = (recaptchaToken) => {
@@ -113,7 +73,7 @@ export default function DemographicForm({
   };
 
   const fetchDB = async () => {
-    setRKey(rKey+1);
+
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
@@ -128,21 +88,22 @@ export default function DemographicForm({
         body: JSON.stringify(gameDataSave)
       };
     
-    const socioConsent = await fetch("/api/getParticipant", requestOptions).then(resp => resp.json());
-    if (socioConsent.length === 0) {
-      setIsOpenDemographicForm(true);
-    }else{
-      setIsOpenDemographicForm(false);
-    }
+    await fetch("/api/getParticipant", requestOptions)
+      .then(resp => resp.json())
+      .then(socioConsent => {
+        if (socioConsent.length > 0) {
+          setScoreDB(parseFloat(socioConsent[0].score_bot));
+          setIsOpenDemographicForm(false);
+        }else{
+          setIsOpenDemographicForm(true);
+        }
+      });
   }
+
   useEffect(() => {
-
     loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
-    fetchDB();
+  }, []); 
 
-  }, []);
-  
-  
   
   countries.sort((a, b) => a.name.localeCompare(b.name));
   allUsaStates.sort((a, b) => a.name.localeCompare(b.name));
@@ -205,7 +166,7 @@ export default function DemographicForm({
   tmpLocation.slice(0, 200);
 
   const USAtmpLocation = allUsaStates
-    ? allUsaStates.concat([{id: 998, name: t("text.game.popup.outside")}, {id: 999, name: t("text.game.popup.skip")}])
+    ? allUsaStates.concat([{id: 998, name: t("text.game.popup.outside"), abbreviation:""}, {id: 999, name: t("text.game.popup.skip"), abbreviation:""}])
     : [];
   const USAstatesFiltered = usaStates ?
   USAtmpLocation.filter(d => filterItemCountries(usaStates, d.name) || filterItemCountries(usaStates, d.name)).slice(0, 200) :
@@ -237,43 +198,17 @@ export default function DemographicForm({
     setLanguages(newLanguages);
   }
 
-  function SelectedUSA (){
-    // United States
-    if (countryCode && countryCode.name == "United States") {
-      return (
-        <Question
-        title={USATitle}
-      >
-        <Select
-          className={styles["popup-select"]}
-          items={USAtmpLocation}
-          filterable={false}
-          inputProps={{placeholder: popupFilter}}
-          // itemPredicate={filterItemCountries}
-          onQueryChange={e => setUsaStates(e)}
-          itemRenderer={(d, active) => <MenuItem 
-            active={usaStates?.id === d.id}
-            onClick={() => setUsaStates(d)}
-            key={`${d.name}_location`}
-            text={[998, 999].includes(d.id) ? d.name : `${d.name} (${d.id})`} 
-          />}
-          noResults={(d, active) => <MenuItem 
-            active={d.id === 999}
-            onClick={() => setUsaStates(d)}
-            key={`${d.name}_location`}
-            text={[998, 999].includes(d.id) ? d.name : `${d.name} (${d.id})`} 
-          />}
-        >
-          <Button 
-            className={styles["select-button"]}
-            rightIcon="chevron-down" 
-            text={usaStates ? `${usaStates.name} (${usaStates.id})` : popupSelect}
-          />
-        </Select>
-      </Question>
-      );
+
+
+  function getRecaptcha() {
+    if(isOpenDemographicForm) {
+      return <ReCaptcha 
+        id = "demo"
+        key={Math.random().toString()}
+        ref={recaptchaRef} 
+        sitekey={'6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D'} 
+        verifyCallback={verifyCallback} />
     }
-    return false
   }
 
   return (
@@ -283,16 +218,12 @@ export default function DemographicForm({
     onClose={() => setIsOpenDemographicForm(false)}
     title={""}
   >
-    <ReCaptcha
-        id="demo"
-        key={"demo"+rKey.toString()}
-        sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
-        verifyCallback={verifyCallback}
-      />
+    {getRecaptcha()}
     <div className={classNames(Classes.DIALOG_BODY, styles.popup, styles.popupwrapper)}>
       <p>{popupDescription}</p>
-      <Question
+      <QuestionDemo
         title={sexTitle}
+        getkey={"firstquestion"}
       > 
       <Select
           className={styles["popup-select"]}
@@ -302,7 +233,7 @@ export default function DemographicForm({
           itemPredicate={filterItem}
           itemRenderer={(d, active) => <MenuItem 
             active={sex?.id === d.id}
-            key={`${d.name}`}
+            key={`${d.name}_sex`}
             onClick={() => setSex(d)}
             text={d.name}
           />}
@@ -314,10 +245,11 @@ export default function DemographicForm({
             text={sex?.name || popupSelect}
           />
         </Select>
-      </Question>
+      </QuestionDemo>
 
-      <Question
+      <QuestionDemo
         title={agetTitle}
+        getkey={"secondquestion"}
         customClasses="age-option"
       >
         <Select
@@ -328,7 +260,7 @@ export default function DemographicForm({
         itemPredicate={filterItem}
         itemRenderer={(d, active) => <MenuItem 
           active={age?.id === d.id}
-          key={`${d.name}`}
+          key={`${d.name}_age`}
           onClick={() => setAge(d)}
           text={d.name}
         />}
@@ -340,10 +272,11 @@ export default function DemographicForm({
           text={age?.name || popupSelect}
         />
       </Select>
-      </Question>
+      </QuestionDemo>
 
-      <Question
+      <QuestionDemo
         title={educationTitle}
+        getkey={"thirdquestion"}
       >
         <Select
           className={styles["popup-select"]}
@@ -354,7 +287,7 @@ export default function DemographicForm({
           itemPredicate={filterItem}
           itemRenderer={(d, active) => <MenuItem 
             active={education?.id === d.id}
-            key={`${d.name}`}
+            key={`${d.name}_education`}
             onClick={() => setEducation(d)}
             text={d.name}
           />}
@@ -366,9 +299,10 @@ export default function DemographicForm({
             text={education?.name || popupSelect}
           />
         </Select>
-      </Question>
-      <Question
+      </QuestionDemo>
+      <QuestionDemo
         title={countryTitle}
+        getkey={"fourthquestion"}
       >
         <Select
           className={styles["popup-select2"]}
@@ -399,32 +333,65 @@ export default function DemographicForm({
             text={countryCode ? `${countryCode.name} (${countryCode.id})` : popupSelect}
           />
         </Select>
-      </Question>
+      </QuestionDemo>
+      
+      {(countryCode && countryCode.name == "United States") &&
+      <QuestionDemo
+        title={USATitle}
+        getkey={"USAquestion"}
+      >
+        <Select
+          className={styles["popup-select2"]}
+          items={USAtmpLocation}
+          filterable={false}
+          inputProps={{placeholder: popupFilter}}
+          // itemPredicate={filterItemCountries}
+          onQueryChange={e => setUsaStates(e)}
+          itemRenderer={(d, active) => <MenuItem 
+            active={usaStates?.id === d.id}
+            onClick={() => setUsaStates(d)}
+            key={`${d.name}_usalocation`}
+            text={[998, 999].includes(d.id) ? d.name : `${d.name} (${d.id})`} 
+          />}
+          noResults={(d, active) => <MenuItem 
+            active={d.id === 999}
+            onClick={() => setUsaStates(d)}
+            key={`${d.name}_usalocation`}
+            text={[998, 999].includes(d.id) ? d.name : `${d.name} (${d.id})`} 
+          />}
+        >
+          <Button 
+            className={styles["select-button"]}
+            rightIcon="chevron-down" 
+            text={usaStates ? `${usaStates.name} (${usaStates.id})` : popupSelect}
+          />
+        </Select>
+      </QuestionDemo>}
 
-      <SelectedUSA />
-
-      <Question
-        title={languageTitle}> 
-      <div>
+      <QuestionDemo
+        title={languageTitle}
+        getkey={"fifthquestion"} > 
+      <div key={"languageoptionsdiv"}>
         {languageOptions.map(d => <Checkbox
-          key={`${"language"}_${d.id}`}
+          key={`${d.id}_language`}
           label={d.name}
           value={d.id}
           inline = {true}
           onChange= {e => updateLanguages(e.target.value)}
         />)}
       </div>
-      </Question>
+      </QuestionDemo>
         
       <br/>
-      <div className={styles.options}>
+      <div key={"democonsentsubmission"} className={styles.options}>
         <Button
+          key={"demobttclose"}
           className={classNames(styles.button, styles.lite)}
           onClick={() => setIsOpenDemographicForm(false)}
         >
           {preferNotToAnswer}
         </Button>
-        <Button className={styles.button} onClick={async() => {
+        <Button key={"demotosubmit"} className={styles.button} onClick={async() => {
           // location && politics && age && sex && zone
           // lang, location_id, country_id, education_id, age_id, sex_id, languages, user_id, token
           if (countryCode && education && sex && age && languages) {
@@ -453,10 +420,10 @@ export default function DemographicForm({
               education_id: education.id * 1,
               lang: lang,
               token: recap,
-              universe: universe
+              universe: universe,
+              scoreDB: scoreDB
             };
             // lang, location_id, education_id, country_id, age_id, sex_id, languages, user_id, token, universe
-
             const requestOptions = {
               method: "POST",
               headers: {"Content-Type": "application/json"},
@@ -480,7 +447,7 @@ export default function DemographicForm({
         
       </div>
 
-      <Toaster position={Position.BOTTOM} ref={refHandlers}>
+      <Toaster key={"toasterDemo"} position={Position.BOTTOM} ref={refHandlers}>
         {/* <Toast
           intent={Intent.DANGER}
           // message="No pudimos almacenar tu respuesta. Inténtalo más tarde."

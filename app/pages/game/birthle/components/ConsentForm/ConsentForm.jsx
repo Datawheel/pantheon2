@@ -7,12 +7,14 @@ import {v4 as uuidv4} from "uuid";
 import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
 
 export default function ConsentForm({
-  isOpen,
+  isOpenConsentForm,
   setIsOpenConsentForm,
   acceptBtnRef,
   universe,
   saveConsent,
   setSaveConsent,
+  scoreDB,
+  setScoreDB,
   t
 }) {
 
@@ -37,7 +39,8 @@ export default function ConsentForm({
       locale: "en",
       universe: universe,
       url: window.location.href,
-      token: recap
+      token: recap,
+      scoreDB: scoreDB
     };
 
     const requestOptions = {
@@ -66,47 +69,52 @@ export default function ConsentForm({
         body: JSON.stringify(gameDataSave)
       };
 
-    const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
-
-    if (consent.length > 0) {
-      setSaveConsent(false);
-      setIsOpenConsentForm(false);
-    }else{
-      setSaveConsent(true);
-      setIsOpenConsentForm(true);
-    }
+    await fetch("/api/getConsent", requestOptions)
+        .then(resp => resp.json())
+        .then(consent => {
+          if (consent.length > 0) {
+            setScoreDB(parseFloat(consent[0].score_bot));
+            setSaveConsent(false);
+            setIsOpenConsentForm(false);
+          }else{
+            setSaveConsent(true);
+            setIsOpenConsentForm(true);
+          }
+        });
+    
   }
 
   useEffect(() => {
-
     loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
-    fetchDB();
+  }, []); 
 
-  }, []);
-  
   return (
       <Dialog
-      isOpen={isOpen}
-      id="dialogpopup"
+      isOpen={isOpenConsentForm}
+      id="consentpopup"
+      key={"consentpopup"}
       isCloseButtonShown={false}
       title={""}
     >
       <ReCaptcha
         id="consent"
-        key={"consent"+rKey.toString()}
+        // key={"consent"+rKey.toString()}
+        key={Math.random().toString()}
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />
-      <div className={classNames(Classes.DIALOG_BODY, styles.consentform)}>
-      <div className={styles.description} dangerouslySetInnerHTML={{__html:consentText}} />
+      <div key={"dialogbody"} className={classNames(Classes.DIALOG_BODY, styles.consentform)}>
+      <div key={"cosenttitle"} className={styles.description} dangerouslySetInnerHTML={{__html:consentText}} />
 
-        <div className={styles.options}>
+        <div key={"consentbuttons"} className={styles.options}>
         <button
+         key={"consentno"}
          className={classNames(styles.button, styles.lite)}
          onClick={event =>  window.location.href='/data/faq'}
          >Do not accept</button>
 
           <button
+            key={"consentyes"}
             className={styles.button}
             ref = {acceptBtnRef}
             onClick={acceptClick}

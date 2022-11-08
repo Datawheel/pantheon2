@@ -83,7 +83,6 @@ CREATE TABLE IF NOT EXISTS game(
     sorted_person_3 VARCHAR NOT NULL,
     sorted_person_4 VARCHAR NOT NULL,
     sorted_person_5 VARCHAR NOT NULL,
-    score_bot DECIMAL NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -117,8 +116,11 @@ CREATE TABLE IF NOT EXISTS trivia_score(
     user_id UUID NOT NULL,
     ip_hash VARCHAR NOT NULL,
     game_share_id INT,
+    q_id INT,
     question_id INT,
-    answers VARCHAR NOT NULL,
+    current_answer_option VARCHAR NOT NULL,
+    current_answer VARCHAR NOT NULL,
+    correct_answer_option VARCHAR NOT NULL,
     score_bot DECIMAL NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
