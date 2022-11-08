@@ -28,10 +28,6 @@ module.exports = function(sequelize, db) {
         sorted_person_5: {
             type: db.TEXT
         },
-        score_bot: {
-            allowNull: false,
-            type: db.FLOAT
-        },
         createdAt: {
           field: 'created_at',
           type: db.DATE,

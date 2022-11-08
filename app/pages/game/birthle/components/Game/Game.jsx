@@ -24,9 +24,13 @@ export default function Game({
   gameBlockRef,
   gameDate,
   gameNumber,
-  // localStorage,
   correctPersons,
-  setCorrectPersons
+  setCorrectPersons,
+  scoreDB,
+  setScoreDB,
+  setIsOpenDemographicForm,
+  setIsOpenConsentForm,
+  setSaveConsent
 }) {
   
   const [recap, setRecap] = useState(undefined);
@@ -79,9 +83,10 @@ export default function Game({
       sorted_person_3: savePersons[2].slug, 
       sorted_person_4 :savePersons[3].slug, 
       sorted_person_5: savePersons[4].slug,
-      token: recap
+      token: recap,
+      scoreDB: scoreDB
     }
-
+    
     const requestOptions = {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -117,7 +122,54 @@ export default function Game({
     
   }
 
+  const fetchDB = async () => {
+
+    const token = localStorage.getItem("mptoken");
+    if (!token) {
+      localStorage.setItem("mptoken", uuidv4());
+    }
+    
+    const gameDataSave = {
+      user_id: localStorage.getItem("mptoken")
+    }
+    const requestOptions = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(gameDataSave)
+      };
+
+    await fetch("/api/getParticipant", requestOptions)
+        .then(resp => resp.json())
+        .then(socioConsent => {
+          if (socioConsent.length > 0) {
+            setScoreDB(parseFloat(socioConsent[0].score_bot));
+            setIsOpenDemographicForm(false);
+          }else{
+            setIsOpenDemographicForm(true);
+          }
+        });
+
+
+    await fetch("/api/getConsent", requestOptions)
+        .then(resp => resp.json())
+        .then(consent => {
+          if (consent.length > 0) {
+            setScoreDB(parseFloat(consent[0].score_bot));
+            setSaveConsent(false);
+            setIsOpenConsentForm(false);
+          }else{
+            setSaveConsent(true);
+            setIsOpenConsentForm(true);
+          }
+        });
+    
+  }
+
   const onCheckClick = () => {
+
+    if (personPos.get() === 5 && attempt.get() === 0){
+      fetchDB();
+    }
 
     if (personPos.get() === 5){
       const newPersons = [...persons];
@@ -211,21 +263,21 @@ export default function Game({
   };
 
   return (
-    <main className="game" ref={gameBlockRef}>
+    <main key="bGameDiv" className="game" ref={gameBlockRef}>
       <ReCaptcha
-        key={rKey.toString()}
+        key={Math.random().toString()}
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />
-      <div className="game-header">
-        <div className="game-name">Who was born first?</div>
-        <div className="game-goal">Guess the correct order</div>
+      <div key="bGameDivHeader" className="game-header">
+        <div key="bGameDivName" className="game-name">Who was born first?</div>
+        <div key="bGameDivGoal" className="game-goal">Guess the correct order</div>
       </div>
-      <div className="game-panel">
+      <div key="bGameDivPanel" className="game-panel">
         {!fetchError.get() ? (
           persons.length > 0 ? (
-            <div className="panel">
-              <ul className="panel-list">
+            <div key="bGameDivPanelDiv" className="panel">
+              <ul key="bGameDivPanelList" className="panel-list">
                 {persons.map((person) => (
                   <Person
                     data={person}
@@ -236,24 +288,24 @@ export default function Game({
               </ul>
             </div>
           ) : (
-            <div className="error-block">Loading...</div>
+            <div key="bGameDivLoading" className="error-block">Loading...</div>
           )
         ) : (
-          <div className="error-block">Try to reload game later</div>
+          <div key="bGameDivErrorBlock" className="error-block">Try to reload game later</div>
         )}
       </div>
-      <div className="game-board">
-        <div className="board">
+      <div key={"gameBoard"} className="game-board">
+        <div key={"gameBoard2"} className="board">
           {
-            <ul className="board-list">
+            <ul key={"gameBoardList"} className="board-list">
               {board.get().map((row, i) => (
-                <li key={i}>
-                  <ul className="board-row-list">
+                <li key={`r${i}`}>
+                  <ul key={`ulr${i}`} className="board-row-list">
                     {row.map((cell, j) => {
                       if (cell.person === null) {
                         return (
                           <li className="board-row-list-item" key={`${i}-${j}`}>
-                            <div className="card board-item"></div>
+                            <div className="card board-item" key={`b${i}-${j}`}></div>
                           </li>
                         );
                       } else {
@@ -272,15 +324,15 @@ export default function Game({
             </ul>
           }
         </div>
-        <div className="btn-list">
+        <div key={"gameButtons"} className="btn-list">
           <div>
-            <button className="btn" ref={cancelBtnRef} onClick={onCancelClick}>
-              <span className="btn-cancel">Cancel</span>
+            <button key={"gameCancel"} className="btn" ref={cancelBtnRef} onClick={onCancelClick}>
+              <span key={"labelGameCancel"} className="btn-cancel">Cancel</span>
             </button>
           </div>
           <div>
-            <button className="btn" ref={checkBtnRef} onClick={onCheckClick}>
-              <span className="btn-check">Check</span>
+            <button key={"gameCheck"} className="btn" ref={checkBtnRef} onClick={onCheckClick}>
+              <span key={"labelGameCheck"} className="btn-check">Check</span>
             </button>
           </div>
         </div>

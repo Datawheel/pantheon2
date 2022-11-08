@@ -44,8 +44,6 @@ const Trivia = (props) => {
     currentAnswer: "",
     answers: [],
     showResults: false,
-    timeLeft: undefined,
-    currentDate: new Date(),
     error: ""
   };
 
@@ -53,11 +51,11 @@ const Trivia = (props) => {
   const { t, i18n } = props;
   const [time, setTime] = useState(15);
   const timer = useRef(null);
-  const [openConsent, setOpenConsent] = useState(false);
-  const [oldScore, setOldScore] = useState(undefined);
+  const [isOpenConsentForm, setIsOpenConsentForm] = useState(false);
+  const [scoreDB, setScoreDB] = useState(-1.0);
+  const [firstOpen, setFirstOpen] = useState(true);
   const [saveConsent, setSaveConsent] = useState(false);
-  const [openDemo, setOpenDemo] = useState(false);
-  const [firstOpen, setFirstOpen] = useState(false);
+  const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(false);
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
   const [recap, setRecap] = useState(undefined);
   const [rKey, setRKey] = useState(10);
@@ -74,8 +72,6 @@ const Trivia = (props) => {
     currentAnswer,
     answers,
     showResults,
-    timeLeft,
-    currentDate,
     error,
   } = state;
 
@@ -97,9 +93,6 @@ const Trivia = (props) => {
     setRecap(recaptchaToken);
   }
 
-
-  
-
   const renderResultsData = () =>
     answers.map((answer) => {
       const question = questions.find(
@@ -114,7 +107,7 @@ const Trivia = (props) => {
               ? "result-question q-correct"
               : "result-question q-incorrect"
           }
-          key={question.id}
+          key={question.id.toString()}
         >
           <div className="result-question-title">{question.question}</div>
           <div className="result-question-answer a-correct">
@@ -125,7 +118,7 @@ const Trivia = (props) => {
             <div className="result-question-answer a-incorrect">
               <Icon icon="cross" iconSize={12} />{" "}
               {question[`answer_${answer.ao}`]}{" "}
-              <span className="a-yours">(your answer)</span>
+              <span key={`eachAnswer_${answer.quid}`} className="a-yours">(your answer)</span>
             </div>
           ) : null}
         </div>
@@ -136,7 +129,7 @@ const Trivia = (props) => {
 
   const restart = () => {
 
-    axios.get("/api/trivia/getQuestionsCSV").then((resp) => {
+    axios.get("http://localhost:3300/api/trivia/getQuestionsCSV").then((resp) => {
       dispatch({ type: RESET_QUIZ, questions: resp.data });
     });
     
@@ -178,14 +171,15 @@ const Trivia = (props) => {
     }
 
   }
-  
-  const callDB = async () => {
+
+  const saveQuestion = async (answer, tempScore) => {
 
     const questionScore = {
       user_id : localStorage.getItem("mptoken"),
       game_share_id: gameIdShare,
       token: recap,
-      answers: answers
+      answer: answer,
+      scoreDB: tempScore
     };
 
     const requestOptionsS = {
@@ -193,63 +187,135 @@ const Trivia = (props) => {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(questionScore)
     };
-
     await fetch("/api/createTriviaScore", requestOptionsS);
+  }
+
+
+  const fetchDB = async () => {
+
+    const token = localStorage.getItem("mptoken");
+    if (!token) {
+      localStorage.setItem("mptoken", uuidv4());
+    }
+    
+    const gameDataSave = {
+      user_id: localStorage.getItem("mptoken")
+    }
+    const requestOptions = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(gameDataSave)
+      };
+
+    await fetch("/api/getParticipant", requestOptions)
+        .then(resp => resp.json())
+        .then(socioConsent => {
+          if (socioConsent.length > 0) {
+            setScoreDB(parseFloat(socioConsent[0].score_bot));
+            setIsOpenDemographicForm(false);
+          }else{
+            setIsOpenDemographicForm(true);
+          }
+        });
+
+
+    await fetch("/api/getConsent", requestOptions)
+        .then(resp => resp.json())
+        .then(consent => {
+          if (consent.length > 0) {
+            setScoreDB(parseFloat(consent[0].score_bot));
+            setSaveConsent(false);
+            setIsOpenConsentForm(false);
+          }else{
+            setSaveConsent(true);
+            setIsOpenConsentForm(true);
+          }
+        });
+    
+  }
+
+  const callDB = async (answer) => {
+    
+    if (scoreDB === -1) {
+
+      const questionScore = {
+        user_id : localStorage.getItem("mptoken"),
+      };
+      const requestOptions = {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(questionScore)
+      };
+      const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
+      
+      if (consent.length > 0) {
+        const tempScore = parseFloat(consent[0].score_bot);
+        setScoreDB(tempScore);
+        saveQuestion(answer, tempScore);
+      }
+
+    }else{
+      saveQuestion(answer, scoreDB);
+    }
 
   }
 
   const next = () => {
 
-    if (answers.length < 10) {
+    if (firstOpen){
 
-      if (time > 0){
-        if (!currentAnswer) {
-          dispatch({ type: SET_ERROR, error: "Please select an option" });
+      fetchDB();
+      setFirstOpen(false);
+
+    }else{
+
+      if (answers.length >= 0 && answers.length <= 10) {
+
+        if (time > 0){
+          if (!currentAnswer) {
+            dispatch({ type: SET_ERROR, error: "Please select an option" });
+            return;
+          }
+        }
+  
+        setRKey(rKey+1);
+        
+        const answer = {
+          qid: question.id,
+          quid: question.questionUid,
+          ao : currentAnswer,
+          at : currentAnswer !== ''? question[`answer_${currentAnswer}`]: '',
+          cao : question.correct_answer,
+          cat : question[`answer_${question.correct_answer}`]
+        };
+        callDB(answer);
+        answers.push(answer);
+        setTime(15);
+        
+        dispatch({ type: SET_ANSWERS, answers });
+        dispatch({ type: SET_CURRENT_ANSWER, currentAnswer: "" });
+        
+        if (currentQuestion + 1 < questions.length) {
+          dispatch({
+            type: SET_CURRENT_QUESTION,
+            currentQuestion: currentQuestion + 1,
+          });
           return;
         }
-      }
-
-      setRKey(rKey+1);
-      const answer = {
-        qid: question.id,
-        quid: question.questionUid,
-        ao : currentAnswer,
-        at : question[`answer_${currentAnswer}`],
-        cao : question.correct_answer,
-        cat : question[`answer_${question.correct_answer}`]
-      };
-
-      answers.push(answer);
-      setTime(15);
+        
+        dispatch({ type: SET_SHOW_RESULTS, showResults: true });
       
-      dispatch({ type: SET_ANSWERS, answers });
-      dispatch({ type: SET_CURRENT_ANSWER, currentAnswer: "" });
-      
-      if (currentQuestion + 1 < questions.length) {
-        dispatch({
-          type: SET_CURRENT_QUESTION,
-          currentQuestion: currentQuestion + 1,
-        });
-        return;
       }
-      
-      dispatch({ type: SET_SHOW_RESULTS, showResults: true });
-
-      if (answers.length === 10) {
-        callDB();
-      }
-    
     }
 
     
-
   };
 
   useEffect(
     () => {
       timer.current = setTimeout(() => {
         setTime(time - 1);
-        if (time === 0){
+        if (time === 0 || firstOpen){
           next();
         }
       }, 1 * 1000);
@@ -266,7 +332,6 @@ const Trivia = (props) => {
 
     updateUserID();
     loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
-    saveGameDB();
 
     const keyPressHandler = (e) => {
       if (e.key === "Enter") {
@@ -294,55 +359,29 @@ const Trivia = (props) => {
   function Consent() {
 
     return <ConsentForm 
-      isOpen={openConsent} 
-      setIsOpenConsentForm ={setOpenConsent}
+      isOpenConsentForm={isOpenConsentForm} 
+      setIsOpenConsentForm ={setIsOpenConsentForm}
       universe={"trivia"}
       saveConsent = {saveConsent}
       setSaveConsent = {setSaveConsent}
+      setScoreDB = {setScoreDB}
+      scoreDB = {scoreDB}
       t = {t}
       />
+
   }
 
   function Demographic () {
 
-    return <DemographicForm 
-      isOpenDemographicForm = {openDemo}
-      setIsOpenDemographicForm = {setOpenDemo}
-      isOpen={openConsent}
+      return <DemographicForm 
+      isOpenDemographicForm = {isOpenDemographicForm}
+      setIsOpenDemographicForm = {setIsOpenDemographicForm}
       universe = {"trivia"}
+      scoreDB = {scoreDB}
+      setScoreDB = {setScoreDB}
       t = {t}
-    />
-    
-  }
+      />
 
-
-  const acceptClick = async () => {
-
-    if (openConsent){
-
-      updateUserID();
-      setOpenConsent(false);
-      setTime(15);
-
-      
-      const data = {
-        user_id: localStorage.getItem("mptoken"),
-        locale: "en",
-        universe: "trivia",
-        url: window.location.href,
-        token: recap
-      };
-      
-      const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-      };
-      
-      await fetch("/api/createConsent", requestOptions);
-
-    }
-    
   }
 
   function copyToClipboard(text) {
@@ -368,6 +407,8 @@ const Trivia = (props) => {
   };
 
   const renderScore = () => {
+
+    saveGameDB();
     let resultToShare = "";
     const correctAnswers = answers.filter((answer) => {
       const question = questions.find(
@@ -386,12 +427,12 @@ const Trivia = (props) => {
     }
 
     return (
-      <span>
-        {correctAnswers.length} / {answers.length} correct
+      <span key={"renderScoreAnswers"}>
+        {correctAnswers.length.toString()} / {answers.length.toString()} correct
         <br/>
         {/* {resultToShare}
         <br/> */}
-        <button classname="sharebutton" onClick = {() => {
+      <button key={"buttonShareKey"} className="sharebutton" onClick = {() => {
             copyToClipboard("Pantheon Trivia "+ gameIdShare + "\n"+ resultToShare + correctAnswers.length + "0%" +
               "\nhttps://pantheon.world/app/trivia" +"\n#pantheon #trivia" +"\nWhat about you?");
             addToast({
@@ -399,7 +440,7 @@ const Trivia = (props) => {
               intent: Intent.SUCCESS
             }, undefined);
           }}>Share</button>
-          <Toaster ref={refHandlers} usePortal={false} position={Position.BOTTOM} >
+          <Toaster key={"toasterTriviaPage"} ref={refHandlers} usePortal={false} position={Position.BOTTOM} >
           </Toaster>
       </span>
       
@@ -409,29 +450,31 @@ const Trivia = (props) => {
   };
 
   function getRecaptcha() {
-  
+
     return <ReCaptcha 
-      id = "trivia"
-      key={"trivia"+rKey.toString()}
-      ref={recaptchaRef} 
-      sitekey={'6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D'} 
-      verifyCallback={verifyCallback} />
+        id = "trivia"
+        key={"trivia"+rKey.toString()}
+        ref={recaptchaRef} 
+        sitekey={'6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D'} 
+        verifyCallback={verifyCallback} />
+
+
   }
   
   return (
-    <TriviaContext.Provider value={{ state, dispatch }}>
-
-
+    <TriviaContext.Provider key={"triviaContextProvider"} value={{ state, dispatch }}>
       {getRecaptcha()}
       {Demographic()}
       {Consent()}
-      <Helmet title="Trivia" />
-      <div>
-        <h1 className="trivia-title">Trivia</h1>
+      <Helmet key={"triviaTitle"} title="Trivia" />
+      <div key={"triviaDiv1"}>
+        <h1 key={"triviaTitleH1"} className="trivia-title">Trivia</h1>
         {showResults ? (
-          <div className="results">
-            <h2>Results: {renderScore()}</h2>
-            <div>{renderResultsData()}</div>
+          <div key={"triviaResultsDiv"} className="results">
+
+            <h2 key={"triviaResultsDivH2"}>Results: {renderScore()}</h2>
+            <div key={"triviaResultsDivData"}>{renderResultsData()}</div>
+
             {/* <div className="continue">
               <button className="btn-continue" onClick={restart}>
                 Restart
@@ -439,9 +482,9 @@ const Trivia = (props) => {
             </div> */}
           </div>
         ) : (
-          <div className="quiz">
-            <div className="countdown">
-            <Countdown time={time} />
+          <div key={"triviaQuizDiv"} className="quiz">
+            <div key={"triviaCountDownDiv"} className="countdown">
+            <Countdown key={"triviaCountDownTime"} time={time} />
             <Question />
             <Progress total={questions.length} current={currentQuestion + 1} />
             {renderError()}

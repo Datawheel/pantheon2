@@ -36,6 +36,7 @@ function Birthle(props) {
 
   const [persons, setPersons] = useState([]);
   const [sortedPersons, setSortedPersons] = useState([]);
+  const [scoreDB, setScoreDB] = useState(-1);
   const fetchError = useTrait(false);
   const selectedPersons = useTrait([]);
   const board = useTrait(boardDefault);
@@ -114,24 +115,25 @@ function Birthle(props) {
 
   }, []);
 
- 
-
   return (
-    <div className="birthle">
+    <div key={"birthleComponents"} className="birthle">
       <DemographicForm 
         setIsOpenDemographicForm={setIsOpenDemographicForm}
         isOpenDemographicForm = {isOpenDemographicForm}
-        isOpen={isOpenConsentForm} 
         universe = {"birthle"}
+        scoreDB = {scoreDB}
+        setScoreDB = {setScoreDB}
         t = {t}
-        />
+        /> 
       <ConsentForm 
-      isOpen={isOpenConsentForm} 
+      isOpenConsentForm={isOpenConsentForm} 
       setIsOpenConsentForm ={setIsOpenConsentForm}
       userId={userId}
       universe={"birthle"}
       saveConsent = {saveConsent}
       setSaveConsent = {setSaveConsent}
+      scoreDB = {scoreDB}
+      setScoreDB = {setScoreDB}
       t = {t}
       /> 
       <Game
@@ -157,6 +159,11 @@ function Birthle(props) {
         userId={userId}
         correctPersons = {correctPersons}
         setCorrectPersons = {setCorrectPersons}
+        scoreDB = {scoreDB}
+        setScoreDB = {setScoreDB}
+        setIsOpenDemographicForm = {setIsOpenDemographicForm}
+        setIsOpenConsentForm = {setIsOpenConsentForm}
+        setSaveConsent = {setSaveConsent}
       /> 
       <Result
         MAX_ATTEMPTS={MAX_ATTEMPTS}

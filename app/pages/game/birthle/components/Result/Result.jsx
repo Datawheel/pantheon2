@@ -28,19 +28,20 @@ export default function Result({
   const gameIdShare = Math.ceil(difference/ (1000 * 60 * 60 * 24));
     
   return (
-    <div className="result" ref={resultBlockRef}>
-      <div className="result-block">
-        <div className="result-block-border">
+    <div key={"resultDiv"} className="result" ref={resultBlockRef}>
+      <div key={"resultBlock"} className="result-block">
+        <div key={"resultBlockBorder"} className="result-block-border">
           {isWin.get() ? (
-            <div className="result-title_success">You won!!!</div>
+            <div key={"resultTitleSuccess"} className="result-title_success">You won!!!</div>
           ) : (
-            <div className="result-title_fail">The correct order:</div>
+            <div key={"resultTitleFail"} className="result-title_fail">The correct order:</div>
           )}
           <div>
-            <ul className="result-links-list">
+            <ul key={"resultLinksList"} className="result-links-list">
               {sortedPersons.map((person) => (
-                <li key={person.id}>
+                <li key={`${person.id}_people`}>
                   <a
+                    key={`${person.id}_peopleLink`}
                     className="result-link"
                     href={`https://pantheon.world/profile/person/${person.slug}`}
                   >
@@ -50,15 +51,16 @@ export default function Result({
               ))}
             </ul>
           </div>
-          <div className="btn-list">
+          <div key={"resultBtnList"} className="btn-list">
             <div>
               <CopyToClipboard
               // ${attempt.get() + 1}/${MAX_ATTEMPTS}\n${resultToShare.get()}
                 text={`Pantheon Birthle ${gameIdShare} \n${resultToShare.get()}\nhttps://pantheon.world/game/birthle \n#pantheon #birthle \nWhat about you?`}
+                key="CopyToClipboardBirthle"
                 onCopy={onShareBtnCLick}
               >
-                <button className="btn">
-                  <span className="btn-share" ref={shareBtn}>
+                <button key={"resultBtnShare"} className="btn">
+                  <span key={"resultBtnShareLabel"} className="btn-share" ref={shareBtn}>
                     Share
                   </span>
                 </button>
