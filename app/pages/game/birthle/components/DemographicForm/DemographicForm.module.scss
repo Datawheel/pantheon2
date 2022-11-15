@@ -18,7 +18,7 @@
 
 .popup {
   padding: 20px;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   .title {
     margin: 1rem 0rem 0.5rem 0rem;
     font-size: 1.8rem;
@@ -73,6 +73,7 @@
   }
   .bp4-button-group {
     width: 100%;
+    
     .bp4-button {
       flex: 1;
       align-items: center;
@@ -111,6 +112,18 @@
       color: $black;
     }
   }
+}
+
+#acceptbutton{
+  margin-left: 5px;
+  background: none #5b5b5b;
+  background-color:rgb(70, 73, 74);
+  font-size: 1.5rem;
+  color:beige;
+}
+
+#buttonsgroup{
+  text-align: right;
 }
 
 .button-group {

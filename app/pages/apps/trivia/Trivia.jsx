@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { Icon, Intent, Toaster, Position } from "@blueprintjs/core";
+import { Button, Icon, Intent, Toaster, Position } from "@blueprintjs/core";
 import { fetchData } from "@datawheel/canon-core";
 import { Helmet } from "react-helmet-async";
 import Progress from "pages/apps/trivia/Progress";
@@ -137,13 +137,13 @@ const Trivia = (props) => {
 
 
 
-  const updateUserID = async () => {
+  const updateUserID = () => {
 
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
-
+    fetchDB();
   }
 
   const saveGameDB = async () => {
@@ -207,18 +207,6 @@ const Trivia = (props) => {
         body: JSON.stringify(gameDataSave)
       };
 
-    await fetch("/api/getParticipant", requestOptions)
-        .then(resp => resp.json())
-        .then(socioConsent => {
-          if (socioConsent.length > 0) {
-            setScoreDB(parseFloat(socioConsent[0].score_bot));
-            setIsOpenDemographicForm(false);
-          }else{
-            setIsOpenDemographicForm(true);
-          }
-        });
-
-
     await fetch("/api/getConsent", requestOptions)
         .then(resp => resp.json())
         .then(consent => {
@@ -227,8 +215,36 @@ const Trivia = (props) => {
             setSaveConsent(false);
             setIsOpenConsentForm(false);
           }else{
-            setSaveConsent(true);
-            setIsOpenConsentForm(true);
+            window.location.href='/game/birthle';
+          }
+        });
+    
+  }
+
+  const checkDemographics = async () => {
+
+    const token = localStorage.getItem("mptoken");
+    if (!token) {
+      localStorage.setItem("mptoken", uuidv4());
+    }
+    
+    const gameDataSave = {
+      user_id: localStorage.getItem("mptoken")
+    }
+    const requestOptions = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(gameDataSave)
+      };
+
+    await fetch("/api/getParticipant", requestOptions)
+        .then(resp => resp.json())
+        .then(socioConsent => {
+          if (socioConsent.length > 0) {
+            setScoreDB(parseFloat(socioConsent[0].score_bot));
+            setIsOpenDemographicForm(false);
+          }else{
+            setIsOpenDemographicForm(true);
           }
         });
     
@@ -408,7 +424,9 @@ const Trivia = (props) => {
 
   const renderScore = () => {
 
+    checkDemographics();
     saveGameDB();
+
     let resultToShare = "";
     const correctAnswers = answers.filter((answer) => {
       const question = questions.find(
@@ -432,14 +450,14 @@ const Trivia = (props) => {
         <br/>
         {/* {resultToShare}
         <br/> */}
-      <button key={"buttonShareKey"} className="sharebutton" onClick = {() => {
+      <Button key={"buttonShareKey"} id="buttonShareKey" className="buttonShareKey" onClick = {() => {
             copyToClipboard("Pantheon Trivia "+ gameIdShare + "\n"+ resultToShare + correctAnswers.length + "0%" +
               "\nhttps://pantheon.world/app/trivia" +"\n#pantheon #trivia" +"\nWhat about you?");
             addToast({
               message: "Copied",
               intent: Intent.SUCCESS
             }, undefined);
-          }}>Share</button>
+          }}>Share</Button>
           <Toaster key={"toasterTriviaPage"} ref={refHandlers} usePortal={false} position={Position.BOTTOM} >
           </Toaster>
       </span>
@@ -465,7 +483,7 @@ const Trivia = (props) => {
     <TriviaContext.Provider key={"triviaContextProvider"} value={{ state, dispatch }}>
       {getRecaptcha()}
       {Demographic()}
-      {Consent()}
+      {/* {Consent()} */}
       <Helmet key={"triviaTitle"} title="Trivia" />
       <div key={"triviaDiv1"}>
         <h1 key={"triviaTitleH1"} className="trivia-title">Trivia</h1>

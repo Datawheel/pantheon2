@@ -383,7 +383,7 @@ export default function DemographicForm({
       </QuestionDemo>
         
       <br/>
-      <div key={"democonsentsubmission"} className={styles.options}>
+      <div id={"buttonsgroup"} key={"democonsentsubmission"} className={styles.options}>
         <Button
           key={"demobttclose"}
           className={classNames(styles.button, styles.lite)}
@@ -391,7 +391,7 @@ export default function DemographicForm({
         >
           {preferNotToAnswer}
         </Button>
-        <Button key={"demotosubmit"} className={styles.button} onClick={async() => {
+        <Button id={"acceptbutton"} key={"demotosubmit"} className={styles.button} onClick={async() => {
           // location && politics && age && sex && zone
           // lang, location_id, country_id, education_id, age_id, sex_id, languages, user_id, token
           if (countryCode && education && sex && age && languages) {
