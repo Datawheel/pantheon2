@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import React from "react";
-import {Classes, Dialog} from "@blueprintjs/core";
+import {Button, Classes, Dialog} from "@blueprintjs/core";
 import classNames from "classnames";
 import styles from "./ConsentForm.module.scss";
 import {v4 as uuidv4} from "uuid";
@@ -21,12 +21,13 @@ export default function ConsentForm({
   const [recap, setRecap] = useState(undefined);
   const [rKey, setRKey] = useState(Math.random() * (100 - 50) + 50);
   const consentText = t("text.game.popup.consent-form");
+  const isMounted = React.useRef(true);
 
   const verifyCallback = (recaptchaToken) => {
     setRecap(recaptchaToken);
   }
 
-  const acceptClick = async () => {
+  const acceptClick = async (buttonType) => {
 
     setRKey(rKey+1);
     loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
@@ -51,6 +52,18 @@ export default function ConsentForm({
     
     await fetch("/api/createConsent", requestOptions);
 
+    if (buttonType === "trivia"){
+      window.location.href='/app/trivia';
+    } 
+
+  }
+
+  const playTrivia = () => {
+    acceptClick("trivia")
+  }
+
+  const playBirthle = () => {
+    acceptClick("birthle")
   }
 
   const fetchDB = async () => {
@@ -86,6 +99,14 @@ export default function ConsentForm({
 
   useEffect(() => {
     loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
+
+    if (isMounted.current) {
+      fetchDB();
+      return () => {
+        isMounted.current = false;
+      };
+    }
+    
   }, []); 
 
   return (
@@ -106,19 +127,28 @@ export default function ConsentForm({
       <div key={"dialogbody"} className={classNames(Classes.DIALOG_BODY, styles.consentform)}>
       <div key={"cosenttitle"} className={styles.description} dangerouslySetInnerHTML={{__html:consentText}} />
 
-        <div key={"consentbuttons"} className={styles.options}>
         <button
          key={"consentno"}
+         id={"consentno"}
          className={classNames(styles.button, styles.lite)}
          onClick={event =>  window.location.href='/data/faq'}
          >Do not accept</button>
-
-          <button
-            key={"consentyes"}
-            className={styles.button}
+         
+        <div id={"consentbuttons"} key={"consentbuttons"} className={classNames(styles.options,"consentbuttons")}>
+          <Button
+            key={"playTrivia"}
+            id={"playTrivia"}
+            className={classNames(styles.button, "playTrivia")}
             ref = {acceptBtnRef}
-            onClick={acceptClick}
-          >Accept</button>
+            onClick={playTrivia}
+          >Accept and play Trivia</Button>
+          <Button
+            key={"consentyes"}
+            id={"consentyes"}
+            className={classNames(styles.button, "consentyes")}
+            ref = {acceptBtnRef}
+            onClick={playBirthle}
+          >Accept and play Birthle</Button>
         </div>
       </div>
 

@@ -101,7 +101,7 @@ export default function Game({
     const gameDB2 = await fetch("/api/getGame", requestOptions).then(resp => resp.json());
     
     if (gameDB2.length > 0){
-
+        
         const proposal = {
           game_share_id: gameDB2[0].id,
           trials: correctPersonsAux,
@@ -167,7 +167,7 @@ export default function Game({
 
   const onCheckClick = () => {
 
-    if (personPos.get() === 5 && attempt.get() === 0){
+    if (personPos.get() === 5 && attempt.get() === 2){
       fetchDB();
     }
 

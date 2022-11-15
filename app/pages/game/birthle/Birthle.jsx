@@ -112,7 +112,6 @@ function Birthle(props) {
     fetchData().catch(() => {
       fetchError.set(true);
     });
-
   }, []);
 
   return (
