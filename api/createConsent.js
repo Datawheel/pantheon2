@@ -13,10 +13,10 @@ module.exports = function(app) {
           req.socket.remoteAddress ||
           null;
       const ip_hash = hmacSHA512(publicIpV4, REACT_APP_GAME_SECRET_KEY).toString();
-      console.log("scoreDB",scoreDB);
+
       if (scoreDB > -1){
         await db.consent.create({"user_id": user_id, "ip_hash" :ip_hash, "universe": universe, locale: "en", "url": url, "score_bot": scoreDB}).catch(err => {
-          // console.error(err);
+          console.error(err);
           res.status(500).json({
             success: false
           });
