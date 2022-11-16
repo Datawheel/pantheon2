@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "canon-dev",
     "build": "canon-build",
-    "start": "canon-start",
+    "start": "node index.js",
     "locales": "canon-locales",
     "setup": "canon-setup",
     "release": "canon-release"
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@blueprintjs/select": "^3.19.1",
-    "@datawheel/canon-core": "^0.25.12",
+    "@datawheel/canon-core": "0.25.12",
     "async-throttle": "^1.1.0",
     "babel-preset-react": "^6.24.1",
     "compose-function": "^3.0.3",
