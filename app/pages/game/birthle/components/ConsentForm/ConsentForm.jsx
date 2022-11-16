@@ -126,15 +126,14 @@ export default function ConsentForm({
       />
       <div key={"dialogbody"} className={classNames(Classes.DIALOG_BODY, styles.consentform)}>
       <div key={"cosenttitle"} className={styles.description} dangerouslySetInnerHTML={{__html:consentText}} />
-
-        <button
+         
+        <div id={"consentbuttons"} key={"consentbuttons"} className={classNames(styles.options,"consentbuttons")}>
+        <Button
          key={"consentno"}
          id={"consentno"}
          className={classNames(styles.button, styles.lite)}
          onClick={event =>  window.location.href='/data/faq'}
-         >Do not accept</button>
-         
-        <div id={"consentbuttons"} key={"consentbuttons"} className={classNames(styles.options,"consentbuttons")}>
+         >Do not accept</Button>
           <Button
             key={"playTrivia"}
             id={"playTrivia"}
