@@ -320,7 +320,10 @@ const Trivia = (props) => {
         }
         
         dispatch({ type: SET_SHOW_RESULTS, showResults: true });
-      
+        
+        if (answers.length === 10) {
+          checkDemographics();
+        }
       }
     }
 
@@ -424,7 +427,6 @@ const Trivia = (props) => {
 
   const renderScore = () => {
 
-    checkDemographics();
     saveGameDB();
 
     let resultToShare = "";
