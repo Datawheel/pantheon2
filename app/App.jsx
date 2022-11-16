@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Navigation from "components/Navigation";
 import Footer from "components/Footer";
@@ -8,56 +8,56 @@ import "components/common/tooltip.css";
 import GameAlert from "./pages/banner/GameAlert";
 
 class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       page: undefined,
-      searchActive: false
+      searchActive: false,
     };
   }
 
   getChildContext() {
-    return {activateSearch: this.activateSearch};
+    return { activateSearch: this.activateSearch };
   }
 
   componentDidMount() {
     let page;
     if (this.props.location.pathname === "/") {
       page = "app home";
-    }
-    else if (this.props.location.pathname === "/explore/rankings") {
+    } else if (this.props.location.pathname === "/explore/rankings") {
       page = "app rankings";
-    }
-    else if (this.props.location.pathname === "/explore/viz") {
+    } else if (this.props.location.pathname === "/explore/viz") {
       page = "app explorer";
-    }
-    else {
+    } else {
       page = "app";
     }
-    this.setState({page});
+    this.setState({ page });
 
-    document.addEventListener("keydown", () => {
-      // 's' key
-      if (event.keyCode === 83) {
-        if (event.target.tagName !== "INPUT") {
-          event.preventDefault();
-          this.activateSearch();
+    document.addEventListener(
+      "keydown",
+      () => {
+        // 's' key
+        if (event.keyCode === 83) {
+          if (event.target.tagName !== "INPUT") {
+            event.preventDefault();
+            this.activateSearch();
+          }
         }
-      }
-    }, false);
+      },
+      false
+    );
   }
 
-  _closeSearchEscKey = event => {
+  _closeSearchEscKey = (event) => {
     // 'esc' key
     if (event.keyCode === 27) {
       event.preventDefault();
       this.activateSearch();
     }
-  }
+  };
 
-  activateSearch = e => {
-    const {searchActive} = this.state;
+  activateSearch = (e) => {
+    const { searchActive } = this.state;
     if (e) {
       e.preventDefault();
     }
@@ -65,24 +65,28 @@ class App extends Component {
     if (searchActive) {
       document.body.classList.remove("noscroll");
       document.removeEventListener("keydown", this._closeSearchEscKey, false);
-    }
-    else { // user wants to open the search
+    } else {
+      // user wants to open the search
       document.body.classList.add("noscroll");
       document.addEventListener("keydown", this._closeSearchEscKey, false);
     }
-    this.setState({searchActive: !searchActive});
-  }
+    this.setState({ searchActive: !searchActive });
+  };
 
   render() {
-    const {page, searchActive} = this.state;
-    const {children} = this.props;
+    const { page, searchActive } = this.state;
+    const { children } = this.props;
 
     // conditional for screenshots to remove all extraneous design
     if (this.props.location.pathname.match(/screenshot[\/]{0,1}$/)) {
       return (
         <div id="App" className="screenshot container">
           <div className="ss-logo-container">
-            <img className="logo" src="/images/logos/logo_pantheon.svg" alt="Pantheon" />
+            <img
+              className="logo"
+              src="/images/logos/logo_pantheon.svg"
+              alt="Pantheon"
+            />
           </div>
           <div>{children}</div>
         </div>
@@ -99,21 +103,19 @@ class App extends Component {
     }
 
     return (
-      <div>
+      <div id="App" className={`${page} container`}>
         <GameAlert />
-        <div id="App" className={`${page} container`}>
-          {searchActive ? <Search activateSearch={this.activateSearch} /> : null}
-          <Navigation activateSearch={this.activateSearch} />
-          <div>{children}</div>
-          <Footer />
-        </div>
+        {searchActive ? <Search activateSearch={this.activateSearch} /> : null}
+        <Navigation activateSearch={this.activateSearch} />
+        <div>{children}</div>
+        <Footer />
       </div>
     );
   }
 }
 
 App.childContextTypes = {
-  activateSearch: PropTypes.func
+  activateSearch: PropTypes.func,
 };
 
 export default App;
