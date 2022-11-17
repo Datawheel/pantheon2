@@ -9,11 +9,11 @@ import Question from "pages/apps/trivia/Question";
 import Answers from "pages/apps/trivia/Answers";
 import TriviaContext from "pages/apps/trivia/TriviaContext.js";
 import TriviaReducer from "pages/apps/trivia/TriviaReducer.js";
-import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm"
-import ConsentForm from "pages/game/birthle/components/ConsentForm/ConsentForm"
-import {v4 as uuidv4} from "uuid";
+import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm";
+import ConsentForm from "pages/game/birthle/components/ConsentForm/ConsentForm";
+import { v4 as uuidv4 } from "uuid";
 import { translate } from "react-i18next";
-import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
+import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
 
 import {
   SET_ANSWERS,
@@ -21,32 +21,32 @@ import {
   SET_CURRENT_ANSWER,
   SET_ERROR,
   SET_SHOW_RESULTS,
-  RESET_QUIZ
+  RESET_QUIZ,
 } from "pages/apps/trivia/reducerTypes.js";
 
 import "pages/about/About.css";
 import "pages/apps/trivia/Trivia.css";
 
 function Countdown(props) {
-  
-  const {time} = props;
-    
-  return <div className="countdown.label"><img src="../images/icons/oec-trivia-timer.svg" />{time}</div>;
-  
+  const { time } = props;
+
+  return (
+    <div className="countdown.label">
+      <img src="../images/icons/oec-trivia-timer.svg" />
+      {time}
+    </div>
+  );
 }
 
 const Trivia = (props) => {
-
-  
   const initialState = {
     questions: props.data.questions,
     currentQuestion: 0,
     currentAnswer: "",
     answers: [],
     showResults: false,
-    error: ""
+    error: "",
   };
-
 
   const { t, i18n } = props;
   const [time, setTime] = useState(15);
@@ -61,11 +61,11 @@ const Trivia = (props) => {
   const [rKey, setRKey] = useState(10);
   const recaptchaRef = useRef();
   const refHandlers = useRef();
-  const difference = +convertTZ(new Date(), "Europe/Paris") - +convertTZ(new Date(`10/06/2022 00:00:00`), "Europe/Paris");
-  const gameIdShare = Math.ceil(difference/ (1000 * 60 * 60 * 24));
+  const difference =
+    +convertTZ(new Date(), "Europe/Paris") -
+    +convertTZ(new Date(`10/06/2022 00:00:00`), "Europe/Paris");
+  const gameIdShare = Math.ceil(difference / (1000 * 60 * 60 * 24));
 
-
-  
   const {
     questions,
     currentQuestion,
@@ -86,18 +86,21 @@ const Trivia = (props) => {
   };
 
   function convertTZ(date, tzString) {
-    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+    return new Date(
+      (typeof date === "string" ? new Date(date) : date).toLocaleString(
+        "en-US",
+        { timeZone: tzString }
+      )
+    );
   }
 
   const verifyCallback = (recaptchaToken) => {
     setRecap(recaptchaToken);
-  }
+  };
 
   const renderResultsData = () =>
     answers.map((answer) => {
-      const question = questions.find(
-        (question) => question.id === answer.qid
-      );
+      const question = questions.find((question) => question.id === answer.qid);
       const isCorrect = question.correct_answer === answer.ao;
       clearTimeout(timer.current);
       return (
@@ -118,199 +121,181 @@ const Trivia = (props) => {
             <div className="result-question-answer a-incorrect">
               <Icon icon="cross" iconSize={12} />{" "}
               {question[`answer_${answer.ao}`]}{" "}
-              <span key={`eachAnswer_${answer.quid}`} className="a-yours">(your answer)</span>
+              <span key={`eachAnswer_${answer.quid}`} className="a-yours">
+                (your answer)
+              </span>
             </div>
           ) : null}
         </div>
       );
     });
 
-  
-
   const restart = () => {
-
-    axios.get("http://localhost:3300/api/trivia/getQuestionsCSV").then((resp) => {
+    axios.get("/api/trivia/getQuestionsCSV").then((resp) => {
       dispatch({ type: RESET_QUIZ, questions: resp.data });
     });
-    
   };
 
-
-
   const updateUserID = () => {
-
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
     fetchDB();
-  }
+  };
 
   const saveGameDB = async () => {
-
     const now = convertTZ(new Date(), "Europe/Paris");
     const dateDB = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
 
     const getGame = {
       game_share_id: gameIdShare,
-      date : dateDB,
+      date: dateDB,
       game_number: 1,
-      questions: questions
+      questions: questions,
     };
 
     const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(getGame)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(getGame),
     };
 
-    const triviaGame =  await fetch("/api/getTriviaGame", requestOptions).then(resp => resp.json());
-    
+    const triviaGame = await fetch("/api/getTriviaGame", requestOptions).then(
+      (resp) => resp.json()
+    );
+
     if (triviaGame.length === 0) {
       await fetch("/api/createTriviaGame", requestOptions);
     }
-
-  }
+  };
 
   const saveQuestion = async (answer, tempScore) => {
-
     const questionScore = {
-      user_id : localStorage.getItem("mptoken"),
+      user_id: localStorage.getItem("mptoken"),
       game_share_id: gameIdShare,
       token: recap,
       answer: answer,
-      scoreDB: tempScore
+      scoreDB: tempScore,
     };
 
     const requestOptionsS = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(questionScore)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(questionScore),
     };
     await fetch("/api/createTriviaScore", requestOptionsS);
-  }
-
+  };
 
   const fetchDB = async () => {
-
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
-    
+
     const gameDataSave = {
-      user_id: localStorage.getItem("mptoken")
-    }
+      user_id: localStorage.getItem("mptoken"),
+    };
     const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(gameDataSave)
-      };
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(gameDataSave),
+    };
 
     await fetch("/api/getConsent", requestOptions)
-        .then(resp => resp.json())
-        .then(consent => {
-          if (consent.length > 0) {
-            setScoreDB(parseFloat(consent[0].score_bot));
-            setSaveConsent(false);
-            setIsOpenConsentForm(false);
-          }else{
-            window.location.href='/game/birthle';
-          }
-        });
-    
-  }
+      .then((resp) => resp.json())
+      .then((consent) => {
+        if (consent.length > 0) {
+          setScoreDB(parseFloat(consent[0].score_bot));
+          setSaveConsent(false);
+          setIsOpenConsentForm(false);
+        } else {
+          window.location.href = "/game/birthle";
+        }
+      });
+  };
 
   const checkDemographics = async () => {
-
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
-    
+
     const gameDataSave = {
-      user_id: localStorage.getItem("mptoken")
-    }
+      user_id: localStorage.getItem("mptoken"),
+    };
     const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(gameDataSave)
-      };
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(gameDataSave),
+    };
 
     await fetch("/api/getParticipant", requestOptions)
-        .then(resp => resp.json())
-        .then(socioConsent => {
-          if (socioConsent.length > 0) {
-            setScoreDB(parseFloat(socioConsent[0].score_bot));
-            setIsOpenDemographicForm(false);
-          }else{
-            setIsOpenDemographicForm(true);
-          }
-        });
-    
-  }
+      .then((resp) => resp.json())
+      .then((socioConsent) => {
+        if (socioConsent.length > 0) {
+          setScoreDB(parseFloat(socioConsent[0].score_bot));
+          setIsOpenDemographicForm(false);
+        } else {
+          setIsOpenDemographicForm(true);
+        }
+      });
+  };
 
   const callDB = async (answer) => {
-    
     if (scoreDB === -1) {
-
       const questionScore = {
-        user_id : localStorage.getItem("mptoken"),
+        user_id: localStorage.getItem("mptoken"),
       };
       const requestOptions = {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(questionScore)
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(questionScore),
       };
-      const consent = await fetch("/api/getConsent", requestOptions).then(resp => resp.json());
-      
+      const consent = await fetch("/api/getConsent", requestOptions).then(
+        (resp) => resp.json()
+      );
+
       if (consent.length > 0) {
         const tempScore = parseFloat(consent[0].score_bot);
         setScoreDB(tempScore);
         saveQuestion(answer, tempScore);
       }
-
-    }else{
+    } else {
       saveQuestion(answer, scoreDB);
     }
-
-  }
+  };
 
   const next = () => {
-
-    if (firstOpen){
-
+    if (firstOpen) {
       fetchDB();
       setFirstOpen(false);
-
-    }else{
-
+    } else {
       if (answers.length >= 0 && answers.length <= 10) {
-
-        if (time > 0){
+        if (time > 0) {
           if (!currentAnswer) {
             dispatch({ type: SET_ERROR, error: "Please select an option" });
             return;
           }
         }
-  
-        setRKey(rKey+1);
-        
+
+        setRKey(rKey + 1);
+
         const answer = {
           qid: question.id,
           quid: question.questionUid,
-          ao : currentAnswer,
-          at : currentAnswer !== ''? question[`answer_${currentAnswer}`]: '',
-          cao : question.correct_answer,
-          cat : question[`answer_${question.correct_answer}`]
+          ao: currentAnswer,
+          at: currentAnswer !== "" ? question[`answer_${currentAnswer}`] : "",
+          cao: question.correct_answer,
+          cat: question[`answer_${question.correct_answer}`],
         };
         callDB(answer);
         answers.push(answer);
         setTime(15);
-        
+
         dispatch({ type: SET_ANSWERS, answers });
         dispatch({ type: SET_CURRENT_ANSWER, currentAnswer: "" });
-        
+
         if (currentQuestion + 1 < questions.length) {
           dispatch({
             type: SET_CURRENT_QUESTION,
@@ -318,37 +303,30 @@ const Trivia = (props) => {
           });
           return;
         }
-        
+
         dispatch({ type: SET_SHOW_RESULTS, showResults: true });
-        
+
         if (answers.length === 10) {
           checkDemographics();
         }
       }
     }
-
-    
   };
 
-  useEffect(
-    () => {
-      timer.current = setTimeout(() => {
-        setTime(time - 1);
-        if (time === 0 || firstOpen){
-          next();
-        }
-      }, 1 * 1000);
+  useEffect(() => {
+    timer.current = setTimeout(() => {
+      setTime(time - 1);
+      if (time === 0 || firstOpen) {
+        next();
+      }
+    }, 1 * 1000);
 
-      
-      return () => {
-        clearTimeout(timer.current);
-      };
-    },
-    [time]
-  );
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, [time]);
 
   useEffect(() => {
-
     updateUserID();
     loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
 
@@ -370,37 +348,34 @@ const Trivia = (props) => {
     return () => {
       window.removeEventListener("keydown", keyPressHandler);
     };
-
-    
-
   }, [currentAnswer]);
-  
+
   function Consent() {
-
-    return <ConsentForm 
-      isOpenConsentForm={isOpenConsentForm} 
-      setIsOpenConsentForm ={setIsOpenConsentForm}
-      universe={"trivia"}
-      saveConsent = {saveConsent}
-      setSaveConsent = {setSaveConsent}
-      setScoreDB = {setScoreDB}
-      scoreDB = {scoreDB}
-      t = {t}
+    return (
+      <ConsentForm
+        isOpenConsentForm={isOpenConsentForm}
+        setIsOpenConsentForm={setIsOpenConsentForm}
+        universe={"trivia"}
+        saveConsent={saveConsent}
+        setSaveConsent={setSaveConsent}
+        setScoreDB={setScoreDB}
+        scoreDB={scoreDB}
+        t={t}
       />
-
+    );
   }
 
-  function Demographic () {
-
-      return <DemographicForm 
-      isOpenDemographicForm = {isOpenDemographicForm}
-      setIsOpenDemographicForm = {setIsOpenDemographicForm}
-      universe = {"trivia"}
-      scoreDB = {scoreDB}
-      setScoreDB = {setScoreDB}
-      t = {t}
+  function Demographic() {
+    return (
+      <DemographicForm
+        isOpenDemographicForm={isOpenDemographicForm}
+        setIsOpenDemographicForm={setIsOpenDemographicForm}
+        universe={"trivia"}
+        scoreDB={scoreDB}
+        setScoreDB={setScoreDB}
+        t={t}
       />
-
+    );
   }
 
   function copyToClipboard(text) {
@@ -413,12 +388,11 @@ const Trivia = (props) => {
   }
 
   const addToast = (toast, callback) => {
-    
     const defaultToast = {
       className: "toast-sucess",
       timeout: 5000,
       intent: Intent.SUCCESS,
-      position: Position.BOTTOM
+      position: Position.BOTTOM,
     };
 
     const toastOutput = Object.assign(defaultToast, toast);
@@ -426,72 +400,93 @@ const Trivia = (props) => {
   };
 
   const renderScore = () => {
-
     saveGameDB();
 
     let resultToShare = "";
     const correctAnswers = answers.filter((answer) => {
-      const question = questions.find(
-        (question) => question.id === answer.qid
-      );
+      const question = questions.find((question) => question.id === answer.qid);
 
-      if (question.correct_answer === answer.ao){
+      if (question.correct_answer === answer.ao) {
         resultToShare = resultToShare + "🟩";
       }
-      
+
       return question.correct_answer === answer.ao;
     });
 
-    while(resultToShare.length !== 20) {
+    while (resultToShare.length !== 20) {
       resultToShare = resultToShare + "🟥";
     }
 
     return (
       <span key={"renderScoreAnswers"}>
         {correctAnswers.length.toString()} / {answers.length.toString()} correct
-        <br/>
+        <br />
         {/* {resultToShare}
         <br/> */}
-      <Button key={"buttonShareKey"} id="buttonShareKey" className="buttonShareKey" onClick = {() => {
-            copyToClipboard("Pantheon Trivia "+ gameIdShare + "\n"+ resultToShare + correctAnswers.length + "0%" +
-              "\nhttps://pantheon.world/app/trivia" +"\n#pantheon #trivia" +"\nWhat about you?");
-            addToast({
-              message: "Copied",
-              intent: Intent.SUCCESS
-            }, undefined);
-          }}>Share</Button>
-          <Toaster key={"toasterTriviaPage"} ref={refHandlers} usePortal={false} position={Position.BOTTOM} >
-          </Toaster>
+        <Button
+          key={"buttonShareKey"}
+          id="buttonShareKey"
+          className="buttonShareKey"
+          onClick={() => {
+            copyToClipboard(
+              "Pantheon Trivia " +
+                gameIdShare +
+                "\n" +
+                resultToShare +
+                correctAnswers.length +
+                "0%" +
+                "\nhttps://pantheon.world/app/trivia" +
+                "\n#pantheon #trivia" +
+                "\nWhat about you?"
+            );
+            addToast(
+              {
+                message: "Copied",
+                intent: Intent.SUCCESS,
+              },
+              undefined
+            );
+          }}
+        >
+          Share
+        </Button>
+        <Toaster
+          key={"toasterTriviaPage"}
+          ref={refHandlers}
+          usePortal={false}
+          position={Position.BOTTOM}
+        ></Toaster>
       </span>
-      
     );
-
-    
   };
 
   function getRecaptcha() {
-
-    return <ReCaptcha 
-        id = "trivia"
-        key={"trivia"+rKey.toString()}
-        ref={recaptchaRef} 
-        sitekey={'6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D'} 
-        verifyCallback={verifyCallback} />
-
-
+    return (
+      <ReCaptcha
+        id="trivia"
+        key={"trivia" + rKey.toString()}
+        ref={recaptchaRef}
+        sitekey={"6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"}
+        verifyCallback={verifyCallback}
+      />
+    );
   }
-  
+
   return (
-    <TriviaContext.Provider key={"triviaContextProvider"} value={{ state, dispatch }}>
+    <TriviaContext.Provider
+      key={"triviaContextProvider"}
+      value={{ state, dispatch }}
+    >
       {getRecaptcha()}
       {Demographic()}
       {/* {Consent()} */}
       <Helmet key={"triviaTitle"} title="Trivia" />
       <div key={"triviaDiv1"}>
-        <h1 key={"triviaTitleH1"} className="trivia-title">Trivia</h1>
+        <h1 key={"triviaTitleH1"} className="trivia-title">
+          Trivia
+        </h1>
         {showResults ? (
           <div key={"triviaResultsDiv"} className="results">
-
             <h2 key={"triviaResultsDivH2"}>Results: {renderScore()}</h2>
             <div key={"triviaResultsDivData"}>{renderResultsData()}</div>
 
@@ -504,32 +499,35 @@ const Trivia = (props) => {
         ) : (
           <div key={"triviaQuizDiv"} className="quiz">
             <div key={"triviaCountDownDiv"} className="countdown">
-            <Countdown key={"triviaCountDownTime"} time={time} />
-            <Question />
-            <Progress total={questions.length} current={currentQuestion + 1} />
-            {renderError()}
-            <Answers />
-            <div className="continue">
-              <button
-                className={
-                  currentAnswer ? "btn-continue" : "btn-continue btn-disabled"
-                }
-                onClick={next}
-              >
-                Confirm and Continue
-              </button>
+              <Countdown key={"triviaCountDownTime"} time={time} />
+              <Question />
+              <Progress
+                total={questions.length}
+                current={currentQuestion + 1}
+              />
+              {renderError()}
+              <Answers />
+              <div className="continue">
+                <button
+                  className={
+                    currentAnswer ? "btn-continue" : "btn-continue btn-disabled"
+                  }
+                  onClick={next}
+                >
+                  Confirm and Continue
+                </button>
               </div>
             </div>
           </div>
         )}
       </div>
-      <br/> <br/> <br/>
+      <br /> <br /> <br />
     </TriviaContext.Provider>
   );
 };
 
-Trivia.need = [
-  fetchData("questions", "http://localhost:3300/api/trivia/getQuestionsCSV"),
-];
+Trivia.need = [fetchData("questions", "/api/trivia/getQuestionsCSV")];
 
-export default translate()(connect((state) => ({ data: state.data }), {})(Trivia));
+export default translate()(
+  connect((state) => ({ data: state.data }), {})(Trivia)
+);
