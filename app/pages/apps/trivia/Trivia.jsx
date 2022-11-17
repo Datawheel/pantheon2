@@ -131,9 +131,11 @@ const Trivia = (props) => {
     });
 
   const restart = () => {
-    axios.get("/api/trivia/getQuestionsCSV").then((resp) => {
-      dispatch({ type: RESET_QUIZ, questions: resp.data });
-    });
+    axios
+      .get("https://pantheon.world/api/trivia/getQuestionsCSV")
+      .then((resp) => {
+        dispatch({ type: RESET_QUIZ, questions: resp.data });
+      });
   };
 
   const updateUserID = () => {
@@ -526,7 +528,9 @@ const Trivia = (props) => {
   );
 };
 
-Trivia.need = [fetchData("questions", "/api/trivia/getQuestionsCSV")];
+Trivia.need = [
+  fetchData("questions", "https://pantheon.world/api/trivia/getQuestionsCSV"),
+];
 
 export default translate()(
   connect((state) => ({ data: state.data }), {})(Trivia)
