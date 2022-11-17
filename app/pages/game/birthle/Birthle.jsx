@@ -1,19 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Birthle.css";
 import fetchSlugs from "./fetchSlugs";
 import fetchPersons from "./fetchPersons";
 import useTrait from "./useTrait";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { translate } from "react-i18next";
 
 import Result from "pages/game/birthle/components/Result/Result";
 import Game from "pages/game/birthle/components/Game/Game";
 import ConsentForm from "pages/game/birthle/components/ConsentForm/ConsentForm";
-import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm"
-
+import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm";
 
 function convertTZ(date, tzString) {
-  return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+  return new Date(
+    (typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
+      timeZone: tzString,
+    })
+  );
 }
 
 const N_PERSONS = 5;
@@ -30,8 +33,6 @@ const boardDefault = (() =>
   ))();
 
 function Birthle(props) {
-
-
   const { t, i18n } = props;
 
   const [persons, setPersons] = useState([]);
@@ -47,7 +48,7 @@ function Birthle(props) {
 
   const [isOpenConsentForm, setIsOpenConsentForm] = useState(undefined);
   const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(undefined);
-  const [userId, setUserId]= useState(undefined);
+  const [userId, setUserId] = useState(undefined);
   const [saveConsent, setSaveConsent] = useState(true);
   const [correctPersons, setCorrectPersons] = useState(undefined);
 
@@ -63,11 +64,11 @@ function Birthle(props) {
   const month = date.getMonth() + 1;
   const gameNumber = 1; // (hour >= 2 && hour < 14) ? 1 : 2;
   const gameDate = `${year}-${month}-${day}`; // 2022-5-25
-  
+
   const fetchData = async () => {
     const slugs = await fetchSlugs();
     const persons = await fetchPersons(slugs);
-    
+
     setPersons(persons);
 
     setSortedPersons(() =>
@@ -92,12 +93,10 @@ function Birthle(props) {
       }
 
       return a.birthyear - b.birthyear;
-    })
-    
+    });
   };
-  
-  useEffect(() => {
 
+  useEffect(() => {
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
@@ -116,25 +115,25 @@ function Birthle(props) {
 
   return (
     <div key={"birthleComponents"} className="birthle">
-      <DemographicForm 
+      <DemographicForm
         setIsOpenDemographicForm={setIsOpenDemographicForm}
-        isOpenDemographicForm = {isOpenDemographicForm}
-        universe = {"birthle"}
-        scoreDB = {scoreDB}
-        setScoreDB = {setScoreDB}
-        t = {t}
-        /> 
-      <ConsentForm 
-      isOpenConsentForm={isOpenConsentForm} 
-      setIsOpenConsentForm ={setIsOpenConsentForm}
-      userId={userId}
-      universe={"birthle"}
-      saveConsent = {saveConsent}
-      setSaveConsent = {setSaveConsent}
-      scoreDB = {scoreDB}
-      setScoreDB = {setScoreDB}
-      t = {t}
-      /> 
+        isOpenDemographicForm={isOpenDemographicForm}
+        universe={"birthle"}
+        scoreDB={scoreDB}
+        setScoreDB={setScoreDB}
+        t={t}
+      />
+      <ConsentForm
+        isOpenConsentForm={isOpenConsentForm}
+        setIsOpenConsentForm={setIsOpenConsentForm}
+        userId={userId}
+        universe={"birthle"}
+        saveConsent={saveConsent}
+        setSaveConsent={setSaveConsent}
+        scoreDB={scoreDB}
+        setScoreDB={setScoreDB}
+        t={t}
+      />
       <Game
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         N_PERSONS={N_PERSONS}
@@ -153,17 +152,17 @@ function Birthle(props) {
         cancelBtnRef={cancelBtnRef}
         resultBlockRef={resultBlockRef}
         gameBlockRef={gameBlockRef}
-        gameDate = {gameDate}
-        gameNumber = {gameNumber}
+        gameDate={gameDate}
+        gameNumber={gameNumber}
         userId={userId}
-        correctPersons = {correctPersons}
-        setCorrectPersons = {setCorrectPersons}
-        scoreDB = {scoreDB}
-        setScoreDB = {setScoreDB}
-        setIsOpenDemographicForm = {setIsOpenDemographicForm}
-        setIsOpenConsentForm = {setIsOpenConsentForm}
-        setSaveConsent = {setSaveConsent}
-      /> 
+        correctPersons={correctPersons}
+        setCorrectPersons={setCorrectPersons}
+        scoreDB={scoreDB}
+        setScoreDB={setScoreDB}
+        setIsOpenDemographicForm={setIsOpenDemographicForm}
+        setIsOpenConsentForm={setIsOpenConsentForm}
+        setSaveConsent={setSaveConsent}
+      />
       <Result
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         sortedPersons={sortedPersons}
@@ -174,7 +173,6 @@ function Birthle(props) {
       />
     </div>
   );
-  
 }
 
 export default translate()(Birthle);
