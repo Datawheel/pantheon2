@@ -1,10 +1,9 @@
-import { useRef, useEffect, useState } from "react";
-import React from "react";
-import {Button, Classes, Dialog} from "@blueprintjs/core";
+import React, { useEffect, useState } from "react";
+import { Button, Classes, Dialog } from "@blueprintjs/core";
 import classNames from "classnames";
 import styles from "./ConsentForm.module.scss";
-import {v4 as uuidv4} from "uuid";
-import {loadReCaptcha, ReCaptcha} from "react-recaptcha-v3";
+import { v4 as uuidv4 } from "uuid";
+import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
 
 export default function ConsentForm({
   isOpenConsentForm,
@@ -15,9 +14,8 @@ export default function ConsentForm({
   setSaveConsent,
   scoreDB,
   setScoreDB,
-  t
+  t,
 }) {
-
   const [recap, setRecap] = useState(undefined);
   const [rKey, setRKey] = useState(Math.random() * (100 - 50) + 50);
   const consentText = t("text.game.popup.consent-form");
@@ -25,13 +23,12 @@ export default function ConsentForm({
 
   const verifyCallback = (recaptchaToken) => {
     setRecap(recaptchaToken);
-  }
+  };
 
   const acceptClick = async (buttonType) => {
-
-    setRKey(rKey+1);
+    setRKey(rKey + 1);
     loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
-    
+
     setIsOpenConsentForm(false);
     setSaveConsent(false);
 
@@ -41,61 +38,58 @@ export default function ConsentForm({
       universe: universe,
       url: window.location.href,
       token: recap,
-      scoreDB: scoreDB
+      scoreDB: scoreDB,
     };
 
     const requestOptions = {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(data)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     };
-    
+
     await fetch("/api/createConsent", requestOptions);
 
-    if (buttonType === "trivia"){
-      window.location.href='/app/trivia';
-    } 
-
-  }
+    if (buttonType === "trivia") {
+      window.location.href = "/app/trivia";
+    }
+  };
 
   const playTrivia = () => {
-    acceptClick("trivia")
-  }
+    acceptClick("trivia");
+  };
 
   const playBirthle = () => {
-    acceptClick("birthle")
-  }
+    acceptClick("birthle");
+  };
 
   const fetchDB = async () => {
-
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
-    
+
     const gameDataSave = {
-      user_id: localStorage.getItem("mptoken")
-    }
+      user_id: localStorage.getItem("mptoken"),
+    };
     const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(gameDataSave)
-      };
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(gameDataSave),
+    };
 
     await fetch("/api/getConsent", requestOptions)
-        .then(resp => resp.json())
-        .then(consent => {
-          if (consent.length > 0) {
-            setScoreDB(parseFloat(consent[0].score_bot));
-            setSaveConsent(false);
-            setIsOpenConsentForm(false);
-          }else{
-            setSaveConsent(true);
-            setIsOpenConsentForm(true);
-          }
-        });
-    
-  }
+      .then((resp) => resp.json())
+      .then((consent) => {
+        if (consent.length > 0) {
+          setScoreDB(parseFloat(consent[0].score_bot));
+          setSaveConsent(false);
+          setIsOpenConsentForm(false);
+        } else {
+          setSaveConsent(true);
+          setIsOpenConsentForm(true);
+        }
+      });
+  };
 
   useEffect(() => {
     loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
@@ -106,11 +100,10 @@ export default function ConsentForm({
         isMounted.current = false;
       };
     }
-    
-  }, []); 
+  }, []);
 
   return (
-      <Dialog
+    <Dialog
       isOpen={isOpenConsentForm}
       id="consentpopup"
       key={"consentpopup"}
@@ -124,37 +117,49 @@ export default function ConsentForm({
         sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
         verifyCallback={verifyCallback}
       />
-      <div key={"dialogbody"} className={classNames(Classes.DIALOG_BODY, styles.consentform)}>
-      <div key={"cosenttitle"} className={styles.description} dangerouslySetInnerHTML={{__html:consentText}} />
-         
-        <div id={"consentbuttons"} key={"consentbuttons"} className={classNames(styles.options,"consentbuttons")}>
-        <Button
-         key={"consentno"}
-         id={"consentno"}
-         className={classNames(styles.button, styles.lite)}
-         onClick={event =>  window.location.href='/data/faq'}
-         >Do not accept</Button>
+      <div
+        key={"dialogbody"}
+        className={classNames(Classes.DIALOG_BODY, styles.consentform)}
+      >
+        <div
+          key={"cosenttitle"}
+          className={styles.description}
+          dangerouslySetInnerHTML={{ __html: consentText }}
+        />
+
+        <div
+          id={"consentbuttons"}
+          key={"consentbuttons"}
+          className={classNames(styles.options, "consentbuttons")}
+        >
+          <Button
+            key={"consentno"}
+            id={"consentno"}
+            className={classNames(styles.button, styles.lite)}
+            onClick={(event) => (window.location.href = "/data/faq")}
+          >
+            Do not accept
+          </Button>
           <Button
             key={"playTrivia"}
             id={"playTrivia"}
             className={classNames(styles.button, "playTrivia")}
-            ref = {acceptBtnRef}
+            ref={acceptBtnRef}
             onClick={playTrivia}
-          >Accept and play Trivia</Button>
+          >
+            Accept and play Trivia
+          </Button>
           <Button
             key={"consentyes"}
             id={"consentyes"}
             className={classNames(styles.button, "consentyes")}
-            ref = {acceptBtnRef}
+            ref={acceptBtnRef}
             onClick={playBirthle}
-          >Accept and play Birthle</Button>
+          >
+            Accept and play Birthle
+          </Button>
         </div>
       </div>
-
     </Dialog>
   );
 }
-
-
-
-
