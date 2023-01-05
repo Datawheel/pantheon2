@@ -4,21 +4,129 @@
   }
 }
 
+.boardS{
+  margin: 10px;
+  align-items: center; 
+}
+
+.bestScoreB{
+  padding: 10px;
+  width: 100px;
+  height: 80px;
+  text-align: center;
+  background-color: $primary;
+  font-size: 14px;
+  display: inline-grid;
+}
+.numberDaysB{
+  padding: 10px;
+  width: 100px;
+  height: 80px;
+  text-align: center;
+  background-color: $primary;
+  font-size: 14px;
+  display: inline-grid;
+}
+.numberAttemptsB{
+  padding: 10px;
+  width: 100px;
+  height: 80px;
+  text-align: center;
+  background-color: $primary;
+  font-size: 16px;
+  display: inline-grid;
+}
+.numberWinsB{
+  padding: 10px;
+  width: 100px;
+  height: 80px;
+  text-align: center;
+  background-color: $primary;
+  font-size: 14px;
+  display: inline-grid;
+}
+.currentStreakB{
+  padding: 10px;
+  width: 100px;
+  height: 80px;
+  text-align: center;
+  background-color: $primary;
+  font-size: 14px;
+  display: inline-grid;
+}
+.maxStreakB{
+  padding: 10px;
+  width: 100px;
+  height: 80px;
+  text-align: center;
+  background-color: $primary;
+  font-size: 14px;
+  display: inline-grid;
+}
+.line1{
+  width: 100%;
+  text-align: center;
+  padding-bottom: 20px;
+}
+.line2{
+  width: 100%;
+  text-align: center;
+}
+
+.numberAttempts{
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+.bestScore{
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+.numberDays{
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+.numberWins{
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+.currentStreak{
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+.maxStreak{
+  font-size: 25px;
+  padding-bottom: 10px;
+}
+
+.bp3-dialog-header{
+  background: initial;
+  text-align: center;
+  background-color: $primary; 
+  opacity: 1;
+ }
+ 
+ .bp3-dialog-body{
+   background-color: $primary;
+  }
+ 
+
 .bp3-dialog{
   margin: 50px 0;
   width: 520px;
+  background-color: $primary;
 }
 
 @media (max-width: 600px) {
   .bp3-dialog{
     margin: 70px 0;
     width: 380px;
+    background-color: $primary;
   }
 }
 
 .consentform {
   p {
-    font-size: 0.9em;
+    font-size: 0.9rem;
     line-height: 1.2rem;
   }
   img {
@@ -53,7 +161,7 @@
   }
 }
 
-#consentbuttons{
+#consentbuttons2{
   text-align: right;
 }
 

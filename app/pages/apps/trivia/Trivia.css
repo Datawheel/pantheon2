@@ -17,6 +17,49 @@
   }
 }
 
+
+.buttons{
+  height: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 0px 0px 0 0;
+}
+
+#help {
+  background-color: rgba(208, 201, 191, 0.6);
+  border: 2px solid var(--colorCardboard);
+  border-radius: 5px;
+  margin: 5px 5px 0px 0px;
+  padding: 1px 1px 1px 1px;
+  color: none;
+  text-transform: uppercase;
+  font-size: 15px;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    color: var(--colorSlate);
+    background-color: var(--colorCardboard);
+  }
+  &.btn-disabled {
+    background-color: var(--colorSlate);
+    border-color: var(--colorStone);
+    color: var(--colorStone);
+    cursor: default;
+  }
+}
+
+.help::before {
+  content: "";
+  background-color: rgba(208, 201, 191, 0.6);
+  display: block;
+  background: url("/images/icons/oec-dist.svg") no-repeat center;
+  width: 34px;
+  height: 30px;
+  float: center;
+}
+
 .buttonShareKey::before {
   content: "";
   display: block;
@@ -24,15 +67,15 @@
   width: 16px;
   height: 22px;
   float: left;
-  margin: 0px 5px 0 0;
+  margin: 0px 0px 0 0;
 }
 
 #buttonShareKey {
   background-color: rgba(208, 201, 191, 0.6);
   border: 1px solid var(--colorCardboard);
   border-radius: 5px;
-  margin: 5px 5px 0px 0px;
   padding-right: 15px;
+  margin: 5px 5px 0 0;
   color: none;
   text-transform: uppercase;
   font-size: 15px;

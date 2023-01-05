@@ -50,8 +50,11 @@ module.exports = function(app) {
     if (date) {
       jsonData = jsonData.filter((el) => el["date"] === date);
     }
+    if (jsonData.length === 0) {
+      jsonData = csvJSON(data).filter((el) => el["date"] === "2022-1-1");
+    }
     
-    const questions = []
+    const questions = [];
     const letters = ["a","b","c","d"];
 
     jsonData.forEach(function(obj, ind, arr) {
