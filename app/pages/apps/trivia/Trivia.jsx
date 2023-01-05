@@ -11,6 +11,7 @@ import TriviaContext from "pages/apps/trivia/TriviaContext.js";
 import TriviaReducer from "pages/apps/trivia/TriviaReducer.js";
 import DemographicForm from "pages/game/birthle/components/DemographicForm/DemographicForm";
 import ConsentForm from "pages/game/birthle/components/ConsentForm/ConsentForm";
+import Statistics from "pages/apps/trivia/Statistics/Statistics"
 import { v4 as uuidv4 } from "uuid";
 import { translate } from "react-i18next";
 import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
@@ -56,6 +57,8 @@ const Trivia = (props) => {
   const [firstOpen, setFirstOpen] = useState(true);
   const [saveConsent, setSaveConsent] = useState(false);
   const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(false);
+  const [isOpenStatistics, setIsOpenStatistics] = useState(false);
+  const [statistics, setStatistics] = useState([]);
   const [state, dispatch] = useReducer(TriviaReducer, initialState);
   const [recap, setRecap] = useState(undefined);
   const [rKey, setRKey] = useState(10);
@@ -367,6 +370,17 @@ const Trivia = (props) => {
     );
   }
 
+  function ShowStatistics() {
+    return (
+      <Statistics
+          allScores = {statistics}
+          isOpenStatistics = {isOpenStatistics}
+          setIsOpenStatistics = {setIsOpenStatistics}
+          t={t}
+        />
+    );
+  }
+
   function Demographic() {
     return (
       <DemographicForm
@@ -378,6 +392,25 @@ const Trivia = (props) => {
         t={t}
       />
     );
+  }
+
+  const seeStatistics = async () => {
+    const questionScore = {
+      user_id: localStorage.getItem("mptoken"),
+    };
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(questionScore),
+    };
+    const allScores = await fetch("/api/getAllTriviaScore", requestOptions).then(
+      (resp) => resp.json()
+    );
+
+    if (allScores.length > 0){
+      setStatistics(allScores);
+      setIsOpenStatistics(true);
+    }
   }
 
   function copyToClipboard(text) {
@@ -425,6 +458,7 @@ const Trivia = (props) => {
         <br />
         {/* {resultToShare}
         <br/> */}
+        <div className="buttons">
         <Button
           key={"buttonShareKey"}
           id="buttonShareKey"
@@ -452,6 +486,12 @@ const Trivia = (props) => {
         >
           Share
         </Button>
+        <Button id="help"
+          className={"help"} 
+            onClick={seeStatistics}
+            >
+        </Button>
+        </div>
         <Toaster
           key={"toasterTriviaPage"}
           ref={refHandlers}
@@ -473,6 +513,9 @@ const Trivia = (props) => {
       />
     );
   }
+  
+  
+
 
   return (
     <TriviaContext.Provider
@@ -480,7 +523,8 @@ const Trivia = (props) => {
       value={{ state, dispatch }}
     >
       {getRecaptcha()}
-      {Demographic()}
+      {showResults ? Demographic(): <div></div>}
+      {showResults ? ShowStatistics(): <div></div>}
       {/* {Consent()} */}
       <Helmet key={"triviaTitle"} title="Trivia" />
       <div key={"triviaDiv1"}>
@@ -489,7 +533,9 @@ const Trivia = (props) => {
         </h1>
         {showResults ? (
           <div key={"triviaResultsDiv"} className="results">
-            <h2 key={"triviaResultsDivH2"}>Results: {renderScore()}</h2>
+            <h2 key={"triviaResultsDivH2"}>Results: {renderScore()}
+            </h2>
+            
             <div key={"triviaResultsDivData"}>{renderResultsData()}</div>
 
             {/* <div className="continue">

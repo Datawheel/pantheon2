@@ -18,6 +18,8 @@ ALTER USER user_p2 PASSWORD 'p@nth30_db_2022';
 CREATE ROLE user_p2 WITH ENCRYPTED PASSWORD 'p@nth30_db_2022';
 CREATE DATABASE db_pantheon_games OWNER user_p2;
 
+pg_restore -d db_pantheon_games db_br.sql -U user_p2
+
 GRANT ALL PRIVILEGES ON DATABASE db_pantheon_games TO user_p2;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user_p2;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO user_p2;
@@ -47,7 +49,9 @@ host    all             user_p2             ::1/128            md5
 # sudo chown $USER:$USER /var/cache/mon_programme
 # sudo chown -R navarrete:www-data /var/cache/mon_programme
 
-CREATE TABLE IF NOT EXISTS consent(
+CREATE SCHEMA trivia;
+
+CREATE TABLE IF NOT EXISTS trivia.consent(
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
     ip_hash VARCHAR NOT NULL,
@@ -58,7 +62,7 @@ CREATE TABLE IF NOT EXISTS consent(
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS participant(
+CREATE TABLE IF NOT EXISTS trivia.participant(
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
     ip_hash VARCHAR NOT NULL,
@@ -74,7 +78,7 @@ CREATE TABLE IF NOT EXISTS participant(
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS game(
+CREATE TABLE IF NOT EXISTS trivia.game(
     id SERIAL PRIMARY KEY,
     game_date VARCHAR NOT NULL,
     game_number INT,
@@ -86,7 +90,7 @@ CREATE TABLE IF NOT EXISTS game(
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS game_participation(
+CREATE TABLE IF NOT EXISTS trivia.game_participation(
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
     ip_hash VARCHAR NOT NULL,
@@ -100,7 +104,7 @@ CREATE TABLE IF NOT EXISTS game_participation(
 );
 
 
-CREATE TABLE IF NOT EXISTS trivia_game(
+CREATE TABLE IF NOT EXISTS trivia.trivia_game(
     id SERIAL PRIMARY KEY,
     date VARCHAR NOT NULL,
     game_number INT,
@@ -111,7 +115,7 @@ CREATE TABLE IF NOT EXISTS trivia_game(
 
 
 
-CREATE TABLE IF NOT EXISTS trivia_score(
+CREATE TABLE IF NOT EXISTS trivia.trivia_score(
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
     ip_hash VARCHAR NOT NULL,
@@ -135,6 +139,10 @@ DELETE FROM game_participation;
 
 DELETE FROM trivia_game;
 DELETE FROM trivia_score;
+
+
+
+
 
 pg_dump -d db_pantheon_games -h 127.0.0.1 -U user_p2 -Fc -f db.sql
 

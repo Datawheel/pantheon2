@@ -90,7 +90,7 @@ class Search extends Component {
           primary_meta: d.occupation,
           slug: d.slug
         }));
-        console.log("results", results);
+        // console.log("results", results);
         this.setState({results, query: "", showTrending: true});
       });
   }
