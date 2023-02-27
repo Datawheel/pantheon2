@@ -296,12 +296,11 @@ module.exports = function (app) {
       .catch(
         (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
       );
-    // const todaysBiosFromDb = calcRankDeltas(
-    //   todaysBiosFromDbResp.data,
-    //   `${year}-${month}-${day}`,
-    //   `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`
-    // );
-    const todaysBiosFromDb = [];
+    const todaysBiosFromDb = calcRankDeltas(
+      todaysBiosFromDbResp.data,
+      `${year}-${month}-${day}`,
+      `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`
+    );
 
     if (todaysBiosFromDb.length) {
       return res.json(
@@ -331,11 +330,10 @@ module.exports = function (app) {
       });
       const topPageViewsJson = topPageViewsResp.data;
       if (
-        true ||
-        (topPageViewsResp.error &&
-          topPageViewsResp.error.detail.includes(
-            "The date(s) you used are valid, but we either do not have data for those date(s)"
-          ))
+        topPageViewsResp.error &&
+        topPageViewsResp.error.detail.includes(
+          "The date(s) you used are valid, but we either do not have data for those date(s)"
+        )
       ) {
         const todaysBiosFromDbResp2 = await axios
           .get(
