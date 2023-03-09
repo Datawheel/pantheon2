@@ -31,6 +31,7 @@ export const initRankingsAndViz = (initialState) => (dispatch) => {
     type: "VB_UPDATE_OCCUPATION",
     occupation: initialState.occupation,
   });
+  dispatch({ type: "VB_UPDATE_YEAR_TYPE", yearType: initialState.yearType });
   dispatch({ type: "VB_UPDATE_YEARS", years: initialState.years });
   if (initialState.show) {
     dispatch({

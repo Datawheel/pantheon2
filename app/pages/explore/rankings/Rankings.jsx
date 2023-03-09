@@ -34,6 +34,8 @@ class Ranking extends Component {
     const show = qParams.show
       ? SANITIZERS.show(qParams.show, "rankings")
       : "people";
+    const yearType =
+      qParams.yearType === "deathyear" ? "deathyear" : "birthyear";
     initRankingsAndViz({
       country,
       city,
@@ -45,6 +47,7 @@ class Ranking extends Component {
       occupation,
       show,
       years,
+      yearType,
     });
   }
 
