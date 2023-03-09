@@ -29,7 +29,8 @@ class Viz extends Component {
     const onlyShowNew = qParams.new === "true";
     const show = qParams.show ? SANITIZERS.show(qParams.show, "viz") : "occupations";
     const viz = qParams.viz ? SANITIZERS.vizType(qParams.viz) : "treemap";
-    initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "viz", occupation, show, viz, years});
+    const yearType = qParams.yearType === "deathyear" ? "deathyear" : "birthyear";
+    initRankingsAndViz({country, city, gender, metricCutoff, metricType, onlyShowNew, page: "viz", occupation, show, viz, years, yearType});
   }
 
   componentWillUnmount() {

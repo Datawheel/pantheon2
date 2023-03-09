@@ -22,7 +22,7 @@ export const LANGS_RANGE = range(15, 20)
   .concat(range(20, 50, 5))
   .concat(range(50, 100, 15))
   .concat(range(100, 225, 25));
-export const YEAR_RANGE = [-3501, 2022];
+export const YEAR_RANGE = [-3501, 2023];
 
 // for rankings pages
 export const RANKINGS_RESULTS_PER_PAGE = 50;
