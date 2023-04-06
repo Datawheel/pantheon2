@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { fetchData } from "@datawheel/canon-core";
 import HomeGrid from "pages/HomeGrid";
 import axios from "axios";
-import { Link } from "react-router";
+import Link from "next/link";
 import Spinner from "components/Spinner";
 import api from "apiConfig";
 import { plural } from "pluralize";
@@ -218,7 +218,6 @@ class Home extends Component {
 
     return (
       <div className="home-container">
-        
         <img className="bg-design" src="/images/home/printing.png" />
         <img className="bg-design bg-design-r" src="/images/home/film.png" />
 
@@ -237,22 +236,22 @@ class Home extends Component {
             </div>
             <div className="home-head-content">
               {/* <p><strong>Pantheon</strong> is an observatory of human collective memory. With data on more than 85,000 biographies, Pantheon helps you explore the geography and dynamics of the most memorable people in our planet&apos;s history.</p>
-              <h2 className="home-explore-links">Explore <Link to="/profile/person">People</Link>, <Link to="/profile/place">Places</Link>, <Link to="/profile/occupation">Occupations</Link>, and <Link to="/profile/era">Eras</Link></h2> */}
+              <h2 className="home-explore-links">Explore <Link href="/profile/person">People</Link>, <Link href="/profile/place">Places</Link>, <Link href="/profile/occupation">Occupations</Link>, and <Link href="/profile/era">Eras</Link></h2> */}
               <h2>Explore human collective memory!</h2>
               <p>
                 Pantheon helps you discover the geography and dynamics of our
                 planet's history.
               </p>
               <h3 className="home-explore-links">
-                Explore <Link to="/profile/person">People</Link>,{" "}
-                <Link to="/profile/place">Places</Link>,{" "}
-                <Link to="/profile/occupation">Occupations</Link>, and{" "}
-                <Link to="/profile/era">Eras</Link>
+                Explore <Link href="/profile/person">People</Link>,{" "}
+                <Link href="/profile/place">Places</Link>,{" "}
+                <Link href="/profile/occupation">Occupations</Link>, and{" "}
+                <Link href="/profile/era">Eras</Link>
               </h3>
             </div>
           </div>
         </div>
-        
+
         <div className="profile-grid">
           <div className="grid-title-container">
             <h3 className="grid-title">Trending Profiles Today</h3>

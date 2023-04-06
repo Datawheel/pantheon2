@@ -10,7 +10,6 @@ import {
   Position,
   Toaster,
 } from "@blueprintjs/core";
-import { Select } from "@blueprintjs/select";
 import styles from "./DemographicForm.module.scss";
 import countries from "static/jsons/countries.json";
 import allUsaStates from "static/jsons/usastates.json";
@@ -258,7 +257,7 @@ export default function DemographicForm({
       >
         <p>{popupDescription}</p>
         <QuestionDemo title={sexTitle} getkey={"firstquestion"}>
-          <Select
+          {/* <Select
             className={styles["popup-select"]}
             items={sexOptions}
             filterable={false}
@@ -279,7 +278,7 @@ export default function DemographicForm({
               rightIcon="chevron-down"
               text={sex?.name || popupSelect}
             />
-          </Select>
+          </Select> */}
         </QuestionDemo>
 
         <QuestionDemo

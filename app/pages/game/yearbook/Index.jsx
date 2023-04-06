@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router";
+import Link from "next/link";
 import { AnchorButton, Collapse } from "@blueprintjs/core";
 
 import "pages/about/Misc.css";
@@ -66,7 +66,7 @@ class YearbookIndex extends Component {
                     {[...Array(10).keys()].reverse().map((yearIndex) => (
                       <li key={1900 + decade * 10 + yearIndex}>
                         <Link
-                          to={`/game/yearbook/${
+                          href={`/game/yearbook/${
                             1900 + decade * 10 + yearIndex
                           }`}
                           className="item-link"
@@ -86,7 +86,7 @@ class YearbookIndex extends Component {
           <div className="next">
             {parseInt(year, 10) < 2000 ? (
               <Link
-                to={`/game/yearbook/${parseInt(year, 10) + 1}`}
+                href={`/game/yearbook/${parseInt(year, 10) + 1}`}
                 className="bp3-button bp3-minimal bp3-icon-chevron-left"
               >
                 {parseInt(year, 10) + 1}
@@ -107,7 +107,7 @@ class YearbookIndex extends Component {
           <div className="prev">
             {parseInt(year, 10) > 1900 ? (
               <Link
-                to={`/game/yearbook/${parseInt(year, 10) - 1}`}
+                href={`/game/yearbook/${parseInt(year, 10) - 1}`}
                 className="bp3-button bp3-minimal"
               >
                 {parseInt(year, 10) - 1}
