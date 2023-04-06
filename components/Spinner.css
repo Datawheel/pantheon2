@@ -1,4 +1,4 @@
-@import "components/common/mixins";
+@import "../pages/mixins.css";
 
 .spinner {
   @mixin absolute-center;

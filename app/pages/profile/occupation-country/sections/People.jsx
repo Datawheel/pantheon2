@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router";
+import Link from "next/link";
 import AnchorList from "components/utils/AnchorList";
 import PhotoCarousel from "components/utils/PhotoCarousel";
 import SectionHead from "pages/profile/common/SectionHead";
@@ -90,7 +90,7 @@ const People = ({ people, occupation }) => {
               <div className="rank-title">
                 <h3>Living {toTitleCase(plural(occupation.occupation))}</h3>
                 <Link
-                  to={`/explore/rankings?show=people&occupation=${occupation.id}`}
+                  href={`/explore/rankings?show=people&occupation=${occupation.id}`}
                 >
                   Go to all Rankings
                 </Link>
@@ -107,7 +107,7 @@ const People = ({ people, occupation }) => {
               <div className="rank-title">
                 <h3>Deceased {toTitleCase(plural(occupation.occupation))}</h3>
                 <Link
-                  to={`/explore/rankings?show=people&occupation=${occupation.id}`}
+                  href={`/explore/rankings?show=people&occupation=${occupation.id}`}
                 >
                   Go to all Rankings
                 </Link>
@@ -127,7 +127,7 @@ const People = ({ people, occupation }) => {
                   (2022)
                 </h3>
                 <Link
-                  to={`/explore/rankings?show=people&occupation=${occupation.id}`}
+                  href={`/explore/rankings?show=people&occupation=${occupation.id}`}
                 >
                   Go to all Rankings
                 </Link>

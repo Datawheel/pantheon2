@@ -4,13 +4,8 @@ npm-debug.log*
 # node modules should never be synced with git
 node_modules
 
-# these static files will be generated on build
-/static/assets
-/packages/*/static/assets
-/static/reports
-packages/*/static/reports
-/index.js
-/packages/*/index.js
+# nextjs build files
+.next
 
 # environment variable files for autoenv and direnv
 .env
@@ -20,13 +15,14 @@ packages/*/static/reports
 dockerfiles/nginx/certs/*
 dockerfiles/nginx/conf.d/default.conf
 
+# pm2 ecosystem config
+ecosystem.config.js
+
+# compiled python files
 *.pyc
+
+# postgrest config
 postgrest.conf
 
 # dont commit huge images dir
-static/images/profile
-
-.vscode
-
-# for pm2 deployment
-ecosystem.config.js
+public/images/profile
