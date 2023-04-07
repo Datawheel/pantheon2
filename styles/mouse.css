@@ -1,5 +1,3 @@
-@import "components/common/mixins";
-
 .mouse {
   @media (max-width: 750px) {
     display: none;

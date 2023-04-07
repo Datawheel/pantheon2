@@ -1,7 +1,7 @@
 import React from "react";
-import "pages/profile/common/Section.css";
+import "./Section.css";
 
-const Section = ({children, index, numSections, slug, title}) =>
+const Section = ({ children, index, numSections, slug, title }) => (
   <section className="profile-section" key={slug}>
     <div className="section-head">
       <div className="section-title">
@@ -19,6 +19,7 @@ const Section = ({children, index, numSections, slug, title}) =>
       </div>*/}
     </div>
     <div className="section-body">{children}</div>
-  </section>;
+  </section>
+);
 
 export default Section;

@@ -1,17 +1,30 @@
-import React from "react";
-import {Tooltip} from "@blueprintjs/core";
+import { Tooltip } from "@blueprintjs/core";
+import Link from "next/link";
 
-const AnchorList = ({items, name, tooltip, url, noAnd, newWindow}) =>
+const AnchorList = ({ items, name, tooltip, url, noAnd, newWindow }) => (
   <span>
-    {items.map((item, index) =>
+    {items.map((item, index) => (
       <span key={item.id || index}>
-        { !noAnd && index && index === items.length - 1 ? " and " : null }
-        {tooltip
-          ? <Tooltip content={tooltip(item)}><a href={url(item)} target={newWindow ? "_blank" : "_self"} rel={newWindow ? "noopener" : null}>{name(item)}</a></Tooltip>
-          : <a href={url(item)} target={newWindow ? "_blank" : "_self"}>{name(item)}</a>}
-        { items.length !== 2 ? index < items.length - 1 ? ", " : null : null }
+        {!noAnd && index && index === items.length - 1 ? " and " : null}
+        {tooltip ? (
+          <Tooltip content={tooltip(item)}>
+            <a
+              href={url(item)}
+              target={newWindow ? "_blank" : "_self"}
+              rel={newWindow ? "noopener" : null}
+            >
+              {name(item)}
+            </a>
+          </Tooltip>
+        ) : (
+          <Link href={url(item)} target={newWindow ? "_blank" : "_self"}>
+            {name(item)}
+          </Link>
+        )}
+        {items.length !== 2 ? (index < items.length - 1 ? ", " : null) : null}
       </span>
-    )}
-  </span>;
+    ))}
+  </span>
+);
 
 export default AnchorList;

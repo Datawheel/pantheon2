@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { strip, trim } from "d3plus-text";
 import { Icon, NonIdealState } from "@blueprintjs/core";
-import api from "../app/apiConfig.js";
+import api from "./utils/apiConfig.js";
 // import "components/Search.css";
 
 class Search extends Component {
