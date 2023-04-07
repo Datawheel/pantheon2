@@ -1,4 +1,4 @@
-@import "../pages/mixins.css";
+@import "../styles/mixins.css";
 
 .spinner {
   @mixin absolute-center;

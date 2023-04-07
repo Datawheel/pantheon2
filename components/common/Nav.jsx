@@ -1,13 +1,13 @@
 import React from "react";
-import { AnchorLink } from "@datawheel/canon-core";
-import "pages/profile/common/Nav.css";
+import Link from "next/link";
+import "./Nav.css";
 
 const Nav = ({ sections }) => (
   <nav className="profile-nav">
     <ol className="profile-nav-list">
       {sections.map((section) => (
         <li className="profile-nav-item" key={section.slug}>
-          <AnchorLink
+          <Link
             href={section.slug}
             className={`profile-nav-link ${section.slug}`}
           >
@@ -17,7 +17,7 @@ const Nav = ({ sections }) => (
               {" "}
               »
             </span>
-          </AnchorLink>
+          </Link>
         </li>
       ))}
     </ol>

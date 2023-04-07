@@ -1,4 +1,4 @@
-@import "../pages/mixins.css";
+@import "../styles/mixins.css";
 
 .app.explorer .global-footer {
   margin: 0 24px;

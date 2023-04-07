@@ -1,4 +1,4 @@
-@import "../../pages/mixins.css";
+@import "../../styles/mixins.css";
 
 .profile-grid {
   @mixin max-container-width;

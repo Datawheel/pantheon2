@@ -1,13 +1,13 @@
+"use client";
 import React, { Component } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { v4 as uuidv4 } from "uuid";
-// import "/components/Navigation.css";
+import { usePathname } from "next/navigation";
+// import { v4 as uuidv4 } from "uuid";
 
 export default function Navigation(props) {
   const { activateSearch } = props;
 
-  const router = useRouter();
+  const pathname = usePathname();
 
   const toggleSubNav = (e) => {
     const itemChildren = e.target.childNodes;
@@ -157,7 +157,7 @@ export default function Navigation(props) {
             <Link
               href="/data/faq"
               className={
-                router.pathname == "/data/faq"
+                pathname == "/data/faq"
                   ? "active item-link about-link"
                   : "item-link about-link"
               }
@@ -169,7 +169,7 @@ export default function Navigation(props) {
             <Link
               href="/data/permissions"
               className={
-                router.pathname == "/data/permissions"
+                pathname == "/data/permissions"
                   ? "active item-link data-link dd"
                   : "item-link data-link dd"
               }
@@ -198,7 +198,7 @@ export default function Navigation(props) {
             <Link
               href="/game/yearbook"
               className={
-                router.pathname == "/game/yearbook"
+                pathname == "/game/yearbook"
                   ? "active item-link explore-link dd"
                   : "item-link explore-link dd"
               }
@@ -227,7 +227,7 @@ export default function Navigation(props) {
             <Link
               href="/app/yearbook"
               className={
-                router.pathname == "/app/yearbook"
+                pathname == "/app/yearbook"
                   ? "active item-link explore-link"
                   : "item-link explore-link"
               }
