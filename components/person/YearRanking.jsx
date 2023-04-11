@@ -7,6 +7,7 @@ import {
 } from "../utils/consts";
 import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
+import SectionLayout from "../common/SectionLayout";
 
 async function getBirthYearRankings(
   birthYear,
@@ -30,7 +31,15 @@ async function getDeathYearRankings(
   return res.json();
 }
 
-export default async function YearRanking({ person, personRanks }) {
+export default async function YearRanking({
+  person,
+  personRanks,
+  title,
+  slug,
+}) {
+  if (!person.birthYear) {
+    return null;
+  }
   // Calculate min/max for birthyear peers
   const birthYearRankLow = Math.max(
     1,
@@ -181,52 +190,55 @@ export default async function YearRanking({ person, personRanks }) {
   }
 
   return (
-    <div>
-      <p>
-        Among people born in {FORMATTERS.year(person.birthyear)}, {person.name}{" "}
-        ranks <strong>{FORMATTERS.commas(meBy.birthyear_rank)}</strong>.&nbsp;
-        {betterBirthPeers}
-        {worseBirthPeers}
-        {deathYearRanking.length ? (
-          <span>
-            &nbsp;Among people deceased in {FORMATTERS.year(person.deathyear)},{" "}
-            {person.name} ranks <strong>{meDy.deathyear_rank}</strong>
-            .&nbsp;
-          </span>
-        ) : null}
-        {betterDeathPeers}
-        {worseDeathPeers}
-      </p>
-      <div className="rank-title">
-        <h3>Others Born in {FORMATTERS.year(person.birthyear)}</h3>
-        <Link
-          href={`/explore/rankings?viz=treemap&show=people&years=${person.birthyear},${person.birthyear}&yearType=birthyear`}
-        >
-          Go to all Rankings
-        </Link>
-      </div>
-      <PhotoCarousel
-        me={person}
-        people={birthYearRanking}
-        rankAccessor="birthyear_rank_unique"
-      />
-      {deathYearRanking.length ? (
-        <div className="rank-sec-body">
-          <div className="rank-title">
-            <h3>Others Deceased in {FORMATTERS.year(person.deathyear)}</h3>
-            <Link
-              href={`/explore/rankings?viz=treemap&show=people&years=${person.deathyear},${person.deathyear}&yearType=deathyear`}
-            >
-              Go to all Rankings
-            </Link>
-          </div>
-          <PhotoCarousel
-            me={person}
-            people={deathYearRanking}
-            rankAccessor="deathyear_rank_unique"
-          />
+    <SectionLayout slug={slug} title={title}>
+      <div>
+        <p>
+          Among people born in {FORMATTERS.year(person.birthyear)},{" "}
+          {person.name} ranks{" "}
+          <strong>{FORMATTERS.commas(meBy.birthyear_rank)}</strong>.&nbsp;
+          {betterBirthPeers}
+          {worseBirthPeers}
+          {deathYearRanking.length ? (
+            <span>
+              &nbsp;Among people deceased in {FORMATTERS.year(person.deathyear)}
+              , {person.name} ranks <strong>{meDy.deathyear_rank}</strong>
+              .&nbsp;
+            </span>
+          ) : null}
+          {betterDeathPeers}
+          {worseDeathPeers}
+        </p>
+        <div className="rank-title">
+          <h3>Others Born in {FORMATTERS.year(person.birthyear)}</h3>
+          <Link
+            href={`/explore/rankings?viz=treemap&show=people&years=${person.birthyear},${person.birthyear}&yearType=birthyear`}
+          >
+            Go to all Rankings
+          </Link>
         </div>
-      ) : null}
-    </div>
+        <PhotoCarousel
+          me={person}
+          people={birthYearRanking}
+          rankAccessor="birthyear_rank_unique"
+        />
+        {deathYearRanking.length ? (
+          <div className="rank-sec-body">
+            <div className="rank-title">
+              <h3>Others Deceased in {FORMATTERS.year(person.deathyear)}</h3>
+              <Link
+                href={`/explore/rankings?viz=treemap&show=people&years=${person.deathyear},${person.deathyear}&yearType=deathyear`}
+              >
+                Go to all Rankings
+              </Link>
+            </div>
+            <PhotoCarousel
+              me={person}
+              people={deathYearRanking}
+              rankAccessor="deathyear_rank_unique"
+            />
+          </div>
+        ) : null}
+      </div>
+    </SectionLayout>
   );
 }

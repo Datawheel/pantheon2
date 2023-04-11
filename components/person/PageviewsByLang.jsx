@@ -4,6 +4,7 @@ import { COLORS_DOMAIN, FORMATTERS } from "../utils/consts";
 import MemMetricsAreaPlot from "./MemMetricsAreaPlot";
 import PageviewsByLangSummary from "./PageviewsByLangSummary";
 import PageviewsByLangAreaPlot from "./PageviewByLangAreaPlot";
+import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 
 function yyyymmdd(dateIn) {
@@ -88,7 +89,7 @@ const formatTimeSeriesData = (timeSeriesDataResps, langlinksLookup) => {
   return [langsTs, numLangs];
 };
 
-export default async function PageviewsByLang({ person }) {
+export default async function PageviewsByLang({ person, slug, title }) {
   const langEditions = await getLangEditions(person.id);
   const [langlinksLookup, timeSeriesDataReqs] = await getTimeSeriesData(
     langEditions,
@@ -101,13 +102,18 @@ export default async function PageviewsByLang({ person }) {
   );
 
   return (
-    <div>
-      <PageviewsByLangSummary timeSeriesData={timeSeriesData} person={person} />
-      <PageviewsByLangAreaPlot
-        timeSeriesData={timeSeriesData}
-        numLangs={numLangs}
-      />
-    </div>
+    <SectionLayout slug={slug} title={title}>
+      <div>
+        <PageviewsByLangSummary
+          timeSeriesData={timeSeriesData}
+          person={person}
+        />
+        <PageviewsByLangAreaPlot
+          timeSeriesData={timeSeriesData}
+          numLangs={numLangs}
+        />
+      </div>
+    </SectionLayout>
   );
 }
 

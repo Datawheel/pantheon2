@@ -1,6 +1,6 @@
+import React from "react";
 import { plural } from "pluralize";
 import ProfileNav from "../../../../components/common/Nav";
-import Section from "../../../../components/common/Section";
 import Intro from "../../../../components/person/Intro";
 import Header from "../../../../components/person/Header";
 import MemMetrics from "../../../../components/person/MemMetrics";
@@ -9,6 +9,10 @@ import OccupationRanking from "../../../../components/person/OccupationRanking";
 import YearRanking from "../../../../components/person/YearRanking";
 import CountryRanking from "../../../../components/person/CountryRanking";
 import CountryOccupationRanking from "../../../../components/person/CountryOccupationRanking";
+import Books from "../../../../components/person/Books";
+import News from "../../../../components/person/News";
+import Twitter from "../../../../components/person/Twitter";
+import Movies from "../../../../components/person/Movies";
 
 async function getPerson(id) {
   const res = await fetch(
@@ -84,40 +88,59 @@ export default async function Page({ params: { id } }) {
       slug: "metrics",
       content: <MemMetrics pageViews={wikiPageViews} person={person} />,
     },
-  ];
-  sections.push({
-    title: `Page views of ${plural(person.name)} by language`,
-    slug: "page-views-by-lang",
-    content: <PageviewsByLang person={person} />,
-  });
-  sections.push({
-    title: `Among ${plural(person.occupation.occupation)}`,
-    slug: "occupation_peers",
-    content: <OccupationRanking person={person} personRanks={personRanks} />,
-  });
-  if (person.birthyear) {
-    sections.push({
+    {
+      title: "In the news",
+      slug: "news_articles",
+      content: <News person={person} />,
+    },
+    {
+      title: "Notable Works",
+      slug: "books",
+      content: <Books person={person} />,
+    },
+    {
+      title: `Page views of ${plural(person.name)} by language`,
+      slug: "page-views-by-lang",
+      content: <PageviewsByLang person={person} />,
+    },
+    {
+      title: `Among ${plural(person.occupation.occupation)}`,
+      slug: "occupation_peers",
+      content: <OccupationRanking person={person} personRanks={personRanks} />,
+    },
+    {
       title: "Contemporaries",
       slug: "year_peers",
       content: <YearRanking person={person} personRanks={personRanks} />,
-    });
-  }
-  if (person.bplace_country) {
-    sections.push({
-      title: `In ${person.bplace_country.country}`,
+    },
+    {
+      title: `In ${person?.bplace_country?.country}`,
       slug: "country_peers",
       content: <CountryRanking person={person} personRanks={personRanks} />,
-    });
-    sections.push({
+    },
+    {
       title: `Among ${plural(person.occupation.occupation)} In ${
-        person.bplace_country.country
+        person?.bplace_country?.country
       }`,
       slug: "country_occupation_peers",
       content: (
         <CountryOccupationRanking person={person} personRanks={personRanks} />
       ),
-    });
-  }
+    },
+    {
+      title: "Twitter Activity",
+      slug: "twitter",
+      content: <Twitter person={person} />,
+    },
+    {
+      title:
+        person.occupation.id === "FILM DIRECTOR"
+          ? "Filmography"
+          : "Television and Movie Roles",
+      slug: "movies",
+      content: <Movies person={person} />,
+    },
+  ];
 
   return (
     <div className="person">
@@ -131,48 +154,14 @@ export default async function Page({ params: { id } }) {
           wikiExtract={wikiExtract}
         />
       </div>
-      {sections.map((section, key) => (
-        <Section
-          index={key}
-          key={section.slug}
-          numSections={sections.length}
-          title={section.title}
-          slug={section.slug}
-        >
-          {section.content ? section.content : null}
-          {section.viz ? <div className="viz">{section.viz}</div> : null}
-        </Section>
-      ))}
+      {sections.map((section, key) =>
+        React.cloneElement(section.content, {
+          key,
+          id: key + 1,
+          slug: section.slug,
+          title: section.title,
+        })
+      )}
     </div>
   );
 }
-
-// export async function getServerSideProps({ params }) {
-//   let person, personRanks;
-//   try {
-//     const personRes = await axios.get(
-//       `https://api.pantheon.world/person?slug=eq.${params.id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`
-//     );
-//     person = await personRes.data;
-
-//     const personRanksRes = await axios.get(
-//       `https://api.pantheon.world/person_ranks?slug=eq.${params.id}`
-//     );
-//     personRanks = await personRanksRes.data;
-//   } catch (error) {
-//     console.log("Person API error", error);
-//   }
-
-//   // fetch similar in rank
-//   let occupationRanks = {};
-//   try {
-//     const occupationRanksURL = `https://api.pantheon.world/person_ranks?occupation=eq.${person?.occupation?.id}&occupation_rank_unique=gte.${personRanks?.occupationRankLow}&occupation_rank_unique=lte.${personRanks?.occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`;
-//     console.log("occupationRanksURL!", occupationRanksURL);
-//     const occupationRanksRes = await fetch(occupationRanksURL);
-//     occupationRanks = await occupationRanksRes.json();
-//   } catch (error) {
-//     console.log("Person API error", error);
-//   }
-
-//   return { props: { person, personRanks, occupationRanks } };
-// }
