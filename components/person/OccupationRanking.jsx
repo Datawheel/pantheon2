@@ -9,6 +9,7 @@ import {
 import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
 import { toTitleCase } from "../utils/vizHelpers";
+import SectionLayout from "../common/SectionLayout";
 
 async function getOccupationRankings(
   occupationId,
@@ -21,7 +22,12 @@ async function getOccupationRankings(
   return res.json();
 }
 
-export default async function OccupationRanking({ person, personRanks }) {
+export default async function OccupationRanking({
+  person,
+  personRanks,
+  slug,
+  title,
+}) {
   const occupationRankLow = Math.max(
     1,
     parseInt(personRanks.occupation_rank_unique, 10) - NUM_RANKINGS_PRE
@@ -84,31 +90,33 @@ export default async function OccupationRanking({ person, personRanks }) {
   }
 
   return (
-    <div>
-      <p>
-        Among {plural(person.occupation.occupation.toLowerCase())},{" "}
-        {person.name} ranks{" "}
-        <strong>{FORMATTERS.commas(me.occupation_rank)}</strong> out of{" "}
-        {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
-        {betterPeers}
-        {worsePeers}
-      </p>
-      <div className="rank-title">
-        <h3>
-          Most Popular {toTitleCase(plural(person.occupation.occupation))} in
-          Wikipedia
-        </h3>
-        <Link
-          href={`/explore/rankings?show=people&occupation=${person.occupation.id}`}
-        >
-          Go to all Rankings
-        </Link>
+    <SectionLayout slug={slug} title={title}>
+      <div>
+        <p>
+          Among {plural(person.occupation.occupation.toLowerCase())},{" "}
+          {person.name} ranks{" "}
+          <strong>{FORMATTERS.commas(me.occupation_rank)}</strong> out of{" "}
+          {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
+          {betterPeers}
+          {worsePeers}
+        </p>
+        <div className="rank-title">
+          <h3>
+            Most Popular {toTitleCase(plural(person.occupation.occupation))} in
+            Wikipedia
+          </h3>
+          <Link
+            href={`/explore/rankings?show=people&occupation=${person.occupation.id}`}
+          >
+            Go to all Rankings
+          </Link>
+        </div>
+        <PhotoCarousel
+          me={person}
+          people={occupationRankings}
+          rankAccessor="occupation_rank_unique"
+        />
       </div>
-      <PhotoCarousel
-        me={person}
-        people={occupationRankings}
-        rankAccessor="occupation_rank_unique"
-      />
-    </div>
+    </SectionLayout>
   );
 }

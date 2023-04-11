@@ -6,6 +6,7 @@ import {
 } from "../utils/consts";
 import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
+import SectionLayout from "../common/SectionLayout";
 
 async function getBirthCountryRankings(
   birthCountryId,
@@ -18,7 +19,15 @@ async function getBirthCountryRankings(
   return res.json();
 }
 
-export default async function CountryRanking({ person, personRanks }) {
+export default async function CountryRanking({
+  person,
+  personRanks,
+  title,
+  slug,
+}) {
+  if (!person.bplace_country) {
+    return null;
+  }
   let betterBirthPeers = null,
     worseBirthPeers = null;
   const bplaceCountryRankLow = personRanks.bplace_country_rank_unique
@@ -80,39 +89,41 @@ export default async function CountryRanking({ person, personRanks }) {
   }
 
   return (
-    <div>
-      <p>
-        Among people born in{" "}
-        <a href={`/profile/country/${person.bplace_country.slug}`}>
-          {person.bplace_country.country}
-        </a>
-        , {person.name} ranks{" "}
-        <strong>{FORMATTERS.commas(me.bplace_country_rank_unique)}</strong> out
-        of {FORMATTERS.commas(person.bplace_country.num_born)}.&nbsp;
-        {betterBirthPeers}
-        {worseBirthPeers}
-        {/* { ranking.deathcountryPeers.length
-             ? <span>&nbsp;Among people deceased in <a href={`/profile/country/${person.deathcountry.slug}`}>{person.deathcountry.name}</a>, {person.name} ranks {ranking.me.deathcountry_rank_unique} out of {person.deathcountry.num_died}.&nbsp;</span>
-             : null} */}
-      </p>
-      <div className="rank-title">
-        <h3>
-          Others born in{" "}
+    <SectionLayout slug={slug} title={title}>
+      <div>
+        <p>
+          Among people born in{" "}
           <a href={`/profile/country/${person.bplace_country.slug}`}>
             {person.bplace_country.country}
           </a>
-        </h3>
-        <a
-          href={`/explore/rankings?show=people&place=${person.bplace_country.country_code}`}
-        >
-          Go to all Rankings
-        </a>
+          , {person.name} ranks{" "}
+          <strong>{FORMATTERS.commas(me.bplace_country_rank_unique)}</strong>{" "}
+          out of {FORMATTERS.commas(person.bplace_country.num_born)}.&nbsp;
+          {betterBirthPeers}
+          {worseBirthPeers}
+          {/* { ranking.deathcountryPeers.length
+             ? <span>&nbsp;Among people deceased in <a href={`/profile/country/${person.deathcountry.slug}`}>{person.deathcountry.name}</a>, {person.name} ranks {ranking.me.deathcountry_rank_unique} out of {person.deathcountry.num_died}.&nbsp;</span>
+             : null} */}
+        </p>
+        <div className="rank-title">
+          <h3>
+            Others born in{" "}
+            <a href={`/profile/country/${person.bplace_country.slug}`}>
+              {person.bplace_country.country}
+            </a>
+          </h3>
+          <a
+            href={`/explore/rankings?show=people&place=${person.bplace_country.country_code}`}
+          >
+            Go to all Rankings
+          </a>
+        </div>
+        <PhotoCarousel
+          me={person}
+          people={birthCountryRankings}
+          rankAccessor="bplace_country_rank_unique"
+        />
       </div>
-      <PhotoCarousel
-        me={person}
-        people={birthCountryRankings}
-        rankAccessor="bplace_country_rank_unique"
-      />
-    </div>
+    </SectionLayout>
   );
 }

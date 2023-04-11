@@ -1,3 +1,11 @@
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  /* this will cause ragged bottoms */
+  /* align-items: flex-start; */
+  justify-content: space-between;
+}
+
 .work-card {
   display: flex;
   border-radius: 10px;
