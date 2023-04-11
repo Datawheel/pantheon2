@@ -5,6 +5,10 @@ import Intro from "../../../../components/person/Intro";
 import Header from "../../../../components/person/Header";
 import MemMetrics from "../../../../components/person/MemMetrics";
 import PageviewsByLang from "../../../../components/person/PageviewsByLang";
+import OccupationRanking from "../../../../components/person/OccupationRanking";
+import YearRanking from "../../../../components/person/YearRanking";
+import CountryRanking from "../../../../components/person/CountryRanking";
+import CountryOccupationRanking from "../../../../components/person/CountryOccupationRanking";
 
 async function getPerson(id) {
   const res = await fetch(
@@ -21,7 +25,13 @@ async function getPerson(id) {
 
 async function getPersonRanks(id) {
   const res = await fetch(
-    `https://api.pantheon.world/person_ranks?slug=eq.${id}`
+    `https://api.pantheon.world/person_ranks?slug=eq.${id}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/vnd.pgrst.object+json",
+      },
+    }
   );
   return res.json();
 }
@@ -80,6 +90,34 @@ export default async function Page({ params: { id } }) {
     slug: "page-views-by-lang",
     content: <PageviewsByLang person={person} />,
   });
+  sections.push({
+    title: `Among ${plural(person.occupation.occupation)}`,
+    slug: "occupation_peers",
+    content: <OccupationRanking person={person} personRanks={personRanks} />,
+  });
+  if (person.birthyear) {
+    sections.push({
+      title: "Contemporaries",
+      slug: "year_peers",
+      content: <YearRanking person={person} personRanks={personRanks} />,
+    });
+  }
+  if (person.bplace_country) {
+    sections.push({
+      title: `In ${person.bplace_country.country}`,
+      slug: "country_peers",
+      content: <CountryRanking person={person} personRanks={personRanks} />,
+    });
+    sections.push({
+      title: `Among ${plural(person.occupation.occupation)} In ${
+        person.bplace_country.country
+      }`,
+      slug: "country_occupation_peers",
+      content: (
+        <CountryOccupationRanking person={person} personRanks={personRanks} />
+      ),
+    });
+  }
 
   return (
     <div className="person">
