@@ -1,4 +1,3 @@
-import React from "react";
 import PersonImage from "../utils/PersonImage";
 import { toTitleCase } from "../utils/vizHelpers";
 import { COLORS_DOMAIN, FORMATTERS } from "../utils/consts";
@@ -194,11 +193,11 @@ const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
             </p>
           )}
           <p>
-            <React.Fragment>
+            <>
               Since 2007, the English Wikipedia page of {person.name} has
               received more than {FORMATTERS.commas(totalPageViews)} page views.{" "}
-            </React.Fragment>
-            <React.Fragment>
+            </>
+            <>
               {person.gender
                 ? person.gender === "M"
                   ? "His"
@@ -212,8 +211,8 @@ const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
                   } in 2019)`
                 : ""}
               .{" "}
-            </React.Fragment>
-            <React.Fragment>
+            </>
+            <>
               {person.name} is the{" "}
               {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)}{" "}
               most popular{" "}
@@ -227,8 +226,8 @@ const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
                     occupationRank < occupationRankPrev ? "up" : "down"
                   } from ${FORMATTERS.ordinal(occupationRankPrev)} in 2019)`
                 : ""}
-            </React.Fragment>
-            <React.Fragment>
+            </>
+            <>
               {!person.bplace_country ? (
                 <span>.</span>
               ) : (
@@ -270,7 +269,7 @@ const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
               ) : (
                 ""
               )}
-            </React.Fragment>
+            </>
           </p>
           {person.famous_for ? <p>{person.famous_for}</p> : null}
         </div>
