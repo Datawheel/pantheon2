@@ -1,13 +1,13 @@
 import { nest } from "d3-collection";
+import { plural } from "pluralize";
 import AnchorList from "../../utils/AnchorList";
 import SectionLayout from "../../common/SectionLayout";
-import { plural } from "pluralize";
 import { calculateYearBucket } from "../../utils/vizHelpers";
-import OccupationsStackedArea from "./vizes/OccupationsStackedArea";
+import OccupationsStackedArea from "../../place/sections/vizes/OccupationsStackedArea";
 
 const OccupationTrends = ({
   attrs,
-  place,
+  country,
   peopleBorn,
   peopleDied,
   occupations,
@@ -42,7 +42,7 @@ const OccupationTrends = ({
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
+    d.place = d.bplace_geonameid;
   });
 
   const tmapDeathData = peopleDied
@@ -55,7 +55,7 @@ const OccupationTrends = ({
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.deathplace;
+    d.place = d.dplace_geonameid;
   });
 
   const [bornBuckets, bornTicks] = calculateYearBucket(
@@ -87,8 +87,8 @@ const OccupationTrends = ({
                   occupationsLookup[topModern[0].key].occupation.toLowerCase()
                 )}
               </a>{" "}
-              have been the top profession of globally memorable people born in{" "}
-              {place.place}, including{" "}
+              have been the top profession of globally memorable people born in
+              present day {country.country}, including{" "}
               <AnchorList
                 items={topModern[0].values.slice(0, 3)}
                 name={(d) => d.name}
@@ -105,7 +105,7 @@ const OccupationTrends = ({
                 )}
               </a>{" "}
               have been the profession with the most memorable people born in
-              present day {place.place}, including{" "}
+              present day {country.country}, including{" "}
               <AnchorList
                 items={topOverall[0].values.slice(0, 3)}
                 name={(d) => d.name}
@@ -126,7 +126,7 @@ const OccupationTrends = ({
                 )}
               </a>{" "}
               have been the profession with the most memorable people born in
-              present day {place.place}, including{" "}
+              present day {country.country}, including{" "}
               <AnchorList
                 items={topOverall[0].values.slice(0, 3)}
                 name={(d) => d.name}
@@ -152,6 +152,38 @@ const OccupationTrends = ({
             buckets={deathBuckets}
           />
         ) : null}
+        {/* <VizWrapper component={this} refKey="viz">
+        <StackedArea
+          key="stacked1"
+          config={{
+            title: "Births Over Time",
+            data: tmapBornData,
+            depth: 2,
+            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+            shapeConfig: shapeConfig(attrs),
+            tooltipConfig: groupTooltip(tmapBornData),
+            xConfig: {
+              labels: bornTicks,
+              tickFormat: d => bornBuckets[d]
+            }
+          }} />
+      </VizWrapper>
+      <VizWrapper component={this} refKey="viz2">
+        <StackedArea
+          key="stacked2"
+          config={{
+            title: "Deaths Over Time",
+            data: tmapDeathData,
+            depth: 2,
+            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
+            shapeConfig: shapeConfig(attrs),
+            tooltipConfig: groupTooltip(tmapDeathData),
+            xConfig: {
+              labels: deathTicks,
+              tickFormat: d => deathBuckets[d]
+            }
+          }} />
+      </VizWrapper> */}
       </div>
     </SectionLayout>
   );
