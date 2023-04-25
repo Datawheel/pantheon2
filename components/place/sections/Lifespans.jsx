@@ -1,8 +1,5 @@
 import SectionLayout from "../../common/SectionLayout";
 import PeoplePriestley from "./vizes/PeoplePriestley";
-// import VizWrapper from "pages/profile/common/VizWrapper";
-// import {Priestley} from "d3plus-react";
-// import {groupBy, shapeConfig, peopleTooltip, on} from "viz/helpers";
 
 const Lifespans = ({ attrs, place, peopleBorn, title, slug }) => {
   const tmapBornData = peopleBorn
