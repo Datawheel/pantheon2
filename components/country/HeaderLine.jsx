@@ -31,7 +31,7 @@ export default function HeaderLine({ pageViewData }) {
           tooltipConfig: {
             footer: (d) => `${FORMATTERS.commas(d.views)} Page Views`,
             title: (d) =>
-              `<span class="center">${moment(d.date, "YYYY/MM/DD").format(
+              `<span class="center">${dayjs(d.date, "YYYY/MM/DD").format(
                 "MMMM YYYY"
               )}</span>`,
             titleStyle: { "text-align": "center" },
