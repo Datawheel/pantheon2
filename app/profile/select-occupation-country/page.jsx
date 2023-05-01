@@ -1,16 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { nest } from "d3-collection";
 import { plural } from "pluralize";
 import Select from "/components/common/Select";
 import FancyButton from "/components/common/FancyButton";
-import "../../../components/occupation-country/SelectOccupationCountry.css";
 import { toTitleCase } from "../../../components/utils/vizHelpers";
+import { FORMATTERS } from "../../../components/utils/consts";
+import "../../../components/occupation-country/SelectOccupationCountry.css";
 
 export default function Page() {
-  const selection1 = "soccer-player";
-  const selection2 = "united-states";
+  const { push } = useRouter();
   const selection2Entity = "product";
 
   const countryIconPath = "/images/icons/country";
@@ -18,6 +19,8 @@ export default function Page() {
   const countryDefaultIcon = `${countryIconPath}/country.svg`;
   const productDefaultIcon = `${productIconPath}/product.svg`;
 
+  const [selection1, setSelection1] = useState("soccer-player");
+  const [selection2, setSelection2] = useState("united-states");
   const [occupations, setOccupations] = useState([]);
   const [countries, setCountries] = useState([]);
   const [occupationsInCountry, setOccupationsInCountry] = useState([]);
@@ -68,7 +71,18 @@ export default function Page() {
     fetchMyData();
   }, []);
 
-  console.log("occupationsInCountry!", occupationsInCountry);
+  useEffect(() => {
+    setSelection1(occupation);
+    async function fetchOccupationData() {
+      const getOccupationsInCountry = await axios.get(
+        `https://api.pantheon.world/occupation_country?occupation_slug=eq.${occupation}&order=num_people.desc.nullslast`
+      );
+      const { data: countries } = getOccupationsInCountry;
+      setCountries(countries);
+      console.log("getOccupationsInCountry!");
+    }
+    fetchOccupationData();
+  }, [occupation]);
 
   return (
     <div className="welcome">
@@ -91,7 +105,10 @@ export default function Page() {
           </h2>
 
           {/* the form */}
-          <form onSubmit={(e) => this.handleSubmit(e)} className="welcome-form">
+          <form
+            onSubmit={(evt) => evt.preventDefault()}
+            className="welcome-form"
+          >
             {/* entity 1 */}
             <div className="welcome-form-select-wrapper">
               <img
@@ -107,7 +124,7 @@ export default function Page() {
                 label="occupation"
                 className="welcome-form-select"
                 fontSize="lg"
-                onChange={setOccupation}
+                onChange={(evt) => setOccupation(evt.target.value)}
               >
                 <option disabled={true}>Select an occupation</option>
                 {occupations.map((occupation) => (
@@ -141,7 +158,7 @@ export default function Page() {
                 label="country"
                 className="welcome-form-select"
                 fontSize="lg"
-                onChange={(e) => this.setState({ selection2: e.target.value })}
+                onChange={(evt) => setSelection2(evt.target.value)}
               >
                 <option disabled={true}>Select a country</option>
                 {countries.map((country) => (
@@ -165,7 +182,7 @@ export default function Page() {
                 icon="arrow-right"
                 disabled={selection1 === "unspecified"}
                 onClick={() =>
-                  router.push(
+                  push(
                     `/profile/occupation/${selection1}/country/${selection2}`
                   )
                 }
