@@ -1,4 +1,4 @@
-@import "components/common/mixins";
+@import "../../styles/mixins.css";
 
 .fancy-button {
   /* theming */
