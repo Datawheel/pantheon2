@@ -1,4 +1,3 @@
-import React from "react";
 import ProfileNav from "../../../../components/common/Nav";
 import Intro from "../../../../components/place/Intro";
 import Header from "../../../../components/place/Header";

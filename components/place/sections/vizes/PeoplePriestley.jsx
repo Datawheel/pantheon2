@@ -9,7 +9,6 @@ import {
 } from "../../../utils/vizHelpers";
 
 export default function PeoplePriestley({ attrs, data, title }) {
-  console.log("attrs", attrs);
   return (
     <VizWrapper component={this} refKey="lifespansViz">
       <Priestley
