@@ -10,7 +10,6 @@ import {
 import { COLORS_CONTINENT } from "../../../utils/consts";
 
 export default function PlacesStacked({ data, title, ticks, buckets }) {
-  console.log("data:", data[0]);
   return (
     <VizWrapper component={this} refKey="occAliveTmapViz">
       <div className="metric-trending">
