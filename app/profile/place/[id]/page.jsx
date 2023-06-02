@@ -1,3 +1,4 @@
+import { cloneElement } from "react";
 import ProfileNav from "../../../../components/common/Nav";
 import Intro from "../../../../components/place/Intro";
 import Header from "../../../../components/place/Header";
@@ -168,7 +169,7 @@ export default async function Page({ params: { id } }) {
         <Intro place={place} country={country} placeRanks={placeRanks} />
       </div>
       {sections.map((section, key) =>
-        React.cloneElement(section.content, {
+        cloneElement(section.content, {
           key,
           id: key + 1,
           slug: section.slug,
