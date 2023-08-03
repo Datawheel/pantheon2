@@ -12,7 +12,7 @@ export default function PlacesMap({ country, data, title }) {
           title,
           data,
           depth: 1,
-          fitFilter: `${country.country_num}`,
+          fitFilter: country ? `${country.country_num}` : null,
           groupBy: ["event", "place_name"],
           on: on("place", (d) => d.place.slug),
           shapeConfig: {
@@ -24,6 +24,7 @@ export default function PlacesMap({ country, data, title }) {
             strokeWidth: 1,
             Path: {
               fill: (d) =>
+                country &&
                 parseInt(d.id, 10) === parseInt(country.country_num, 10)
                   ? "#ccc"
                   : "transparent",
