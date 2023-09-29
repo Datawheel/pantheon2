@@ -2,16 +2,14 @@
 "use client";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  decrement,
-  increment,
-  dataRequested,
-  dataReceived,
-  dataRequestFailed,
-} from "./exploreSlice";
+import { dataRequested, dataReceived, dataRequestFailed } from "./exploreSlice";
 import VizTitle from "../components/explore/VizTitle";
 import Controls from "../components/explore/Controls";
+import Spinner from "../components/Spinner";
+import RankingTable from "../components/explore/rankings/RankingTable";
 import { FORMATTERS, HPI_RANGE, LANGS_RANGE } from "../components/utils/consts";
+import dataFormatter from "../components/utils/dataFormatter";
+import "./Explore.css";
 
 const makeApiUrl = (
   pageIndex,
@@ -144,14 +142,27 @@ const fetchDataFromApi = async (
     years,
     yearType
   );
-  console.log("apiUrl!!!!", apiUrl);
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, {
+      headers: { Prefer: "count=estimated" },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch data from the API");
     }
-    const data = await response.json();
-    return data;
+    let data = await response.json();
+    const range = response.headers.get("content-range")
+      ? response.headers.get("content-range").split("/")[0]
+      : null;
+    let count = response.headers.get("content-range")
+      ? parseInt(response.headers.get("content-range").split("/")[1], 10)
+      : null;
+    console.log("range::", range);
+    console.log("count::", count);
+    data =
+      page === "rankings"
+        ? dataFormatter(data, show.type, show.depth, placeType)
+        : data;
+    console.log("DATA!!!!", data);
   } catch (error) {
     throw new Error("Failed to fetch data from the API");
   }
@@ -200,9 +211,18 @@ function Explore({ places, nestedOccupations }) {
       .catch((error) => {
         dispatch(dataRequestFailed(error.message));
       });
-  }, []);
-
-  console.log("data!!!", data);
+  }, [
+    country,
+    city,
+    occupation,
+    gender,
+    years,
+    metricCutoff,
+    metricType,
+    onlyShowNew,
+    show,
+    dispatch,
+  ]);
 
   const metricRange = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
   let metricSentence;
@@ -221,22 +241,7 @@ function Explore({ places, nestedOccupations }) {
   }
 
   return (
-    <div style={{ marginTop: "144px" }}>
-      <div>
-        <button
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          +
-        </button>
-        <span>{count}</span>
-        <button
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-      </div>
+    <div>
       <div className="explore-head">
         <VizTitle places={places} nestedOccupations={nestedOccupations} />
         {years.length ? (
@@ -247,16 +252,8 @@ function Explore({ places, nestedOccupations }) {
         {metricSentence ? <p>{metricSentence}</p> : null}
       </div>
       <div className="explore-body">
-        <Controls
-          // countryLookup={this.countryLookup}
-          // updateData={this.updateData}
-          // update={this.update}
-          nestedOccupations={nestedOccupations}
-          // pageType={pageType}
-          places={places}
-          // pathname={pathname}
-          // qParams={qParams}
-        />
+        <Controls nestedOccupations={nestedOccupations} places={places} />
+        {data ? <RankingTable /> : <Spinner />}
       </div>
     </div>
   );

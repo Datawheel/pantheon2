@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { YEAR_RANGE } from "../components/utils/consts";
+import { HPI_RANGE, LANGS_RANGE, YEAR_RANGE } from "../components/utils/consts";
 
 // Define the initial state using that type
 const initialState = {
@@ -26,16 +26,6 @@ export const exploreSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
-    },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
-    },
     dataRequested: (state) => {
       state.dataLoading = true;
       state.dataError = null;
@@ -68,13 +58,29 @@ export const exploreSlice = createSlice({
     updateOccupation: (state, action) => {
       state.occupation = action.payload;
     },
+    updateMetricType: (state, action) => {
+      const metricRange = action.payload === "hpi" ? HPI_RANGE : LANGS_RANGE;
+      state.metricType = action.payload;
+      state.metricCutoff = metricRange[0];
+    },
+    updateMetricCutoff: (state, action) => {
+      state.metricCutoff = action.payload;
+    },
+    updateOnlyShowNew: (state, action) => {
+      state.onlyShowNew = action.payload;
+    },
+    updateShowType: (state, action) => {
+      const { page, showType } = action.payload;
+      state.show = { type: showType, depth: showType };
+      state.page = page;
+      if (page === "rankings") {
+        state.data = null;
+      }
+    },
   },
 });
 
 export const {
-  increment,
-  decrement,
-  incrementByAmount,
   dataRequested,
   dataReceived,
   dataRequestFailed,
@@ -84,6 +90,10 @@ export const {
   updateCountry,
   updatePlaceType,
   updateOccupation,
+  updateMetricType,
+  updateMetricCutoff,
+  updateOnlyShowNew,
+  updateShowType,
 } = exploreSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

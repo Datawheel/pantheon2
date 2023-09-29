@@ -6,6 +6,8 @@ import GenderControl from "./GenderControl";
 import YearControl from "./YearControl";
 import PlaceControl from "./PlaceControl";
 import OccupationControl from "./OccupationControl";
+import MetricCutoffControl from "./MetricCutoffControl";
+import OnlyShowNewControl from "./OnlyShowNewControl";
 
 const toggleSidePanel = () => {
   console.log("toggle side panel!");
@@ -51,6 +53,12 @@ export default function Controls({ places, nestedOccupations }) {
         <YearControl />
         {show.type !== "places" ? <PlaceControl places={places} /> : null}
         <OccupationControl nestedOccupations={nestedOccupations} />
+      </section>
+
+      <section className="control-group advanced-group">
+        <h3>Advanced Options</h3>
+        <MetricCutoffControl />
+        <OnlyShowNewControl />
       </section>
     </div>
   );
