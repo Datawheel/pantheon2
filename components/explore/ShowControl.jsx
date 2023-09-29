@@ -1,5 +1,6 @@
 "use client";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateShowType } from "../../features/exploreSlice";
 
 const rankingTypes = [
   { id: "people", name: "People" },
@@ -9,6 +10,7 @@ const rankingTypes = [
 
 export default function ShowControl() {
   const loading = false;
+  const dispatch = useDispatch();
   const { page, show } = useSelector((state) => state.explore);
   let pageRankingTypes = rankingTypes;
 
@@ -32,7 +34,9 @@ export default function ShowControl() {
                   loading
                     ? e.preventDefault()
                     : (e.preventDefault(),
-                      updateShowType(rt.id.toLowerCase(), page))
+                      dispatch(
+                        updateShowType({ showType: rt.id.toLowerCase(), page })
+                      ))
                 }
                 className={`${rt.id} ${loading ? "disabled" : null} ${
                   !showType || showType === rt.id ? "active" : ""
