@@ -218,7 +218,7 @@ class Navigation extends Component {
             </li>
             <li className="item">
               <Link
-                to="/app/yearbook"
+                to="/game/yearbook"
                 className="item-link explore-link"
                 activeClassName="active"
               >
