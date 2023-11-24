@@ -162,7 +162,7 @@ const fetchDataFromApi = async (
       page === "rankings"
         ? dataFormatter(data, show.type, show.depth, placeType)
         : data;
-    console.log("DATA!!!!", data);
+    return data;
   } catch (error) {
     throw new Error("Failed to fetch data from the API");
   }
@@ -253,7 +253,13 @@ function Explore({ places, nestedOccupations }) {
       </div>
       <div className="explore-body">
         <Controls nestedOccupations={nestedOccupations} places={places} />
-        {data ? <RankingTable /> : <Spinner />}
+        {data ? (
+          <RankingTable />
+        ) : (
+          <div style={{ position: "relative", width: "100%" }}>
+            <Spinner />
+          </div>
+        )}
       </div>
     </div>
   );
