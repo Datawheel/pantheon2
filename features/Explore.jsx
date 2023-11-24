@@ -1,176 +1,21 @@
 /*eslint no-undefined: "error"*/
 "use client";
 import { useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { dataRequested, dataReceived, dataRequestFailed } from "./exploreSlice";
 import VizTitle from "../components/explore/VizTitle";
 import Controls from "../components/explore/Controls";
 import Spinner from "../components/Spinner";
 import RankingTable from "../components/explore/rankings/RankingTable";
 import { FORMATTERS, HPI_RANGE, LANGS_RANGE } from "../components/utils/consts";
-import dataFormatter from "../components/utils/dataFormatter";
+import { fetchDataAndDispatch } from "../components/utils/exploreHelpers";
+import { SANITIZERS } from "../components/utils/sanitizers";
+import { setFirstLoad, updateShowDepth } from "./exploreSlice";
 import "./Explore.css";
 
-const makeApiUrl = (
-  pageIndex,
-  sortBy,
-  places,
-  city,
-  country,
-  gender,
-  metricCutoff,
-  metricType,
-  occupation,
-  onlyShowNew,
-  page,
-  placeType,
-  show,
-  years,
-  yearType
-) => {
-  const apiHeaders = { Prefer: "count=estimated" };
-  const pageSize = 50;
-  let selectFields =
-    "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
-  let sorting = "&order=hpi.desc.nullslast";
-
-  // Set place...
-  let placeFilter = "";
-  if (country !== "all") {
-    const countryObj = places.find((d) => d.country.country_code === country);
-    const countryId = countryObj ? countryObj.country.id : "";
-    placeFilter =
-      placeType === "birthplace"
-        ? `&bplace_country=eq.${countryId}`
-        : `&dplace_country=eq.${countryId}`;
-    if (city !== "all") {
-      placeFilter =
-        placeType === "birthplace"
-          ? `&bplace_geonameid=eq.${city}`
-          : `&dplace_geonameid=eq.${city}`;
-    }
-  }
-
-  // Set occupation...
-  let occupationFilter = "";
-  if (occupation !== "all") {
-    occupationFilter = `&occupation=in.(${occupation})`;
-  }
-
-  // Set gender...
-  let genderFilter = "";
-  if (`${gender}`.toUpperCase() === "M" || `${gender}`.toUpperCase() === "F") {
-    genderFilter = `&gender=eq.${gender.toUpperCase()}`;
-  }
-
-  // Set metric (hpi etc.)...
-  let metricFilter = "";
-  if (metricType) {
-    metricFilter = `&${metricType}=gte.${metricCutoff}`;
-  }
-
-  let limitOffset = "";
-  let table = "person";
-  if (page === "rankings") {
-    if (show.type === "people") {
-      limitOffset = `&limit=50&offset=${pageSize * pageIndex}`;
-    }
-    table = "person_ranks";
-    // selectFields = `${selectFields},rank,rank_prev,rank_delta,occupation_rank,occupation_rank_prev,occupation_rank_delta,bplace_country_rank,bplace_country_rank_prev,bplace_country_rank_delta`;
-    selectFields = `${selectFields},rank,rank_prev,rank_delta`;
-    if (sortBy && sortBy.length) {
-      sorting = sortBy.map((sortCol, i) => {
-        let sortingColumn = sortCol.id;
-        if (sortingColumn === "occupation_id") {
-          sortingColumn = "occupation";
-        }
-        if (sortingColumn === "bplace_geonameid") {
-          sortingColumn = "bplace_name";
-        }
-        if (sortingColumn === "dplace_geonameid") {
-          sortingColumn = "dplace_name";
-        }
-        return i
-          ? `${sortingColumn}.${sortCol.desc ? "desc" : "asc"}.nullslast`
-          : `&order=${sortingColumn}.${
-              sortCol.desc ? "desc" : "asc"
-            }.nullslast`;
-      });
-    }
-  }
-
-  const onlyShowNewFilter = onlyShowNew ? "&hpi_prev=is.null" : "";
-
-  const apiUrl2 = `https://api.pantheon.world/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
-  console.log("apiUrl:", apiUrl2);
-  const apiUrl =
-    "https://api.pantheon.world/occupation?order=num_born.desc.nullslast&limit=1";
-  return apiUrl2;
-};
-
-const fetchDataFromApi = async (
-  places,
-  city,
-  country,
-  gender,
-  metricCutoff,
-  metricType,
-  occupation,
-  onlyShowNew,
-  page,
-  placeType,
-  show,
-  years,
-  yearType
-) => {
-  const pageIndex = 0;
-  const sortBy = null;
-  const apiUrl = makeApiUrl(
-    pageIndex,
-    sortBy,
-    places,
-    city,
-    country,
-    gender,
-    metricCutoff,
-    metricType,
-    occupation,
-    onlyShowNew,
-    page,
-    placeType,
-    show,
-    years,
-    yearType
-  );
-  try {
-    const response = await fetch(apiUrl, {
-      headers: { Prefer: "count=estimated" },
-    });
-    if (!response.ok) {
-      throw new Error("Failed to fetch data from the API");
-    }
-    let data = await response.json();
-    const range = response.headers.get("content-range")
-      ? response.headers.get("content-range").split("/")[0]
-      : null;
-    let count = response.headers.get("content-range")
-      ? parseInt(response.headers.get("content-range").split("/")[1], 10)
-      : null;
-    console.log("range::", range);
-    console.log("count::", count);
-    data =
-      page === "rankings"
-        ? dataFormatter(data, show.type, show.depth, placeType)
-        : data;
-    return data;
-  } catch (error) {
-    throw new Error("Failed to fetch data from the API");
-  }
-};
-
 function Explore({ places, nestedOccupations }) {
-  const count = useSelector((state) => state.explore.value);
   const {
+    firstLoad,
     data,
     city,
     country,
@@ -185,33 +30,33 @@ function Explore({ places, nestedOccupations }) {
     years,
     yearType,
   } = useSelector((state) => state.explore);
+  const exploreState = useSelector((state) => state.explore);
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    // Fetch data from the API when the component mounts
-    dispatch(dataRequested());
-    fetchDataFromApi(
-      places,
-      city,
-      country,
-      gender,
-      metricCutoff,
-      metricType,
-      occupation,
-      onlyShowNew,
-      page,
-      placeType,
-      show,
-      years,
-      yearType
-    )
-      .then((responseData) => {
-        dispatch(dataReceived(responseData));
+    const queryParamShow = searchParams.get("show")
+      ? SANITIZERS.show(searchParams.get("show"), "rankings")
+      : "people";
+    console.log("queryParamShow!!!", queryParamShow);
+    dispatch(
+      updateShowDepth({
+        showType: queryParamShow.type,
+        showDepth: queryParamShow.depth,
+        page: "rankings",
       })
-      .catch((error) => {
-        dispatch(dataRequestFailed(error.message));
-      });
+    );
+    dispatch(setFirstLoad());
+  }, []); // Empty dependency array to run only on initial mount
+
+  useEffect(() => {
+    if (!firstLoad) {
+      fetchDataAndDispatch(places, exploreState, dispatch, router, pathname);
+    }
   }, [
+    firstLoad,
     country,
     city,
     occupation,
@@ -254,7 +99,7 @@ function Explore({ places, nestedOccupations }) {
       <div className="explore-body">
         <Controls nestedOccupations={nestedOccupations} places={places} />
         {data ? (
-          <RankingTable />
+          <RankingTable places={places} />
         ) : (
           <div style={{ position: "relative", width: "100%" }}>
             <Spinner />

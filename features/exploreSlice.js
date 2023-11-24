@@ -3,6 +3,7 @@ import { HPI_RANGE, LANGS_RANGE, YEAR_RANGE } from "../components/utils/consts";
 
 // Define the initial state using that type
 const initialState = {
+  firstLoad: true,
   city: "all",
   country: "all",
   gender: null,
@@ -17,8 +18,10 @@ const initialState = {
   yearType: "birthyear",
   value: 0,
   data: null,
+  dataCount: null,
   dataLoading: false,
   dataError: null,
+  dataPageIndex: 0,
 };
 
 export const exploreSlice = createSlice({
@@ -26,12 +29,17 @@ export const exploreSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    setFirstLoad: (state) => {
+      state.firstLoad = false;
+    },
     dataRequested: (state) => {
       state.dataLoading = true;
       state.dataError = null;
     },
     dataReceived: (state, action) => {
-      state.data = action.payload;
+      const { data, count } = action.payload;
+      state.data = data;
+      state.dataCount = count;
       state.dataLoading = false;
     },
     dataRequestFailed: (state, action) => {
@@ -75,22 +83,27 @@ export const exploreSlice = createSlice({
       state.page = page;
       if (page === "rankings") {
         state.data = null;
+        state.dataPageIndex = 0;
       }
     },
     updateShowDepth: (state, action) => {
       const { type } = state;
       const { page, showDepth, showType } = action.payload;
-      console.log("\n~~~~~~~showType:", showType, "\n~~~~~~~~~~``");
       state.show = { type: showType, depth: showDepth };
       state.page = page;
       if (page === "rankings") {
         state.data = null;
+        state.dataPageIndex = 0;
       }
+    },
+    updateDataPageIndex: (state, action) => {
+      state.dataPageIndex = action.payload;
     },
   },
 });
 
 export const {
+  setFirstLoad,
   dataRequested,
   dataReceived,
   dataRequestFailed,
@@ -105,6 +118,7 @@ export const {
   updateOnlyShowNew,
   updateShowType,
   updateShowDepth,
+  updateDataPageIndex,
 } = exploreSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

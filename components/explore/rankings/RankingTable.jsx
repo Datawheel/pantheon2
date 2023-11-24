@@ -1,13 +1,19 @@
 "use client";
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
 import { useTable, usePagination, useSortBy } from "react-table";
 import getColumns from "./RankingColumns";
+import { fetchDataAndDispatch } from "../../../components/utils/exploreHelpers";
+import { updateDataPageIndex } from "../../../features/exploreSlice";
 import "./Rankings.css";
 
-export default function RankingTable({}) {
+export default function RankingTable({ places }) {
+  const exploreState = useSelector((state) => state.explore);
   const {
     data,
+    dataCount,
+    dataPageIndex,
     city,
     country,
     gender,
@@ -16,20 +22,21 @@ export default function RankingTable({}) {
     show,
     viz,
     yearType,
-  } = useSelector((state) => state.explore);
-  const controlledPageCount = 1;
-  const controlledPageIndex = 0;
-  // const controlledPageCount = data.data && data.data.length ? Math.ceil(data.count / 50) : 1;
-  // const controlledPageIndex =
-  //   data && data.length ? data.pageIndex : 0;
+  } = exploreState;
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+  const controlledPageCount =
+    data && data.length ? Math.ceil(dataCount / 50) : 1;
+  const controlledPageIndex = data && data.length ? dataPageIndex : 0;
+
+  const [pageInputVal, setPageInputVal] = useState(controlledPageIndex);
 
   const columns = useMemo(
     () => getColumns(show.type, show.depth, controlledPageIndex * 50),
     // [controlledPageIndex]
     [controlledPageIndex, show.type]
   );
-  console.log("columns", columns);
-  console.log("data", data);
 
   const {
     getTableProps,
@@ -79,6 +86,12 @@ export default function RankingTable({}) {
     useSortBy,
     usePagination
   );
+
+  useEffect(() => {
+    setPageInputVal(controlledPageIndex);
+  }, [controlledPageIndex]);
+
+  console.log("pageIndex, pageSize, sortBy", pageIndex, pageSize, sortBy);
 
   return (
     <div className="ranking-table-container">
@@ -143,6 +156,94 @@ export default function RankingTable({}) {
             </tr>
           </tbody>
         </table>
+      </div>
+      <div className="pagination">
+        <button
+          onClick={() => (setPageInputVal(0), fetchData(0, 50, false, sortBy))}
+          disabled={!canPreviousPage || data.loading}
+        >
+          {"<<"}
+        </button>{" "}
+        <button
+          onClick={() => (
+            setPageInputVal(controlledPageIndex - 1),
+            fetchData(controlledPageIndex - 1, 50, false, sortBy)
+          )}
+          disabled={!canPreviousPage || data.loading}
+        >
+          {"<"}
+        </button>{" "}
+        <button
+          onClick={() => {
+            setPageInputVal(controlledPageIndex + 1);
+            // fetchData(controlledPageIndex + 1, 50, false, sortBy)
+            dispatch(updateDataPageIndex(controlledPageIndex + 1));
+            fetchDataAndDispatch(
+              places,
+              exploreState,
+              dispatch,
+              router,
+              pathname,
+              controlledPageIndex + 1
+            );
+          }}
+          disabled={!canNextPage || data.loading}
+        >
+          {">"}
+        </button>{" "}
+        <button
+          onClick={() => (
+            setPageInputVal(pageCount - 1),
+            fetchData(pageCount - 1, 50, false, sortBy)
+          )}
+          disabled={!canNextPage || data.loading}
+        >
+          {">>"}
+        </button>{" "}
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{" "}
+        </span>
+        <span>
+          | Go to page:{" "}
+          <input
+            type="number"
+            // defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              setPageInputVal(page);
+            }}
+            onKeyDown={(e) => {
+              let page = e.target.value ? Number(e.target.value) - 1 : 0;
+              if (e.key === "Enter") {
+                if (page > pageCount - 1) {
+                  page = pageCount - 1;
+                }
+                if (page < 0) {
+                  page = 0;
+                }
+                fetchData(page, 50, false, sortBy);
+                setPageInputVal(page);
+              }
+            }}
+            style={{ width: "100px" }}
+            value={pageInputVal + 1}
+          />
+        </span>{" "}
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[5, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
