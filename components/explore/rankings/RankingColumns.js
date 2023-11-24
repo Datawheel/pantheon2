@@ -1059,7 +1059,6 @@ const getColumns = (show, nesting, countOffset) => {
     },
   };
 
-  console.log("nesting!!", show, nesting);
   const initialColumns = COLUMNS[show][nesting];
 
   if (show === "people") {

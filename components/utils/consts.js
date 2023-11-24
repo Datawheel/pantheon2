@@ -3,6 +3,8 @@ import { timeFormat } from "d3-time-format";
 import { range } from "d3-array";
 import { closest } from "d3plus-common";
 
+export const PAGE_SIZE = 50;
+
 export const NUM_RANKINGS = 12;
 export const NUM_RANKINGS_PRE = Math.floor(NUM_RANKINGS / 2);
 export const NUM_RANKINGS_POST = Math.floor(NUM_RANKINGS / 2);
