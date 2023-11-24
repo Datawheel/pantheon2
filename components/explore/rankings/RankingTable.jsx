@@ -82,7 +82,6 @@ export default function RankingTable({}) {
 
   return (
     <div className="ranking-table-container">
-      <div className="ranking-head"></div>
       <div className="ranking-table">
         <table {...getTableProps()}>
           <thead>

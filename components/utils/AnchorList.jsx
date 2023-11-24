@@ -9,7 +9,7 @@ export default function AnchorList({
   noAnd,
   newWindow,
 }) {
-  return (
+  return items ? (
     <span>
       {items.map((item, index) => (
         <span key={item.id || index}>
@@ -17,11 +17,12 @@ export default function AnchorList({
           <Link href={url(item)} target={newWindow ? "_blank" : "_self"}>
             {name(item)}
           </Link>
-          {items.length !== 2 ? (index < items.length - 1 ? ", " : null) : null}
+          {/* {items.length !== 2 ? (index < items.length - 1 ? ", " : null) : ", "} */}
+          {index < items.length - 1 ? ", " : null}
         </span>
       ))}
     </span>
-  );
+  ) : null;
   // <span>
   //   {items.map((item, index) => (
   //     <span key={item.id || index}>

@@ -1,6 +1,6 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { updateShowType } from "../../features/exploreSlice";
+import { updateShowDepth, updateShowType } from "../../features/exploreSlice";
 
 const rankingTypes = [
   { id: "people", name: "People" },
@@ -61,7 +61,13 @@ export default function ShowControl() {
                     loading
                       ? e.preventDefault()
                       : (e.preventDefault(),
-                        updateShowDepth("occupations", page))
+                        dispatch(
+                          updateShowDepth({
+                            showType,
+                            showDepth: "occupations",
+                            page,
+                          })
+                        ))
                   }
                   className={`d-3 ${
                     !showDepth || showDepth === "occupations" ? "active" : ""
@@ -80,7 +86,13 @@ export default function ShowControl() {
                     loading
                       ? e.preventDefault()
                       : (e.preventDefault(),
-                        updateShowDepth("industries", page))
+                        dispatch(
+                          updateShowDepth({
+                            showType,
+                            showDepth: "industries",
+                            page,
+                          })
+                        ))
                   }
                   className={`d-2 ${
                     showDepth === "industries" ? "active" : ""
@@ -98,7 +110,14 @@ export default function ShowControl() {
                   onClick={(e) =>
                     loading
                       ? e.preventDefault()
-                      : (e.preventDefault(), updateShowDepth("domains", page))
+                      : (e.preventDefault(),
+                        dispatch(
+                          updateShowDepth({
+                            showType,
+                            showDepth: "domains",
+                            page,
+                          })
+                        ))
                   }
                   className={`d-1 ${showDepth === "domains" ? "active" : ""}`}
                 >
@@ -121,7 +140,14 @@ export default function ShowControl() {
                   onClick={(e) =>
                     loading
                       ? e.preventDefault()
-                      : (e.preventDefault(), updateShowDepth("places", page))
+                      : (e.preventDefault(),
+                        dispatch(
+                          updateShowDepth({
+                            showType,
+                            showDepth: "places",
+                            page,
+                          })
+                        ))
                   }
                   className={`d-2 ${
                     !showDepth || showDepth === "places" ? "active" : ""
@@ -139,7 +165,14 @@ export default function ShowControl() {
                   onClick={(e) =>
                     loading
                       ? e.preventDefault()
-                      : (e.preventDefault(), updateShowDepth("countries", page))
+                      : (e.preventDefault(),
+                        dispatch(
+                          updateShowDepth({
+                            showType,
+                            showDepth: "countries",
+                            page,
+                          })
+                        ))
                   }
                   className={`d-1 ${showDepth === "countries" ? "active" : ""}`}
                 >

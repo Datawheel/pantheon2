@@ -77,6 +77,16 @@ export const exploreSlice = createSlice({
         state.data = null;
       }
     },
+    updateShowDepth: (state, action) => {
+      const { type } = state;
+      const { page, showDepth, showType } = action.payload;
+      console.log("\n~~~~~~~showType:", showType, "\n~~~~~~~~~~``");
+      state.show = { type: showType, depth: showDepth };
+      state.page = page;
+      if (page === "rankings") {
+        state.data = null;
+      }
+    },
   },
 });
 
@@ -94,6 +104,7 @@ export const {
   updateMetricCutoff,
   updateOnlyShowNew,
   updateShowType,
+  updateShowDepth,
 } = exploreSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

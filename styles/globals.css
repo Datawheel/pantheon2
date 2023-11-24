@@ -27,6 +27,13 @@ body {
   }
 }
 
+a {
+  color: #0f74d1;
+}
+a:hover {
+  color: #2090e6;
+}
+
 .app {
   font-weight: normal;
   /* sticky footer */
