@@ -88,10 +88,36 @@ export default function RankingTable({ places }) {
   );
 
   useEffect(() => {
+    fetchDataAndDispatch(
+      places,
+      exploreState,
+      dispatch,
+      router,
+      pathname,
+      controlledPageIndex,
+      sortBy
+    );
+  }, [sortBy]);
+
+  useEffect(() => {
     setPageInputVal(controlledPageIndex);
   }, [controlledPageIndex]);
 
   console.log("pageIndex, pageSize, sortBy", pageIndex, pageSize, sortBy);
+
+  const setPageAndFetchData = (pageNum) => {
+    setPageInputVal(pageNum);
+    dispatch(updateDataPageIndex(pageNum));
+    fetchDataAndDispatch(
+      places,
+      exploreState,
+      dispatch,
+      router,
+      pathname,
+      pageNum,
+      sortBy
+    );
+  };
 
   return (
     <div className="ranking-table-container">
@@ -159,43 +185,25 @@ export default function RankingTable({ places }) {
       </div>
       <div className="pagination">
         <button
-          onClick={() => (setPageInputVal(0), fetchData(0, 50, false, sortBy))}
+          onClick={() => setPageAndFetchData(0)}
           disabled={!canPreviousPage || data.loading}
         >
           {"<<"}
         </button>{" "}
         <button
-          onClick={() => (
-            setPageInputVal(controlledPageIndex - 1),
-            fetchData(controlledPageIndex - 1, 50, false, sortBy)
-          )}
+          onClick={() => setPageAndFetchData(controlledPageIndex - 1)}
           disabled={!canPreviousPage || data.loading}
         >
           {"<"}
         </button>{" "}
         <button
-          onClick={() => {
-            setPageInputVal(controlledPageIndex + 1);
-            // fetchData(controlledPageIndex + 1, 50, false, sortBy)
-            dispatch(updateDataPageIndex(controlledPageIndex + 1));
-            fetchDataAndDispatch(
-              places,
-              exploreState,
-              dispatch,
-              router,
-              pathname,
-              controlledPageIndex + 1
-            );
-          }}
+          onClick={() => setPageAndFetchData(controlledPageIndex + 1)}
           disabled={!canNextPage || data.loading}
         >
           {">"}
         </button>{" "}
         <button
-          onClick={() => (
-            setPageInputVal(pageCount - 1),
-            fetchData(pageCount - 1, 50, false, sortBy)
-          )}
+          onClick={() => setPageAndFetchData(pageCount - 1)}
           disabled={!canNextPage || data.loading}
         >
           {">>"}
@@ -213,7 +221,7 @@ export default function RankingTable({ places }) {
             // defaultValue={pageIndex + 1}
             onChange={(e) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              setPageInputVal(page);
+              setPageAndFetchData(page);
             }}
             onKeyDown={(e) => {
               let page = e.target.value ? Number(e.target.value) - 1 : 0;
@@ -224,8 +232,7 @@ export default function RankingTable({ places }) {
                 if (page < 0) {
                   page = 0;
                 }
-                fetchData(page, 50, false, sortBy);
-                setPageInputVal(page);
+                setPageAndFetchData(page);
               }
             }}
             style={{ width: "100px" }}
@@ -238,7 +245,7 @@ export default function RankingTable({ places }) {
             setPageSize(Number(e.target.value));
           }}
         >
-          {[5, 50].map((pageSize) => (
+          {[10, 50, 100].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>

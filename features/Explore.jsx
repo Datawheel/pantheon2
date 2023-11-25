@@ -40,7 +40,6 @@ function Explore({ places, nestedOccupations }) {
     const queryParamShow = searchParams.get("show")
       ? SANITIZERS.show(searchParams.get("show"), "rankings")
       : "people";
-    console.log("queryParamShow!!!", queryParamShow);
     dispatch(
       updateShowDepth({
         showType: queryParamShow.type,
@@ -49,7 +48,7 @@ function Explore({ places, nestedOccupations }) {
       })
     );
     dispatch(setFirstLoad());
-  }, []); // Empty dependency array to run only on initial mount
+  }, []);
 
   useEffect(() => {
     if (!firstLoad) {
