@@ -63,7 +63,7 @@ const getQueryArgs = (exploreState) => {
   return queryStr;
 };
 
-const makeApiUrl = (places, exploreState, pageIndex) => {
+const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
   const {
     city,
     country,
@@ -79,7 +79,6 @@ const makeApiUrl = (places, exploreState, pageIndex) => {
     yearType,
   } = exploreState;
   const apiHeaders = { Prefer: "count=estimated" };
-  const sortBy = [];
   let selectFields =
     "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
   let sorting = "&order=hpi.desc.nullslast";
@@ -151,18 +150,17 @@ const makeApiUrl = (places, exploreState, pageIndex) => {
 
   const onlyShowNewFilter = onlyShowNew ? "&hpi_prev=is.null" : "";
 
-  const apiUrl2 = `https://api.pantheon.world/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
-  console.log("apiUrl:", apiUrl2);
-  const apiUrl =
-    "https://api.pantheon.world/occupation?order=num_born.desc.nullslast&limit=1";
-  return apiUrl2;
+  const apiUrl = `https://api.pantheon.world/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
+  return apiUrl;
 };
 
-const fetchDataFromApi = async (places, exploreState, pageOverride) => {
-  const sortBy = null;
+const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
   const { dataPageIndex, page, show, placeType } = exploreState;
-  const pageIndex = pageOverride || dataPageIndex;
-  const apiUrl = makeApiUrl(places, exploreState, pageIndex);
+  const pageIndex =
+    typeof pageOverride === "number" && !isNaN(pageOverride)
+      ? pageOverride
+      : dataPageIndex;
+  const apiUrl = makeApiUrl(places, exploreState, pageIndex, sortBy);
   try {
     const response = await fetch(apiUrl, {
       headers: { Prefer: "count=estimated" },
@@ -177,14 +175,11 @@ const fetchDataFromApi = async (places, exploreState, pageOverride) => {
     let count = response.headers.get("content-range")
       ? parseInt(response.headers.get("content-range").split("/")[1], 10)
       : null;
-    console.log("range::", range);
-    console.log("count::", count);
     data =
       page === "rankings"
         ? dataFormatter(data, show.type, show.depth, placeType)
         : data;
     if (page === "rankings" && show.type !== "people") {
-      console.log("pageIndex!!!", pageIndex);
       count = data.length;
       data = data.slice(
         PAGE_SIZE * pageIndex,
@@ -203,14 +198,16 @@ export async function fetchDataAndDispatch(
   dispatch,
   router,
   pathname,
-  pageOverride
+  pageOverride,
+  sortBy
 ) {
   dispatch(dataRequested());
   try {
     const responseData = await fetchDataFromApi(
       places,
       exploreState,
-      pageOverride
+      pageOverride,
+      sortBy
     );
     dispatch(dataReceived(responseData));
     const queryStr = getQueryArgs(exploreState);
