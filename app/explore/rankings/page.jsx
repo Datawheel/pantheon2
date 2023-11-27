@@ -43,7 +43,11 @@ export default async function Page() {
   return (
     <div className="explore">
       {/* <Helmet title="Rankings" /> */}
-      <Explore places={places} nestedOccupations={nestedOccupations} />
+      <Explore
+        places={places}
+        nestedOccupations={nestedOccupations}
+        pageType="rankings"
+      />
       {/* <div className="explore-head"> */}
       {/* <VizTitle /> */}
       {/* {years.length ? (
