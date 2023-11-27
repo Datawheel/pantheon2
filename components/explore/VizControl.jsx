@@ -1,5 +1,6 @@
 "use client";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateViz } from "../../features/exploreSlice";
 
 const allVizTypes = [
   { id: "Treemap", name: "Tree Map" },
@@ -8,20 +9,11 @@ const allVizTypes = [
   { id: "Map", name: "Map" },
 ];
 
-const getClassName = (viz, currentViz, loading) => {
-  if (viz === currentViz) {
-    if (loading) {
-      return `active disabled ${viz}`;
-    }
-    return `active ${viz}`;
-  } else if (loading) {
-    return `disabled ${viz}`;
-  } else {
-    return viz;
-  }
-};
-
 export default function VizControl() {
+  const loading = false;
+  const dispatch = useDispatch();
+  const { viz } = useSelector((state) => state.explore);
+
   return (
     <div className="filter">
       <h3>Make a</h3>
@@ -31,13 +23,16 @@ export default function VizControl() {
             <h4>
               <a
                 href="#"
-                data-viz={v.id.toLowerCase()}
-                className={getClassName(v.id.toLowerCase(), viz, loading)}
+                data-id={v.id}
                 onClick={(e) =>
                   loading
                     ? e.preventDefault()
-                    : (e.preventDefault(), updateViz(v.id.toLowerCase()))
+                    : (e.preventDefault(),
+                      dispatch(updateViz(v.id.toLowerCase())))
                 }
+                className={`${v.id.toLowerCase()} ${
+                  loading ? "disabled" : null
+                } ${viz === v.id.toLowerCase() ? "active" : ""}`}
               >
                 {v.name}
               </a>

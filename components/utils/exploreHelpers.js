@@ -22,6 +22,7 @@ const getQueryArgs = (exploreState) => {
     page,
     placeType,
     show,
+    viz,
     years,
     yearType,
   } = exploreState;

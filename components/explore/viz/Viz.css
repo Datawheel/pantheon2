@@ -1,0 +1,5 @@
+@import "../../../styles/mixins.css";
+
+.explore-body {
+  width: 100%;
+}

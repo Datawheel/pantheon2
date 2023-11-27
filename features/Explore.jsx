@@ -1,19 +1,33 @@
 /*eslint no-undefined: "error"*/
 "use client";
 import { useEffect } from "react";
+import { nest } from "d3-collection";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import VizTitle from "../components/explore/VizTitle";
 import Controls from "../components/explore/Controls";
 import Spinner from "../components/Spinner";
 import RankingTable from "../components/explore/rankings/RankingTable";
-import { FORMATTERS, HPI_RANGE, LANGS_RANGE } from "../components/utils/consts";
+import {
+  FORMATTERS,
+  HPI_RANGE,
+  LANGS_RANGE,
+  COUNTRY_LIST,
+} from "../components/utils/consts";
 import { fetchDataAndDispatch } from "../components/utils/exploreHelpers";
 import { SANITIZERS } from "../components/utils/sanitizers";
-import { setFirstLoad, updateShowDepth } from "./exploreSlice";
+import {
+  setFirstLoad,
+  updateCountry,
+  updateCity,
+  updateGender,
+  updateYears,
+  updateShowDepth,
+} from "./exploreSlice";
 import "./Explore.css";
+import VizShell from "../components/explore/viz/VizShell";
 
-function Explore({ places, nestedOccupations }) {
+function Explore({ places, occupations, pageType }) {
   const {
     firstLoad,
     data,
@@ -36,17 +50,41 @@ function Explore({ places, nestedOccupations }) {
   const router = useRouter();
   const pathname = usePathname();
 
+  const nestedOccupations = nest()
+    .key((d) => d.domain_slug)
+    .entries(occupations)
+    .map((occData) => ({
+      domain: {
+        id: `${occData.values.map((o) => o.id)}`,
+        slug: occData.values[0].domain_slug,
+        name: occData.values[0].domain,
+      },
+      occupations: occData.values,
+    }));
+
   useEffect(() => {
     const queryParamShow = searchParams.get("show")
       ? SANITIZERS.show(searchParams.get("show"), "rankings")
-      : "people";
+      : pageType === "rankings"
+      ? { type: "people", depth: "people" }
+      : { type: "occupations", depth: "occupations" };
+    const queryParamCountry =
+      SANITIZERS.country(searchParams.get("place")) ||
+      COUNTRY_LIST[Math.floor(Math.random() * COUNTRY_LIST.length)];
+    const queryParamCity = SANITIZERS.city(searchParams.get("place")) || "all";
+    const queryParamGender = SANITIZERS.gender(searchParams.get("gender"));
+    const queryParamYears = SANITIZERS.years(searchParams.get("years"));
     dispatch(
       updateShowDepth({
         showType: queryParamShow.type,
         showDepth: queryParamShow.depth,
-        page: "rankings",
+        page: pageType,
       })
     );
+    dispatch(updateCountry(queryParamCountry));
+    dispatch(updateCity(queryParamCity));
+    dispatch(updateGender(queryParamGender));
+    dispatch(updateYears(queryParamYears));
     dispatch(setFirstLoad());
   }, []);
 
@@ -98,7 +136,11 @@ function Explore({ places, nestedOccupations }) {
       <div className="explore-body">
         <Controls nestedOccupations={nestedOccupations} places={places} />
         {data ? (
-          <RankingTable places={places} />
+          pageType === "rankings" ? (
+            <RankingTable places={places} />
+          ) : (
+            <VizShell occupations={occupations} />
+          )
         ) : (
           <div style={{ position: "relative", width: "100%" }}>
             <Spinner />

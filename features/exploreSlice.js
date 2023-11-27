@@ -16,6 +16,7 @@ const initialState = {
   show: { type: "people", depth: "people" },
   years: YEAR_RANGE,
   yearType: "birthyear",
+  viz: "treemap",
   value: 0,
   data: null,
   dataCount: null,
@@ -99,6 +100,9 @@ export const exploreSlice = createSlice({
     updateDataPageIndex: (state, action) => {
       state.dataPageIndex = action.payload;
     },
+    updateViz: (state, action) => {
+      state.viz = action.payload;
+    },
   },
 });
 
@@ -119,6 +123,7 @@ export const {
   updateShowType,
   updateShowDepth,
   updateDataPageIndex,
+  updateViz,
 } = exploreSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

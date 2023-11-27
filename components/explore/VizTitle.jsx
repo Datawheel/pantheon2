@@ -2,6 +2,7 @@
 import { useSelector } from "react-redux";
 import { merge } from "d3-array";
 import { plural } from "pluralize";
+import { toTitleCase } from "../utils/vizHelpers";
 
 const lowerFirstLetter = (str) =>
   str.charAt(0).toLocaleLowerCase() + str.slice(1);

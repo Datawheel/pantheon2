@@ -105,7 +105,7 @@ export const FORMATTERS = {
   slugify: slugifyStr,
 };
 
-function sanitizeYear(yr) {
+const sanitizeYear = (yr) => {
   const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
   if (
     yr.replace(".", "").toLowerCase().includes("bc") ||
@@ -114,7 +114,91 @@ function sanitizeYear(yr) {
     return yearAsNumber * -1;
   }
   return yearAsNumber;
-}
+};
+
+export const COUNTRY_LIST = [
+  "cze",
+  "geo",
+  "rou",
+  "mkd",
+  "civ",
+  "ury",
+  "arg",
+  "lva",
+  "bgr",
+  "blr",
+  "egy",
+  "nzl",
+  "gha",
+  "irq",
+  "chl",
+  "rus",
+  "ecu",
+  "tur",
+  "jpn",
+  "fin",
+  "bra",
+  "pol",
+  "che",
+  "mex",
+  "nld",
+  "ita",
+  "ind",
+  "usa",
+  "nor",
+  "chn",
+  "aut",
+  "prt",
+  "deu",
+  "grc",
+  "esp",
+  "can",
+  "dnk",
+  "hun",
+  "bel",
+  "fra",
+  "isr",
+  "swe",
+  "gbr",
+  "lbn",
+  "dza",
+  "isl",
+  "aus",
+  "tha",
+  "pak",
+  "zaf",
+  "arm",
+  "tun",
+  "hrv",
+  "syr",
+  "ukr",
+  "irn",
+  "vnm",
+  "irl",
+  "svk",
+  "svn",
+  "col",
+  "est",
+  "cub",
+  "sau",
+  "per",
+  "ven",
+  "mar",
+  "ltu",
+  "afg",
+  "srb",
+  "ken",
+  "jam",
+  "pry",
+  "nga",
+  "kaz",
+  "mne",
+  "uzb",
+  "bih",
+  "aze",
+  "cmr",
+  "kor",
+];
 
 export const SANITIZERS = {
   vizType: (viz) => {

@@ -1,3 +1,14 @@
+const sanitizeYear = (yr) => {
+  const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
+  if (
+    yr.replace(".", "").toLowerCase().includes("bc") ||
+    parseInt(yr, 10) < 0
+  ) {
+    return yearAsNumber * -1;
+  }
+  return yearAsNumber;
+};
+
 export const SANITIZERS = {
   vizType: (viz) => {
     const supportedViz = ["treemap", "stackedarea", "linechart", "map"];
