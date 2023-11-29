@@ -75,6 +75,8 @@
     display: inline-block;
     min-width: 2em;
     margin: 0 4px 0 0;
+    position: relative;
+    z-index: 10;
   }
 }
 
@@ -89,25 +91,24 @@
   .profile-nav-item {
     padding: 10px 0;
     width: 100%; /* necessary because flex */
+  }
 
-    /* dots */
-    &:after {
-      display: block;
-      content: ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
-      white-space: nowrap;
-      /* sizing */
-      width: 100%;
-      left: 0;
-      right: 0;
-      /* positioning */
-      position: absolute;
-      top: 0.9em; /* fudged into baseline */
-      z-index: -1; /* behind */
-      /* theming */
-      color: var(--colorSand);
-      /* handle overflow */
-      overflow: hidden;
-    }
+  /* dots */
+  .profile-nav-item:after {
+    display: block;
+    content: ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+    white-space: nowrap;
+    /* sizing */
+    width: 100%;
+    left: 0;
+    right: 0;
+    /* positioning */
+    position: absolute;
+    top: 0.9em; /* fudged into baseline */
+    /* theming */
+    color: var(--colorSand);
+    /* handle overflow */
+    overflow: hidden;
   }
 
   /* container for link text and jump text */
@@ -127,6 +128,8 @@
   .profile-nav-link-title {
     @mixin overflow-ellipsis;
     padding-right: 0.25em; /* hide the dots */
+    position: relative;
+    z-index: 10;
   }
 
   .jump-to-text {
