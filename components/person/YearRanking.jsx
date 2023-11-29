@@ -37,7 +37,7 @@ export default async function YearRanking({
   title,
   slug,
 }) {
-  if (!person.birthYear) {
+  if (!person.birthyear) {
     return null;
   }
   // Calculate min/max for birthyear peers
