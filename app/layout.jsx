@@ -13,6 +13,14 @@ export default function Layout({ children }) {
     <html lang="en">
       <head>
         <title>Pantheon</title>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Amiko&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body>
         <Navigation />

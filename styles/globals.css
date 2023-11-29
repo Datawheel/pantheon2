@@ -1,6 +1,4 @@
 @import "./mixins.css";
-@import url("https://fonts.googleapis.com/css?family=Amiko:400,600,700");
-
 @import './home.css';
 @import '../components/Footer.css';
 @import '../components/Navigation.css';
