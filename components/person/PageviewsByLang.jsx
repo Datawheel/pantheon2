@@ -1,7 +1,4 @@
-import axios from "axios";
 import langFamilies from "../../pages/api/json/langFamilies.json";
-import { COLORS_DOMAIN, FORMATTERS } from "../utils/consts";
-import MemMetricsAreaPlot from "./MemMetricsAreaPlot";
 import PageviewsByLangSummary from "./PageviewsByLangSummary";
 import PageviewsByLangAreaPlot from "./PageviewByLangAreaPlot";
 import SectionLayout from "../common/SectionLayout";
