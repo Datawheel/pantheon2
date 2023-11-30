@@ -13,6 +13,7 @@ import Books from "../../../../components/person/Books";
 import News from "../../../../components/person/News";
 import Twitter from "../../../../components/person/Twitter";
 import Movies from "../../../../components/person/Movies";
+import Footer from "../../../../components/person/Footer";
 
 async function getPerson(id) {
   const res = await fetch(
@@ -162,6 +163,7 @@ export default async function Page({ params: { id } }) {
           title: section.title,
         })
       )}
+      <Footer person={person} personRanks={personRanks} />
     </div>
   );
 }

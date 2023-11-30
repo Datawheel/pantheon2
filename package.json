@@ -51,8 +51,9 @@
     }
   },
   "dependencies": {
-    "@blueprintjs/core": "^4.17.8",
+    "@blueprintjs/core": "^5.7.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "@tippyjs/react": "^4.2.6",
     "async-throttle": "^1.1.0",
     "axios": "^1.4.0",
     "babel-preset-react": "^6.24.1",
