@@ -1,3 +1,5 @@
+import { HPI_RANGE, LANGS_RANGE, YEAR_RANGE } from "/components/utils/consts";
+
 const sanitizeYear = (yr) => {
   const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
   if (
