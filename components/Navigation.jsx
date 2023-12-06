@@ -1,5 +1,4 @@
 "use client";
-import React, { Component } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // import { v4 as uuidv4 } from "uuid";
@@ -225,9 +224,9 @@ export default function Navigation(props) {
           </li>
           <li className="item">
             <Link
-              href="/app/yearbook"
+              href="/game/yearbook"
               className={
-                pathname == "/app/yearbook"
+                pathname == "/game/yearbook"
                   ? "active item-link explore-link"
                   : "item-link explore-link"
               }
