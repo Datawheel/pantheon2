@@ -1,9 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
-import Person from "../Person/Person";
+import Person from "./Person";
 import "./Game.css";
-import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
+// import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
+import { useGoogleReCaptcha, GoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export default function Game({
   MAX_ATTEMPTS,
@@ -36,18 +37,33 @@ export default function Game({
   const [recap, setRecap] = useState(undefined);
   const [rKey, setRKey] = useState(Math.random() * (15000 - 150) + 150);
 
-  const verifyCallback = (recaptchaToken) => {
-    setRecap(recaptchaToken);
-  };
+  // const verifyCallback = (recaptchaToken) => {
+  //   setRecap(recaptchaToken);
+  // };
 
+  // useEffect(() => {
+  //   loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
+  // }, []);
+
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  // Create an event handler so you can call the verification on button click event or form submit
+  const handleReCaptchaVerify = useCallback(async () => {
+    if (!executeRecaptcha) {
+      console.log("Execute recaptcha not yet available");
+      return;
+    }
+
+    const token = await executeRecaptcha("yourAction");
+    // Do whatever you want with the token
+  }, [executeRecaptcha]);
+
+  // You can use useEffect to trigger the verification as soon as the component being loaded
   useEffect(() => {
-    loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
-  }, []);
+    handleReCaptchaVerify();
+  }, [handleReCaptchaVerify]);
 
-  const onPersonClick = (event) => {
-    const id = event.target.parentNode.id;
-    const person = persons.find((person) => person.id === id);
-
+  const onPersonClick = (person) => {
     if (personPos.get() < N_PERSONS) {
       if (person !== undefined) {
         if (person.selected === false) {
@@ -62,7 +78,7 @@ export default function Game({
     cancelBtnRef.current.disabled = false;
   };
 
-  var saveInformation = async function (correctPersonsAux) {
+  const saveInformation = async function (correctPersonsAux) {
     const savePersons = [...persons].sort((a, b) => {
       if (a.birthyear === b.birthyear) {
         const dateA = new Date(a.birthdate);
@@ -214,7 +230,7 @@ export default function Game({
       cancelBtnRef.current.disabled = true;
 
       setRKey(rKey + 1);
-      saveInformation(correctPersonsAux);
+      // saveInformation(correctPersonsAux);
     }
   };
 
@@ -258,11 +274,7 @@ export default function Game({
 
   return (
     <main key="bGameDiv" className="game" ref={gameBlockRef}>
-      <ReCaptcha
-        key={Math.random().toString()}
-        sitekey="6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D"
-        verifyCallback={verifyCallback}
-      />
+      <GoogleReCaptcha onVerify={handleReCaptchaVerify} />
       <div key="bGameDivHeader" className="game-header">
         <div key="bGameDivName" className="game-name">
           Who was born first?
@@ -276,11 +288,12 @@ export default function Game({
           persons.length > 0 ? (
             <div key="bGameDivPanelDiv" className="panel">
               <ul key="bGameDivPanelList" className="panel-list">
-                {persons.map((person) => (
+                {persons.map((person, i) => (
                   <Person
                     data={person}
-                    onClick={onPersonClick}
+                    onClick={() => onPersonClick(person)}
                     isBoardItem={false}
+                    dataKey={i}
                   />
                 ))}
               </ul>
@@ -296,7 +309,7 @@ export default function Game({
           </div>
         )}
       </div>
-      <div key={"gameBoard"} className="game-board">
+      <div key="gameBoard" className="game-board">
         <div key={"gameBoard2"} className="board">
           {
             <ul key={"gameBoardList"} className="board-list">
