@@ -1,6 +1,10 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useTrait from "./useTrait";
+import Game from "./Game";
+import fetchSlugs from "./fetchSlugs";
+import fetchPersons from "./fetchPersons";
+import { v4 as uuidv4 } from "uuid";
 import "./Birthle.css";
 
 function convertTZ(date, tzString) {
@@ -43,6 +47,7 @@ function Birthle(props) {
   const checkBtnRef = useRef(0);
   const cancelBtnRef = useRef(0);
   const gameBlockRef = useRef(0);
+  const resultBlockRef = useRef(0);
 
   const date = convertTZ(new Date(), "Europe/Paris");
   const year = date.getFullYear();
@@ -52,10 +57,57 @@ function Birthle(props) {
   const gameNumber = 1; // (hour >= 2 && hour < 14) ? 1 : 2;
   const gameDate = `${year}-${month}-${day}`; // 2022-5-25
 
+  const fetchData = async () => {
+    const slugs = await fetchSlugs();
+    const persons = await fetchPersons(slugs);
+
+    setPersons(persons);
+
+    setSortedPersons(() =>
+      [...persons].sort((a, b) => {
+        if (a.birthyear === b.birthyear) {
+          const dateA = new Date(a.birthdate);
+          const dateB = new Date();
+
+          return dateA - dateB;
+        }
+
+        return a.birthyear - b.birthyear;
+      })
+    );
+
+    const savePersons = [...persons].sort((a, b) => {
+      if (a.birthyear === b.birthyear) {
+        const dateA = new Date(a.birthdate);
+        const dateB = new Date();
+
+        return dateA - dateB;
+      }
+
+      return a.birthyear - b.birthyear;
+    });
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("mptoken");
+    if (!token) {
+      localStorage.setItem("mptoken", uuidv4());
+    }
+    setUserId(localStorage.getItem("mptoken"));
+
+    board.set(boardDefault);
+    selectedPersons.set([]);
+    setSortedPersons([]);
+    // checkBtnRef.current.disabled = true;
+    // cancelBtnRef.current.disabled = true;
+    fetchData().catch(() => {
+      fetchError.set(true);
+    });
+  }, []);
+
   return (
     <div key={"birthleComponents"} className="birthle">
-      GAME!!!
-      {/* <Game
+      <Game
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         N_PERSONS={N_PERSONS}
         fetchError={fetchError}
@@ -83,7 +135,7 @@ function Birthle(props) {
         setIsOpenDemographicForm={setIsOpenDemographicForm}
         setIsOpenConsentForm={setIsOpenConsentForm}
         setSaveConsent={setSaveConsent}
-      /> */}
+      />
     </div>
   );
 }
