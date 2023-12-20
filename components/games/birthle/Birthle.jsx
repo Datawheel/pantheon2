@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import useTrait from "./useTrait";
 import Game from "./Game";
+import ConsentForm from "./ConsentForm";
 import fetchSlugs from "./fetchSlugs";
 import fetchPersons from "./fetchPersons";
 import { v4 as uuidv4 } from "uuid";
@@ -16,7 +17,6 @@ function convertTZ(date, tzString) {
 }
 
 function Birthle(props) {
-  const { t, i18n } = props;
   const MAX_ATTEMPTS = 3;
   const N_PERSONS = 5;
   const boardCellDefault = {
@@ -42,7 +42,7 @@ function Birthle(props) {
   const [scoreDB, setScoreDB] = useState(-1);
   const [isOpenConsentForm, setIsOpenConsentForm] = useState(undefined);
   const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(undefined);
-  const [saveConsent, setSaveConsent] = useState(true);
+  const [saveConsent, setSaveConsent] = useState(undefined);
 
   const checkBtnRef = useRef(0);
   const cancelBtnRef = useRef(0);
@@ -107,6 +107,16 @@ function Birthle(props) {
 
   return (
     <div key={"birthleComponents"} className="birthle">
+      <ConsentForm
+        isOpenConsentForm={isOpenConsentForm}
+        setIsOpenConsentForm={setIsOpenConsentForm}
+        userId={userId}
+        universe={"birthle"}
+        saveConsent={saveConsent}
+        setSaveConsent={setSaveConsent}
+        scoreDB={scoreDB}
+        setScoreDB={setScoreDB}
+      />
       <Game
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         N_PERSONS={N_PERSONS}

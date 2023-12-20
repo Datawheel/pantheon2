@@ -1,0 +1,70 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("PANTHEON_PGURI")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Participant {
+  id           Int      @id @default(autoincrement())
+  user_id      String   @db.Uuid
+  ip_hash      String
+  country_id   Int?
+  location_id  Int?
+  age_id       Int?
+  sex_id       Int?
+  language_ids Json?
+  education_id Int?
+  universe     String?  @db.Text
+  locale       String?  @db.Text
+  score_bot    Float
+  createdAt    DateTime @default(now()) @map("created_at") @db.Date
+  // @@schema("trivia")
+
+  @@map("participant")
+}
+
+model Consent {
+  id        Int      @id @default(autoincrement())
+  user_id   String   @db.Uuid
+  ip_hash   String
+  universe  String?
+  locale    String?
+  url       String?
+  score_bot Float    @map("score_bot")
+  createdAt DateTime @default(now()) @map("created_at") @db.Date
+  // @@schema("trivia")
+
+  @@map("consent")
+}
+
+model TriviaScore {
+  id                    Int      @id @default(autoincrement())
+  user_id               String   @db.Uuid
+  ip_hash               String
+  game_share_id         Int?
+  q_id                  Int?
+  question_id           Int?
+  current_answer_option String?
+  current_answer        String?
+  correct_answer_option String?
+  score_bot             Float
+  createdAt             DateTime @default(now()) @map("created_at") @db.Date
+  // @@schema("trivia")
+
+  @@map("trivia_score")
+}
+
+model TriviaGame {
+  id            Int      @id @default(autoincrement())
+  date          String
+  game_number   Int?
+  game_share_id Int?
+  questions     Json?
+  createdAt     DateTime @default(now()) @map("created_at") @db.Date
+  // @@schema("trivia")
+
+  @@map("trivia_game")
+}

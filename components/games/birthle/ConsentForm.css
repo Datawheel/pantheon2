@@ -1,0 +1,110 @@
+.gettingstarted .gif {
+  width: 100%;
+}
+
+.bp3-dialog {
+  margin: 50px 0;
+  width: 520px;
+}
+
+@media (max-width: 600px) {
+  .bp3-dialog {
+    margin: 70px 0;
+    width: 380px;
+  }
+}
+
+.consentform p {
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+}
+
+.consentform img {
+  width: 100%;
+}
+
+.options {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.options .button {
+  background-color: var(--primary);
+  background-image: none;
+  box-shadow: none;
+  border-radius: 0px;
+  padding: 0.5rem 1rem;
+  font-family: var(--text-font);
+  font-size: 1.4rem;
+  color: "#fff";
+}
+
+.options .button:hover {
+  border: 1px solid var(--primary);
+  color: "#000";
+}
+
+.options .button.lite {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: "#000";
+}
+
+#consentbuttons {
+  text-align: right;
+}
+
+#consentno, #playTrivia {
+  background: none #5b5b5b;
+  background-color: rgb(250, 250, 243);
+  font-size: 1.3rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: rgb(70, 73, 74);
+}
+
+#consentyes {
+  background: none #5b5b5b;
+  background-color: rgb(70, 73, 74);
+  font-size: 1.3rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: beige;
+}
+
+.question-wrapper {
+  margin-bottom: 10px;
+}
+
+.question-wrapper h6 {
+  margin: 0.2em;
+}
+
+.question-wrapper .popup-select .button {
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.question-wrapper label {
+  font-size: 0.8rem;
+}
+
+.question-wrapper .bp3-button-group {
+  width: 80%;
+}
+
+.question-wrapper .bp3-button-group .bp3-button {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.question-wrapper .bp3-button-group .bp3-button.selected {
+  background: var(--primary);
+}
+
+.question-wrapper .bp3-button-group .bp3-button .bp3-button-text {
+  text-align: center;
+}
