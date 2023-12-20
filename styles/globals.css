@@ -5,6 +5,7 @@
 @import '../components/home/Grid.css';
 @import '../components/utils/PersonImage.css';
 @import '../components/Spinner.css';
+@import '@blueprintjs/core/lib/css/blueprint.css';
 
 * {box-sizing: border-box;}
 

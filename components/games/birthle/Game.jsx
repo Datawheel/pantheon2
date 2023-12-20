@@ -157,6 +157,7 @@ export default function Game({
     await fetch("/api/getParticipant", requestOptions)
       .then((resp) => resp.json())
       .then((socioConsent) => {
+        console.log("socioConsent", socioConsent);
         if (socioConsent.length > 0) {
           setScoreDB(parseFloat(socioConsent[0].score_bot));
           setIsOpenDemographicForm(false);
@@ -168,6 +169,7 @@ export default function Game({
     await fetch("/api/getConsent", requestOptions)
       .then((resp) => resp.json())
       .then((consent) => {
+        console.log("consent", consent);
         if (consent.length > 0) {
           setScoreDB(parseFloat(consent[0].score_bot));
           setSaveConsent(false);
@@ -293,7 +295,6 @@ export default function Game({
                     data={person}
                     onClick={() => onPersonClick(person)}
                     isBoardItem={false}
-                    dataKey={i}
                   />
                 ))}
               </ul>
