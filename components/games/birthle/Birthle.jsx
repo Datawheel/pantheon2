@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import useTrait from "./useTrait";
 import Game from "./Game";
-import ConsentForm from "./ConsentForm";
+import ConsentForm from "../ConsentForm";
 import fetchSlugs from "./fetchSlugs";
 import fetchPersons from "./fetchPersons";
 import { v4 as uuidv4 } from "uuid";

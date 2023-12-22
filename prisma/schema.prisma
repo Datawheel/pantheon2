@@ -12,10 +12,10 @@ model Participant {
   user_id      String   @db.Uuid
   ip_hash      String
   country_id   Int?
-  location_id  Int?
+  location_id  String?
   age_id       Int?
-  sex_id       Int?
-  language_ids Json?
+  sex_id       String?
+  language_ids String?
   education_id Int?
   universe     String?  @db.Text
   locale       String?  @db.Text

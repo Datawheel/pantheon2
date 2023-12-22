@@ -12,7 +12,7 @@ import {
 } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
 import "./ConsentForm.css";
-import { useI18n, useScopedI18n } from "../../../locales/client";
+import { useI18n, useScopedI18n } from "../../locales/client";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export default function ConsentForm({
@@ -39,8 +39,7 @@ export default function ConsentForm({
         return;
       }
 
-      const token = await executeRecaptcha("yourAction");
-      console.log("TOKEN!", token, buttonType);
+      const token = await executeRecaptcha("consentForm");
 
       setRKey(rKey + 1);
 
