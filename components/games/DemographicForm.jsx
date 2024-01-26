@@ -214,7 +214,7 @@ export default function DemographicForm({
       onClose={() => setIsOpenDemographicForm(false)}
       title={""}
     >
-      <div className="bp3-dialog popup popupwrapper">
+      <div className="bp5-dialog-body popup popupwrapper">
         <p>{popupDescription}</p>
 
         {/************
@@ -332,13 +332,13 @@ export default function DemographicForm({
             )}
           >
             <Button
-              className="select-button"
-              rightIcon="chevron-down"
               text={
                 countryCode
                   ? `${countryCode.name} (${countryCode.id})`
                   : popupSelect
               }
+              rightIcon="double-caret-vertical"
+              placeholder={popupSelect}
             />
           </Select>
         </QuestionDemo>

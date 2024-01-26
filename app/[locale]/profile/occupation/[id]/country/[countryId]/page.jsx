@@ -1,9 +1,11 @@
+import { plural } from "pluralize";
 import Header from "/components/occupation-country/Header";
 import Intro from "/components/occupation-country/Intro";
 import TopTen from "/components/occupation-country/Sections/TopTen";
 import People from "/components/occupation-country/Sections/People";
 import Lifespans from "/components/occupation-country/Sections/Lifespans";
 import Footer from "/components/occupation-country/Sections/Footer";
+import { toTitleCase } from "../../../../../../../components/utils/vizHelpers";
 
 async function getOccupations() {
   const res = await fetch(
@@ -57,6 +59,30 @@ async function getPeople(occupationId, countryId) {
     `https://api.pantheon.world/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev,l`
   );
   return res.json();
+}
+
+export async function generateMetadata({ params, searchParams }, parent) {
+  // read route params
+  const { id, countryId } = params;
+
+  // fetch data
+  const occupation = await getOccupation(id);
+  const country = await getCountry(countryId);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `Greatest ${country.demonym} ${toTitleCase(
+      plural(occupation.occupation)
+    )} | Pantheon`,
+    openGraph: {
+      images: [
+        `/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}`,
+        ...previousImages,
+      ],
+    },
+  };
 }
 
 export default async function Page({ params: { id, countryId } }) {

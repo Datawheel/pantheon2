@@ -1,0 +1,352 @@
+@import '../../../styles/mixins.css';
+
+.trivia-page {
+  @mixin max-container-width;
+  display: flex;
+  flex-direction: row;
+  width: 1024px;
+  margin: 0 auto;
+  border-top: 1px solid var(--colorCardboard);
+  padding: 80px 0;
+}
+
+.trivia-page.trivia-results {
+  @mixin themeLight;
+}
+
+.trivia-page.trivia-results .quiz {
+  background-color: transparent;
+}
+
+.buttonShareKey::before {
+  content: "";
+  display: block;
+  background: url("/images/icons/icon-share.svg") no-repeat center;
+  width: 16px;
+  height: 22px;
+  float: left;
+  margin: 0px 5px 0 0;
+}
+
+#buttonShareKey {
+  background-color: rgba(208, 201, 191, 0.6);
+  border: 1px solid var(--colorCardboard);
+  border-radius: 5px;
+  margin: 5px 5px 0px 0px;
+  padding-right: 15px;
+  color: none;
+  text-transform: uppercase;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#buttonShareKey:focus {
+  outline: none;
+}
+
+#buttonShareKey:hover {
+  color: var(--colorSlate);
+  background-color: var(--colorCardboard);
+}
+
+#buttonShareKey.btn-disabled {
+  background-color: var(--colorSlate);
+  border-color: var(--colorStone);
+  color: var(--colorStone);
+  cursor: default;
+}
+
+.countdown {
+  font-size: 2.9rem;
+  color: #F6C646;
+}
+
+.countdown .label {
+  font-size: 5rem;
+  font-color: #F6C646; /* 'font-color' is not a valid CSS property. Use 'color' instead. */
+}
+
+.countdown .title {
+  margin: 0;
+  text-align: left;
+}
+
+h1.trivia-title {
+  @mixin priTitle;
+  text-align: center;
+  margin: 80px 0 0 0;
+}
+
+.quiz {
+  @mixin themeDark;
+  border-radius: 16px;
+  margin-top: 40px;
+  margin-left: 20%;
+  width: 60%;
+  text-align: center;
+  opacity: 0.85;
+}
+
+@media (max-width: 450px) {
+  .quiz {
+    margin-left: 10%;
+    width: 80%;
+  }
+}
+
+.quiz .error {
+  text-align: center;
+}
+
+.trivia-question {
+  @mixin profileSectionTitle;
+  @mixin priTitle;
+  line-height: normal;
+  color: var(--colorEggshell);
+  font-size: var(--sizeXXL);
+  margin: 30px 20px 0 20px !important;
+  text-align: center !important;
+}
+
+@media (max-width: 750px) {
+  .trivia-question {
+    font-size: var(--sizeXL);
+  }
+}
+
+@media (max-width: 450px) {
+  .trivia-question {
+    font-size: var(--sizeML);
+  }
+}
+
+.progress {
+  @mixin secLabel;
+  text-align: center;
+}
+
+.answers {
+  margin: 0 20px;
+}
+
+.answer {
+  background-color: var(--colorStone);
+  border: 1px solid #fff;
+  border-radius: 5px;
+  color: var(--colorKashi);
+  cursor: pointer;
+  display: block;
+  margin: 10px 0;
+  padding: 5px 10px 5px 45px;
+  position: relative;
+  font-size: 22px;
+  text-align: left;
+  transition: ease-in-out, width 0.35s ease-in-out;
+  width: 100%;
+}
+
+.answer.selected {
+  color: #4f4c4c;
+  background-color: #f8ce56;
+}
+
+.answer.selected .letter {
+  color: var(--colorStone);
+}
+
+.answer:hover {
+  color: var(--colorSlate);
+  background-color: var(--colorCardboard);
+}
+
+.answer:hover .letter {
+  color: var(--colorStone);
+}
+
+.answer:focus {
+  outline: none;
+}
+
+.letter {
+  color: var(--colorCardboard);
+  width: 30px;
+  position: absolute;
+  left: 0;
+  text-align: center;
+  height: 28px;
+  top: 0;
+  padding: 5px;
+  text-transform: uppercase;
+}
+
+.continue {
+  margin: 0 20px;
+  text-align: right;
+}
+
+.btn-continue {
+  background-color: var(--colorStone);
+  border: 2px solid #fff;
+  border-radius: 5px;
+  color: var(--colorKashi);
+  border-radius: 5px;
+  padding: 10px 50px;
+  text-transform: uppercase;
+  font-size: 18px;
+  margin: 20px 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-continue:focus {
+  outline: none;
+}
+
+.btn-continue:hover {
+  color: var(--colorSlate);
+  background-color: var(--colorCardboard);
+}
+
+.btn-continue.btn-disabled {
+  background-color: var(--colorSlate);
+  border-color: var(--colorStone);
+  color: var(--colorStone);
+  cursor: default;
+}
+
+.results h2 {
+  text-align: center;
+}
+
+.results h2 .sharebutton {
+  content: "";
+  display: block;
+  background: url("/images/icons/icon-share.svg") no-repeat center;
+  width: 20px;
+  height: 20px;
+  float: left;
+  margin: 0 5px 0 0;
+}
+
+.results > ul {
+  margin: 0;
+  padding: 0;
+}
+
+.results .result-question {
+  border: solid 1px var(--colorStone);
+  border-radius: 10px;
+  width: 80%;
+  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+  margin-top: 30px;
+  margin-left: 10%;
+  padding: 20px;
+}
+
+.results .result-question.q-correct {
+  border-left: solid 10px #32BF84;
+}
+
+.results .result-question.q-incorrect {
+  border-left: solid 10px #FD5956;
+}
+
+.results .result-question .a-correct .bp3-icon {
+  color: #32BF84;
+}
+
+.results .result-question .a-incorrect .bp3-icon {
+  color: #FD5956;
+}
+
+.results .result-question .a-yours {
+  @mixin secLabel;
+}
+
+.results .result-question .result-question-title {
+  @mixin priTitle;
+  letter-spacing: 0.15rem;
+  margin: 0 0 10px 0;
+  font-size: var(--sizeLarge);
+}
+
+.consent .gettingstarted .gif {
+  width: 100%;
+}
+
+.consent .consentform p {
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+}
+
+.consent .consentform img {
+  width: 100%;
+}
+
+.consent .options {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.consent .options .button {
+  background-color: /* Replace with the value of $primary */;
+  background-image: none;
+  border-radius: 0px;
+  border: 1px solid /* Replace with the value of $primary */;
+  box-shadow: none;
+  color: /* Replace with the value of $white */;
+  cursor: pointer;
+  font-family: /* Replace with the value of $text-font */;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.consent .options .button:hover {
+  border: 1px solid /* Replace with the value of $primary */;
+  color: /* Replace with the value of $black */;
+}
+
+.consent .options .button.lite {
+  background-color: transparent;
+  border: 1px solid /* Replace with the value of $primary */;
+  color: /* Replace with the value of $black */;
+}
+
+.consent .question-wrapper {
+  margin-bottom: 10px;
+}
+
+.consent .question-wrapper h6 {
+  margin: 0.2em;
+}
+
+.consent .question-wrapper .popup-select .button {
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.consent .question-wrapper label {
+  font-size: 0.8rem;
+}
+
+.consent .question-wrapper .bp3-button-group {
+  width: 80%;
+}
+
+.consent .question-wrapper .bp3-button-group .bp3-button {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.consent .question-wrapper .bp3-button-group .bp3-button.selected {
+  background: /* Replace with the value of $primary */;
+}
+
+.consent .question-wrapper .bp3-button-group .bp3-button .bp3-button-text {
+  text-align: center;
+}
+
+/* Note: Replace the mixin references and SCSS variable values with actual CSS rules and values. */

@@ -2,13 +2,13 @@
   width: 100%;
 }
 
-.bp3-dialog {
+.bp5-dialog {
   margin: 50px 0;
   width: 520px;
 }
 
 @media (max-width: 600px) {
-  .bp3-dialog {
+  .bp5-dialog {
     margin: 70px 0;
     width: 380px;
   }
@@ -30,24 +30,23 @@
 }
 
 .options .button {
-  background-color: var(--primary);
+  background-color: #f5f8fa;
   background-image: none;
   box-shadow: none;
   border-radius: 0px;
   padding: 0.5rem 1rem;
-  font-family: var(--text-font);
   font-size: 1.4rem;
   color: "#fff";
 }
 
 .options .button:hover {
-  border: 1px solid var(--primary);
+  border: 1px solid #f5f8fa;
   color: "#000";
 }
 
 .options .button.lite {
   background-color: transparent;
-  border: 1px solid var(--primary);
+  border: 1px solid #f5f8fa;
   color: "#000";
 }
 
@@ -91,20 +90,20 @@
   font-size: 0.8rem;
 }
 
-.question-wrapper .bp3-button-group {
+.question-wrapper .bp5-button-group {
   width: 80%;
 }
 
-.question-wrapper .bp3-button-group .bp3-button {
+.question-wrapper .bp5-button-group .bp5-button {
   flex: 1;
   align-items: center;
   justify-content: center;
 }
 
-.question-wrapper .bp3-button-group .bp3-button.selected {
-  background: var(--primary);
+.question-wrapper .bp5-button-group .bp5-button.selected {
+  background: #f5f8fa;
 }
 
-.question-wrapper .bp3-button-group .bp3-button .bp3-button-text {
+.question-wrapper .bp5-button-group .bp5-button .bp5-button-text {
   text-align: center;
 }

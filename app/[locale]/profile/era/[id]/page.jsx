@@ -56,6 +56,27 @@ async function getPeopleDiedInEra(startYear, endYear) {
   return res.json();
 }
 
+export async function generateMetadata({ params, searchParams }, parent) {
+  // read route params
+  const id = params.id;
+
+  // fetch data
+  const era = await getEra(id);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${era.name} | Pantheon`,
+    openGraph: {
+      images: [
+        `http://localhost:3000/api/screenshot/era?id=${id}`,
+        ...previousImages,
+      ],
+    },
+  };
+}
+
 export default async function Page({ params: { id } }) {
   const [era, eras, occupations] = await Promise.all([
     getEra(id),
@@ -139,7 +160,7 @@ export default async function Page({ params: { id } }) {
   ];
 
   return (
-    <div className="person">
+    <div className="era">
       <Header era={era} />
       <div className="about-section">
         {/* <ProfileNav sections={this.sections} /> */}

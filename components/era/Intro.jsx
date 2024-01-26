@@ -33,7 +33,6 @@ export default function Intro({ era, eras, peopleBorn, peopleDied }) {
       </span>
     );
   }
-  console.log("peopleDied!!!!", peopleDied[0]);
   const cities = nest()
     .key((d) => d.dplace_geonameid.id)
     .rollup((leaves) => ({

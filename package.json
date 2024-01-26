@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^5.7.1",
-    "@blueprintjs/select": "^5.0.20",
+    "@blueprintjs/select": "^5.0.22",
     "@prisma/client": "^5.7.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@tippyjs/react": "^4.2.6",
