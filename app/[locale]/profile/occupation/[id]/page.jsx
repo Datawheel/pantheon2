@@ -1,4 +1,5 @@
 import { cloneElement } from "react";
+import { plural } from "pluralize";
 // import ProfileNav from "../../../../components/common/Nav";
 import Intro from "/components/occupation/Intro";
 import Header from "/components/occupation/Header";
@@ -12,6 +13,7 @@ import {
   NUM_RANKINGS_PRE,
   NUM_RANKINGS_POST,
 } from "/components/utils/consts";
+import { toTitleCase } from "../../../../../components/utils/vizHelpers";
 
 async function getOccupations() {
   const res = await fetch(
@@ -52,6 +54,27 @@ async function getPeopleDiedHere(countryId) {
     `https://api.pantheon.world/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
   );
   return res.json();
+}
+
+export async function generateMetadata({ params, searchParams }, parent) {
+  // read route params
+  const id = params.id;
+
+  // fetch data
+  const occupation = await getOccupation(id);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${toTitleCase(plural(occupation.occupation))} | Pantheon`,
+    openGraph: {
+      images: [
+        `http://localhost:3000/api/screenshot/occupation?id=${id}`,
+        ...previousImages,
+      ],
+    },
+  };
 }
 
 export default async function Page({ params: { id } }) {

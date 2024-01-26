@@ -5,21 +5,20 @@
 }
 
 @media (max-width: 600px) {
-  .bp3-dialog{
+  .bp5-dialog{
     margin: 70px 0;
     width: 380px;
     overflow: hidden;
   }
 }
 
-.bp3-popover-content{
+.bp5-popover-content{
   max-height: 200px;
   overflow-y: scroll;
 }
 
 
 .popup {
-  padding: 20px;
   font-size: 1.5rem;
 }
 .popup .title {
@@ -32,9 +31,10 @@
 }
 .popup .bp5-slider-progress {
   background-color: "#333";
-  &.bp3-intent-primary {
-    background-color: "#333";
-  }
+}
+
+.popup .bp5-slider-progress.bp5-intent-primary {
+  background-color: "#333";
 }
 .popup .bp5-slider-handle {
   background-color: "#333";
@@ -82,7 +82,7 @@
 .question-wrapper .bp5-button-group .bp5-button.selected {
   background: "#333";
 }
-.question-wrapper .bp5-button-group .bp5-button .bp3-button-text {
+.question-wrapper .bp5-button-group .bp5-button .bp5-button-text {
   text-align: center;
 }
 

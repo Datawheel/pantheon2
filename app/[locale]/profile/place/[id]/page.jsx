@@ -1,17 +1,17 @@
 import { cloneElement } from "react";
-import ProfileNav from "../../../../components/common/Nav";
-import Intro from "../../../../components/place/Intro";
-import Header from "../../../../components/place/Header";
-import PeopleRanking from "../../../../components/place/sections/PeopleRanking";
-import Occupations from "../../../../components/place/sections/Occupations";
-import Places from "../../../../components/place/sections/Places";
+import ProfileNav from "../../../../../components/common/Nav";
+import Intro from "../../../../../components/place/Intro";
+import Header from "../../../../../components/place/Header";
+import PeopleRanking from "../../../../../components/place/sections/PeopleRanking";
+import Occupations from "../../../../../components/place/sections/Occupations";
+import Places from "../../../../../components/place/sections/Places";
 import {
   NUM_RANKINGS,
   NUM_RANKINGS_PRE,
   NUM_RANKINGS_POST,
-} from "../../../../components/utils/consts";
-import OccupationTrends from "../../../../components/place/sections/OccupationTrends";
-import Lifespans from "../../../../components/place/sections/Lifespans";
+} from "../../../../../components/utils/consts";
+import OccupationTrends from "../../../../../components/place/sections/OccupationTrends";
+import Lifespans from "../../../../../components/place/sections/Lifespans";
 
 async function getPlace(id) {
   const res = await fetch(`https://api.pantheon.world/place?slug=eq.${id}`, {
@@ -62,6 +62,24 @@ async function getPeopleDiedHere(placeId) {
     `https://api.pantheon.world/person?dplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
   );
   return res.json();
+}
+
+export async function generateMetadata({ params, searchParams }, parent) {
+  // read route params
+  const { id, countryId } = params;
+
+  // fetch data
+  const place = await getPlace(id);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${place.place} | Pantheon`,
+    openGraph: {
+      images: [`/api/screenshot/place?id=${id}`, ...previousImages],
+    },
+  };
 }
 
 export default async function Page({ params: { id } }) {

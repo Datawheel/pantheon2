@@ -7,13 +7,15 @@ import DemographicForm from "../DemographicForm";
 import Question from "./Question";
 import Progress from "./Progress";
 import Answers from "./Answers";
+import Score from "./Score";
+import Results from "./Results";
 // import fetchSlugs from "./fetchSlugs";
 // import fetchPersons from "./fetchPersons";
 // import { v4 as uuidv4 } from "uuid";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import "./Trivia.css";
 
-const TIME_PER_QUESTION = 1;
+const TIME_PER_QUESTION = 15;
 
 function convertTZ(date, tzString) {
   return new Date(
@@ -35,7 +37,7 @@ function Trivia({ questions }) {
   const [firstOpen, setFirstOpen] = useState(true);
   const [isOpenConsentForm, setIsOpenConsentForm] = useState(false);
   const [saveConsent, setSaveConsent] = useState(false);
-  const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(true);
+  const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(false);
   const [scoreDB, setScoreDB] = useState(-1.0);
 
   const [showResults, setShowResults] = useState(false);
@@ -44,7 +46,7 @@ function Trivia({ questions }) {
   const [currentAnswer, setCurrentAnswer] = useState("");
   const [answers, setAnswers] = useState([]);
 
-  const [time, setTime] = useState(5);
+  const [time, setTime] = useState(TIME_PER_QUESTION);
   const [rKey, setRKey] = useState(10);
 
   const question = questions[currentQuestion];
@@ -77,49 +79,85 @@ function Trivia({ questions }) {
       });
   };
 
+  const saveGameDB = async () => {
+    const now = convertTZ(new Date(), "Europe/Paris");
+    const dateDB = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+
+    const getGame = {
+      game_share_id: gameIdShare,
+      date: dateDB,
+      game_number: 1,
+      questions: questions,
+    };
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(getGame),
+    };
+
+    const triviaGame = await fetch("/api/getTriviaGame", requestOptions).then(
+      (resp) => resp.json()
+    );
+
+    console.log("triviaGame!!!", triviaGame);
+    console.log("getGame!", getGame);
+
+    if (triviaGame.length === 0) {
+      await fetch("/api/createTriviaGame", requestOptions);
+    }
+  };
+
   const next = useCallback(async () => {
-    const token = await executeRecaptcha("trivia");
-    if (firstOpen) {
-      fetchDB();
-      setFirstOpen(false);
-    } else {
-      if (answers.length >= 0 && answers.length <= 10) {
-        if (time > 0) {
-          if (!currentAnswer) {
-            setError("Please select an option");
+    if (executeRecaptcha) {
+      const token = await executeRecaptcha("trivia");
+      if (firstOpen) {
+        fetchDB();
+        setFirstOpen(false);
+      } else {
+        if (answers.length >= 0 && answers.length <= 10) {
+          // if (time > 0) {
+          //   if (!currentAnswer) {
+          //     setError("Please select an option");
+          //     return;
+          //   }
+          // }
+
+          setRKey(rKey + 1);
+
+          const answer = {
+            qid: question.id,
+            quid: question.questionUid,
+            ao: currentAnswer,
+            at: currentAnswer !== "" ? question[`answer_${currentAnswer}`] : "",
+            cao: question.correct_answer,
+            cat: question[`answer_${question.correct_answer}`],
+          };
+          console.log("ANSWERs!", answers);
+
+          callDB(answer, token);
+          setAnswers((prevAnswers) => [...prevAnswers, answer]);
+          setTime(TIME_PER_QUESTION);
+          setCurrentAnswer(null);
+
+          if (currentQuestion + 1 < questions.length) {
+            setCurrentQuestion(
+              (prevCurrentQuestion) => prevCurrentQuestion + 1
+            );
             return;
           }
-        }
 
-        setRKey(rKey + 1);
+          setShowResults(true);
 
-        const answer = {
-          qid: question.id,
-          quid: question.questionUid,
-          ao: currentAnswer,
-          at: currentAnswer !== "" ? question[`answer_${currentAnswer}`] : "",
-          cao: question.correct_answer,
-          cat: question[`answer_${question.correct_answer}`],
-        };
-        console.log("ANSWER!", answer);
-
-        callDB(answer, token);
-        setAnswers((prevAnswers) => [...prevAnswers, answer]);
-        setTime(TIME_PER_QUESTION);
-
-        if (currentQuestion + 1 < questions.length) {
-          setCurrentQuestion((prevCurrentQuestion) => prevCurrentQuestion + 1);
-          return;
-        }
-
-        setShowResults(true);
-
-        if (answers.length === 10) {
-          await checkDemographics();
+          if (currentQuestion + 1 === questions.length) {
+            clearTimeout(timer.current);
+            await saveGameDB();
+            await checkDemographics();
+          }
         }
       }
     }
-  }, [executeRecaptcha, firstOpen, answers, time]);
+  }, [executeRecaptcha, firstOpen, answers, time, timer, currentAnswer]);
 
   const checkDemographics = async () => {
     const token = localStorage.getItem("mptoken");
@@ -193,7 +231,7 @@ function Trivia({ questions }) {
   useEffect(() => {
     timer.current = setTimeout(() => {
       setTime(time - 1);
-      if (time === 0 || firstOpen) {
+      if ((time === 0 || firstOpen) && answers.length < 10) {
         next();
       }
     }, 1 * 1000);
@@ -202,6 +240,8 @@ function Trivia({ questions }) {
       clearTimeout(timer.current);
     };
   }, [time]);
+
+  console.log("⏰ time: ", time);
 
   return (
     <div key={"triviaDiv1"}>
@@ -226,21 +266,26 @@ function Trivia({ questions }) {
       </h1>
       {showResults ? (
         <div key={"triviaResultsDiv"} className="results">
-          {/* <h2 key={"triviaResultsDivH2"}>Results: {renderScore()}</h2> */}
-          {/* <div key={"triviaResultsDivData"}>{renderResultsData()}</div> */}
+          <Score
+            answers={answers}
+            questions={questions}
+            gameIdShare={gameIdShare}
+          />
+          <Results answers={answers} questions={questions} timer={timer} />
         </div>
       ) : (
         <div key={"triviaQuizDiv"} className="quiz">
           <div key={"triviaCountDownDiv"} className="countdown">
             <div className="countdown.label">
               <img src="../images/icons/oec-trivia-timer.svg" />
-              {time}
+              {time > 0 ? time : 0}
             </div>
             <Question questions={questions} currentQuestion={currentQuestion} />
             <Progress total={questions.length} current={currentQuestion + 1} />
             {error ? <div className="error">{error}</div> : null}
             <Answers
               currentAnswer={currentAnswer}
+              setCurrentAnswer={setCurrentAnswer}
               currentQuestion={currentQuestion}
               questions={questions}
             />
@@ -250,6 +295,7 @@ function Trivia({ questions }) {
                   currentAnswer ? "btn-continue" : "btn-continue btn-disabled"
                 }
                 onClick={next}
+                disabled={!currentAnswer}
               >
                 Confirm and Continue
               </button>

@@ -62,6 +62,27 @@ async function getWikiExtract(personId) {
   return res.json();
 }
 
+export async function generateMetadata({ params, searchParams }, parent) {
+  // read route params
+  const id = params.id;
+
+  // fetch data
+  const person = await getPerson(id);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${person.name} Biography | Pantheon`,
+    openGraph: {
+      images: [
+        `http://localhost:3000/api/screenshot/person?id=${person.id}`,
+        ...previousImages,
+      ],
+    },
+  };
+}
+
 export default async function Page({ params: { id } }) {
   const personData = getPerson(id);
   const personRanksData = getPersonRanks(id);

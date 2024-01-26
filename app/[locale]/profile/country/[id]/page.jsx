@@ -54,6 +54,27 @@ async function getPeopleDiedHere(countryId) {
   return res.json();
 }
 
+export async function generateMetadata({ params, searchParams }, parent) {
+  // read route params
+  const id = params.id;
+
+  // fetch data
+  const country = await getCountry(id);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${country.country} | Pantheon`,
+    openGraph: {
+      images: [
+        `http://localhost:3000/api/screenshot/country?id=${id}`,
+        ...previousImages,
+      ],
+    },
+  };
+}
+
 export default async function Page({ params: { id } }) {
   const [country, occupations] = await Promise.all([
     getCountry(id),
