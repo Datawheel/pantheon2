@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import useTrait from "./useTrait";
 import Game from "./Game";
+import Result from "./Result";
 import ConsentForm from "../ConsentForm";
 import fetchSlugs from "./fetchSlugs";
 import fetchPersons from "./fetchPersons";
@@ -145,6 +146,14 @@ function Birthle(props) {
         setIsOpenDemographicForm={setIsOpenDemographicForm}
         setIsOpenConsentForm={setIsOpenConsentForm}
         setSaveConsent={setSaveConsent}
+      />
+      <Result
+        MAX_ATTEMPTS={MAX_ATTEMPTS}
+        sortedPersons={sortedPersons}
+        attempt={attempt}
+        isWin={isWin}
+        resultToShare={resultToShare}
+        resultBlockRef={resultBlockRef}
       />
     </div>
   );
