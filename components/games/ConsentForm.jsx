@@ -1,19 +1,11 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Button,
-  Classes,
-  Dialog,
-  Intent,
-  Checkbox,
-  MenuItem,
-  Position,
-  Toaster,
-} from "@blueprintjs/core";
+import { Button, Dialog } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
 import "./ConsentForm.css";
 import { useI18n, useScopedI18n } from "../../locales/client";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { v4 as uuidv4 } from "uuid";
 
 export default function ConsentForm({
   isOpenConsentForm,

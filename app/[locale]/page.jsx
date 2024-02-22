@@ -1,4 +1,5 @@
 "use client";
+import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import HomeGrid from "/components/home/Grid";
 import axios from "axios";
@@ -38,10 +39,12 @@ export default function Home() {
   const [trendingSoccerPlayersForGrid, setTrendingSoccerPlayersForGrid] =
     useState([]);
   const [trendingActorsForGrid, setTrendingActorsForGrid] = useState([]);
+  const [recentPassingsForGrid, setRecentPassingsForGrid] = useState([]);
 
   useEffect(() => {
     setLoadingTrendingBios(true);
     async function fetchMyData() {
+      const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
       const all = await axios.get(
         `/api/wikiTrends?lang=${trendingLangEdition}`
       );
@@ -54,8 +57,11 @@ export default function Home() {
       const actors = await axios.get(
         `/api/wikiTrends?lang=${trendingLangEdition}&occupation=ACTOR`
       );
+      const deaths = await axios.get(
+        `https://api.pantheon.world/person?alive=is.false&deathdate=gte.${date30DaysAgo}&select=wd_id,name,slug,birthyear,deathyear,id&order=deathdate.desc`
+      );
       const trendingData = await axios
-        .all([all, singers, soccerPlayers, actors])
+        .all([all, singers, soccerPlayers, actors, deaths])
         .then(axios.spread((...responses) => responses.map((r) => r.data)))
         .catch((errors) => {
           console.log("ERRORS!", errors);
@@ -65,11 +71,13 @@ export default function Home() {
         trendingSingers,
         trendingSoccerPlayers,
         trendingActors,
+        recentPassings,
       ] = trendingData;
       setTrendingBiosForGrid(trendingAll);
       setTrendingSingersForGrid(trendingSingers);
       setTrendingSoccerPlayersForGrid(trendingSoccerPlayers);
       setTrendingActorsForGrid(trendingActors);
+      setRecentPassingsForGrid(recentPassings);
       setLoadingTrendingBios(false);
     }
     fetchMyData();
@@ -156,6 +164,22 @@ export default function Home() {
           , a company specialized in the creation of data distribution and
           visualization solutions.
         </p>
+      </div>
+
+      <div className="profile-grid">
+        <div className="grid-title-container">
+          <h3 className="grid-title">Recent Passings</h3>
+        </div>
+        {!loadingTrendingBios ? (
+          <HomeGrid
+            bios={recentPassingsForGrid.slice(0, 16)}
+            showDates={true}
+          />
+        ) : (
+          <div className="loading-trends">
+            <Spinner />
+          </div>
+        )}
       </div>
 
       <div className="profile-grid">

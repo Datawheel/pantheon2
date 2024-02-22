@@ -176,6 +176,10 @@
         z-index: 2;
       }
 
+      & .grid-box-title-dates {
+        font-size: var(--sizeSmall);
+      }
+
       & a:hover {
         text-decoration: none;
 

@@ -11,7 +11,7 @@ const deltaClassName = (n) => {
   return n >= 0 ? "up" : "down";
 };
 
-const HomeGrid = ({ bios }) => (
+const HomeGrid = ({ bios, showDates }) => (
   <ul className="grid-row">
     {bios.map((profile) => (
       <li className="grid-box" key={profile.pid || profile.id}>
@@ -27,7 +27,14 @@ const HomeGrid = ({ bios }) => (
             {/* <div className={`grid-box-bg-img ${profile.gender}`} style={{backgroundImage: `url(/images/profile/people/${profile.pid || profile.id}.jpg)`}}></div> */}
             {/* </div> */}
           </div>
-          <div className="grid-box-title-container">{profile.name}</div>
+          <div className="grid-box-title-container">
+            {profile.name}
+            {showDates ? (
+              <div className="grid-box-title-dates">
+                {profile.birthyear} - {profile.deathyear}
+              </div>
+            ) : null}
+          </div>
 
           {/* <h3>{profile.name}</h3> */}
           {/* {profile.rank_delta !== undefined
