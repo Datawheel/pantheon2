@@ -63,7 +63,7 @@ export async function GET(request) {
   ).then((res) => res.arrayBuffer());
 
   const res = await fetch(
-    `https://api.pantheon.world/occupation?occupation_slug=eq.${id}`,
+    `https://api-dev.pantheon.world/occupation?occupation_slug=eq.${id}`,
     {
       method: "GET",
       headers: {
@@ -79,7 +79,7 @@ export async function GET(request) {
   }
 
   const peopleRes = await fetch(
-    `https://api.pantheon.world/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=id&limit=16`
+    `https://api-dev.pantheon.world/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=id&limit=16`
   );
   const people = await peopleRes.json();
   const peopleIds = people.map((p) => p.id);

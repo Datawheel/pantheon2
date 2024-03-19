@@ -17,14 +17,14 @@ import { toTitleCase } from "../../../../../components/utils/vizHelpers";
 
 async function getOccupations() {
   const res = await fetch(
-    "https://api.pantheon.world/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug"
+    "https://api-dev.pantheon.world/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug"
   );
   return res.json();
 }
 
 async function getOccupation(occupationId) {
   const res = await fetch(
-    `https://api.pantheon.world/occupation?occupation_slug=eq.${occupationId}`,
+    `https://api-dev.pantheon.world/occupation?occupation_slug=eq.${occupationId}`,
     {
       method: "GET",
       headers: {
@@ -37,21 +37,21 @@ async function getOccupation(occupationId) {
 
 async function getCountryRanks(countryRankLow, countryRankHigh) {
   const res = await fetch(
-    `https://api.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
+    `https://api-dev.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
   );
   return res.json();
 }
 
 async function getPeople(occupationId) {
   const res = await fetch(
-    `https://api.pantheon.world/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev`
+    `https://api-dev.pantheon.world/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev`
   );
   return res.json();
 }
 
 async function getPeopleDiedHere(countryId) {
   const res = await fetch(
-    `https://api.pantheon.world/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
+    `https://api-dev.pantheon.world/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
   );
   return res.json();
 }

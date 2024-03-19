@@ -45,7 +45,7 @@ export async function GET(request) {
   ).then((res) => res.arrayBuffer());
 
   const res = await fetch(
-    `https://api.pantheon.world/person?id=eq.${id}&select=name,occupation(occupation,domain_slug),birthyear,deathyear`,
+    `https://api-dev.pantheon.world/person?id=eq.${id}&select=name,occupation(occupation,domain_slug),birthyear,deathyear`,
     {
       method: "GET",
       headers: {

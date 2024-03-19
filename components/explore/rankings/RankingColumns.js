@@ -255,7 +255,7 @@ const getColumns = (show, nesting, countOffset) => {
                   content={"Historical Popularity Index"}
                 >
                   <div>
-                    HPI 2022 <Icon icon="info-sign" iconSize={10} />
+                    HPI 2024 <Icon icon="info-sign" iconSize={10} />
                   </div>
                 </Tooltip>
               ),
@@ -273,7 +273,7 @@ const getColumns = (show, nesting, countOffset) => {
                   content={"Historical Popularity Index"}
                 >
                   <div>
-                    HPI 2020 <Icon icon="info-sign" iconSize={10} />
+                    HPI 2022 <Icon icon="info-sign" iconSize={10} />
                   </div>
                 </Tooltip>
               ),
@@ -285,13 +285,13 @@ const getColumns = (show, nesting, countOffset) => {
               sortDescFirst: true,
             },
             {
-              Header: "Rank 2022",
+              Header: "Rank 2024",
               accessor: "rank",
               minWidth: 45,
               className: "cell_numeric",
             },
             {
-              Header: "Rank 2020",
+              Header: "Rank 2022",
               accessor: "rank_prev",
               minWidth: 45,
               className: "cell_numeric",

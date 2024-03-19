@@ -17,12 +17,15 @@ export async function GET(request) {
     new URL("../../../../public/fonts/Amiko-Regular.ttf", import.meta.url)
   ).then((res) => res.arrayBuffer());
 
-  const eraRes = await fetch(`https://api.pantheon.world/era?slug=eq.${id}`, {
-    method: "GET",
-    headers: {
-      Accept: "application/vnd.pgrst.object+json",
-    },
-  });
+  const eraRes = await fetch(
+    `https://api-dev.pantheon.world/era?slug=eq.${id}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/vnd.pgrst.object+json",
+      },
+    }
+  );
   const era = await eraRes.json();
   const { id: eraId, name: eraName, start_year, end_year } = era;
 

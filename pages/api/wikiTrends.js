@@ -76,7 +76,7 @@ const handler = async (req, res) => {
   const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
   const todaysBiosFromDbResp = await axios
     .get(
-      `https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`
+      `https://api-dev.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`
     )
     .catch(
       (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
@@ -97,7 +97,7 @@ const handler = async (req, res) => {
     if (occupation) {
       const todaysBiosFromDbCheck = await axios
         .get(
-          `https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
+          `https://api-dev.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
         )
         .catch(
           (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
@@ -122,7 +122,7 @@ const handler = async (req, res) => {
     ) {
       const todaysBiosFromDbResp2 = await axios
         .get(
-          `https://api.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
+          `https://api-dev.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
         )
         .catch(
           (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
@@ -206,7 +206,7 @@ const handler = async (req, res) => {
       }
 
       trendingPeoplePantheonUrls.push(
-        `https://api.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug,occupation`
+        `https://api-dev.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug,occupation`
       );
     }
 
@@ -251,7 +251,7 @@ const handler = async (req, res) => {
       .sort((a, b) => a.rank - b.rank)
       .map((d, i) => ({ ...d, rank_pantheon: i + 1 }));
 
-    await axios.post("https://api.pantheon.world/trend", todaysBiosForDb, {
+    await axios.post("https://api-dev.pantheon.world/trend", todaysBiosForDb, {
       headers: {
         "Content-Type": "application/json",
         Authorization:
@@ -299,7 +299,7 @@ export default handler;
 //     );
 //     const topRelatedInPantheonResp = await axios
 //       .get(
-//         `https://api.pantheon.world/person?or=(${pantheonPersonQuery})&select=id,birthyear,name,hpi,slug,occupation.occupation_name`
+//         `https://api-dev.pantheon.world/person?or=(${pantheonPersonQuery})&select=id,birthyear,name,hpi,slug,occupation.occupation_name`
 //       )
 //       .catch(
 //         (e) => (
@@ -350,7 +350,7 @@ export default handler;
 //     // FIRST check if this person is trending at all
 //     const monthAgoTrendFromDbResp = await axios
 //       .get(
-//         `https://api.pantheon.world/trend?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}&rank_pantheon=lte.100`
+//         `https://api-dev.pantheon.world/trend?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}&rank_pantheon=lte.100`
 //       )
 //       .catch(
 //         (e) => (console.log("Pantheon DB trends read Error:", e), { data: [] })
@@ -363,7 +363,7 @@ export default handler;
 //     // try to get daily pageview data from db
 //     const monthAgoPvFromDbResp = await axios
 //       .get(
-//         `https://api.pantheon.world/trend_pageviews?date=eq.${year}-${month}-${day}&pid=eq.${wikiId}`
+//         `https://api-dev.pantheon.world/trend_pageviews?date=eq.${year}-${month}-${day}&pid=eq.${wikiId}`
 //       )
 //       .catch(
 //         (e) => (console.log("Pantheon DB trends read Error:", e), { data: [] })
@@ -371,7 +371,7 @@ export default handler;
 //     if (monthAgoPvFromDbResp.data.length) {
 //       const pastMonthPvFromDbResp = await axios
 //         .get(
-//           `https://api.pantheon.world/trend_pageviews?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}`
+//           `https://api-dev.pantheon.world/trend_pageviews?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}`
 //         )
 //         .catch(
 //           (e) => (
@@ -458,7 +458,7 @@ export default handler;
 //           // UPSERT via "Prefer: resolution=merge-duplicates" header
 //           await axios
 //             .post(
-//               "https://api.pantheon.world/trend_pageviews",
+//               "https://api-dev.pantheon.world/trend_pageviews",
 //               enrichedPageViewsFlat,
 //               {
 //                 headers: {
@@ -542,7 +542,7 @@ export default handler;
 //     const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
 //     const todaysBiosFromDbResp = await axios
 //       .get(
-//         `https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`
+//         `https://api-dev.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`
 //       )
 //       .catch(
 //         (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
@@ -563,7 +563,7 @@ export default handler;
 //       if (occupation) {
 //         const todaysBiosFromDbCheck = await axios
 //           .get(
-//             `https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
+//             `https://api-dev.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
 //           )
 //           .catch(
 //             (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
@@ -588,7 +588,7 @@ export default handler;
 //       ) {
 //         const todaysBiosFromDbResp2 = await axios
 //           .get(
-//             `https://api.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
+//             `https://api-dev.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
 //           )
 //           .catch(
 //             (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
@@ -675,7 +675,7 @@ export default handler;
 //         }
 
 //         trendingPeoplePantheonUrls.push(
-//           `https://api.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug,occupation`
+//           `https://api-dev.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug,occupation`
 //         );
 //       }
 
@@ -720,7 +720,7 @@ export default handler;
 //         .sort((a, b) => a.rank - b.rank)
 //         .map((d, i) => ({ ...d, rank_pantheon: i + 1 }));
 
-//       await axios.post("https://api.pantheon.world/trend", todaysBiosForDb, {
+//       await axios.post("https://api-dev.pantheon.world/trend", todaysBiosForDb, {
 //         headers: {
 //           "Content-Type": "application/json",
 //           Authorization:

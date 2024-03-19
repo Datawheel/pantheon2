@@ -69,8 +69,9 @@ function Explore({ places, occupations, pageType }) {
       ? { type: "people", depth: "people" }
       : { type: "occupations", depth: "occupations" };
     const queryParamCountry =
-      SANITIZERS.country(searchParams.get("place")) ||
-      COUNTRY_LIST[Math.floor(Math.random() * COUNTRY_LIST.length)];
+      SANITIZERS.country(searchParams.get("place")) || pageType !== "rankings"
+        ? COUNTRY_LIST[Math.floor(Math.random() * COUNTRY_LIST.length)]
+        : "all";
     const queryParamCity = SANITIZERS.city(searchParams.get("place")) || "all";
     const queryParamGender = SANITIZERS.gender(searchParams.get("gender"));
     const queryParamYears = SANITIZERS.years(searchParams.get("years"));

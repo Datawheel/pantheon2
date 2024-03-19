@@ -14,7 +14,7 @@ async function getBirthCountryRankings(
   birthCountryRankHigh
 ) {
   const res = await fetch(
-    `https://api.pantheon.world/person_ranks?bplace_country=eq.${birthCountryId}&bplace_country_rank_unique=gte.${birthCountryRankLow}&bplace_country_rank_unique=lte.${birthCountryRankHigh}&order=bplace_country_rank_unique&select=bplace_country,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,deathyear,birthyear`
+    `https://api-dev.pantheon.world/person_ranks?bplace_country=eq.${birthCountryId}&bplace_country_rank_unique=gte.${birthCountryRankLow}&bplace_country_rank_unique=lte.${birthCountryRankHigh}&order=bplace_country_rank_unique&select=bplace_country,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,deathyear,birthyear`
   );
   return res.json();
 }

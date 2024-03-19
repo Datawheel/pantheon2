@@ -34,7 +34,7 @@ async function getIsTrending(personId) {
   );
   const monthAgo = `${year1monthAgo}-${month1monthAgo}-${day1monthAgo}`;
   const res = await fetch(
-    `https://api.pantheon.world/trend?date=gte.${monthAgo}&pid=eq.${personId}&rank_pantheon=lte.100`
+    `https://api-dev.pantheon.world/trend?date=gte.${monthAgo}&pid=eq.${personId}&rank_pantheon=lte.100`
   );
   return res.json();
 }

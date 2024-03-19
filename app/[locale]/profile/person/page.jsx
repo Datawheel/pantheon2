@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 async function getTopPeople() {
   const res = await fetch(
-    "https://api.pantheon.world/person?limit=1000&order=hpi.desc.nullslast"
+    "https://api-dev.pantheon.world/person?limit=1000&order=hpi.desc.nullslast"
   );
   return res.json();
 }
