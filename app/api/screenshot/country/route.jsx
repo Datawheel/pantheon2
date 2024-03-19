@@ -18,7 +18,7 @@ export async function GET(request) {
   ).then((res) => res.arrayBuffer());
 
   const countryRes = await fetch(
-    `https://api.pantheon.world/country?slug=eq.${id}`,
+    `https://api-dev.pantheon.world/country?slug=eq.${id}`,
     {
       method: "GET",
       headers: {

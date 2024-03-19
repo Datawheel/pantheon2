@@ -7,7 +7,9 @@ import { FORMATTERS } from "../../utils/consts";
 import SectionLayout from "../../common/SectionLayout";
 
 async function getEras() {
-  const res = await fetch(`https://api.pantheon.world/era?order=start_year`);
+  const res = await fetch(
+    `https://api-dev.pantheon.world/era?order=start_year`
+  );
   return res.json();
 }
 

@@ -1,7 +1,7 @@
 export default async function fetchPersons(slugs) {
   return Promise.all(
     slugs.map((slug) => {
-      return fetch(`https://api.pantheon.world/person?slug=eq.${slug}`)
+      return fetch(`https://api-dev.pantheon.world/person?slug=eq.${slug}`)
         .then((res) => res.json())
         .then((data) => {
           return {

@@ -15,14 +15,14 @@ import {
 
 async function getOccupations() {
   const res = await fetch(
-    "https://api.pantheon.world/occupation?order=num_born.desc.nullslast"
+    "https://api-dev.pantheon.world/occupation?order=num_born.desc.nullslast"
   );
   return res.json();
 }
 
 async function getCountry(countryId) {
   const res = await fetch(
-    `https://api.pantheon.world/country?slug=eq.${countryId}`,
+    `https://api-dev.pantheon.world/country?slug=eq.${countryId}`,
     {
       method: "GET",
       headers: {
@@ -35,21 +35,21 @@ async function getCountry(countryId) {
 
 async function getCountryRanks(countryRankLow, countryRankHigh) {
   const res = await fetch(
-    `https://api.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
+    `https://api-dev.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
   );
   return res.json();
 }
 
 async function getPeopleBornHere(countryId) {
   const res = await fetch(
-    `https://api.pantheon.world/person?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
+    `https://api-dev.pantheon.world/person?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
   );
   return res.json();
 }
 
 async function getPeopleDiedHere(countryId) {
   const res = await fetch(
-    `https://api.pantheon.world/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
+    `https://api-dev.pantheon.world/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
   );
   return res.json();
 }

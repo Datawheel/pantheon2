@@ -8,7 +8,7 @@ module.exports = function (app) {
     const { uid } = req.params;
     const nullResp = { user: {}, timeline: [] };
     const pantheonData = await axios
-      .get(`https://api.pantheon.world/person?id=eq.${uid}&select=twitter`)
+      .get(`https://api-dev.pantheon.world/person?id=eq.${uid}&select=twitter`)
       .then((resp) => (resp.data.length ? resp.data[0] : []))
       .catch((errors) => {
         console.log("ERRORS!", errors);

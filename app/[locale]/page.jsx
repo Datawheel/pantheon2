@@ -58,7 +58,7 @@ export default function Home() {
         `/api/wikiTrends?lang=${trendingLangEdition}&occupation=ACTOR`
       );
       const deaths = await axios.get(
-        `https://api.pantheon.world/person?alive=is.false&deathdate=gte.${date30DaysAgo}&select=wd_id,name,slug,birthyear,deathyear,id&order=deathdate.desc`
+        `https://api-dev.pantheon.world/person?alive=is.false&deathdate=gte.${date30DaysAgo}&select=wd_id,name,slug,birthyear,deathyear,id&order=deathdate.desc`
       );
       const trendingData = await axios
         .all([all, singers, soccerPlayers, actors, deaths])

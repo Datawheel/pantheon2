@@ -151,7 +151,7 @@ const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
 
   const onlyShowNewFilter = onlyShowNew ? "&hpi_prev=is.null" : "";
 
-  const apiUrl = `https://api.pantheon.world/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
+  const apiUrl = `https://api-dev.pantheon.world/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
   return apiUrl;
 };
 

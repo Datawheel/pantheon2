@@ -15,7 +15,7 @@ async function getBirthYearRankings(
   birthYearRankHigh
 ) {
   const res = await fetch(
-    `https://api.pantheon.world/person_ranks?birthyear=eq.${birthYear}&birthyear_rank_unique=gte.${birthYearRankLow}&birthyear_rank_unique=lte.${birthYearRankHigh}&order=birthyear_rank_unique&select=occupation,bplace_country,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear`
+    `https://api-dev.pantheon.world/person_ranks?birthyear=eq.${birthYear}&birthyear_rank_unique=gte.${birthYearRankLow}&birthyear_rank_unique=lte.${birthYearRankHigh}&order=birthyear_rank_unique&select=occupation,bplace_country,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear`
   );
   return res.json();
 }
@@ -26,7 +26,7 @@ async function getDeathYearRankings(
   deathYearRankHigh
 ) {
   const res = await fetch(
-    `https://api.pantheon.world/person_ranks?deathyear=eq.${deathyear}&deathyear_rank_unique=gte.${deathYearRankLow}&deathyear_rank_unique=lte.${deathYearRankHigh}&order=deathyear_rank_unique&select=occupation,dplace_country,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear`
+    `https://api-dev.pantheon.world/person_ranks?deathyear=eq.${deathyear}&deathyear_rank_unique=gte.${deathYearRankLow}&deathyear_rank_unique=lte.${deathYearRankHigh}&order=deathyear_rank_unique&select=occupation,dplace_country,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear`
   );
   return res.json();
 }

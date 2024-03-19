@@ -5,7 +5,7 @@ import "/components/games/Yearbook.css";
 
 async function getPeopleBornInYear(year) {
   const res = await fetch(
-    `https://api.pantheon.world/person?select=name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)&birthyear=eq.${year}&hpi=gte.4&order=hpi.desc.nullslast`
+    `https://api-dev.pantheon.world/person?select=name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)&birthyear=eq.${year}&hpi=gte.4&order=hpi.desc.nullslast`
   );
   return res.json();
 }

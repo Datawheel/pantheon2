@@ -3,7 +3,7 @@ export default async function fetchPersons(slugs) {
     (slug) => `%22${encodeURIComponent(slug)}%22`
   );
   return fetch(
-    `https://api.pantheon.world/person?slug=in.(${wrappedAndEncodedSlugs})`
+    `https://api-dev.pantheon.world/person?slug=in.(${wrappedAndEncodedSlugs})`
   )
     .then((res) => res.json())
     .then((data) =>
