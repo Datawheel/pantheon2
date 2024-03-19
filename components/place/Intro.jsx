@@ -1,3 +1,5 @@
+import { nest } from "d3-collection";
+import { plural } from "pluralize";
 import AnchorList from "../utils/AnchorList";
 import { FORMATTERS } from "../utils/consts";
 import "../common/Intro.css";
@@ -9,17 +11,40 @@ async function getWikiSummary(placeName) {
   return res.json();
 }
 
-export default async function Intro({ place, country, placeRanks }) {
-  const peopleBornHere = [];
-  const peopleDiedHere = [];
-  const occupationsBorn = [];
-  const occupationsDied = [];
+export default async function Intro({
+  place,
+  country,
+  placeRanks,
+  peopleBornHere,
+  peopleDiedHere,
+}) {
   const myIndex = placeRanks
     ? placeRanks.findIndex((p) => p.place === place.place)
     : null;
   let wikiLink, wikiSentence;
 
   const wikiSummary = await getWikiSummary(place.place);
+
+  const occupationsBorn = nest()
+    .key((d) => d.occupation.id)
+    .rollup((leaves) => ({
+      num_born: leaves.length,
+      occupation: leaves[0].occupation,
+    }))
+    .entries(peopleBornHere.filter((d) => d.occupation_id))
+    .sort((a, b) => b.value.num_born - a.value.num_born)
+    .map((d) => d.value)
+    .slice(0, 2);
+  const occupationsDied = nest()
+    .key((d) => d.occupation.id)
+    .rollup((leaves) => ({
+      num_died: leaves.length,
+      occupation: leaves[0].occupation,
+    }))
+    .entries(peopleDiedHere.filter((d) => d.occupation_id))
+    .sort((a, b) => b.value.num_died - a.value.num_died)
+    .map((d) => d.value)
+    .slice(0, 2);
 
   // wikipedia summary
   if (wikiSummary) {

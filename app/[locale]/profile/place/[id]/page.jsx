@@ -184,7 +184,13 @@ export default async function Page({ params: { id } }) {
       <Header place={place} country={country} />
       <div className="about-section">
         <ProfileNav sections={sections} />
-        <Intro place={place} country={country} placeRanks={placeRanks} />
+        <Intro
+          place={place}
+          country={country}
+          placeRanks={placeRanks}
+          peopleBornHere={peopleBornHere}
+          peopleDiedHere={peopleDiedHere}
+        />
       </div>
       {sections.map((section, key) =>
         cloneElement(section.content, {
