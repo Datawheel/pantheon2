@@ -1,6 +1,6 @@
 import langFamilies from "../../pages/api/json/langFamilies.json";
-import PageviewsByLangSummary from "./PageviewsByLangSummary";
-import PageviewsByLangAreaPlot from "./PageviewByLangAreaPlot";
+import PageviewsByLangSummary from "/components/person/PageViewsByLangSummary";
+import PageviewsByLangAreaPlot from "/components/person/PageViewByLangAreaPlot";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 
