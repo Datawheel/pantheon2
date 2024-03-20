@@ -1,11 +1,11 @@
 import { plural } from "pluralize";
 import Header from "/components/occupation-country/Header";
 import Intro from "/components/occupation-country/Intro";
-import TopTen from "/components/occupation-country/Sections/TopTen";
-import People from "/components/occupation-country/Sections/People";
-import Lifespans from "/components/occupation-country/Sections/Lifespans";
-import Footer from "/components/occupation-country/Sections/Footer";
-import { toTitleCase } from "../../../../../../../components/utils/vizHelpers";
+import TopTen from "/components/occupation-country/sections/TopTen";
+import People from "/components/occupation-country/sections/People";
+import Lifespans from "/components/occupation-country/sections/Lifespans";
+import Footer from "/components/occupation-country/sections/Footer";
+import { toTitleCase } from "/components/utils/vizHelpers";
 
 async function getOccupations() {
   const res = await fetch(
