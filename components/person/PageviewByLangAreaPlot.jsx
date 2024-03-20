@@ -17,7 +17,7 @@ const langFamColors = {
   tai: "#255A7F",
 };
 
-export default function PageviewsByLangAreaPlot({ timeSeriesData, numLangs }) {
+export default function PageViewsByLangAreaPlot({ timeSeriesData, numLangs }) {
   // Whether or not we should show the labels on the lines
   // depends on how many unique languages we have. If there are
   // more than 30 the chart becomes too cluttered with the labels.
