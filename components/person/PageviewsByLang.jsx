@@ -1,6 +1,6 @@
 import langFamilies from "../../pages/api/json/langFamilies.json";
-import PageviewsByLangSummary from "/components/person/PageViewsByLangSummary";
-import PageviewsByLangAreaPlot from "/components/person/PageViewByLangAreaPlot";
+import PageViewsByLangSummary from "/components/person/PageViewsByLangSummary";
+import PageViewsByLangAreaPlot from "/components/person/PageViewByLangAreaPlot";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 
@@ -86,7 +86,7 @@ const formatTimeSeriesData = (timeSeriesDataResps, langlinksLookup) => {
   return [langsTs, numLangs];
 };
 
-export default async function PageviewsByLang({ person, slug, title }) {
+export default async function PageViewsByLang({ person, slug, title }) {
   const langEditions = await getLangEditions(person.id);
   const [langlinksLookup, timeSeriesDataReqs] = await getTimeSeriesData(
     langEditions,
