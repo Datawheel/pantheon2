@@ -4,7 +4,7 @@ import ProfileNav from "/components/common/Nav";
 import Intro from "/components/person/Intro";
 import Header from "/components/person/Header";
 import MemMetrics from "/components/person/MemMetrics";
-import PageviewsByLang from "/components/person/PageviewsByLang";
+import PageViewsByLang from "/components/person/PageViewsByLang";
 import OccupationRanking from "/components/person/OccupationRanking";
 import YearRanking from "/components/person/YearRanking";
 import CountryRanking from "/components/person/CountryRanking";
@@ -123,7 +123,7 @@ export default async function Page({ params: { id } }) {
     {
       title: `Page views of ${plural(person.name)} by language`,
       slug: "page-views-by-lang",
-      content: <PageviewsByLang person={person} />,
+      content: <PageViewsByLang person={person} />,
     },
     {
       title: `Among ${plural(person.occupation.occupation)}`,
