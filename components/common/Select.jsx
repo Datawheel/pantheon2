@@ -16,7 +16,7 @@ export default function Select({
   onChange, // callback function; select a new option
 }) {
   // remove stringified nulls
-  const filteredOptions = options && options.filter((option) => option !== "");
+  const filteredOptions = options && options.filter(option => option !== "");
 
   return (options && options.length) || children ? (
     <label
@@ -48,7 +48,7 @@ export default function Select({
         tabIndex={tabIndex}
       >
         {options &&
-          filteredOptions.map((option) => (
+          filteredOptions.map(option => (
             <option value={option} key={`select-option-${option}`}>
               {option}
             </option>

@@ -1,7 +1,7 @@
-import { nest } from "d3-collection";
-import { plural } from "pluralize";
+import {nest} from "d3-collection";
+import {plural} from "pluralize";
 import AnchorList from "../utils/AnchorList";
-import { FORMATTERS } from "../utils/consts";
+import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 
 async function getWikiSummary(placeName) {
@@ -19,31 +19,31 @@ export default async function Intro({
   peopleDiedHere,
 }) {
   const myIndex = placeRanks
-    ? placeRanks.findIndex((p) => p.place === place.place)
+    ? placeRanks.findIndex(p => p.place === place.place)
     : null;
   let wikiLink, wikiSentence;
 
   const wikiSummary = await getWikiSummary(place.place);
 
   const occupationsBorn = nest()
-    .key((d) => d.occupation.id)
-    .rollup((leaves) => ({
+    .key(d => d.occupation.id)
+    .rollup(leaves => ({
       num_born: leaves.length,
       occupation: leaves[0].occupation,
     }))
-    .entries(peopleBornHere.filter((d) => d.occupation_id))
+    .entries(peopleBornHere.filter(d => d.occupation_id))
     .sort((a, b) => b.value.num_born - a.value.num_born)
-    .map((d) => d.value)
+    .map(d => d.value)
     .slice(0, 2);
   const occupationsDied = nest()
-    .key((d) => d.occupation.id)
-    .rollup((leaves) => ({
+    .key(d => d.occupation.id)
+    .rollup(leaves => ({
       num_died: leaves.length,
       occupation: leaves[0].occupation,
     }))
-    .entries(peopleDiedHere.filter((d) => d.occupation_id))
+    .entries(peopleDiedHere.filter(d => d.occupation_id))
     .sort((a, b) => b.value.num_died - a.value.num_died)
-    .map((d) => d.value)
+    .map(d => d.value)
     .slice(0, 2);
 
   // wikipedia summary
@@ -70,8 +70,8 @@ export default async function Intro({
                 in number of biographies on Pantheon, behind{" "}
                 <AnchorList
                   items={placeRanks.slice(Math.max(0, myIndex - 3), myIndex)}
-                  name={(d) => d.place}
-                  url={(d) => `/profile/place/${d.slug}/`}
+                  name={d => d.place}
+                  url={d => `/profile/place/${d.slug}/`}
                 />
                 .{" "}
               </span>
@@ -81,8 +81,8 @@ export default async function Intro({
                 Memorable people born in {place.place} include{" "}
                 <AnchorList
                   items={peopleBornHere.slice(0, 3)}
-                  name={(d) => d.name}
-                  url={(d) => `/profile/person/${d.slug}/`}
+                  name={d => d.name}
+                  url={d => `/profile/person/${d.slug}/`}
                 />
                 .
               </span>
@@ -93,8 +93,8 @@ export default async function Intro({
                 Memorable people who died in {place.place} include{" "}
                 <AnchorList
                   items={peopleDiedHere.slice(0, 3)}
-                  name={(d) => d.name}
-                  url={(d) => `/profile/person/${d.slug}/`}
+                  name={d => d.name}
+                  url={d => `/profile/person/${d.slug}/`}
                 />
                 .
               </span>
@@ -105,8 +105,8 @@ export default async function Intro({
                 {place.place} has been the birth place of many{" "}
                 <AnchorList
                   items={occupationsBorn}
-                  name={(d) => plural(d.occupation.occupation.toLowerCase())}
-                  url={(d) =>
+                  name={d => plural(d.occupation.occupation.toLowerCase())}
+                  url={d =>
                     `/profile/occupation/${d.occupation.occupation_slug}/`
                   }
                 />
@@ -118,8 +118,8 @@ export default async function Intro({
                 and the death place of many{" "}
                 <AnchorList
                   items={occupationsDied}
-                  name={(d) => plural(d.occupation.occupation.toLowerCase())}
-                  url={(d) =>
+                  name={d => plural(d.occupation.occupation.toLowerCase())}
+                  url={d =>
                     `/profile/occupation/${d.occupation.occupation_slug}/`
                   }
                 />

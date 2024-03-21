@@ -3,7 +3,7 @@ const ytApiKey = process.env.YOUTUBE_API_KEY;
 
 module.exports = function (app) {
   app.get("/api/youtube/:pid", async (req, res) => {
-    const { pid } = req.params;
+    const {pid} = req.params;
     let errorMsg = "error: unable to find person with this id";
     const pantheonData = await axios
       .get(
@@ -14,16 +14,16 @@ module.exports = function (app) {
           },
         }
       )
-      .then((resp) => resp.data)
-      .catch((error) => {
+      .then(resp => resp.data)
+      .catch(error => {
         console.log("[pantheon API errors]", error.response.data);
         return null;
       });
     if (!pantheonData) {
-      return res.json({ error: errorMsg });
+      return res.json({error: errorMsg});
     }
     if (pantheonData.youtube) {
-      return res.json({ youtube: pantheonData.youtube });
+      return res.json({youtube: pantheonData.youtube});
     }
 
     // Note: this key is restricted to Pantheon domains, if you want to use this in your
@@ -33,12 +33,12 @@ module.exports = function (app) {
       .get(
         `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${pantheonData.name}&maxResults=1&type=video&videoEmbeddable=true&key=${ytApiKey}`
       )
-      .then((res) => {
+      .then(res => {
         const vid =
           res.data.items && res.data.items.length ? res.data.items[0] : null;
         return vid;
       })
-      .catch((error) => {
+      .catch(error => {
         errorMsg =
           error.response &&
           error.response.data &&
@@ -54,17 +54,17 @@ module.exports = function (app) {
       const ytId = ytData.id.videoId;
       await axios.patch(
         `https://api-dev.pantheon.world/person?id=eq.${pid}`,
-        { youtube: ytId },
+        {youtube: ytId},
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization:
+            "Authorization":
               "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
           },
         }
       );
-      return res.json({ youtube: ytId });
+      return res.json({youtube: ytId});
     }
-    return res.json({ error: errorMsg });
+    return res.json({error: errorMsg});
   });
 };

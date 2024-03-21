@@ -1,17 +1,17 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import {usePathname} from "next/navigation";
 // import { v4 as uuidv4 } from "uuid";
 
 export default function Navigation(props) {
-  const { activateSearch } = props;
+  const {activateSearch} = props;
 
   const pathname = usePathname();
 
-  const toggleSubNav = (e) => {
+  const toggleSubNav = e => {
     const itemChildren = e.target.childNodes;
     e.target.classList.toggle("o");
-    itemChildren.forEach((child) => {
+    itemChildren.forEach(child => {
       if (child.nodeType === 1 && child.tagName === "UL") {
         child.classList.toggle("open");
       }
@@ -20,7 +20,7 @@ export default function Navigation(props) {
     document.body.classList.toggle("frozen");
   };
 
-  const toggleSubNavSib = (e) => {
+  const toggleSubNavSib = e => {
     const itemSibling = e.target.nextSibling;
     itemSibling.classList.toggle("open");
     e.target.parentNode.classList.toggle("o");
@@ -34,12 +34,12 @@ export default function Navigation(props) {
     document.body.classList.remove("frozen");
 
     const subItems = document.getElementsByClassName("sub-items");
-    [].forEach.call(subItems, (el) => {
+    [].forEach.call(subItems, el => {
       el.classList.remove("open");
     });
 
     const items = document.getElementsByClassName("item");
-    [].forEach.call(items, (el) => {
+    [].forEach.call(items, el => {
       el.classList.remove("o");
     });
   };
@@ -156,7 +156,7 @@ export default function Navigation(props) {
             <Link
               href="/data/faq"
               className={
-                pathname == "/data/faq"
+                pathname === "/data/faq"
                   ? "active item-link about-link"
                   : "item-link about-link"
               }
@@ -168,7 +168,7 @@ export default function Navigation(props) {
             <Link
               href="/data/permissions"
               className={
-                pathname == "/data/permissions"
+                pathname === "/data/permissions"
                   ? "active item-link data-link dd"
                   : "item-link data-link dd"
               }
@@ -197,7 +197,7 @@ export default function Navigation(props) {
             <Link
               href="/game/yearbook"
               className={
-                pathname == "/game/yearbook"
+                pathname === "/game/yearbook"
                   ? "active item-link explore-link dd"
                   : "item-link explore-link dd"
               }
@@ -226,7 +226,7 @@ export default function Navigation(props) {
             <Link
               href="/game/yearbook"
               className={
-                pathname == "/game/yearbook"
+                pathname === "/game/yearbook"
                   ? "active item-link explore-link"
                   : "item-link explore-link"
               }

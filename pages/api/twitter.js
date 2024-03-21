@@ -5,12 +5,12 @@ const twApiSecret = process.env.TW_API_SECRET;
 
 module.exports = function (app) {
   app.get("/api/twit/:uid", async (req, res) => {
-    const { uid } = req.params;
-    const nullResp = { user: {}, timeline: [] };
+    const {uid} = req.params;
+    const nullResp = {user: {}, timeline: []};
     const pantheonData = await axios
       .get(`https://api-dev.pantheon.world/person?id=eq.${uid}&select=twitter`)
-      .then((resp) => (resp.data.length ? resp.data[0] : []))
-      .catch((errors) => {
+      .then(resp => (resp.data.length ? resp.data[0] : []))
+      .catch(errors => {
         console.log("ERRORS!", errors);
       });
     if (!pantheonData) {
@@ -34,7 +34,7 @@ module.exports = function (app) {
         count: 5,
         tweet_mode: "extended",
       })
-      .catch((errors) => errors);
+      .catch(errors => errors);
     if (timelineResp.errors) {
       console.log("[tw timeline api error] ", timelineResp.errors);
       return res.json(nullResp);
@@ -45,7 +45,7 @@ module.exports = function (app) {
     }
     // return res.json(timelineResp);
 
-    const retTimeline = timelineResp.map((d) => {
+    const retTimeline = timelineResp.map(d => {
       let quote = false;
       if (d.is_quote_status && d.quoted_status) {
         quote = {
@@ -129,7 +129,7 @@ module.exports = function (app) {
       .get("users/show", {
         screen_name: twScreenName,
       })
-      .catch((errors) => errors);
+      .catch(errors => errors);
     if (userResp.errors) {
       console.log("[tw user api error] ", userResp.errors);
       return res.json(nullResp);
@@ -156,6 +156,6 @@ module.exports = function (app) {
       ),
     };
 
-    return res.json({ user: retUser, timeline: retTimeline });
+    return res.json({user: retUser, timeline: retTimeline});
   });
 };

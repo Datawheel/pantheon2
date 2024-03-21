@@ -32,7 +32,7 @@
   margin-right: auto;
   text-align: center;
   /* theming */
-  color: var(--light-3);
+  /* color: var(--light-3); */
 }
 .welcome-intro-heading {
   /* sizing */
@@ -41,7 +41,7 @@
   /* typography */
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-weight: var(--label-font-weight);
+  /* font-weight: var(--label-font-weight); */
 
   & > * {
     display: block;
@@ -133,8 +133,8 @@
         /* sizing */
         content: "+";
         display: block;
-        font-size: var(--font-xxl);
-        color: var(--dark-1);
+        /* font-size: var(--font-xxl); */
+        /* color: var(--dark-1); */
         /* positioning */
         @mixin absolute-vertical-center;
         right: -1.25em;
@@ -174,14 +174,14 @@
     transition: color 0.1s ease-out;
 
     &:first-child {
-      border-right: 1px solid var(--dark-1);
+      /* border-right: 1px solid var(--dark-1); */
     }
 
     &.is-inactive {
-      color: var(--dark-1);
+      /* color: var(--dark-1); */
 
       &:hover, &:focus {
-        color: var(--accent);
+        /* color: var(--accent); */
       }
     }
   }
@@ -190,20 +190,20 @@
 /* select menu overrides */
 .welcome-form-select-wrapper > .cp-select-label > .cp-select {
   /* typography */
-  font-weight: var(--base-font-weight);
+  /* font-weight: var(--base-font-weight); */
   /* theming */
   background: none;
   border-width: 0 0 2px 0;
-  border-bottom-color: var(--dark-1);
+  /* border-bottom-color: var(--dark-1); */
   /* sizing */
   padding-top: 0.25em; /* bring in labels closer */
   /* padding-left: 1.5em; make room for icon */
 
   &:hover {
-    border-bottom-color: var(--light-3);
+    /* border-bottom-color: var(--light-3); */
   }
   &:focus {
-    border-bottom-color: var(--accent);
+    /* border-bottom-color: var(--accent); */
   }
 }
 
@@ -214,7 +214,7 @@
 
   & > .welcome-form-select-icon {
     /* sizing */
-    width: var(--font-lg);
+    width: var(--sizeLarge);
     height: auto;
     /* positioning */
     position: absolute;

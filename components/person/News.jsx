@@ -6,7 +6,7 @@ async function getNewsArticles(personId) {
   return res.json();
 }
 
-export default async function News({ person, slug, title }) {
+export default async function News({person, slug, title}) {
   const newsArticles = await getNewsArticles(person.id);
   if (!newsArticles.length) {
     return null;
@@ -17,7 +17,7 @@ export default async function News({ person, slug, title }) {
       <div className="news-container">
         {newsArticles.length ? (
           <div className="card-list">
-            {newsArticles.map((news) =>
+            {newsArticles.map(news =>
               news.article ? (
                 <a
                   href={news.article.url}

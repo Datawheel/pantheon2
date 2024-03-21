@@ -1,8 +1,8 @@
-import { Suspense } from "react";
-import { max as D3Max, min as D3Min } from "d3-array";
+import {Suspense} from "react";
+import {max as D3Max, min as D3Min} from "d3-array";
 import dayjs from "dayjs";
 import HeaderLine from "./HeaderLine";
-import { COLORS_DOMAIN, FORMATTERS } from "../utils/consts";
+import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
@@ -39,33 +39,31 @@ async function getIsTrending(personId) {
   return res.json();
 }
 
-export default async function Header({ person }) {
-  const { items: wikiPageViews } = await getWikiPageViews(person.name);
+export default async function Header({person}) {
+  const {items: wikiPageViews} = await getWikiPageViews(person.name);
   const isTrendingData = await getIsTrending(person.id);
   const isTrending = !!isTrendingData.length;
 
   let pageViewData = null;
   if (wikiPageViews) {
-    pageViewData = wikiPageViews.map((pv) => ({
+    pageViewData = wikiPageViews.map(pv => ({
       ...pv,
       date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(
         4,
         6
       )}/${pv.timestamp.substring(6, 8)}`,
     }));
-    const mostRecentDate = D3Max(pageViewData, (d) =>
+    const mostRecentDate = D3Max(pageViewData, d =>
       dayjs(d.date, "YYYY/MM/DD")
     );
-    const oldestDate = D3Min(pageViewData, (d) => dayjs(d.date, "YYYY/MM/DD"));
+    const oldestDate = D3Min(pageViewData, d => dayjs(d.date, "YYYY/MM/DD"));
     pageViewData.push({
-      ...pageViewData.find((d) => d.date === oldestDate.format("YYYY/MM/DD")),
+      ...pageViewData.find(d => d.date === oldestDate.format("YYYY/MM/DD")),
       shape: "Circle",
       article: "circle",
     });
     pageViewData.push({
-      ...pageViewData.find(
-        (d) => d.date === mostRecentDate.format("YYYY/MM/DD")
-      ),
+      ...pageViewData.find(d => d.date === mostRecentDate.format("YYYY/MM/DD")),
       shape: "Circle",
       article: "circle",
     });
@@ -79,14 +77,14 @@ export default async function Header({ person }) {
   return (
     <header className="hero">
       <div className="bg-container">
-        <div className="bg-img-mask person" style={{ backgroundColor }}>
+        <div className="bg-img-mask person" style={{backgroundColor}}>
           <div
             className="bg-img bg-img-l"
-            style={{ backgroundColor, backgroundImage }}
+            style={{backgroundColor, backgroundImage}}
           ></div>
           <div
             className="bg-img bg-img-r"
-            style={{ backgroundColor, backgroundImage }}
+            style={{backgroundColor, backgroundImage}}
           ></div>
         </div>
       </div>

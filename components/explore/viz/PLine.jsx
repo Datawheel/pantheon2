@@ -1,17 +1,17 @@
-import { LinePlot } from "d3plus-react";
-import { RESET } from "d3plus-common";
-import { nest } from "d3-collection";
-import { COLORS_CONTINENT, COLORS_DOMAIN } from "../../utils/consts";
+import {LinePlot} from "d3plus-react";
+import {RESET} from "d3plus-common";
+import {nest} from "d3-collection";
+import {COLORS_CONTINENT, COLORS_DOMAIN} from "../../utils/consts";
 import {
   calculateYearBucket,
   groupBy,
   groupTooltip,
 } from "../../utils/vizHelpers";
 
-export default function PLine({ data, occupations, show, yearType }) {
+export default function PLine({data, occupations, show, yearType}) {
   let depth = 2;
-  let dataFilter = (d) => d.occupation;
-  const occsObj = occupations.reduce((obj, d) => ({ ...obj, [d.id]: d }), {});
+  let dataFilter = d => d.occupation;
+  const occsObj = occupations.reduce((obj, d) => ({...obj, [d.id]: d}), {});
   let grouping = ["domain", "industry", "occupation_name"].map(
     groupBy(occsObj)
   );
@@ -19,7 +19,7 @@ export default function PLine({ data, occupations, show, yearType }) {
   let shapeConf = {
     Line: {
       strokeWidth: 2,
-      stroke: (d) => {
+      stroke: d => {
         if (d.color) return d.color;
         else if (d.occupation_id !== undefined) {
           let occ =
@@ -35,7 +35,7 @@ export default function PLine({ data, occupations, show, yearType }) {
   };
 
   if (show === "places") {
-    dataFilter = (p) =>
+    dataFilter = p =>
       p.occupation &&
       p[yearType] !== null &&
       p.bplace_country &&
@@ -45,15 +45,15 @@ export default function PLine({ data, occupations, show, yearType }) {
     shapeConf = {
       Line: {
         strokeWidth: 2,
-        stroke: (d) => COLORS_CONTINENT[d.borncontinent],
+        stroke: d => COLORS_CONTINENT[d.borncontinent],
       },
     };
     const uniqCountries = nest()
-      .key((d) => d.bplace_country.id)
+      .key(d => d.bplace_country.id)
       .entries(data.filter(dataFilter));
     if (uniqCountries.length === 1) {
       grouping = ["borncountry", "bornplace"];
-      dataFilter = (p) =>
+      dataFilter = p =>
         p.occupation &&
         p[yearType] !== null &&
         p.bplace_country &&
@@ -64,7 +64,7 @@ export default function PLine({ data, occupations, show, yearType }) {
     depth = 1;
   }
 
-  const stackedData = data.filter(dataFilter).map((d) => {
+  const stackedData = data.filter(dataFilter).map(d => {
     const newData = {
       ...d, // Spread the existing properties of d
       borncountry: d.bplace_country
@@ -94,7 +94,7 @@ export default function PLine({ data, occupations, show, yearType }) {
 
   const [bornBuckets, bornTicks] = calculateYearBucket(
     stackedData,
-    (d) => d.birthyear
+    d => d.birthyear
   );
   // const [deathBuckets, deathTicks] = calculateYearBucket(stackedData, d => d.deathyear);
 
@@ -110,7 +110,7 @@ export default function PLine({ data, occupations, show, yearType }) {
         tooltipConfig: groupTooltip(stackedData),
         xConfig: {
           labels: bornTicks,
-          tickFormat: (d) => bornBuckets[d],
+          tickFormat: d => bornBuckets[d],
         },
         // y: d => {
         //   console.log("y!!", d.id ? d.id instanceof Array ? d.id.length : 1 : 0);

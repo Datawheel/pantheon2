@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import { max as D3Max, min as D3Min } from "d3-array";
+import {Suspense} from "react";
+import {max as D3Max, min as D3Min} from "d3-array";
 import dayjs from "dayjs";
 import HeaderLine from "./HeaderLine";
 import "../../styles/Header.css";
@@ -18,31 +18,29 @@ async function getWikiPageViews(countryName) {
   return res.json();
 }
 
-export default async function Header({ country }) {
-  const { items: wikiPageViews } = await getWikiPageViews(country.country);
+export default async function Header({country}) {
+  const {items: wikiPageViews} = await getWikiPageViews(country.country);
 
   let pageViewData = null;
   if (wikiPageViews) {
-    pageViewData = wikiPageViews.map((pv) => ({
+    pageViewData = wikiPageViews.map(pv => ({
       ...pv,
       date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(
         4,
         6
       )}/${pv.timestamp.substring(6, 8)}`,
     }));
-    const mostRecentDate = D3Max(pageViewData, (d) =>
+    const mostRecentDate = D3Max(pageViewData, d =>
       dayjs(d.date, "YYYY/MM/DD")
     );
-    const oldestDate = D3Min(pageViewData, (d) => dayjs(d.date, "YYYY/MM/DD"));
+    const oldestDate = D3Min(pageViewData, d => dayjs(d.date, "YYYY/MM/DD"));
     pageViewData.push({
-      ...pageViewData.find((d) => d.date === oldestDate.format("YYYY/MM/DD")),
+      ...pageViewData.find(d => d.date === oldestDate.format("YYYY/MM/DD")),
       shape: "Circle",
       article: "circle",
     });
     pageViewData.push({
-      ...pageViewData.find(
-        (d) => d.date === mostRecentDate.format("YYYY/MM/DD")
-      ),
+      ...pageViewData.find(d => d.date === mostRecentDate.format("YYYY/MM/DD")),
       shape: "Circle",
       article: "circle",
     });
@@ -58,11 +56,11 @@ export default async function Header({ country }) {
         <div className="bg-img-mask place">
           <div
             className="bg-img bg-img-t"
-            style={{ backgroundImage: `url(${countryImg})` }}
+            style={{backgroundImage: `url(${countryImg})`}}
           ></div>
           <div
             className="bg-img bg-img-b"
-            style={{ backgroundImage: `url(${countryImg})` }}
+            style={{backgroundImage: `url(${countryImg})`}}
           ></div>
         </div>
       </div>

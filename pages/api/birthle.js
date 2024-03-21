@@ -15,25 +15,26 @@ function csvJSON(csv, delimiter = "\t") {
     const obj = {};
     const currentline = lines[i].split(delimiter);
 
-    for (let j = 0; j < headers.length; j++)
+    for (let j = 0; j < headers.length; j++) {
       obj[headers[j]] = isNumeric(currentline[j])
         ? currentline[j] * 1
         : currentline[j];
+    }
 
     result.push(obj);
   }
   return result;
 }
 
-module.exports = function (app) {
-  app.get("/api/indexes", async function (req, res, next) {
+module.exports = app => {
+  app.get("/api/indexes", async (req, res) => {
     const date = req.query.date;
-    const data = await axios.get(CSV_URL).then((resp) => resp.data);
+    const data = await axios.get(CSV_URL).then(resp => resp.data);
 
     let jsonData = csvJSON(data);
 
     if (date) {
-      jsonData = jsonData.filter((el) => el["0"] === date)[0];
+      jsonData = jsonData.filter(el => el["0"] === date)[0];
     }
 
     res.status(200).json(jsonData);

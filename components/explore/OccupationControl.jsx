@@ -1,11 +1,11 @@
 "use client";
-import { useDispatch, useSelector } from "react-redux";
-import { updateOccupation } from "../../features/exploreSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {updateOccupation} from "../../features/exploreSlice";
 
-export default function OccupationControl({ nestedOccupations }) {
+export default function OccupationControl({nestedOccupations}) {
   const loading = false;
   const dispatch = useDispatch();
-  const { occupation } = useSelector((state) => state.explore);
+  const {occupation} = useSelector(state => state.explore);
 
   return (
     <div className="filter prof-control">
@@ -17,13 +17,13 @@ export default function OccupationControl({ nestedOccupations }) {
         <select
           disabled={loading}
           value={occupation}
-          onChange={(e) => dispatch(updateOccupation(e.target.value))}
+          onChange={e => dispatch(updateOccupation(e.target.value))}
         >
           <option value="all" data-occupations="all">
             All Occupations
           </option>
           {nestedOccupations
-            ? nestedOccupations.map((domain) => (
+            ? nestedOccupations.map(domain => (
                 <optgroup key={domain.domain.slug} label={domain.domain.name}>
                   <option
                     value={domain.domain.id}
@@ -31,7 +31,7 @@ export default function OccupationControl({ nestedOccupations }) {
                   >
                     All {domain.domain.name} occupations
                   </option>
-                  {domain.occupations.map((occ) => (
+                  {domain.occupations.map(occ => (
                     <option
                       key={occ.occupation_slug}
                       value={occ.id}

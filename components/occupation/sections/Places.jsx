@@ -1,55 +1,55 @@
-import { nest } from "d3-collection";
-import { plural } from "pluralize";
+import {nest} from "d3-collection";
+import {plural} from "pluralize";
 import PlacesTmap from "./vizes/PlacesTmap";
 import AnchorList from "../../utils/AnchorList";
-import { toTitleCase } from "../../utils/vizHelpers";
+import {toTitleCase} from "../../utils/vizHelpers";
 import SectionLayout from "../../common/SectionLayout";
 
-export default function Places({ people, occupation, title, slug }) {
+export default function Places({people, occupation, title, slug}) {
   const countriesBorn = nest()
-    .key((p) => p.bplace_country.id)
-    .rollup((leaves) => ({
+    .key(p => p.bplace_country.id)
+    .rollup(leaves => ({
       num_people: leaves.length,
       bplace_country: leaves[0].bplace_country,
     }))
-    .entries(people.filter((p) => p.bplace_country))
+    .entries(people.filter(p => p.bplace_country))
     .sort((a, b) => b.value.num_people - a.value.num_people);
   const placesBorn = nest()
-    .key((p) => p.bplace_geonameid.id)
-    .rollup((leaves) => ({
+    .key(p => p.bplace_geonameid.id)
+    .rollup(leaves => ({
       num_people: leaves.length,
       bplace_geonameid: leaves[0].bplace_geonameid,
     }))
-    .entries(people.filter((p) => p.bplace_geonameid))
+    .entries(people.filter(p => p.bplace_geonameid))
     .sort((a, b) => b.value.num_people - a.value.num_people);
 
   const countriesDied = nest()
-    .key((p) => p.dplace_country.id)
-    .rollup((leaves) => ({
+    .key(p => p.dplace_country.id)
+    .rollup(leaves => ({
       num_people: leaves.length,
       dplace_country: leaves[0].dplace_country,
     }))
-    .entries(people.filter((p) => p.dplace_country))
+    .entries(people.filter(p => p.dplace_country))
     .sort((a, b) => b.value.num_people - a.value.num_people);
   const placesDied = nest()
-    .key((p) => p.dplace_geonameid.id)
-    .rollup((leaves) => ({
+    .key(p => p.dplace_geonameid.id)
+    .rollup(leaves => ({
       num_people: leaves.length,
       dplace_geonameid: leaves[0].dplace_geonameid,
     }))
-    .entries(people.filter((p) => p.dplace_geonameid))
+    .entries(people.filter(p => p.dplace_geonameid))
     .sort((a, b) => b.value.num_people - a.value.num_people);
 
   const tmapBornData = people
     .filter(
-      (p) =>
+      p =>
         p.birthyear !== null &&
         p.bplace_country &&
         p.bplace_country.country &&
         p.bplace_country.continent
     )
     .sort((a, b) => b.l - a.l)
-    .map((d) => ({
+    .map(d => ({
       ...d,
       country: d.bplace_country.country,
       continent: d.bplace_country.continent,
@@ -57,14 +57,14 @@ export default function Places({ people, occupation, title, slug }) {
 
   const tmapDeathData = people
     .filter(
-      (p) =>
+      p =>
         p.deathyear !== null &&
         p.dplace_country &&
         p.dplace_country.country &&
         p.dplace_country.continent
     )
     .sort((a, b) => b.l - a.l)
-    .map((d) => ({
+    .map(d => ({
       ...d,
       country: d.dplace_country.country,
       continent: d.dplace_country.continent,
@@ -77,18 +77,18 @@ export default function Places({ people, occupation, title, slug }) {
           Most {plural(occupation.occupation.toLowerCase())} were born in{" "}
           <AnchorList
             items={countriesBorn.slice(0, 3)}
-            name={(d) =>
+            name={d =>
               `${d.value.bplace_country.country} (${d.value.num_people})`
             }
-            url={(d) => `/profile/country/${d.value.bplace_country.slug}/`}
+            url={d => `/profile/country/${d.value.bplace_country.slug}/`}
           />
           . By city, the most common birth places were{" "}
           <AnchorList
             items={placesBorn.slice(0, 3)}
-            name={(d) =>
+            name={d =>
               `${d.value.bplace_geonameid.place} (${d.value.num_people})`
             }
-            url={(d) => `/profile/place/${d.value.bplace_geonameid.slug}/`}
+            url={d => `/profile/place/${d.value.bplace_geonameid.slug}/`}
           />
           .
           {tmapDeathData.length ? (
@@ -97,18 +97,18 @@ export default function Places({ people, occupation, title, slug }) {
               {plural(occupation.occupation.toLowerCase())} were{" "}
               <AnchorList
                 items={countriesDied.slice(0, 3)}
-                name={(d) =>
+                name={d =>
                   `${d.value.dplace_country.country} (${d.value.num_people})`
                 }
-                url={(d) => `/profile/country/${d.value.dplace_country.slug}/`}
+                url={d => `/profile/country/${d.value.dplace_country.slug}/`}
               />
               . By city, these were{" "}
               <AnchorList
                 items={placesDied.slice(0, 3)}
-                name={(d) =>
+                name={d =>
                   `${d.value.dplace_geonameid.place} (${d.value.num_people})`
                 }
-                url={(d) => `/profile/place/${d.value.dplace_geonameid.slug}/`}
+                url={d => `/profile/place/${d.value.dplace_geonameid.slug}/`}
               />
               .
             </>

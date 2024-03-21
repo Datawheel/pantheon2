@@ -1,41 +1,41 @@
 "use client";
-import { useDispatch, useSelector } from "react-redux";
-import { updateShowDepth, updateShowType } from "../../features/exploreSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {updateShowDepth, updateShowType} from "../../features/exploreSlice";
 
 const rankingTypes = [
-  { id: "people", name: "People" },
-  { id: "places", name: "Places" },
-  { id: "occupations", name: "Occupations" },
+  {id: "people", name: "People"},
+  {id: "places", name: "Places"},
+  {id: "occupations", name: "Occupations"},
 ];
 
 export default function ShowControl() {
   const loading = false;
   const dispatch = useDispatch();
-  const { page, show } = useSelector((state) => state.explore);
+  const {page, show} = useSelector(state => state.explore);
   let pageRankingTypes = rankingTypes;
 
   if (page === "viz") {
     pageRankingTypes = pageRankingTypes.slice(1, pageRankingTypes.length);
   }
 
-  const { type: showType, depth: showDepth } = show;
+  const {type: showType, depth: showDepth} = show;
 
   return (
     <div className="filter">
       <h3>Group People by</h3>
       <ul className="items filter options viztype-options">
-        {pageRankingTypes.map((rt) => (
+        {pageRankingTypes.map(rt => (
           <li key={rt.id} value={rt.id}>
             <h4>
               <a
                 href="#"
                 data-id={rt.id}
-                onClick={(e) =>
+                onClick={e =>
                   loading
                     ? e.preventDefault()
                     : (e.preventDefault(),
                       dispatch(
-                        updateShowType({ showType: rt.id.toLowerCase(), page })
+                        updateShowType({showType: rt.id.toLowerCase(), page})
                       ))
                 }
                 className={`${rt.id} ${loading ? "disabled" : null} ${
@@ -57,7 +57,7 @@ export default function ShowControl() {
                 <a
                   href="#"
                   id="occupations"
-                  onClick={(e) =>
+                  onClick={e =>
                     loading
                       ? e.preventDefault()
                       : (e.preventDefault(),
@@ -82,7 +82,7 @@ export default function ShowControl() {
                 <a
                   href="#"
                   id="industries"
-                  onClick={(e) =>
+                  onClick={e =>
                     loading
                       ? e.preventDefault()
                       : (e.preventDefault(),
@@ -107,7 +107,7 @@ export default function ShowControl() {
                 <a
                   href="#"
                   id="domains"
-                  onClick={(e) =>
+                  onClick={e =>
                     loading
                       ? e.preventDefault()
                       : (e.preventDefault(),
@@ -137,7 +137,7 @@ export default function ShowControl() {
                 <a
                   href="#"
                   id="places"
-                  onClick={(e) =>
+                  onClick={e =>
                     loading
                       ? e.preventDefault()
                       : (e.preventDefault(),
@@ -162,7 +162,7 @@ export default function ShowControl() {
                 <a
                   href="#"
                   id="countries"
-                  onClick={(e) =>
+                  onClick={e =>
                     loading
                       ? e.preventDefault()
                       : (e.preventDefault(),

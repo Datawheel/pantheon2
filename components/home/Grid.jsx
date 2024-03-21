@@ -1,19 +1,19 @@
 import React from "react";
 import PersonImage from "/components/utils/PersonImage";
 
-const formatDelta = (n) => {
-  if (n === 0) return "-";
-  return n > 0 ? `▲ ${Math.abs(n)}` : `▼ ${Math.abs(n)}`;
-};
+// const formatDelta = n => {
+//   if (n === 0) return "-";
+//   return n > 0 ? `▲ ${Math.abs(n)}` : `▼ ${Math.abs(n)}`;
+// };
 
-const deltaClassName = (n) => {
-  if (n === null) return "new";
-  return n >= 0 ? "up" : "down";
-};
+// const deltaClassName = n => {
+//   if (n === null) return "new";
+//   return n >= 0 ? "up" : "down";
+// };
 
-const HomeGrid = ({ bios, showDates }) => (
+const HomeGrid = ({bios, showDates}) => (
   <ul className="grid-row">
-    {bios.map((profile) => (
+    {bios.map(profile => (
       <li className="grid-box" key={profile.pid || profile.id}>
         <a href={`/profile/person/${profile.slug}`}>
           {/* <div className="backup-title">{profile.name}</div> */}

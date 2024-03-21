@@ -12,7 +12,7 @@ import "./Loading.css";
 */
 class Loading extends Component {
   render() {
-    const {progress, t, total} = this.props;
+    // const {progress, t, total} = this.props;
     // return <NonIdealState
     //   className="Loading"
     //   title={ t("Loading.title") }
@@ -30,7 +30,9 @@ class Loading extends Component {
   }
 }
 
-export default translate()(connect(state => ({
-  total: state.loadingProgress.requests,
-  progress: state.loadingProgress.fulfilled
-}))(Loading));
+export default translate()(
+  connect(state => ({
+    total: state.loadingProgress.requests,
+    progress: state.loadingProgress.fulfilled,
+  }))(Loading)
+);

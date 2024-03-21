@@ -1,24 +1,16 @@
 "use client";
-import { useCallback, useState } from "react";
-import {
-  Button,
-  Classes,
-  Dialog,
-  Intent,
-  Checkbox,
-  MenuItem,
-  Position,
-  Toaster,
-} from "@blueprintjs/core";
-import { Select } from "@blueprintjs/select";
+import {v4 as uuidv4} from "uuid";
+import {useCallback, useState} from "react";
+import {Button, Dialog, Checkbox, MenuItem} from "@blueprintjs/core";
+import {Select} from "@blueprintjs/select";
 import "./DemographicForm.css";
-import { useI18n, useScopedI18n } from "../../locales/client";
+import {useI18n} from "../../locales/client";
 import countries from "/public/jsons/countries.json";
 import allUsaStates from "/public/jsons/usastates.json";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
 
 function QuestionDemo(datap) {
-  const { customClasses, children, title, getkey } = datap;
+  const {customClasses, children, title, getkey} = datap;
   let combinedClassNames;
   if (Array.isArray(customClasses)) {
     // If classNames is an array, join it with the hardcoded class
@@ -35,9 +27,8 @@ function QuestionDemo(datap) {
   );
 }
 
-const filterItem = (query, item) => {
-  return item.toString().toLowerCase().indexOf(query.toLowerCase()) >= 0;
-};
+const filterItem = (query, item) =>
+  item.toString().toLowerCase().indexOf(query.toLowerCase()) >= 0;
 const filterItemCountries = (query, item) => {
   item.toString().toLowerCase().indexOf(query.name.toString().toLowerCase()) >=
     0;
@@ -48,14 +39,13 @@ export default function DemographicForm({
   isOpenDemographicForm,
   setIsOpenDemographicForm,
   scoreDB,
-  setScoreDB,
 }) {
   const t = useI18n();
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  const {executeRecaptcha} = useGoogleReCaptcha();
 
-  const [lang, setLang] = useState("en");
-  const [sex, setSex] = useState({ id: 99, name: t("text.game.popup.skip") });
-  const [age, setAge] = useState({ id: 99, name: t("text.game.popup.skip") });
+  const [lang] = useState("en");
+  const [sex, setSex] = useState({id: 99, name: t("text.game.popup.skip")});
+  const [age, setAge] = useState({id: 99, name: t("text.game.popup.skip")});
   const [education, setEducation] = useState({
     id: 99,
     name: t("text.game.popup.skip"),
@@ -64,7 +54,7 @@ export default function DemographicForm({
   const [usaStates, setUsaStates] = useState(undefined);
   const [languages, setLanguages] = useState([]);
 
-  const popupTitle = t("text.game.popup.title");
+  // const popupTitle = t("text.game.popup.title");
   const popupDescription = t("text.game.popup.description");
   const sexTitle = t("text.game.popup.sex-title");
   const agetTitle = t("text.game.popup.age-title");
@@ -72,7 +62,7 @@ export default function DemographicForm({
   const languageTitle = t("text.game.popup.language-title");
   const countryTitle = t("text.game.popup.country-title");
   const popupFilter = t("text.game.popup.filter");
-  const messageError = t("text.game.popup.message-error");
+  // const messageError = t("text.game.popup.message-error");
   const popupNoResults = t("text.game.popup.no-results");
   const preferNotToAnswer = t("text.game.popup.prefer-not-to-answer");
   const popupSelect = t("text.game.popup.select");
@@ -80,41 +70,41 @@ export default function DemographicForm({
   const USATitle = t("text.game.popup.usa-title");
 
   const sexOptions = [
-    { id: 1, name: t("text.game.popup.sex-female") },
-    { id: 2, name: t("text.game.popup.sex-male") },
-    { id: 98, name: t("text.game.popup.other") },
-    { id: 99, name: t("text.game.popup.skip") },
+    {id: 1, name: t("text.game.popup.sex-female")},
+    {id: 2, name: t("text.game.popup.sex-male")},
+    {id: 98, name: t("text.game.popup.other")},
+    {id: 99, name: t("text.game.popup.skip")},
   ];
   const ageOptions = [
-    { id: 1, name: "10-19 " + t("text.game.text.years") },
-    { id: 2, name: "20-29 " + t("text.game.text.years") },
-    { id: 3, name: "30-39 " + t("text.game.text.years") },
-    { id: 4, name: "40-49 " + t("text.game.text.years") },
-    { id: 5, name: "50-59 " + t("text.game.text.years") },
-    { id: 6, name: "60-69 " + t("text.game.text.years") },
-    { id: 7, name: "70+ " + t("text.game.text.years") },
-    { id: 98, name: t("text.game.popup.other") },
-    { id: 99, name: t("text.game.popup.skip") },
+    {id: 1, name: "10-19 " + t("text.game.text.years")},
+    {id: 2, name: "20-29 " + t("text.game.text.years")},
+    {id: 3, name: "30-39 " + t("text.game.text.years")},
+    {id: 4, name: "40-49 " + t("text.game.text.years")},
+    {id: 5, name: "50-59 " + t("text.game.text.years")},
+    {id: 6, name: "60-69 " + t("text.game.text.years")},
+    {id: 7, name: "70+ " + t("text.game.text.years")},
+    {id: 98, name: t("text.game.popup.other")},
+    {id: 99, name: t("text.game.popup.skip")},
   ];
   const educationLevel = [
-    { id: 1, name: t("text.game.popup.education-pretitle") },
-    { id: 2, name: t("text.game.popup.education-highschool") },
-    { id: 3, name: t("text.game.popup.education-undergraduate-i") },
-    { id: 4, name: t("text.game.popup.education-licence") },
-    { id: 5, name: t("text.game.popup.education-master") },
-    { id: 6, name: t("text.game.popup.education-doctorant") },
-    { id: 99, name: t("text.game.popup.skip") },
+    {id: 1, name: t("text.game.popup.education-pretitle")},
+    {id: 2, name: t("text.game.popup.education-highschool")},
+    {id: 3, name: t("text.game.popup.education-undergraduate-i")},
+    {id: 4, name: t("text.game.popup.education-licence")},
+    {id: 5, name: t("text.game.popup.education-master")},
+    {id: 6, name: t("text.game.popup.education-doctorant")},
+    {id: 99, name: t("text.game.popup.skip")},
   ];
   const tmpLocation = countries
     ? countries.concat([
-        { id: 998, name: t("text.game.popup.outside") },
-        { id: 999, name: t("text.game.popup.skip") },
+        {id: 998, name: t("text.game.popup.outside")},
+        {id: 999, name: t("text.game.popup.skip")},
       ])
     : [];
   const countriesFiltered = countryCode
     ? tmpLocation
         .filter(
-          (d) =>
+          d =>
             filterItemCountries(countryCode, d.name) ||
             filterItemCountries(countryCode, d.name)
         )
@@ -122,34 +112,34 @@ export default function DemographicForm({
     : tmpLocation.slice(0, 200);
   const USAtmpLocation = allUsaStates
     ? allUsaStates.concat([
-        { id: 998, name: t("text.game.popup.outside"), abbreviation: "" },
-        { id: 999, name: t("text.game.popup.skip"), abbreviation: "" },
+        {id: 998, name: t("text.game.popup.outside"), abbreviation: ""},
+        {id: 999, name: t("text.game.popup.skip"), abbreviation: ""},
       ])
     : [];
   const languageOptions = [
-    { id: 1, name: t("text.game.popup.english") },
-    { id: 2, name: t("text.game.popup.portuguese") },
-    { id: 3, name: t("text.game.popup.spanish") },
-    { id: 4, name: t("text.game.popup.italian") },
-    { id: 5, name: t("text.game.popup.french") },
-    { id: 6, name: t("text.game.popup.german") },
-    { id: 7, name: t("text.game.popup.chinese") },
-    { id: 8, name: t("text.game.popup.japanese") },
-    { id: 9, name: t("text.game.popup.hindi") },
-    { id: 10, name: t("text.game.popup.russian") },
-    { id: 11, name: t("text.game.popup.polish") },
-    { id: 12, name: t("text.game.popup.mandarin") },
-    { id: 13, name: t("text.game.popup.arabic") },
-    { id: 14, name: t("text.game.popup.bengali") },
-    { id: 15, name: t("text.game.popup.indonesian") },
-    { id: 16, name: t("text.game.popup.korean") },
-    { id: 98, name: t("text.game.popup.other") },
-    { id: 99, name: t("text.game.popup.skip") },
+    {id: 1, name: t("text.game.popup.english")},
+    {id: 2, name: t("text.game.popup.portuguese")},
+    {id: 3, name: t("text.game.popup.spanish")},
+    {id: 4, name: t("text.game.popup.italian")},
+    {id: 5, name: t("text.game.popup.french")},
+    {id: 6, name: t("text.game.popup.german")},
+    {id: 7, name: t("text.game.popup.chinese")},
+    {id: 8, name: t("text.game.popup.japanese")},
+    {id: 9, name: t("text.game.popup.hindi")},
+    {id: 10, name: t("text.game.popup.russian")},
+    {id: 11, name: t("text.game.popup.polish")},
+    {id: 12, name: t("text.game.popup.mandarin")},
+    {id: 13, name: t("text.game.popup.arabic")},
+    {id: 14, name: t("text.game.popup.bengali")},
+    {id: 15, name: t("text.game.popup.indonesian")},
+    {id: 16, name: t("text.game.popup.korean")},
+    {id: 98, name: t("text.game.popup.other")},
+    {id: 99, name: t("text.game.popup.skip")},
   ];
 
-  const updateLanguages = (lid) => {
+  const updateLanguages = lid => {
     const newLanguages = [];
-    languages.forEach(function (obj, ind, arr) {
+    languages.forEach(obj => {
       newLanguages.push(obj);
     });
     newLanguages.push(lid);
@@ -157,12 +147,12 @@ export default function DemographicForm({
   };
 
   const submit = useCallback(async () => {
-    const token = await executeRecaptcha("trivia");
+    await executeRecaptcha("trivia");
     if (countryCode && education && sex && age && languages) {
-      var languageIds = [];
+      const languageIds = [];
       if (languages.length > 0) {
-        languages.forEach(function (obj, ind, arr) {
-          languageIds.push(parseInt(obj));
+        languages.forEach(obj => {
+          languageIds.push(parseInt(obj, 10));
         });
       }
 
@@ -181,15 +171,15 @@ export default function DemographicForm({
         sex_id: sex.id * 1,
         languages: languageIds,
         education_id: education.id * 1,
-        lang: lang,
-        token: token,
-        universe: universe,
-        scoreDB: scoreDB,
+        lang,
+        token,
+        universe,
+        scoreDB,
       };
       // lang, location_id, education_id, country_id, age_id, sex_id, languages, user_id, token, universe
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data),
       };
 
@@ -217,7 +207,7 @@ export default function DemographicForm({
       <div className="bp5-dialog-body popup popupwrapper">
         <p>{popupDescription}</p>
 
-        {/************
+        {/************ 
           1. GENDER / SEX
          *************/}
         <QuestionDemo title={sexTitle} getkey={"firstquestion"}>
@@ -225,9 +215,9 @@ export default function DemographicForm({
             className="popup-select"
             items={sexOptions}
             filterable={false}
-            inputProps={{ placeholder: popupFilter }}
+            inputProps={{placeholder: popupFilter}}
             itemPredicate={filterItem}
-            itemRenderer={(d, active) => (
+            itemRenderer={d => (
               <MenuItem
                 active={sex?.id === d.id}
                 key={`${d.name}_sex`}
@@ -257,9 +247,9 @@ export default function DemographicForm({
             className="popup-select"
             items={ageOptions}
             filterable={false}
-            inputProps={{ placeholder: popupFilter }}
+            inputProps={{placeholder: popupFilter}}
             itemPredicate={filterItem}
-            itemRenderer={(d, active) => (
+            itemRenderer={d => (
               <MenuItem
                 active={age?.id === d.id}
                 key={`${d.name}_age`}
@@ -286,9 +276,9 @@ export default function DemographicForm({
             items={educationLevel}
             filterable={false}
             scrollToActiveItem={true}
-            inputProps={{ placeholder: popupFilter }}
+            inputProps={{placeholder: popupFilter}}
             itemPredicate={filterItem}
-            itemRenderer={(d, active) => (
+            itemRenderer={d => (
               <MenuItem
                 active={education?.id === d.id}
                 key={`${d.name}_education`}
@@ -315,12 +305,12 @@ export default function DemographicForm({
             items={tmpLocation}
             filterable={false}
             resetOnSelect={true}
-            inputProps={{ placeholder: popupFilter }}
-            defaultItem={{ id: 999, name: t("text.game.popup.skip") }}
+            inputProps={{placeholder: popupFilter}}
+            defaultItem={{id: 999, name: t("text.game.popup.skip")}}
             onItemSelect={countriesFiltered}
             // itemPredicate={filterItemCountries}
-            onQueryChange={(e) => setCountryCode(e)}
-            itemRenderer={(d, active) => (
+            onQueryChange={e => setCountryCode(e)}
+            itemRenderer={d => (
               <MenuItem
                 active={countryCode?.id === d.id}
                 onClick={() => setCountryCode(d)}
@@ -346,16 +336,16 @@ export default function DemographicForm({
         {/************
           4b. Where are you from? (US STATES)
          *************/}
-        {countryCode && countryCode.name == "United States" && (
+        {countryCode && countryCode.name === "United States" && (
           <QuestionDemo title={USATitle} getkey={"USAquestion"}>
             <Select
               className="popup-select2"
               items={USAtmpLocation}
               filterable={false}
-              inputProps={{ placeholder: popupFilter }}
+              inputProps={{placeholder: popupFilter}}
               // itemPredicate={filterItemCountries}
-              onQueryChange={(e) => setUsaStates(e)}
-              itemRenderer={(d, active) => (
+              onQueryChange={e => setUsaStates(e)}
+              itemRenderer={d => (
                 <MenuItem
                   active={usaStates?.id === d.id}
                   onClick={() => setUsaStates(d)}
@@ -365,7 +355,7 @@ export default function DemographicForm({
                   }
                 />
               )}
-              noResults={(d, active) => (
+              noResults={d => (
                 <MenuItem
                   active={d.id === 999}
                   onClick={() => setUsaStates(d)}
@@ -377,7 +367,7 @@ export default function DemographicForm({
               )}
             >
               <Button
-                className={styles["select-button"]}
+                className="select-button"
                 rightIcon="chevron-down"
                 text={
                   usaStates
@@ -394,13 +384,13 @@ export default function DemographicForm({
          *************/}
         <QuestionDemo title={languageTitle} getkey={"fifthquestion"}>
           <div key={"languageoptionsdiv"}>
-            {languageOptions.map((d) => (
+            {languageOptions.map(d => (
               <Checkbox
                 key={`${d.id}_language`}
                 label={d.name}
                 value={d.id}
                 inline={true}
-                onChange={(e) => updateLanguages(e.target.value)}
+                onChange={e => updateLanguages(e.target.value)}
               />
             ))}
           </div>

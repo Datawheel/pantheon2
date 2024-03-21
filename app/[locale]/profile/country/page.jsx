@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 
-export default async function Page({ params: { id } }) {
+export default async function Page() {
   const countryCandidates = [
     "united-states",
     "united-kingdom",

@@ -1,21 +1,21 @@
-import { ImageResponse } from "next/og";
-import { NextResponse } from "next/server";
+import {ImageResponse} from "next/og";
+import {NextResponse} from "next/server";
 
 export const runtime = "edge";
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url);
+  const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) {
-    return new NextResponse("Not Found", { status: 404 });
+    return new NextResponse("Not Found", {status: 404});
   }
 
   const MarcellusfontData = await fetch(
     new URL("../../../../public/fonts/Marcellus-Regular.ttf", import.meta.url)
-  ).then((res) => res.arrayBuffer());
+  ).then(res => res.arrayBuffer());
   const AmikofontData = await fetch(
     new URL("../../../../public/fonts/Amiko-Regular.ttf", import.meta.url)
-  ).then((res) => res.arrayBuffer());
+  ).then(res => res.arrayBuffer());
 
   const placeRes = await fetch(
     `https://api-dev.pantheon.world/place?slug=eq.${id}`,
@@ -27,7 +27,7 @@ export async function GET(request) {
     }
   );
   const place = await placeRes.json();
-  const { place: name, country: countryId, birthyear, deathyear } = place;
+  const {place: name, country: countryId} = place;
 
   const countryRes = await fetch(
     `https://api-dev.pantheon.world/country?id=eq.${countryId}`,
@@ -39,16 +39,16 @@ export async function GET(request) {
     }
   );
   const country = await countryRes.json();
-  const { country: countryName, country_code } = country;
+  const {country: countryName, country_code} = country;
 
   const wikiRes = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/summary/${name}`
   );
   const wiki = await wikiRes.json();
-  const { originalimage } = wiki;
+  const {originalimage} = wiki;
 
   if (!name) {
-    return new NextResponse("ID mismatch", { status: 404 });
+    return new NextResponse("ID mismatch", {status: 404});
   }
   const backgroundColor = "#f4f4f1";
 
@@ -66,7 +66,7 @@ export async function GET(request) {
           width: "100%",
         }}
       >
-        <header style={{ position: "absolute" }}>
+        <header style={{position: "absolute"}}>
           <div
             style={{
               display: "flex",

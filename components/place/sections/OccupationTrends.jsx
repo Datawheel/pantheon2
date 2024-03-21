@@ -1,8 +1,8 @@
-import { nest } from "d3-collection";
+import {nest} from "d3-collection";
 import AnchorList from "../../utils/AnchorList";
 import SectionLayout from "../../common/SectionLayout";
-import { plural } from "pluralize";
-import { calculateYearBucket } from "../../utils/vizHelpers";
+import {plural} from "pluralize";
+import {calculateYearBucket} from "../../utils/vizHelpers";
 import OccupationsStackedArea from "./vizes/OccupationsStackedArea";
 
 const OccupationTrends = ({
@@ -16,18 +16,18 @@ const OccupationTrends = ({
 }) => {
   const currentYear = new Date().getFullYear();
   const topModern = nest()
-    .key((d) => d.occupation.id)
+    .key(d => d.occupation.id)
     .sortValues((a, b) => b.langs - a.langs)
     .entries(
       peopleBorn.filter(
-        (d) => d.birthyear >= currentYear - 100 && d.occupation !== null
+        d => d.birthyear >= currentYear - 100 && d.occupation !== null
       )
     )
     .sort((a, b) => b.values.length - a.values.length);
   const topOverall = nest()
-    .key((d) => d.occupation.id)
+    .key(d => d.occupation.id)
     .sortValues((a, b) => b.langs - a.langs)
-    .entries(peopleBorn.filter((d) => d.occupation !== null))
+    .entries(peopleBorn.filter(d => d.occupation !== null))
     .sort((a, b) => b.values.length - a.values.length);
   const occupationsLookup = occupations.reduce((obj, item) => {
     obj[`${item.id}`] = item;
@@ -35,10 +35,10 @@ const OccupationTrends = ({
   }, {});
 
   const tmapBornData = peopleBorn
-    .filter((p) => p.birthyear !== null && p.occupation !== null)
+    .filter(p => p.birthyear !== null && p.occupation !== null)
     .sort((a, b) => b.langs - a.langs);
 
-  tmapBornData.forEach((d) => {
+  tmapBornData.forEach(d => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
@@ -46,10 +46,10 @@ const OccupationTrends = ({
   });
 
   const tmapDeathData = peopleDied
-    .filter((p) => p.deathyear !== null && p.occupation !== null)
+    .filter(p => p.deathyear !== null && p.occupation !== null)
     .sort((a, b) => b.langs - a.langs);
 
-  tmapDeathData.forEach((d) => {
+  tmapDeathData.forEach(d => {
     d.industry = d.occupation.industry;
     d.domain = d.occupation.domain;
     d.occupation_name = d.occupation.occupation;
@@ -60,11 +60,11 @@ const OccupationTrends = ({
 
   const [bornBuckets, bornTicks] = calculateYearBucket(
     tmapBornData,
-    (d) => d.birthyear
+    d => d.birthyear
   );
   const [deathBuckets, deathTicks] = calculateYearBucket(
     peopleDied,
-    (d) => d.deathyear
+    d => d.deathyear
   );
 
   if (!topOverall.length && !topModern.length) {
@@ -91,8 +91,8 @@ const OccupationTrends = ({
               {place.place}, including{" "}
               <AnchorList
                 items={topModern[0].values.slice(0, 3)}
-                name={(d) => d.name}
-                url={(d) => `/profile/person/${d.slug}`}
+                name={d => d.name}
+                url={d => `/profile/person/${d.slug}`}
               />
               . Whereas, throughout history,{" "}
               <a
@@ -108,8 +108,8 @@ const OccupationTrends = ({
               present day {place.place}, including{" "}
               <AnchorList
                 items={topOverall[0].values.slice(0, 3)}
-                name={(d) => d.name}
-                url={(d) => `/profile/person/${d.slug}`}
+                name={d => d.name}
+                url={d => `/profile/person/${d.slug}`}
               />
               .
             </p>
@@ -129,8 +129,8 @@ const OccupationTrends = ({
               present day {place.place}, including{" "}
               <AnchorList
                 items={topOverall[0].values.slice(0, 3)}
-                name={(d) => d.name}
-                url={(d) => `/profile/person/${d.slug}`}
+                name={d => d.name}
+                url={d => `/profile/person/${d.slug}`}
               />
               .
             </p>

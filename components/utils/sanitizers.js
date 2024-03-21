@@ -1,6 +1,7 @@
-import { HPI_RANGE, LANGS_RANGE, YEAR_RANGE } from "/components/utils/consts";
+import {HPI_RANGE, LANGS_RANGE, YEAR_RANGE} from "/components/utils/consts";
+import {closest} from "d3plus-common";
 
-const sanitizeYear = (yr) => {
+const sanitizeYear = yr => {
   const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
   if (
     yr.replace(".", "").toLowerCase().includes("bc") ||
@@ -12,7 +13,7 @@ const sanitizeYear = (yr) => {
 };
 
 export const SANITIZERS = {
-  vizType: (viz) => {
+  vizType: viz => {
     const supportedViz = ["treemap", "stackedarea", "linechart", "map"];
     return supportedViz.includes(viz.toLowerCase())
       ? viz.toLowerCase()
@@ -41,9 +42,9 @@ export const SANITIZERS = {
     if (!depth && type === "people") depth = "people";
     if (!depth && type === "occupations") depth = "occupations";
     if (!depth && type === "places") depth = "places";
-    return { type, depth };
+    return {type, depth};
   },
-  years: (yearStr) => {
+  years: yearStr => {
     if (!yearStr || !yearStr.includes(",")) return YEAR_RANGE;
     return [
       sanitizeYear(yearStr.split(",")[0]),
@@ -61,18 +62,18 @@ export const SANITIZERS = {
     } else {
       cutoff = metricRange[0];
     }
-    return { metricType, cutoff };
+    return {metricType, cutoff};
   },
-  gender: (gender) =>
+  gender: gender =>
     ["F", "f", "M", "m"].includes(gender) ? gender.toUpperCase() : null,
-  yearType: (yearType) => (yearType === "deathyear" ? yearType : "birthyear"),
-  placeType: (placeType) =>
+  yearType: yearType => (yearType === "deathyear" ? yearType : "birthyear"),
+  placeType: placeType =>
     placeType === "deathplace" ? placeType : "birthplace",
-  country: (place) =>
+  country: place =>
     place
       ? place.includes("|")
         ? place.split("|")[0].toLowerCase()
         : place.toLowerCase()
       : place,
-  city: (place) => (place && place.includes("|") ? place.split("|")[1] : "all"),
+  city: place => (place && place.includes("|") ? place.split("|")[1] : "all"),
 };

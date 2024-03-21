@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FORMATTERS } from "../../utils/consts";
+import {FORMATTERS} from "../../utils/consts";
 import AnchorList from "../../utils/AnchorList";
 import PhotoCarousel from "../../utils/PhotoCarousel";
 import SectionLayout from "../../common/SectionLayout";
@@ -13,13 +13,13 @@ export default async function PeopleRanking({
   slug,
 }) {
   const newPeopleBorn = peopleBorn
-    .filter((p) => !p.hpi_prev)
+    .filter(p => !p.hpi_prev)
     .sort((personA, personB) => personB.hpi - personA.hpi);
   const newPeopleDied = peopleDied
-    .filter((p) => !p.hpi_prev)
+    .filter(p => !p.hpi_prev)
     .sort((personA, personB) => personB.hpi - personA.hpi);
-  const youngestBirthyear = Math.max(...peopleBorn.map((r) => r.birthyear));
-  const oldestBirthyear = Math.min(...peopleBorn.map((r) => r.birthyear));
+  const youngestBirthyear = Math.max(...peopleBorn.map(r => r.birthyear));
+  const oldestBirthyear = Math.min(...peopleBorn.map(r => r.birthyear));
   const moreDeaths = peopleDied.length > peopleBorn.length ? true : false;
 
   const topRankingBorn = peopleBorn.slice(0, 12);
@@ -45,8 +45,8 @@ export default async function PeopleRanking({
           including{" "}
           <AnchorList
             items={peopleBorn.slice(0, 3)}
-            name={(d) => d.name}
-            url={(d) => `/profile/person/${d.slug}/`}
+            name={d => d.name}
+            url={d => `/profile/person/${d.slug}/`}
           />
           .{" "}
           {topRankingDied.length ? (
@@ -55,8 +55,8 @@ export default async function PeopleRanking({
               memorable people have passed away in {place.place} including{" "}
               <AnchorList
                 items={peopleDied.slice(0, 3)}
-                name={(d) => d.name}
-                url={(d) => `/profile/person/${d.slug}/`}
+                name={d => d.name}
+                url={d => `/profile/person/${d.slug}/`}
               />
               .{" "}
               {moreDeaths

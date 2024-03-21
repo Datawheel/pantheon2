@@ -47,12 +47,12 @@ export default async function CountryRanking({
     bplaceCountryRankLow,
     bplaceCountryRankHigh
   );
-  const me = birthCountryRankings.find((rank) => rank.slug === person.slug);
+  const me = birthCountryRankings.find(rank => rank.slug === person.slug);
   const betterRankedBirthPeers = birthCountryRankings.filter(
-    (p) => p.bplace_country_rank_unique < me.bplace_country_rank_unique
+    p => p.bplace_country_rank_unique < me.bplace_country_rank_unique
   );
   const worseRankedBirthPeers = birthCountryRankings.filter(
-    (p) => p.bplace_country_rank_unique > me.bplace_country_rank_unique
+    p => p.bplace_country_rank_unique > me.bplace_country_rank_unique
   );
 
   if (betterRankedBirthPeers.length) {
@@ -63,8 +63,8 @@ export default async function CountryRanking({
         {
           <AnchorList
             items={betterRankedBirthPeers}
-            name={(d) => `${d.name} (${d.birthyear})`}
-            url={(d) => `/profile/person/${d.slug}/`}
+            name={d => `${d.name} (${d.birthyear})`}
+            url={d => `/profile/person/${d.slug}/`}
           />
         }
         .{" "}
@@ -79,8 +79,8 @@ export default async function CountryRanking({
         {
           <AnchorList
             items={worseRankedBirthPeers}
-            name={(d) => `${d.name} (${d.birthyear})`}
-            url={(d) => `/profile/person/${d.slug}/`}
+            name={d => `${d.name} (${d.birthyear})`}
+            url={d => `/profile/person/${d.slug}/`}
           />
         }
         .

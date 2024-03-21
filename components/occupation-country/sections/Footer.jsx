@@ -1,5 +1,5 @@
-import { plural } from "pluralize";
-import { toTitleCase } from "../../utils/vizHelpers";
+import {plural} from "pluralize";
+import {toTitleCase} from "../../utils/vizHelpers";
 import "../../common/Footer.css";
 
 export default function Footer({
@@ -11,7 +11,7 @@ export default function Footer({
       <div className="footer-container">
         <h4 className="footer-title">Keep Exploring</h4>
         <ul className="footer-carousel-container">
-          {allCountriesInOccupation.slice(0, 3).map((countryOccupation) => (
+          {allCountriesInOccupation.slice(0, 3).map(countryOccupation => (
             <li
               className="footer-carousel-item"
               key={countryOccupation.country}
@@ -37,7 +37,7 @@ export default function Footer({
               <p>from {countryOccupation.country}</p>
             </li>
           ))}
-          {allOccupationsInCountry.slice(0, 3).map((occupationCountry) => (
+          {allOccupationsInCountry.slice(0, 3).map(occupationCountry => (
             <li
               className="footer-carousel-item"
               key={occupationCountry.country}

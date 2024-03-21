@@ -1,13 +1,13 @@
 "use client";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { FORMATTERS } from "../utils/consts";
-import { updateYears } from "../../features/exploreSlice";
+import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {FORMATTERS} from "../utils/consts";
+import {updateYears} from "../../features/exploreSlice";
 
 const ENTER_KEY_CODE = 13;
 const MAX_ALLOWED_YEAR = new Date().getFullYear();
 
-const sanitizeYear = (yr) => {
+const sanitizeYear = yr => {
   const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);
   if (
     yr.replace(".", "").toLowerCase().includes("bc") ||
@@ -34,11 +34,11 @@ const getClasName = (yearType, activeYearType, loading) => {
 export default function YearControl() {
   const loading = false;
   const dispatch = useDispatch();
-  const { years, yearType } = useSelector((state) => state.explore);
+  const {years, yearType} = useSelector(state => state.explore);
   const [tempYearStart, setTempYearStart] = useState(null);
   const [tempYearEnd, setTempYearEnd] = useState(null);
 
-  const yearChange = (e) => {
+  const yearChange = e => {
     const tempYear = e.target.value;
     const tempYearSetter = e.target.id.includes("end")
       ? setTempYearEnd
@@ -73,7 +73,7 @@ export default function YearControl() {
       <ul className="items options flat-options filter">
         <li>
           <a
-            onClick={(e) =>
+            onClick={e =>
               loading ? null : this.changeYearType("birthyear", e)
             }
             href="#"
@@ -85,7 +85,7 @@ export default function YearControl() {
         </li>
         <li>
           <a
-            onClick={(e) =>
+            onClick={e =>
               loading ? null : this.changeYearType("deathyear", e)
             }
             href="#"

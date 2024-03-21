@@ -1,4 +1,4 @@
-import { nest } from "d3-collection";
+import {nest} from "d3-collection";
 import Explore from "/features/Explore";
 
 async function getPlaces() {
@@ -16,22 +16,22 @@ async function getOccupations() {
 }
 
 export default async function Page() {
-  let [places, occupations] = await Promise.all([
+  const [places, occupations] = await Promise.all([
     getPlaces(),
     getOccupations(),
   ]);
-  places = nest()
-    .key((d) => d.country_id)
+  const nestedPlaces = nest()
+    .key(d => d.country_id)
     .entries(places)
-    .map((countryData) => ({
+    .map(countryData => ({
       country: countryData.values[0].country,
       cities: countryData.values,
     }))
-    .filter((countryData) => countryData.country);
+    .filter(countryData => countryData.country);
 
   return (
     <div className="explore">
-      <Explore places={places} occupations={occupations} pageType="viz" />
+      <Explore places={nestedPlaces} occupations={occupations} pageType="viz" />
       <div className="explore-body"></div>
     </div>
   );

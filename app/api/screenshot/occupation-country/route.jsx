@@ -1,6 +1,6 @@
-import { ImageResponse } from "next/og";
-import { NextResponse } from "next/server";
-import { plural } from "pluralize";
+import {ImageResponse} from "next/og";
+import {NextResponse} from "next/server";
+import {plural} from "pluralize";
 
 export const runtime = "edge";
 
@@ -32,14 +32,14 @@ async function fetchPersonImage(id) {
 
 async function fetchAllPersonImages(ids) {
   try {
-    const imageFetchPromises = ids.map((id) => fetchPersonImage(id));
+    const imageFetchPromises = ids.map(id => fetchPersonImage(id));
     const imagesData = await Promise.all(imageFetchPromises);
 
     return imagesData.map((imageData, index) => {
       if (imageData) {
-        return { imageD: imageData, hasImage: true };
+        return {imageD: imageData, hasImage: true};
       } else {
-        return { imageD: null, hasImage: false, id: ids[index] };
+        return {imageD: null, hasImage: false, id: ids[index]};
       }
     });
   } catch (error) {
@@ -50,19 +50,19 @@ async function fetchAllPersonImages(ids) {
 }
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url);
+  const {searchParams} = new URL(request.url);
   const occupationQueryId = searchParams.get("occupation");
   const countryQueryId = searchParams.get("country");
   if (!occupationQueryId || !countryQueryId) {
-    return new NextResponse("Not Found", { status: 404 });
+    return new NextResponse("Not Found", {status: 404});
   }
 
   const MarcellusfontData = await fetch(
     new URL("../../../../public/fonts/Marcellus-Regular.ttf", import.meta.url)
-  ).then((res) => res.arrayBuffer());
+  ).then(res => res.arrayBuffer());
   const AmikofontData = await fetch(
     new URL("../../../../public/fonts/Amiko-Regular.ttf", import.meta.url)
-  ).then((res) => res.arrayBuffer());
+  ).then(res => res.arrayBuffer());
 
   const occupationRes = await fetch(
     `https://api-dev.pantheon.world/occupation?occupation_slug=eq.${occupationQueryId}`,
@@ -74,9 +74,9 @@ export async function GET(request) {
     }
   );
   const occupation = await occupationRes.json();
-  const { occupation: occupationName, id: occupationId } = occupation;
+  const {occupation: occupationName, id: occupationId} = occupation;
   if (!occupationName) {
-    return new NextResponse("Not Found", { status: 404 });
+    return new NextResponse("Not Found", {status: 404});
   }
 
   const countryRes = await fetch(
@@ -89,23 +89,23 @@ export async function GET(request) {
     }
   );
   const country = await countryRes.json();
-  const { country: countryName, id: countryId } = country;
+  const {country: countryName, id: countryId} = country;
   if (!countryName) {
-    return new NextResponse("Not Found", { status: 404 });
+    return new NextResponse("Not Found", {status: 404});
   }
 
   if (!occupationName) {
-    return new NextResponse("ID mismatch", { status: 404 });
+    return new NextResponse("ID mismatch", {status: 404});
   }
   const peopleRes = await fetch(
     `https://api-dev.pantheon.world/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id&limit=16`
   );
   const people = await peopleRes.json();
-  const peopleIds = people.map((p) => p.id);
+  const peopleIds = people.map(p => p.id);
 
   // Example usage:
-  const personImages = await fetchAllPersonImages(peopleIds).then((results) => {
-    const resultsWithImages = results.filter((r) => r.hasImage).slice(0, 8);
+  const personImages = await fetchAllPersonImages(peopleIds).then(results => {
+    const resultsWithImages = results.filter(r => r.hasImage).slice(0, 8);
     return resultsWithImages;
   });
 
@@ -125,7 +125,7 @@ export async function GET(request) {
           width: "100%",
         }}
       >
-        <header style={{ position: "absolute" }}>
+        <header style={{position: "absolute"}}>
           <div
             style={{
               display: "flex",
@@ -144,7 +144,7 @@ export async function GET(request) {
                 height: "50%",
               }}
             >
-              {[0, 1, 2, 3].map((item, i) =>
+              {[0, 1, 2, 3].map(item =>
                 personImages[item] && personImages[item].hasImage ? (
                   <img
                     key={`row1-${item}`}

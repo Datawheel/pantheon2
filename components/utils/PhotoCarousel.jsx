@@ -1,10 +1,10 @@
 "use client";
-import { useRef, useEffect } from "react";
+import {useRef, useEffect} from "react";
 import Link from "next/link";
-import { COLORS_DOMAIN, FORMATTERS } from "../utils/consts";
+import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import PersonImage from "./PersonImage";
 
-export default function PhotoCarousel({ me, people, rankAccessor }) {
+export default function PhotoCarousel({me, people, rankAccessor}) {
   const scroll = () => {
     console.log("scrolled!");
   };
@@ -39,7 +39,7 @@ export default function PhotoCarousel({ me, people, rankAccessor }) {
       </a>
       <>
         <ul className="rank-list" ref={rankList}>
-          {people.map((person) => (
+          {people.map(person => (
             <li
               key={`${person.id}`}
               className={person.id === myId ? "rank-me" : null}

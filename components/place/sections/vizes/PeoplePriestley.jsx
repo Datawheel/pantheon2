@@ -1,5 +1,5 @@
 "use client";
-import { Priestley } from "d3plus-react";
+import {Priestley} from "d3plus-react";
 import VizWrapper from "../../../common/VizWrapper";
 import {
   groupBy,
@@ -8,7 +8,7 @@ import {
   shapeConfig,
 } from "../../../utils/vizHelpers";
 
-export default function PeoplePriestley({ attrs, data, title }) {
+export default function PeoplePriestley({attrs, data, title}) {
   return (
     <VizWrapper component={this} refKey="lifespansViz">
       <Priestley
@@ -22,9 +22,9 @@ export default function PeoplePriestley({ attrs, data, title }) {
           groupBy: ["domain", "name"].map(groupBy(attrs)),
           height: 700,
           legendConfig: {
-            label: (d) => d.occupation.domain,
+            label: d => d.occupation.domain,
           },
-          on: on("person", (d) => d.slug),
+          on: on("person", d => d.slug),
           start: "birthyear",
           shapeConfig: Object.assign({}, shapeConfig(attrs), {
             labelPadding: 2,

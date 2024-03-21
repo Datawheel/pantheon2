@@ -1,8 +1,8 @@
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
-import { FORMATTERS } from "../utils/consts";
+import {FORMATTERS} from "../utils/consts";
 
-export default function Header({ era }) {
+export default function Header({era}) {
   return (
     <header className="hero">
       <div className="bg-container">

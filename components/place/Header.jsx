@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import { max as D3Max, min as D3Min } from "d3-array";
+import {Suspense} from "react";
+import {max as d3Max, min as d3Min} from "d3-array";
 import dayjs from "dayjs";
 import HeaderLine from "./HeaderLine";
 import "../../styles/Header.css";
@@ -27,32 +27,30 @@ async function getWikiSummary(placeName) {
   return res.json();
 }
 
-export default async function Header({ place, country }) {
-  const { items: wikiPageViews } = await getWikiPageViews(place.place);
+export default async function Header({place, country}) {
+  const {items: wikiPageViews} = await getWikiPageViews(place.place);
   const wikiSummary = await getWikiSummary(place.place);
 
   let pageViewData = null;
   if (wikiPageViews) {
-    pageViewData = wikiPageViews.map((pv) => ({
+    pageViewData = wikiPageViews.map(pv => ({
       ...pv,
       date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(
         4,
         6
       )}/${pv.timestamp.substring(6, 8)}`,
     }));
-    const mostRecentDate = D3Max(pageViewData, (d) =>
+    const mostRecentDate = d3Max(pageViewData, d =>
       dayjs(d.date, "YYYY/MM/DD")
     );
-    const oldestDate = D3Min(pageViewData, (d) => dayjs(d.date, "YYYY/MM/DD"));
+    const oldestDate = d3Min(pageViewData, d => dayjs(d.date, "YYYY/MM/DD"));
     pageViewData.push({
-      ...pageViewData.find((d) => d.date === oldestDate.format("YYYY/MM/DD")),
+      ...pageViewData.find(d => d.date === oldestDate.format("YYYY/MM/DD")),
       shape: "Circle",
       article: "circle",
     });
     pageViewData.push({
-      ...pageViewData.find(
-        (d) => d.date === mostRecentDate.format("YYYY/MM/DD")
-      ),
+      ...pageViewData.find(d => d.date === mostRecentDate.format("YYYY/MM/DD")),
       shape: "Circle",
       article: "circle",
     });
@@ -72,11 +70,11 @@ export default async function Header({ place, country }) {
         <div className="bg-img-mask place">
           <div
             className="bg-img bg-img-t"
-            style={{ backgroundImage: `url(${placeImg})` }}
+            style={{backgroundImage: `url(${placeImg})`}}
           ></div>
           <div
             className="bg-img bg-img-b"
-            style={{ backgroundImage: `url(${placeImg})` }}
+            style={{backgroundImage: `url(${placeImg})`}}
           ></div>
         </div>
       </div>
@@ -118,7 +116,7 @@ export default async function Header({ place, country }) {
 // import {FORMATTERS} from "types/index";
 // import {nest} from "d3-collection";
 // import {LinePlot} from "d3plus-react";
-// import {max as D3Max, min as D3Min} from "d3-array";
+// import {max as d3Max, min as d3Min} from "d3-array";
 // import moment from "moment";
 
 // const Header = ({country, people, place, wikiSummary, wikiPageViews}) => {
@@ -134,8 +132,8 @@ export default async function Header({ place, country }) {
 //   if (wikiPageViews) {
 //     if (wikiPageViews.items) {
 //       pageViewData = wikiPageViews.items.map(pv => ({...pv, date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(4, 6)}/${pv.timestamp.substring(6, 8)}`}));
-//       const mostRecentDate = D3Max(pageViewData, d => moment(d.date, "YYYY/MM/DD"));
-//       const oldestDate = D3Min(pageViewData, d => moment(d.date, "YYYY/MM/DD"));
+//       const mostRecentDate = d3Max(pageViewData, d => moment(d.date, "YYYY/MM/DD"));
+//       const oldestDate = d3Min(pageViewData, d => moment(d.date, "YYYY/MM/DD"));
 //       pageViewData.push({...pageViewData.find(d => d.date === oldestDate.format("YYYY/MM/DD")), shape: "Circle", article: "circle"});
 //       pageViewData.push({...pageViewData.find(d => d.date === mostRecentDate.format("YYYY/MM/DD")), shape: "Circle", article: "circle"});
 //     }

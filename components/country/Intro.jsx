@@ -1,7 +1,7 @@
 import AnchorList from "../utils/AnchorList";
-import { FORMATTERS } from "../utils/consts";
-import { nest } from "d3-collection";
-import { plural } from "pluralize";
+import {FORMATTERS} from "../utils/consts";
+import {nest} from "d3-collection";
+import {plural} from "pluralize";
 import "../common/Intro.css";
 
 async function getWikiSummary(countryName) {
@@ -18,27 +18,27 @@ export default async function Intro({
   peopleDiedHere,
 }) {
   const occupationsBorn = nest()
-    .key((d) => d.occupation.id)
-    .rollup((leaves) => ({
+    .key(d => d.occupation.id)
+    .rollup(leaves => ({
       num_born: leaves.length,
       occupation: leaves[0].occupation,
     }))
-    .entries(peopleBornHere.filter((d) => d.occupation_id))
+    .entries(peopleBornHere.filter(d => d.occupation_id))
     .sort((a, b) => b.value.num_born - a.value.num_born)
-    .map((d) => d.value)
+    .map(d => d.value)
     .slice(0, 2);
   const occupationsDied = nest()
-    .key((d) => d.occupation.id)
-    .rollup((leaves) => ({
+    .key(d => d.occupation.id)
+    .rollup(leaves => ({
       num_died: leaves.length,
       occupation: leaves[0].occupation,
     }))
-    .entries(peopleDiedHere.filter((d) => d.occupation_id))
+    .entries(peopleDiedHere.filter(d => d.occupation_id))
     .sort((a, b) => b.value.num_died - a.value.num_died)
-    .map((d) => d.value)
+    .map(d => d.value)
     .slice(0, 2);
   const myIndex = countryRanks
-    ? countryRanks.findIndex((c) => c.country === country.country)
+    ? countryRanks.findIndex(c => c.country === country.country)
     : null;
   let wikiLink, wikiSentence;
 
@@ -77,8 +77,8 @@ export default async function Intro({
                         Math.max(0, myIndex - 3),
                         myIndex
                       )}
-                      name={(d) => d.country}
-                      url={(d) => `/profile/country/${d.slug}/`}
+                      name={d => d.country}
+                      url={d => `/profile/country/${d.slug}/`}
                     />
                   </>
                 )}
@@ -90,8 +90,8 @@ export default async function Intro({
                 Memorable people born in present day {country.country} include{" "}
                 <AnchorList
                   items={peopleBornHere.slice(0, 3)}
-                  name={(d) => d.name}
-                  url={(d) => `/profile/person/${d.slug}/`}
+                  name={d => d.name}
+                  url={d => `/profile/person/${d.slug}/`}
                 />
                 .
               </span>
@@ -102,8 +102,8 @@ export default async function Intro({
                 Memorable people who died in {country.country} include{" "}
                 <AnchorList
                   items={peopleDiedHere.slice(0, 3)}
-                  name={(d) => d.name}
-                  url={(d) => `/profile/person/${d.slug}/`}
+                  name={d => d.name}
+                  url={d => `/profile/person/${d.slug}/`}
                 />
                 .
               </span>
@@ -114,8 +114,8 @@ export default async function Intro({
                 {country.country} has been the birth place of many{" "}
                 <AnchorList
                   items={occupationsBorn}
-                  name={(d) => plural(d.occupation.occupation.toLowerCase())}
-                  url={(d) =>
+                  name={d => plural(d.occupation.occupation.toLowerCase())}
+                  url={d =>
                     `/profile/occupation/${d.occupation.occupation_slug}/`
                   }
                 />
@@ -127,8 +127,8 @@ export default async function Intro({
                 and the death place of many{" "}
                 <AnchorList
                   items={occupationsDied}
-                  name={(d) => plural(d.occupation.occupation.toLowerCase())}
-                  url={(d) =>
+                  name={d => plural(d.occupation.occupation.toLowerCase())}
+                  url={d =>
                     `/profile/occupation/${d.occupation.occupation_slug}/`
                   }
                 />

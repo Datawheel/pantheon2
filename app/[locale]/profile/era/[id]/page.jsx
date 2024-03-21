@@ -1,17 +1,17 @@
-import { cloneElement } from "react";
+import {cloneElement} from "react";
 // import ProfileNav from "../../../../components/common/Nav";
 import Intro from "/components/era/Intro";
 import Header from "/components/era/Header";
 import PeopleRanking from "/components/era/sections/PeopleRanking";
 import Occupations from "/components/era/sections/Occupations";
-import OccupationTrends from "/components/era/sections/OccupationTrends";
-import Places from "/components/era/sections/Places";
-import Lifespans from "/components/era/sections/Lifespans";
-import {
-  NUM_RANKINGS,
-  NUM_RANKINGS_PRE,
-  NUM_RANKINGS_POST,
-} from "/components/utils/consts";
+// import OccupationTrends from "/components/era/sections/OccupationTrends";
+// import Places from "/components/era/sections/Places";
+// import Lifespans from "/components/era/sections/Lifespans";
+// import {
+//   NUM_RANKINGS,
+//   NUM_RANKINGS_PRE,
+//   NUM_RANKINGS_POST,
+// } from "/components/utils/consts";
 
 async function getOccupations() {
   const res = await fetch(
@@ -40,12 +40,12 @@ async function getEra(eraId) {
   return res.json();
 }
 
-async function getCountryRanks(countryRankLow, countryRankHigh) {
-  const res = await fetch(
-    `https://api-dev.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
-  );
-  return res.json();
-}
+// async function getCountryRanks(countryRankLow, countryRankHigh) {
+//   const res = await fetch(
+//     `https://api-dev.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
+//   );
+//   return res.json();
+// }
 
 async function getPeopleBornInEra(startYear, endYear) {
   const res = await fetch(
@@ -61,7 +61,7 @@ async function getPeopleDiedInEra(startYear, endYear) {
   return res.json();
 }
 
-export async function generateMetadata({ params, searchParams }, parent) {
+export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
 
@@ -82,14 +82,14 @@ export async function generateMetadata({ params, searchParams }, parent) {
   };
 }
 
-export default async function Page({ params: { id } }) {
+export default async function Page({params: {id}}) {
   const [era, eras, occupations] = await Promise.all([
     getEra(id),
     getEras(),
     getOccupations(),
   ]);
 
-  let [peopleBornInEra, peopleDiedInEra] = await Promise.all([
+  const [peopleBornInEra, peopleDiedInEra] = await Promise.all([
     getPeopleBornInEra(era.start_year, era.end_year),
     getPeopleDiedInEra(era.start_year, era.end_year),
   ]);

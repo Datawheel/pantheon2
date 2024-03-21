@@ -1,5 +1,5 @@
 "use client";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import Spinner from "../../../components/Spinner";
 import PTreemap from "../../../components/explore/viz/PTreemap";
 import PStacked from "../../../components/explore/viz/PStacked";
@@ -7,9 +7,9 @@ import PLine from "../../../components/explore/viz/PLine";
 import PMap from "../../../components/explore/viz/PMap";
 import "./Viz.css";
 
-export default function VizShell({ occupations }) {
-  const exploreState = useSelector((state) => state.explore);
-  const { data, dataLoading, show, viz, yearType } = exploreState;
+export default function VizShell({occupations}) {
+  const exploreState = useSelector(state => state.explore);
+  const {data, dataLoading, show, viz, yearType} = exploreState;
 
   if (dataLoading) {
     return (

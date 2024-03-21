@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 
-export default function Person({ data, onClick, isBoardItem, dataKey }) {
+export default function Person({data, onClick, isBoardItem, dataKey}) {
   const [imgURL, setImgURL] = useState(data.imgURL);
 
   useEffect(() => {

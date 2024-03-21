@@ -1,11 +1,11 @@
 import PlacesMap from "./vizes/PlacesMap";
 import SectionLayout from "../../common/SectionLayout";
 
-export default function Places({ place, peopleBorn, peopleDied, slug, title }) {
+export default function Places({place, peopleBorn, peopleDied, slug, title}) {
   const tmapBornData = peopleBorn
-    .filter((p) => p.deathyear !== null)
+    .filter(p => p.deathyear !== null)
     .sort((a, b) => b.l - a.l)
-    .map((d) => ({
+    .map(d => ({
       ...d,
       event: "CITY OF DEATHS OF FAMOUS PEOPLE",
       place: d.dplace_geonameid,
@@ -13,12 +13,12 @@ export default function Places({ place, peopleBorn, peopleDied, slug, title }) {
 
   const geomapBornData = tmapBornData
     .filter(
-      (d) =>
+      d =>
         d.dplace_geonameid && d.dplace_geonameid.lat && d.dplace_geonameid.lon
     )
     .sort((a, b) => b.l - a.l)
     .slice(0, 100);
-  geomapBornData.forEach((d) => {
+  geomapBornData.forEach(d => {
     d.place_name = d.dplace_geonameid.place;
     d.place_coord = [d.dplace_geonameid.lat, d.dplace_geonameid.lon];
     if (!(d.place_coord instanceof Array)) {
@@ -32,19 +32,19 @@ export default function Places({ place, peopleBorn, peopleDied, slug, title }) {
   });
 
   const tmapDeathData = peopleDied
-    .filter((p) => p.deathyear !== null)
+    .filter(p => p.deathyear !== null)
     .sort((a, b) => b.l - a.l)
-    .map((d) => ({
+    .map(d => ({
       ...d,
       event: "CITY FOR BIRTHS OF FAMOUS PEOPLE",
       place: d.bplace_geonameid,
     }));
   // console.log("tmapDeathData!", tmapDeathData.length);
   const geomapDeathData = tmapDeathData
-    .filter((d) => d.place && d.place.lat && d.place.lon)
+    .filter(d => d.place && d.place.lat && d.place.lon)
     .sort((a, b) => b.l - a.l)
     .slice(0, 100);
-  geomapDeathData.forEach((d) => {
+  geomapDeathData.forEach(d => {
     d.place_name = d.place.place;
     d.place_coord = [d.place.lat, d.place.lon];
     if (!(d.place_coord instanceof Array)) {

@@ -5,14 +5,14 @@ const axios = require("axios");
 
 const calcRankDeltas = (arrOfBios, day1Ago, day2Ago) => {
   const day2AgoRanks = arrOfBios
-    .filter((d) => d.date === day2Ago)
+    .filter(d => d.date === day2Ago)
     .reduce((obj, item) => {
       obj[item.slug] = item;
       return obj;
     }, {});
   return arrOfBios
-    .filter((d) => d.date === day1Ago)
-    .map((d) =>
+    .filter(d => d.date === day1Ago)
+    .map(d =>
       Object.assign({}, d, {
         rank_delta: day2AgoRanks[d.slug]
           ? day2AgoRanks[d.slug].rank_pantheon - d.rank_pantheon
@@ -78,9 +78,7 @@ const handler = async (req, res) => {
     .get(
       `https://api-dev.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`
     )
-    .catch(
-      (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
-    );
+    .catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
   const todaysBiosFromDb = calcRankDeltas(
     todaysBiosFromDbResp.data,
     `${year}-${month}-${day}`,
@@ -100,18 +98,18 @@ const handler = async (req, res) => {
           `https://api-dev.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
         )
         .catch(
-          (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
+          e => (console.log("Pantheon trends read Error:", e), {data: []})
         );
       if (todaysBiosFromDbCheck.data.length) {
         return res.json([]);
       }
     }
     const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
-    const topPageViewsResp = await axios.get(wikiPageViewsURL).catch((e) => {
+    const topPageViewsResp = await axios.get(wikiPageViewsURL).catch(e => {
       if (e.response) {
-        return { data: [], error: e.response.data };
+        return {data: [], error: e.response.data};
       }
-      return { data: [] };
+      return {data: []};
     });
     const topPageViewsJson = topPageViewsResp.data;
     if (
@@ -125,14 +123,14 @@ const handler = async (req, res) => {
           `https://api-dev.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
         )
         .catch(
-          (e) => (console.log("Pantheon trends read Error:", e), { data: [] })
+          e => (console.log("Pantheon trends read Error:", e), {data: []})
         );
       return res.json(
         [...todaysBiosFromDbResp2.data]
           .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
           .slice(0, limit)
       );
-      return res.json({ topPageViewsResp });
+      // return res.json({topPageViewsResp});
     }
     // create API URLs from list of people
     if (!topPageViewsJson.items || !Array.isArray(topPageViewsJson.items)) {
@@ -149,28 +147,26 @@ const handler = async (req, res) => {
       // validate URLs for non-english slugs
       if (lang !== "en") {
         const wikiLangTitles = currentArticlesChunk
-          .map((p) => encodeURIComponent(p.article))
+          .map(p => encodeURIComponent(p.article))
           .join("|");
         const wikiLangLinksResp = await axios
           .get(
             `https://${lang}.wikipedia.org/w/api.php?action=query&titles=${wikiLangTitles}&prop=langlinks&lllimit=500&llprop=url&lllang=en&format=json`
           )
-          .catch(
-            (e) => (console.log("Wiki Langlinks Error:", e), { data: [] })
-          );
+          .catch(e => (console.log("Wiki Langlinks Error:", e), {data: []}));
         const wikiLangLinksJson = wikiLangLinksResp.data;
 
-        currentArticlesChunk.forEach((article) => {
+        currentArticlesChunk.forEach(article => {
           // see if name is normalized
           let normalizedArticleTitle = article.article;
           if (wikiLangLinksJson.query.normalized) {
             const normForm = wikiLangLinksJson.query.normalized.find(
-              (norm) => norm.from === article.article
+              norm => norm.from === article.article
             );
             normalizedArticleTitle = normForm ? normForm.to : article.article;
           }
           const enArticle = Object.values(wikiLangLinksJson.query.pages).find(
-            (page) => page.title === normalizedArticleTitle
+            page => page.title === normalizedArticleTitle
           );
           if (
             enArticle &&
@@ -193,7 +189,7 @@ const handler = async (req, res) => {
           }
         });
       } else {
-        currentArticlesChunk.forEach((article) => {
+        currentArticlesChunk.forEach(article => {
           trendingArticlesQuery.push(
             `slug.eq."${encodeURIComponent(article.article)}"`
           );
@@ -213,14 +209,13 @@ const handler = async (req, res) => {
     // throttle API queries to 20 at a time
     const throttle = createThrottle(20);
     const bios = await Promise.all(
-      trendingPeoplePantheonUrls.map((url) =>
+      trendingPeoplePantheonUrls.map(url =>
         throttle(async () => {
           const res = await axios
             .get(url)
             .catch(
-              (e) => (
-                console.log("Batch pantheon person query error:", e),
-                { data: [] }
+              e => (
+                console.log("Batch pantheon person query error:", e), {data: []}
               )
             );
           return res.data;
@@ -232,7 +227,7 @@ const handler = async (req, res) => {
     const biosOnPantheon = bios.filter(Array.isArray);
 
     // convert to format for db
-    const todaysBiosForDbUnsorted = biosOnPantheon.flat().map((d) => {
+    const todaysBiosForDbUnsorted = biosOnPantheon.flat().map(d => {
       // const trendDataFromWiki = trending.find(p => p.article === d.slug);
       const trendDataFromWiki = trendingArticlesLookup[d.slug];
       const retD = {
@@ -249,21 +244,19 @@ const handler = async (req, res) => {
     // sort and add ranking
     const todaysBiosForDb = todaysBiosForDbUnsorted
       .sort((a, b) => a.rank - b.rank)
-      .map((d, i) => ({ ...d, rank_pantheon: i + 1 }));
+      .map((d, i) => ({...d, rank_pantheon: i + 1}));
 
     await axios.post("https://api-dev.pantheon.world/trend", todaysBiosForDb, {
       headers: {
         "Content-Type": "application/json",
-        Authorization:
+        "Authorization":
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
       },
     });
 
     if (occupation) {
       return res.json(
-        todaysBiosForDb
-          .filter((d) => d.occupation === occupation)
-          .slice(0, limit)
+        todaysBiosForDb.filter(d => d.occupation === occupation).slice(0, limit)
       );
     }
 

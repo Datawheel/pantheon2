@@ -2,10 +2,10 @@ import React from "react";
 import Link from "next/link";
 import "./Nav.css";
 
-const Nav = ({ sections }) => (
+const Nav = ({sections}) => (
   <nav className="profile-nav">
     <ol className="profile-nav-list">
-      {sections.map((section) => (
+      {sections.map(section => (
         <li className="profile-nav-item" key={section.slug}>
           <Link
             href={section.slug}

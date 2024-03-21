@@ -1,7 +1,7 @@
-const Answer = ({ answer, letter, selected, setCurrentAnswer }) => {
+const Answer = ({answer, letter, selected, setCurrentAnswer}) => {
   const classes = ["answer"];
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     // props.dispatch({
     //   type: SET_CURRENT_ANSWER,
     //   currentAnswer: e.target.value,

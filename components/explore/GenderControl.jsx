@@ -1,6 +1,6 @@
 "use client";
-import { useDispatch, useSelector } from "react-redux";
-import { updateGender } from "../../features/exploreSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {updateGender} from "../../features/exploreSlice";
 
 const getClassName = (genderId, genderName, currentGender, loading) => {
   if (genderId === currentGender) {
@@ -18,7 +18,7 @@ const getClassName = (genderId, genderName, currentGender, loading) => {
 export default function GenderControl() {
   const loading = false;
   const dispatch = useDispatch();
-  const { gender } = useSelector((state) => state.explore);
+  const {gender} = useSelector(state => state.explore);
 
   return (
     <div className="filter">
@@ -26,7 +26,7 @@ export default function GenderControl() {
       <ul className="items options flat-options filter">
         <li>
           <a
-            onClick={(e) =>
+            onClick={e =>
               loading
                 ? e.preventDefault()
                 : (e.preventDefault(), dispatch(updateGender(null)))
@@ -40,7 +40,7 @@ export default function GenderControl() {
         </li>
         <li>
           <a
-            onClick={(e) =>
+            onClick={e =>
               loading
                 ? e.preventDefault()
                 : (e.preventDefault(), dispatch(updateGender("F")))
@@ -54,7 +54,7 @@ export default function GenderControl() {
         </li>
         <li>
           <a
-            onClick={(e) =>
+            onClick={e =>
               loading
                 ? e.preventDefault()
                 : (e.preventDefault(), dispatch(updateGender("M")))

@@ -27,12 +27,12 @@ async function getTimeSeriesData(wikiData, person) {
     if (wikiData.query.pages) {
       const personResult = wikiData.query.pages[person.id];
       if (personResult) {
-        const { langlinks } = personResult;
+        const {langlinks} = personResult;
         langlinks.unshift({
           "*": person.name,
-          lang: "en",
-          langname: "English",
-          url: `https://en.wikipedia.org/wiki/${person.name}`,
+          "lang": "en",
+          "langname": "English",
+          "url": `https://en.wikipedia.org/wiki/${person.name}`,
         });
         const langlinksLookup = langlinks.reduce(
           (obj, d) => ((obj[d.lang] = d), obj),
@@ -41,21 +41,22 @@ async function getTimeSeriesData(wikiData, person) {
         const todaysDate = new Date();
         const thisMonth = yyyymmdd(todaysDate);
 
-        const promises = langlinks.map((ll) =>
+        const promises = langlinks.map(ll =>
           fetch(
             `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/${ll.lang}.wikipedia/all-access/all-agents/${ll["*"]}/monthly/20150701/${thisMonth}`
-          ).then((y) => y.json())
+          ).then(y => y.json())
         );
         return [langlinksLookup, promises];
       }
     }
   }
+  return [null, null];
 }
 
 const formatTimeSeriesData = (timeSeriesDataResps, langlinksLookup) => {
   let langsTs = [];
   let numLangs = 0;
-  timeSeriesDataResps.forEach((lr) => {
+  timeSeriesDataResps.forEach(lr => {
     if (lr.items) {
       numLangs++;
       const wikiLangCode = lr.items[0].project.split(".")[0];
@@ -68,10 +69,10 @@ const formatTimeSeriesData = (timeSeriesDataResps, langlinksLookup) => {
         primary_family_code: "",
         primary_family_name: "",
       };
-      const localUrl = langlinksLookup[wikiLangCode] || { url: "" };
+      const localUrl = langlinksLookup[wikiLangCode] || {url: ""};
       langsTs = [
         ...langsTs,
-        ...lr.items.map((lrd) => ({
+        ...lr.items.map(lrd => ({
           ...lrd,
           ...langFamily,
           pageUrl: localUrl.url,
@@ -86,7 +87,7 @@ const formatTimeSeriesData = (timeSeriesDataResps, langlinksLookup) => {
   return [langsTs, numLangs];
 };
 
-export default async function PageViewsByLang({ person, slug, title }) {
+export default async function PageViewsByLang({person, slug, title}) {
   const langEditions = await getLangEditions(person.id);
   const [langlinksLookup, timeSeriesDataReqs] = await getTimeSeriesData(
     langEditions,
@@ -101,11 +102,11 @@ export default async function PageViewsByLang({ person, slug, title }) {
   return (
     <SectionLayout slug={slug} title={title}>
       <div>
-        <PageviewsByLangSummary
+        <PageViewsByLangSummary
           timeSeriesData={timeSeriesData}
           person={person}
         />
-        <PageviewsByLangAreaPlot
+        <PageViewsByLangAreaPlot
           timeSeriesData={timeSeriesData}
           numLangs={numLangs}
         />

@@ -1,16 +1,14 @@
-import { plural } from "pluralize";
 import SectionLayout from "../../common/SectionLayout";
 import PeoplePriestley from "../../place/sections/vizes/PeoplePriestley";
-import { toTitleCase } from "../../utils/vizHelpers";
 
-const Lifespans = ({ era, attrs, people, title, slug }) => {
+const Lifespans = ({era, attrs, people, title, slug}) => {
   people = people
-    .filter((p) => p.birthyear && p.occupation)
+    .filter(p => p.birthyear && p.occupation)
     .sort((a, b) => b.birthyear - a.birthyear);
 
   const tmapBornData = people
     .filter(
-      (p) =>
+      p =>
         p.birthyear !== null &&
         p.birthyear > 1699 &&
         p.bplace_country &&
@@ -22,7 +20,7 @@ const Lifespans = ({ era, attrs, people, title, slug }) => {
     )
     .sort((a, b) => b.l - a.l);
 
-  tmapBornData.forEach((d) => {
+  tmapBornData.forEach(d => {
     d.borncountry = d.bplace_country.country_name;
     d.borncontinent = d.bplace_country.continent;
     d.diedcontinent = d.dplace_country.continent;
@@ -31,7 +29,7 @@ const Lifespans = ({ era, attrs, people, title, slug }) => {
   const priestleyMax = 25;
 
   const priestleyData = tmapBornData
-    .filter((p) => p.deathyear !== null && p.dplace_country !== null)
+    .filter(p => p.deathyear !== null && p.dplace_country !== null)
     .slice(0, priestleyMax);
 
   if (priestleyData.length < 3) {
