@@ -1,4 +1,4 @@
-import { plural } from "pluralize";
+import {plural} from "pluralize";
 import {
   FORMATTERS,
   NUM_RANKINGS,
@@ -7,7 +7,7 @@ import {
 } from "../utils/consts";
 import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
-import { toTitleCase } from "../utils/vizHelpers";
+import {toTitleCase} from "../utils/vizHelpers";
 import SectionLayout from "../common/SectionLayout";
 
 async function getBirthCountryRankings(
@@ -55,14 +55,14 @@ export default async function CountryRanking({
     bplaceCountryOccupationRankLow,
     bplaceCountryOccupationRankHigh
   );
-  const me = birthCountryRankings.find((rank) => rank.slug === person.slug);
+  const me = birthCountryRankings.find(rank => rank.slug === person.slug);
   const betterRankedBirthPeers = birthCountryRankings.filter(
-    (p) =>
+    p =>
       p.bplace_country_occupation_rank_unique <
       me.bplace_country_occupation_rank_unique
   );
   const worseRankedBirthPeers = birthCountryRankings.filter(
-    (p) =>
+    p =>
       p.bplace_country_occupation_rank_unique >
       me.bplace_country_occupation_rank_unique
   );
@@ -75,8 +75,8 @@ export default async function CountryRanking({
         {
           <AnchorList
             items={betterRankedBirthPeers}
-            name={(d) => `${d.name} (${d.birthyear})`}
-            url={(d) => `/profile/person/${d.slug}/`}
+            name={d => `${d.name} (${d.birthyear})`}
+            url={d => `/profile/person/${d.slug}/`}
           />
         }
         .{" "}
@@ -91,8 +91,8 @@ export default async function CountryRanking({
         {
           <AnchorList
             items={worseRankedBirthPeers}
-            name={(d) => `${d.name} (${d.birthyear})`}
-            url={(d) => `/profile/person/${d.slug}/`}
+            name={d => `${d.name} (${d.birthyear})`}
+            url={d => `/profile/person/${d.slug}/`}
           />
         }
         .

@@ -1,12 +1,12 @@
 import SectionLayout from "../../common/SectionLayout";
 import PeoplePriestley from "../../place/sections/vizes/PeoplePriestley";
 
-const Lifespans = ({ attrs, country, peopleBorn, title, slug }) => {
+const Lifespans = ({attrs, country, peopleBorn, title, slug}) => {
   const tmapBornData = peopleBorn
-    .filter((p) => p.birthyear !== null && p.birthyear > 1699 && p.occupation)
+    .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 
-  tmapBornData.forEach((d) => {
+  tmapBornData.forEach(d => {
     d.occupation_name = d.occupation.occupation;
     d.occupation_id = `${d.occupation_id}`;
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
@@ -16,7 +16,7 @@ const Lifespans = ({ attrs, country, peopleBorn, title, slug }) => {
   const priestleyMax = 25;
 
   const priestleyData = tmapBornData
-    .filter((p) => p.deathyear !== null)
+    .filter(p => p.deathyear !== null)
     .slice(0, priestleyMax);
 
   return (

@@ -1,11 +1,10 @@
 import AnchorList from "../utils/AnchorList";
-import { FORMATTERS } from "../utils/consts";
-import { nest } from "d3-collection";
-import { plural } from "pluralize";
+import {FORMATTERS} from "../utils/consts";
+import {nest} from "d3-collection";
 import "../common/Intro.css";
 
-export default function Intro({ era, eras, peopleBorn, peopleDied }) {
-  const currentEraIndex = eras.findIndex((e) => e.slug === era.slug);
+export default function Intro({era, eras, peopleBorn, peopleDied}) {
+  const currentEraIndex = eras.findIndex(e => e.slug === era.slug);
   const prevEra = currentEraIndex > 0 ? eras[currentEraIndex - 1] : null;
   const nextEra =
     currentEraIndex < eras.length - 1 ? eras[currentEraIndex + 1] : null;
@@ -34,14 +33,14 @@ export default function Intro({ era, eras, peopleBorn, peopleDied }) {
     );
   }
   const cities = nest()
-    .key((d) => d.dplace_geonameid.id)
-    .rollup((leaves) => ({
+    .key(d => d.dplace_geonameid.id)
+    .rollup(leaves => ({
       num_died: leaves.length,
       city: leaves[0].dplace_geonameid,
     }))
-    .entries(peopleDied.filter((d) => d.dplace_geonameid))
+    .entries(peopleDied.filter(d => d.dplace_geonameid))
     .sort((a, b) => b.value.num_died - a.value.num_died)
-    .map((d) => d.value);
+    .map(d => d.value);
   return (
     <section className="intro-section era">
       <div className="intro-content">
@@ -55,21 +54,21 @@ export default function Intro({ era, eras, peopleBorn, peopleDied }) {
             The most memorable people born in this era include{" "}
             <AnchorList
               items={peopleBorn.slice(0, 3)}
-              name={(d) => `${d.name}`}
-              url={(d) => `/profile/person/${d.slug}/`}
+              name={d => `${d.name}`}
+              url={d => `/profile/person/${d.slug}/`}
             />
             . The most important cities in this era, ranked by number of deaths,
             were{" "}
             <AnchorList
               items={cities.slice(0, 3)}
-              name={(d) => `${d.city.place} (${d.num_died})`}
-              url={(d) => `/profile/place/${d.city.slug}/`}
+              name={d => `${d.city.place} (${d.num_died})`}
+              url={d => `/profile/place/${d.city.slug}/`}
             />
             .
           </p>
         </div>
         <ul className="items era-timeline">
-          {eras.map((e) => (
+          {eras.map(e => (
             <li key={e.slug} className="item era-time">
               <a
                 href={`/profile/era/${e.slug}`}

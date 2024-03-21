@@ -1,11 +1,11 @@
 "use client";
-import { useDispatch, useSelector } from "react-redux";
-import { updateOnlyShowNew } from "../../features/exploreSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {updateOnlyShowNew} from "../../features/exploreSlice";
 
 export default function MetricCutoffControl() {
   const loading = false;
   const dispatch = useDispatch();
-  const { onlyShowNew } = useSelector((state) => state.explore);
+  const {onlyShowNew} = useSelector(state => state.explore);
 
   return (
     <div className="flat-options">
@@ -21,7 +21,7 @@ export default function MetricCutoffControl() {
         type="checkbox"
         id="onlyNew"
         name="scales"
-        onChange={(e) => dispatch(updateOnlyShowNew(e.target.checked))}
+        onChange={e => dispatch(updateOnlyShowNew(e.target.checked))}
         checked={onlyShowNew}
       />
     </div>

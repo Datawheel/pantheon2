@@ -1,13 +1,13 @@
-import { Suspense } from "react";
+import {Suspense} from "react";
 import HeaderLine from "./HeaderLine";
-import { plural } from "pluralize";
-import { min, histogram } from "d3-array";
-import { ckmeans } from "d3plus-legend";
-import { COLORS_DOMAIN } from "../utils/consts";
+import {plural} from "pluralize";
+import {min, histogram} from "d3-array";
+import {ckmeans} from "d3plus-legend";
+import {COLORS_DOMAIN} from "../utils/consts";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
-export default function Header({ occupation, people }) {
+export default function Header({occupation, people}) {
   // determine number of buckets based on count of people
   let numBuckets = 20;
   if (people.length < 40) {
@@ -18,16 +18,14 @@ export default function Header({ occupation, people }) {
   }
 
   // create histogram using ckmeans
-  const b2 = histogram().thresholds((data) =>
-    ckmeans(data, numBuckets).map((l) => min(l))
-  )(people.map((d) => d.birthyear));
+  const b2 = histogram().thresholds(data =>
+    ckmeans(data, numBuckets).map(l => min(l))
+  )(people.map(d => d.birthyear));
 
   // get max top 3 people to show in tooltip
-  const lineChartDataFormat = b2.map((bin) => {
+  const lineChartDataFormat = b2.map(bin => {
     const topPeople = people
-      .filter(
-        (p) => (p.birthyear >= bin.x0 || 0) && (p.birthyear < bin.x1 || 0)
-      )
+      .filter(p => (p.birthyear >= bin.x0 || 0) && (p.birthyear < bin.x1 || 0))
       .sort((a, b) => b.hpi - a.hpi)
       .slice(0, 3);
     return {
@@ -43,17 +41,17 @@ export default function Header({ occupation, people }) {
       <div className="bg-container">
         <div className="bg-img-mask profession">
           <div className="bg-img bg-img-t">
-            {people.slice(0, 4).map((p) => (
+            {people.slice(0, 4).map(p => (
               <img key={p.id} src={`/images/profile/people/${p.id}.jpg`} />
             ))}
           </div>
           <div className="bg-img bg-img-b">
-            {people.slice(5, 9).map((p) => (
+            {people.slice(5, 9).map(p => (
               <img key={p.id} src={`/images/profile/people/${p.id}.jpg`} />
             ))}
           </div>
           <div
-            style={{ backgroundColor: COLORS_DOMAIN[occupation.domain_slug] }}
+            style={{backgroundColor: COLORS_DOMAIN[occupation.domain_slug]}}
             className="bg-img-mask-after"
           ></div>
         </div>

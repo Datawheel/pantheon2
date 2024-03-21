@@ -1,18 +1,18 @@
 "use client";
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import HomeGrid from "/components/home/Grid";
 import axios from "axios";
 import Link from "next/link";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
 
-const LangSelector = ({ setTrendingLangEdition, trendingLangEdition }) => (
+const LangSelector = ({setTrendingLangEdition, trendingLangEdition}) => (
   <Select
     label=""
     className="home-select"
     fontSize="sm"
-    onChange={(evt) => setTrendingLangEdition(evt.target.value)}
+    onChange={evt => setTrendingLangEdition(evt.target.value)}
     value={trendingLangEdition}
   >
     <option value="ar">Arabic</option>
@@ -30,7 +30,7 @@ const LangSelector = ({ setTrendingLangEdition, trendingLangEdition }) => (
 );
 
 export default function Home() {
-  const activateSearch = (e) => false;
+  const activateSearch = () => false;
 
   const [loadingTrendingBios, setLoadingTrendingBios] = useState(false);
   const [trendingLangEdition, setTrendingLangEdition] = useState("en");
@@ -62,8 +62,8 @@ export default function Home() {
       );
       const trendingData = await axios
         .all([all, singers, soccerPlayers, actors, deaths])
-        .then(axios.spread((...responses) => responses.map((r) => r.data)))
-        .catch((errors) => {
+        .then(axios.spread((...responses) => responses.map(r => r.data)))
+        .catch(errors => {
           console.log("ERRORS!", errors);
         });
       const [
@@ -105,7 +105,7 @@ export default function Home() {
             <h2>Explore human collective memory!</h2>
             <p>
               Pantheon helps you discover the geography and dynamics of our
-              planet's history.
+              planet&apos;s history.
             </p>
             <h3 className="home-explore-links">
               Explore <Link href="/profile/person">People</Link>,{" "}

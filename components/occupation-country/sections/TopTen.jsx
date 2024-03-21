@@ -1,7 +1,7 @@
-import { plural } from "pluralize";
+import {plural} from "pluralize";
 import PersonImage from "../../utils/PersonImage";
-import { toTitleCase } from "../../utils/vizHelpers";
-import { FORMATTERS } from "../../utils/consts";
+import {toTitleCase} from "../../utils/vizHelpers";
+import {FORMATTERS} from "../../utils/consts";
 import "../../common/Section.css";
 import "./TopTen.css";
 
@@ -25,18 +25,18 @@ async function getWikiPageSummaries(top10Ids) {
     {
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        "Accept": "application/json",
       },
     }
   );
   return res.json();
 }
 
-export default async function TopTen({ country, occupation, people }) {
+export default async function TopTen({country, occupation, people}) {
   const number1 = people[0];
   const top10Ids = people
     .slice(0, 10)
-    .map((p) => p.id)
+    .map(p => p.id)
     .join("|");
   const wikiPageSummaries = await getWikiPageSummaries(top10Ids);
   return (

@@ -1,4 +1,4 @@
-import { I18nProviderClient } from "/locales/client";
+import {I18nProviderClient} from "/locales/client";
 import Birthle from "/components/games/birthle/Birthle";
 
 export default async function Page() {

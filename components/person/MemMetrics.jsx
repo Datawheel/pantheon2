@@ -1,4 +1,4 @@
-import { COLORS_DOMAIN, FORMATTERS } from "../utils/consts";
+import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import MemMetricsAreaPlot from "./MemMetricsAreaPlot";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
@@ -9,14 +9,14 @@ async function getWikiPageViewsPast30Days(personId) {
     {
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        "Accept": "application/json",
       },
     }
   );
   return res.json();
 }
 
-export default async function MemMetricx({ pageViews, person, slug, title }) {
+export default async function MemMetricx({pageViews, person, slug, title}) {
   const wikiPageViewsPast30Days = await getWikiPageViewsPast30Days(person.id);
 
   const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
@@ -34,8 +34,8 @@ export default async function MemMetricx({ pageViews, person, slug, title }) {
   }));
   const totalPageviews = pageViews?.items
     ? pageViews?.items
-        ?.filter((pv) => pv.views)
-        .map((pv) => pv.views)
+        ?.filter(pv => pv.views)
+        .map(pv => pv.views)
         .reduce((total, newVal) => total + newVal, 0)
     : 0;
 

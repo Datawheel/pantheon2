@@ -1,4 +1,4 @@
-import { cloneElement } from "react";
+import {cloneElement} from "react";
 import ProfileNav from "../../../../../components/common/Nav";
 import Intro from "../../../../../components/place/Intro";
 import Header from "../../../../../components/place/Header";
@@ -67,9 +67,9 @@ async function getPeopleDiedHere(placeId) {
   return res.json();
 }
 
-export async function generateMetadata({ params, searchParams }, parent) {
+export async function generateMetadata({params}, parent) {
   // read route params
-  const { id, countryId } = params;
+  const {id} = params;
 
   // fetch data
   const place = await getPlace(id);
@@ -85,7 +85,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
   };
 }
 
-export default async function Page({ params: { id } }) {
+export default async function Page({params: {id}}) {
   const [place, occupations] = await Promise.all([
     getPlace(id),
     getOccupations(),
@@ -111,12 +111,12 @@ export default async function Page({ params: { id } }) {
     !peopleBornHere ||
     peopleBornHere
       .sort((personA, personB) => personB.hpi - personA.hpi)
-      .map((d, i) => ({ ...d, bplace_name_rank: i + 1 }));
+      .map((d, i) => ({...d, bplace_name_rank: i + 1}));
   peopleDiedHere =
     !peopleDiedHere ||
     peopleDiedHere
       .sort((personA, personB) => personB.hpi - personA.hpi)
-      .map((d, i) => ({ ...d, dplace_name_rank: i + 1 }));
+      .map((d, i) => ({...d, dplace_name_rank: i + 1}));
 
   const attrs = occupations.reduce((obj, d) => {
     obj[d.id] = d;

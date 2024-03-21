@@ -1,11 +1,11 @@
 import AnchorList from "../utils/AnchorList";
-import { plural } from "pluralize";
-import { FORMATTERS } from "../utils/consts";
-import { toTitleCase } from "../utils/vizHelpers";
+import {plural} from "pluralize";
+import {FORMATTERS} from "../utils/consts";
+import {toTitleCase} from "../utils/vizHelpers";
 import "../common/Intro.css";
 
-export default function Intro({ occupation, occupations }) {
-  const myIndex = occupations.findIndex((o) => o.id === occupation.id);
+export default function Intro({occupation, occupations}) {
+  const myIndex = occupations.findIndex(o => o.id === occupation.id);
 
   return (
     <section className="intro-section">
@@ -28,8 +28,8 @@ export default function Intro({ occupation, occupations }) {
                 , behind{" "}
                 <AnchorList
                   items={occupations.slice(Math.max(0, myIndex - 3), myIndex)}
-                  name={(o) => toTitleCase(plural(o.occupation))}
-                  url={(o) => `/profile/occupation/${o.occupation_slug}/`}
+                  name={o => toTitleCase(plural(o.occupation))}
+                  url={o => `/profile/occupation/${o.occupation_slug}/`}
                 />
               </span>
             ) : null}

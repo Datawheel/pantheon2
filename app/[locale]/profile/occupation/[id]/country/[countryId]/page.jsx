@@ -1,11 +1,11 @@
-import { plural } from "pluralize";
+import {plural} from "pluralize";
 import Header from "/components/occupation-country/Header";
 import Intro from "/components/occupation-country/Intro";
 import TopTen from "/components/occupation-country/sections/TopTen";
 import People from "/components/occupation-country/sections/People";
 import Lifespans from "/components/occupation-country/sections/Lifespans";
 import Footer from "/components/occupation-country/sections/Footer";
-import { toTitleCase } from "/components/utils/vizHelpers";
+import {toTitleCase} from "/components/utils/vizHelpers";
 
 async function getOccupations() {
   const res = await fetch(
@@ -61,9 +61,9 @@ async function getPeople(occupationId, countryId) {
   return res.json();
 }
 
-export async function generateMetadata({ params, searchParams }, parent) {
+export async function generateMetadata({params}, parent) {
   // read route params
-  const { id, countryId } = params;
+  const {id, countryId} = params;
 
   // fetch data
   const occupation = await getOccupation(id);
@@ -85,7 +85,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
   };
 }
 
-export default async function Page({ params: { id, countryId } }) {
+export default async function Page({params: {id, countryId}}) {
   const [occupations, occupation, country] = await Promise.all([
     getOccupations(),
     getOccupation(id),

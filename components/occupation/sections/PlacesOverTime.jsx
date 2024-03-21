@@ -1,14 +1,14 @@
-import { nest } from "d3-collection";
-import { plural } from "pluralize";
+import {nest} from "d3-collection";
+import {plural} from "pluralize";
 import PlacesStacked from "./vizes/PlacesStacked";
 import AnchorList from "../../utils/AnchorList";
-import { calculateYearBucket, toTitleCase } from "../../utils/vizHelpers";
-import { FORMATTERS } from "../../utils/consts";
+import {calculateYearBucket, toTitleCase} from "../../utils/vizHelpers";
+import {FORMATTERS} from "../../utils/consts";
 import SectionLayout from "../../common/SectionLayout";
 
 async function getEras() {
   const res = await fetch(
-    `https://api-dev.pantheon.world/era?order=start_year`
+    "https://api-dev.pantheon.world/era?order=start_year"
   );
   return res.json();
 }
@@ -22,62 +22,62 @@ export default async function PlacesOverTime({
   const eras = await getEras();
 
   people = people
-    .filter((p) => p.birthyear)
+    .filter(p => p.birthyear)
     .sort((a, b) => b.birthyear - a.birthyear);
-  people.forEach((p) => {
+  people.forEach(p => {
     const thisEra = eras.filter(
-      (e) => p.birthyear >= e.start_year && p.birthyear <= e.end_year
+      e => p.birthyear >= e.start_year && p.birthyear <= e.end_year
     );
     p.era = thisEra.length ? thisEra[0].id : null;
   });
   const oldestPeople = people.slice(Math.max(people.length - 3, 1));
 
   const peopleByEra = nest()
-    .key((p) => p.era)
-    .entries(people.filter((p) => p.era))
+    .key(p => p.era)
+    .entries(people.filter(p => p.era))
     .sort((a, b) => b.values.length - a.values.length);
   const eraWithMostPeople = eras.filter(
-    (e) => e.id.toString() === peopleByEra[0].key
+    e => e.id.toString() === peopleByEra[0].key
   )[0];
 
   const tmapBornData = people
     .filter(
-      (p) =>
+      p =>
         p.birthyear !== null &&
         p.bplace_country &&
         p.bplace_country.country &&
         p.bplace_country.continent
     )
     .sort((a, b) => b.l - a.l)
-    .map((d) => ({
+    .map(d => ({
       ...d,
       country: d.bplace_country.country,
       continent: d.bplace_country.continent,
     }));
 
-  const tmapDeathData = people
-    .filter(
-      (p) =>
-        p.deathyear !== null &&
-        p.dplace_country &&
-        p.dplace_country.country &&
-        p.dplace_country.continent
-    )
-    .sort((a, b) => b.l - a.l)
-    .map((d) => ({
-      ...d,
-      country: d.dplace_country.country,
-      continent: d.dplace_country.continent,
-    }));
+  // const tmapDeathData = people
+  //   .filter(
+  //     p =>
+  //       p.deathyear !== null &&
+  //       p.dplace_country &&
+  //       p.dplace_country.country &&
+  //       p.dplace_country.continent
+  //   )
+  //   .sort((a, b) => b.l - a.l)
+  //   .map(d => ({
+  //     ...d,
+  //     country: d.dplace_country.country,
+  //     continent: d.dplace_country.continent,
+  //   }));
 
   const [bornBuckets, bornTicks] = calculateYearBucket(
     tmapBornData,
-    (d) => d.birthyear
+    d => d.birthyear
   );
-  const [deathBuckets, deathTicks] = calculateYearBucket(
-    tmapDeathData,
-    (d) => d.deathyear
-  );
+  // const [deathBuckets, deathTicks] = calculateYearBucket(
+  //   tmapDeathData,
+  //   d => d.deathyear
+  // );
 
   return (
     <SectionLayout slug={slug} title={title}>
@@ -87,8 +87,8 @@ export default async function PlacesOverTime({
           {plural(occupation.occupation.toLowerCase())} in Pantheon are{" "}
           <AnchorList
             items={oldestPeople}
-            name={(d) => d.name}
-            url={(d) => `/profile/person/${d.slug}/`}
+            name={d => d.name}
+            url={d => `/profile/person/${d.slug}/`}
           />
           .&nbsp; The concentration of{" "}
           {plural(occupation.occupation.toLowerCase())} was largest during the{" "}

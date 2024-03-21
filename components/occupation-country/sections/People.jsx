@@ -1,25 +1,25 @@
 import Link from "next/link";
-import { plural } from "pluralize";
-import { FORMATTERS } from "../../utils/consts";
-import { toTitleCase } from "../../utils/vizHelpers";
+import {plural} from "pluralize";
+import {FORMATTERS} from "../../utils/consts";
+import {toTitleCase} from "../../utils/vizHelpers";
 import AnchorList from "../../utils/AnchorList";
 import PhotoCarousel from "../../utils/PhotoCarousel";
 import SectionLayout from "../../common/SectionLayout";
 
-export default function People({ country, occupation, people, title, slug }) {
-  const youngestBirthyear = Math.max(...people.map((r) => r.birthyear));
+export default function People({country, occupation, people, title, slug}) {
+  const youngestBirthyear = Math.max(...people.map(r => r.birthyear));
   const oldestBirthyear = Math.min(
-    ...people.filter((p) => p.birthyear).map((r) => r.birthyear)
+    ...people.filter(p => p.birthyear).map(r => r.birthyear)
   );
 
   const peopleAlive = people
-    .filter((p) => p.alive)
+    .filter(p => p.alive)
     .sort((personA, personB) => personB.hpi - personA.hpi);
   const peopleDead = people
-    .filter((p) => !p.alive)
+    .filter(p => !p.alive)
     .sort((personA, personB) => personB.hpi - personA.hpi);
   const peopleNew = people
-    .filter((p) => !p.hpi_prev)
+    .filter(p => !p.hpi_prev)
     .sort((personA, personB) => personB.hpi - personA.hpi);
   const shareAlive = peopleAlive.length / people.length;
 
@@ -47,9 +47,9 @@ export default function People({ country, occupation, people, title, slug }) {
               The most famous living{" "}
               {plural(occupation.occupation.toLowerCase())} include{" "}
               <AnchorList
-                items={people.filter((p) => p.alive).slice(0, 3)}
-                name={(d) => d.name}
-                url={(d) => `/profile/person/${d.slug}/`}
+                items={people.filter(p => p.alive).slice(0, 3)}
+                name={d => d.name}
+                url={d => `/profile/person/${d.slug}/`}
               />
               .
             </span>
@@ -60,9 +60,9 @@ export default function People({ country, occupation, people, title, slug }) {
               The most famous deceased{" "}
               {plural(occupation.occupation.toLowerCase())} include{" "}
               <AnchorList
-                items={people.filter((p) => !p.alive).slice(0, 3)}
-                name={(d) => d.name}
-                url={(d) => `/profile/person/${d.slug}/`}
+                items={people.filter(p => !p.alive).slice(0, 3)}
+                name={d => d.name}
+                url={d => `/profile/person/${d.slug}/`}
               />
               .
             </span>
@@ -75,8 +75,8 @@ export default function People({ country, occupation, people, title, slug }) {
               Pantheon including{" "}
               <AnchorList
                 items={peopleNew.slice(0, 3)}
-                name={(d) => d.name}
-                url={(d) => `/profile/person/${d.slug}/`}
+                name={d => d.name}
+                url={d => `/profile/person/${d.slug}/`}
               />
               .
             </span>

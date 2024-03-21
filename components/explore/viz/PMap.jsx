@@ -1,16 +1,16 @@
-import { Geomap } from "d3plus-react";
-import { RESET } from "d3plus-common";
-import { groupTooltip } from "../../utils/vizHelpers";
+import {Geomap} from "d3plus-react";
+import {RESET} from "d3plus-common";
+import {groupTooltip} from "../../utils/vizHelpers";
 
-export default function PMap({ data }) {
+export default function PMap({data}) {
   const geomapData = data
     .filter(
-      (d) =>
+      d =>
         d.bplace_geonameid && d.bplace_geonameid.lat && d.bplace_geonameid.lon
     )
     .sort((a, b) => b.l - a.l)
     .slice(0, 1000)
-    .map((d) => {
+    .map(d => {
       let place_coord = d.bplace_geonameid
         ? [d.bplace_geonameid.lat, d.bplace_geonameid.lon]
         : null;
@@ -49,12 +49,12 @@ export default function PMap({ data }) {
       config={{
         data: geomapData,
         depth: 1,
-        fitFilter: (d) => ["152", "643"].includes(d.id),
+        fitFilter: d => ["152", "643"].includes(d.id),
         groupBy: ["event", "place_name"],
         height: RESET,
         // on: on("place", d => d.place.slug),
         shapeConfig: {
-          fill: (d) =>
+          fill: d =>
             d.event.toLowerCase().indexOf("birth") > 0
               ? "rgba(76, 94, 215, 0.4)"
               : "rgba(95, 1, 22, 0.4)",
@@ -66,7 +66,7 @@ export default function PMap({ data }) {
             strokeWidth: 0.75,
           },
         },
-        tooltipConfig: groupTooltip(geomapData, (d) => d.bplace_geonameid.slug),
+        tooltipConfig: groupTooltip(geomapData, d => d.bplace_geonameid.slug),
       }}
     />
   );

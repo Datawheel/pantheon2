@@ -1,4 +1,4 @@
-import { nest } from "d3-collection";
+import {nest} from "d3-collection";
 import Explore from "/features/Explore";
 
 async function getPlaces() {
@@ -16,34 +16,38 @@ async function getOccupations() {
 }
 
 export default async function Page() {
-  let [places, occupations] = await Promise.all([
+  const [places, occupations] = await Promise.all([
     getPlaces(),
     getOccupations(),
   ]);
-  places = nest()
-    .key((d) => d.country_id)
+  const nestedPlaces = nest()
+    .key(d => d.country_id)
     .entries(places)
-    .map((countryData) => ({
+    .map(countryData => ({
       country: countryData.values[0].country,
       cities: countryData.values,
     }))
-    .filter((countryData) => countryData.country);
-  const nestedOccupations = nest()
-    .key((d) => d.domain_slug)
-    .entries(occupations)
-    .map((occData) => ({
-      domain: {
-        id: `${occData.values.map((o) => o.id)}`,
-        slug: occData.values[0].domain_slug,
-        name: occData.values[0].domain,
-      },
-      occupations: occData.values,
-    }));
+    .filter(countryData => countryData.country);
+  // const nestedOccupations = nest()
+  //   .key(d => d.domain_slug)
+  //   .entries(occupations)
+  //   .map(occData => ({
+  //     domain: {
+  //       id: `${occData.values.map(o => o.id)}`,
+  //       slug: occData.values[0].domain_slug,
+  //       name: occData.values[0].domain,
+  //     },
+  //     occupations: occData.values,
+  //   }));
 
   return (
     <div className="explore">
       {/* <Helmet title="Rankings" /> */}
-      <Explore places={places} occupations={occupations} pageType="rankings" />
+      <Explore
+        places={nestedPlaces}
+        occupations={occupations}
+        pageType="rankings"
+      />
       {/* <div className="explore-head"> */}
       {/* <VizTitle /> */}
       {/* {years.length ? (

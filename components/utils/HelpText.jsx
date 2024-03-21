@@ -1,19 +1,19 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "css/components/utils/helptext";
 import Link from "next/link";
 
 class HelpText extends Component {
   constructor(props) {
     super(props);
-    this.state = { hover: false };
+    this.state = {hover: false};
   }
 
   handleMouseIn() {
-    this.setState({ hover: true });
+    this.setState({hover: true});
   }
 
   handleMouseOut(event) {
-    const { parent } = this.refs;
+    const {parent} = this.refs;
 
     let e = event.toElement || event.relatedTarget;
     while (e && e.parentNode && e.parentNode !== window) {
@@ -24,12 +24,12 @@ class HelpText extends Component {
       e = e.parentNode;
     }
 
-    this.setState({ hover: false });
+    this.setState({hover: false});
   }
 
   render() {
-    const { text, msg, link, linkTitle } = this.props;
-    const { hover } = this.state;
+    const {text, msg, link, linkTitle} = this.props;
+    const {hover} = this.state;
 
     return (
       <span

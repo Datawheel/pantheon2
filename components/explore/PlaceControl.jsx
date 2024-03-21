@@ -1,5 +1,5 @@
 "use client";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
   updateCity,
   updateCountry,
@@ -19,17 +19,17 @@ const getClassName = (placetype, activePlaceType, loading) => {
   }
 };
 
-export default function PlaceControl({ places }) {
+export default function PlaceControl({places}) {
   const loading = false;
   const dispatch = useDispatch();
-  const { city, country, placeType } = useSelector((state) => state.explore);
+  const {city, country, placeType} = useSelector(state => state.explore);
 
   return (
     <div className="filter place-control">
       <ul className="items options flat-options filter">
         <li>
           <a
-            onClick={(e) =>
+            onClick={e =>
               loading
                 ? e.preventDefault()
                 : (e.preventDefault(), dispatch(updatePlaceType("birthplace")))
@@ -43,7 +43,7 @@ export default function PlaceControl({ places }) {
         </li>
         <li>
           <a
-            onClick={(e) =>
+            onClick={e =>
               loading
                 ? e.preventDefault()
                 : (e.preventDefault(), dispatch(updatePlaceType("deathplace")))
@@ -60,13 +60,13 @@ export default function PlaceControl({ places }) {
       <select
         disabled={loading}
         value={country}
-        onChange={(e) => dispatch(updateCountry(e.target.value))}
+        onChange={e => dispatch(updateCountry(e.target.value))}
       >
         <option value="all">All Countries</option>
         {places
-          .filter((c) => c.country.country_code)
+          .filter(c => c.country.country_code)
           .sort((a, b) => a.country.country.localeCompare(b.country.country))
-          .map((c) => (
+          .map(c => (
             <option
               key={`${c.country.country_code}-${c.country.id}`}
               value={c.country.country_code}
@@ -80,18 +80,18 @@ export default function PlaceControl({ places }) {
       <select
         disabled={loading}
         value={city}
-        onChange={(e) => dispatch(updateCity(e.target.value))}
+        onChange={e => dispatch(updateCity(e.target.value))}
       >
         <option value="all">All Cities</option>
         {country !== "all" &&
         places.length &&
-        places.find((c) => `${c.country.country_code}` === `${country}`)
+        places.find(c => `${c.country.country_code}` === `${country}`)
           ? places
-              .find((c) => `${c.country.country_code}` === `${country}`)
-              .cities.filter((c) =>
+              .find(c => `${c.country.country_code}` === `${country}`)
+              .cities.filter(c =>
                 placeType === "birthplace" ? c.num_born > 0 : c.num_died > 0
               )
-              .map((p) => (
+              .map(p => (
                 <option key={p.id} value={p.id} data-slug={p.slug}>
                   {p.state && p.country_code === "usa"
                     ? `${p.place}, ${p.state}`

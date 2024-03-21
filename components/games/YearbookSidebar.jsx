@@ -1,18 +1,18 @@
 "use client";
-import { Fragment, useState } from "react";
-import { useRouter } from "next/navigation";
+import {Fragment, useState} from "react";
+import {useRouter} from "next/navigation";
 import Link from "next/link";
-import { AnchorButton, Collapse } from "@blueprintjs/core";
+import {AnchorButton, Collapse} from "@blueprintjs/core";
 
 import "../../styles/Misc.css";
 import "../../styles/About.css";
 
-export default function YearbookSidebar({ year }) {
+export default function YearbookSidebar({year}) {
   const router = useRouter();
   const decade = year ? Math.floor(year / 10) * 10 : 1900;
   const [openDecade, setOpenDecade] = useState(decade);
 
-  const changeYear = (event) => {
+  const changeYear = event => {
     // Get the selected value
     const selectedValue = event.target.value;
     // Update the URL
@@ -23,7 +23,7 @@ export default function YearbookSidebar({ year }) {
     <Fragment>
       <nav className="page-nav" role="navigation">
         <ul className="page-items">
-          {[...Array(11).keys()].reverse().map((decade) => (
+          {[...Array(11).keys()].reverse().map(decade => (
             <li className="item" key={decade}>
               <AnchorButton
                 text={`${1900 + decade * 10}s`}
@@ -33,11 +33,11 @@ export default function YearbookSidebar({ year }) {
                     : "chevron-right"
                 }
                 minimal={true}
-                onClick={(e) => setOpenDecade(1900 + decade * 10)}
+                onClick={() => setOpenDecade(1900 + decade * 10)}
               />
               <Collapse isOpen={openDecade === 1900 + decade * 10}>
                 <ul className="inner-page-items">
-                  {[...Array(10).keys()].reverse().map((yearIndex) => (
+                  {[...Array(10).keys()].reverse().map(yearIndex => (
                     <li key={1900 + decade * 10 + yearIndex}>
                       <Link
                         href={`/game/yearbook/${
@@ -71,7 +71,7 @@ export default function YearbookSidebar({ year }) {
 
         <div className="drop">
           <select value={year} onChange={changeYear}>
-            {[...Array(100).keys()].reverse().map((yearIndex) => (
+            {[...Array(100).keys()].reverse().map(yearIndex => (
               <option key={yearIndex + 1900} value={yearIndex + 1900}>
                 {yearIndex + 1900}
               </option>

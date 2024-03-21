@@ -1,10 +1,11 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {v4 as uuidv4} from "uuid";
+import {useCallback, useEffect, useState} from "react";
 import React from "react";
 import Person from "./Person";
 import "./Game.css";
 // import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
-import { useGoogleReCaptcha, GoogleReCaptcha } from "react-google-recaptcha-v3";
+import {useGoogleReCaptcha, GoogleReCaptcha} from "react-google-recaptcha-v3";
 
 export default function Game({
   MAX_ATTEMPTS,
@@ -26,7 +27,6 @@ export default function Game({
   gameBlockRef,
   gameDate,
   gameNumber,
-  correctPersons,
   setCorrectPersons,
   scoreDB,
   setScoreDB,
@@ -34,7 +34,7 @@ export default function Game({
   setIsOpenConsentForm,
   setSaveConsent,
 }) {
-  const [recap, setRecap] = useState(undefined);
+  const [recap] = useState(undefined);
   const [rKey, setRKey] = useState(Math.random() * (15000 - 150) + 150);
 
   // const verifyCallback = (recaptchaToken) => {
@@ -45,7 +45,7 @@ export default function Game({
   //   loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
   // }, []);
 
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  const {executeRecaptcha} = useGoogleReCaptcha();
 
   // Create an event handler so you can call the verification on button click event or form submit
   const handleReCaptchaVerify = useCallback(async () => {
@@ -54,7 +54,7 @@ export default function Game({
       return;
     }
 
-    const token = await executeRecaptcha("yourAction");
+    // const token = await executeRecaptcha("yourAction");
     // Do whatever you want with the token
   }, [executeRecaptcha]);
 
@@ -63,7 +63,7 @@ export default function Game({
     handleReCaptchaVerify();
   }, [handleReCaptchaVerify]);
 
-  const onPersonClick = (person) => {
+  const onPersonClick = person => {
     if (personPos.get() < N_PERSONS) {
       if (person !== undefined) {
         if (person.selected === false) {
@@ -78,7 +78,7 @@ export default function Game({
     cancelBtnRef.current.disabled = false;
   };
 
-  const saveInformation = async function (correctPersonsAux) {
+  const saveInformation = async correctPersonsAux => {
     const savePersons = [...persons].sort((a, b) => {
       if (a.birthyear === b.birthyear) {
         const dateA = new Date(a.birthdate);
@@ -100,23 +100,23 @@ export default function Game({
       sorted_person_4: savePersons[3].slug,
       sorted_person_5: savePersons[4].slug,
       token: recap,
-      scoreDB: scoreDB,
+      scoreDB,
     };
 
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(gameDataSave),
     };
 
-    const gameDB = await fetch("/api/getGame", requestOptions).then((resp) =>
+    const gameDB = await fetch("/api/getGame", requestOptions).then(resp =>
       resp.json()
     );
     if (gameDB.length === 0) {
       await fetch("/api/createGame", requestOptions);
     }
 
-    const gameDB2 = await fetch("/api/getGame", requestOptions).then((resp) =>
+    const gameDB2 = await fetch("/api/getGame", requestOptions).then(resp =>
       resp.json()
     );
 
@@ -132,7 +132,7 @@ export default function Game({
 
       const requestOptions2 = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(proposal),
       };
       await fetch("/api/createGameParticipation", requestOptions2);
@@ -150,13 +150,13 @@ export default function Game({
     };
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(gameDataSave),
     };
 
     await fetch("/api/getParticipant", requestOptions)
-      .then((resp) => resp.json())
-      .then((socioConsent) => {
+      .then(resp => resp.json())
+      .then(socioConsent => {
         console.log("socioConsent", socioConsent);
         if (socioConsent.length > 0) {
           setScoreDB(parseFloat(socioConsent[0].score_bot));
@@ -167,8 +167,8 @@ export default function Game({
       });
 
     await fetch("/api/getConsent", requestOptions)
-      .then((resp) => resp.json())
-      .then((consent) => {
+      .then(resp => resp.json())
+      .then(consent => {
         console.log("consent", consent);
         if (consent.length > 0) {
           setScoreDB(parseFloat(consent[0].score_bot));
@@ -189,7 +189,7 @@ export default function Game({
     if (personPos.get() === 5) {
       const newPersons = [...persons];
 
-      newPersons.forEach((person) => (person.selected = false));
+      newPersons.forEach(person => (person.selected = false));
       setPersons(newPersons);
 
       const cells = document.querySelectorAll(".card");
@@ -212,7 +212,7 @@ export default function Game({
       });
 
       setCorrectPersons(correctPersonsAux);
-      isWin.set(correctPersonsAux.every((el) => el === true));
+      isWin.set(correctPersonsAux.every(el => el === true));
 
       if (isWin.get()) {
         resultBlockRef.current.style.display = "block";
@@ -232,14 +232,14 @@ export default function Game({
       cancelBtnRef.current.disabled = true;
 
       setRKey(rKey + 1);
-      // saveInformation(correctPersonsAux);
+      saveInformation(correctPersonsAux);
     }
   };
 
-  const selectPerson = (person) => {
+  const selectPerson = person => {
     const newBoard = [...board.get()];
 
-    newBoard[attempt.get()][personPos.get()] = { person, isCorrect: false };
+    newBoard[attempt.get()][personPos.get()] = {person, isCorrect: false};
     newBoard[attempt.get()][personPos.get()].person.selected = true;
     board.set(newBoard);
 
@@ -253,7 +253,7 @@ export default function Game({
 
       newBoard[attempt.get()][personPos.get() - 1] = boardCellDefault;
 
-      const newPersons = persons.map((person) => {
+      const newPersons = persons.map(person => {
         if (person.id === id) person.selected = false;
 
         return person;
@@ -291,7 +291,7 @@ export default function Game({
             persons.length > 0 ? (
               <div key="bGameDivPanelDiv" className="panel">
                 <ul key="bGameDivPanelList" className="panel-list">
-                  {persons.map((person, i) => (
+                  {persons.map(person => (
                     <Person
                       data={person}
                       onClick={() => onPersonClick(person)}

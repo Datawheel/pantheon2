@@ -15,10 +15,11 @@ function csvJSON(csv, delimiter = "\t") {
     const obj = {};
     const currentline = lines[i].split(delimiter);
 
-    for (let j = 0; j < headers.length; j++)
+    for (let j = 0; j < headers.length; j++) {
       obj[headers[j]] = isNumeric(currentline[j])
         ? currentline[j] * 1
         : currentline[j];
+    }
 
     result.push(obj);
   }
@@ -26,15 +27,15 @@ function csvJSON(csv, delimiter = "\t") {
 }
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url);
+  const {searchParams} = new URL(request.url);
   const date = searchParams.get("date");
 
-  const data = await axios.get(CSV_URL).then((resp) => resp.data);
+  const data = await axios.get(CSV_URL).then(resp => resp.data);
 
   let jsonData = csvJSON(data);
 
   if (date) {
-    jsonData = jsonData.filter((el) => el["0"] === date)[0];
+    jsonData = jsonData.filter(el => el["0"] === date)[0];
   }
 
   return Response.json(jsonData);

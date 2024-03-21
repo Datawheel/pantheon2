@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 
-export default async function Page({ params: { id } }) {
+export default async function Page() {
   const years = [];
   for (let year = 1900; year <= 2020; year++) {
     years.push(year);

@@ -1,9 +1,9 @@
 /* eslint react/display-name: 0 */
 import React from "react";
-import { Icon, Tooltip } from "@blueprintjs/core";
+import {Icon, Tooltip} from "@blueprintjs/core";
 import AnchorList from "../../utils/AnchorList";
 import PersonImage from "../../utils/PersonImage";
-import { FORMATTERS } from "../../utils/consts";
+import {FORMATTERS} from "../../utils/consts";
 
 const genderOrder = ["M", null, "F", "Non-binary"];
 
@@ -26,7 +26,7 @@ const getColumns = (show, nesting, countOffset) => {
               disableSortBy: true,
               Header: "",
               accessor: "id",
-              Cell: ({ value }) => (
+              Cell: ({value}) => (
                 <PersonImage
                   className="ranking-thumbnail"
                   src={`/images/profile/people/${value}.jpg`}
@@ -38,16 +38,16 @@ const getColumns = (show, nesting, countOffset) => {
             {
               Header: "Name",
               accessor: "name",
-              style: { whiteSpace: "unset" },
-              Cell: ({ value, row: { original } }) => (
+              style: {whiteSpace: "unset"},
+              Cell: ({value, row: {original}}) => (
                 <a href={`/profile/person/${original.slug}`}>{value}</a>
               ),
             },
             {
               id: "occupation_id",
               Header: "Occupation",
-              accessor: (d) => (d.occupation ? d.occupation.occupation : null),
-              Cell: ({ value, row: { original } }) =>
+              accessor: d => (d.occupation ? d.occupation.occupation : null),
+              Cell: ({value, row: {original}}) =>
                 value ? (
                   <a
                     href={`/profile/occupation/${original.occupation.occupation_slug}`}
@@ -61,7 +61,7 @@ const getColumns = (show, nesting, countOffset) => {
             {
               Header: "Birth",
               accessor: "birthyear",
-              Cell: ({ value }) =>
+              Cell: ({value}) =>
                 value ? (
                   <span>{FORMATTERS.year(value)}</span>
                 ) : (
@@ -72,7 +72,7 @@ const getColumns = (show, nesting, countOffset) => {
             {
               Header: "Death",
               accessor: "deathyear",
-              Cell: ({ value }) =>
+              Cell: ({value}) =>
                 value ? (
                   <span>{FORMATTERS.year(value)}</span>
                 ) : (
@@ -83,7 +83,7 @@ const getColumns = (show, nesting, countOffset) => {
             {
               Header: "Gender",
               accessor: "gender",
-              Cell: ({ value }) => (
+              Cell: ({value}) => (
                 <span>
                   {value === "M"
                     ? "Male"
@@ -107,10 +107,10 @@ const getColumns = (show, nesting, countOffset) => {
             {
               id: "bplace_geonameid",
               Header: "City",
-              style: { whiteSpace: "unset" },
-              accessor: (d) =>
+              style: {whiteSpace: "unset"},
+              accessor: d =>
                 d.bplace_geonameid ? d.bplace_geonameid.place : null,
-              Cell: ({ value, row: { original } }) =>
+              Cell: ({value, row: {original}}) =>
                 value ? (
                   <a href={`/profile/place/${original.bplace_geonameid.slug}`}>
                     {value}
@@ -122,10 +122,10 @@ const getColumns = (show, nesting, countOffset) => {
             {
               id: "bplace_country",
               Header: "Country",
-              style: { whiteSpace: "unset" },
-              accessor: (d) =>
+              style: {whiteSpace: "unset"},
+              accessor: d =>
                 d.bplace_country ? d.bplace_country.country : null,
-              Cell: ({ value, row: { original } }) =>
+              Cell: ({value, row: {original}}) =>
                 value ? (
                   <a href={`/profile/country/${original.bplace_country.slug}`}>
                     {value}
@@ -142,10 +142,10 @@ const getColumns = (show, nesting, countOffset) => {
             {
               id: "dplace_geonameid",
               Header: "City",
-              style: { whiteSpace: "unset" },
-              accessor: (d) =>
+              style: {whiteSpace: "unset"},
+              accessor: d =>
                 d.dplace_geonameid ? d.dplace_geonameid.place : null,
-              Cell: ({ value, row: { original } }) =>
+              Cell: ({value, row: {original}}) =>
                 value ? (
                   <a href={`/profile/place/${original.dplace_geonameid.slug}`}>
                     {value}
@@ -157,10 +157,10 @@ const getColumns = (show, nesting, countOffset) => {
             {
               id: "dplace_country",
               Header: "Country",
-              style: { whiteSpace: "unset" },
-              accessor: (d) =>
+              style: {whiteSpace: "unset"},
+              accessor: d =>
                 d.dplace_country ? d.dplace_country.country : null,
-              Cell: ({ value, row: { original } }) =>
+              Cell: ({value, row: {original}}) =>
                 value ? (
                   <a href={`/profile/country/${original.dplace_country.slug}`}>
                     {value}
@@ -203,7 +203,7 @@ const getColumns = (show, nesting, countOffset) => {
                 </Tooltip>
               ),
               accessor: "l_",
-              Cell: ({ value }) => FORMATTERS.decimal(value),
+              Cell: ({value}) => FORMATTERS.decimal(value),
               minWidth: 105,
               className: "cell_numeric",
               headerClassName: "nowrap",
@@ -223,7 +223,7 @@ const getColumns = (show, nesting, countOffset) => {
                 </Tooltip>
               ),
               accessor: "non_en_page_views",
-              Cell: ({ value }) => FORMATTERS.bigNum(value),
+              Cell: ({value}) => FORMATTERS.bigNum(value),
               width: 105,
               headerClassName: "nowrap",
               sortDescFirst: true,
@@ -242,7 +242,7 @@ const getColumns = (show, nesting, countOffset) => {
                 </Tooltip>
               ),
               accessor: "coefficient_of_variation",
-              Cell: ({ value }) => FORMATTERS.decimal(value),
+              Cell: ({value}) => FORMATTERS.decimal(value),
               minWidth: 105,
               className: "cell_numeric",
               headerClassName: "nowrap",
@@ -260,7 +260,7 @@ const getColumns = (show, nesting, countOffset) => {
                 </Tooltip>
               ),
               accessor: "hpi",
-              Cell: ({ value }) => FORMATTERS.decimal(value),
+              Cell: ({value}) => FORMATTERS.decimal(value),
               defaultSorted: true,
               minWidth: 105,
               className: "cell_numeric",
@@ -278,7 +278,7 @@ const getColumns = (show, nesting, countOffset) => {
                 </Tooltip>
               ),
               accessor: "hpi_prev",
-              Cell: ({ value }) => (value ? FORMATTERS.decimal(value) : "-"),
+              Cell: ({value}) => (value ? FORMATTERS.decimal(value) : "-"),
               defaultSorted: true,
               minWidth: 105,
               className: "cell_numeric",
@@ -301,7 +301,7 @@ const getColumns = (show, nesting, countOffset) => {
               accessor: "rank_delta",
               minWidth: 45,
               className: "cell_numeric",
-              Cell: ({ value }) =>
+              Cell: ({value}) =>
                 value ? (
                   value > 0 ? (
                     <span className="u-positive-text u-positive-arrow">{`+${value}`}</span>
@@ -378,8 +378,8 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "Occupation",
           accessor: "name",
-          style: { whiteSpace: "unset" },
-          Cell: ({ value, row: { original } }) => (
+          style: {whiteSpace: "unset"},
+          Cell: ({value, row: {original}}) => (
             <a href={`/profile/occupation/${original.slug}`}>{value}</a>
           ),
         },
@@ -409,7 +409,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "hpi",
-          Cell: ({ value }) => FORMATTERS.bigNum(value),
+          Cell: ({value}) => FORMATTERS.bigNum(value),
           defaultSorted: true,
           minWidth: 55,
           className: "cell_numeric",
@@ -427,7 +427,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_hpi",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -444,7 +444,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "langs",
-          Cell: ({ value }) => FORMATTERS.commas(value),
+          Cell: ({value}) => FORMATTERS.commas(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -461,7 +461,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_langs",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -469,11 +469,11 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "Top 3",
           accessor: "top_ranked",
-          Cell: ({ value }) => (
+          Cell: ({value}) => (
             <AnchorList
               items={value}
-              name={(d) => d.name}
-              url={(d) => `/profile/person/${d.slug}/`}
+              name={d => d.name}
+              url={d => `/profile/person/${d.slug}/`}
               noAnd
             />
           ),
@@ -513,7 +513,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "hpi",
-          Cell: ({ value }) => FORMATTERS.bigNum(value),
+          Cell: ({value}) => FORMATTERS.bigNum(value),
           defaultSorted: true,
           minWidth: 55,
           className: "cell_numeric",
@@ -531,7 +531,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_hpi",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -548,7 +548,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "langs",
-          Cell: ({ value }) => FORMATTERS.commas(value),
+          Cell: ({value}) => FORMATTERS.commas(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -565,7 +565,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_langs",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -573,11 +573,11 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "Top 3",
           accessor: "top_ranked",
-          Cell: ({ value }) => (
+          Cell: ({value}) => (
             <AnchorList
               items={value}
-              name={(d) => d.name}
-              url={(d) => `/profile/person/${d.slug}/`}
+              name={d => d.name}
+              url={d => `/profile/person/${d.slug}/`}
               noAnd
             />
           ),
@@ -613,7 +613,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "hpi",
-          Cell: ({ value }) => FORMATTERS.bigNum(value),
+          Cell: ({value}) => FORMATTERS.bigNum(value),
           defaultSorted: true,
           minWidth: 55,
           className: "cell_numeric",
@@ -631,7 +631,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_hpi",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -648,7 +648,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "langs",
-          Cell: ({ value }) => FORMATTERS.commas(value),
+          Cell: ({value}) => FORMATTERS.commas(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -665,7 +665,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_langs",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -673,11 +673,11 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "Top 3",
           accessor: "top_ranked",
-          Cell: ({ value }) => (
+          Cell: ({value}) => (
             <AnchorList
               items={value}
-              name={(d) => d.name}
-              url={(d) => `/profile/person/${d.slug}/`}
+              name={d => d.name}
+              url={d => `/profile/person/${d.slug}/`}
               noAnd
             />
           ),
@@ -828,8 +828,8 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "Country",
           accessor: "country_name",
-          style: { whiteSpace: "unset" },
-          Cell: ({ value, row: { original } }) => (
+          style: {whiteSpace: "unset"},
+          Cell: ({value, row: {original}}) => (
             <a href={`/profile/country/${original.country_slug}`}>{value}</a>
           ),
         },
@@ -851,7 +851,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "hpi",
-          Cell: ({ value }) => FORMATTERS.bigNum(value),
+          Cell: ({value}) => FORMATTERS.bigNum(value),
           defaultSorted: true,
           minWidth: 55,
           className: "cell_numeric",
@@ -869,7 +869,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_hpi",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -886,7 +886,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "langs",
-          Cell: ({ value }) => FORMATTERS.commas(value),
+          Cell: ({value}) => FORMATTERS.commas(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -903,7 +903,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_langs",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -911,11 +911,11 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "Top 3",
           accessor: "top_ranked",
-          Cell: ({ value }) => (
+          Cell: ({value}) => (
             <AnchorList
               items={value}
-              name={(d) => d.name}
-              url={(d) => `/profile/person/${d.slug}/`}
+              name={d => d.name}
+              url={d => `/profile/person/${d.slug}/`}
               noAnd
             />
           ),
@@ -952,8 +952,8 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "City",
           accessor: "name",
-          style: { whiteSpace: "unset" },
-          Cell: ({ value, row: { original } }) =>
+          style: {whiteSpace: "unset"},
+          Cell: ({value, row: {original}}) =>
             original.count > 15 ? (
               <a href={`/profile/place/${original.slug}`}>{value}</a>
             ) : (
@@ -963,8 +963,8 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "Country",
           accessor: "country_name",
-          style: { whiteSpace: "unset" },
-          Cell: ({ value, row: { original } }) => (
+          style: {whiteSpace: "unset"},
+          Cell: ({value, row: {original}}) => (
             <a href={`/profile/country/${original.country_slug}`}>{value}</a>
           ),
         },
@@ -986,7 +986,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "hpi",
-          Cell: ({ value }) => FORMATTERS.bigNum(value),
+          Cell: ({value}) => FORMATTERS.bigNum(value),
           defaultSorted: true,
           minWidth: 55,
           className: "cell_numeric",
@@ -1004,7 +1004,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_hpi",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -1021,7 +1021,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "langs",
-          Cell: ({ value }) => FORMATTERS.commas(value),
+          Cell: ({value}) => FORMATTERS.commas(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -1038,7 +1038,7 @@ const getColumns = (show, nesting, countOffset) => {
             </Tooltip>
           ),
           accessor: "avg_langs",
-          Cell: ({ value }) => FORMATTERS.decimal(value),
+          Cell: ({value}) => FORMATTERS.decimal(value),
           minWidth: 55,
           className: "cell_numeric",
           sortDescFirst: true,
@@ -1046,11 +1046,11 @@ const getColumns = (show, nesting, countOffset) => {
         {
           Header: "Top 3",
           accessor: "top_ranked",
-          Cell: ({ value }) => (
+          Cell: ({value}) => (
             <AnchorList
               items={value}
-              name={(d) => d.name}
-              url={(d) => `/profile/person/${d.slug}/`}
+              name={d => d.name}
+              url={d => `/profile/person/${d.slug}/`}
               noAnd
             />
           ),

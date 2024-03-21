@@ -1,4 +1,4 @@
-import { plural } from "pluralize";
+import {plural} from "pluralize";
 import Link from "next/link";
 import {
   FORMATTERS,
@@ -8,7 +8,7 @@ import {
 } from "../utils/consts";
 import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
-import { toTitleCase } from "../utils/vizHelpers";
+import {toTitleCase} from "../utils/vizHelpers";
 import SectionLayout from "../common/SectionLayout";
 
 async function getOccupationRankings(
@@ -41,12 +41,12 @@ export default async function OccupationRanking({
     occupationRankLow,
     occupationRankHigh
   );
-  const me = occupationRankings.find((rank) => rank.slug === person.slug);
+  const me = occupationRankings.find(rank => rank.slug === person.slug);
   const betterRankedPeers = occupationRankings.filter(
-    (p) => p.occupation_rank_unique < me.occupation_rank_unique
+    p => p.occupation_rank_unique < me.occupation_rank_unique
   );
   const worseRankedPeers = occupationRankings.filter(
-    (p) => p.occupation_rank_unique > me.occupation_rank_unique
+    p => p.occupation_rank_unique > me.occupation_rank_unique
   );
 
   let betterPeers = null,
@@ -59,12 +59,12 @@ export default async function OccupationRanking({
         {person.gender ? (person.gender === "M" ? "him" : "her") : "them"} are{" "}
         <AnchorList
           items={betterRankedPeers}
-          name={(d) =>
+          name={d =>
             d.birthcountry
               ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})`
               : d.name
           }
-          url={(d) => `/profile/person/${d.slug}/`}
+          url={d => `/profile/person/${d.slug}/`}
         />
         .{" "}
       </span>
@@ -77,12 +77,12 @@ export default async function OccupationRanking({
         are{" "}
         <AnchorList
           items={worseRankedPeers}
-          name={(d) =>
+          name={d =>
             d.birthcountry
               ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})`
               : d.name
           }
-          url={(d) => `/profile/person/${d.slug}/`}
+          url={d => `/profile/person/${d.slug}/`}
         />
         .
       </span>

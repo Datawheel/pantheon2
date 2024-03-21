@@ -1,9 +1,9 @@
 import PersonImage from "../utils/PersonImage";
-import { toTitleCase } from "../utils/vizHelpers";
-import { COLORS_DOMAIN, FORMATTERS } from "../utils/consts";
+import {toTitleCase} from "../utils/vizHelpers";
+import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 
-const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
+const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
   const {
     occupationRank,
     occupationRankPrev,
@@ -25,10 +25,9 @@ const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
   let fromSentence, wikiSentence, wikiSlug;
   if (person.bplace_country) {
     if (!person.bplace_geonameid) {
-      /* Example test case person:
-          pope_pius_ii
-          sergej_barbarez (w/o country)
-      */
+      // Example test case person:
+      //   pope_pius_ii
+      //   sergej_barbarez (w/o country)
       const birthplace = person.bplace_name ? `${person.bplace_name}, ` : "";
       const birthcountry = person.bplace_country ? (
         <span>
@@ -76,10 +75,9 @@ const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
         </a>
       );
       if (person.bplace_name !== person.bplace_geonameid.place) {
-        /* Example test case person:
-            jack_nicholson (w/ state)
-            jack_nicholson (w/o state)
-        */
+        // Example test case person:
+        //     jack_nicholson (w/ state)
+        //     jack_nicholson (w/o state)
         fromSentence = (
           <span>
             born in {FORMATTERS.year(person.birthyear.name)} in{" "}
@@ -91,10 +89,9 @@ const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
           </span>
         );
       } else {
-        /* Example test case person:
-            ada_lovelace (w/ state)
-            bud_spencer (w/o state)
-        */
+        // Example test case person:
+        //     ada_lovelace (w/ state)
+        //     bud_spencer (w/o state)
         fromSentence = person.birthyear ? (
           <span>
             born in {FORMATTERS.year(person.birthyear.name)} in {birthplace},{" "}
@@ -145,7 +142,7 @@ const Intro = ({ person, personRanks, totalPageViews, wikiExtract }) => {
               <span
                 key={i}
                 className="deco-line"
-                style={{ backgroundColor }}
+                style={{backgroundColor}}
               ></span>
             ))}
         </div>

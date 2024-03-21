@@ -1,6 +1,6 @@
 import React from "react";
 
-const PersonImage = ({ alt, className, src, fallbackSrc }) => (
+const PersonImage = ({alt, className, src, fallbackSrc}) => (
   <div
     className="image"
     dangerouslySetInnerHTML={{

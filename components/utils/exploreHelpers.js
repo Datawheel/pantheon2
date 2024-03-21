@@ -1,8 +1,4 @@
-import {
-  HPI_RANGE,
-  LANGS_RANGE,
-  PAGE_SIZE,
-} from "../../components/utils/consts";
+import {HPI_RANGE, LANGS_RANGE, PAGE_SIZE} from "../../components/utils/consts";
 import {
   dataRequested,
   dataReceived,
@@ -10,7 +6,7 @@ import {
 } from "../../features/exploreSlice";
 import dataFormatter from "../../components/utils/dataFormatter";
 
-const getQueryArgs = (exploreState) => {
+const getQueryArgs = exploreState => {
   const {
     city,
     country,
@@ -79,7 +75,7 @@ const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
     years,
     yearType,
   } = exploreState;
-  const apiHeaders = { Prefer: "count=estimated" };
+  // const apiHeaders = {Prefer: "count=estimated"};
   let selectFields =
     "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
   let sorting = "&order=hpi.desc.nullslast";
@@ -87,7 +83,7 @@ const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
   // Set place...
   let placeFilter = "";
   if (country !== "all") {
-    const countryObj = places.find((d) => d.country.country_code === country);
+    const countryObj = places.find(d => d.country.country_code === country);
     const countryId = countryObj ? countryObj.country.id : "";
     placeFilter =
       placeType === "birthplace"
@@ -156,7 +152,7 @@ const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
 };
 
 const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
-  const { dataPageIndex, page, show, placeType } = exploreState;
+  const {dataPageIndex, page, show, placeType} = exploreState;
   const pageIndex =
     typeof pageOverride === "number" && !isNaN(pageOverride)
       ? pageOverride
@@ -164,15 +160,15 @@ const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
   const apiUrl = makeApiUrl(places, exploreState, pageIndex, sortBy);
   try {
     const response = await fetch(apiUrl, {
-      headers: { Prefer: "count=estimated" },
+      headers: {Prefer: "count=estimated"},
     });
     if (!response.ok) {
       throw new Error("Failed to fetch data from the API");
     }
     let data = await response.json();
-    const range = response.headers.get("content-range")
-      ? response.headers.get("content-range").split("/")[0]
-      : null;
+    // const range = response.headers.get("content-range")
+    //   ? response.headers.get("content-range").split("/")[0]
+    //   : null;
     let count = response.headers.get("content-range")
       ? parseInt(response.headers.get("content-range").split("/")[1], 10)
       : null;
@@ -187,7 +183,7 @@ const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
         PAGE_SIZE * pageIndex + PAGE_SIZE
       );
     }
-    return { data, count };
+    return {data, count};
   } catch (error) {
     throw new Error("Failed to fetch data from the API");
   }

@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 // import useTrait from "./useTrait";
 // import Game from "./Game";
 import ConsentForm from "../ConsentForm";
@@ -11,8 +11,8 @@ import Score from "./Score";
 import Results from "./Results";
 // import fetchSlugs from "./fetchSlugs";
 // import fetchPersons from "./fetchPersons";
-// import { v4 as uuidv4 } from "uuid";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import {v4 as uuidv4} from "uuid";
+import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
 import "./Trivia.css";
 
 const TIME_PER_QUESTION = 15;
@@ -25,14 +25,14 @@ function convertTZ(date, tzString) {
   );
 }
 
-function Trivia({ questions }) {
+function Trivia({questions}) {
   const timer = useRef(null);
   const difference =
     +convertTZ(new Date(), "Europe/Paris") -
-    +convertTZ(new Date(`10/06/2022 00:00:00`), "Europe/Paris");
+    +convertTZ(new Date("10/06/2022 00:00:00"), "Europe/Paris");
   const gameIdShare = Math.ceil(difference / (1000 * 60 * 60 * 24));
 
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  const {executeRecaptcha} = useGoogleReCaptcha();
 
   const [firstOpen, setFirstOpen] = useState(true);
   const [isOpenConsentForm, setIsOpenConsentForm] = useState(false);
@@ -42,7 +42,7 @@ function Trivia({ questions }) {
 
   const [showResults, setShowResults] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [error, setError] = useState(false);
+  const [error] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState("");
   const [answers, setAnswers] = useState([]);
 
@@ -62,13 +62,13 @@ function Trivia({ questions }) {
     };
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(gameDataSave),
     };
 
     await fetch("/api/getConsent", requestOptions)
-      .then((resp) => resp.json())
-      .then((consent) => {
+      .then(resp => resp.json())
+      .then(consent => {
         if (consent.length > 0) {
           setScoreDB(parseFloat(consent[0].score_bot));
           setSaveConsent(false);
@@ -87,17 +87,17 @@ function Trivia({ questions }) {
       game_share_id: gameIdShare,
       date: dateDB,
       game_number: 1,
-      questions: questions,
+      questions,
     };
 
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(getGame),
     };
 
     const triviaGame = await fetch("/api/getTriviaGame", requestOptions).then(
-      (resp) => resp.json()
+      resp => resp.json()
     );
 
     console.log("triviaGame!!!", triviaGame);
@@ -136,14 +136,12 @@ function Trivia({ questions }) {
           console.log("ANSWERs!", answers);
 
           callDB(answer, token);
-          setAnswers((prevAnswers) => [...prevAnswers, answer]);
+          setAnswers(prevAnswers => [...prevAnswers, answer]);
           setTime(TIME_PER_QUESTION);
           setCurrentAnswer(null);
 
           if (currentQuestion + 1 < questions.length) {
-            setCurrentQuestion(
-              (prevCurrentQuestion) => prevCurrentQuestion + 1
-            );
+            setCurrentQuestion(prevCurrentQuestion => prevCurrentQuestion + 1);
             return;
           }
 
@@ -170,13 +168,13 @@ function Trivia({ questions }) {
     };
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(gameDataSave),
     };
 
     await fetch("/api/getParticipant", requestOptions)
-      .then((resp) => resp.json())
-      .then((socioConsent) => {
+      .then(resp => resp.json())
+      .then(socioConsent => {
         if (socioConsent.length > 0) {
           setScoreDB(parseFloat(socioConsent[0].score_bot));
           setIsOpenDemographicForm(false);
@@ -193,11 +191,11 @@ function Trivia({ questions }) {
       };
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(questionScore),
       };
       const consent = await fetch("/api/getConsent", requestOptions).then(
-        (resp) => resp.json()
+        resp => resp.json()
       );
 
       if (consent.length > 0) {
@@ -215,14 +213,14 @@ function Trivia({ questions }) {
     const questionScore = {
       user_id: localStorage.getItem("mptoken"),
       game_share_id: gameIdShare,
-      token: token,
-      answer: answer,
+      token,
+      answer,
       scoreDB: tempScore,
     };
 
     const requestOptionsS = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(questionScore),
     };
     await fetch("/api/createTriviaScore", requestOptionsS);

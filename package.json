@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --quiet"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,8 @@
     "@datawheel/eslint-config": "latest",
     "@webpack-cli/serve": "^1.7.0",
     "babel-eslint": ">=6",
-    "eslint": ">=3",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.1.4",
     "eslint-plugin-react": ">=7",
     "postcss-css-variables": "^0.18.0",
     "postcss-flexbugs-fixes": "^5.0.2",
@@ -48,6 +49,25 @@
     "globals": {
       "__DEV__": true,
       "__SERVER__": true
+    },
+    "rules": {
+      "no-extra-parens": "off",
+      "indent": "off",
+      "brace-style": "off",
+      "comma-dangle": "off",
+      "space-before-function-paren": "off",
+      "require-jsdoc": "off",
+      "react/no-string-refs": "off",
+      "new-cap": "warn",
+      "camelcase": "warn",
+      "wrap-regex": "off",
+      "spaced-comment": "off",
+      "react/jsx-key": [
+        1,
+        {
+          "checkFragmentShorthand": true
+        }
+      ]
     }
   },
   "dependencies": {

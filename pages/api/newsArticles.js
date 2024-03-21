@@ -1,7 +1,7 @@
 const axios = require("axios");
 const newsApiKey = process.env.NEWS_API_KEY;
 
-const pgFormatDate = (dateobj) => {
+const pgFormatDate = dateobj => {
   const year = dateobj.getFullYear();
   const month = `${dateobj.getMonth() + 1}`.replace(
     /(^|\D)(\d)(?!\d)/g,
@@ -47,7 +47,7 @@ module.exports = function (app) {
         `https://api-dev.pantheon.world/trend?date=gte.${daysAgo2}&pid=eq.${wikiId}&lang=eq.${lang}&rank_pantheon=lte.100`
       )
       .catch(
-        (e) => (console.log("Pantheon DB trends read Error:", e), { data: [] })
+        e => (console.log("Pantheon DB trends read Error:", e), {data: []})
       );
     // if empty it means this person is not trending
     // console.log("trendFromDbResp.data!", trendFromDbResp.data, `https://api-dev.pantheon.world/trend?date=gte.${daysAgo2}&pid=eq.${wikiId}&lang=eq.${lang}&rank_pantheon=lte.100`);
@@ -55,16 +55,14 @@ module.exports = function (app) {
       return res.json([]);
     }
 
-    const { slug, name } = trendFromDbResp.data[0];
+    const {slug, name} = trendFromDbResp.data[0];
 
     // NEXT check if it's already in the db...
     const todaysNewsFromDbResp = await axios
       .get(
         `https://api-dev.pantheon.world/news?fetch_date=eq.${today}&pid=eq.${wikiId}`
       )
-      .catch(
-        (e) => (console.log("Pantheon DB news read Error:", e), { data: [] })
-      );
+      .catch(e => (console.log("Pantheon DB news read Error:", e), {data: []}));
 
     if (todaysNewsFromDbResp.data.length) {
       return res.json(todaysNewsFromDbResp.data);
@@ -77,16 +75,14 @@ module.exports = function (app) {
     const newsResp = await axios
       .get(newApiUrl)
       .catch(
-        (e) => (
-          console.log("newsapi.org Error:", name), { data: { articles: [] } }
-        )
+        () => (console.log("newsapi.org Error:", name), {data: {articles: []}})
       );
     const newsResults = newsResp.data;
 
     // newsResults.articles.slice(0, 5).forEach(article => {
     //   console.log("len of desc:", article.description.length);
     // });
-    const allArticles = newsResults.articles.slice(0, 4).map((article) => ({
+    const allArticles = newsResults.articles.slice(0, 4).map(article => ({
       name,
       pid: wikiId,
       slug,
@@ -101,7 +97,7 @@ module.exports = function (app) {
       },
     }));
 
-    const newsPosts = allArticles.map((newsItem) =>
+    const newsPosts = allArticles.map(newsItem =>
       axios
         .post(
           "https://api-dev.pantheon.world/news?columns=name,pid,slug,article",
@@ -109,17 +105,17 @@ module.exports = function (app) {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization:
+              "Authorization":
                 "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
-              Prefer: "resolution=merge-duplicates",
+              "Prefer": "resolution=merge-duplicates",
             },
           }
         )
-        .catch((err) => {
+        .catch(err => {
           console.log(
             `[News API] unable to post news item about ${name} to db.`
           );
-          return { error: err };
+          return {error: err};
         })
     );
     await Promise.all(newsPosts);

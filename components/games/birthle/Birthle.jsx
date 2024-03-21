@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import useTrait from "./useTrait";
 import Game from "./Game";
 import Result from "./Result";
 import ConsentForm from "../ConsentForm";
 import fetchSlugs from "./fetchSlugs";
 import fetchPersons from "./fetchPersons";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import "./Birthle.css";
 
 function convertTZ(date, tzString) {
@@ -17,7 +17,7 @@ function convertTZ(date, tzString) {
   );
 }
 
-function Birthle(props) {
+function Birthle() {
   const MAX_ATTEMPTS = 3;
   const N_PERSONS = 5;
   const boardCellDefault = {
@@ -25,8 +25,8 @@ function Birthle(props) {
     isCorrect: false,
   };
   const boardDefault = (() =>
-    Array.from({ length: MAX_ATTEMPTS }, () =>
-      Array.from({ length: N_PERSONS }, () => boardCellDefault)
+    Array.from({length: MAX_ATTEMPTS}, () =>
+      Array.from({length: N_PERSONS}, () => boardCellDefault)
     ))();
 
   const fetchError = useTrait(false);
@@ -42,7 +42,7 @@ function Birthle(props) {
   const [correctPersons, setCorrectPersons] = useState(undefined);
   const [scoreDB, setScoreDB] = useState(-1);
   const [isOpenConsentForm, setIsOpenConsentForm] = useState(undefined);
-  const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(undefined);
+  const [, setIsOpenDemographicForm] = useState(undefined);
   const [saveConsent, setSaveConsent] = useState(undefined);
 
   const checkBtnRef = useRef(0);
@@ -53,7 +53,7 @@ function Birthle(props) {
   const date = convertTZ(new Date(), "Europe/Paris");
   const year = date.getFullYear();
   const day = date.getDate();
-  const hour = date.getHours();
+  // const hour = date.getHours();
   const month = date.getMonth() + 1;
   const gameNumber = 1; // (hour >= 2 && hour < 14) ? 1 : 2;
   const gameDate = `${year}-${month}-${day}`; // 2022-5-25
@@ -77,16 +77,16 @@ function Birthle(props) {
       })
     );
 
-    const savePersons = [...persons].sort((a, b) => {
-      if (a.birthyear === b.birthyear) {
-        const dateA = new Date(a.birthdate);
-        const dateB = new Date();
+    // const savePersons = [...persons].sort((a, b) => {
+    //   if (a.birthyear === b.birthyear) {
+    //     const dateA = new Date(a.birthdate);
+    //     const dateB = new Date();
 
-        return dateA - dateB;
-      }
+    //     return dateA - dateB;
+    //   }
 
-      return a.birthyear - b.birthyear;
-    });
+    //   return a.birthyear - b.birthyear;
+    // });
   };
 
   useEffect(() => {

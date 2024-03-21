@@ -6,7 +6,7 @@ async function getBooks(personId) {
   return res.json();
 }
 
-export default async function Books({ person, slug, title }) {
+export default async function Books({person, slug, title}) {
   if (person.occupation.id !== "WRITER") {
     return null;
   }
@@ -17,14 +17,12 @@ export default async function Books({ person, slug, title }) {
       <div>
         {books.length ? (
           <div className="card-list">
-            {books.map((book) => (
+            {books.map(book => (
               <div href="#" className="work-card book" key={book.totle}>
                 <div
                   className="thumb"
                   style={
-                    book.cover
-                      ? { backgroundImage: `url('${book.cover}')` }
-                      : {}
+                    book.cover ? {backgroundImage: `url('${book.cover}')`} : {}
                   }
                 ></div>
                 <div className="info-group">

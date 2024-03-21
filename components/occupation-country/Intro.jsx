@@ -1,14 +1,10 @@
 import AnchorList from "../utils/AnchorList";
-import { plural } from "pluralize";
-import { toTitleCase } from "../utils/vizHelpers";
-import { FORMATTERS } from "../utils/consts";
+import {plural} from "pluralize";
+import {toTitleCase} from "../utils/vizHelpers";
+import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 
-export default function Intro({
-  country,
-  occupation,
-  allCountriesInOccupation,
-}) {
+export default function Intro({country, occupation, allCountriesInOccupation}) {
   const allCountriesInOccupationSorted = allCountriesInOccupation.sort(
     (a, b) => {
       if (b.num_people === a.num_people) {
@@ -18,7 +14,7 @@ export default function Intro({
     }
   );
   const countryIndex = allCountriesInOccupationSorted.findIndex(
-    (d) => d.country === country.id
+    d => d.country === country.id
   );
   const countriesAheadInRanking =
     countryIndex > 1
@@ -59,8 +55,8 @@ export default function Intro({
                 behind{" "}
                 <AnchorList
                   items={countriesAheadInRanking}
-                  name={(d) => d.country}
-                  url={(d) =>
+                  name={d => d.country}
+                  url={d =>
                     `/profile/occupation/${occupation.occupation_slug}/country/${d.country_slug}/`
                   }
                 />

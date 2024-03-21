@@ -1,5 +1,5 @@
 const axios = require("axios");
-const createThrottle = require("async-throttle");
+// const createThrottle = require("async-throttle");
 
 module.exports = function (app) {
   app.get("/api/books", async (req, res) => {
@@ -13,9 +13,8 @@ module.exports = function (app) {
         `https://api-dev.pantheon.world/person?id=eq.${id}&select=name,slug,occupation.occupation_name`
       )
       .catch(
-        (e) => (
-          console.log(`[Books API]: No Person in DB with id: ${id}`),
-          { data: [] }
+        () => (
+          console.log(`[Books API]: No Person in DB with id: ${id}`), {data: []}
         )
       );
     if (!personPantheonResp.data.length) return res.json([]);
@@ -28,8 +27,8 @@ module.exports = function (app) {
     const booksFromPantheonDbResp = await axios
       .get(`https://api-dev.pantheon.world/book?pid=eq.${id}`)
       .catch(
-        (e) => (
-          console.log("[Books API] Error finding books in db:", e), { data: [] }
+        e => (
+          console.log("[Books API] Error finding books in db:", e), {data: []}
         )
       );
     if (booksFromPantheonDbResp.data && booksFromPantheonDbResp.data.length) {
@@ -42,11 +41,11 @@ module.exports = function (app) {
     const openLibResp = await axios
       .get(openLibURL)
       .catch(
-        (e) => (
+        () => (
           console.log(
             `Open Library API Error: No results for ${person.name} found.`
           ),
-          { data: [] }
+          {data: []}
         )
       );
     const openLibJson = openLibResp.data;
@@ -59,29 +58,29 @@ module.exports = function (app) {
     }
     // keep only top 6 by edition count
     const topBooks = openLibJson.docs
-      .filter((b) => b.key)
+      .filter(b => b.key)
       .sort((a, b) => b.edition_count - a.edition_count)
       .slice(0, 6);
     // return res.json(topBooks);
-    const openLibWorksReqs = topBooks.map((b) =>
+    const openLibWorksReqs = topBooks.map(b =>
       axios.get(`https://openlibrary.org${b.key}`, {
-        headers: { Accept: "application/json" },
+        headers: {Accept: "application/json"},
       })
     );
     const detailedWorksData = await axios
       .all(openLibWorksReqs)
       .then(
         axios.spread(
-          (...responses) => responses.map((r) => r.data)
+          (...responses) => responses.map(r => r.data)
           // use/access the results
         )
       )
-      .catch((errors) => {
+      .catch(errors => {
         console.log("ERRORS!", errors);
       });
     // return res.json(detailedWorksData);
-    const cleanedBooksData = detailedWorksData.map((book) => {
-      const bookData = topBooks.find((b) => b.key === book.key);
+    const cleanedBooksData = detailedWorksData.map(book => {
+      const bookData = topBooks.find(b => b.key === book.key);
       return {
         pid: id,
         slug: person.slug,
@@ -113,11 +112,11 @@ module.exports = function (app) {
             : null,
         id: book.key,
         links:
-          book.links && book.links.length ? book.links.map((l) => l.url) : null,
+          book.links && book.links.length ? book.links.map(l => l.url) : null,
       };
     });
 
-    const bookPosts = cleanedBooksData.map((book) =>
+    const bookPosts = cleanedBooksData.map(book =>
       axios
         .post(
           "https://api-dev.pantheon.world/book?columns=pid,slug,title,cover,isbn,oclc,editions,first_published,categories,description,gid,key",
@@ -125,18 +124,18 @@ module.exports = function (app) {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization:
+              "Authorization":
                 "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
-              Prefer: "resolution=merge-duplicates",
+              "Prefer": "resolution=merge-duplicates",
             },
           }
         )
-        .catch((err) => {
+        .catch(err => {
           console.log(
             `[Books API] unable to post book by ${person.name} to db.`
           );
           console.log(err);
-          return { error: err };
+          return {error: err};
         })
     );
 

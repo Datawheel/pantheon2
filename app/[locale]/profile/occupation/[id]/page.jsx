@@ -1,5 +1,5 @@
-import { cloneElement } from "react";
-import { plural } from "pluralize";
+import {cloneElement} from "react";
+import {plural} from "pluralize";
 // import ProfileNav from "../../../../components/common/Nav";
 import Intro from "/components/occupation/Intro";
 import Header from "/components/occupation/Header";
@@ -7,13 +7,13 @@ import People from "/components/occupation/sections/People";
 import Places from "/components/occupation/sections/Places";
 import PlacesOverTime from "/components/occupation/sections/PlacesOverTime";
 import Lifespans from "/components/occupation/sections/Lifespans";
-import OccupationTrends from "/components/country/sections/OccupationTrends";
-import {
-  NUM_RANKINGS,
-  NUM_RANKINGS_PRE,
-  NUM_RANKINGS_POST,
-} from "/components/utils/consts";
-import { toTitleCase } from "../../../../../components/utils/vizHelpers";
+// import OccupationTrends from "/components/country/sections/OccupationTrends";
+// import {
+//   NUM_RANKINGS,
+//   NUM_RANKINGS_PRE,
+//   NUM_RANKINGS_POST,
+// } from "/components/utils/consts";
+import {toTitleCase} from "../../../../../components/utils/vizHelpers";
 
 async function getOccupations() {
   const res = await fetch(
@@ -35,12 +35,12 @@ async function getOccupation(occupationId) {
   return res.json();
 }
 
-async function getCountryRanks(countryRankLow, countryRankHigh) {
-  const res = await fetch(
-    `https://api-dev.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
-  );
-  return res.json();
-}
+// async function getCountryRanks(countryRankLow, countryRankHigh) {
+//   const res = await fetch(
+//     `https://api-dev.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
+//   );
+//   return res.json();
+// }
 
 async function getPeople(occupationId) {
   const res = await fetch(
@@ -49,14 +49,14 @@ async function getPeople(occupationId) {
   return res.json();
 }
 
-async function getPeopleDiedHere(countryId) {
-  const res = await fetch(
-    `https://api-dev.pantheon.world/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
-  );
-  return res.json();
-}
+// async function getPeopleDiedHere(countryId) {
+//   const res = await fetch(
+//     `https://api-dev.pantheon.world/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
+//   );
+//   return res.json();
+// }
 
-export async function generateMetadata({ params, searchParams }, parent) {
+export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
 
@@ -77,7 +77,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
   };
 }
 
-export default async function Page({ params: { id } }) {
+export default async function Page({params: {id}}) {
   const [occupation, occupations] = await Promise.all([
     getOccupation(id),
     getOccupations(),

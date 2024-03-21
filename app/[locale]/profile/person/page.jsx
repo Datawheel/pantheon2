@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 
 async function getTopPeople() {
   const res = await fetch(
@@ -7,7 +7,7 @@ async function getTopPeople() {
   return res.json();
 }
 
-export default async function Page({ params: { id } }) {
+export default async function Page() {
   const topPeople = await getTopPeople();
   // random 250 candidates
   const randomPeople = [
@@ -264,7 +264,7 @@ export default async function Page({ params: { id } }) {
     "Dennis_Rodman",
     "Mike_Trout",
   ];
-  const allPeople = topPeople.map((p) => p.slug).concat(randomPeople);
+  const allPeople = topPeople.map(p => p.slug).concat(randomPeople);
   const redirectSlug = allPeople[Math.floor(Math.random() * allPeople.length)];
   redirect(`/profile/person/${redirectSlug}`);
 }

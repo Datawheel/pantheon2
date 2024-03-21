@@ -7,7 +7,7 @@ async function getMovies(personId) {
   return res.json();
 }
 
-export default async function Books({ person, slug, title }) {
+export default async function Books({person, slug, title}) {
   if (!["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)) {
     return null;
   }
@@ -18,7 +18,7 @@ export default async function Books({ person, slug, title }) {
       <div>
         {movies.length ? (
           <div className="card-list">
-            {movies.map((movie) => (
+            {movies.map(movie => (
               <a
                 href={
                   movie.homepage ||
@@ -33,7 +33,7 @@ export default async function Books({ person, slug, title }) {
                   className="thumb"
                   style={
                     movie.poster
-                      ? { backgroundImage: `url('${movie.poster}')` }
+                      ? {backgroundImage: `url('${movie.poster}')`}
                       : {}
                   }
                 ></div>

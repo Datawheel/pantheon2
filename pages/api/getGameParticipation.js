@@ -1,17 +1,12 @@
-module.exports = function(app) {
+module.exports = function (app) {
+  const {db} = app.settings;
 
-    const {db} = app.settings;
+  app.post("/api/getGameParticipation", async (req, res) => {
+    const {user_id} = req.body;
 
-    app.post("/api/getGameParticipation", async(req, res) => {
-        
-        const {user_id} = req.body;
-
-        const game_participation = await db.game_participation.findAll({where: {"user_id": user_id}});
-        res.status(200).json(game_participation);
-
+    const game_participation = await db.game_participation.findAll({
+      where: {user_id},
     });
-  
-  };
-  
-
-
+    res.status(200).json(game_participation);
+  });
+};

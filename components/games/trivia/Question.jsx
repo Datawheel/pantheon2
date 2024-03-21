@@ -1,4 +1,4 @@
-const Question = ({ questions, currentQuestion }) => {
+const Question = ({questions, currentQuestion}) => {
   // const {state} = useContext(TriviaContext);
   // const {currentQuestion, questions} = state;
   const question = questions[currentQuestion];

@@ -1,5 +1,5 @@
 "use client";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import VizControl from "./VizControl";
 import ShowControl from "./ShowControl";
 import GenderControl from "./GenderControl";
@@ -13,18 +13,8 @@ const toggleSidePanel = () => {
   console.log("toggle side panel!");
 };
 
-export default function Controls({ places, nestedOccupations }) {
-  const {
-    city,
-    country,
-    gender,
-    occupation,
-    page,
-    placeType,
-    show,
-    viz,
-    yearType,
-  } = useSelector((state) => state.explore);
+export default function Controls({places, nestedOccupations}) {
+  const {page, show} = useSelector(state => state.explore);
 
   return (
     <div className="explore-controls viz-explorer" id="side-panel">

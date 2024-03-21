@@ -1,8 +1,9 @@
 "use client";
-import { AreaPlot } from "d3plus-react";
-import { FORMATTERS } from "../utils/consts";
+import {AreaPlot} from "d3plus-react";
+import {FORMATTERS} from "../utils/consts";
+import dayjs from "dayjs";
 
-export default function MemMetricsAreaPlot({ trendData }) {
+export default function MemMetricsAreaPlot({trendData}) {
   return (
     <div className="metric-trending">
       <AreaPlot
@@ -17,7 +18,7 @@ export default function MemMetricsAreaPlot({ trendData }) {
           shapeConfig: {
             Area: {
               curve: "monotoneX",
-              fill: (d) => d.color,
+              fill: d => d.color,
             },
           },
           yConfig: {
@@ -30,17 +31,17 @@ export default function MemMetricsAreaPlot({ trendData }) {
             fontFamily: () => ["Amiko", "Arial Narrow", "sans-serif"],
           },
           tooltipConfig: {
-            footer: (d) => `${FORMATTERS.commas(d.views)} Page Views`,
-            title: (d) =>
-              `<span class="center">${moment(d.date, "YYYY-MM-DD").format(
+            footer: d => `${FORMATTERS.commas(d.views)} Page Views`,
+            title: d =>
+              `<span class="center">${dayjs(d.date, "YYYY-MM-DD").format(
                 "LL"
               )}</span>`,
-            titleStyle: { "text-align": "center" },
+            titleStyle: {"text-align": "center"},
             width: "200px",
             footerStyle: {
               "font-size": "12px",
               "text-transform": "none",
-              color: "#4B4A48",
+              "color": "#4B4A48",
             },
           },
         }}

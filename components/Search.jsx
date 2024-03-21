@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { strip, trim } from "d3plus-text";
-import { Icon, NonIdealState } from "@blueprintjs/core";
+import React, {Component} from "react";
+import {connect} from "react-redux";
+import {strip, trim} from "d3plus-text";
+import {Icon, NonIdealState} from "@blueprintjs/core";
 import api from "./utils/apiConfig.js";
 // import "components/Search.css";
 
@@ -16,14 +16,14 @@ class Search extends Component {
   }
 
   onChange(e) {
-    const { env } = this.props;
+    const {env} = this.props;
     const userQuery = e.target.value;
     if (userQuery === "") {
       this.showTrending();
       return;
     }
     if (userQuery.length < 3) {
-      this.setState({ results: null, showTrending: false });
+      this.setState({results: null, showTrending: false});
       return;
     }
 
@@ -37,12 +37,12 @@ class Search extends Component {
       .get(
         `/search?document=fts.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`
       )
-      .then((queryResults) => {
+      .then(queryResults => {
         const results = queryResults.data;
         if (results.length) {
-          this.setState({ results, query: userQuery, showTrending: false });
+          this.setState({results, query: userQuery, showTrending: false});
         } else {
-          this.setState({ results: [], query: userQuery, showTrending: false });
+          this.setState({results: [], query: userQuery, showTrending: false});
         }
       });
   }
@@ -93,18 +93,18 @@ class Search extends Component {
   }
 
   showTrending = () => {
-    const { env } = this.props;
+    const {env} = this.props;
     api(env)
       .get("https://pantheon.world/api/wikiTrends?lang=en&limit=12")
-      .then((queryResults) => {
-        const results = queryResults.data.map((d) => ({
+      .then(queryResults => {
+        const results = queryResults.data.map(d => ({
           name: d.name,
           profile_type: "person",
           primary_meta: d.occupation,
           slug: d.slug,
         }));
         console.log("results", results);
-        this.setState({ results, query: "", showTrending: true });
+        this.setState({results, query: "", showTrending: true});
       });
   };
 
@@ -119,8 +119,8 @@ class Search extends Component {
   }
 
   render() {
-    const { activateSearch } = this.props;
-    const { query, results, showTrending } = this.state;
+    const {activateSearch} = this.props;
+    const {query, results, showTrending} = this.state;
 
     return (
       <div className="search">
@@ -140,7 +140,7 @@ class Search extends Component {
             <React.Fragment>
               <input
                 type="text"
-                ref={(el) => (this._searchInput = el)}
+                ref={el => (this._searchInput = el)}
                 onChange={this.onChange.bind(this)}
               />
             </React.Fragment>
@@ -153,7 +153,7 @@ class Search extends Component {
           {results ? (
             results.length ? (
               <ul className="results-list">
-                {results.map((result) => (
+                {results.map(result => (
                   <li
                     key={`person_${result.slug}`}
                     className={`result-${result.profile_type}`}
@@ -192,4 +192,4 @@ class Search extends Component {
   }
 }
 
-export default connect((state) => ({ env: state.env }), {})(Search);
+export default connect(state => ({env: state.env}), {})(Search);

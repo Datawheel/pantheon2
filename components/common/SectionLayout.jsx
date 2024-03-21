@@ -1,6 +1,6 @@
 import "./Section.css";
 
-export default function SectionLayout({ children, slug, title }) {
+export default function SectionLayout({children, slug, title}) {
   return (
     <section className="profile-section" key={slug}>
       <div className="section-head">

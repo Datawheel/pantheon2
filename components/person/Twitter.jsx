@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import duration from "dayjs/plugin/duration";
 import calendar from "dayjs/plugin/calendar";
-import { formatAbbreviate } from "d3plus-format";
+import {formatAbbreviate} from "d3plus-format";
 import SectionLayout from "../common/SectionLayout";
 import "./Twitter.css";
 import "./MemMetrics.css";
@@ -16,7 +16,7 @@ async function getTweets(personId) {
   return res.json();
 }
 
-const renderTweetDate = (twDate) => {
+const renderTweetDate = twDate => {
   const twMomentDate = dayjs(twDate, "ddd MMM DD HH:mm:ss Z YYYY");
   const now = new dayjs();
   const duration = dayjs.duration(now.diff(twMomentDate));
@@ -25,11 +25,11 @@ const renderTweetDate = (twDate) => {
     : twMomentDate.calendar();
 };
 
-export default async function Twitter({ person, slug, title }) {
+export default async function Twitter({person, slug, title}) {
   if (!person.twitter) {
     return null;
   }
-  const { user, timeline } = await getTweets(person.id);
+  const {user, timeline} = await getTweets(person.id);
 
   return (
     <SectionLayout slug={slug} title={title}>
@@ -40,8 +40,8 @@ export default async function Twitter({ person, slug, title }) {
               className="tw-banner"
               style={
                 user.profile_banner_url
-                  ? { backgroundImage: `url('${user.profile_banner_url}')` }
-                  : { backgroundColor: "#9E978D", height: "100px" }
+                  ? {backgroundImage: `url('${user.profile_banner_url}')`}
+                  : {backgroundColor: "#9E978D", height: "100px"}
               }
             ></div>
             <div className="tw-userinfo">
@@ -86,7 +86,7 @@ export default async function Twitter({ person, slug, title }) {
               </ul>
             </div>
             <div className="tw-feed">
-              {timeline.map((d) => (
+              {timeline.map(d => (
                 <div className="tweet-outer" key={d.id}>
                   {d.retweeted ? (
                     <div className="retweeted">

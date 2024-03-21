@@ -1,4 +1,4 @@
-const Progress = (props) => (
+const Progress = props => (
   <h3 className="progress">
     Question {props.current} of {props.total}
   </h3>

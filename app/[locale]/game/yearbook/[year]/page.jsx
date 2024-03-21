@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FORMATTERS } from "/components/utils/consts";
+import {FORMATTERS} from "/components/utils/consts";
 import YearbookSidebar from "/components/games/YearbookSidebar";
 import "/components/games/Yearbook.css";
 
@@ -10,11 +10,11 @@ async function getPeopleBornInYear(year) {
   return res.json();
 }
 
-export default async function Page({ params: { year } }) {
+export default async function Page({params: {year}}) {
   const peopleBornInYear = await getPeopleBornInYear(year);
 
-  const topPersonM = peopleBornInYear.find((d) => d.gender === "M");
-  const topPersonF = peopleBornInYear.find((d) => d.gender === "F");
+  const topPersonM = peopleBornInYear.find(d => d.gender === "M");
+  const topPersonF = peopleBornInYear.find(d => d.gender === "F");
 
   return (
     <div className="yearbook-page">

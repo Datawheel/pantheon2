@@ -6,7 +6,7 @@ import {
   NUM_RANKINGS_PRE,
   NUM_RANKINGS_POST,
 } from "../utils/consts";
-import { toTitleCase } from "../utils/vizHelpers";
+import {toTitleCase} from "../utils/vizHelpers";
 import "../../components/common/Footer.css";
 import "tippy.js/dist/tippy.css"; // optional
 
@@ -28,7 +28,7 @@ async function getOccupationRankings(
   return res.json();
 }
 
-export default async function Footer({ person, personRanks }) {
+export default async function Footer({person, personRanks}) {
   const wikiRelatedPeople = await getWikiRelatedPeople(person.slug);
   const occupationRankLow = Math.max(
     1,
@@ -44,7 +44,7 @@ export default async function Footer({ person, personRanks }) {
     occupationRankHigh
   );
 
-  const me = occupationRankings.findIndex((rank) => rank.slug === person.slug);
+  const me = occupationRankings.findIndex(rank => rank.slug === person.slug);
   const aboveMe = occupationRankings[me + 1];
   const belowMe = occupationRankings[me - 1];
 
@@ -155,7 +155,7 @@ export default async function Footer({ person, personRanks }) {
           ) : null}
 
           {wikiRelatedPeople.length
-            ? wikiRelatedPeople.map((relatedBio) => (
+            ? wikiRelatedPeople.map(relatedBio => (
                 <li className="footer-carousel-item" key={relatedBio.id}>
                   <div className="footer-carousel-item-photo">
                     <Tippy content={relatedBio.extract}>

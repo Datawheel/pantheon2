@@ -1,7 +1,7 @@
 "use client";
-import { useRef } from "react";
+import {useRef} from "react";
 import React from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import {CopyToClipboard} from "react-copy-to-clipboard";
 import "./Result.css";
 
 function convertTZ(date, tzString) {
@@ -13,9 +13,7 @@ function convertTZ(date, tzString) {
 }
 
 export default function Result({
-  MAX_ATTEMPTS,
   sortedPersons,
-  attempt,
   isWin,
   resultToShare,
   resultBlockRef,
@@ -29,7 +27,7 @@ export default function Result({
 
   const difference =
     +convertTZ(new Date(), "Europe/Paris") -
-    +convertTZ(new Date(`10/06/2022 00:00:00`), "Europe/Paris");
+    +convertTZ(new Date("10/06/2022 00:00:00"), "Europe/Paris");
   const gameIdShare = Math.ceil(difference / (1000 * 60 * 60 * 24));
 
   return (
@@ -47,7 +45,7 @@ export default function Result({
           )}
           <div>
             <ul key={"resultLinksList"} className="result-links-list">
-              {sortedPersons.map((person) => (
+              {sortedPersons.map(person => (
                 <li key={`${person.id}_people`}>
                   <a
                     key={`${person.id}_peopleLink`}

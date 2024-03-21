@@ -31,12 +31,7 @@ async function getDeathYearRankings(
   return res.json();
 }
 
-export default async function YearRanking({
-  person,
-  personRanks,
-  title,
-  slug,
-}) {
+export default async function YearRanking({person, personRanks, title, slug}) {
   if (!person.birthyear) {
     return null;
   }
@@ -78,7 +73,7 @@ export default async function YearRanking({
     deathYearRankingsData,
   ]);
 
-  const meBy = birthYearRanking.find((rank) => rank.slug === person.slug);
+  const meBy = birthYearRanking.find(rank => rank.slug === person.slug);
 
   // return <div>year ranking to come...</div>;
 
@@ -89,10 +84,10 @@ export default async function YearRanking({
     worseDeathPeers = null;
 
   const betterRankedBirthPeers = birthYearRanking.filter(
-    (p) => p.birthyear_rank_unique < meBy.birthyear_rank_unique
+    p => p.birthyear_rank_unique < meBy.birthyear_rank_unique
   );
   const worseRankedBirthPeers = birthYearRanking.filter(
-    (p) => p.birthyear_rank_unique > meBy.birthyear_rank_unique
+    p => p.birthyear_rank_unique > meBy.birthyear_rank_unique
   );
 
   if (betterRankedBirthPeers.length) {
@@ -104,12 +99,12 @@ export default async function YearRanking({
         {
           <AnchorList
             items={betterRankedBirthPeers}
-            name={(d) =>
+            name={d =>
               d.birthcountry
                 ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})`
                 : d.name
             }
-            url={(d) => `/profile/person/${d.slug}/`}
+            url={d => `/profile/person/${d.slug}/`}
           />
         }
         .{" "}
@@ -124,12 +119,12 @@ export default async function YearRanking({
         {
           <AnchorList
             items={worseRankedBirthPeers}
-            name={(d) =>
+            name={d =>
               d.birthcountry
                 ? `${d.name} (${d.birthcountry.country_code.toUpperCase()})`
                 : d.name
             }
-            url={(d) => `/profile/person/${d.slug}/`}
+            url={d => `/profile/person/${d.slug}/`}
           />
         }
         .
@@ -138,12 +133,12 @@ export default async function YearRanking({
   }
 
   if (deathYearRanking.length) {
-    meDy = deathYearRanking.find((rank) => rank.slug === person.slug);
+    meDy = deathYearRanking.find(rank => rank.slug === person.slug);
     const betterRankedDeathPeers = deathYearRanking.filter(
-      (p) => p.deathyear_rank_unique < meDy.deathyear_rank_unique
+      p => p.deathyear_rank_unique < meDy.deathyear_rank_unique
     );
     const worseRankedDeathPeers = deathYearRanking.filter(
-      (p) => p.deathyear_rank_unique > meDy.deathyear_rank_unique
+      p => p.deathyear_rank_unique > meDy.deathyear_rank_unique
     );
     if (betterRankedDeathPeers.length) {
       betterDeathPeers = (
@@ -154,12 +149,12 @@ export default async function YearRanking({
           {
             <AnchorList
               items={betterRankedDeathPeers}
-              name={(d) =>
+              name={d =>
                 d.deathcountry
                   ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})`
                   : d.name
               }
-              url={(d) => `/profile/person/${d.slug}/`}
+              url={d => `/profile/person/${d.slug}/`}
             />
           }
           .{" "}
@@ -175,12 +170,12 @@ export default async function YearRanking({
           {
             <AnchorList
               items={worseRankedDeathPeers}
-              name={(d) =>
+              name={d =>
                 d.deathcountry
                   ? `${d.name} (${d.deathcountry.country_code.toUpperCase()})`
                   : d.name
               }
-              url={(d) => `/profile/person/${d.slug}/`}
+              url={d => `/profile/person/${d.slug}/`}
             />
           }
           .

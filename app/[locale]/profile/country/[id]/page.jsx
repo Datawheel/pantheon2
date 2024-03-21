@@ -1,5 +1,5 @@
 // import ProfileNav from "../../../../components/common/Nav";
-import { cloneElement } from "react";
+import {cloneElement} from "react";
 import Intro from "/components/country/Intro";
 import Header from "/components/country/Header";
 import PeopleRanking from "/components/country/sections/PeopleRanking";
@@ -54,7 +54,7 @@ async function getPeopleDiedHere(countryId) {
   return res.json();
 }
 
-export async function generateMetadata({ params, searchParams }, parent) {
+export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
 
@@ -75,7 +75,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
   };
 }
 
-export default async function Page({ params: { id } }) {
+export default async function Page({params: {id}}) {
   const [country, occupations] = await Promise.all([
     getCountry(id),
     getOccupations(),
@@ -101,12 +101,12 @@ export default async function Page({ params: { id } }) {
     !peopleBornHere ||
     peopleBornHere
       .sort((personA, personB) => personB.hpi - personA.hpi)
-      .map((d, i) => ({ ...d, bplace_country_rank_unique: i + 1 }));
+      .map((d, i) => ({...d, bplace_country_rank_unique: i + 1}));
   peopleDiedHere =
     !peopleDiedHere ||
     peopleDiedHere
       .sort((personA, personB) => personB.hpi - personA.hpi)
-      .map((d, i) => ({ ...d, dplace_country_rank_unique: i + 1 }));
+      .map((d, i) => ({...d, dplace_country_rank_unique: i + 1}));
 
   const attrs = occupations.reduce((obj, d) => {
     obj[d.id] = d;

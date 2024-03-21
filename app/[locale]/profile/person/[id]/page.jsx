@@ -1,5 +1,5 @@
-import { cloneElement } from "react";
-import { plural } from "pluralize";
+import {cloneElement} from "react";
+import {plural} from "pluralize";
 import ProfileNav from "/components/common/Nav";
 import Intro from "/components/person/Intro";
 import Header from "/components/person/Header";
@@ -62,7 +62,7 @@ async function getWikiExtract(personId) {
   return res.json();
 }
 
-export async function generateMetadata({ params, searchParams }, parent) {
+export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
 
@@ -83,7 +83,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
   };
 }
 
-export default async function Page({ params: { id } }) {
+export default async function Page({params: {id}}) {
   const personData = getPerson(id);
   const personRanksData = getPersonRanks(id);
 

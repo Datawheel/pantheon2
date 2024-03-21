@@ -1,18 +1,16 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, Dialog } from "@blueprintjs/core";
-import { Select } from "@blueprintjs/select";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {Button, Dialog} from "@blueprintjs/core";
 import "./ConsentForm.css";
-import { useI18n, useScopedI18n } from "../../locales/client";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { v4 as uuidv4 } from "uuid";
+import {useI18n} from "../../locales/client";
+import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
+import {v4 as uuidv4} from "uuid";
 
 export default function ConsentForm({
   isOpenConsentForm,
   setIsOpenConsentForm,
   acceptBtnRef,
   universe,
-  saveConsent,
   setSaveConsent,
   scoreDB,
   setScoreDB,
@@ -22,10 +20,10 @@ export default function ConsentForm({
   const [rKey, setRKey] = useState(Math.random() * (100 - 50) + 50);
   const isMounted = useRef(true);
 
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  const {executeRecaptcha} = useGoogleReCaptcha();
 
   const handleReCaptchaVerify = useCallback(
-    async (buttonType) => {
+    async buttonType => {
       if (!executeRecaptcha) {
         console.log("Execute recaptcha not yet available");
         return;
@@ -41,15 +39,15 @@ export default function ConsentForm({
       const data = {
         user_id: localStorage.getItem("mptoken"),
         locale: "en",
-        universe: universe,
+        universe,
         url: window.location.href,
-        token: token,
-        scoreDB: scoreDB,
+        token,
+        scoreDB,
       };
 
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data),
       };
 
@@ -73,13 +71,13 @@ export default function ConsentForm({
     };
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(gameDataSave),
     };
 
     await fetch("/api/getConsent", requestOptions)
-      .then((resp) => resp.json())
-      .then((consent) => {
+      .then(resp => resp.json())
+      .then(consent => {
         console.log("consent!!!", consent);
         if (consent.length > 0) {
           setScoreDB(parseFloat(consent[0].score_bot));
@@ -100,6 +98,7 @@ export default function ConsentForm({
         isMounted.current = false;
       };
     }
+    return null;
   }, []);
 
   return (
@@ -114,7 +113,7 @@ export default function ConsentForm({
         <div
           key={"cosenttitle"}
           className="description"
-          dangerouslySetInnerHTML={{ __html: consentText }}
+          dangerouslySetInnerHTML={{__html: consentText}}
         />
 
         <div
@@ -126,7 +125,7 @@ export default function ConsentForm({
             key={"consentno"}
             id={"consentno"}
             className="bp5-button lite"
-            onClick={(event) => (window.location.href = "/data/faq")}
+            onClick={() => (window.location.href = "/data/faq")}
           >
             Do not accept
           </Button>

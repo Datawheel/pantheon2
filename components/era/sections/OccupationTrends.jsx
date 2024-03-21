@@ -1,18 +1,15 @@
-import { nest } from "d3-collection";
-import { plural } from "pluralize";
-import AnchorList from "../../utils/AnchorList";
 import SectionLayout from "../../common/SectionLayout";
-import { calculateYearBucket } from "../../utils/vizHelpers";
+import {calculateYearBucket} from "../../utils/vizHelpers";
 import OccupationsStackedArea from "../../place/sections/vizes/OccupationsStackedArea";
 
-const OccupationTrends = ({ attrs, peopleBorn, peopleDied, slug, title }) => {
+const OccupationTrends = ({attrs, peopleBorn, peopleDied, slug, title}) => {
   const tmapBornData = peopleBorn
     .filter(
-      (p) => p.birthyear !== null && p.bplace_country !== null && p.occupation
+      p => p.birthyear !== null && p.bplace_country !== null && p.occupation
     )
     .sort((a, b) => b.langs - a.langs);
 
-  tmapBornData.forEach((d) => {
+  tmapBornData.forEach(d => {
     d.borncountry = d.bplace_country.country;
     d.borncontinent = d.bplace_country.continent;
     d.occupation_name = d.occupation.occupation;
@@ -22,10 +19,10 @@ const OccupationTrends = ({ attrs, peopleBorn, peopleDied, slug, title }) => {
   });
 
   const tmapDeathData = peopleDied
-    .filter((p) => p.deathyear !== null && p.occupation)
+    .filter(p => p.deathyear !== null && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 
-  tmapDeathData.forEach((d) => {
+  tmapDeathData.forEach(d => {
     d.industry = d.occupation.industry;
     d.domain = d.occupation.domain;
     d.occupation_name = d.occupation.occupation;
@@ -36,11 +33,11 @@ const OccupationTrends = ({ attrs, peopleBorn, peopleDied, slug, title }) => {
 
   const [bornBuckets, bornTicks] = calculateYearBucket(
     tmapBornData,
-    (d) => d.birthyear
+    d => d.birthyear
   );
   const [deathBuckets, deathTicks] = calculateYearBucket(
     tmapDeathData,
-    (d) => d.deathyear
+    d => d.deathyear
   );
 
   return (

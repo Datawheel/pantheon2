@@ -1,7 +1,7 @@
 "use client";
-import { StackedArea } from "d3plus-react";
+import {StackedArea} from "d3plus-react";
 import VizWrapper from "../../../common/VizWrapper";
-import { groupBy, groupTooltip, shapeConfig } from "../../../utils/vizHelpers";
+import {groupBy, groupTooltip, shapeConfig} from "../../../utils/vizHelpers";
 
 export default function OccupationsStackedArea({
   attrs,
@@ -17,7 +17,7 @@ export default function OccupationsStackedArea({
           key="stacked1"
           config={{
             title,
-            data: data,
+            data,
             depth: 2,
             groupBy: ["domain", "industry", "occupation_name"].map(
               groupBy(attrs)
@@ -26,7 +26,7 @@ export default function OccupationsStackedArea({
             tooltipConfig: groupTooltip(data),
             xConfig: {
               labels: ticks,
-              tickFormat: (d) => buckets[d],
+              tickFormat: d => buckets[d],
             },
           }}
         />

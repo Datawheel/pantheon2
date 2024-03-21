@@ -1,7 +1,7 @@
 import React from "react";
 import "./Section.css";
 
-const Section = ({ children, index, numSections, slug, title }) => (
+const Section = ({children, slug, title}) => (
   <section className="profile-section" key={slug}>
     <div className="section-head">
       <div className="section-title">
