@@ -1,8 +1,10 @@
-import langFamilies from "../../pages/api/json/langFamilies.json";
+// import langFamilies from "../../pages/api/json/langFamilies.json";
 import PageViewsByLangSummary from "/components/person/PageViewsByLangSummary";
 import PageViewsByLangAreaPlot from "/components/person/PageViewByLangAreaPlot";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
+
+const langFamilies = {};
 
 function yyyymmdd(dateIn) {
   const mm = dateIn.getMonth() + 1; // getMonth() is zero-based
