@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import HomeGrid from "/components/home/Grid";
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
 
@@ -85,17 +86,39 @@ export default function Home() {
 
   return (
     <div className="container">
-      <img className="bg-design" src="/images/home/printing.png" />
-      <img className="bg-design bg-design-r" src="/images/home/film.png" />
+      <Image
+        className="bg-design"
+        src="/images/home/printing.png"
+        alt="old school printing press"
+        width={400}
+        height={423}
+      />
+      <Image
+        className="bg-design bg-design-r"
+        src="/images/home/film.png"
+        alt="old school film camera"
+        width={230}
+        height={290}
+      />
 
       <div className="home-head-container">
         <div className="home-head">
           <div className="home-head-title">
             <h1>
-              <img src="/images/logos/logo_pantheon.svg" alt="Pantheon" />
+              <Image
+                src="/images/logos/logo_pantheon.svg"
+                alt="Pantheon logo"
+                width={348}
+                height={49}
+              />
             </h1>
             <div className="home-search">
-              <img src="/images/icons/icon-search.svg" alt="Search" />
+              <Image
+                src="/images/icons/icon-search.svg"
+                alt="search icon"
+                width={22}
+                height={22}
+              />
               <a href="#" onClick={activateSearch}>
                 Search people, places, &amp; occupations
               </a>

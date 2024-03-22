@@ -1,0 +1,45 @@
+.mouse {
+  @media (max-width: 750px) {
+    display: none;
+  }
+
+  @media (min-height: 560px) {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    height: 33px;
+    width: 22px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    border: 1px solid var(--colorSlate);
+    border-radius: 11px;
+
+    & .mouse-scroll {
+      width: 2.8px;
+      height: 6px;
+      background-color: var(--colorSlate);
+      border-radius: 11px;
+      box-sizing: border-box;
+      animation: scroll 1.5s ease-out infinite;
+    }
+
+    &::after {
+      content: '';
+      background-image: url("/images/ui/tri-down.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 16px;
+      height: 10px;
+      position: absolute;
+      bottom: -15px;
+    }
+  }
+}
+
+@keyframes scroll {
+  from {margin-top: 6px;}
+  to {margin-top: 12px;}
+}
