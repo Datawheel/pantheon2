@@ -1,9 +1,0 @@
-@import "components/common/mixins";
-
-.about-section {
-  @media (max-width: 750px) {
-    position: relative;
-    display: flex;
-    flex-direction: column-reverse;
-  }
-}

@@ -1,102 +1,20 @@
 {
   "name": "pantheon",
-  "version": "2.1.0",
-  "description": "Pantheon as a Node.js app using Express 4 with Webpack, React, D3plus",
-  "main": "src/index.js",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --quiet"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/Datawheel/pantheon2.git"
-  },
-  "keywords": [
-    "culture",
-    "history",
-    "wikipedia",
-    "node",
-    "react"
-  ],
-  "author": "Alexander Simoes",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Datawheel/pantheon2/issues"
-  },
-  "homepage": "https://github.com/Datawheel/pantheon2#readme",
-  "devDependencies": {
-    "@datawheel/eslint-config": "latest",
-    "@webpack-cli/serve": "^1.7.0",
-    "babel-eslint": ">=6",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "^14.1.4",
-    "eslint-plugin-react": ">=7",
-    "postcss-css-variables": "^0.18.0",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-import": "^15.1.0",
-    "postcss-mixins": "^9.0.4",
-    "postcss-preset-env": "^8.3.0",
-    "webpack": "^4.46.0",
-    "webpack-dev-server": "^3.11.3"
-  },
-  "eslintConfig": {
-    "extends": [
-      "@datawheel",
-      "next"
-    ],
-    "globals": {
-      "__DEV__": true,
-      "__SERVER__": true
-    },
-    "rules": {
-      "no-extra-parens": "off",
-      "indent": "off",
-      "brace-style": "off",
-      "comma-dangle": "off",
-      "space-before-function-paren": "off",
-      "require-jsdoc": "off",
-      "react/no-string-refs": "off",
-      "new-cap": "warn",
-      "camelcase": "warn",
-      "wrap-regex": "off",
-      "spaced-comment": "off",
-      "react/jsx-key": [
-        1,
-        {
-          "checkFragmentShorthand": true
-        }
-      ]
-    }
+    "lint": "next lint"
   },
   "dependencies": {
-    "@blueprintjs/core": "^5.9.1",
-    "@blueprintjs/select": "^5.1.1",
-    "@prisma/client": "^5.7.0",
-    "@reduxjs/toolkit": "^1.9.5",
-    "@tippyjs/react": "^4.2.6",
-    "async-throttle": "^1.1.0",
-    "axios": "^1.6.2",
-    "babel-preset-react": "^6.24.1",
-    "compose-function": "^3.0.3",
-    "crypto-js": "^4.1.1",
-    "d3-array": "^3.2.4",
-    "d3plus-react": "^1.3.3",
-    "dayjs": "^1.11.7",
-    "i18next-http-backend": "^1.4.1",
-    "next": "^14.0.4",
-    "next-international": "^1.1.4",
-    "normalize.css": "^8.0.1",
-    "numeral": "^2.0.6",
-    "pg": "^8.8.0",
-    "pluralize": "^8.0.0",
-    "react": "^18.2.0",
-    "react-copy-to-clipboard": "^5.1.0",
-    "react-dom": "^18.2.0",
-    "react-google-recaptcha-v3": "^1.10.1",
-    "react-redux": "^8.1.2",
-    "react-table": "^7.8.0",
-    "twitter-lite": "^1.1.0"
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "14.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.1.4"
   }
 }
