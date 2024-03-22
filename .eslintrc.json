@@ -1,3 +1,22 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-extra-parens": "off",
+    "indent": "off",
+    "brace-style": "off",
+    "comma-dangle": "off",
+    "space-before-function-paren": "off",
+    "require-jsdoc": "off",
+    "react/no-string-refs": "off",
+    "new-cap": "warn",
+    "camelcase": "warn",
+    "wrap-regex": "off",
+    "spaced-comment": "off",
+    "react/jsx-key": [
+      1,
+      {
+        "checkFragmentShorthand": true
+      }
+    ]
+  }
 }
