@@ -1,0 +1,59 @@
+@import "../../styles/mixins.css";
+
+.fancy-button {
+  /* theming */
+  color: var(--colorSnow);
+  background-color: var(--colorSlate);
+  border: none;
+  border-radius: 4px;
+  padding: 1em 1.5em;
+  cursor: pointer; /* it a button, but it acts like a link */
+  /* typography */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: var(--sizeBody);
+  font-weight: 800;
+  /* transitions */
+  transition:
+    opacity 0.3s ease-out,
+    background 0.3s ease-out,
+    box-shadow 0.1s ease-out;
+
+  & > .fancy-button-text {
+    margin-right: 0.5em;
+  }
+  & > .fancy-button-icon {
+    width: 1.125em;
+    vertical-align: middle;
+    position: relative;
+    top: -0.075em;
+    transition: transform 0.15s ease-out;
+
+    & > svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  /* disabled state */
+  &[disabled] {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* interactions */
+  &:not([disabled]):hover,
+  &:not([disabled]):focus {
+    background-color: var(--colorCtrl);
+    box-shadow: 0 0.125em 1em color(var(--colorSlate) a(0.5));
+
+    & > .fancy-button-icon {
+      transform: scale(1.125);
+
+      &[class*="arrow-right"] {
+        transform: scale(1.125) translateX(0.075em);
+      }
+    }
+  }
+}
