@@ -14,7 +14,7 @@ export default function MetricCutoffControl() {
         className={onlyShowNew ? "active" : ""}
         htmlFor="onlyNew"
       >
-        Only new biographies (2022)
+        Only new biographies (2024)
       </label>
       <input
         disabled={loading}

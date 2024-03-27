@@ -76,4 +76,9 @@ export const SANITIZERS = {
         : place.toLowerCase()
       : place,
   city: place => (place && place.includes("|") ? place.split("|")[1] : "all"),
+  occupation: (potentialOccupation, validOccupations) =>
+    validOccupations.find(vo => vo.id === potentialOccupation)
+      ? potentialOccupation
+      : null,
+  new: potentialNew => potentialNew === "true" || false,
 };
