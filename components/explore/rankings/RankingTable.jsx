@@ -88,7 +88,7 @@ export default function RankingTable({places}) {
     setPageInputVal(controlledPageIndex);
   }, [controlledPageIndex]);
 
-  console.log("pageIndex, pageSize, sortBy", pageIndex, pageSize, sortBy);
+  // console.log("pageIndex, pageSize, sortBy", pageIndex, pageSize, sortBy);
 
   const setPageAndFetchData = pageNum => {
     setPageInputVal(pageNum);

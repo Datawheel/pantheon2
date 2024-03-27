@@ -100,9 +100,6 @@ function Trivia({questions}) {
       resp => resp.json()
     );
 
-    console.log("triviaGame!!!", triviaGame);
-    console.log("getGame!", getGame);
-
     if (triviaGame.length === 0) {
       await fetch("/api/createTriviaGame", requestOptions);
     }
@@ -133,7 +130,6 @@ function Trivia({questions}) {
             cao: question.correct_answer,
             cat: question[`answer_${question.correct_answer}`],
           };
-          console.log("ANSWERs!", answers);
 
           callDB(answer, token);
           setAnswers(prevAnswers => [...prevAnswers, answer]);
@@ -204,7 +200,6 @@ function Trivia({questions}) {
         saveQuestion(answer, tempScore);
       }
     } else {
-      console.log("GOT HERE!!!!");
       await saveQuestion(answer, scoreDB, token);
     }
   };
@@ -239,7 +234,7 @@ function Trivia({questions}) {
     };
   }, [time]);
 
-  console.log("⏰ time: ", time);
+  // console.log("⏰ time: ", time);
 
   return (
     <div key={"triviaDiv1"}>

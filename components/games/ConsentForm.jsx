@@ -78,7 +78,6 @@ export default function ConsentForm({
     await fetch("/api/getConsent", requestOptions)
       .then(resp => resp.json())
       .then(consent => {
-        console.log("consent!!!", consent);
         if (consent.length > 0) {
           setScoreDB(parseFloat(consent[0].score_bot));
           setSaveConsent(false);

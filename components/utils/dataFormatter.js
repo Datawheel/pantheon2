@@ -104,7 +104,6 @@ const dataFormatter = (dataArray, showType, showDepth, placeType) => {
         .sort((a, b) => b.hpi - a.hpi);
     }
   } else {
-    console.log("IN ELSE!!@");
     data = data.map((d, i) => Object.assign(d, {rank: i + 1}));
   }
   return data;

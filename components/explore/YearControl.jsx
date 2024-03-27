@@ -44,7 +44,6 @@ export default function YearControl() {
       ? setTempYearEnd
       : setTempYearStart;
     tempYearSetter(tempYear);
-    console.log(tempYear);
     if (
       e.type === "blur" ||
       (e.type === "keydown" && e.keyCode === ENTER_KEY_CODE)
