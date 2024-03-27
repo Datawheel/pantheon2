@@ -1,9 +1,9 @@
 /*eslint no-undefined: "error"*/
 "use client";
-import { useEffect } from "react";
-import { nest } from "d3-collection";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
+import {useEffect} from "react";
+import {nest} from "d3-collection";
+import {useSearchParams, useRouter, usePathname} from "next/navigation";
+import {useSelector, useDispatch} from "react-redux";
 import VizTitle from "../components/explore/VizTitle";
 import Controls from "../components/explore/Controls";
 import Spinner from "../components/Spinner";
@@ -14,8 +14,8 @@ import {
   LANGS_RANGE,
   COUNTRY_LIST,
 } from "../components/utils/consts";
-import { fetchDataAndDispatch } from "../components/utils/exploreHelpers";
-import { SANITIZERS } from "../components/utils/sanitizers";
+import {fetchDataAndDispatch} from "../components/utils/exploreHelpers";
+import {SANITIZERS} from "../components/utils/sanitizers";
 import {
   setFirstLoad,
   updateCountry,
@@ -23,11 +23,13 @@ import {
   updateGender,
   updateYears,
   updateShowDepth,
+  updateOccupation,
+  updateOnlyShowNew,
 } from "./exploreSlice";
 import "./Explore.css";
 import VizShell from "../components/explore/viz/VizShell";
 
-function Explore({ places, occupations, pageType }) {
+function Explore({places, occupations, pageType}) {
   const {
     firstLoad,
     data,
@@ -43,38 +45,45 @@ function Explore({ places, occupations, pageType }) {
     show,
     years,
     yearType,
-  } = useSelector((state) => state.explore);
-  const exploreState = useSelector((state) => state.explore);
+  } = useSelector(state => state.explore);
+  const exploreState = useSelector(state => state.explore);
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
   const nestedOccupations = nest()
-    .key((d) => d.domain_slug)
+    .key(d => d.domain_slug)
     .entries(occupations)
-    .map((occData) => ({
+    .map(occData => ({
       domain: {
-        id: `${occData.values.map((o) => o.id)}`,
+        id: `${occData.values.map(o => o.id)}`,
         slug: occData.values[0].domain_slug,
         name: occData.values[0].domain,
       },
       occupations: occData.values,
     }));
+  console.log("occupations", occupations);
+  console.log("nestedOccupations", nestedOccupations);
 
   useEffect(() => {
     const queryParamShow = searchParams.get("show")
       ? SANITIZERS.show(searchParams.get("show"), "rankings")
       : pageType === "rankings"
-      ? { type: "people", depth: "people" }
-      : { type: "occupations", depth: "occupations" };
+      ? {type: "people", depth: "people"}
+      : {type: "occupations", depth: "occupations"};
     const queryParamCountry =
-      SANITIZERS.country(searchParams.get("place")) || pageType !== "rankings"
+      pageType !== "rankings" && !SANITIZERS.country(searchParams.get("place"))
         ? COUNTRY_LIST[Math.floor(Math.random() * COUNTRY_LIST.length)]
-        : "all";
+        : SANITIZERS.country(searchParams.get("place")) || "all";
+    const queryParamOccupation =
+      SANITIZERS.occupation(searchParams.get("occupation"), occupations) ||
+      "all";
+    console.log("queryParamOccupation!!", queryParamOccupation);
     const queryParamCity = SANITIZERS.city(searchParams.get("place")) || "all";
     const queryParamGender = SANITIZERS.gender(searchParams.get("gender"));
     const queryParamYears = SANITIZERS.years(searchParams.get("years"));
+    const queryParamNew = SANITIZERS.new(searchParams.get("new"));
     dispatch(
       updateShowDepth({
         showType: queryParamShow.type,
@@ -82,10 +91,12 @@ function Explore({ places, occupations, pageType }) {
         page: pageType,
       })
     );
+    dispatch(updateOccupation(queryParamOccupation));
     dispatch(updateCountry(queryParamCountry));
     dispatch(updateCity(queryParamCity));
     dispatch(updateGender(queryParamGender));
     dispatch(updateYears(queryParamYears));
+    dispatch(updateOnlyShowNew(queryParamNew));
     dispatch(setFirstLoad());
   }, []);
 
@@ -112,7 +123,7 @@ function Explore({ places, occupations, pageType }) {
 
   if (metricCutoff > metricRange[0]) {
     metricSentence = onlyShowNew
-      ? "Only showing newly added biographies (as of 2022)"
+      ? "Only showing newly added biographies (as of 2024)"
       : "Only showing biographies";
     if (metricType === "hpi") {
       metricSentence = `${metricSentence} with a Historical Popularity Index (HPI) greater than ${metricCutoff}.`;
@@ -120,7 +131,7 @@ function Explore({ places, occupations, pageType }) {
       metricSentence = `${metricSentence} with more than ${metricCutoff} Wikipedia language editions.`;
     }
   } else if (onlyShowNew) {
-    metricSentence = "Only showing newly added biographies (as of 2022)";
+    metricSentence = "Only showing newly added biographies (as of 2024)";
   }
 
   return (
@@ -143,7 +154,7 @@ function Explore({ places, occupations, pageType }) {
             <VizShell occupations={occupations} />
           )
         ) : (
-          <div style={{ position: "relative", width: "100%" }}>
+          <div style={{position: "relative", width: "100%"}}>
             <Spinner />
           </div>
         )}

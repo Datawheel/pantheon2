@@ -70,7 +70,7 @@ export default function People({occupation, people, title, slug}) {
           {peopleNew.length ? (
             <span>
               {" "}
-              As of April 2022, {peopleNew.length} new{" "}
+              As of April 2024, {peopleNew.length} new{" "}
               {plural(occupation.occupation.toLowerCase())} have been added to
               Pantheon including{" "}
               <AnchorList
@@ -120,7 +120,7 @@ export default function People({occupation, people, title, slug}) {
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>
-                Newly Added {toTitleCase(plural(occupation.occupation))} (2022)
+                Newly Added {toTitleCase(plural(occupation.occupation))} (2024)
               </h3>
               <Link
                 href={`/explore/rankings?show=people&occupation=${occupation.id}`}
