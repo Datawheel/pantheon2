@@ -80,12 +80,9 @@ export default function Page() {
       );
       const {data: countries} = getOccupationsInCountry;
       setCountries(countries);
-      console.log("getOccupationsInCountry!");
     }
     fetchOccupationData();
   }, [occupation]);
-
-  console.log("aCountry.country", occupationsInCountry);
 
   return (
     <div className="welcome">
