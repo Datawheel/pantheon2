@@ -63,8 +63,6 @@ function Explore({places, occupations, pageType}) {
       },
       occupations: occData.values,
     }));
-  console.log("occupations", occupations);
-  console.log("nestedOccupations", nestedOccupations);
 
   useEffect(() => {
     const queryParamShow = searchParams.get("show")
