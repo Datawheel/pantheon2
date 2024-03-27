@@ -1,0 +1,221 @@
+@import "../../../styles/mixins.css";
+
+.game-container {
+  @mixin max-container-width;
+  display: flex;
+  flex-direction: row;
+  width: 1024px;
+  margin: 0 auto;
+  border-top: 1px solid var(--colorCardboard);
+  padding: 80px 0;
+  justify-content: center;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 43px;
+  margin-bottom: 44px;
+}
+
+.game-name, .game-goal {
+  margin: 0;
+  font-family: 'Helvetica';
+  text-align: center;
+}
+
+.game-name {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+}
+
+.game-goal {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.game-board {
+  margin-top: 31px;
+}
+
+.board {
+  display: flex;
+  justify-content: center;
+}
+
+.board-list{
+  list-style:none;
+}
+
+.board-row-list, .panel-list {
+  display: flex;
+  list-style: none;
+  gap: 4px;
+}
+
+.board-row-list {
+  margin: 5px 0;
+}
+
+.board-row-list-item, .panel-list-item {
+  box-sizing: border-box;
+  width: 65px;
+  height: 65px;
+}
+
+.card {
+  position: absolute;
+  overflow: hidden;
+  width: inherit;
+  height: inherit;
+  box-sizing: border-box;
+  border: 1px solid #878787;
+  cursor: pointer;
+}
+
+.card-title{
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  padding: 2px 0;
+  background: rgba(244,244,241,.7) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC) repeat;
+  font-size: 8px;
+  font-family: Marcellus,Times,serif;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: center;
+  color: #4b4a48;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.board-item{
+  cursor: default;
+}
+
+.correct:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  background: rgba(90, 244, 79, 0.5);
+  transition: background .3s linear;
+}
+
+.wrong:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  background: rgba(201, 56, 23, 0.5);
+  transition: background .3s linear;
+}
+
+.selected::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  background: rgba(201, 201, 201, 0.685);
+  transition: background .3s linear;
+}
+
+.error-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 65px;
+}
+
+.game-board .btn-list {
+  margin: 58px 0 40px 0;
+}
+
+.btn-check::before {
+  content: "";
+  display: block;
+  background: url("/images/icons/icon-ok.svg") no-repeat center;
+  background-color: transparent;
+  width: 15px;
+  height: 15px;
+  float: left;
+  margin: 0 5px 0 0;
+}
+
+.btn-cancel::before {
+  content: "";
+  display: block;
+  background-color: white;
+  background: url("/images/icons/icon-close.svg") no-repeat center;
+  width: 15px;
+  height: 15px;
+  float: left;
+  margin: 0 5px 0 0;
+}
+
+@media (min-width: 900px) {
+  .panel-list {
+    gap: 5px;
+  }
+
+  .panel-list-item {
+    width: 110px;
+    height: 110px;
+  }  
+  .error-block {
+    height: 110px;
+  }
+
+  .game-header {
+    gap: 9px;
+    margin-top: 48px;
+    margin-bottom: 42px;
+  }
+
+  .game-name {
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 41px;
+  }
+
+  .game-goal {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+  }
+
+  .game-board {
+    margin-top: 41px;
+    margin-bottom: 34px;
+  }
+
+  .card-title {
+    font-size: 12px;
+  }
+
+  .game-board .btn-list {
+    margin: 20px 0
+  }
+}
