@@ -3,11 +3,12 @@ import {LinePlot} from "d3plus-react";
 import {FORMATTERS} from "../utils/consts";
 
 export default function HeaderLine({data}) {
+  const filteredData = data.filter(d => d.topPeople.length);
   return (
     <div>
       <LinePlot
         config={{
-          data,
+          data: filteredData,
           discrete: "x",
           // groupBy: "article",
           height: 120,
