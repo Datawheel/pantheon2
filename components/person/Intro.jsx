@@ -5,11 +5,11 @@ import "../common/Intro.css";
 
 const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
   const {
-    occupationRank,
-    occupationRankPrev,
-    bplaceCountryRank,
-    bplaceCountryRankPrev,
-    bplaceCountryOccupationRank,
+    occupation_rank: occupationRank,
+    occupation_rank_prev: occupationRankPrev,
+    bplace_country_rank: bplaceCountryRank,
+    bplace_country_rank_prev: bplaceCountryRankPrev,
+    bplace_country_occupation_rank: bplaceCountryOccupationRank,
   } = personRanks;
   // const bplaceCountryRank = personRanks.bplaceCountryRank ? personRanks.bplaceCountryRank : null;
   const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug];
