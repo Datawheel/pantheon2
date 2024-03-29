@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
+import {useSearchVisibility} from "/contexts/SearchContext";
 
 const LangSelector = ({setTrendingLangEdition, trendingLangEdition}) => (
   <Select
@@ -31,7 +32,8 @@ const LangSelector = ({setTrendingLangEdition, trendingLangEdition}) => (
 );
 
 export default function Home() {
-  const activateSearch = () => false;
+  const {isSearchVisible, setSearchVisible} = useSearchVisibility();
+  const activateSearch = () => setSearchVisible(!isSearchVisible);
 
   const [loadingTrendingBios, setLoadingTrendingBios] = useState(false);
   const [trendingLangEdition, setTrendingLangEdition] = useState("en");

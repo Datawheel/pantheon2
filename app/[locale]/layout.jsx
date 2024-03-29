@@ -7,6 +7,9 @@ import Footer from "/components/Footer";
 // import Search from "/components/Search";
 import "/styles/globals.css";
 
+import {SearchProvider} from "/contexts/SearchContext";
+import SearchComponent from "/components/Search";
+
 export default function Layout({children}) {
   const config = useD3plusConfig();
   return (
@@ -22,15 +25,18 @@ export default function Layout({children}) {
           rel="stylesheet"
         />
       </head>
-      <body>
-        <Navigation />
-        <main>
-          <D3plusContext.Provider value={config}>
-            <ReduxProvider>{children}</ReduxProvider>
-          </D3plusContext.Provider>
-        </main>
-        <Footer />
-      </body>
+      <SearchProvider>
+        <body>
+          <SearchComponent />
+          <Navigation />
+          <main>
+            <D3plusContext.Provider value={config}>
+              <ReduxProvider>{children}</ReduxProvider>
+            </D3plusContext.Provider>
+          </main>
+          <Footer />
+        </body>
+      </SearchProvider>
     </html>
   );
 }
