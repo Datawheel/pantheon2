@@ -79,6 +79,7 @@ export default async function PeopleRanking({
               people={topRankingBorn}
               rankAccessor="bplace_name_rank"
               peopleAll={peopleBorn}
+              showOccupation={true}
             />
           </div>
         ) : null}
@@ -96,6 +97,7 @@ export default async function PeopleRanking({
               people={newPeopleBorn.slice(0, 12)}
               rankAccessor="bplace_name_rank"
               peopleAll={newPeopleBorn}
+              showOccupation={true}
             />
           </div>
         ) : null}
@@ -113,6 +115,7 @@ export default async function PeopleRanking({
               people={topRankingDied}
               rankAccessor="dplace_name_rank"
               peopleAll={peopleDied}
+              showOccupation={true}
             />
           </div>
         ) : null}
@@ -130,6 +133,7 @@ export default async function PeopleRanking({
               people={newPeopleDied.slice(0, 12)}
               rankAccessor="dplace_name_rank"
               peopleAll={newPeopleDied}
+              showOccupation={true}
             />
           </div>
         ) : null}

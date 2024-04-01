@@ -2,9 +2,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import {usePathname} from "next/navigation";
+import {useSearchVisibility} from "/contexts/SearchContext";
 
 export default function Navigation(props) {
-  const {activateSearch} = props;
+  const {setSearchVisible} = useSearchVisibility();
 
   const pathname = usePathname();
 
@@ -242,7 +243,7 @@ export default function Navigation(props) {
             </Link>
           </li>
           <li className="search-btn">
-            <button onClick={activateSearch}>
+            <button onClick={() => setSearchVisible(true)}>
               <Image
                 width={18}
                 height={18}
@@ -380,7 +381,10 @@ export default function Navigation(props) {
               API
             </a>
           </li>
-          <li className="item search-link item-link" onClick={activateSearch}>
+          <li
+            className="item search-link item-link"
+            onClick={() => setSearchVisible(true)}
+          >
             Search
           </li>
           <li className="item">

@@ -77,6 +77,7 @@ export default async function PeopleRanking({
               people={topRankingBorn}
               rankAccessor={"bplace_country_rank_unique"}
               peopleAll={peopleBorn}
+              showOccupation={true}
             />
           </div>
         ) : null}
@@ -94,6 +95,7 @@ export default async function PeopleRanking({
               people={newPeopleBorn.slice(0, 12)}
               rankAccessor={"bplace_country_rank_unique"}
               peopleAll={newPeopleBorn}
+              showOccupation={true}
             />
           </div>
         ) : null}
@@ -111,6 +113,7 @@ export default async function PeopleRanking({
               people={topRankingDied}
               rankAccessor={"dplace_country_rank_unique"}
               peopleAll={peopleDied}
+              showOccupation={true}
             />
           </div>
         ) : null}
@@ -130,6 +133,7 @@ export default async function PeopleRanking({
               people={newPeopleDied.slice(0, 12)}
               rankAccessor={"dplace_country_rank_unique"}
               peopleAll={newPeopleDied}
+              showOccupation={true}
             />
           </div>
         ) : null}

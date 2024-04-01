@@ -22,6 +22,7 @@ export default function OccupationsStackedArea({
             groupBy: ["domain", "industry", "occupation_name"].map(
               groupBy(attrs)
             ),
+            legendPosition: "right",
             shapeConfig: shapeConfig(attrs),
             tooltipConfig: groupTooltip(data),
             xConfig: {
