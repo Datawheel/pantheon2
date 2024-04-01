@@ -35,10 +35,9 @@ export default async function Page({params: {year}}) {
                     </h2>
                   </div>
                   <div className="portrait">
-                    <Image
-                      width={200}
-                      height={246}
+                    <img
                       src={`/images/profile/people/${topPersonF.id}.jpg`}
+                      alt={`Yearbook image of ${topPersonF.name}`}
                     />
                     <div className="shadow"></div>
                   </div>
@@ -47,10 +46,9 @@ export default async function Page({params: {year}}) {
               {topPersonM ? (
                 <div className="portrait-container">
                   <div className="portrait">
-                    <Image
-                      width={200}
-                      height={246}
+                    <img
                       src={`/images/profile/people/${topPersonM.id}.jpg`}
+                      alt={`Yearbook image of ${topPersonM.name}`}
                     />
                     <div className="shadow"></div>
                   </div>
