@@ -92,8 +92,6 @@ export default async function Page({params: {id}}) {
     personRanksData,
   ]);
 
-  console.log("personRanks!", personRanks);
-
   const wikiPageViewsData = getWikiPageViews(person.name);
   const wikiExtractData = getWikiExtract(person.id);
 

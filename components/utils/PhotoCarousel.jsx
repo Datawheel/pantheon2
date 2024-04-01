@@ -3,8 +3,14 @@ import {useRef, useEffect} from "react";
 import Link from "next/link";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import PersonImage from "./PersonImage";
+import Image from "next/image";
 
-export default function PhotoCarousel({me, people, rankAccessor}) {
+export default function PhotoCarousel({
+  me,
+  people,
+  rankAccessor,
+  showOccupation,
+}) {
   const scroll = () => {
     console.log("scrolled!");
   };
@@ -31,7 +37,9 @@ export default function PhotoCarousel({me, people, rankAccessor}) {
   return (
     <div className="rank-carousel">
       <a className="arrow back" href="#" onClick={scroll}>
-        <img
+        <Image
+          width={8}
+          height={12}
           className="back"
           src="/images/ui/tri-left-b.svg"
           alt="Load previous"
@@ -65,6 +73,11 @@ export default function PhotoCarousel({me, people, rankAccessor}) {
                   {person.name}
                 </Link>
               </h2>
+              {showOccupation ? (
+                <p className="sdf">
+                  {person.occupation ? person.occupation.occupation : ""}
+                </p>
+              ) : null}
               {person.birthyear ? (
                 <p className="rank-year">
                   {FORMATTERS.year(person.birthyear)} -{" "}
@@ -87,7 +100,9 @@ export default function PhotoCarousel({me, people, rankAccessor}) {
         </ul>
       </>
       <a className="arrow forward" href="#" onClick={scroll}>
-        <img
+        <Image
+          width={8}
+          height={12}
           className="forward"
           src="/images/ui/tri-right-b.svg"
           alt="Load previous"

@@ -94,6 +94,13 @@ export default function PageViewsByLangAreaPlot({timeSeriesData, numLangs}) {
           },
           x: "date",
           // xConfig: {tickFormat: d => FORMATTERS.year(new Date(d).getFullYear())},
+          xConfig: {
+            shapeConfig: {
+              labelConfig: {
+                fontSize: () => 14,
+              },
+            },
+          },
           y: "views",
           yConfig: {
             // scale: "log",
@@ -106,7 +113,7 @@ export default function PageViewsByLangAreaPlot({timeSeriesData, numLangs}) {
             },
             shapeConfig: {
               labelConfig: {
-                fontSize: () => 20,
+                fontSize: () => 16,
               },
             },
           },

@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { FORMATTERS } from "../components/utils/consts";
-import { default as topojson } from "../public/jsons/world-50m.json";
+import {useMemo} from "react";
+import {FORMATTERS} from "../components/utils/consts";
+import {default as topojson} from "../public/jsons/world-50m.json";
 
 // All "aggs" functions receive an array of OBJECTS (and not
 // just the values as of latest d3plus) along with the callback
@@ -20,7 +20,7 @@ export function useD3plusConfig() {
         bucketyear: uniques,
         deathyear: uniques,
         id: uniques,
-        langs: (a) => Math.max(...a.map(cb)),
+        langs: a => Math.max(...a.map(cb)),
         logyear: uniques,
         occupation_id: uniques,
         yearBucket: uniques,
@@ -43,7 +43,7 @@ export function useD3plusConfig() {
           },
           stroke: "#D6D6D0",
         },
-        tickFormat: (d) => FORMATTERS.year(new Date(d).getFullYear()),
+        tickFormat: d => FORMATTERS.year(new Date(d).getFullYear()),
         tickSize: 5,
         title: false,
       },
@@ -76,8 +76,8 @@ export function useD3plusConfig() {
       },
 
       ocean: false,
-      point: (d) => d.place_coord,
-      pointSize: (d) => (d.id instanceof Array ? d.id.length : 1),
+      point: d => d.place_coord,
+      pointSize: d => (d.id instanceof Array ? d.id.length : 1),
       pointSizeMax: 35,
       pointSizeMin: 8,
 
@@ -100,7 +100,7 @@ export function useD3plusConfig() {
         },
       },
 
-      sum: (d) => (d.id ? (d.id instanceof Array ? d.id.length : 1) : 0),
+      sum: d => (d.id ? (d.id instanceof Array ? d.id.length : 1) : 0),
       tiles: false,
       // time: "yearBucket",
       timeline: false,
@@ -113,7 +113,7 @@ export function useD3plusConfig() {
           ry: 6,
         },
         handleSize: 12,
-        tickFormat: (d) => {
+        tickFormat: d => {
           d = new Date(d);
           return d.getMonth() ? false : FORMATTERS.year(d.getFullYear());
         },
@@ -207,7 +207,7 @@ export function useD3plusConfig() {
           },
           stroke: "#D6D6D0",
         },
-        tickFormat: (d) => (d % 1 ? "" : FORMATTERS.commas(d)),
+        tickFormat: d => (d % 1 ? "" : FORMATTERS.commas(d)),
         tickSize: 5,
         title: "Globally Memorable Individuals",
         titleConfig: {

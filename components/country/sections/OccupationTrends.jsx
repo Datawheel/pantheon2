@@ -152,38 +152,6 @@ const OccupationTrends = ({
             buckets={deathBuckets}
           />
         ) : null}
-        {/* <VizWrapper component={this} refKey="viz">
-        <StackedArea
-          key="stacked1"
-          config={{
-            title: "Births Over Time",
-            data: tmapBornData,
-            depth: 2,
-            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
-            shapeConfig: shapeConfig(attrs),
-            tooltipConfig: groupTooltip(tmapBornData),
-            xConfig: {
-              labels: bornTicks,
-              tickFormat: d => bornBuckets[d]
-            }
-          }} />
-      </VizWrapper>
-      <VizWrapper component={this} refKey="viz2">
-        <StackedArea
-          key="stacked2"
-          config={{
-            title: "Deaths Over Time",
-            data: tmapDeathData,
-            depth: 2,
-            groupBy: ["domain", "industry", "occupation_name"].map(groupBy(attrs)),
-            shapeConfig: shapeConfig(attrs),
-            tooltipConfig: groupTooltip(tmapDeathData),
-            xConfig: {
-              labels: deathTicks,
-              tickFormat: d => deathBuckets[d]
-            }
-          }} />
-      </VizWrapper> */}
       </div>
     </SectionLayout>
   );
