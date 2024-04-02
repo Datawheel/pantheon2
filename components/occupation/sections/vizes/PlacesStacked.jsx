@@ -15,7 +15,7 @@ export default function PlacesStacked({data, title, ticks, buckets}) {
             data,
             depth: 1,
             groupBy: ["continent", "country"],
-            on: on("country", d => d.country.slug),
+            on: on("country", d => d.countrySlug),
             shapeConfig: {fill: d => COLORS_CONTINENT[d.continent]},
             tooltipConfig: groupTooltip(data, d => d.country.slug),
             xConfig: {
@@ -24,6 +24,7 @@ export default function PlacesStacked({data, title, ticks, buckets}) {
             },
             x: "yearBucket",
             y: "yearWeight",
+            legendPosition: "right",
           }}
         />
       </div>
