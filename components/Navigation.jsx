@@ -1,60 +1,28 @@
 "use client";
+import {useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {usePathname} from "next/navigation";
 import {useSearchVisibility} from "/contexts/SearchContext";
 
-export default function Navigation(props) {
+export default function Navigation() {
   const {setSearchVisible} = useSearchVisibility();
+  const [mobileNavVisible, setMobileNavVisible] = useState(false);
+  const [mobileSubnav, setMobileSubnav] = useState(null);
 
   const pathname = usePathname();
 
-  const toggleSubNav = e => {
-    const itemChildren = e.target.childNodes;
-    e.target.classList.toggle("o");
-    itemChildren.forEach(child => {
-      if (child.nodeType === 1 && child.tagName === "UL") {
-        child.classList.toggle("open");
-      }
-    });
-    document.getElementById("m-navigation").classList.toggle("expanded");
-    document.body.classList.toggle("frozen");
-  };
-
-  const toggleSubNavSib = e => {
-    const itemSibling = e.target.nextSibling;
-    itemSibling.classList.toggle("open");
-    e.target.parentNode.classList.toggle("o");
-    document.getElementById("m-navigation").classList.toggle("expanded");
-    document.body.classList.toggle("frozen");
-  };
-
-  const closeMobileNav = () => {
-    document.getElementById("m-navigation").classList.remove("open");
-    document.getElementById("m-navigation").classList.remove("expanded");
-    document.body.classList.remove("frozen");
-
-    const subItems = document.getElementsByClassName("sub-items");
-    [].forEach.call(subItems, el => {
-      el.classList.remove("open");
-    });
-
-    const items = document.getElementsByClassName("item");
-    [].forEach.call(items, el => {
-      el.classList.remove("o");
-    });
+  const toggleSubNav = subnavType => {
+    subnavType === mobileSubnav
+      ? setMobileSubnav(null)
+      : setMobileSubnav(subnavType);
   };
 
   return (
     <nav>
       <div id="navigation" className="globalNav navigation" role="navigation">
         <ul className="items">
-          <li
-            className="nav-btn"
-            onClick={() => {
-              document.querySelector("#m-navigation").classList.add("open");
-            }}
-          >
+          <li className="nav-btn" onClick={() => setMobileNavVisible(true)}>
             <span>
               <Image
                 width={18}
@@ -254,70 +222,79 @@ export default function Navigation(props) {
           </li>
         </ul>
       </div>
-      <div className="globalNav mobileNavigation">
-        <div className="logo-container">
-          <a href="/" className="home">
-            <Image
-              width={93}
-              height={13}
-              className="logo"
-              src="/images/logos/logo_pantheon.svg"
-              alt="Pantheon"
-            />
-          </a>
-          <span className="close-btn" onClick={closeMobileNav}>
-            <Image
-              width={18}
-              height={18}
-              src="/images/icons/icon-close.svg"
-              alt="close navigation"
-            />
-          </span>
-        </div>
-        <ul className="items">
-          <li className="item">
-            <a href="/" className="item-link home-link">
-              Home
+      {mobileNavVisible ? (
+        <div className="globalNav mobileNavigation">
+          <div className="logo-container">
+            <a href="/" className="home">
+              <Image
+                width={93}
+                height={13}
+                className="logo"
+                src="/images/logos/logo_pantheon.svg"
+                alt="Pantheon"
+              />
             </a>
-          </li>
-          <li className="item">
-            <a href="/explore/viz" className="item-link explore-link">
-              Visualizations
-            </a>
-          </li>
-          <li className="item">
-            <a href="/explore/rankings" className="item-link rankings-link">
-              Rankings
-            </a>
-          </li>
-          <li className="item" onClick={toggleSubNav}>
-            <a className="item-link profiles-link" onClick={toggleSubNavSib}>
-              Profiles
-            </a>
-            <ul className="sub-items">
-              <li>
-                <a href="/profile/person">People</a>
-              </li>
-              <li>
-                <a href="/profile/place">Places</a>
-              </li>
-              <li>
-                <a href="/profile/country">Countries</a>
-              </li>
-              <li>
-                <a href="/profile/occupation">Occupations</a>
-              </li>
-              <li>
-                <a href="/profile/select-occupation-country">
-                  Occupation / Country
-                </a>
-              </li>
-              <li>
-                <a href="/profile/era">Eras</a>
-              </li>
-            </ul>
-          </li>
-          {/* <li className="item" onClick={this.toggleSubNav}>
+            <span
+              className="close-btn"
+              onClick={() => setMobileNavVisible(false)}
+            >
+              <Image
+                width={18}
+                height={18}
+                src="/images/icons/icon-close.svg"
+                alt="close navigation"
+              />
+            </span>
+          </div>
+          <ul className="items">
+            <li className="item">
+              <a href="/" className="item-link home-link">
+                Home
+              </a>
+            </li>
+            <li className="item">
+              <a href="/explore/viz" className="item-link explore-link">
+                Visualizations
+              </a>
+            </li>
+            <li className="item">
+              <a href="/explore/rankings" className="item-link rankings-link">
+                Rankings
+              </a>
+            </li>
+            <li className="item" onClick={() => toggleSubNav("profiles")}>
+              <a
+                className="item-link profiles-link"
+                onClick={e => e.preventDefault()}
+              >
+                Profiles
+              </a>
+              {mobileSubnav === "profiles" ? (
+                <ul className="sub-items">
+                  <li>
+                    <a href="/profile/person">People</a>
+                  </li>
+                  <li>
+                    <a href="/profile/place">Places</a>
+                  </li>
+                  <li>
+                    <a href="/profile/country">Countries</a>
+                  </li>
+                  <li>
+                    <a href="/profile/occupation">Occupations</a>
+                  </li>
+                  <li>
+                    <a href="/profile/select-occupation-country">
+                      Occupation / Country
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/profile/era">Eras</a>
+                  </li>
+                </ul>
+              ) : null}
+            </li>
+            {/* <li className="item" onClick={this.toggleSubNav}>
               <a className="item-link about-link" onClick={this.toggleSubNavSib}>About</a>
               <ul className="sub-items">
                 <li><a href="/about/vision">Vision</a></li>
@@ -329,84 +306,95 @@ export default function Navigation(props) {
                 <li><a href="/about/contact">Contact</a></li>
               </ul>
             </li> */}
-          <li className="item">
-            <a href="/data/faq" className="item-link about-link">
-              About
-            </a>
-          </li>
-          <li className="item" onClick={toggleSubNav}>
-            <a className="item-link data-link" onClick={toggleSubNavSib}>
-              Data
-            </a>
-            <ul className="sub-items">
-              {/* <li><a href="/data/datasets">Download</a></li> */}
-              <li>
-                <a href="/data/permissions">Permissions</a>
-              </li>
-              <li>
-                <a href="/data/api">API</a>
-              </li>
-            </ul>
-          </li>
-          {/* <li className="item" onClick={toggleSubNav}>
+            <li className="item">
+              <a href="/data/faq" className="item-link about-link">
+                About
+              </a>
+            </li>
+            <li className="item" onClick={() => toggleSubNav("data")}>
+              <a
+                className="item-link data-link"
+                onClick={e => e.preventDefault()}
+              >
+                Data
+              </a>
+              {mobileSubnav === "data" ? (
+                <ul className="sub-items">
+                  {/* <li><a href="/data/datasets">Download</a></li> */}
+                  <li>
+                    <a href="/data/permissions">Permissions</a>
+                  </li>
+                  <li>
+                    <a href="/data/api">API</a>
+                  </li>
+                </ul>
+              ) : null}
+            </li>
+            {/* <li className="item" onClick={toggleSubNav}>
               <a className="item-link data-link" onClick={toggleSubNavSib}>Apps</a>
               <ul className="sub-items">
                 <li><a href="/app/yearbook">Yearbook</a></li>
               </ul>
             </li> */}
-          <li className="item" onClick={toggleSubNav}>
-            <a className="item-link game-link" onClick={toggleSubNavSib}>
-              Games
-            </a>
-            <ul className="sub-items">
-              <li>
-                <Link href="/game/yearbook" className="item-link">
-                  Yearbook
-                </Link>
-              </li>
-              <li>
-                <a href="/game/birthle" className="item-link">
-                  Birthle
-                </a>
-              </li>
-              <li>
-                <a href="/app/trivia" className="item-link">
-                  Trivia
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li className="item">
-            <a href="/data/api" className="item-link api-link">
-              API
-            </a>
-          </li>
-          <li
-            className="item search-link item-link"
-            onClick={() => setSearchVisible(true)}
-          >
-            Search
-          </li>
-          <li className="item">
-            <a
-              href="http://bit.ly/QWSKoc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="item-link feedback-link"
+            <li className="item" onClick={() => toggleSubNav("games")}>
+              <a
+                className="item-link game-link"
+                onClick={e => e.preventDefault()}
+              >
+                Games
+              </a>
+              {mobileSubnav === "games" ? (
+                <ul className="sub-items">
+                  <li>
+                    <Link href="/game/yearbook" className="item-link">
+                      Yearbook
+                    </Link>
+                  </li>
+                  <li>
+                    <a href="/game/birthle" className="item-link">
+                      Birthle
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/app/trivia" className="item-link">
+                      Trivia
+                    </a>
+                  </li>
+                </ul>
+              ) : null}
+            </li>
+            <li className="item">
+              <a href="/data/api" className="item-link api-link">
+                API
+              </a>
+            </li>
+            <li
+              className="item search-link item-link"
+              onClick={() => setSearchVisible(true)}
             >
-              Give Feedback
-            </a>
-          </li>
-          <li className="item item-link citation-link">
-            Usage Citation
-            <input
-              readOnly
-              type="text"
-              value="Yu, A. Z., et al. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific Data 2:150075. doi: 10.1038/sdata.2015.75"
-            />
-          </li>
-        </ul>
-      </div>
+              Search
+            </li>
+            <li className="item">
+              <a
+                href="http://bit.ly/QWSKoc"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="item-link feedback-link"
+              >
+                Give Feedback
+              </a>
+            </li>
+            <li className="item item-link citation-link">
+              Usage Citation
+              <input
+                readOnly
+                type="text"
+                value="Yu, A. Z., et al. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific Data 2:150075. doi: 10.1038/sdata.2015.75"
+              />
+            </li>
+          </ul>
+        </div>
+      ) : null}
     </nav>
   );
 }

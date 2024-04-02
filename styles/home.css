@@ -453,6 +453,10 @@
   right: 0;
   z-index: -2;
 
+  @media (max-width: 800px) {
+    display: none;
+  }
+
   & .box {
     display: block;
     position: absolute;
