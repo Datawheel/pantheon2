@@ -20,7 +20,9 @@ export default function Header({occupation, people}) {
   // create histogram using ckmeans
   const b2 = histogram().thresholds(data =>
     ckmeans(data, numBuckets).map(l => min(l))
-  )(people.map(d => d.birthyear));
+  )(
+    people.filter(d => d.birthyear && d.birthyear >= 1500).map(d => d.birthyear)
+  );
 
   // get max top 3 people to show in tooltip
   const lineChartDataFormat = b2.map(bin => {

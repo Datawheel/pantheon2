@@ -3,7 +3,12 @@ import {LinePlot} from "d3plus-react";
 import {FORMATTERS} from "../utils/consts";
 
 export default function HeaderLine({data}) {
+  if (!data || !data.length) {
+    return null;
+  }
   const filteredData = data.filter(d => d.topPeople.length);
+  // console.log("filteredData", filteredData);
+
   return (
     <div>
       <LinePlot

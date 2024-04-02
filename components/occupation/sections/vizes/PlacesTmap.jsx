@@ -15,7 +15,7 @@ export default function PlacesTmap({data, title}) {
             data,
             depth: 1,
             groupBy: ["continent", "country"],
-            on: on("country", d => d.country.slug),
+            on: on("country", d => d.countrySlug),
             legendConfig: {
               label: d => d.borncontinent,
             },

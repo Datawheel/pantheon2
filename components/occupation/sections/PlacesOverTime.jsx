@@ -52,6 +52,7 @@ export default async function PlacesOverTime({
     .map(d => ({
       ...d,
       country: d.bplace_country.country,
+      countrySlug: d.bplace_country.slug,
       continent: d.bplace_country.continent,
     }));
 
@@ -67,6 +68,7 @@ export default async function PlacesOverTime({
   //   .map(d => ({
   //     ...d,
   //     country: d.dplace_country.country,
+  //     countrySlug: d.dplace_country.slug,
   //     continent: d.dplace_country.continent,
   //   }));
 
