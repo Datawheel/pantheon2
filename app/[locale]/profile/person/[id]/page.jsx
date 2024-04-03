@@ -1,4 +1,5 @@
 import {cloneElement} from "react";
+import {notFound} from "next/navigation";
 import {plural} from "pluralize";
 import ProfileNav from "/components/common/Nav";
 import Intro from "/components/person/Intro";
@@ -25,6 +26,17 @@ async function getPerson(id) {
       },
     }
   );
+
+  // Clone the response to check the body for the no rows message
+  const clonedRes = res.clone();
+
+  // Attempt to parse the cloned response as JSON to inspect the message
+  const data = await clonedRes.json().catch(() => null);
+
+  // Check if the specific message exists in the response
+  if (data && data.details && data.details.includes("Results contain 0 rows")) {
+    return null;
+  }
   return res.json();
 }
 
@@ -98,6 +110,12 @@ export async function generateMetadata({params}, parent) {
   // fetch data
   const person = await getPerson(id);
 
+  if (!person) {
+    return {
+      title: "Not found",
+    };
+  }
+
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 
@@ -120,6 +138,10 @@ export default async function Page({params: {id}}) {
     personData,
     personRanksData,
   ]);
+
+  if (!person) {
+    return notFound();
+  }
 
   const wikiPageViewsData = getWikiPageViews(person.name);
   const wikiExtractData = getWikiExtract(person.id);
