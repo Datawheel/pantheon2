@@ -76,6 +76,11 @@ async function getNewsArticles(personId) {
   return res.json();
 }
 
+async function getTweets(personId) {
+  const res = await fetch(`${process.env.URL}/api/twit?pid=${personId}`);
+  return res.json();
+}
+
 export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
@@ -108,13 +113,16 @@ export default async function Page({params: {id}}) {
 
   const wikiPageViewsData = getWikiPageViews(person.name);
   const wikiExtractData = getWikiExtract(person.id);
-  const newsArticles = getNewsArticles(person.id);
+  const newsArticlesData = getNewsArticles(person.id);
+  const tweetsData = getTweets(person.id);
 
-  const [wikiPageViews, wikiExtract, getNews] = await Promise.all([
-    wikiPageViewsData,
-    wikiExtractData,
-    newsArticles,
-  ]);
+  const [wikiPageViews, wikiExtract, newsArticles, twitterData] =
+    await Promise.all([
+      wikiPageViewsData,
+      wikiExtractData,
+      newsArticlesData,
+      tweetsData,
+    ]);
 
   const totalPageViews = wikiPageViews?.items
     ? wikiPageViews?.items.reduce((sum, d) => sum + d.views, 0)
@@ -168,7 +176,7 @@ export default async function Page({params: {id}}) {
     {
       title: "Twitter Activity",
       slug: "twitter",
-      content: <Twitter person={person} />,
+      content: <Twitter person={person} twitterData={twitterData} />,
     },
     {
       title:
@@ -182,6 +190,9 @@ export default async function Page({params: {id}}) {
 
   const filteredSection = sections.filter(section => {
     if (section.slug === "news_articles" && !newsArticles.length) {
+      return false;
+    }
+    if (section.slug === "twitter" && !twitterData?.timeline?.length) {
       return false;
     }
     return true;

@@ -11,11 +11,6 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 dayjs.extend(calendar);
 
-async function getTweets(personId) {
-  const res = await fetch(`https://pantheon.world/api/twit/${personId}`);
-  return res.json();
-}
-
 const renderTweetDate = twDate => {
   const twMomentDate = dayjs(twDate, "ddd MMM DD HH:mm:ss Z YYYY");
   const now = new dayjs();
@@ -25,11 +20,11 @@ const renderTweetDate = twDate => {
     : twMomentDate.calendar();
 };
 
-export default async function Twitter({person, slug, title}) {
+export default async function Twitter({person, twitterData, slug, title}) {
   if (!person.twitter) {
     return null;
   }
-  const {user, timeline} = await getTweets(person.id);
+  const {user, timeline} = twitterData;
 
   return (
     <SectionLayout slug={slug} title={title}>
