@@ -125,12 +125,12 @@ const Footer = () => (
       </li>
 
       <li className="item">
-        <Link href="/app/yearbook" className="item-link data-link">
+        <Link href="/game/yearbook" className="item-link data-link">
           Apps
         </Link>
         <ul className="sub-items">
           <li>
-            <a href="/app/yearbook" className="item-link">
+            <a href="/game/yearbook" className="item-link">
               Yearbook
             </a>
           </li>
