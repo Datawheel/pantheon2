@@ -71,6 +71,11 @@ async function getWikiExtract(personId) {
   return res.json();
 }
 
+async function getNewsArticles(personId) {
+  const res = await fetch(`${process.env.URL}/api/news?pid=${personId}`);
+  return res.json();
+}
+
 export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
@@ -103,10 +108,12 @@ export default async function Page({params: {id}}) {
 
   const wikiPageViewsData = getWikiPageViews(person.name);
   const wikiExtractData = getWikiExtract(person.id);
+  const newsArticles = getNewsArticles(person.id);
 
-  const [wikiPageViews, wikiExtract] = await Promise.all([
+  const [wikiPageViews, wikiExtract, getNews] = await Promise.all([
     wikiPageViewsData,
     wikiExtractData,
+    newsArticles,
   ]);
 
   const totalPageViews = wikiPageViews?.items
@@ -122,7 +129,7 @@ export default async function Page({params: {id}}) {
     {
       title: "In the news",
       slug: "news_articles",
-      content: <News person={person} />,
+      content: <News newsArticles={newsArticles} />,
     },
     {
       title: "Notable Works",
@@ -173,11 +180,18 @@ export default async function Page({params: {id}}) {
     },
   ];
 
+  const filteredSection = sections.filter(section => {
+    if (section.slug === "news_articles" && !newsArticles.length) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <div className="person">
       <Header person={person} />
       <div className="about-section">
-        <ProfileNav sections={sections} />
+        <ProfileNav sections={filteredSection} />
         <Intro
           person={person}
           personRanks={personRanks}
@@ -185,7 +199,7 @@ export default async function Page({params: {id}}) {
           wikiExtract={wikiExtract}
         />
       </div>
-      {sections.map((section, key) =>
+      {filteredSection.map((section, key) =>
         cloneElement(section.content, {
           key,
           id: key + 1,

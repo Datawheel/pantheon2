@@ -1,13 +1,7 @@
 import "./News.css";
 import SectionLayout from "../common/SectionLayout";
 
-async function getNewsArticles(personId) {
-  const res = await fetch(`https://pantheon.world/api/news?pid=${personId}`);
-  return res.json();
-}
-
-export default async function News({person, slug, title}) {
-  const newsArticles = await getNewsArticles(person.id);
+export default async function News({newsArticles, slug, title}) {
   if (!newsArticles.length) {
     return null;
   }
