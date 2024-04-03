@@ -81,6 +81,16 @@ async function getTweets(personId) {
   return res.json();
 }
 
+async function getBooks(personId) {
+  const res = await fetch(`${process.env.URL}/api/books?id=${personId}`);
+  return res.json();
+}
+
+async function getMovies(personId) {
+  const res = await fetch(`${process.env.URL}/api/movies?id=${personId}`);
+  return res.json();
+}
+
 export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
@@ -124,6 +134,16 @@ export default async function Page({params: {id}}) {
       tweetsData,
     ]);
 
+  let movies = [];
+  if (["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)) {
+    movies = await getMovies(person.id);
+  }
+
+  let books = [];
+  if (["WRITER"].includes(person.occupation.id)) {
+    books = await getBooks(person.id);
+  }
+
   const totalPageViews = wikiPageViews?.items
     ? wikiPageViews?.items.reduce((sum, d) => sum + d.views, 0)
     : 0;
@@ -142,7 +162,7 @@ export default async function Page({params: {id}}) {
     {
       title: "Notable Works",
       slug: "books",
-      content: <Books person={person} />,
+      content: <Books person={person} books={books} />,
     },
     {
       title: `Page views of ${plural(person.name)} by language`,
@@ -184,7 +204,7 @@ export default async function Page({params: {id}}) {
           ? "Filmography"
           : "Television and Movie Roles",
       slug: "movies",
-      content: <Movies person={person} />,
+      content: <Movies person={person} movies={movies} />,
     },
   ];
 
@@ -193,6 +213,12 @@ export default async function Page({params: {id}}) {
       return false;
     }
     if (section.slug === "twitter" && !twitterData?.timeline?.length) {
+      return false;
+    }
+    if (section.slug === "movies" && !movies.length) {
+      return false;
+    }
+    if (section.slug === "books" && !books.length) {
       return false;
     }
     return true;

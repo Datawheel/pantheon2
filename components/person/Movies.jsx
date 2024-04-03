@@ -2,16 +2,10 @@ import dayjs from "dayjs";
 import SectionLayout from "../common/SectionLayout";
 import "./Works.css";
 
-async function getMovies(personId) {
-  const res = await fetch(`https://pantheon.world/api/movies?id=${personId}`);
-  return res.json();
-}
-
-export default async function Books({person, slug, title}) {
+export default async function Movies({person, movies, slug, title}) {
   if (!["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)) {
     return null;
   }
-  const movies = await getMovies(person.id);
 
   return (
     <SectionLayout slug={slug} title={title}>

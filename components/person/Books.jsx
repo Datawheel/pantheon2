@@ -1,16 +1,10 @@
 import SectionLayout from "../common/SectionLayout";
 import "./Works.css";
 
-async function getBooks(personId) {
-  const res = await fetch(`https://pantheon.world/api/books?id=${personId}`);
-  return res.json();
-}
-
-export default async function Books({person, slug, title}) {
+export default async function Books({person, books, slug, title}) {
   if (person.occupation.id !== "WRITER") {
     return null;
   }
-  const books = await getBooks(person.id);
 
   return (
     <SectionLayout slug={slug} title={title}>
