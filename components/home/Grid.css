@@ -15,7 +15,7 @@
     display: flex;
     justify-content: space-between;
     padding: 10px;
-    @media (max-width: 480px) {
+    @media (max-width: 440px) {
       flex-direction: column;
     }
   }
@@ -75,6 +75,10 @@
       height: 200px;
       position: relative;
       overflow: hidden;
+
+      @media (max-width: 750px) {
+        height: 130px;
+      }
 
       & h3, & .backup-title {
         @mixin priTitle;
@@ -174,6 +178,10 @@
         padding: 5px 10px;
         text-align: center;
         z-index: 2;
+        @media (max-width: 750px) {
+          padding: 0;
+          font-size: var(--sizeSmall);
+        }
       }
 
       & .grid-box-title-dates {
