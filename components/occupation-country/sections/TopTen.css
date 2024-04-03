@@ -20,6 +20,9 @@
 .top-person {
   display: flex;
   margin: 0 0 40px 0;
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
   & .top-person-img {
     margin: 0 20px 0 0;
     & img {
@@ -29,15 +32,22 @@
   }
   & .top-person-details {
     & h3 {
-      font-size: 26px;
+      font-size: var(--sizeXL);
       margin: 0 0 10px 0;
+      @media (max-width: 800px) {
+        font-size: var(--sizeLarge);
+      }
     }
     & p {
-      font-size: 1.8rem;
-      line-height: calc(1.8rem * 1.7);
-      margin: 0 0 10px;
+      font-size: var(--sizeML);
+      line-height: calc(1.8rem * 1.6);
+      margin: 0 0 20px;
       font-weight: 400;
       width: 100%;
+      @media (max-width: 800px) {
+        font-size: var(--sizeMobileSmall);
+        line-height: calc(1.8rem * 1.4);
+      }
       &.wiki-summary {
         font-size: 1.4rem;
         line-height: calc(1.4rem * 1.7);

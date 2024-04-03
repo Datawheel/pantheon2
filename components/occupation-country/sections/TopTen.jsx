@@ -75,7 +75,14 @@ export default async function TopTen({country, occupation, people}) {
             <h3>
               1.{" "}
               <a href={`/profile/person/${number1.slug}`}>
-                {number1.name} ({number1.birthyear} - {number1.deathyear})
+                {number1.name}{" "}
+                {number1.deathyear ? (
+                  <span>
+                    ({number1.birthyear} - {number1.deathyear})
+                  </span>
+                ) : (
+                  <span>(b. {number1.birthyear})</span>
+                )}
               </a>
             </h3>
             <p>
@@ -108,7 +115,14 @@ export default async function TopTen({country, occupation, people}) {
               <h3>
                 {i + 2}.{" "}
                 <a href={`/profile/person/${person.slug}`}>
-                  {person.name} ({person.birthyear} - {person.deathyear})
+                  {person.name}{" "}
+                  {person.deathyear ? (
+                    <span>
+                      ({person.birthyear} - {person.deathyear})
+                    </span>
+                  ) : (
+                    <span>(b. {person.birthyear})</span>
+                  )}
                 </a>
               </h3>
               <p>

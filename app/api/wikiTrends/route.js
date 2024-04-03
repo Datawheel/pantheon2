@@ -76,10 +76,10 @@ export async function GET(request) {
   );
 
   const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
+  const trendApiUrl = `https://api-dev.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`;
+  // console.log("trendApiUrl!!", trendApiUrl);
   const todaysBiosFromDbResp = await axios
-    .get(
-      `https://api-dev.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`
-    )
+    .get(trendApiUrl)
     .catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
   const todaysBiosFromDb = calcRankDeltas(
     todaysBiosFromDbResp.data,
@@ -88,12 +88,14 @@ export async function GET(request) {
   );
 
   if (todaysBiosFromDb.length) {
+    // console.log(`\n~~FOUND IN DB! (lang:${lang}|occupation:${occupation})~~\n`);
     return Response.json(
       [...todaysBiosFromDb]
         .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
         .slice(0, limit)
     );
   } else {
+    // console.log("\n***NOT FOUND IN DB!****\n");
     if (occupation) {
       const todaysBiosFromDbCheck = await axios
         .get(
@@ -132,7 +134,6 @@ export async function GET(request) {
           .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
           .slice(0, limit)
       );
-      // return Response.json({topPageViewsResp});
     }
     // create API URLs from list of people
     if (!topPageViewsJson.items || !Array.isArray(topPageViewsJson.items)) {
