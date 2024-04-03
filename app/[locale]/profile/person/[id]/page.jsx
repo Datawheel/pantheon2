@@ -49,10 +49,19 @@ async function getWikiPageViews(personName) {
     /(^|\D)(\d)(?!\d)/g,
     "$10$2"
   );
-  const res = await fetch(
-    `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`
-  );
-  return res.json();
+  const apiUrl = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`;
+  try {
+    const res = await fetch(apiUrl);
+    // Check if the response is ok (status in the range 200-299)
+    if (!res.ok)
+      throw new Error("Network response for getWikiPageViews failed.");
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch wiki page views:", error);
+    // Return a default object with items as an empty array
+    return {items: []};
+  }
 }
 
 async function getWikiExtract(personId) {
