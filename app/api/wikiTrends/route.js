@@ -1,6 +1,9 @@
 const createThrottle = require("async-throttle");
 const axios = require("axios");
 
+const dedupe = (item, index, self) =>
+  self.findIndex(obj => obj.slug === item.slug) === index;
+
 const calcRankDeltas = (arrOfBios, day1Ago, day2Ago) => {
   const day2AgoRanks = arrOfBios
     .filter(d => d.date === day2Ago)
@@ -92,6 +95,7 @@ export async function GET(request) {
     return Response.json(
       [...todaysBiosFromDb]
         .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
+        .filter(dedupe)
         .slice(0, limit)
     );
   } else {
@@ -132,6 +136,7 @@ export async function GET(request) {
       return Response.json(
         [...todaysBiosFromDbResp2.data]
           .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
+          .filter(dedupe)
           .slice(0, limit)
       );
     }
@@ -259,10 +264,13 @@ export async function GET(request) {
 
     if (occupation) {
       return Response.json(
-        todaysBiosForDb.filter(d => d.occupation === occupation).slice(0, limit)
+        todaysBiosForDb
+          .filter(dedupe)
+          .filter(d => d.occupation === occupation)
+          .slice(0, limit)
       );
     }
 
-    return Response.json(todaysBiosForDb.slice(0, limit));
+    return Response.json(todaysBiosForDb.filter(dedupe).slice(0, limit));
   }
 }
