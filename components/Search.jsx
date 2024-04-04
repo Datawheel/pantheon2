@@ -10,6 +10,7 @@ const SearchComponent = () => {
   const [results, setResults] = useState([]);
   const [showTrending, setShowTrending] = useState(true);
   const [debouncedValue, setDebouncedValue] = useState("");
+  const [activeIndex, setActiveIndex] = useState(-1);
   const {isSearchVisible, setSearchVisible} = useSearchVisibility();
   const inputRef = useRef(null);
 
@@ -34,6 +35,25 @@ const SearchComponent = () => {
 
     return () => clearTimeout(timeout);
   }, [inputValue]);
+
+  useEffect(() => {
+    const handleKeyDown = event => {
+      if (event.key === "ArrowUp") {
+        setActiveIndex(
+          prevIndex => (prevIndex - 1 + results.length) % results.length
+        );
+      } else if (event.key === "ArrowDown") {
+        setActiveIndex(prevIndex => (prevIndex + 1) % results.length);
+      } else if (event.key === "Enter" && activeIndex !== -1) {
+        // Follow the link for the active item
+        const activeItem = results[activeIndex];
+        window.location.href = `/profile/${activeItem.profile_type}/${activeItem.slug}`;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [results, activeIndex]);
 
   const handleChange = e => {
     setInputValue(e.target.value);
@@ -115,12 +135,13 @@ const SearchComponent = () => {
         {results ? (
           results.length ? (
             <ul className="results-list">
-              {results.map(result => (
+              {results.map((result, index) => (
                 <li
                   key={`person_${result.slug}`}
                   className={`result-${result.profile_type}`}
                 >
                   <a href={`/profile/${result.profile_type}/${result.slug}`}>
+                    {index === activeIndex && "→ "}
                     {result.name}
                   </a>
                   <sub>
