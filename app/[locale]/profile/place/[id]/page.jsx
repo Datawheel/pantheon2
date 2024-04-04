@@ -108,15 +108,17 @@ export default async function Page({params: {id}}) {
   // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
   // we calculate and add them...
   peopleBornHere =
-    !peopleBornHere ||
-    peopleBornHere
-      .sort((personA, personB) => personB.hpi - personA.hpi)
-      .map((d, i) => ({...d, bplace_name_rank: i + 1}));
+    peopleBornHere && peopleBornHere.length
+      ? peopleBornHere
+          .sort((personA, personB) => personB.hpi - personA.hpi)
+          .map((d, i) => ({...d, bplace_name_rank: i + 1}))
+      : [];
   peopleDiedHere =
-    !peopleDiedHere ||
-    peopleDiedHere
-      .sort((personA, personB) => personB.hpi - personA.hpi)
-      .map((d, i) => ({...d, dplace_name_rank: i + 1}));
+    peopleDiedHere && peopleDiedHere.length
+      ? peopleDiedHere
+          .sort((personA, personB) => personB.hpi - personA.hpi)
+          .map((d, i) => ({...d, dplace_name_rank: i + 1}))
+      : [];
 
   const attrs = occupations.reduce((obj, d) => {
     obj[d.id] = d;
@@ -187,13 +189,15 @@ export default async function Page({params: {id}}) {
       <Header place={place} country={country} />
       <div className="about-section">
         <ProfileNav sections={sections} />
-        <Intro
-          place={place}
-          country={country}
-          placeRanks={placeRanks}
-          peopleBornHere={peopleBornHere}
-          peopleDiedHere={peopleDiedHere}
-        />
+        {placeRanks && placeRanks.length ? (
+          <Intro
+            place={place}
+            country={country}
+            placeRanks={placeRanks}
+            peopleBornHere={peopleBornHere}
+            peopleDiedHere={peopleDiedHere}
+          />
+        ) : null}
       </div>
       {sections.map((section, key) =>
         cloneElement(section.content, {
