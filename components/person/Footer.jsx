@@ -1,5 +1,6 @@
 "use client";
-import Tippy from "@tippyjs/react";
+// import Tippy from "@tippyjs/react";
+// const Tippy = dynamic(() => import("@tippyjs/react"), {ssr: false});
 import {
   FORMATTERS,
   NUM_RANKINGS,
@@ -70,7 +71,7 @@ export default async function Footer({person, personRanks}) {
                 {person.occupation.occupation}
               </a>
             </h4>
-            <p>{person.occupation.num_born} Individuals</p>
+            <p>{FORMATTERS.commas(person.occupation.num_born)} Individuals</p>
           </li>
 
           {belowMe ? (
@@ -158,15 +159,15 @@ export default async function Footer({person, personRanks}) {
             ? wikiRelatedPeople.map(relatedBio => (
                 <li className="footer-carousel-item" key={relatedBio.id}>
                   <div className="footer-carousel-item-photo">
-                    <Tippy content={relatedBio.extract}>
-                      <a
-                        aria-label={`${relatedBio.name} profile`}
-                        href={`/profile/person/${relatedBio.slug}`}
-                        style={{
-                          backgroundImage: `url(/images/profile/people/${relatedBio.id}.jpg)`,
-                        }}
-                      ></a>
-                    </Tippy>
+                    {/* <Tippy content={relatedBio.extract}> */}
+                    <a
+                      aria-label={`${relatedBio.name} profile`}
+                      href={`/profile/person/${relatedBio.slug}`}
+                      style={{
+                        backgroundImage: `url(/images/profile/people/${relatedBio.id}.jpg)`,
+                      }}
+                    ></a>
+                    {/* </Tippy> */}
                   </div>
                   <h4 className="footer-carousel-item-title">
                     <a href={`/profile/person/${relatedBio.slug}`}>

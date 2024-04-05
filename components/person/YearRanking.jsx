@@ -215,6 +215,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
           me={person}
           people={birthYearRanking}
           rankAccessor="birthyear_rank_unique"
+          showOccupation={true}
         />
         {deathYearRanking.length ? (
           <div className="rank-sec-body">
@@ -230,6 +231,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
               me={person}
               people={deathYearRanking}
               rankAccessor="deathyear_rank_unique"
+              showOccupation={true}
             />
           </div>
         ) : null}

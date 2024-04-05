@@ -74,8 +74,12 @@ export default function PhotoCarousel({
                 </Link>
               </h2>
               {showOccupation ? (
-                <p className="sdf">
-                  {person.occupation ? person.occupation.occupation : ""}
+                <p>
+                  {person.occupation
+                    ? typeof person.occupation === "string"
+                      ? person.occupation
+                      : person.occupation.occupation
+                    : ""}
                 </p>
               ) : null}
               {person.birthyear ? (
