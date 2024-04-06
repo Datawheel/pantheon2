@@ -79,3 +79,7 @@ a {
     width: 300px;
   }
 }
+
+.d3plus-tooltip {
+  z-index: 99;
+}

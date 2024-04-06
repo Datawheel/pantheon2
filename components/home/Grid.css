@@ -77,7 +77,8 @@
       overflow: hidden;
 
       @media (max-width: 750px) {
-        height: 130px;
+        height: 110px;
+        margin-bottom: 0;
       }
 
       & h3, & .backup-title {

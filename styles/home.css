@@ -808,6 +808,7 @@
 
 .home-select {
   display: inline-block;
+  -webkit-appearance: none;
 
   & .cp-select {
     display: inline;

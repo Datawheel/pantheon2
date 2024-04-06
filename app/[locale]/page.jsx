@@ -31,6 +31,10 @@ const LangSelector = ({setTrendingLangEdition, trendingLangEdition}) => (
   </Select>
 );
 
+// export const metadata = {
+//   title: "Pantheon",
+// };
+
 export default function Home() {
   const {isSearchVisible, setSearchVisible} = useSearchVisibility();
   const activateSearch = () => setSearchVisible(!isSearchVisible);
@@ -88,6 +92,7 @@ export default function Home() {
 
   return (
     <div className="container">
+      <title>Pantheon</title>
       <Image
         className="bg-design"
         src="/images/home/printing.png"
