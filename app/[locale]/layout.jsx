@@ -15,7 +15,6 @@ export default function Layout({children}) {
   return (
     <html lang="en">
       <head>
-        <title>Pantheon</title>
         <link
           href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap"
           rel="stylesheet"
