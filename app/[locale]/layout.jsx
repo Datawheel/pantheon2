@@ -16,6 +16,12 @@ export default function Layout({children}) {
     <html lang="en">
       <head>
         <link
+          data-rh="true"
+          rel="icon"
+          href="/images/favicon.ico"
+          type="image/x-icon"
+        />
+        <link
           href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap"
           rel="stylesheet"
         />

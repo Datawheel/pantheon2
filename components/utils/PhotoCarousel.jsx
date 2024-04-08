@@ -1,18 +1,117 @@
 "use client";
-import {useRef, useEffect} from "react";
+import axios from "axios";
+import {useRef, useEffect, useState} from "react";
 import Link from "next/link";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import PersonImage from "./PersonImage";
 import Image from "next/image";
+import {min as D3Min, max as D3Max} from "d3-array";
+
+const PHOTO_WIDTH = 150;
+const PHOTO_PADDING = 36;
+const ITEMS_TO_LOAD = 12;
 
 export default function PhotoCarousel({
   me,
   people,
   rankAccessor,
   showOccupation,
+  peopleAll,
 }) {
-  const scroll = () => {
-    console.log("scrolled!");
+  const [lowerBound, setLowerBound] = useState(null);
+  const [upperBound, setUpperBound] = useState(null);
+  const [replacementPeople, setReplacementPeople] = useState([]);
+
+  const scroll = async leftOrRight => {
+    if (rankList.current) {
+      const rankListContainer = rankList.current;
+      const left = leftOrRight === "left";
+      const direction = left ? -1 : 1;
+      // console.log("scrolled direction?", direction);
+
+      // store old offset for comparison with new
+      const oldOffset = rankListContainer.scrollLeft;
+
+      // modify horizontal scroll position of container
+      rankListContainer.scrollLeft += PHOTO_WIDTH * direction;
+      const newOffset = rankListContainer.scrollLeft;
+
+      // load more items if user has reached end (either furthest right or left)
+      if (oldOffset === newOffset) {
+        // console.log("load more!");
+        const peopleShown = replacementPeople.length
+          ? replacementPeople
+          : people;
+
+        // IF user wants to load more items to the left, decrease lower bound limit
+        const newLowerBound = left
+          ? Math.max(
+              1,
+              D3Min(peopleShown, person => person[rankAccessor]) - ITEMS_TO_LOAD
+            )
+          : D3Min(peopleShown, person => person[rankAccessor]);
+        if (left && lowerBound === newLowerBound) {
+          return;
+        }
+
+        // IF user wants to load more items to the right, increase upper bound limit
+        const newUpperBound = left
+          ? D3Max(peopleShown, person => person[rankAccessor])
+          : D3Max(peopleShown, person => person[rankAccessor]) + ITEMS_TO_LOAD;
+        if (!left && upperBound === newUpperBound) {
+          return;
+        }
+
+        // console.log(
+        //   "newLowerBound|newUpperBound",
+        //   newLowerBound,
+        //   newUpperBound
+        // );
+        // console.log("rankAccessor", rankAccessor);
+
+        // determine filter key
+        const filterKey = rankAccessor.replace("_rank_unique", "");
+
+        // determine whether to fetch more people from server or not
+        if (peopleAll) {
+          console.log("No API");
+        } else {
+          let datasetFilter = "";
+          if (rankAccessor === "bplace_country_occupation_rank_unique") {
+            datasetFilter = me
+              ? `bplace_country=eq.${me.bplace_country.id}&occupation=eq.${me.occupation.id}&`
+              : "";
+          } else {
+            datasetFilter = me
+              ? `${filterKey}=eq.${me[filterKey].id || me[filterKey]}&`
+              : "";
+          }
+          const morePeopleUrl = `/person_ranks?${datasetFilter}${rankAccessor}=gte.${newLowerBound}&${rankAccessor}=lte.${newUpperBound}&select=occupation,bplace_country,hpi,${rankAccessor.replace(
+            "_unique",
+            ""
+          )},${rankAccessor},slug,gender,name,id,birthyear,deathyear`;
+          // console.log("morePeopleUrl", morePeopleUrl);
+          const newPeopleResults = await axios.get(
+            `https://api-dev.pantheon.world${morePeopleUrl}`
+          );
+          const replacementPeople = newPeopleResults.data.sort(
+            (personA, personB) => personA[rankAccessor] - personB[rankAccessor]
+          );
+          // lastly set the offset to the former last item is still in view
+          const diffx = lowerBound - newLowerBound;
+          setReplacementPeople(replacementPeople);
+          setLowerBound(newLowerBound);
+          setUpperBound(newUpperBound);
+          if (direction > 0) {
+            rankListContainer.scrollLeft +=
+              (PHOTO_WIDTH + PHOTO_PADDING) * 5 - PHOTO_WIDTH / 2;
+          } else {
+            rankListContainer.scrollLeft +=
+              (PHOTO_WIDTH + PHOTO_PADDING) * Math.min(7, diffx);
+          }
+        }
+      }
+    }
   };
   const rankList = useRef(null);
   const myId = me ? me.id : null;
@@ -34,9 +133,15 @@ export default function PhotoCarousel({
     }
   }, []);
 
+  const peopleToRender = replacementPeople.length ? replacementPeople : people;
+
   return (
     <div className="rank-carousel">
-      <a className="arrow back" href="#" onClick={scroll}>
+      <a
+        className="arrow back"
+        href="#"
+        onClick={e => (e.preventDefault(), scroll("left"))}
+      >
         <Image
           width={8}
           height={12}
@@ -47,7 +152,7 @@ export default function PhotoCarousel({
       </a>
       <>
         <ul className="rank-list" ref={rankList}>
-          {people.map(person => (
+          {peopleToRender.map(person => (
             <li
               key={`${person.id}`}
               className={person.id === myId ? "rank-me" : null}
@@ -103,7 +208,11 @@ export default function PhotoCarousel({
           ))}
         </ul>
       </>
-      <a className="arrow forward" href="#" onClick={scroll}>
+      <a
+        className="arrow forward"
+        href="#"
+        onClick={e => (e.preventDefault(), scroll("right"))}
+      >
         <Image
           width={8}
           height={12}
