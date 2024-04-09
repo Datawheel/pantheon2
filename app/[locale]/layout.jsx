@@ -1,4 +1,5 @@
 "use client";
+import {GoogleAnalytics} from "@next/third-parties/google";
 import {D3plusContext} from "d3plus-react";
 import {useD3plusConfig} from "/themes/useD3plusConfig";
 import ReduxProvider from "/components/ReduxProvider";
@@ -42,6 +43,7 @@ export default function Layout({children}) {
           <Footer />
         </body>
       </SearchProvider>
+      <GoogleAnalytics gaId="G-56HH4RQ1J2" />
     </html>
   );
 }
