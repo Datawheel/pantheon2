@@ -166,7 +166,6 @@ export default async function Page({params: {id}}) {
   const totalPageViews = wikiPageViews?.items
     ? wikiPageViews?.items.reduce((sum, d) => sum + d.views, 0)
     : 0;
-  console.log("totalPageViews!", totalPageViews);
 
   const sections = [
     {

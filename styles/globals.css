@@ -1,5 +1,6 @@
 @import "./mixins.css";
 @import './home.css';
+@import './tooltip.css';
 @import '../components/Footer.css';
 @import '../components/Navigation.css';
 @import '../components/home/Grid.css';
@@ -78,8 +79,4 @@ a {
   & img {
     width: 300px;
   }
-}
-
-.d3plus-tooltip {
-  z-index: 99;
 }
