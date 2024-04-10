@@ -118,7 +118,7 @@ export async function GET(request) {
   const bookPosts = cleanedBooksData.map(book =>
     axios
       .post(
-        "https://api.pantheon.world/book?columns=pid,slug,title,cover,isbn,oclc,editions,first_published,categories,description,gid,key",
+        "https://api.pantheon.world/book?columns=pid,slug,title,cover,isbn,oclc,editions,first_published,categories,description,gid",
         book,
         {
           headers: {
