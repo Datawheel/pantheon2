@@ -20,7 +20,7 @@ export async function GET(request) {
   // try to find person in patheon ID (if missing return empty array)
   const personPantheonResp = await axios
     .get(
-      `https://api-dev.pantheon.world/person?id=eq.${id}&select=name,slug,occupation.occupation_name`
+      `https://api.pantheon.world/person?id=eq.${id}&select=name,slug,occupation.occupation_name`
     )
     .catch(
       e => (
@@ -40,7 +40,7 @@ export async function GET(request) {
   const sixMonthsAgo = pgFormatDate(dateobj);
   const moviesFromPantheonDbResp = await axios
     .get(
-      `https://api-dev.pantheon.world/movie?pid=eq.${id}&last_fetch=gte.${sixMonthsAgo}`
+      `https://api.pantheon.world/movie?pid=eq.${id}&last_fetch=gte.${sixMonthsAgo}`
     )
     .catch(
       e => (
@@ -54,7 +54,7 @@ export async function GET(request) {
   // in case the person DOES have movies but older than 180 days,
   // delete them and pull in fresh ones
   await axios
-    .delete(`https://api-dev.pantheon.world/movie?pid=eq.${id}`, {
+    .delete(`https://api.pantheon.world/movie?pid=eq.${id}`, {
       headers: {
         "Content-Type": "application/json",
         "Authorization":
@@ -158,7 +158,7 @@ export async function GET(request) {
   const moviePosts = cleanedMovieData.map(movie =>
     axios
       .post(
-        "https://api-dev.pantheon.world/movie?columns=pid,slug,mid,title,poster,backdrop,role,overview,tagline,genres,release_date,average_rating,rating_count,budget,revenue,runtime,homepage",
+        "https://api.pantheon.world/movie?columns=pid,slug,mid,title,poster,backdrop,role,overview,tagline,genres,release_date,average_rating,rating_count,budget,revenue,runtime,homepage",
         movie,
         {
           headers: {

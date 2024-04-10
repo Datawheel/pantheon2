@@ -9,7 +9,7 @@ export async function GET(request) {
   // try to find person in patheon ID (if missing return empty array)
   const personPantheonResp = await axios
     .get(
-      `https://api-dev.pantheon.world/person?id=eq.${id}&select=name,slug,occupation.occupation_name`
+      `https://api.pantheon.world/person?id=eq.${id}&select=name,slug,occupation.occupation_name`
     )
     .catch(
       e => (
@@ -24,7 +24,7 @@ export async function GET(request) {
 
   // check if we've already scraped their books
   const booksFromPantheonDbResp = await axios
-    .get(`https://api-dev.pantheon.world/book?pid=eq.${id}`)
+    .get(`https://api.pantheon.world/book?pid=eq.${id}`)
     .catch(
       e => (
         console.log("[Books API] Error finding books in db:", e), {data: []}
@@ -118,7 +118,7 @@ export async function GET(request) {
   const bookPosts = cleanedBooksData.map(book =>
     axios
       .post(
-        "https://api-dev.pantheon.world/book?columns=pid,slug,title,cover,isbn,oclc,editions,first_published,categories,description,gid,key",
+        "https://api.pantheon.world/book?columns=pid,slug,title,cover,isbn,oclc,editions,first_published,categories,description,gid,key",
         book,
         {
           headers: {

@@ -18,7 +18,7 @@ import Footer from "/components/person/Footer";
 
 async function getPerson(id) {
   const res = await fetch(
-    `https://api-dev.pantheon.world/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`,
+    `https://api.pantheon.world/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`,
     {
       method: "GET",
       headers: {
@@ -42,7 +42,7 @@ async function getPerson(id) {
 
 async function getPersonRanks(id) {
   const res = await fetch(
-    `https://api-dev.pantheon.world/person_ranks?slug=eq.${id}`,
+    `https://api.pantheon.world/person_ranks?slug=eq.${id}`,
     {
       method: "GET",
       headers: {

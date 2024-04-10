@@ -79,7 +79,7 @@ export async function GET(request) {
   );
 
   const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
-  const trendApiUrl = `https://api-dev.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`;
+  const trendApiUrl = `https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`;
   // console.log("trendApiUrl!!", trendApiUrl);
   const todaysBiosFromDbResp = await axios
     .get(trendApiUrl)
@@ -103,7 +103,7 @@ export async function GET(request) {
     if (occupation) {
       const todaysBiosFromDbCheck = await axios
         .get(
-          `https://api-dev.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
+          `https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
         )
         .catch(
           e => (console.log("Pantheon trends read Error:", e), {data: []})
@@ -128,7 +128,7 @@ export async function GET(request) {
     ) {
       const todaysBiosFromDbResp2 = await axios
         .get(
-          `https://api-dev.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
+          `https://api.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
         )
         .catch(
           e => (console.log("Pantheon trends read Error:", e), {data: []})
@@ -210,7 +210,7 @@ export async function GET(request) {
       }
 
       trendingPeoplePantheonUrls.push(
-        `https://api-dev.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug,occupation`
+        `https://api.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug,occupation`
       );
     }
 
@@ -254,7 +254,7 @@ export async function GET(request) {
       .sort((a, b) => a.rank - b.rank)
       .map((d, i) => ({...d, rank_pantheon: i + 1}));
 
-    await axios.post("https://api-dev.pantheon.world/trend", todaysBiosForDb, {
+    await axios.post("https://api.pantheon.world/trend", todaysBiosForDb, {
       headers: {
         "Content-Type": "application/json",
         "Authorization":
