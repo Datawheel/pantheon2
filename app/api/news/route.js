@@ -47,7 +47,7 @@ export async function GET(request) {
   // FIRST check if this person is trending in the past 2 days
   const trendFromDbResp = await axios
     .get(
-      `https://api-dev.pantheon.world/trend?date=gte.${daysAgo2}&pid=eq.${wikiId}&lang=eq.${lang}&rank_pantheon=lte.100`
+      `https://api.pantheon.world/trend?date=gte.${daysAgo2}&pid=eq.${wikiId}&lang=eq.${lang}&rank_pantheon=lte.100`
     )
     .catch(e => (console.log("Pantheon DB trends read Error:", e), {data: []}));
   // if empty it means this person is not trending
@@ -61,7 +61,7 @@ export async function GET(request) {
   // NEXT check if it's already in the db...
   const todaysNewsFromDbResp = await axios
     .get(
-      `https://api-dev.pantheon.world/news?fetch_date=eq.${today}&pid=eq.${wikiId}`
+      `https://api.pantheon.world/news?fetch_date=eq.${today}&pid=eq.${wikiId}`
     )
     .catch(e => (console.log("Pantheon DB news read Error:", e), {data: []}));
 
@@ -101,7 +101,7 @@ export async function GET(request) {
   const newsPosts = allArticles.map(newsItem =>
     axios
       .post(
-        "https://api-dev.pantheon.world/news?columns=name,pid,slug,article",
+        "https://api.pantheon.world/news?columns=name,pid,slug,article",
         newsItem,
         {
           headers: {

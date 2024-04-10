@@ -92,7 +92,7 @@ export default function PhotoCarousel({
           )},${rankAccessor},slug,gender,name,id,birthyear,deathyear`;
           // console.log("morePeopleUrl", morePeopleUrl);
           const newPeopleResults = await axios.get(
-            `https://api-dev.pantheon.world${morePeopleUrl}`
+            `https://api.pantheon.world${morePeopleUrl}`
           );
           const replacementPeople = newPeopleResults.data.sort(
             (personA, personB) => personA[rankAccessor] - personB[rankAccessor]

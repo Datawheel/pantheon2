@@ -31,13 +31,13 @@ export default function Page() {
   useEffect(() => {
     async function fetchMyData() {
       const getOccupations = await axios.get(
-        "https://api-dev.pantheon.world/occupation?order=num_born.desc.nullslast"
+        "https://api.pantheon.world/occupation?order=num_born.desc.nullslast"
       );
       const getCountries = await axios.get(
-        "https://api-dev.pantheon.world/country?order=num_born.desc.nullslast"
+        "https://api.pantheon.world/country?order=num_born.desc.nullslast"
       );
       const getOccupationsInCountry = await axios.get(
-        "https://api-dev.pantheon.world/occupation_country?num_people=gte.18"
+        "https://api.pantheon.world/occupation_country?num_people=gte.18"
       );
       const initialData = await axios
         .all([getOccupations, getCountries, getOccupationsInCountry])
@@ -76,7 +76,7 @@ export default function Page() {
     setSelection1(occupation);
     async function fetchOccupationData() {
       const getOccupationsInCountry = await axios.get(
-        `https://api-dev.pantheon.world/occupation_country?occupation_slug=eq.${occupation}&order=num_people.desc.nullslast`
+        `https://api.pantheon.world/occupation_country?occupation_slug=eq.${occupation}&order=num_people.desc.nullslast`
       );
       const {data: countries} = getOccupationsInCountry;
       setCountries(countries);

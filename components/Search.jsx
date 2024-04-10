@@ -74,7 +74,7 @@ const SearchComponent = () => {
       userQueryCleaned = userQueryCleaned.join("%26");
 
       const response = await axios.get(
-        `https://api-dev.pantheon.world/search?document=fts.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`
+        `https://api.pantheon.world/search?document=fts.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`
       );
       setResults(response.data);
     } catch (error) {
