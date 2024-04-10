@@ -12,7 +12,7 @@ import CountryRanking from "/components/person/CountryRanking";
 import CountryOccupationRanking from "/components/person/CountryOccupationRanking";
 import Books from "/components/person/Books";
 import News from "/components/person/News";
-import Twitter from "/components/person/Twitter";
+// import Twitter from "/components/person/Twitter";
 import Movies from "/components/person/Movies";
 import Footer from "/components/person/Footer";
 
@@ -85,10 +85,10 @@ async function getNewsArticles(personId) {
   return res.json();
 }
 
-async function getTweets(personId) {
-  const res = await fetch(`${process.env.URL}/api/twit?pid=${personId}`);
-  return res.json();
-}
+// async function getTweets(personId) {
+//   const res = await fetch(`${process.env.URL}/api/twit?pid=${personId}`);
+//   return res.json();
+// }
 
 async function getBooks(personId) {
   const res = await fetch(`${process.env.URL}/api/books?id=${personId}`);
@@ -143,15 +143,13 @@ export default async function Page({params: {id}}) {
   const wikiPageViewsData = getWikiPageViews(person.name);
   const wikiExtractData = getWikiExtract(person.id);
   const newsArticlesData = getNewsArticles(person.id);
-  const tweetsData = getTweets(person.id);
+  // const tweetsData = getTweets(person.id);
 
-  const [wikiPageViews, wikiExtract, newsArticles, twitterData] =
-    await Promise.all([
-      wikiPageViewsData,
-      wikiExtractData,
-      newsArticlesData,
-      tweetsData,
-    ]);
+  const [wikiPageViews, wikiExtract, newsArticles] = await Promise.all([
+    wikiPageViewsData,
+    wikiExtractData,
+    newsArticlesData,
+  ]);
 
   let movies = [];
   if (["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)) {
@@ -212,11 +210,11 @@ export default async function Page({params: {id}}) {
         <CountryOccupationRanking person={person} personRanks={personRanks} />
       ),
     },
-    {
-      title: "Twitter Activity",
-      slug: "twitter",
-      content: <Twitter person={person} twitterData={twitterData} />,
-    },
+    // {
+    //   title: "Twitter Activity",
+    //   slug: "twitter",
+    //   content: <Twitter person={person} twitterData={twitterData} />,
+    // },
     {
       title:
         person.occupation.id === "FILM DIRECTOR"
@@ -231,9 +229,9 @@ export default async function Page({params: {id}}) {
     if (section.slug === "news_articles" && !newsArticles.length) {
       return false;
     }
-    if (section.slug === "twitter" && !twitterData?.timeline?.length) {
-      return false;
-    }
+    // if (section.slug === "twitter" && !twitterData?.timeline?.length) {
+    //   return false;
+    // }
     if (section.slug === "movies" && !movies.length) {
       return false;
     }
