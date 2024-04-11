@@ -68,7 +68,7 @@ export async function generateMetadata({params}, parent) {
     title: `${country.country} | Pantheon`,
     openGraph: {
       images: [
-        `https://dev.pantheon.world/api/screenshot/country?id=${id}`,
+        `https://pantheon.world/api/screenshot/country?id=${id}`,
         ...previousImages,
       ],
     },
