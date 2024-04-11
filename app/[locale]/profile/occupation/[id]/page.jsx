@@ -70,7 +70,7 @@ export async function generateMetadata({params}, parent) {
     title: `${toTitleCase(plural(occupation.occupation))} | Pantheon`,
     openGraph: {
       images: [
-        `https://dev.pantheon.world/api/screenshot/occupation?id=${id}`,
+        `https://pantheon.world/api/screenshot/occupation?id=${id}`,
         ...previousImages,
       ],
     },
