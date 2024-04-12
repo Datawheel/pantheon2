@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 // import Tippy from "@tippyjs/react";
 // const Tippy = dynamic(() => import("@tippyjs/react"), {ssr: false});
 import {
