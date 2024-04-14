@@ -205,8 +205,12 @@ export default function RankingTable({places}) {
             type="number"
             // defaultValue={pageIndex + 1}
             onChange={e => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              setPageAndFetchData(page);
+              const page = e.target.value
+                ? Math.min(Number(e.target.value) - 1, pageOptions.length - 1)
+                : 0;
+              if (pageInputVal + 1 !== page) {
+                setPageAndFetchData(page);
+              }
             }}
             onKeyDown={e => {
               let page = e.target.value ? Number(e.target.value) - 1 : 0;
