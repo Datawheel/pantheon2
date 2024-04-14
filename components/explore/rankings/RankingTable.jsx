@@ -205,12 +205,11 @@ export default function RankingTable({places}) {
             type="number"
             // defaultValue={pageIndex + 1}
             onChange={e => {
-              const page = e.target.value
-                ? Math.min(Number(e.target.value) - 1, pageOptions.length - 1)
-                : 0;
-              if (pageInputVal + 1 !== page) {
-                setPageAndFetchData(page);
-              }
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              setPageInputVal(page);
+              // if (pageInputVal + 1 !== page) {
+              //   setPageAndFetchData(page);
+              // }
             }}
             onKeyDown={e => {
               let page = e.target.value ? Number(e.target.value) - 1 : 0;
@@ -223,6 +222,17 @@ export default function RankingTable({places}) {
                 }
                 setPageAndFetchData(page);
               }
+            }}
+            onBlur={e => {
+              let page = e.target.value ? Number(e.target.value) - 1 : 0;
+
+              if (page > pageCount - 1) {
+                page = pageCount - 1;
+              }
+              if (page < 0) {
+                page = 0;
+              }
+              setPageAndFetchData(page);
             }}
             style={{width: "100px"}}
             value={pageInputVal + 1}
