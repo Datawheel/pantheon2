@@ -5,6 +5,7 @@ import {useD3plusConfig} from "/themes/useD3plusConfig";
 import ReduxProvider from "/components/ReduxProvider";
 import Navigation from "/components/Navigation";
 import Footer from "/components/Footer";
+import NextTopLoader from "nextjs-toploader";
 // import Search from "/components/Search";
 import "/styles/globals.css";
 
@@ -33,6 +34,7 @@ export default function Layout({children}) {
       </head>
       <SearchProvider>
         <body>
+          <NextTopLoader color="#363636" />
           <SearchComponent />
           <Navigation />
           <main>
