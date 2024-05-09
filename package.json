@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pm2": "pm2"
   },
   "dependencies": {
     "@blueprintjs/core": "^5.10.1",
