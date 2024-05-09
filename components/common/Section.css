@@ -223,7 +223,12 @@
         box-sizing: border-box;
         border: 1px solid var(--colorMatza);
 
+        & a {
+          cursor: pointer;
+        }
+
         & img {
+          cursor: pointer;
           width: 105%;
           margin-top: -7%;
           margin-left: -2.5%;

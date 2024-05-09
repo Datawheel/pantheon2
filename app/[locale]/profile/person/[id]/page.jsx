@@ -48,6 +48,7 @@ async function getPersonRanks(id) {
       headers: {
         Accept: "application/vnd.pgrst.object+json",
       },
+      next: {revalidate: 1440},
     }
   );
   return res.json();
