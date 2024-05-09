@@ -16,7 +16,7 @@ async function getWikiPageViewsPast30Days(personId) {
   return res.json();
 }
 
-export default async function MemMetricx({pageViews, person, slug, title}) {
+export default async function MemMetrics({pageViews, person, slug, title}) {
   const wikiPageViewsPast30Days = await getWikiPageViewsPast30Days(person.id);
 
   const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;

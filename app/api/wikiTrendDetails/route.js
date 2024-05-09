@@ -158,12 +158,17 @@ export async function GET(request) {
   const pvTotals = nest()
     .key(d => d.date)
     .entries(enrichedPageViewsFlat)
-    .map(pvData => ({
-      date: pvData.key,
-      pid: `${pvData.values[0].pid}`,
-      slug: pvData.values.find(d => d.lang === "en").slug,
-      views: sum(pvData.values, d => d.views),
-    }));
+    .map(pvData => {
+      return pvData.values.find(d => d.lang === "en")
+        ? {
+            date: pvData.key,
+            pid: `${pvData.values[0].pid}`,
+            slug: pvData.values.find(d => d.lang === "en").slug,
+            views: sum(pvData.values, d => d.views),
+          }
+        : null;
+    })
+    .filter(Boolean);
   // pvTotals
   return Response.json(pvTotals.sort((a, b) => a.date.localeCompare(b.date)));
 }
