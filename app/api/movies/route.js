@@ -82,6 +82,7 @@ export async function GET(request) {
         };
       }
     });
+  console.log("movieDbPerson!!", movieDbPerson);
   const movieIds = movieDbPerson.movies.map(m => m.id);
   const movieMediaTypeIds = movieDbPerson.movies.map(m => [m.id, m.media_type]);
 
