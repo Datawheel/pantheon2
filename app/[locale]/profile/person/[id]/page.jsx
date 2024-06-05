@@ -68,7 +68,7 @@ async function getWikiPageViews(personName) {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error("Failed to fetch wiki page views:", error);
+    console.error("Failed to fetch wiki page views (person page):", error);
     // Return a default object with items as an empty array
     return {items: []};
   }
