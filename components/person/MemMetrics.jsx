@@ -23,12 +23,12 @@ async function getWikiPageViewsPast30Days(personId) {
 }
 
 export default async function MemMetrics({pageViews, person, slug, title}) {
-  let wikiPageViewsPast30Days;
-  try {
-    wikiPageViewsPast30Days = await getWikiPageViewsPast30Days(person.id);
-  } catch (error) {
-    console.error("Failed to fetch wiki page views:", error);
-  }
+  let wikiPageViewsPast30Days = [];
+  // try {
+  //   wikiPageViewsPast30Days = await getWikiPageViewsPast30Days(person.id);
+  // } catch (error) {
+  //   console.error("Failed to fetch wiki page views!!");
+  // }
 
   const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
   const domainColor =
