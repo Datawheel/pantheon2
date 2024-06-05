@@ -13,11 +13,22 @@ async function getWikiPageViewsPast30Days(personId) {
       },
     }
   );
-  return res.json();
+  const contentType = res.headers.get("content-type");
+  if (contentType && contentType.indexOf("application/json") !== -1) {
+    return res.json();
+  } else {
+    const text = await res.text();
+    throw new Error(`Unexpected response format: ${text}`);
+  }
 }
 
 export default async function MemMetrics({pageViews, person, slug, title}) {
-  const wikiPageViewsPast30Days = await getWikiPageViewsPast30Days(person.id);
+  let wikiPageViewsPast30Days;
+  try {
+    wikiPageViewsPast30Days = await getWikiPageViewsPast30Days(person.id);
+  } catch (error) {
+    console.error("Failed to fetch wiki page views:", error);
+  }
 
   const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
   const domainColor =
