@@ -2,7 +2,7 @@ import {I18nProviderClient} from "/locales/client";
 import Trivia from "/components/games/trivia/Trivia";
 
 async function getQuestions() {
-  const res = await fetch("https://pantheon.world/api/trivia/getQuestionsCSV");
+  const res = await fetch("https://pantheon.world/api/getTriviaQuestionsCSV");
   return res.json();
 }
 
