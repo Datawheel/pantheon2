@@ -1,25 +1,25 @@
-import {Suspense} from "react";
+// import {Suspense} from "react";
 import {max as D3Max, min as D3Min} from "d3-array";
 import dayjs from "dayjs";
-import HeaderLine from "./HeaderLine";
+// import HeaderLine from "./HeaderLine";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
-async function getWikiPageViews(personName) {
-  const wikiSlug = personName.replace(/ /g, "_");
-  const dateobj = new Date();
-  const year = dateobj.getFullYear();
-  // need to add 1 since getMonth is zero based
-  const month = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  const res = await fetch(
-    `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`
-  );
-  return res.json();
-}
+// async function getWikiPageViews(personName) {
+//   const wikiSlug = personName.replace(/ /g, "_");
+//   const dateobj = new Date();
+//   const year = dateobj.getFullYear();
+//   // need to add 1 since getMonth is zero based
+//   const month = `${dateobj.getMonth() + 1}`.replace(
+//     /(^|\D)(\d)(?!\d)/g,
+//     "$10$2"
+//   );
+//   const res = await fetch(
+//     `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`
+//   );
+//   return res.json();
+// }
 
 async function getIsTrending(personId) {
   const dateobj = new Date();
@@ -42,7 +42,8 @@ async function getIsTrending(personId) {
 }
 
 export default async function Header({person}) {
-  const {items: wikiPageViews} = await getWikiPageViews(person.name);
+  // const {items: wikiPageViews} = await getWikiPageViews(person.name);
+  const wikiPageViews = null;
   const isTrendingData = await getIsTrending(person.id);
   const isTrending = !!isTrendingData.length;
 
@@ -105,11 +106,11 @@ export default async function Header({person}) {
               : "Today"}
           </p>
         ) : null}
-        <pre>
+        {/* <pre>
           <Suspense fallback={<div>Loading...</div>}>
             <HeaderLine pageViewData={pageViewData} />
           </Suspense>
-        </pre>
+        </pre> */}
       </div>
       <div className="mouse">
         <span className="mouse-scroll"></span>
