@@ -30,7 +30,7 @@ const Score = ({answers, questions, gameIdShare}) => {
 
   return (
     <h2 key={"triviaResultsDivH2"}>
-      Results:
+      Results:{" "}
       <span key={"renderScoreAnswers"}>
         {correctAnswers.length.toString()} / {answers.length.toString()} correct
         <br />
