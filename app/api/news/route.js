@@ -69,15 +69,18 @@ export async function GET(request) {
     return Response.json(todaysNewsFromDbResp.data);
   }
 
-  const newApiUrl = `http://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(
+  const newsApiUrl = `http://newsapi.org/v2/everything?qInTitle=${encodeURIComponent(
     name
   )}&from=${daysAgo2}&sortBy=relevancy&pageSize=5&apiKey=${newsApiKey}&language=en&excludeDomains=youtube.com`;
 
-  const newsResp = await axios
-    .get(newApiUrl)
-    .catch(
-      e => (console.log("newsapi.org Error:", name), {data: {articles: []}})
-    );
+  const newsResp = await axios.get(newsApiUrl).catch(e => {
+    console.log("newsapi.org Error for:", name);
+    return {data: {articles: []}, error: e.response ? e.response.data : null};
+  });
+
+  if (newsResp.error) {
+    console.error("newsapi.org Error:", newsResp?.error?.message);
+  }
   const newsResults = newsResp.data;
 
   // newsResults.articles.slice(0, 5).forEach(article => {
