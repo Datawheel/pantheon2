@@ -1,0 +1,20 @@
+steps:
+  # [START cloudbuild_image_yaml]
+  # Start from previous build
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args: ["-c", "docker pull ${_GCP_ARTIFACT_REGISTRY_LOCATION}-docker.pkg.dev/${_GCP_PROJECT_ID}/${_GCP_ARTIFACT_REGISTRY_NAME}/${_GCP_IMAGE_NAME}:${_GCP_IMAGE_ENVIRONMENT} || exit 0"]
+  # Docker Build
+  # "--build-arg", "NEXT_PUBLIC_CHAT_API=${_NEXT_PUBLIC_CHAT_API}",
+  - name: "gcr.io/cloud-builders/docker"
+    args: [
+      "build",
+      "-t", "${_GCP_ARTIFACT_REGISTRY_LOCATION}-docker.pkg.dev/${_GCP_PROJECT_ID}/${_GCP_ARTIFACT_REGISTRY_NAME}/${_GCP_IMAGE_NAME}:${_GCP_IMAGE_TAG}",
+      "-t", "${_GCP_ARTIFACT_REGISTRY_LOCATION}-docker.pkg.dev/${_GCP_PROJECT_ID}/${_GCP_ARTIFACT_REGISTRY_NAME}/${_GCP_IMAGE_NAME}:${_GCP_IMAGE_ENVIRONMENT}",
+      "--cache-from", "${_GCP_ARTIFACT_REGISTRY_LOCATION}-docker.pkg.dev/${_GCP_PROJECT_ID}/${_GCP_ARTIFACT_REGISTRY_NAME}/${_GCP_IMAGE_NAME}:${_GCP_IMAGE_ENVIRONMENT}",
+      "."
+    ]
+  # [END cloudbuild_image_yaml]
+images:
+  - "${_GCP_ARTIFACT_REGISTRY_LOCATION}-docker.pkg.dev/${_GCP_PROJECT_ID}/${_GCP_ARTIFACT_REGISTRY_NAME}/${_GCP_IMAGE_NAME}:${_GCP_IMAGE_TAG}"
+  - "${_GCP_ARTIFACT_REGISTRY_LOCATION}-docker.pkg.dev/${_GCP_PROJECT_ID}/${_GCP_ARTIFACT_REGISTRY_NAME}/${_GCP_IMAGE_NAME}:${_GCP_IMAGE_ENVIRONMENT}"
