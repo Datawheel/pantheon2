@@ -25,7 +25,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # If the instance require environment at build time, add them here as ARG
-# ARG NEXT_PUBLIC_CMS
+ARG PANTHEON_PGURI
 # ARG NEXT_PUBLIC_TESSERACT
 
 # Generate prisma files
