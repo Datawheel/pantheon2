@@ -107,56 +107,38 @@ jobs:
             --config=cloudbuild.yml \
             --substitutions=_GCP_ARTIFACT_REGISTRY_LOCATION=${{ vars.GCP_ARTIFACT_REGISTRY_LOCATION }},_GCP_PROJECT_ID=${{ vars.GCP_PROJECT_ID }},_GCP_ARTIFACT_REGISTRY_NAME=${{ vars.GCP_ARTIFACT_REGISTRY_NAME }},_GCP_IMAGE_NAME=${{ vars.GCP_IMAGE_NAME }},_GCP_IMAGE_TAG=${{ github.sha }},_GCP_IMAGE_ENVIRONMENT=${{ vars.GKE_APP_NAMESPACE }},_PANTHEON_PGURI=${{ secrets.PANTHEON_PGURI }},_REACT_APP_TRIVIA_GAME=${{ secrets.REACT_APP_TRIVIA_GAME }}
 
+  # deploys the recently created docker image via google cloude build
   deploy:
     needs: build
+    name: Deploy Docker Image to Cloud Run
     runs-on: ubuntu-latest
-    # runs-on: 
-    #   group: datawheel-self-runners
-    environment: development
+    environment: develop_environment
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # Authentication via credentials json
-      - name: Google Auth
-        id: auth
-        uses: google-github-actions/auth@v2
+      - name: Set up GCloud SDK
+        uses: google-github-actions/setup-gcloud@master
         with:
-          project_id: ${{ env.GCP_PROJECT_ID }}
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-      
-      # Install Cloud SDK
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          install_components: "beta"
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.GCP_SA_KEY }}
+          export_default_credentials: true
 
-      # Get google kubernetes engine credentials
-      - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@v2
-        with:
-          cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
-
-      # Transform GitHub secrets to base64 encoded
-      # - name: Set encoded secret values
-      #   run: |
-      #     echo "ENCODED_DB_CMS=$(echo -n "${{ secrets.DB_CMS }}" | base64 | tr -d '\n')" >> $GITHUB_ENV
-      #     echo "ENCODED_DB_USERS=$(echo -n "${{ secrets.DB_USERS }}" | base64 | tr -d '\n')" >> $GITHUB_ENV
-
-      # Install Helm chart
-      # --set configMap.GCP_BUCKET_FOLDER_NAME=${{ vars.GCP_BUCKET_FOLDER_NAME }} \
-      # --set secrets.STRIPE_ACADEMIC_COUPON=$ENCODED_STRIPE_ACADEMIC_COUPON \
-      - name: Helm install
-        uses: WyriHaximus/github-action-helm3@v2
-        with:
-          exec: |
-            helm upgrade --install --create-namespace \
-              --namespace ${{ env.GKE_APP_NAMESPACE }} \
-              --set app.environment=${{ env.GKE_APP_NAMESPACE }} \
-              --set app.release=${{ env.GKE_APP_NAMESPACE }} \
-              --set image.repository=${{ env.GCP_ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY_NAME }}/${{ env.GCP_IMAGE_NAME }} \
-              --set image.tag=${{ github.sha }} \
-              --set nameOverride=${{ env.GKE_APP_NAME }} \
-              --set fullnameOverride=${{ env.GKE_APP_NAME }} \
-              ${{ env.GKE_APP_NAME }} --values=./helm/development.yaml ./helm
+      - name: Deploy Image to Cloud Run
+        run: |-
+          gcloud run deploy ${{ env.IMAGE_NAME }} \
+            --image=${{ env.GCP_ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY_NAME }}/${{ env.GCP_IMAGE_NAME }}:${{ github.sha }} \
+            --region=${{ vars.GCP_ARTIFACT_REGISTRY_LOCATION }} \
+            --port=3000 \
+            --set-env-vars=URL=${{ vars.URL }} \
+            --set-env-vars=CANON_API=${{ vars.CANON_API }} \
+            --set-env-vars=CANON_GOOGLE_ANALYTICS={{ vars.CANON_GOOGLE_ANALYTICS }} \
+            --set-env-vars=NEWS_API_KEY=${{ secrets.NEWS_API_KEY }} \
+            --set-env-vars=PANTHEON_PGURI=${{ secrets.PANTHEON_PGURI }} \
+            --set-env-vars=REACT_APP_GAME_CSV_URL=${{ secrets.REACT_APP_GAME_CSV_URL }} \
+            --set-env-vars=REACT_APP_GAME_RECAPTCHA_SECRET_KEY_V3=${{ secrets.REACT_APP_GAME_RECAPTCHA_SECRET_KEY_V3 }} \
+            --set-env-vars=REACT_APP_GAME_RECAPTCHA_SITE_KEY_V3=${{ secrets.REACT_APP_GAME_RECAPTCHA_SITE_KEY_V3 }}	\
+            --set-env-vars=REACT_APP_GAME_SECRET_KEY=${{ secrets.REACT_APP_GAME_SECRET_KEY }} \
+            --set-env-vars=REACT_APP_TRIVIA_GAME=${{ secrets.REACT_APP_TRIVIA_GAME }} \
+            --set-env-vars=TMDB_API_KEY=${{ secrets.TMDB_API_KEY }} \
+            --set-env-vars=TW_API_KEY=${{ secrets.TW_API_KEY }} \
+            --set-env-vars=TW_API_SECRET=${{ secrets.TW_API_SECRET }} \
+            --set-env-vars=YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }} \
+            --allow-unauthenticated
