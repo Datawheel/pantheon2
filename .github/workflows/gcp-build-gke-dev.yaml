@@ -112,18 +112,31 @@ jobs:
     needs: build
     name: Deploy Docker Image to Cloud Run
     runs-on: ubuntu-latest
-    environment: develop_environment
+    # runs-on: 
+    #   group: datawheel-self-runners
+    environment: development
     steps:
-      - name: Set up GCloud SDK
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ env.GCP_SA_KEY }}
-          export_default_credentials: true
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      # Authentication via credentials json
+      - name: Google Auth
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      # Install Cloud SDK
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          install_components: "beta"
+
+      # Deploy to CloudRun
       - name: Deploy Image to Cloud Run
         run: |-
-          gcloud run deploy ${{ env.IMAGE_NAME }} \
+          gcloud run deploy ${{ env.GCP_ARTIFACT_REGISTRY_NAME }}-${{ env.IMAGE_NAME }} \
             --image=${{ env.GCP_ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY_NAME }}/${{ env.GCP_IMAGE_NAME }}:${{ github.sha }} \
             --region=${{ vars.GCP_ARTIFACT_REGISTRY_LOCATION }} \
             --port=3000 \
