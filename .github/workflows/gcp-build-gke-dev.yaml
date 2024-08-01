@@ -150,7 +150,7 @@ jobs:
             --set-env-vars=REACT_APP_GAME_RECAPTCHA_SITE_KEY_V3=${{ secrets.REACT_APP_GAME_RECAPTCHA_SITE_KEY_V3 }}	\
             --set-env-vars=REACT_APP_GAME_SECRET_KEY=${{ secrets.REACT_APP_GAME_SECRET_KEY }} \
             --set-env-vars=REACT_APP_TRIVIA_GAME=${{ secrets.REACT_APP_TRIVIA_GAME }} \
-            --set-env-vars=TMDB_API_KEY="${{ secrets.TMDB_API_KEY }}" \
+            --set-env-vars=TMDB_API_KEY=${{ secrets.TMDB_API_KEY }} \
             --set-env-vars=TW_API_KEY=${{ secrets.TW_API_KEY }} \
             --set-env-vars=TW_API_SECRET=${{ secrets.TW_API_SECRET }} \
             --set-env-vars=YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }} \
