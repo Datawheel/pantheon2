@@ -136,7 +136,7 @@ jobs:
       # Deploy to CloudRun
       - name: Deploy Image to Cloud Run
         run: |-
-          gcloud run deploy ${{ env.GCP_ARTIFACT_REGISTRY_NAME }}-${{ env.IMAGE_NAME }} \
+          gcloud run deploy ${{ env.IMAGE_NAME }} \
             --image=${{ env.GCP_ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY_NAME }}/${{ env.GCP_IMAGE_NAME }}:${{ github.sha }} \
             --region=${{ vars.GCP_ARTIFACT_REGISTRY_LOCATION }} \
             --port=3000 \
