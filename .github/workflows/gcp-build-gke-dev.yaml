@@ -76,9 +76,9 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    # runs-on: 
-    #   group: datawheel-self-runners
+    # runs-on: ubuntu-latest
+    runs-on: 
+      group: datawheel-self-runners
     environment: development
     steps:
       - name: Checkout
@@ -111,9 +111,9 @@ jobs:
   deploy:
     needs: build
     name: Deploy Docker Image to Cloud Run
-    runs-on: ubuntu-latest
-    # runs-on: 
-    #   group: datawheel-self-runners
+    # runs-on: ubuntu-latest
+    runs-on: 
+      group: datawheel-self-runners
     environment: development
     steps:
       - name: Checkout
