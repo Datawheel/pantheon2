@@ -29,6 +29,7 @@ export default function OccupationsTmap({attrs, data, title}) {
               data,
               d => d.occupation.occupation_slug
             ),
+            width: 780,
           }}
         />
       </div>

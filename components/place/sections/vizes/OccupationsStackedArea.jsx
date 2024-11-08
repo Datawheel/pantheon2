@@ -29,6 +29,7 @@ export default function OccupationsStackedArea({
               labels: ticks,
               tickFormat: d => buckets[d],
             },
+            width: 780,
           }}
         />
       </div>

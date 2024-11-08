@@ -25,6 +25,7 @@ export default function PlacesStacked({data, title, ticks, buckets}) {
             x: "yearBucket",
             y: "yearWeight",
             legendPosition: "right",
+            width: 780,
           }}
         />
       </div>

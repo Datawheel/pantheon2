@@ -63,7 +63,7 @@ export default function Header({occupation, people}) {
         <h1 className="profile-name">{plural(occupation.occupation)}</h1>
         <pre>
           <Suspense fallback={<div>Loading...</div>}>
-            <HeaderLine data={lineChartDataFormat} />
+            {/* <HeaderLine data={lineChartDataFormat} /> */}
           </Suspense>
         </pre>
       </div>

@@ -23,6 +23,7 @@ export default function PlacesTmap({data, title}) {
             // time: "birthyear",
             tooltipConfig: groupTooltip(data, d => d.country.slug),
             sum: d => (d.id ? (d.id instanceof Array ? d.id.length : 1) : 0),
+            width: 780,
           }}
         />
       </div>
