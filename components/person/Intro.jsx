@@ -149,13 +149,16 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
       </div>
       <div className="intro-content">
         <PersonImage
-          fallbackSrc="/images/icons/icon-person.svg"
-          src={`/images/profile/people/${person.id}.jpg`}
+          fallbackSrc="/icons/icon-person.svg"
+          src={`/profile/people/${person.id}.jpg`}
           alt={`Photo of ${person.name}`}
         />
         <div className="intro-text">
           <h3>
-            <img src="/images/ui/profile-w.svg" alt="Icon of person" />{" "}
+            <img
+              src="https://static.pantheon.world/ui/profile-w.svg"
+              alt="Icon of person"
+            />{" "}
             {person.name}
           </h3>
           {wikiSentence ? (
