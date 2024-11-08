@@ -10,7 +10,7 @@ export default function Header({era}) {
           <div
             className="bg-img"
             style={{
-              backgroundImage: `url(/images/profile/era/${era.id}.jpg)`,
+              backgroundImage: `url(https://static.pantheon.world/profile/era/${era.id}.jpg)`,
             }}
           ></div>
         </div>

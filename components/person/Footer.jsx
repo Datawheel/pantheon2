@@ -60,7 +60,7 @@ export default async function Footer({person, personRanks}) {
                 aria-label={`${person.occupation.occupation} profile`}
                 href={`/profile/occupation/${person.occupation.occupation_slug}`}
                 style={{
-                  backgroundImage: `url(/images/profile/occupation/${person.occupation.occupation_slug}.jpg)`,
+                  backgroundImage: `url(https://static.pantheon.world/profile/occupation/${person.occupation.occupation_slug}.jpg)`,
                 }}
               ></a>
             </div>
@@ -81,7 +81,7 @@ export default async function Footer({person, personRanks}) {
                   aria-label={`${belowMe.name} profile`}
                   href={`/profile/person/${belowMe.slug}`}
                   style={{
-                    backgroundImage: `url(/images/profile/people/${belowMe.id}.jpg)`,
+                    backgroundImage: `url(https://static.pantheon.world/profile/people/${belowMe.id}.jpg)`,
                   }}
                 ></a>
               </div>
@@ -99,7 +99,7 @@ export default async function Footer({person, personRanks}) {
                   aria-label={`${aboveMe.name} profile`}
                   href={`/profile/person/${aboveMe.slug}`}
                   style={{
-                    backgroundImage: `url(/images/profile/people/${aboveMe.id}.jpg)`,
+                    backgroundImage: `url(https://static.pantheon.world/profile/people/${aboveMe.id}.jpg)`,
                   }}
                 ></a>
               </div>
@@ -117,7 +117,7 @@ export default async function Footer({person, personRanks}) {
                   aria-label={`${person.birthplace.place} profile`}
                   href={`/profile/place/${person.birthplace.slug}`}
                   style={{
-                    backgroundImage: `url(/images/profile/place/${person.birthcountry.id}.jpg)`,
+                    backgroundImage: `url(https://static.pantheon.world/profile/place/${person.birthcountry.id}.jpg)`,
                   }}
                 ></a>
               </div>
@@ -142,7 +142,7 @@ export default async function Footer({person, personRanks}) {
                   aria-label={`${person.birthcountry.name} profile`}
                   href={`/profile/place/${person.birthcountry.slug}`}
                   style={{
-                    backgroundImage: `url(/images/profile/place/${person.birthcountry.id}.jpg)`,
+                    backgroundImage: `url(https://static.pantheon.world/profile/place/${person.birthcountry.id}.jpg)`,
                   }}
                 ></a>
               </div>
@@ -164,7 +164,7 @@ export default async function Footer({person, personRanks}) {
                       aria-label={`${relatedBio.name} profile`}
                       href={`/profile/person/${relatedBio.slug}`}
                       style={{
-                        backgroundImage: `url(/images/profile/people/${relatedBio.id}.jpg)`,
+                        backgroundImage: `url(https://static.pantheon.world/profile/people/${relatedBio.id}.jpg)`,
                       }}
                     ></a>
                     {/* </Tippy> */}
