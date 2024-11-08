@@ -167,9 +167,9 @@ export default function PhotoCarousel({
               >
                 <Link href={`/profile/person/${person.slug}/`}>
                   <PersonImage
-                    src={`/images/profile/people/${person.id}.jpg`}
+                    src={`/profile/people/${person.id}.jpg`}
                     alt={`Photo of ${person.name}`}
-                    fallbackSrc="/images/icons/icon-person.svg"
+                    fallbackSrc="/icons/icon-person.svg"
                   />
                 </Link>
               </div>
