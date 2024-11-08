@@ -8,9 +8,9 @@ const HomeGrid = ({bios, showDates}) => (
         <a href={`/profile/person/${profile.slug}`}>
           <div className="grid-box-bg-container">
             <PersonImage
-              src={`/images/profile/people/${profile.pid || profile.id}.jpg`}
+              src={`/profile/people/${profile.pid || profile.id}.jpg`}
               alt={`Photo of ${profile.name}`}
-              fallbackSrc="/images/icons/icon-person.svg"
+              fallbackSrc="/icons/icon-person.svg"
             />
           </div>
           <div className="grid-box-title-container">

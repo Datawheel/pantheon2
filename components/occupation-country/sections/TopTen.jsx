@@ -66,8 +66,8 @@ export default async function TopTen({country, occupation, people}) {
         <div className="top-person">
           <div className="top-person-img">
             <PersonImage
-              fallbackSrc="/images/icons/icon-person.svg"
-              src={`/images/profile/people/${number1.id}.jpg`}
+              fallbackSrc="/icons/icon-person.svg"
+              src={`/profile/people/${number1.id}.jpg`}
               alt={`Photo of ${number1.name}`}
             />
           </div>
@@ -106,8 +106,8 @@ export default async function TopTen({country, occupation, people}) {
           <div className="top-person" key={person.id}>
             <div className="top-person-img">
               <PersonImage
-                fallbackSrc="/images/icons/icon-person.svg"
-                src={`/images/profile/people/${person.id}.jpg`}
+                fallbackSrc="/icons/icon-person.svg"
+                src={`/profile/people/${person.id}.jpg`}
                 alt={`Photo of ${person.name}`}
               />
             </div>

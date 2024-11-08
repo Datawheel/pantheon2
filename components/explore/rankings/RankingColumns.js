@@ -29,8 +29,8 @@ const getColumns = (show, nesting, countOffset) => {
               Cell: ({value}) => (
                 <PersonImage
                   className="ranking-thumbnail"
-                  src={`/images/profile/people/${value}.jpg`}
-                  fallbackSrc="/images/icons/icon-person.svg"
+                  src={`/profile/people/${value}.jpg`}
+                  fallbackSrc="/icons/icon-person.svg"
                 />
               ),
               maxWidth: 70,
