@@ -23,7 +23,7 @@ export default function Footer({
                   )} from ${countryOccupation.country}`}
                   href={`/profile/occupation/${countryOccupation.occupation_slug}/country/${countryOccupation.country_slug}`}
                   style={{
-                    backgroundImage: `url(/images/profile/country/${countryOccupation.country_slug}.jpg)`,
+                    backgroundImage: `url(https://static.pantheon.world/profile/country/${countryOccupation.country_slug}.jpg)`,
                   }}
                 ></a>
               </div>
@@ -49,7 +49,7 @@ export default function Footer({
                   )} from ${occupationCountry.country}`}
                   href={`/profile/occupation/${occupationCountry.occupation_slug}/country/${occupationCountry.country_slug}`}
                   style={{
-                    backgroundImage: `url(/images/profile/occupation/${occupationCountry.occupation_slug}.jpg)`,
+                    backgroundImage: `url(https://static.pantheon.world/profile/occupation/${occupationCountry.occupation_slug}.jpg)`,
                   }}
                 ></a>
               </div>

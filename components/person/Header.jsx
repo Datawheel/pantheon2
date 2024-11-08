@@ -76,7 +76,7 @@ export default async function Header({person}) {
   const backgroundColor = person.occupation
       ? COLORS_DOMAIN[person.occupation.domain_slug]
       : "",
-    backgroundImage = `url('/images/profile/people/${person.wp_id}.jpg')`;
+    backgroundImage = `url('https://static.pantheon.world/profile/people/${person.wp_id}.jpg')`;
 
   return (
     <header className="hero">
