@@ -4,6 +4,7 @@ import {NextResponse} from "next/server";
 export const runtime = "edge";
 
 export async function GET(request) {
+  const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) {
@@ -17,28 +18,22 @@ export async function GET(request) {
     new URL("../../../../public/fonts/Amiko-Regular.ttf", import.meta.url)
   ).then(res => res.arrayBuffer());
 
-  const placeRes = await fetch(
-    `https://api.pantheon.world/place?slug=eq.${id}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
-  );
-  const place = await placeRes.json();
+  const placeRes = await fetch(`${BASE_API}/place?slug=eq.${id}`, {});
+
+  const placeData = await placeRes.json();
+
+  // Return first item if array has content, otherwise empty object
+  const place =
+    Array.isArray(placeData) && placeData.length > 0 ? placeData[0] : {};
   const {place: name, country: countryId} = place;
 
-  const countryRes = await fetch(
-    `https://api.pantheon.world/country?id=eq.${countryId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
-  );
-  const country = await countryRes.json();
+  const countryRes = await fetch(`${BASE_API}/country?id=eq.${countryId}`);
+
+  const countryData = await countryRes.json();
+
+  // Return first item if array has content, otherwise empty object
+  const country =
+    Array.isArray(countryData) && countryData.length > 0 ? countryData[0] : {};
   const {country: countryName, country_code} = country;
 
   const wikiRes = await fetch(
