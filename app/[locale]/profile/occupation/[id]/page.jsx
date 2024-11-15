@@ -15,6 +15,8 @@ import Lifespans from "/components/occupation/sections/Lifespans";
 // } from "/components/utils/consts";
 import {toTitleCase} from "../../../../../components/utils/vizHelpers";
 
+const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+
 async function getOccupations() {
   const res = await fetch(
     "https://api.pantheon.world/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug"
@@ -24,15 +26,17 @@ async function getOccupations() {
 
 async function getOccupation(occupationId) {
   const res = await fetch(
-    `https://api.pantheon.world/occupation?occupation_slug=eq.${occupationId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
+    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`
   );
-  return res.json();
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch occupation: ${res.status}`);
+  }
+
+  const data = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
 // async function getCountryRanks(countryRankLow, countryRankHigh) {

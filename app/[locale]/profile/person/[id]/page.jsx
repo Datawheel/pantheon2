@@ -16,15 +16,11 @@ import News from "/components/person/News";
 import Movies from "/components/person/Movies";
 import Footer from "/components/person/Footer";
 
+const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+
 async function getPerson(id) {
   const res = await fetch(
-    `https://api.pantheon.world/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
+    `${BASE_API}/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`
   );
 
   // Clone the response to check the body for the no rows message
@@ -37,21 +33,23 @@ async function getPerson(id) {
   if (data && data.details && data.details.includes("Results contain 0 rows")) {
     return null;
   }
-  return res.json();
+
+  const jsonData = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  return Array.isArray(jsonData) && jsonData.length > 0 ? jsonData[0] : {};
 }
 
 async function getPersonRanks(id) {
-  const res = await fetch(
-    `https://api.pantheon.world/person_ranks?slug=eq.${id}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-      next: {revalidate: 1440},
-    }
-  );
-  return res.json();
+  const res = await fetch(`${BASE_API}/person_ranks?slug=eq.${id}`, {
+    method: "GET",
+    next: {revalidate: 1440},
+  });
+
+  const data = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
 async function getWikiPageViews(personName) {

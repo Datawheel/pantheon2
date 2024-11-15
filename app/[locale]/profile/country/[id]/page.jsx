@@ -13,6 +13,8 @@ import {
   NUM_RANKINGS_POST,
 } from "/components/utils/consts";
 
+const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+
 async function getOccupations() {
   const res = await fetch(
     "https://api.pantheon.world/occupation?order=num_born.desc.nullslast"
@@ -21,16 +23,16 @@ async function getOccupations() {
 }
 
 async function getCountry(countryId) {
-  const res = await fetch(
-    `https://api.pantheon.world/country?slug=eq.${countryId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
-  );
-  return res.json();
+  const res = await fetch(`${BASE_API}/country?id=eq.${countryId}`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch country: ${res.status}`);
+  }
+
+  const data = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
 async function getCountryRanks(countryRankLow, countryRankHigh) {
