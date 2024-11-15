@@ -136,7 +136,6 @@ export default async function Page() {
     "kanagawa-prefecture",
     "buffalo-new-york",
     "konigsberg",
-    "rosario-santa-fe",
     "neuilly-sur-seine",
     "johannesburg",
     "kansas-city-missouri",

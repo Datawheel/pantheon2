@@ -50,6 +50,7 @@ async function fetchAllPersonImages(ids) {
 }
 
 export async function GET(request) {
+  const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const occupationQueryId = searchParams.get("occupation");
   const countryQueryId = searchParams.get("country");
@@ -65,30 +66,28 @@ export async function GET(request) {
   ).then(res => res.arrayBuffer());
 
   const occupationRes = await fetch(
-    `https://api.pantheon.world/occupation?occupation_slug=eq.${occupationQueryId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
+    `${BASE_API}/occupation?occupation_slug=eq.${occupationQueryId}`
   );
-  const occupation = await occupationRes.json();
+  const occupationData = await occupationRes.json();
+
+  // Return first item if array has content, otherwise empty object
+  const occupation =
+    Array.isArray(occupationData) && occupationData.length > 0
+      ? occupationData[0]
+      : {};
   const {occupation: occupationName, id: occupationId} = occupation;
+
   if (!occupationName) {
     return new NextResponse("Not Found", {status: 404});
   }
 
   const countryRes = await fetch(
-    `https://api.pantheon.world/country?country_code=eq.${countryQueryId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
+    `${BASE_API}/country?country_code=eq.${countryQueryId}`
   );
-  const country = await countryRes.json();
+  const countryData = await countryRes.json();
+  const country =
+    Array.isArray(countryData) && countryData.length > 0 ? countryData[0] : {};
+
   const {country: countryName, id: countryId} = country;
   if (!countryName) {
     return new NextResponse("Not Found", {status: 404});

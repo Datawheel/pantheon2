@@ -49,6 +49,7 @@ async function fetchAllPersonImages(ids) {
 }
 
 export async function GET(request) {
+  const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) {
@@ -62,16 +63,12 @@ export async function GET(request) {
     new URL("../../../../public/fonts/Amiko-Regular.ttf", import.meta.url)
   ).then(res => res.arrayBuffer());
 
-  const res = await fetch(
-    `https://api.pantheon.world/occupation?occupation_slug=eq.${id}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
-  );
-  const occupation = await res.json();
+  const res = await fetch(`${BASE_API}/occupation?occupation_slug=eq.${id}`);
+
+  const data = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  const occupation = Array.isArray(data) && data.length > 0 ? data[0] : {};
   const {occupation: occupationName, id: occupationId} = occupation;
 
   if (!occupationName) {
@@ -79,7 +76,7 @@ export async function GET(request) {
   }
 
   const peopleRes = await fetch(
-    `https://api.pantheon.world/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=id&limit=16`
+    `${BASE_API}/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=id&limit=16`
   );
   const people = await peopleRes.json();
   const peopleIds = people.map(p => p.id);

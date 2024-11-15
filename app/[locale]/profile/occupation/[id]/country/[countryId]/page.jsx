@@ -7,6 +7,8 @@ import Lifespans from "/components/occupation-country/sections/Lifespans";
 import Footer from "/components/occupation-country/sections/Footer";
 import {toTitleCase} from "/components/utils/vizHelpers";
 
+const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+
 async function getOccupations() {
   const res = await fetch(
     "https://api.pantheon.world/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug"
@@ -16,28 +18,30 @@ async function getOccupations() {
 
 async function getOccupation(occupationId) {
   const res = await fetch(
-    `https://api.pantheon.world/occupation?occupation_slug=eq.${occupationId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
+    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`
   );
-  return res.json();
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch occupation: ${res.status}`);
+  }
+
+  const data = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
 async function getCountry(countryId) {
-  const res = await fetch(
-    `https://api.pantheon.world/country?slug=eq.${countryId}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
-  );
-  return res.json();
+  const res = await fetch(`${BASE_API}/country?id=eq.${countryId}`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch country: ${res.status}`);
+  }
+
+  const data = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
 async function getAllCountriesInOccupation(occupationId) {
