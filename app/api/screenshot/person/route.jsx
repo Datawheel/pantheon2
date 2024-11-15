@@ -31,6 +31,7 @@ async function fetchPersonImage(id) {
 }
 
 export async function GET(request) {
+  const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) {
@@ -45,15 +46,14 @@ export async function GET(request) {
   ).then(res => res.arrayBuffer());
 
   const res = await fetch(
-    `https://api.pantheon.world/person?id=eq.${id}&select=name,occupation(occupation,domain_slug),birthyear,deathyear`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
+    `${BASE_API}/person?id=eq.${id}&select=name,occupation(occupation,domain_slug),birthyear,deathyear`
   );
-  const person = await res.json();
+  // const person = await res.json();
+  const data = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  const person = Array.isArray(data) && data.length > 0 ? data[0] : {};
+
   const {name, occupation, birthyear, deathyear} = person;
 
   if (!name) {

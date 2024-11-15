@@ -4,6 +4,7 @@ import {NextResponse} from "next/server";
 export const runtime = "edge";
 
 export async function GET(request) {
+  const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) {
@@ -17,16 +18,12 @@ export async function GET(request) {
     new URL("../../../../public/fonts/Amiko-Regular.ttf", import.meta.url)
   ).then(res => res.arrayBuffer());
 
-  const countryRes = await fetch(
-    `https://api.pantheon.world/country?slug=eq.${id}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.pgrst.object+json",
-      },
-    }
-  );
-  const country = await countryRes.json();
+  const countryRes = await fetch(`${BASE_API}/country?slug=eq.${id}`);
+  const data = await countryRes.json();
+
+  // Return first item if array has content, otherwise empty object
+  const country = Array.isArray(data) && data.length > 0 ? data[0] : {};
+
   const {country: countryName, img_link, slug} = country;
 
   if (!countryName) {

@@ -15,7 +15,7 @@ const SearchComponent = () => {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    fetchLatestTrendData();
+    // fetchLatestTrendData();
   }, []);
 
   useEffect(() => {
@@ -62,7 +62,8 @@ const SearchComponent = () => {
   // Function to fetch data from API
   const fetchData = async query => {
     if (!query || query.length < 3) {
-      fetchLatestTrendData();
+      // fetchLatestTrendData();
+      setResults(null);
       return;
     }
     try {

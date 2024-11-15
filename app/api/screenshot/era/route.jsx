@@ -4,6 +4,7 @@ import {NextResponse} from "next/server";
 export const runtime = "edge";
 
 export async function GET(request) {
+  const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) {
@@ -17,13 +18,14 @@ export async function GET(request) {
     new URL("../../../../public/fonts/Amiko-Regular.ttf", import.meta.url)
   ).then(res => res.arrayBuffer());
 
-  const eraRes = await fetch(`https://api.pantheon.world/era?slug=eq.${id}`, {
+  const eraRes = await fetch(`${BASE_API}/era?slug=eq.${id}`, {
     method: "GET",
-    headers: {
-      Accept: "application/vnd.pgrst.object+json",
-    },
   });
-  const era = await eraRes.json();
+  const data = await eraRes.json();
+
+  // Return first item if array has content, otherwise empty object
+  const era = Array.isArray(data) && data.length > 0 ? data[0] : {};
+
   const {id: eraId, name: eraName, start_year, end_year} = era;
 
   if (!eraName) {
