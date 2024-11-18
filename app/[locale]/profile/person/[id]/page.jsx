@@ -37,7 +37,7 @@ async function getPerson(id) {
   const jsonData = await res.json();
 
   // Return first item if array has content, otherwise empty object
-  return Array.isArray(jsonData) && jsonData.length > 0 ? jsonData[0] : {};
+  return Array.isArray(jsonData) && jsonData.length > 0 ? jsonData[0] : null;
 }
 
 async function getPersonRanks(id) {
