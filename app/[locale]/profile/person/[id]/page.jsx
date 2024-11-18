@@ -79,10 +79,10 @@ async function getWikiExtract(personId) {
   return res.json();
 }
 
-async function getNewsArticles(personId) {
-  const res = await fetch(`${process.env.URL}/api/news?pid=${personId}`);
-  return res.json();
-}
+// async function getNewsArticles(personId) {
+//   const res = await fetch(`${process.env.URL}/api/news?pid=${personId}`);
+//   return res.json();
+// }
 
 // async function getTweets(personId) {
 //   const res = await fetch(`${process.env.URL}/api/twit?pid=${personId}`);
@@ -141,13 +141,12 @@ export default async function Page({params: {id}}) {
 
   const wikiPageViewsData = getWikiPageViews(person.name);
   const wikiExtractData = getWikiExtract(person.id);
-  const newsArticlesData = getNewsArticles(person.id);
+  // const newsArticlesData = getNewsArticles(person.id);
   // const tweetsData = getTweets(person.id);
 
-  const [wikiPageViews, wikiExtract, newsArticles] = await Promise.all([
+  const [wikiPageViews, wikiExtract] = await Promise.all([
     wikiPageViewsData,
     wikiExtractData,
-    newsArticlesData,
   ]);
 
   let movies = [];
@@ -170,11 +169,11 @@ export default async function Page({params: {id}}) {
       slug: "metrics",
       content: <MemMetrics pageViews={wikiPageViews} person={person} />,
     },
-    {
-      title: "In the news",
-      slug: "news_articles",
-      content: <News newsArticles={newsArticles} />,
-    },
+    // {
+    //   title: "In the news",
+    //   slug: "news_articles",
+    //   content: <News newsArticles={newsArticles} />,
+    // },
     {
       title: "Notable Works",
       slug: "books",
