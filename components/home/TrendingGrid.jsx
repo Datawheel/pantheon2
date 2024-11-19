@@ -27,7 +27,12 @@ const LangSelector = ({handleLanguageChange, trendingLangEdition}) => (
   </Select>
 );
 
-export default function TrendingGrid({initialTrendingAll, defaultLang}) {
+export default function TrendingGrid({
+  title,
+  allowLangChange,
+  initialTrendingAll,
+  defaultLang,
+}) {
   const [trendingAll, setTrendingAll] = useState(initialTrendingAll);
   const [trendingLangEdition, setTrendingLangEdition] = useState(defaultLang);
   const [loading, setLoading] = useState(false);
@@ -56,21 +61,27 @@ export default function TrendingGrid({initialTrendingAll, defaultLang}) {
   return (
     <div className="profile-grid">
       <div className="grid-title-container">
-        <h3 className="grid-title">Trending Profiles Today</h3>
-        <p className="grid-subtitle">
-          <span className="grid-select-label">
-            Top profiles by pageviews for the{" "}
-          </span>
-          <LangSelector
-            handleLanguageChange={handleLanguageChange}
-            trendingLangEdition={trendingLangEdition}
-          />
-          <span className="grid-select-label"> wikipedia edition</span>
-        </p>
+        <h3 className="grid-title">{title}</h3>
+        {allowLangChange ? (
+          <p className="grid-subtitle">
+            <span className="grid-select-label">
+              Top profiles by pageviews for the{" "}
+            </span>
+            <LangSelector
+              handleLanguageChange={handleLanguageChange}
+              trendingLangEdition={trendingLangEdition}
+            />
+            <span className="grid-select-label"> wikipedia edition</span>
+          </p>
+        ) : null}
       </div>
       {!loading ? (
         <HomeGrid
-          bios={trendingAll.sort((a, b) => a.rank - b.rank).slice(0, 16)}
+          bios={
+            allowLangChange
+              ? trendingAll.sort((a, b) => a.rank - b.rank).slice(0, 16)
+              : trendingAll.slice(0, 16)
+          }
         />
       ) : (
         <div className="loading-trends">

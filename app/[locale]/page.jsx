@@ -8,17 +8,8 @@ export const revalidate = 3600 * 4; // Cache the page for 4 hours
 
 const baseUrl = process.env.URL || "https://pantheon.world";
 
-// export default function Home() {
-//   const {isSearchVisible, setSearchVisible} = useSearchVisibility();
-//   const activateSearch = () => setSearchVisible(!isSearchVisible);
-
-//   const [loadingTrendingBios, setLoadingTrendingBios] = useState(false);
-//   const [trendingLangEdition, setTrendingLangEdition] = useState("en");
-//   const [trendingBiosForGrid, setTrendingBiosForGrid] = useState([]);
 export default async function Home() {
-  const date30DaysAgo = new Date();
-  date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
-  const formattedDate = date30DaysAgo.toISOString().split("T")[0];
+  const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
   // Fetch initial data server-side (default language: "en")
   const trendingAll = await fetch(
@@ -26,7 +17,26 @@ export default async function Home() {
     {
       next: {revalidate}, // Cache for revalidation period
     }
-  ).then(res => res.json());
+  )
+    .then(res => res.json())
+    .then(data => (Array.isArray(data) ? data : []))
+    .catch(error => {
+      console.error("Error fetching data:", error);
+      return [];
+    });
+
+  const recentPassings = await fetch(
+    `https://api.pantheon.world/person?alive=is.false&deathdate=gte.${date30DaysAgo}&select=wd_id,name,slug,birthyear,deathyear,id&order=deathdate.desc&limit=16`,
+    {
+      next: {revalidate: 3600 * 12}, // Cache for 12 hours
+    }
+  )
+    .then(res => res.json())
+    .then(data => (Array.isArray(data) ? data : []))
+    .catch(error => {
+      console.error("Error fetching data:", error);
+      return [];
+    });
 
   return (
     <div className="container">
@@ -84,36 +94,11 @@ export default async function Home() {
         </div>
       </div>
 
-      {/* <div className="profile-grid">
-        <div className="grid-title-container">
-          <h3 className="grid-title">Trending Profiles Today</h3>
-          <p className="grid-subtitle">
-            <span className="grid-select-label">
-              Top profiles by pageviews for the{" "}
-            </span>
-            <LangSelector
-              setTrendingLangEdition={setTrendingLangEdition}
-              trendingLangEdition={trendingLangEdition}
-            />
-            <span className="grid-select-label"> wikipedia edition</span>
-          </p>
-        </div>
-        {!loadingTrendingBios ? (
-          <HomeGrid
-            bios={trendingBiosForGrid
-              .sort((a, b) => a.rank - b.rank)
-              .slice(0, 16)}
-          />
-        ) : (
-          <div className="loading-trends">
-            <Spinner />
-          </div>
-        )}
-      </div> */}
       <TrendingGrid
+        title="Trending Profiles Today"
+        allowLangChange={true}
         initialTrendingAll={trendingAll}
         defaultLang="en"
-        date30DaysAgo={formattedDate}
       />
 
       <div className="profile-grid">
@@ -137,6 +122,13 @@ export default async function Home() {
           visualization solutions.
         </p>
       </div>
+
+      <TrendingGrid
+        title="Recent Passings"
+        allowLangChange={false}
+        initialTrendingAll={recentPassings}
+        defaultLang="en"
+      />
 
       <div className="floating-content l-1">
         <div className="box"></div>
