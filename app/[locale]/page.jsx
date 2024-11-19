@@ -1,94 +1,32 @@
-"use client";
 import dayjs from "dayjs";
-import React, {useEffect, useState} from "react";
-import HomeGrid from "/components/home/Grid";
-import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import Spinner from "/components/Spinner";
-import Select from "/components/common/Select";
-import {useSearchVisibility} from "/contexts/SearchContext";
+import TrendingGrid from "/components/home/TrendingGrid";
+// import {useSearchVisibility} from "/contexts/SearchContext";
 
-const LangSelector = ({setTrendingLangEdition, trendingLangEdition}) => (
-  <Select
-    label=""
-    className="home-select"
-    fontSize="sm"
-    onChange={evt => setTrendingLangEdition(evt.target.value)}
-    value={trendingLangEdition}
-  >
-    <option value="ar">Arabic</option>
-    <option value="zh">Chinese</option>
-    <option value="nl">Dutch</option>
-    <option value="en">English</option>
-    <option value="fr">French</option>
-    <option value="de">German</option>
-    <option value="it">Italian</option>
-    <option value="ja">Japanese</option>
-    <option value="pt">Portuguese</option>
-    <option value="ru">Russian</option>
-    <option value="es">Spanish</option>
-  </Select>
-);
+export const revalidate = 3600 * 4; // Cache the page for 4 hours
 
-// export const metadata = {
-//   title: "Pantheon",
-// };
+const baseUrl = process.env.URL || "https://pantheon.world";
 
-export default function Home() {
-  const {isSearchVisible, setSearchVisible} = useSearchVisibility();
-  const activateSearch = () => setSearchVisible(!isSearchVisible);
+// export default function Home() {
+//   const {isSearchVisible, setSearchVisible} = useSearchVisibility();
+//   const activateSearch = () => setSearchVisible(!isSearchVisible);
 
-  const [loadingTrendingBios, setLoadingTrendingBios] = useState(false);
-  const [trendingLangEdition, setTrendingLangEdition] = useState("en");
-  const [trendingBiosForGrid, setTrendingBiosForGrid] = useState([]);
-  const [trendingSingersForGrid, setTrendingSingersForGrid] = useState([]);
-  const [trendingSoccerPlayersForGrid, setTrendingSoccerPlayersForGrid] =
-    useState([]);
-  const [trendingActorsForGrid, setTrendingActorsForGrid] = useState([]);
-  const [recentPassingsForGrid, setRecentPassingsForGrid] = useState([]);
+//   const [loadingTrendingBios, setLoadingTrendingBios] = useState(false);
+//   const [trendingLangEdition, setTrendingLangEdition] = useState("en");
+//   const [trendingBiosForGrid, setTrendingBiosForGrid] = useState([]);
+export default async function Home() {
+  const date30DaysAgo = new Date();
+  date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
+  const formattedDate = date30DaysAgo.toISOString().split("T")[0];
 
-  useEffect(() => {
-    setLoadingTrendingBios(true);
-    async function fetchMyData() {
-      const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
-      const all = await axios.get(
-        `/api/wikiTrends?lang=${trendingLangEdition}`
-      );
-      const singers = await axios.get(
-        `/api/wikiTrends?lang=${trendingLangEdition}&occupation=SINGER`
-      );
-      const soccerPlayers = await axios.get(
-        `/api/wikiTrends?lang=${trendingLangEdition}&occupation=SOCCER+PLAYER`
-      );
-      const actors = await axios.get(
-        `/api/wikiTrends?lang=${trendingLangEdition}&occupation=ACTOR`
-      );
-      const deaths = await axios.get(
-        `https://api.pantheon.world/person?alive=is.false&deathdate=gte.${date30DaysAgo}&select=wd_id,name,slug,birthyear,deathyear,id&order=deathdate.desc`
-      );
-      const trendingData = await axios
-        .all([all, singers, soccerPlayers, actors, deaths])
-        .then(axios.spread((...responses) => responses.map(r => r.data)))
-        .catch(errors => {
-          console.log("ERRORS!", errors);
-        });
-      const [
-        trendingAll,
-        trendingSingers,
-        trendingSoccerPlayers,
-        trendingActors,
-        recentPassings,
-      ] = trendingData;
-      setTrendingBiosForGrid(trendingAll);
-      setTrendingSingersForGrid(trendingSingers);
-      setTrendingSoccerPlayersForGrid(trendingSoccerPlayers);
-      setTrendingActorsForGrid(trendingActors);
-      setRecentPassingsForGrid(recentPassings);
-      setLoadingTrendingBios(false);
+  // Fetch initial data server-side (default language: "en")
+  const trendingAll = await fetch(
+    `${baseUrl}/api/wikiTrends?lang=en&limit=16`,
+    {
+      next: {revalidate}, // Cache for revalidation period
     }
-    fetchMyData();
-  }, [trendingLangEdition]);
+  ).then(res => res.json());
 
   return (
     <div className="container">
@@ -126,9 +64,8 @@ export default function Home() {
                 width={22}
                 height={22}
               />
-              <a href="#" onClick={activateSearch}>
-                Search people, places, &amp; occupations
-              </a>
+              {/* <a href="#" onClick={activateSearch}> */}
+              <a href="#">Search people, places, &amp; occupations</a>
             </div>
           </div>
           <div className="home-head-content">
@@ -147,7 +84,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="profile-grid">
+      {/* <div className="profile-grid">
         <div className="grid-title-container">
           <h3 className="grid-title">Trending Profiles Today</h3>
           <p className="grid-subtitle">
@@ -172,7 +109,12 @@ export default function Home() {
             <Spinner />
           </div>
         )}
-      </div>
+      </div> */}
+      <TrendingGrid
+        initialTrendingAll={trendingAll}
+        defaultLang="en"
+        date30DaysAgo={formattedDate}
+      />
 
       <div className="profile-grid">
         <p className="post">
@@ -194,103 +136,6 @@ export default function Home() {
           , a company specialized in the creation of data distribution and
           visualization solutions.
         </p>
-      </div>
-
-      <div className="profile-grid">
-        <div className="grid-title-container">
-          <h3 className="grid-title">Recent Passings</h3>
-        </div>
-        {!loadingTrendingBios ? (
-          <HomeGrid
-            bios={recentPassingsForGrid.slice(0, 16)}
-            showDates={true}
-          />
-        ) : (
-          <div className="loading-trends">
-            <Spinner />
-          </div>
-        )}
-      </div>
-
-      <div className="profile-grid">
-        <div className="grid-title-container">
-          <h3 className="grid-title">Trending Actors Today</h3>
-          <p className="grid-subtitle">
-            <span className="grid-select-label">
-              Top actors by pageviews for the{" "}
-            </span>
-            <LangSelector
-              setTrendingLangEdition={setTrendingLangEdition}
-              trendingLangEdition={trendingLangEdition}
-            />
-            <span className="grid-select-label"> wikipedia edition</span>
-          </p>
-        </div>
-        {!loadingTrendingBios ? (
-          <HomeGrid
-            bios={trendingActorsForGrid
-              .sort((a, b) => a.rank - b.rank)
-              .slice(0, 16)}
-          />
-        ) : (
-          <div className="loading-trends">
-            <Spinner />
-          </div>
-        )}
-      </div>
-
-      <div className="profile-grid">
-        <div className="grid-title-container">
-          <h3 className="grid-title">Trending Soccer Players Today</h3>
-          <p className="grid-subtitle">
-            <span className="grid-select-label">
-              Top soccer players by pageviews for the{" "}
-            </span>
-            <LangSelector
-              setTrendingLangEdition={setTrendingLangEdition}
-              trendingLangEdition={trendingLangEdition}
-            />
-            <span className="grid-select-label"> wikipedia edition</span>
-          </p>
-        </div>
-        {!loadingTrendingBios ? (
-          <HomeGrid
-            bios={trendingSoccerPlayersForGrid
-              .sort((a, b) => a.rank - b.rank)
-              .slice(0, 16)}
-          />
-        ) : (
-          <div className="loading-trends">
-            <Spinner />
-          </div>
-        )}
-      </div>
-
-      <div className="profile-grid">
-        <div className="grid-title-container">
-          <h3 className="grid-title">Trending Singers Today</h3>
-          <p className="grid-subtitle">
-            <span className="grid-select-label">
-              Top singers by pageviews for the{" "}
-            </span>
-            <LangSelector
-              setTrendingLangEdition={setTrendingLangEdition}
-              trendingLangEdition={trendingLangEdition}
-            />
-            <span className="grid-select-label"> wikipedia edition</span>
-          </p>
-        </div>
-        {!loadingTrendingBios ? (
-          <HomeGrid
-            bios={trendingSingersForGrid
-              .sort((a, b) => a.rank - b.rank)
-              .slice(0, 16)}
-          />
-        ) : (
-          <div className="loading-trends">
-            <Spinner />
-          </div>
-        )}
       </div>
 
       <div className="floating-content l-1">
