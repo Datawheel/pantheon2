@@ -6,19 +6,24 @@ import People from "/components/occupation-country/sections/People";
 import Lifespans from "/components/occupation-country/sections/Lifespans";
 import Footer from "/components/occupation-country/sections/Footer";
 import {toTitleCase} from "/components/utils/vizHelpers";
-
-const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getOccupations() {
   const res = await fetch(
-    `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`
+    `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getOccupation(occupationId) {
   const res = await fetch(
-    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`
+    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
 
   if (!res.ok) {
@@ -32,7 +37,9 @@ async function getOccupation(occupationId) {
 }
 
 async function getCountry(countryId) {
-  const res = await fetch(`${BASE_API}/country?slug=eq.${countryId}`);
+  const res = await fetch(`${BASE_API}/country?slug=eq.${countryId}`, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch country: ${res.status}`);
@@ -46,21 +53,30 @@ async function getCountry(countryId) {
 
 async function getAllCountriesInOccupation(occupationId) {
   const res = await fetch(
-    `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast`
+    `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getAllOccupationsInCountry(countryId) {
   const res = await fetch(
-    `${BASE_API}/occupation_country?country=eq.${countryId}&order=num_people.desc.nullslast`
+    `${BASE_API}/occupation_country?country=eq.${countryId}&order=num_people.desc.nullslast`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getPeople(occupationId, countryId) {
   const res = await fetch(
-    `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev,l`
+    `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev,l`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }

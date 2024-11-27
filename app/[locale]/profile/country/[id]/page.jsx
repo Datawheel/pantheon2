@@ -12,18 +12,22 @@ import {
   NUM_RANKINGS_PRE,
   NUM_RANKINGS_POST,
 } from "/components/utils/consts";
-
-const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getOccupations() {
   const res = await fetch(
-    "https://api.pantheon.world/occupation?order=num_born.desc.nullslast"
+    `${BASE_API}/occupation?order=num_born.desc.nullslast`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getCountry(countryId) {
-  const res = await fetch(`${BASE_API}/country?id=eq.${countryId}`);
+  const res = await fetch(`${BASE_API}/country?slug=eq.${countryId}`, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch country: ${res.status}`);
@@ -37,21 +41,30 @@ async function getCountry(countryId) {
 
 async function getCountryRanks(countryRankLow, countryRankHigh) {
   const res = await fetch(
-    `https://api.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
+    `${BASE_API}/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getPeopleBornHere(countryId) {
   const res = await fetch(
-    `https://api.pantheon.world/person?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
+    `${BASE_API}/person?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getPeopleDiedHere(countryId) {
   const res = await fetch(
-    `https://api.pantheon.world/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
+    `${BASE_API}/person?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }

@@ -10,6 +10,7 @@ import {toTitleCase} from "/components/utils/vizHelpers";
 import {FORMATTERS} from "/components/utils/consts";
 import "/components/occupation-country/SelectOccupationCountry.css";
 import Image from "next/image";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 export default function Page() {
   const {push} = useRouter();
@@ -30,44 +31,61 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchMyData() {
-      const getOccupations = await axios.get(
-        "https://api.pantheon.world/occupation?order=num_born.desc.nullslast"
+      const getOccupations = await fetch(
+        `${BASE_API}/occupation?order=num_born.desc.nullslast`,
+        {
+          next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+        }
       );
-      const getCountries = await axios.get(
-        "https://api.pantheon.world/country?order=num_born.desc.nullslast"
+      const getCountries = await fetch(
+        `${BASE_API}/country?order=num_born.desc.nullslast`,
+        {
+          next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+        }
       );
-      const getOccupationsInCountry = await axios.get(
-        "https://api.pantheon.world/occupation_country?num_people=gte.18"
+      const getOccupationsInCountry = await fetch(
+        `${BASE_API}/occupation_country?num_people=gte.18`,
+        {
+          next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+        }
       );
-      const initialData = await axios
-        .all([getOccupations, getCountries, getOccupationsInCountry])
-        .then(axios.spread((...responses) => responses.map(r => r.data)))
-        .catch(errors => {
-          console.log("ERRORS!", errors);
+      try {
+        const responses = await Promise.all([
+          getOccupations,
+          getCountries,
+          getOccupationsInCountry,
+        ]);
+
+        const initialData = await Promise.all(
+          responses.map(response => response.json())
+        );
+
+        const [occupations, countries, occupationsInCountry] = initialData;
+        setOccupations(occupations);
+        setCountries(countries);
+        const numPeopleSum = occupationsInCountry.reduce(
+          (a, b) => a + (b.num_people || 0),
+          0
+        );
+        let occupationsInCountryNested = occupationsInCountry.map(d => {
+          const rca =
+            d.num_people /
+            d.num_people_country /
+            (d.num_people_occupation / numPeopleSum);
+          return {...d, rca};
         });
-      const [occupations, countries, occupationsInCountry] = initialData;
-      setOccupations(occupations);
-      setCountries(countries);
-      const numPeopleSum = occupationsInCountry.reduce(
-        (a, b) => a + (b.num_people || 0),
-        0
-      );
-      let occupationsInCountryNested = occupationsInCountry.map(d => {
-        const rca =
-          d.num_people /
-          d.num_people_country /
-          (d.num_people_occupation / numPeopleSum);
-        return {...d, rca};
-      });
-      occupationsInCountryNested = nest()
-        .key(d => d.country_slug)
-        .rollup(leaves => leaves.sort((a, b) => b.rca - a.rca).slice(0, 5))
-        .entries(occupationsInCountry)
-        .map(d => {
-          const c = countries.find(c => c.id === d.value[0].country);
-          return {values: d.value, country: c};
-        });
-      setOccupationsInCountry(occupationsInCountryNested);
+        occupationsInCountryNested = nest()
+          .key(d => d.country_slug)
+          .rollup(leaves => leaves.sort((a, b) => b.rca - a.rca).slice(0, 5))
+          .entries(occupationsInCountry)
+          .map(d => {
+            const c = countries.find(c => c.id === d.value[0].country);
+            return {values: d.value, country: c};
+          });
+        setOccupationsInCountry(occupationsInCountryNested);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
     fetchMyData();
   }, []);
@@ -75,10 +93,13 @@ export default function Page() {
   useEffect(() => {
     setSelection1(occupation);
     async function fetchOccupationData() {
-      const getOccupationsInCountry = await axios.get(
-        `https://api.pantheon.world/occupation_country?occupation_slug=eq.${occupation}&order=num_people.desc.nullslast`
+      const getOccupationsInCountry = await fetch(
+        `${BASE_API}/occupation_country?occupation_slug=eq.${occupation}&order=num_people.desc.nullslast`,
+        {
+          next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+        }
       );
-      const {data: countries} = getOccupationsInCountry;
+      const countries = await getOccupationsInCountry.json();
       setCountries(countries);
     }
     fetchOccupationData();

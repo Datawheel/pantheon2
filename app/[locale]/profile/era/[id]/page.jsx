@@ -12,23 +12,29 @@ import Occupations from "/components/era/sections/Occupations";
 //   NUM_RANKINGS_PRE,
 //   NUM_RANKINGS_POST,
 // } from "/components/utils/consts";
-
-const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getOccupations() {
   const res = await fetch(
-    "https://api.pantheon.world/occupation?order=num_born.desc.nullslast"
+    `${BASE_API}/occupation?order=num_born.desc.nullslast`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getEras() {
-  const res = await fetch("https://api.pantheon.world/era?order=start_year");
+  const res = await fetch(`${BASE_API}/era?order=start_year`, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
   return res.json();
 }
 
 async function getEra(eraId) {
-  const res = await fetch(`${BASE_API}/era?id=eq.${eraId}`);
+  const res = await fetch(`${BASE_API}/era?slug=eq.${eraId}`, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch era: ${res.status}`);
@@ -49,14 +55,20 @@ async function getEra(eraId) {
 
 async function getPeopleBornInEra(startYear, endYear) {
   const res = await fetch(
-    `https://api.pantheon.world/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(*),occupation_id:occupation,*`
+    `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(*),occupation_id:occupation,*`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getPeopleDiedInEra(startYear, endYear) {
   const res = await fetch(
-    `https://api.pantheon.world/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*`
+    `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
