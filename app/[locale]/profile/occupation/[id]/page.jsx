@@ -14,19 +14,24 @@ import Lifespans from "/components/occupation/sections/Lifespans";
 //   NUM_RANKINGS_POST,
 // } from "/components/utils/consts";
 import {toTitleCase} from "../../../../../components/utils/vizHelpers";
-
-const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getOccupations() {
   const res = await fetch(
-    "https://api.pantheon.world/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug"
+    `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getOccupation(occupationId) {
   const res = await fetch(
-    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`
+    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
 
   if (!res.ok) {
@@ -48,7 +53,10 @@ async function getOccupation(occupationId) {
 
 async function getPeople(occupationId) {
   const res = await fetch(
-    `https://api.pantheon.world/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev`
+    `${BASE_API}/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }

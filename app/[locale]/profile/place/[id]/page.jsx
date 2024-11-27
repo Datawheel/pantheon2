@@ -12,8 +12,7 @@ import {
 } from "../../../../../components/utils/consts";
 import OccupationTrends from "../../../../../components/place/sections/OccupationTrends";
 import Lifespans from "../../../../../components/place/sections/Lifespans";
-
-const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getPlace(id) {
   const res = await fetch(`${BASE_API}/place?slug=eq.${id}`);
@@ -30,13 +29,18 @@ async function getPlace(id) {
 
 async function getOccupations() {
   const res = await fetch(
-    `${BASE_API}/occupation?order=num_born.desc.nullslast`
+    `${BASE_API}/occupation?order=num_born.desc.nullslast`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getCountry(countryId) {
-  const res = await fetch(`${BASE_API}/country?id=eq.${countryId}`);
+  const res = await fetch(`${BASE_API}/country?id=eq.${countryId}`, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch country: ${res.status}`);
@@ -50,14 +54,20 @@ async function getCountry(countryId) {
 
 async function getPlaceRanks(placeRankLow, placeRankHigh) {
   const res = await fetch(
-    `${BASE_API}/place?born_rank_unique=gte.${placeRankLow}&born_rank_unique=lte.${placeRankHigh}&order=born_rank_unique`
+    `${BASE_API}/place?born_rank_unique=gte.${placeRankLow}&born_rank_unique=lte.${placeRankHigh}&order=born_rank_unique`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
 
 async function getPeopleBornHere(placeId) {
   const res = await fetch(
-    `${BASE_API}/person?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
+    `${BASE_API}/person?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }

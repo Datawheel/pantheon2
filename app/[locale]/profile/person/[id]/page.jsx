@@ -15,16 +15,13 @@ import News from "/components/person/News";
 // import Twitter from "/components/person/Twitter";
 import Movies from "/components/person/Movies";
 import Footer from "/components/person/Footer";
-
-const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
-
-const CACHE_DURATION = 60 * 60 * 24 * 7; // 7 days
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getPerson(id) {
   const res = await fetch(
     `${BASE_API}/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`,
     {
-      next: {revalidate: CACHE_DURATION},
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
   );
 
@@ -48,7 +45,7 @@ async function getPerson(id) {
 async function getPersonRanks(id) {
   const res = await fetch(`${BASE_API}/person_ranks?slug=eq.${id}`, {
     method: "GET",
-    next: {revalidate: CACHE_DURATION},
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
   });
 
   const data = await res.json();
@@ -65,7 +62,7 @@ async function getWikiPageViews(personName) {
   const apiUrl = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`;
   try {
     const res = await fetch(apiUrl, {
-      next: {revalidate: CACHE_DURATION}, // Cache for 7 days
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT}, // Cache for 7 days
     });
     // Check if the response is ok (status in the range 200-299)
     if (!res.ok)
@@ -83,7 +80,7 @@ async function getWikiExtract(personId) {
   const res = await fetch(
     `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=${personId}&format=json&exlimit=1&origin=*`,
     {
-      next: {revalidate: CACHE_DURATION},
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
   );
   return res.json();
@@ -101,14 +98,14 @@ async function getWikiExtract(personId) {
 
 async function getBooks(personId) {
   const res = await fetch(`${process.env.URL}/api/books?id=${personId}`, {
-    next: {revalidate: CACHE_DURATION},
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
   });
   return res.json();
 }
 
 async function getMovies(personId) {
   const res = await fetch(`${process.env.URL}/api/movies?id=${personId}`, {
-    next: {revalidate: CACHE_DURATION},
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
   });
   return res.json();
 }
