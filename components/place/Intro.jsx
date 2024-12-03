@@ -1,5 +1,6 @@
 import {nest} from "d3-collection";
 import {plural} from "pluralize";
+import Image from "next/image";
 import AnchorList from "../utils/AnchorList";
 import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
@@ -60,7 +61,12 @@ export default async function Intro({
       <div className="intro-content">
         <div className="intro-text">
           <h3>
-            <img src="/images/ui/profile-w.svg" alt="Icon of place" />
+            <Image
+              src="/images/ui/profile-w.svg"
+              alt="Icon of place"
+              width={24}
+              height={24}
+            />
             {place.place}
           </h3>
           <p>

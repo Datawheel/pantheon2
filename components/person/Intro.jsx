@@ -2,6 +2,7 @@ import PersonImage from "../utils/PersonImage";
 import {toTitleCase} from "../utils/vizHelpers";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
+import Image from "next/image";
 
 const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
   const {
@@ -155,9 +156,11 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
         />
         <div className="intro-text">
           <h3>
-            <img
-              src="https://static.pantheon.world/ui/profile-w.svg"
+            <Image
+              src="/images/ui/profile-w.svg"
               alt="Icon of person"
+              width={24}
+              height={24}
             />{" "}
             {person.name}
           </h3>
