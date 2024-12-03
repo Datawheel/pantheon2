@@ -10,7 +10,7 @@ const HomeGrid = ({bios, showDates}) => (
             <PersonImage
               src={`/profile/people/${profile.pid || profile.id}.jpg`}
               alt={`Photo of ${profile.name}`}
-              fallbackSrc="/icons/icon-person.svg"
+              fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
             />
           </div>
           <div className="grid-box-title-container">

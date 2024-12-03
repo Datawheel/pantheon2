@@ -10,12 +10,18 @@ export default function Header({occupation, country, people}) {
         <div className="bg-img-mask profession">
           <div className="bg-img bg-img-t">
             {people.slice(0, 4).map(p => (
-              <img key={p.id} src={`/images/profile/people/${p.id}.jpg`} />
+              <img
+                key={p.id}
+                src={`https://static.pantheon.world/profile/people/${p.id}.jpg`}
+              />
             ))}
           </div>
           <div className="bg-img bg-img-b">
             {people.slice(5, 9).map(p => (
-              <img key={p.id} src={`/images/profile/people/${p.id}.jpg`} />
+              <img
+                key={p.id}
+                src={`https://static.pantheon.world/profile/people/${p.id}.jpg`}
+              />
             ))}
           </div>
           <div
