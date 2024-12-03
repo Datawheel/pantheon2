@@ -15,7 +15,7 @@ const SearchComponent = () => {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    // fetchLatestTrendData();
+    fetchLatestTrendData();
   }, []);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ const SearchComponent = () => {
   }, [inputValue]);
 
   useEffect(() => {
+    if (!isSearchVisible) return;
     const handleKeyDown = event => {
       if (event.key === "ArrowUp") {
         setActiveIndex(
@@ -53,7 +54,7 @@ const SearchComponent = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [results, activeIndex]);
+  }, [results, activeIndex, isSearchVisible]);
 
   const handleChange = e => {
     setInputValue(e.target.value);
