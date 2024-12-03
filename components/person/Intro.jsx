@@ -149,7 +149,7 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
       </div>
       <div className="intro-content">
         <PersonImage
-          fallbackSrc="/icons/icon-person.svg"
+          fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
           src={`/profile/people/${person.id}.jpg`}
           alt={`Photo of ${person.name}`}
         />

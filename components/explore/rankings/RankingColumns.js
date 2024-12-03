@@ -30,7 +30,7 @@ const getColumns = (show, nesting, countOffset) => {
                 <PersonImage
                   className="ranking-thumbnail"
                   src={`/profile/people/${value}.jpg`}
-                  fallbackSrc="/icons/icon-person.svg"
+                  fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                 />
               ),
               maxWidth: 70,

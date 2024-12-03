@@ -2,11 +2,14 @@ import Link from "next/link";
 import {FORMATTERS} from "/components/utils/consts";
 import YearbookSidebar from "/components/games/YearbookSidebar";
 import "/components/games/Yearbook.css";
-import Image from "next/image";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getPeopleBornInYear(year) {
   const res = await fetch(
-    `https://api.pantheon.world/person?select=name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)&birthyear=eq.${year}&hpi=gte.4&order=hpi.desc.nullslast`
+    `${BASE_API}/person?select=name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)&birthyear=eq.${year}&hpi=gte.4&order=hpi.desc.nullslast`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
@@ -36,7 +39,7 @@ export default async function Page({params: {year}}) {
                   </div>
                   <div className="portrait">
                     <img
-                      src={`/images/profile/people/${topPersonF.id}.jpg`}
+                      src={`https://static.pantheon.world/profile/people/${topPersonF.id}.jpg`}
                       alt={`Yearbook image of ${topPersonF.name}`}
                     />
                     <div className="shadow"></div>
@@ -47,7 +50,7 @@ export default async function Page({params: {year}}) {
                 <div className="portrait-container">
                   <div className="portrait">
                     <img
-                      src={`/images/profile/people/${topPersonM.id}.jpg`}
+                      src={`https://static.pantheon.world/profile/people/${topPersonM.id}.jpg`}
                       alt={`Yearbook image of ${topPersonM.name}`}
                     />
                     <div className="shadow"></div>
@@ -71,7 +74,7 @@ export default async function Page({params: {year}}) {
                     className="grid-portrait-container"
                   >
                     <img
-                      src={`/images/profile/people/${person.id}.jpg`}
+                      src={`https://static.pantheon.world/profile/people/${person.id}.jpg`}
                       // onError={(evt) => (evt.target.style.display = "none")}
                     />
                   </Link>

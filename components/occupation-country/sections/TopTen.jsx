@@ -66,7 +66,7 @@ export default async function TopTen({country, occupation, people}) {
         <div className="top-person">
           <div className="top-person-img">
             <PersonImage
-              fallbackSrc="/icons/icon-person.svg"
+              fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
               src={`/profile/people/${number1.id}.jpg`}
               alt={`Photo of ${number1.name}`}
             />
@@ -106,7 +106,7 @@ export default async function TopTen({country, occupation, people}) {
           <div className="top-person" key={person.id}>
             <div className="top-person-img">
               <PersonImage
-                fallbackSrc="/icons/icon-person.svg"
+                fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                 src={`/profile/people/${person.id}.jpg`}
                 alt={`Photo of ${person.name}`}
               />
