@@ -32,6 +32,7 @@ export default function TrendingGrid({
   allowLangChange,
   initialTrendingAll,
   defaultLang,
+  occupation,
 }) {
   const [trendingAll, setTrendingAll] = useState(initialTrendingAll);
   const [trendingLangEdition, setTrendingLangEdition] = useState(defaultLang);
@@ -40,7 +41,10 @@ export default function TrendingGrid({
   const fetchTrendingData = async lang => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/wikiTrends?lang=${lang}&limit=12`, {
+      const trendingUrl = occupation
+        ? `/api/wikiTrends?lang=${lang}&occupation=${occupation}&limit=16`
+        : `/api/wikiTrends?lang=${lang}&limit=16`;
+      const res = await fetch(trendingUrl, {
         cache: "force-cache", // Use browser cache if available
       });
       const data = await res.json();

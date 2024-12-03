@@ -3,8 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import TrendingGrid from "/components/home/TrendingGrid";
 // import {useSearchVisibility} from "/contexts/SearchContext";
-
-export const revalidate = 3600 * 4; // Cache the page for 4 hours
+import {REVALIDATE_PERIODS} from "/app/constants";
 
 const baseUrl = process.env.URL || "https://pantheon.world";
 
@@ -15,13 +14,13 @@ export default async function Home() {
   const trendingAll = await fetch(
     `${baseUrl}/api/wikiTrends?lang=en&limit=16`,
     {
-      next: {revalidate}, // Cache for revalidation period
+      next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
     }
   )
     .then(res => res.json())
     .then(data => (Array.isArray(data) ? data : []))
     .catch(error => {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching trending all data:", error);
       return [];
     });
 
@@ -34,7 +33,33 @@ export default async function Home() {
     .then(res => res.json())
     .then(data => (Array.isArray(data) ? data : []))
     .catch(error => {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching recent passings data:", error);
+      return [];
+    });
+
+  const trendingSingers = await fetch(
+    `${baseUrl}/api/wikiTrends?lang=en&limit=16&occupation=SINGER`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
+    }
+  )
+    .then(res => res.json())
+    .then(data => (Array.isArray(data) ? data : []))
+    .catch(error => {
+      console.error("Error fetching trending singers data:", error);
+      return [];
+    });
+
+  const trendingActors = await fetch(
+    `${baseUrl}/api/wikiTrends?lang=en&limit=16&occupation=ACTOR`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
+    }
+  )
+    .then(res => res.json())
+    .then(data => (Array.isArray(data) ? data : []))
+    .catch(error => {
+      console.error("Error fetching trending actors data:", error);
       return [];
     });
 
@@ -128,6 +153,22 @@ export default async function Home() {
         allowLangChange={false}
         initialTrendingAll={recentPassings}
         defaultLang="en"
+      />
+
+      <TrendingGrid
+        title="Trending Singers Today"
+        allowLangChange={true}
+        initialTrendingAll={trendingSingers}
+        defaultLang="en"
+        occupation="SINGER"
+      />
+
+      <TrendingGrid
+        title="Trending Actors Today"
+        allowLangChange={true}
+        initialTrendingAll={trendingActors}
+        defaultLang="en"
+        occupation="ACTOR"
       />
 
       <div className="floating-content l-1">
