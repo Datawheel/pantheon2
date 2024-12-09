@@ -2,9 +2,8 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import Image from "next/image";
 import TrendingGrid from "/components/home/TrendingGrid";
-// import {useSearchVisibility} from "/contexts/SearchContext";
 import {REVALIDATE_PERIODS} from "/app/constants";
-
+import HomeSearch from "/components/home/HomeSearch";
 const baseUrl = process.env.URL || "https://pantheon.world";
 
 export default async function Home() {
@@ -92,17 +91,9 @@ export default async function Home() {
                 height={49}
               />
             </h1>
-            <div className="home-search">
-              <Image
-                src="/images/icons/icon-search.svg"
-                alt="search icon"
-                width={22}
-                height={22}
-              />
-              {/* <a href="#" onClick={activateSearch}> */}
-              <a href="#">Search people, places, &amp; occupations</a>
-            </div>
+            <HomeSearch />
           </div>
+
           <div className="home-head-content">
             <h2>Explore human collective memory!</h2>
             <p>
@@ -117,6 +108,27 @@ export default async function Home() {
             </h3>
           </div>
         </div>
+      </div>
+
+      <div className="announcement-block">
+        <h2>New: Notable Deaths of 2024</h2>
+        <p>
+          As we reflect on the passing of time, we've created a dedicated page
+          to honor and remember the notable figures we lost in 2024. Explore our
+          new{" "}
+          <Link href="/en/profile/deaths/2024">
+            In Memoriam: Notable Deaths of 2024
+          </Link>{" "}
+          page, where we list the biographies of influential celebrities,
+          artists, leaders, and cultural icons who passed away this year.
+        </p>
+        <p>
+          This comprehensive timeline serves as a historical record and tribute,
+          allowing you to explore month by month the remarkable individuals who
+          shaped our collective cultural memory. From entertainers to
+          scientists, political figures to artists, discover their stories and
+          lasting impact on human history.
+        </p>
       </div>
 
       <TrendingGrid

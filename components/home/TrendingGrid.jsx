@@ -1,7 +1,7 @@
 "use client";
 
 import {useState} from "react";
-import HomeGrid from "/components/home/Grid";
+import Grid from "/components/home/Grid";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
 
@@ -80,7 +80,7 @@ export default function TrendingGrid({
         ) : null}
       </div>
       {!loading ? (
-        <HomeGrid
+        <Grid
           bios={
             allowLangChange
               ? trendingAll.sort((a, b) => a.rank - b.rank).slice(0, 16)

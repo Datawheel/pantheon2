@@ -1,0 +1,39 @@
+.deaths-by-month {
+  margin-top: 2rem;
+
+  .people-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .person-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .image-column img {
+    width: 100px; /* adjust size as needed */
+    height: 100px; /* adjust size as needed */
+    object-fit: cover;
+  }
+  
+  .text-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .text-column h4 {
+    margin: 0;
+  }
+  
+  .text-column p {
+    margin: 0;
+  }
+
+  .person-card__dates {
+    font-size: 0.9rem;
+  }
+}

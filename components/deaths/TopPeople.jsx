@@ -1,0 +1,56 @@
+import {plural} from "pluralize";
+import PersonImage from "/components/utils/PersonImage";
+import {toTitleCase} from "/components/utils/vizHelpers";
+import {FORMATTERS} from "/components/utils/consts";
+import PeopleGrid from "/components/deaths/PeopleGrid";
+import "../common/Section.css";
+import AnchorList from "../utils/AnchorList";
+
+export default async function TopPeople({year, people}) {
+  const peopleSortedByHPI = people.sort((a, b) => b.hpi - a.hpi);
+  const topActors = peopleSortedByHPI.filter(p =>
+    ["ACTOR"].includes(p.occupation?.occupation)
+  );
+  const topMusicians = peopleSortedByHPI.filter(p =>
+    ["MUSICIAN", "SINGER"].includes(p.occupation?.occupation)
+  );
+  const topAthletes = peopleSortedByHPI.filter(
+    p => p.occupation?.domain === "SPORTS"
+  );
+  return (
+    <section className="profile-section top-10">
+      <h2>{year} Deaths: Honoring Lives and Legacies</h2>
+      <div className="section-body">
+        <p>
+          The year {year} saw the passing of many beloved celebrities, leaving
+          behind legacies that continue to inspire fans across the globe. From
+          legendary actors like{" "}
+          <AnchorList
+            items={topActors.slice(0, 3)}
+            name={d => d.name}
+            url={d => `/profile/person/${d.slug}/`}
+          />{" "}
+          and iconic musicians like{" "}
+          <AnchorList
+            items={topMusicians.slice(0, 3)}
+            name={d => d.name}
+            url={d => `/profile/person/${d.slug}/`}
+          />{" "}
+          to groundbreaking athletes like{" "}
+          <AnchorList
+            items={topAthletes.slice(0, 3)}
+            name={d => d.name}
+            url={d => `/profile/person/${d.slug}/`}
+          />
+          , these remarkable individuals have made a lasting impact in their
+          fields. This page is dedicated to commemorating the lives of those we
+          lost in {year}, celebrating their achievements and remembering their
+          contributions to art, culture, and history. Below are the list of the
+          most famous people to have died in {year} based on cultural impact.
+        </p>
+      </div>
+
+      <PeopleGrid bios={peopleSortedByHPI.slice(0, 16)} />
+    </section>
+  );
+}

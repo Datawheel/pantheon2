@@ -1,7 +1,6 @@
-import React from "react";
 import PersonImage from "/components/utils/PersonImage";
 
-const HomeGrid = ({bios, showDates}) => (
+const Grid = ({bios, showDates}) => (
   <ul className="grid-row">
     {bios.map(profile => (
       <li className="grid-box" key={profile.pid || profile.id}>
@@ -27,4 +26,4 @@ const HomeGrid = ({bios, showDates}) => (
   </ul>
 );
 
-export default HomeGrid;
+export default Grid;
