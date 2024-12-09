@@ -113,9 +113,9 @@ export default async function Home() {
       <div className="announcement-block">
         <h2>New: Notable Deaths of 2024</h2>
         <p>
-          As we reflect on the passing of time, we've created a dedicated page
-          to honor and remember the notable figures we lost in 2024. Explore our
-          new{" "}
+          As we reflect on the passing of time, we&apos;ve created a dedicated
+          page to honor and remember the notable figures we lost in 2024.
+          Explore our new{" "}
           <Link href="/en/profile/deaths/2024">
             In Memoriam: Notable Deaths of 2024
           </Link>{" "}
