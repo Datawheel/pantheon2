@@ -41,8 +41,8 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Install OpenSSL libraries
-RUN apk add --no-cache openssl openssl-dev openssl-libs-static
+# Install specific version of OpenSSL that matches the required libraries
+RUN apk add --no-cache openssl1.1-compat
 
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
