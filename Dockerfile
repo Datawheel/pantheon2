@@ -41,9 +41,10 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Comment the following line in case you want to enable telemetry during runtime
-ENV NEXT_TELEMETRY_DISABLED 1
+# Install OpenSSL libraries
+RUN apk add --no-cache openssl openssl-dev openssl-libs-static
 
+ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
 
 RUN addgroup --system --gid 1001 nodejs
