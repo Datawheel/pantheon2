@@ -1,8 +1,5 @@
-import {plural} from "pluralize";
 import PersonImage from "/components/utils/PersonImage";
 import {toTitleCase} from "/components/utils/vizHelpers";
-import {FORMATTERS} from "/components/utils/consts";
-import PeopleGrid from "/components/deaths/PeopleGrid";
 import "../common/Section.css";
 import AnchorList from "../utils/AnchorList";
 import dayjs from "dayjs";
@@ -47,6 +44,7 @@ export default async function DeathsByMonth({year, people}) {
     }
     return acc;
   }, {});
+
   return (
     <section className="profile-section deaths-by-month">
       <h2>Deaths by Month in {year}</h2>
@@ -100,7 +98,11 @@ export default async function DeathsByMonth({year, people}) {
                         {dayjs(person.deathdate).format("MMM D, YYYY")}
                       </p>
                       <p className="person-card__occupation">
-                        {toTitleCase(person.occupation?.occupation)}
+                        {person.bplace_country?.demonym
+                          ? `${person.bplace_country?.demonym} ${toTitleCase(
+                              person.occupation?.occupation
+                            )}`
+                          : `${toTitleCase(person.occupation?.occupation)}`}
                       </p>
                       <p className="person-card__hpi">
                         HPI: {person.hpi?.toFixed(2)}

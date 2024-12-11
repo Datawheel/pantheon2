@@ -24,7 +24,11 @@ const PeopleGrid = ({bios}) => (
         <div className="person-card__info">
           <h2 className="person-card__name">{profile.name}</h2>
           <h3 className="person-card__occupation">
-            {toTitleCase(profile.occupation.occupation)}
+            {profile.bplace_country?.demonym
+              ? `${profile.bplace_country?.demonym} ${toTitleCase(
+                  profile.occupation?.occupation
+                )}`
+              : `${toTitleCase(profile.occupation?.occupation)}`}
           </h3>
           <p className="person-card__dates">
             <span>

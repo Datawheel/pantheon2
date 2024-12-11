@@ -21,31 +21,31 @@ import "../../styles/mouse.css";
 //   return res.json();
 // }
 
-async function getIsTrending(personId) {
-  const dateobj = new Date();
-  dateobj.setDate(dateobj.getDate() - 29);
-  const year1monthAgo = dateobj.getFullYear();
-  // need to add 1 since getMonth is zero based
-  const month1monthAgo = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  const day1monthAgo = `${dateobj.getDate()}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  const monthAgo = `${year1monthAgo}-${month1monthAgo}-${day1monthAgo}`;
-  const res = await fetch(
-    `https://api.pantheon.world/trend?date=gte.${monthAgo}&pid=eq.${personId}&rank_pantheon=lte.100`
-  );
-  return res.json();
-}
+// async function getIsTrending(personId) {
+//   const dateobj = new Date();
+//   dateobj.setDate(dateobj.getDate() - 29);
+//   const year1monthAgo = dateobj.getFullYear();
+//   // need to add 1 since getMonth is zero based
+//   const month1monthAgo = `${dateobj.getMonth() + 1}`.replace(
+//     /(^|\D)(\d)(?!\d)/g,
+//     "$10$2"
+//   );
+//   const day1monthAgo = `${dateobj.getDate()}`.replace(
+//     /(^|\D)(\d)(?!\d)/g,
+//     "$10$2"
+//   );
+//   const monthAgo = `${year1monthAgo}-${month1monthAgo}-${day1monthAgo}`;
+//   const res = await fetch(
+//     `https://api.pantheon.world/trend?date=gte.${monthAgo}&pid=eq.${personId}&rank_pantheon=lte.100`
+//   );
+//   return res.json();
+// }
 
 export default async function Header({person}) {
   // const {items: wikiPageViews} = await getWikiPageViews(person.name);
   const wikiPageViews = null;
-  const isTrendingData = await getIsTrending(person.id);
-  const isTrending = !!isTrendingData.length;
+  // const isTrendingData = await getIsTrending(person.id);
+  // const isTrending = !!isTrendingData.length;
 
   let pageViewData = null;
   if (wikiPageViews) {
@@ -93,7 +93,7 @@ export default async function Header({person}) {
         </div>
       </div>
       <div className="info">
-        {isTrending ? <div className="trending-cont">Trending</div> : null}
+        {/* {isTrending ? <div className="trending-cont">Trending</div> : null} */}
         <h2 className="profile-type">
           {person.occupation ? person.occupation.occupation : ""}
         </h2>
