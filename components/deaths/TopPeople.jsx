@@ -1,7 +1,3 @@
-import {plural} from "pluralize";
-import PersonImage from "/components/utils/PersonImage";
-import {toTitleCase} from "/components/utils/vizHelpers";
-import {FORMATTERS} from "/components/utils/consts";
 import PeopleGrid from "/components/deaths/PeopleGrid";
 import "../common/Section.css";
 import AnchorList from "../utils/AnchorList";
@@ -18,7 +14,7 @@ export default async function TopPeople({year, people}) {
     p => p.occupation?.domain === "SPORTS"
   );
   return (
-    <section className="profile-section top-10">
+    <section className="profile-section">
       <h2>{year} Deaths: Honoring Lives and Legacies</h2>
       <div className="section-body">
         <p>
