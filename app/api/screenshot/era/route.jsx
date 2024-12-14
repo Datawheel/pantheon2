@@ -33,7 +33,7 @@ export async function GET(request) {
   }
   const backgroundColor = "#f4f4f1";
 
-  const countryImgPath = `https://pantheon.world/images/profile/era/${eraId}.jpg`;
+  const countryImgPath = `https://static.pantheon.world/profile/era/${eraId}.jpg`;
 
   const bgImageData = await fetch(
     new URL(countryImgPath, import.meta.url)

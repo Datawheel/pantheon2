@@ -32,8 +32,8 @@ export async function GET(request) {
   const backgroundColor = "#f4f4f1";
 
   const countryImgPath = img_link
-    ? `https://pantheon.world/images/profile/country/${slug}.jpg`
-    : "https://pantheon.world/images/profile/placeholder_place_profile.jpg";
+    ? `https://static.pantheon.world/profile/country/${slug}.jpg`
+    : "https://static.pantheon.world/profile/placeholder_place_profile.jpg";
 
   const bgImageData = await fetch(
     new URL(countryImgPath, import.meta.url)

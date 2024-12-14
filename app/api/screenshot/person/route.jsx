@@ -7,7 +7,7 @@ export const runtime = "edge";
 async function fetchPersonImage(id) {
   try {
     const response = await fetch(
-      `https://pantheon.world/images/profile/people/${id}.jpg`
+      `https://static.pantheon.world/profile/people/${id}.jpg`
     );
 
     if (!response.ok) {
