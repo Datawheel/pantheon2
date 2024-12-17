@@ -2,7 +2,7 @@
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {FORMATTERS} from "../utils/consts";
-import {updateYears} from "../../features/exploreSlice";
+import {updateYears, updateYearType} from "../../features/exploreSlice";
 
 const ENTER_KEY_CODE = 13;
 const MAX_ALLOWED_YEAR = new Date().getFullYear();
@@ -67,14 +67,16 @@ export default function YearControl() {
     }
   };
 
+  const yearTypeChange = yearType => {
+    dispatch(updateYearType(yearType));
+  };
+
   return (
     <div className="year-control filter">
       <ul className="items options flat-options filter">
         <li>
           <a
-            onClick={e =>
-              loading ? null : this.changeYearType("birthyear", e)
-            }
+            onClick={e => yearTypeChange("birthyear", e)}
             href="#"
             id="birthyear"
             className={getClasName("birthyear", yearType, loading)}
@@ -84,9 +86,7 @@ export default function YearControl() {
         </li>
         <li>
           <a
-            onClick={e =>
-              loading ? null : this.changeYearType("deathyear", e)
-            }
+            onClick={e => yearTypeChange("deathyear", e)}
             href="#"
             id="deathyear"
             className={getClasName("deathyear", yearType, loading)}

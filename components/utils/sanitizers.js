@@ -66,7 +66,7 @@ export const SANITIZERS = {
   },
   gender: gender =>
     ["F", "f", "M", "m"].includes(gender) ? gender.toUpperCase() : null,
-  yearType: yearType => (yearType === "deathyear" ? yearType : "birthyear"),
+  yearType: yearType => (yearType === "deathyear" ? "deathyear" : "birthyear"),
   placeType: placeType =>
     placeType === "deathplace" ? placeType : "birthplace",
   country: place =>

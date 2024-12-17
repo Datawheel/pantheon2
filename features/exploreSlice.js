@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { HPI_RANGE, LANGS_RANGE, YEAR_RANGE } from "../components/utils/consts";
+import {createSlice} from "@reduxjs/toolkit";
+import {HPI_RANGE, LANGS_RANGE, YEAR_RANGE} from "../components/utils/consts";
 
 // Define the initial state using that type
 const initialState = {
@@ -13,7 +13,7 @@ const initialState = {
   onlyShowNew: false,
   page: "rankings",
   placeType: "birthplace",
-  show: { type: "people", depth: "people" },
+  show: {type: "people", depth: "people"},
   years: YEAR_RANGE,
   yearType: "birthyear",
   viz: "treemap",
@@ -30,15 +30,15 @@ export const exploreSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setFirstLoad: (state) => {
+    setFirstLoad: state => {
       state.firstLoad = false;
     },
-    dataRequested: (state) => {
+    dataRequested: state => {
       state.dataLoading = true;
       state.dataError = null;
     },
     dataReceived: (state, action) => {
-      const { data, count } = action.payload;
+      const {data, count} = action.payload;
       state.data = data;
       state.dataCount = count;
       state.dataLoading = false;
@@ -79,8 +79,8 @@ export const exploreSlice = createSlice({
       state.onlyShowNew = action.payload;
     },
     updateShowType: (state, action) => {
-      const { page, showType } = action.payload;
-      state.show = { type: showType, depth: showType };
+      const {page, showType} = action.payload;
+      state.show = {type: showType, depth: showType};
       state.page = page;
       if (page === "rankings") {
         state.data = null;
@@ -88,9 +88,9 @@ export const exploreSlice = createSlice({
       }
     },
     updateShowDepth: (state, action) => {
-      const { type } = state;
-      const { page, showDepth, showType } = action.payload;
-      state.show = { type: showType, depth: showDepth };
+      const {type} = state;
+      const {page, showDepth, showType} = action.payload;
+      state.show = {type: showType, depth: showDepth};
       state.page = page;
       if (page === "rankings") {
         state.data = null;
@@ -102,6 +102,9 @@ export const exploreSlice = createSlice({
     },
     updateViz: (state, action) => {
       state.viz = action.payload;
+    },
+    updateYearType: (state, action) => {
+      state.yearType = action.payload;
     },
   },
 });
@@ -124,9 +127,10 @@ export const {
   updateShowDepth,
   updateDataPageIndex,
   updateViz,
+  updateYearType,
 } = exploreSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state) => state.explore.value;
+export const selectCount = state => state.explore.value;
 
 export default exploreSlice.reducer;

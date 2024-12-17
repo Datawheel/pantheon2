@@ -16,12 +16,21 @@ async function getPeopleDiedThisYear(yearNum) {
   return res.json();
 }
 
-export async function generateMetadata({params}) {
+export async function generateMetadata({params}, parent) {
   // read route params
   const year = params.id;
 
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
   return {
     title: `${year} Celebrity Deaths | Pantheon`,
+    openGraph: {
+      images: [
+        `https://static.pantheon.world/profile/deaths/deaths-${year}.jpg`,
+        ...previousImages,
+      ],
+    },
   };
 }
 
