@@ -22,6 +22,7 @@ import {
   updateCity,
   updateGender,
   updateYears,
+  updateYearType,
   updateShowDepth,
   updateOccupation,
   updateOnlyShowNew,
@@ -77,10 +78,13 @@ function Explore({places, occupations, pageType}) {
     const queryParamOccupation =
       SANITIZERS.occupation(searchParams.get("occupation"), occupations) ||
       "all";
-    console.log("queryParamOccupation!!", queryParamOccupation);
+
     const queryParamCity = SANITIZERS.city(searchParams.get("place")) || "all";
     const queryParamGender = SANITIZERS.gender(searchParams.get("gender"));
     const queryParamYears = SANITIZERS.years(searchParams.get("years"));
+    const queryParamYearType = SANITIZERS.yearType(
+      searchParams.get("yearType")
+    );
     const queryParamNew = SANITIZERS.new(searchParams.get("new"));
     dispatch(
       updateShowDepth({
@@ -94,6 +98,7 @@ function Explore({places, occupations, pageType}) {
     dispatch(updateCity(queryParamCity));
     dispatch(updateGender(queryParamGender));
     dispatch(updateYears(queryParamYears));
+    dispatch(updateYearType(queryParamYearType));
     dispatch(updateOnlyShowNew(queryParamNew));
     dispatch(setFirstLoad());
   }, []);
@@ -109,6 +114,7 @@ function Explore({places, occupations, pageType}) {
     occupation,
     gender,
     years,
+    yearType,
     metricCutoff,
     metricType,
     onlyShowNew,

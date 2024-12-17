@@ -122,13 +122,6 @@ export default async function Home() {
           page, where we list the biographies of influential celebrities,
           artists, leaders, and cultural icons who passed away this year.
         </p>
-        <p>
-          This comprehensive timeline serves as a historical record and tribute,
-          allowing you to explore month by month the remarkable individuals who
-          shaped our collective cultural memory. From entertainers to
-          scientists, political figures to artists, discover their stories and
-          lasting impact on human history.
-        </p>
       </div>
 
       <TrendingGrid

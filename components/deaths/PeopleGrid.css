@@ -1,13 +1,12 @@
 .people-grid {
     display: grid;
-    /* Define columns: three per row if space allows, otherwise adjust responsively */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-gap: 1rem; /* space between cards */
-    /* padding: 1rem; */
+    /* Adjust grid to show 2 items per row on mobile, 3+ on larger screens */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 0.75rem;
     margin: 40px 0;
-  }
-  
-  .person-card {
+}
+
+.person-card {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -16,42 +15,84 @@
     flex-direction: column;
     text-decoration: none !important;
     cursor: pointer;
-  }
-  
-  .person-card__image {
+    min-width: 0; /* Prevents cards from overflowing grid */
+}
+
+.person-card__image {
     width: 100%;
     height: auto;
     overflow: hidden;
-  }
-  
-  .person-card__image img {
+}
+
+.person-card__image img {
     width: 100%;
     height: auto;
     display: block;
     object-fit: cover;
-  }
-  
-  .person-card__info {
-    padding: 0.75rem;
-  }
-  
-  .person-card__name {
-    margin: 0;
-    font-size: 1.3rem;
-    font-weight: bold;
-  }
+}
 
-  .person-card__occupation {
-    margin: 0.5rem 0 0;
+.person-card__info {
+    padding: 0.75rem;
+}
+
+.person-card__name {
+    margin: 0;
     font-size: 1.1rem;
-    color: #555;
-  }
-  
-  .person-card__dates,
-  .person-card__age,
-  .person-card__hpi {
+    font-weight: bold;
+}
+
+.person-card__occupation {
     margin: 0.5rem 0 0;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     color: #555;
-  }
-  
+}
+
+.person-card__dates,
+.person-card__age,
+.person-card__hpi {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Add media queries for larger screens */
+@media (min-width: 768px) {
+    .people-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 1rem;
+    }
+
+    .person-card__name {
+        font-size: 1.3rem;
+    }
+
+    .person-card__occupation,
+    .person-card__dates,
+    .person-card__age,
+    .person-card__hpi {
+        font-size: 1.1rem;
+    }
+}
+
+/* Add these styles at the bottom of the file */
+.view-more-link {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.view-more-link a {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+.view-more-link a:hover {
+  background-color: #e5e5e5;
+  transform: translateY(-1px);
+}
