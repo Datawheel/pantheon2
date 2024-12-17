@@ -10,7 +10,7 @@ export default async function fetchPersons(slugs) {
       data.map(d => ({
         ...d,
         selected: false,
-        imgURL: `https://pantheon.world/images/profile/people/${d.id}.jpg`,
+        imgURL: `https://static.pantheon.world/profile/people/${d.id}.jpg`,
       }))
     );
 }
