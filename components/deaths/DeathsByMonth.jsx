@@ -67,7 +67,7 @@ export default async function DeathsByMonth({year, people}) {
                   items={[...peopleInMonth]
                     .sort((a, b) => b.hpi - a.hpi)
                     .slice(0, 3)}
-                  name={d => `${d.name} (HPI: ${d.hpi.toFixed(2)})`}
+                  name={d => `${d.name} (HPI: ${d?.hpi?.toFixed(2)})`}
                   url={d => `/profile/person/${d.slug}/`}
                 />
                 .

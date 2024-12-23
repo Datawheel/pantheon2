@@ -133,7 +133,13 @@ export default function Intro({year, people, occupation}) {
       <div className="year-navigation">
         <div>
           <a
-            href={`/profile/deaths/${parseInt(year) - 1}`}
+            href={
+              occupation
+                ? `/profile/deaths/${parseInt(year) - 1}/occupation/${
+                    occupation.occupation_slug
+                  }`
+                : `/profile/deaths/${parseInt(year) - 1}`
+            }
             className="year-navigation-link"
           >
             &laquo; view {parseInt(year) - 1} deaths
@@ -142,7 +148,13 @@ export default function Intro({year, people, occupation}) {
         {parseInt(year) + 1 < 2025 ? (
           <div>
             <a
-              href={`/profile/deaths/${parseInt(year) + 1}`}
+              href={
+                occupation
+                  ? `/profile/deaths/${parseInt(year) + 1}/occupation/${
+                      occupation.occupation_slug
+                    }`
+                  : `/profile/deaths/${parseInt(year) + 1}`
+              }
               className="year-navigation-link"
             >
               view {parseInt(year) + 1} deaths &raquo;
