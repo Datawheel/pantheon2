@@ -65,7 +65,6 @@ export default async function Page({params: {id: year, occupationId}}) {
     yearNum,
     occupation.id
   );
-  console.log("peopleDiedThisYear", peopleDiedThisYear[0]);
 
   const sections = [
     {
