@@ -1,8 +1,9 @@
 import {COLORS_DOMAIN} from "../utils/consts";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
+import {plural} from "pluralize";
 
-export default function Header({year, people}) {
+export default function Header({year, people, occupation = null}) {
   return (
     <header className="hero">
       <div className="bg-container">
@@ -35,7 +36,11 @@ export default function Header({year, people}) {
         </div>
       </div>
       <div className="info">
-        <h2 className="profile-type">Celebrity Deaths in</h2>
+        <h2 className="profile-type">
+          {occupation
+            ? `${plural(occupation.occupation)} that died in `
+            : "Celebrity Deaths in"}
+        </h2>
         <h1 className="profile-name">{year}</h1>
       </div>
       <div className="mouse">

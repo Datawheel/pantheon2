@@ -1,8 +1,10 @@
 import PeopleGrid from "/components/deaths/PeopleGrid";
 import "../common/Section.css";
 import AnchorList from "../utils/AnchorList";
+import {plural} from "pluralize";
+import {toTitleCase} from "../utils/vizHelpers";
 
-export default async function TopPeople({year, people}) {
+export default async function TopPeople({occupation, year, people}) {
   const peopleSortedByHPI = people.sort((a, b) => b.hpi - a.hpi);
   const topActors = peopleSortedByHPI.filter(p =>
     ["ACTOR"].includes(p.occupation?.occupation)
@@ -13,12 +15,22 @@ export default async function TopPeople({year, people}) {
   const topAthletes = peopleSortedByHPI.filter(
     p => p.occupation?.domain === "SPORTS"
   );
+  const typeOfCeleb = occupation
+    ? plural(occupation.occupation.toLowerCase())
+    : "celebrities";
   return (
     <section className="profile-section">
-      <h2>{year} Deaths: Honoring Lives and Legacies</h2>
+      {occupation ? (
+        <h2>
+          {year} Deaths: Honoring Lives and Legacies of{" "}
+          {plural(toTitleCase(occupation.occupation))}
+        </h2>
+      ) : (
+        <h2>{year} Deaths: Honoring Lives and Legacies</h2>
+      )}
       <div className="section-body">
         <p>
-          The year {year} saw the passing of many beloved celebrities, leaving
+          The year {year} saw the passing of many beloved {typeOfCeleb}, leaving
           behind legacies that continue to inspire fans across the globe. From
           legendary actors like{" "}
           <AnchorList
@@ -46,7 +58,11 @@ export default async function TopPeople({year, people}) {
         </p>
       </div>
 
-      <PeopleGrid bios={peopleSortedByHPI.slice(0, 16)} />
+      <PeopleGrid
+        bios={peopleSortedByHPI.slice(0, 16)}
+        occupation={occupation}
+        year={year}
+      />
     </section>
   );
 }
