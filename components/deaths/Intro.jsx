@@ -4,7 +4,7 @@ import {toTitleCase} from "../utils/vizHelpers";
 import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 
-export default function Intro({year, people}) {
+export default function Intro({year, people, occupation}) {
   const peopleSortedByHPI = people.sort((a, b) => b.hpi - a.hpi);
   const countryBornCounts = people.reduce((acc, person) => {
     if (person.dplace_country) {
@@ -19,6 +19,19 @@ export default function Intro({year, people}) {
     }
     return acc;
   }, {});
+  const occupationCounts = people.reduce((acc, person) => {
+    if (person.occupation) {
+      const occupationId = person.occupation.id;
+      if (!acc[occupationId]) {
+        acc[occupationId] = {
+          count: 0,
+          occupation: person.occupation,
+        };
+      }
+      acc[occupationId].count++;
+    }
+    return acc;
+  }, []);
 
   const topCountries = Object.values(countryBornCounts)
     .sort((a, b) => b.count - a.count)
@@ -41,6 +54,9 @@ export default function Intro({year, people}) {
   const topCities = Object.values(cityDiedCounts)
     .sort((a, b) => b.count - a.count)
     .slice(0, 3);
+  const topOccupations = Object.values(occupationCounts)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
 
   return (
     <section className="intro-section">
@@ -68,7 +84,22 @@ export default function Intro({year, people}) {
               name={d => `${d.city.place} (${d.count})`}
               url={d => `/profile/place/${d.city.slug}/`}
             />
-            .
+            .{" "}
+            {!occupation ? (
+              <>
+                The most common occupations for people who died this year were{" "}
+                <AnchorList
+                  items={topOccupations}
+                  name={d =>
+                    `${toTitleCase(d.occupation.occupation)} (${d.count})`
+                  }
+                  url={d =>
+                    `/profile/deaths/${year}/occupation/${d.occupation.occupation_slug}/`
+                  }
+                />
+                .
+              </>
+            ) : null}
             {/* ,{" "}
             {FORMATTERS.commas(
               allCountriesInOccupationSorted[countryIndex].num_people
