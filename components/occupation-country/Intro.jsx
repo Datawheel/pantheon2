@@ -40,7 +40,7 @@ export default function Intro({country, occupation, allCountriesInOccupation}) {
             </a>
             ,{" "}
             {FORMATTERS.commas(
-              allCountriesInOccupationSorted[countryIndex].num_people
+              allCountriesInOccupationSorted[countryIndex]?.num_people
             )}{" "}
             of which were born in{" "}
             <a href={`/profile/country/${country.slug}`}>{country.country}</a>.

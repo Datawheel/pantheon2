@@ -83,13 +83,13 @@
   background-image: url("/images/not-found/error/20408.jpg");
 }
 .racing-driver {
-  background-image: url("/images/profile/occupation/racing-driver.jpg");
+  background-image: url("https://static.pantheon.world/profile/occupation/racing-driver.jpg");
 }
 .fashion-designer {
-  background-image: url("/images/profile/occupation/fashion-designer.jpg");
+  background-image: url("https://static.pantheon.world/profile/occupation/fashion-designer.jpg");
 }
 .celebrity {
-  background-image: url("/images/profile/occupation/celebrity.jpg");
+  background-image: url("https://static.pantheon.world/profile/occupation/celebrity.jpg");
 }
 
 .error-photo {
