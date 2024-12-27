@@ -24,9 +24,9 @@ async function getOccupation(occupationId) {
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
-async function getPeopleDiedThisYear(yearNum, occupation) {
+async function getPeopleDiedThisYear(yearNum) {
   const res = await fetch(
-    `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&occupation=eq.${occupation}&select=bplace_country(demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`,
+    `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -61,9 +61,9 @@ export default async function Page({params: {id: year, occupationId}}) {
 
   const occupation = await getOccupation(occupationId);
 
-  const peopleDiedThisYear = await getPeopleDiedThisYear(
-    yearNum,
-    occupation.id
+  const peopleDiedThisYear = await getPeopleDiedThisYear(yearNum);
+  const peopleDiedThisYearFiltered = peopleDiedThisYear.filter(
+    person => person.occupation_id === occupation.id
   );
 
   const sections = [
@@ -74,7 +74,7 @@ export default async function Page({params: {id: year, occupationId}}) {
         <TopPeople
           occupation={occupation}
           year={year}
-          people={peopleDiedThisYear}
+          people={peopleDiedThisYearFiltered}
         />
       ),
     },
@@ -85,7 +85,7 @@ export default async function Page({params: {id: year, occupationId}}) {
         <DeathsByMonth
           occupation={occupation}
           year={year}
-          people={peopleDiedThisYear}
+          people={peopleDiedThisYearFiltered}
         />
       ),
     },
@@ -93,7 +93,11 @@ export default async function Page({params: {id: year, occupationId}}) {
 
   return (
     <div className="person">
-      <Header occupation={occupation} year={year} people={peopleDiedThisYear} />
+      <Header
+        occupation={occupation}
+        year={year}
+        people={peopleDiedThisYearFiltered}
+      />
       <div className="about-section">
         <ProfileNav sections={sections} />
         <Intro

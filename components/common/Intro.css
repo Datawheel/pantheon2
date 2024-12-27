@@ -206,3 +206,36 @@
   @mixin bodyLink;
   color: #666;
 }
+
+.occupation-filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.occupation-filter select {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  min-width: 200px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.occupation-filter label {
+  font-weight: 500;
+  color: var(--colorMatza);
+}
+
+.occupation-filter select:hover {
+  border-color: #999;
+}
+
+.occupation-filter select:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+} 

@@ -1,24 +1,19 @@
+"use client";
+
 import AnchorList from "../utils/AnchorList";
-import {plural} from "pluralize";
 import {toTitleCase} from "../utils/vizHelpers";
 import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
+import {useRouter} from "next/navigation";
 
 export default function Intro({year, people, occupation}) {
-  const peopleSortedByHPI = people.sort((a, b) => b.hpi - a.hpi);
-  const countryBornCounts = people.reduce((acc, person) => {
-    if (person.dplace_country) {
-      const countryId = person.dplace_country.id;
-      if (!acc[countryId]) {
-        acc[countryId] = {
-          count: 0,
-          country: person.dplace_country,
-        };
-      }
-      acc[countryId].count++;
-    }
-    return acc;
-  }, {});
+  const router = useRouter();
+  const peopleSortedByHPI = people
+    .filter(person =>
+      occupation ? person.occupation.id === occupation.id : true
+    )
+    .sort((a, b) => b.hpi - a.hpi);
+
   const occupationCounts = people.reduce((acc, person) => {
     if (person.occupation) {
       const occupationId = person.occupation.id;
@@ -33,11 +28,7 @@ export default function Intro({year, people, occupation}) {
     return acc;
   }, []);
 
-  const topCountries = Object.values(countryBornCounts)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 3);
-
-  const cityDiedCounts = people.reduce((acc, person) => {
+  const cityDiedCounts = peopleSortedByHPI.reduce((acc, person) => {
     if (person.dplace_geonameid) {
       const cityId = person.dplace_geonameid.id;
       if (!acc[cityId]) {
@@ -129,6 +120,31 @@ export default function Intro({year, people, occupation}) {
             )} */}
           </p>
         </div>
+      </div>
+      <div className="occupation-filter">
+        <label htmlFor="occupation-select">Filter by Occupation: </label>
+        <select
+          id="occupation-select"
+          onChange={e => {
+            const path = e.target.value
+              ? `/profile/deaths/${year}/occupation/${e.target.value}`
+              : `/profile/deaths/${year}`;
+            router.push(path);
+          }}
+          value={occupation?.occupation_slug || ""}
+        >
+          <option value="">All Occupations</option>
+          {Object.values(occupationCounts)
+            .sort((a, b) => b.count - a.count)
+            .map(({occupation, count}) => (
+              <option
+                key={occupation.occupation_slug}
+                value={occupation.occupation_slug}
+              >
+                {toTitleCase(occupation.occupation)} ({count})
+              </option>
+            ))}
+        </select>
       </div>
       <div className="year-navigation">
         <div>
