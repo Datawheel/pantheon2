@@ -53,6 +53,9 @@ export default async function DeathsByMonth({year, people}) {
       {months.map((monthName, index) => {
         const month = index + 1;
         const peopleInMonth = groupedByMonth[month] || [];
+        if (peopleInMonth.length === 0) {
+          return null;
+        }
         return (
           <div key={monthName} className="month-section">
             <h3>

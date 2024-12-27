@@ -4,10 +4,11 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import {toTitleCase} from "../utils/vizHelpers";
 import Link from "next/link";
+import {plural} from "pluralize";
 
 dayjs.extend(advancedFormat);
 
-const PeopleGrid = ({bios}) => (
+const PeopleGrid = ({bios, occupation, year}) => (
   <>
     <div className="people-grid">
       {bios.map(profile => (
@@ -47,9 +48,16 @@ const PeopleGrid = ({bios}) => (
       ))}
     </div>
     <div className="view-more-link">
-      <Link href="/explore/rankings?show=people&years=2024,2024&yearType=deathyear">
-        View Full List of 2024 Deaths Ranked by HPI →
-      </Link>
+      {occupation ? (
+        <Link href="/explore/rankings?show=people&years=2024,2024&yearType=deathyear">
+          View Full List of {plural(toTitleCase(occupation.occupation))} that
+          died in {year} →
+        </Link>
+      ) : (
+        <Link href="/explore/rankings?show=people&years=2024,2024&yearType=deathyear">
+          View Full List of {year} Deaths Ranked by HPI →
+        </Link>
+      )}
     </div>
   </>
 );
