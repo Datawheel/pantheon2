@@ -58,7 +58,10 @@ async function getWikiPageViews(personName) {
   const wikiSlug = personName.replace(/ /g, "_");
   const dateobj = new Date();
   const year = dateobj.getFullYear();
-  const month = `${dateobj.getMonth()}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
+  const month = `${dateobj.getMonth() + 1}`.replace(
+    /(^|\D)(\d)(?!\d)/g,
+    "$10$2"
+  );
   const apiUrl = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`;
   try {
     const res = await fetch(apiUrl, {

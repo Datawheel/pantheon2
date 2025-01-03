@@ -18,6 +18,7 @@ const storage = new Storage({
   retryOptions: {
     autoRetry: true,
     maxRetries: 3,
+    retryDelayMultiplier: 2,
   },
 });
 
@@ -147,6 +148,9 @@ CacheHandler.onCreation(() => {
 
   return {
     handlers: [handler],
+    ttl: {
+      defaultStaleAge: 3600,
+    },
   };
 });
 
