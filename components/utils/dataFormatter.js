@@ -1,7 +1,16 @@
 import {nest} from "d3-collection";
 import {mean, sum} from "d3-array";
 
-const dataFormatter = (dataArray, showType, showDepth, placeType) => {
+const dataFormatter = (
+  dataArray,
+  showType,
+  showDepth,
+  placeType,
+  occupation,
+  country,
+  yearType,
+  years
+) => {
   let data = dataArray;
   if (showType === "occupations") {
     if (showDepth === "occupations") {
@@ -104,7 +113,46 @@ const dataFormatter = (dataArray, showType, showDepth, placeType) => {
         .sort((a, b) => b.hpi - a.hpi);
     }
   } else {
-    data = data.map((d, i) => Object.assign(d, {rank: i + 1}));
+    let rankAccessor = "rank";
+    let rankPrevAccessor = "rank_prev";
+    let rankDeltaAccessor = "rank_delta";
+    if (occupation !== "all") {
+      rankAccessor = "occupation_rank";
+      rankPrevAccessor = "occupation_rank_prev";
+      rankDeltaAccessor = "occupation_rank_delta";
+    }
+    if (country !== "all" && placeType == "birthplace") {
+      rankAccessor = "bplace_country_rank";
+      rankPrevAccessor = "bplace_country_rank_prev";
+      rankDeltaAccessor = "bplace_country_rank_delta";
+    }
+    if (country !== "all" && placeType == "deathplace") {
+      rankAccessor = "dplace_country_rank";
+      rankPrevAccessor = "dplace_country_rank_prev";
+      rankDeltaAccessor = "dplace_country_rank_delta";
+    }
+    if (country !== "all" && placeType == "deathplace") {
+      rankAccessor = "dplace_country_rank";
+      rankPrevAccessor = "dplace_country_rank_prev";
+      rankDeltaAccessor = "dplace_country_rank_delta";
+    }
+    if (yearType === "birthyear" && years.every(y => y === years[0])) {
+      rankAccessor = "birthyear_rank";
+      rankPrevAccessor = "birthyear_rank_prev";
+      rankDeltaAccessor = "birthyear_rank_delta";
+    }
+    if (yearType === "deathyear" && years.every(y => y === years[0])) {
+      rankAccessor = "deathyear_rank";
+      rankPrevAccessor = "deathyear_rank_prev";
+      rankDeltaAccessor = "deathyear_rank_delta";
+    }
+    data = data.map((d, i) =>
+      Object.assign(d, {
+        rank: d[rankAccessor],
+        rank_prev: d[rankPrevAccessor],
+        rank_delta: d[rankDeltaAccessor],
+      })
+    );
   }
   return data;
 };

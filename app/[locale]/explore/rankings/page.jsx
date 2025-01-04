@@ -1,16 +1,16 @@
 import {nest} from "d3-collection";
 import Explore from "/features/Explore";
-
+import {BASE_API} from "/app/constants";
 async function getPlaces() {
   const res = await fetch(
-    "https://api.pantheon.world/place?select=id,place,lat,lon,slug,country:country_fk(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died"
+    `${BASE_API}/place?select=id,place,lat,lon,slug,country:country_fk(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died`
   );
   return res.json();
 }
 
 async function getOccupations() {
   const res = await fetch(
-    "https://api.pantheon.world/occupation?order=num_born.desc.nullslast"
+    `${BASE_API}/occupation?order=num_born.desc.nullslast`
   );
   return res.json();
 }

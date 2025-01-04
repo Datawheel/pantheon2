@@ -5,6 +5,7 @@ import {
   dataRequestFailed,
 } from "../../features/exploreSlice";
 import dataFormatter from "../../components/utils/dataFormatter";
+import {BASE_API} from "/app/constants";
 
 const getQueryArgs = exploreState => {
   const {
@@ -123,7 +124,7 @@ const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
     }
     table = "person_ranks";
     // selectFields = `${selectFields},rank,rank_prev,rank_delta,occupation_rank,occupation_rank_prev,occupation_rank_delta,bplace_country_rank,bplace_country_rank_prev,bplace_country_rank_delta`;
-    selectFields = `${selectFields},rank,rank_prev,rank_delta`;
+    selectFields = `${selectFields},rank,rank_prev,rank_delta,occupation_rank,occupation_rank_prev,occupation_rank_delta,bplace_country_rank,bplace_country_rank_prev,bplace_country_rank_delta,dplace_country_rank,dplace_country_rank_prev,dplace_country_rank_delta,birthyear_rank,birthyear_rank_prev,birthyear_rank_delta,deathyear_rank,deathyear_rank_prev,deathyear_rank_delta`;
     if (sortBy && sortBy.length) {
       sorting = sortBy.map((sortCol, i) => {
         let sortingColumn = sortCol.id;
@@ -147,12 +148,21 @@ const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
 
   const onlyShowNewFilter = onlyShowNew ? "&hpi_prev=is.null" : "";
 
-  const apiUrl = `https://api.pantheon.world/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
+  const apiUrl = `${BASE_API}/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
   return apiUrl;
 };
 
 const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
-  const {dataPageIndex, page, show, placeType} = exploreState;
+  const {
+    dataPageIndex,
+    page,
+    show,
+    placeType,
+    occupation,
+    country,
+    yearType,
+    years,
+  } = exploreState;
   const pageIndex =
     typeof pageOverride === "number" && !isNaN(pageOverride)
       ? pageOverride
@@ -174,7 +184,16 @@ const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
       : null;
     data =
       page === "rankings"
-        ? dataFormatter(data, show.type, show.depth, placeType)
+        ? dataFormatter(
+            data,
+            show.type,
+            show.depth,
+            placeType,
+            occupation,
+            country,
+            yearType,
+            years
+          )
         : data;
     if (page === "rankings" && show.type !== "people") {
       count = data.length;
