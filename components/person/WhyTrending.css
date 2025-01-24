@@ -1,0 +1,136 @@
+@import "../../styles/mixins.css";
+
+.why-trending-container {
+    text-align: center;
+    margin: 0 auto;
+
+    max-width: 1200px;
+    
+    padding: 18px 0 36px;
+    
+  }
+  
+  .why-trending-button {
+    background-color: var(--colorAqua);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .why-trending-button:hover:not(:disabled) {
+    background-color: var(--colorSpring);
+  }
+  
+  .why-trending-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .sparkly-loader {
+    width: 50px;
+    height: 50px;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #0070f3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: relative;
+  }
+  
+  .sparkly-loader::before,
+  .sparkly-loader::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: #ffeb3b;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ffeb3b;
+    animation: sparkle 1.5s infinite;
+  }
+  
+  .sparkly-loader::after {
+    top: auto;
+    bottom: -10px;
+    animation-delay: 0.75s;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes sparkle {
+    0%,
+    100% {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: translateX(-50%) scale(1.5);
+    }
+  }
+  
+  .reason-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ceeef0;
+    border-radius: 5px;
+    text-align: left;
+  }
+
+  .reason-container > p{
+    width: 65%;
+  }
+  .reason-container p {
+    line-height: 1.5;
+  }
+  
+  .citations-container {
+    margin-top: 10px;
+  }
+  
+  .citations-container ol {
+    padding-left: 20px;
+  }
+  .citations-container ol li {
+    font-size: 1.1rem;
+    line-height: 1.9;
+  }
+  
+  .citations-container a {
+    color: #0070f3;
+    text-decoration: none;
+  }
+  
+  .citations-container a:hover {
+    text-decoration: underline;
+  }
+  
+  .error-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffebee;
+    border-radius: 5px;
+    color: #c62828;
+  }
+  
