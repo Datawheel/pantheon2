@@ -12,8 +12,9 @@ import CountryRanking from "/components/person/CountryRanking";
 import CountryOccupationRanking from "/components/person/CountryOccupationRanking";
 import Books from "/components/person/Books";
 import News from "/components/person/News";
-// import Twitter from "/components/person/Twitter";
+//  Twitter from "/components/person/tter";
 import Movies from "/components/person/Movies";
+import WhyTrending from "/components/person/WhyTrending";
 import Footer from "/components/person/Footer";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
@@ -113,6 +114,11 @@ async function getMovies(personId) {
   return res.json();
 }
 
+async function getIsTrending(slug) {
+  const res = await fetch(`${process.env.URL}/api/isTrending?slug=${slug}`);
+  return res.json();
+}
+
 export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
@@ -143,10 +149,12 @@ export async function generateMetadata({params}, parent) {
 export default async function Page({params: {id}}) {
   const personData = getPerson(id);
   const personRanksData = getPersonRanks(id);
+  const isTrendingData = getIsTrending(id);
 
-  const [person, personRanks] = await Promise.all([
+  const [person, personRanks, isTrending] = await Promise.all([
     personData,
     personRanksData,
+    isTrendingData,
   ]);
 
   if (!person) {
@@ -236,6 +244,14 @@ export default async function Page({params: {id}}) {
       content: <Movies person={person} movies={movies} />,
     },
   ];
+
+  if (isTrending.isTrending) {
+    sections.unshift({
+      title: "Trending",
+      slug: "why_trending",
+      content: <WhyTrending person={person} isTrending={isTrending} />,
+    });
+  }
 
   const filteredSection = sections.filter(section => {
     if (section.slug === "news_articles" && !newsArticles.length) {
