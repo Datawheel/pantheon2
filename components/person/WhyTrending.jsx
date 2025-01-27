@@ -82,7 +82,7 @@ export default function WhyTrending({person, isTrending, slug, title}) {
             <>
               Find out why {person.name} is trending
               <img
-                src="https://static.pantheon.world/images/icons/icon-spark-pen.png"
+                src="https://static.pantheon.world/icons/icon-spark-pen.png"
                 alt="Spark pen icon"
                 style={{
                   width: "20px",
