@@ -142,6 +142,7 @@ jobs:
             --port=3000 \
             --set-env-vars=URL=${{ vars.URL }} \
             --set-env-vars=CANON_API=${{ vars.CANON_API }} \
+            --set-env-vars=BASE_API=${{ vars.BASE_API }} \
             --set-env-vars=CANON_GOOGLE_ANALYTICS=${{ vars.CANON_GOOGLE_ANALYTICS }} \
             --set-env-vars=NEWS_API_KEY=${{ secrets.NEWS_API_KEY }} \
             --set-env-vars=PANTHEON_PGURI=${{ secrets.PANTHEON_PGURI }} \
