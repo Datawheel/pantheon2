@@ -3,11 +3,8 @@
 .why-trending-container {
     text-align: center;
     margin: 0 auto;
-
-    max-width: 1200px;
-    
-    padding: 18px 0 36px;
-    
+    max-width: 1024px;
+    padding: 18px 0;
   }
   
   .why-trending-button {
@@ -92,14 +89,21 @@
   
   .reason-container {
     margin-top: 20px;
-    padding: 15px;
+    padding: 30px;
     background-color: #ceeef0;
     border-radius: 5px;
     text-align: left;
   }
 
+  .reason-container h3 {
+    margin: 0 0 10px;
+  }
+
   .reason-container > p{
     width: 65%;
+    @media (max-width: 550px) {
+        width: 100%;
+    }
   }
   .reason-container p {
     line-height: 1.5;
@@ -115,11 +119,15 @@
   .citations-container ol li {
     font-size: 1.1rem;
     line-height: 1.9;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   
   .citations-container a {
     color: #0070f3;
     text-decoration: none;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   
   .citations-container a:hover {
