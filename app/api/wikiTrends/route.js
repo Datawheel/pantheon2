@@ -1,276 +1,1404 @@
-const createThrottle = require("async-throttle");
-const axios = require("axios");
-
-const dedupe = (item, index, self) =>
-  self.findIndex(obj => obj.slug === item.slug) === index;
-
-const calcRankDeltas = (arrOfBios, day1Ago, day2Ago) => {
-  const day2AgoRanks = arrOfBios
-    .filter(d => d.date === day2Ago)
-    .reduce((obj, item) => {
-      obj[item.slug] = item;
-      return obj;
-    }, {});
-  return arrOfBios
-    .filter(d => d.date === day1Ago)
-    .map(d =>
-      Object.assign({}, d, {
-        rank_delta: day2AgoRanks[d.slug]
-          ? day2AgoRanks[d.slug].rank_pantheon - d.rank_pantheon
-          : null,
-      })
-    );
-};
-
 export async function GET(request) {
-  const {searchParams} = new URL(request.url);
-  const searchParamLang = searchParams.get("lang");
-  const searchParamOccupation = searchParams.get("occupation");
-  const searchParamLimit = searchParams.get("limit");
-  const lang =
-    [
-      "ar",
-      "zh",
-      "nl",
-      "en",
-      "fr",
-      "de",
-      "it",
-      "ja",
-      "pl",
-      "pt",
-      "ru",
-      "es",
-    ].indexOf(searchParamLang) !== -1
-      ? searchParamLang
-      : "en";
-  const occupation =
-    [
-      "SOCCER PLAYER",
-      "POLITICIAN",
-      "ACTOR",
-      "WRITER",
-      "SINGER",
-      "ATHLETE",
-      "MUSICIAN",
-      "SNOOKER",
-    ].indexOf(searchParamOccupation) !== -1
-      ? searchParamOccupation
-      : null;
-  const limit = parseInt(searchParamLimit, 10) || 100;
-  const dateobj = new Date();
-  // set date to yesterday
-  dateobj.setDate(dateobj.getDate() - 1);
-  const year = dateobj.getFullYear();
-  const month = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  const day = `${dateobj.getDate()}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
-  dateobj.setDate(dateobj.getDate() - 1);
-  const year2DaysAgo = dateobj.getFullYear();
-  const month2DaysAgo = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  const day2DaysAgo = `${dateobj.getDate()}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-
-  const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
-  const trendApiUrl = `https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`;
-  // console.log("trendApiUrl!!", trendApiUrl);
-  const todaysBiosFromDbResp = await axios
-    .get(trendApiUrl)
-    .catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
-  const todaysBiosFromDb = calcRankDeltas(
-    todaysBiosFromDbResp.data,
-    `${year}-${month}-${day}`,
-    `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`
-  );
-
-  if (todaysBiosFromDb.length) {
-    // console.log(`\n~~FOUND IN DB! (lang:${lang}|occupation:${occupation})~~\n`);
-    return Response.json(
-      [...todaysBiosFromDb]
-        .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
-        .filter(dedupe)
-        .slice(0, limit)
-    );
-  } else {
-    // console.log("\n***NOT FOUND IN DB!****\n");
-    if (occupation) {
-      const todaysBiosFromDbCheck = await axios
-        .get(
-          `https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
-        )
-        .catch(
-          e => (console.log("Pantheon trends read Error:", e), {data: []})
-        );
-      if (todaysBiosFromDbCheck.data.length) {
-        return Response.json([]);
-      }
-    }
-    const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
-    const topPageViewsResp = await axios.get(wikiPageViewsURL).catch(e => {
-      if (e.response) {
-        return {data: [], error: e.response.data};
-      }
-      return {data: []};
-    });
-    const topPageViewsJson = topPageViewsResp.data;
-    if (
-      topPageViewsResp.error &&
-      topPageViewsResp.error.detail.includes(
-        "The date(s) you used are valid, but we either do not have data for those date(s)"
-      )
-    ) {
-      const todaysBiosFromDbResp2 = await axios
-        .get(
-          `https://api.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
-        )
-        .catch(
-          e => (console.log("Pantheon trends read Error:", e), {data: []})
-        );
-      return Response.json(
-        [...todaysBiosFromDbResp2.data]
-          .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
-          .filter(dedupe)
-          .slice(0, limit)
-      );
-    }
-    // create API URLs from list of people
-    if (!topPageViewsJson.items || !Array.isArray(topPageViewsJson.items)) {
-      return Response.json([]);
-    }
-    const trendingArticles = topPageViewsJson.items[0].articles;
-    const trendingArticlesLookup = {};
-    const chunks = trendingArticles.length / 50;
-    const trendingPeoplePantheonUrls = [];
-    for (let i = 0; i < chunks; i++) {
-      const currentArticlesChunk = trendingArticles.slice(i * 50, (i + 1) * 50);
-      const trendingArticlesQuery = [];
-
-      // validate URLs for non-english slugs
-      if (lang !== "en") {
-        const wikiLangTitles = currentArticlesChunk
-          .map(p => encodeURIComponent(p.article))
-          .join("|");
-        const wikiLangLinksResp = await axios
-          .get(
-            `https://${lang}.wikipedia.org/w/api.php?action=query&titles=${wikiLangTitles}&prop=langlinks&lllimit=500&llprop=url&lllang=en&format=json`
-          )
-          .catch(e => (console.log("Wiki Langlinks Error:", e), {data: []}));
-        const wikiLangLinksJson = wikiLangLinksResp.data;
-
-        currentArticlesChunk.forEach(article => {
-          // see if name is normalized
-          let normalizedArticleTitle = article.article;
-          if (wikiLangLinksJson.query.normalized) {
-            const normForm = wikiLangLinksJson.query.normalized.find(
-              norm => norm.from === article.article
-            );
-            normalizedArticleTitle = normForm ? normForm.to : article.article;
-          }
-          const enArticle = Object.values(wikiLangLinksJson.query.pages).find(
-            page => page.title === normalizedArticleTitle
-          );
-          if (
-            enArticle &&
-            enArticle.langlinks &&
-            enArticle.langlinks.length &&
-            enArticle.langlinks[0]["*"]
-          ) {
-            const enSlug = enArticle.langlinks[0].url.replace(
-              "https://en.wikipedia.org/wiki/",
-              ""
-            );
-            const enSlugQuoted = `"${enSlug}"`;
-            trendingArticlesQuery.push(
-              `slug.eq.${encodeURIComponent(enSlugQuoted)}`
-            );
-            trendingArticlesLookup[enSlug] = {
-              ...article,
-              title: enArticle.title,
-            };
-          }
-        });
-      } else {
-        currentArticlesChunk.forEach(article => {
-          trendingArticlesQuery.push(
-            `slug.eq."${encodeURIComponent(article.article)}"`
-          );
-          trendingArticlesLookup[article.article] = {
-            ...article,
-            title: article.article,
-          };
-        });
-        // trendingArticlesQuery = currentArticlesChunk.map(p => `slug.eq.${encodeURIComponent(p.article)}`);
-      }
-
-      trendingPeoplePantheonUrls.push(
-        `https://api.pantheon.world/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,hpi,slug,occupation`
-      );
-    }
-
-    // throttle API queries to 20 at a time
-    const throttle = createThrottle(20);
-    const bios = await Promise.all(
-      trendingPeoplePantheonUrls.map(url =>
-        throttle(async () => {
-          const res = await axios
-            .get(url)
-            .catch(
-              e => (
-                console.log("Batch pantheon person query error:", e), {data: []}
-              )
-            );
-          return res.data;
-        })
-      )
-    );
-
-    // filter out people not on pantheon and sort by num languages
-    const biosOnPantheon = bios.filter(Array.isArray);
-
-    // convert to format for db
-    const todaysBiosForDbUnsorted = biosOnPantheon.flat().map(d => {
-      // const trendDataFromWiki = trending.find(p => p.article === d.slug);
-      const trendDataFromWiki = trendingArticlesLookup[d.slug];
-      const retD = {
-        ...d,
-        ...trendDataFromWiki,
-        lang,
-        pid: d.id,
-        date: `${year}-${month}-${day}`,
-      };
-      delete retD.id;
-      delete retD.article;
-      return retD;
-    });
-    // sort and add ranking
-    const todaysBiosForDb = todaysBiosForDbUnsorted
-      .sort((a, b) => a.rank - b.rank)
-      .map((d, i) => ({...d, rank_pantheon: i + 1}));
-
-    await axios.post("https://api.pantheon.world/trend", todaysBiosForDb, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization":
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
-      },
-    });
-
-    if (occupation) {
-      return Response.json(
-        todaysBiosForDb
-          .filter(dedupe)
-          .filter(d => d.occupation === occupation)
-          .slice(0, limit)
-      );
-    }
-
-    return Response.json(todaysBiosForDb.filter(dedupe).slice(0, limit));
-  }
+  return Response.json([
+    {
+      "birthyear": 2001,
+      "name": "Jannik Sinner",
+      "hpi": 55.6200473117337,
+      "slug": "Jannik_Sinner",
+      "occupation": "TENNIS PLAYER",
+      "views": 550179,
+      "rank": 3,
+      "title": "Jannik_Sinner",
+      "lang": "en",
+      "pid": "60061043",
+      "date": "2025-01-26",
+      "rank_pantheon": 1,
+    },
+    {
+      "birthyear": 1997,
+      "name": "Alexander Zverev",
+      "hpi": 55.411459685705,
+      "slug": "Alexander_Zverev",
+      "occupation": "TENNIS PLAYER",
+      "views": 348272,
+      "rank": 4,
+      "title": "Alexander_Zverev",
+      "lang": "en",
+      "pid": "39755766",
+      "date": "2025-01-26",
+      "rank_pantheon": 2,
+    },
+    {
+      "birthyear": 1946,
+      "name": "Donald Trump",
+      "hpi": 94.1642564472411,
+      "slug": "Donald_Trump",
+      "occupation": "POLITICIAN",
+      "views": 203480,
+      "rank": 11,
+      "title": "Donald_Trump",
+      "lang": "en",
+      "pid": "4848272",
+      "date": "2025-01-26",
+      "rank_pantheon": 3,
+    },
+    {
+      "birthyear": 1995,
+      "name": "Timothée Chalamet",
+      "hpi": 59.9584522232011,
+      "slug": "Timothée_Chalamet",
+      "occupation": "ACTOR",
+      "views": 163369,
+      "rank": 15,
+      "title": "Timothée_Chalamet",
+      "lang": "en",
+      "pid": "46494361",
+      "date": "2025-01-26",
+      "rank_pantheon": 4,
+    },
+    {
+      "birthyear": 1971,
+      "name": "Elon Musk",
+      "hpi": 84.8112698533291,
+      "slug": "Elon_Musk",
+      "occupation": "INVENTOR",
+      "views": 163247,
+      "rank": 16,
+      "title": "Elon_Musk",
+      "lang": "en",
+      "pid": "909036",
+      "date": "2025-01-26",
+      "rank_pantheon": 5,
+    },
+    {
+      "birthyear": 1995,
+      "name": "Madison Keys",
+      "hpi": 40.4788247273889,
+      "slug": "Madison_Keys",
+      "occupation": "TENNIS PLAYER",
+      "views": 157547,
+      "rank": 17,
+      "title": "Madison_Keys",
+      "lang": "en",
+      "pid": "23628301",
+      "date": "2025-01-26",
+      "rank_pantheon": 6,
+    },
+    {
+      "birthyear": 1941,
+      "name": "Bob Dylan",
+      "hpi": 79.5132506781558,
+      "slug": "Bob_Dylan",
+      "occupation": "MUSICIAN",
+      "views": 129206,
+      "rank": 21,
+      "title": "Bob_Dylan",
+      "lang": "en",
+      "pid": "4637590",
+      "date": "2025-01-26",
+      "rank_pantheon": 7,
+    },
+    {
+      "birthyear": 1971,
+      "name": "Kristi Noem",
+      "hpi": 44.4747945108208,
+      "slug": "Kristi_Noem",
+      "occupation": "POLITICIAN",
+      "views": 113460,
+      "rank": 27,
+      "title": "Kristi_Noem",
+      "lang": "en",
+      "pid": "27663933",
+      "date": "2025-01-26",
+      "rank_pantheon": 8,
+    },
+    {
+      "birthyear": 1970,
+      "name": "Melania Trump",
+      "hpi": 66.4727926177076,
+      "slug": "Melania_Trump",
+      "occupation": "COMPANION",
+      "views": 93394,
+      "rank": 33,
+      "title": "Melania_Trump",
+      "lang": "en",
+      "pid": "1209075",
+      "date": "2025-01-26",
+      "rank_pantheon": 9,
+    },
+    {
+      "birthyear": 2003,
+      "name": "Carlos Alcaraz",
+      "hpi": 54.0521011355805,
+      "slug": "Carlos_Alcaraz",
+      "occupation": "TENNIS PLAYER",
+      "views": 82279,
+      "rank": 40,
+      "title": "Carlos_Alcaraz",
+      "lang": "en",
+      "pid": "63121147",
+      "date": "2025-01-26",
+      "rank_pantheon": 10,
+    },
+    {
+      "birthyear": 1995,
+      "name": "Patrick Mahomes",
+      "hpi": 44.6428416366661,
+      "slug": "Patrick_Mahomes",
+      "occupation": "AMERICAN FOOTBALL PLAYER",
+      "views": 75510,
+      "rank": 45,
+      "title": "Patrick_Mahomes",
+      "lang": "en",
+      "pid": "45245149",
+      "date": "2025-01-26",
+      "rank_pantheon": 11,
+    },
+    {
+      "birthyear": 1978,
+      "name": "Kobe Bryant",
+      "hpi": 68.2652449860988,
+      "slug": "Kobe_Bryant",
+      "occupation": "BASKETBALL PLAYER",
+      "views": 68893,
+      "rank": 52,
+      "title": "Kobe_Bryant",
+      "lang": "en",
+      "pid": "246185",
+      "date": "2025-01-26",
+      "rank_pantheon": 12,
+    },
+    {
+      "birthyear": 1998,
+      "name": "Aryna Sabalenka",
+      "hpi": 52.1086960369638,
+      "slug": "Aryna_Sabalenka",
+      "occupation": "TENNIS PLAYER",
+      "views": 68523,
+      "rank": 53,
+      "title": "Aryna_Sabalenka",
+      "lang": "en",
+      "pid": "50222577",
+      "date": "2025-01-26",
+      "rank_pantheon": 13,
+    },
+    {
+      "birthyear": -69,
+      "name": "Cleopatra",
+      "hpi": 90.5772357504466,
+      "slug": "Cleopatra",
+      "occupation": "POLITICIAN",
+      "views": 67826,
+      "rank": 55,
+      "title": "Cleopatra",
+      "lang": "en",
+      "pid": "60827",
+      "date": "2025-01-26",
+      "rank_pantheon": 14,
+    },
+    {
+      "birthyear": 1998,
+      "name": "Anna Kalinskaya",
+      "hpi": 45.3882407062527,
+      "slug": "Anna_Kalinskaya",
+      "occupation": "TENNIS PLAYER",
+      "views": 67280,
+      "rank": 57,
+      "title": "Anna_Kalinskaya",
+      "lang": "en",
+      "pid": "46898177",
+      "date": "2025-01-26",
+      "rank_pantheon": 15,
+    },
+    {
+      "birthyear": 1965,
+      "name": "Darren Cahill",
+      "hpi": 54.4063237206681,
+      "slug": "Darren_Cahill",
+      "occupation": "TENNIS PLAYER",
+      "views": 59608,
+      "rank": 68,
+      "title": "Darren_Cahill",
+      "lang": "en",
+      "pid": "2599091",
+      "date": "2025-01-26",
+      "rank_pantheon": 16,
+    },
+    {
+      "birthyear": 1977,
+      "name": "Chris Martin",
+      "hpi": 61.7285662782751,
+      "slug": "Chris_Martin",
+      "occupation": "MUSICIAN",
+      "views": 58438,
+      "rank": 71,
+      "title": "Chris_Martin",
+      "lang": "en",
+      "pid": "405704",
+      "date": "2025-01-26",
+      "rank_pantheon": 17,
+    },
+    {
+      "birthyear": 1994,
+      "name": "Gabriel Basso",
+      "hpi": 41.3240287045702,
+      "slug": "Gabriel_Basso",
+      "occupation": "ACTOR",
+      "views": 57881,
+      "rank": 72,
+      "title": "Gabriel_Basso",
+      "lang": "en",
+      "pid": "28239106",
+      "date": "2025-01-26",
+      "rank_pantheon": 18,
+    },
+    {
+      "birthyear": 1952,
+      "name": "Paul Reubens",
+      "hpi": 61.5919065939005,
+      "slug": "Paul_Reubens",
+      "occupation": "ACTOR",
+      "views": 56955,
+      "rank": 74,
+      "title": "Paul_Reubens",
+      "lang": "en",
+      "pid": "23916",
+      "date": "2025-01-26",
+      "rank_pantheon": 19,
+    },
+    {
+      "birthyear": 1987,
+      "name": "Novak Djokovic",
+      "hpi": 72.1219358857343,
+      "slug": "Novak_Djokovic",
+      "occupation": "TENNIS PLAYER",
+      "views": 55282,
+      "rank": 80,
+      "title": "Novak_Djokovic",
+      "lang": "en",
+      "pid": "16100029",
+      "date": "2025-01-26",
+      "rank_pantheon": 20,
+    },
+    {
+      "birthyear": 1957,
+      "name": "Nick Cave",
+      "hpi": 63.3330377694136,
+      "slug": "Nick_Cave",
+      "occupation": "MUSICIAN",
+      "views": 54548,
+      "rank": 82,
+      "title": "Nick_Cave",
+      "lang": "en",
+      "pid": "87536",
+      "date": "2025-01-26",
+      "rank_pantheon": 21,
+    },
+    {
+      "birthyear": 1972,
+      "name": "Mamta Kulkarni",
+      "hpi": 44.8605639076686,
+      "slug": "Mamta_Kulkarni",
+      "occupation": "ACTOR",
+      "views": 53671,
+      "rank": 85,
+      "title": "Mamta_Kulkarni",
+      "lang": "en",
+      "pid": "2452881",
+      "date": "2025-01-26",
+      "rank_pantheon": 22,
+    },
+    {
+      "birthyear": 2001,
+      "name": "Billie Eilish",
+      "hpi": 53.501566798243,
+      "slug": "Billie_Eilish",
+      "occupation": "SINGER",
+      "views": 51463,
+      "rank": 88,
+      "title": "Billie_Eilish",
+      "lang": "en",
+      "pid": "53785363",
+      "date": "2025-01-26",
+      "rank_pantheon": 23,
+    },
+    {
+      "birthyear": 1944,
+      "name": "Lorne Michaels",
+      "hpi": 52.1364550000559,
+      "slug": "Lorne_Michaels",
+      "occupation": "PRODUCER",
+      "views": 50886,
+      "rank": 89,
+      "title": "Lorne_Michaels",
+      "lang": "en",
+      "pid": "102897",
+      "date": "2025-01-26",
+      "rank_pantheon": 24,
+    },
+    {
+      "birthyear": 1972,
+      "name": "Cameron Diaz",
+      "hpi": 75.7675366481227,
+      "slug": "Cameron_Diaz",
+      "occupation": "ACTOR",
+      "views": 50583,
+      "rank": 91,
+      "title": "Cameron_Diaz",
+      "lang": "en",
+      "pid": "42104",
+      "date": "2025-01-26",
+      "rank_pantheon": 25,
+    },
+    {
+      "birthyear": 1994,
+      "name": "Margaret Qualley",
+      "hpi": 47.3212214608195,
+      "slug": "Margaret_Qualley",
+      "occupation": "ACTOR",
+      "views": 48387,
+      "rank": 93,
+      "title": "Margaret_Qualley",
+      "lang": "en",
+      "pid": "43256079",
+      "date": "2025-01-26",
+      "rank_pantheon": 26,
+    },
+    {
+      "birthyear": 1946,
+      "name": "David Lynch",
+      "hpi": 74.8372363342839,
+      "slug": "David_Lynch",
+      "occupation": "FILM DIRECTOR",
+      "views": 47603,
+      "rank": 95,
+      "title": "David_Lynch",
+      "lang": "en",
+      "pid": "7891",
+      "date": "2025-01-26",
+      "rank_pantheon": 27,
+    },
+    {
+      "birthyear": 1996,
+      "name": "Hailee Steinfeld",
+      "hpi": 49.8103699566556,
+      "slug": "Hailee_Steinfeld",
+      "occupation": "ACTOR",
+      "views": 44492,
+      "rank": 107,
+      "title": "Hailee_Steinfeld",
+      "lang": "en",
+      "pid": "26260043",
+      "date": "2025-01-26",
+      "rank_pantheon": 28,
+    },
+    {
+      "birthyear": 1961,
+      "name": "Barack Obama",
+      "hpi": 78.599531421386,
+      "slug": "Barack_Obama",
+      "occupation": "POLITICIAN",
+      "views": 42289,
+      "rank": 113,
+      "title": "Barack_Obama",
+      "lang": "en",
+      "pid": "534366",
+      "date": "2025-01-26",
+      "rank_pantheon": 29,
+    },
+    {
+      "birthyear": 1977,
+      "name": "Tom Brady",
+      "hpi": 58.2174310185066,
+      "slug": "Tom_Brady",
+      "occupation": "AMERICAN FOOTBALL PLAYER",
+      "views": 41991,
+      "rank": 115,
+      "title": "Tom_Brady",
+      "lang": "en",
+      "pid": "339841",
+      "date": "2025-01-26",
+      "rank_pantheon": 30,
+    },
+    {
+      "birthyear": 1949,
+      "name": "Ivana Trump",
+      "hpi": 66.2357942205532,
+      "slug": "Ivana_Trump",
+      "occupation": "BUSINESSPERSON",
+      "views": 41959,
+      "rank": 116,
+      "title": "Ivana_Trump",
+      "lang": "en",
+      "pid": "1057887",
+      "date": "2025-01-26",
+      "rank_pantheon": 31,
+    },
+    {
+      "birthyear": 1993,
+      "name": "Ariana Grande",
+      "hpi": 70.2205665924459,
+      "slug": "Ariana_Grande",
+      "occupation": "SINGER",
+      "views": 41629,
+      "rank": 118,
+      "title": "Ariana_Grande",
+      "lang": "en",
+      "pid": "25276055",
+      "date": "2025-01-26",
+      "rank_pantheon": 32,
+    },
+    {
+      "birthyear": 1984,
+      "name": "Ross Ulbricht",
+      "hpi": 57.1592037488829,
+      "slug": "Ross_Ulbricht",
+      "occupation": "EXTREMIST",
+      "views": 41091,
+      "rank": 121,
+      "title": "Ross_Ulbricht",
+      "lang": "en",
+      "pid": "41419915",
+      "date": "2025-01-26",
+      "rank_pantheon": 33,
+    },
+    {
+      "birthyear": 1981,
+      "name": "Ivanka Trump",
+      "hpi": 56.3154860693284,
+      "slug": "Ivanka_Trump",
+      "occupation": "WRITER",
+      "views": 40200,
+      "rank": 122,
+      "title": "Ivanka_Trump",
+      "lang": "en",
+      "pid": "1861441",
+      "date": "2025-01-26",
+      "rank_pantheon": 34,
+    },
+    {
+      "birthyear": 1987,
+      "name": "Blake Lively",
+      "hpi": 60.6000959314656,
+      "slug": "Blake_Lively",
+      "occupation": "ACTOR",
+      "views": 40043,
+      "rank": 123,
+      "title": "Blake_Lively",
+      "lang": "en",
+      "pid": "2265561",
+      "date": "2025-01-26",
+      "rank_pantheon": 35,
+    },
+    {
+      "birthyear": 1975,
+      "name": "Bradley Cooper",
+      "hpi": 69.7335605887464,
+      "slug": "Bradley_Cooper",
+      "occupation": "ACTOR",
+      "views": 39906,
+      "rank": 124,
+      "title": "Bradley_Cooper",
+      "lang": "en",
+      "pid": "365352",
+      "date": "2025-01-26",
+      "rank_pantheon": 36,
+    },
+    {
+      "birthyear": 1998,
+      "name": "MrBeast",
+      "hpi": 53.0694872260767,
+      "slug": "MrBeast",
+      "occupation": "YOUTUBER",
+      "views": 39894,
+      "rank": 125,
+      "title": "MrBeast",
+      "lang": "en",
+      "pid": "58920328",
+      "date": "2025-01-26",
+      "rank_pantheon": 37,
+    },
+    {
+      "birthyear": 1902,
+      "name": "Ansel Adams",
+      "hpi": 58.6751785001112,
+      "slug": "Ansel_Adams",
+      "occupation": "PHOTOGRAPHER",
+      "views": 39675,
+      "rank": 126,
+      "title": "Ansel_Adams",
+      "lang": "en",
+      "pid": "84317",
+      "date": "2025-01-26",
+      "rank_pantheon": 38,
+    },
+    {
+      "birthyear": 1801,
+      "name": "Brigham Young",
+      "hpi": 76.141953711039,
+      "slug": "Brigham_Young",
+      "occupation": "RELIGIOUS FIGURE",
+      "views": 39411,
+      "rank": 130,
+      "title": "Brigham_Young",
+      "lang": "en",
+      "pid": "5048",
+      "date": "2025-01-26",
+      "rank_pantheon": 39,
+    },
+    {
+      "birthyear": 1963,
+      "name": "Marla Maples",
+      "hpi": 58.9711917428782,
+      "slug": "Marla_Maples",
+      "occupation": "ACTOR",
+      "views": 39329,
+      "rank": 131,
+      "title": "Marla_Maples",
+      "lang": "en",
+      "pid": "473806",
+      "date": "2025-01-26",
+      "rank_pantheon": 40,
+    },
+    {
+      "birthyear": 1976,
+      "name": "Matthew Shepard",
+      "hpi": 45.2555383688926,
+      "slug": "Matthew_Shepard",
+      "occupation": "SOCIAL ACTIVIST",
+      "views": 38697,
+      "rank": 133,
+      "title": "Matthew_Shepard",
+      "lang": "en",
+      "pid": "96484",
+      "date": "2025-01-26",
+      "rank_pantheon": 41,
+    },
+    {
+      "birthyear": 1944,
+      "name": "John Newcombe",
+      "hpi": 62.7233012136745,
+      "slug": "John_Newcombe",
+      "occupation": "TENNIS PLAYER",
+      "views": 38232,
+      "rank": 135,
+      "title": "John_Newcombe",
+      "lang": "en",
+      "pid": "481779",
+      "date": "2025-01-26",
+      "rank_pantheon": 42,
+    },
+    {
+      "birthyear": 1999,
+      "name": "Omar Marmoush",
+      "hpi": 44.3929037778484,
+      "slug": "Omar_Marmoush",
+      "occupation": "SOCCER PLAYER",
+      "views": 37234,
+      "rank": 144,
+      "title": "Omar_Marmoush",
+      "lang": "en",
+      "pid": "63977483",
+      "date": "2025-01-26",
+      "rank_pantheon": 43,
+    },
+    {
+      "birthyear": 1944,
+      "name": "Charles Sobhraj",
+      "hpi": 65.4895403588201,
+      "slug": "Charles_Sobhraj",
+      "occupation": "EXTREMIST",
+      "views": 37209,
+      "rank": 146,
+      "title": "Charles_Sobhraj",
+      "lang": "en",
+      "pid": "960010",
+      "date": "2025-01-26",
+      "rank_pantheon": 44,
+    },
+    {
+      "birthyear": 1927,
+      "name": "Roger Moore",
+      "hpi": 77.1952902763646,
+      "slug": "Roger_Moore",
+      "occupation": "ACTOR",
+      "views": 37078,
+      "rank": 148,
+      "title": "Roger_Moore",
+      "lang": "en",
+      "pid": "174716",
+      "date": "2025-01-26",
+      "rank_pantheon": 45,
+    },
+    {
+      "birthyear": 1993,
+      "name": "Bjorn Fratangelo",
+      "hpi": 27.2430250104379,
+      "slug": "Bjorn_Fratangelo",
+      "occupation": "TENNIS PLAYER",
+      "views": 36218,
+      "rank": 153,
+      "title": "Bjorn_Fratangelo",
+      "lang": "en",
+      "pid": "32068706",
+      "date": "2025-01-26",
+      "rank_pantheon": 46,
+    },
+    {
+      "birthyear": 1984,
+      "name": "Scarlett Johansson",
+      "hpi": 66.7509956248637,
+      "slug": "Scarlett_Johansson",
+      "occupation": "ACTOR",
+      "views": 36103,
+      "rank": 154,
+      "title": "Scarlett_Johansson",
+      "lang": "en",
+      "pid": "20913246",
+      "date": "2025-01-26",
+      "rank_pantheon": 47,
+    },
+    {
+      "birthyear": 1977,
+      "name": "Donald Trump Jr.",
+      "hpi": 52.5660444792793,
+      "slug": "Donald_Trump_Jr.",
+      "occupation": "BUSINESSPERSON",
+      "views": 35956,
+      "rank": 155,
+      "title": "Donald_Trump_Jr.",
+      "lang": "en",
+      "pid": "5679119",
+      "date": "2025-01-26",
+      "rank_pantheon": 48,
+    },
+    {
+      "birthyear": 1985,
+      "name": "Cristiano Ronaldo",
+      "hpi": 81.1360312619489,
+      "slug": "Cristiano_Ronaldo",
+      "occupation": "SOCCER PLAYER",
+      "views": 35684,
+      "rank": 158,
+      "title": "Cristiano_Ronaldo",
+      "lang": "en",
+      "pid": "623737",
+      "date": "2025-01-26",
+      "rank_pantheon": 49,
+    },
+    {
+      "birthyear": 1983,
+      "name": "Jesse Eisenberg",
+      "hpi": 57.7745698667817,
+      "slug": "Jesse_Eisenberg",
+      "occupation": "ACTOR",
+      "views": 35608,
+      "rank": 160,
+      "title": "Jesse_Eisenberg",
+      "lang": "en",
+      "pid": "1512539",
+      "date": "2025-01-26",
+      "rank_pantheon": 50,
+    },
+    {
+      "birthyear": 1962,
+      "name": "Demi Moore",
+      "hpi": 71.512752586945,
+      "slug": "Demi_Moore",
+      "occupation": "ACTOR",
+      "views": 35533,
+      "rank": 161,
+      "title": "Demi_Moore",
+      "lang": "en",
+      "pid": "187807",
+      "date": "2025-01-26",
+      "rank_pantheon": 51,
+    },
+    {
+      "birthyear": 1960,
+      "name": "Gustavo Petro",
+      "hpi": 65.6508767867722,
+      "slug": "Gustavo_Petro",
+      "occupation": "POLITICIAN",
+      "views": 34846,
+      "rank": 165,
+      "title": "Gustavo_Petro",
+      "lang": "en",
+      "pid": "13391962",
+      "date": "2025-01-26",
+      "rank_pantheon": 52,
+    },
+    {
+      "birthyear": 1993,
+      "name": "Tiffany Trump",
+      "hpi": 59.5347351474135,
+      "slug": "Tiffany_Trump",
+      "occupation": "CELEBRITY",
+      "views": 34572,
+      "rank": 167,
+      "title": "Tiffany_Trump",
+      "lang": "en",
+      "pid": "4339721",
+      "date": "2025-01-26",
+      "rank_pantheon": 53,
+    },
+    {
+      "birthyear": 1942,
+      "name": "Joe Biden",
+      "hpi": 85.7717110129205,
+      "slug": "Joe_Biden",
+      "occupation": "POLITICIAN",
+      "views": 34140,
+      "rank": 172,
+      "title": "Joe_Biden",
+      "lang": "en",
+      "pid": "145422",
+      "date": "2025-01-26",
+      "rank_pantheon": 54,
+    },
+    {
+      "birthyear": 1984,
+      "name": "Justin Baldoni",
+      "hpi": 40.3657298536198,
+      "slug": "Justin_Baldoni",
+      "occupation": "ACTOR",
+      "views": 33704,
+      "rank": 173,
+      "title": "Justin_Baldoni",
+      "lang": "en",
+      "pid": "5896609",
+      "date": "2025-01-26",
+      "rank_pantheon": 55,
+    },
+    {
+      "birthyear": 1942,
+      "name": "Carole King",
+      "hpi": 64.2175353469514,
+      "slug": "Carole_King",
+      "occupation": "SINGER",
+      "views": 33299,
+      "rank": 177,
+      "title": "Carole_King",
+      "lang": "en",
+      "pid": "149109",
+      "date": "2025-01-26",
+      "rank_pantheon": 56,
+    },
+    {
+      "birthyear": 1917,
+      "name": "John F. Kennedy",
+      "hpi": 85.6487613996895,
+      "slug": "John_F._Kennedy",
+      "occupation": "POLITICIAN",
+      "views": 33248,
+      "rank": 178,
+      "title": "John_F._Kennedy",
+      "lang": "en",
+      "pid": "5119376",
+      "date": "2025-01-26",
+      "rank_pantheon": 57,
+    },
+    {
+      "birthyear": 1657,
+      "name": "Sambhaji",
+      "hpi": 66.9367032563738,
+      "slug": "Sambhaji",
+      "occupation": "POLITICIAN",
+      "views": 33179,
+      "rank": 179,
+      "title": "Sambhaji",
+      "lang": "en",
+      "pid": "273772",
+      "date": "2025-01-26",
+      "rank_pantheon": 58,
+    },
+    {
+      "birthyear": 1941,
+      "name": "Joan Baez",
+      "hpi": 78.8942309274995,
+      "slug": "Joan_Baez",
+      "occupation": "SINGER",
+      "views": 33030,
+      "rank": 180,
+      "title": "Joan_Baez",
+      "lang": "en",
+      "pid": "50960",
+      "date": "2025-01-26",
+      "rank_pantheon": 59,
+    },
+    {
+      "birthyear": 1927,
+      "name": "Roy Cohn",
+      "hpi": 56.7644021502251,
+      "slug": "Roy_Cohn",
+      "occupation": "LAWYER",
+      "views": 32975,
+      "rank": 181,
+      "title": "Roy_Cohn",
+      "lang": "en",
+      "pid": "320753",
+      "date": "2025-01-26",
+      "rank_pantheon": 60,
+    },
+    {
+      "birthyear": 1986,
+      "name": "Lady Gaga",
+      "hpi": 66.6997919649353,
+      "slug": "Lady_Gaga",
+      "occupation": "MUSICIAN",
+      "views": 32797,
+      "rank": 182,
+      "title": "Lady_Gaga",
+      "lang": "en",
+      "pid": "17782843",
+      "date": "2025-01-26",
+      "rank_pantheon": 61,
+    },
+    {
+      "birthyear": 1987,
+      "name": "Cynthia Erivo",
+      "hpi": 43.1426276449093,
+      "slug": "Cynthia_Erivo",
+      "occupation": "ACTOR",
+      "views": 32747,
+      "rank": 183,
+      "title": "Cynthia_Erivo",
+      "lang": "en",
+      "pid": "48453494",
+      "date": "2025-01-26",
+      "rank_pantheon": 62,
+    },
+    {
+      "birthyear": 1905,
+      "name": "Fred Trump",
+      "hpi": 66.8589286389893,
+      "slug": "Fred_Trump",
+      "occupation": "BUSINESSPERSON",
+      "views": 32363,
+      "rank": 184,
+      "title": "Fred_Trump",
+      "lang": "en",
+      "pid": "1203316",
+      "date": "2025-01-26",
+      "rank_pantheon": 63,
+    },
+    {
+      "birthyear": 1971,
+      "name": "Idina Menzel",
+      "hpi": 67.3164935855383,
+      "slug": "Idina_Menzel",
+      "occupation": "ACTOR",
+      "views": 32214,
+      "rank": 186,
+      "title": "Idina_Menzel",
+      "lang": "en",
+      "pid": "794688",
+      "date": "2025-01-26",
+      "rank_pantheon": 64,
+    },
+    {
+      "birthyear": 1989,
+      "name": "Taylor Swift",
+      "hpi": 66.801264021394,
+      "slug": "Taylor_Swift",
+      "occupation": "SINGER",
+      "views": 31859,
+      "rank": 189,
+      "title": "Taylor_Swift",
+      "lang": "en",
+      "pid": "5422144",
+      "date": "2025-01-26",
+      "rank_pantheon": 65,
+    },
+    {
+      "birthyear": 1988,
+      "name": "Brenda Song",
+      "hpi": 54.7604174175682,
+      "slug": "Brenda_Song",
+      "occupation": "ACTOR",
+      "views": 31849,
+      "rank": 190,
+      "title": "Brenda_Song",
+      "lang": "en",
+      "pid": "1702544",
+      "date": "2025-01-26",
+      "rank_pantheon": 66,
+    },
+    {
+      "birthyear": 1954,
+      "name": "Robert F. Kennedy Jr.",
+      "hpi": 60.1698414019183,
+      "slug": "Robert_F._Kennedy_Jr.",
+      "occupation": "POLITICIAN",
+      "views": 31795,
+      "rank": 191,
+      "title": "Robert_F._Kennedy_Jr.",
+      "lang": "en",
+      "pid": "522298",
+      "date": "2025-01-26",
+      "rank_pantheon": 67,
+    },
+    {
+      "birthyear": 1987,
+      "name": "Kendrick Lamar",
+      "hpi": 53.2524490729712,
+      "slug": "Kendrick_Lamar",
+      "occupation": "SINGER",
+      "views": 31786,
+      "rank": 193,
+      "title": "Kendrick_Lamar",
+      "lang": "en",
+      "pid": "29909823",
+      "date": "2025-01-26",
+      "rank_pantheon": 68,
+    },
+    {
+      "birthyear": 1981,
+      "name": "Tulsi Gabbard",
+      "hpi": 43.4035617065754,
+      "slug": "Tulsi_Gabbard",
+      "occupation": "POLITICIAN",
+      "views": 31744,
+      "rank": 194,
+      "title": "Tulsi_Gabbard",
+      "lang": "en",
+      "pid": "26328774",
+      "date": "2025-01-26",
+      "rank_pantheon": 69,
+    },
+    {
+      "birthyear": 1977,
+      "name": "Vince Carter",
+      "hpi": 53.8240101916029,
+      "slug": "Vince_Carter",
+      "occupation": "BASKETBALL PLAYER",
+      "views": 31654,
+      "rank": 195,
+      "title": "Vince_Carter",
+      "lang": "en",
+      "pid": "496570",
+      "date": "2025-01-26",
+      "rank_pantheon": 70,
+    },
+    {
+      "birthyear": 1999,
+      "name": "Mikey Madison",
+      "hpi": 39.6399730699947,
+      "slug": "Mikey_Madison",
+      "occupation": "ACTOR",
+      "views": 31542,
+      "rank": 197,
+      "title": "Mikey_Madison",
+      "lang": "en",
+      "pid": "51433169",
+      "date": "2025-01-26",
+      "rank_pantheon": 71,
+    },
+    {
+      "birthyear": 1969,
+      "name": "Matthew McConaughey",
+      "hpi": 68.7004373042351,
+      "slug": "Matthew_McConaughey",
+      "occupation": "ACTOR",
+      "views": 31484,
+      "rank": 198,
+      "title": "Matthew_McConaughey",
+      "lang": "en",
+      "pid": "27834683",
+      "date": "2025-01-26",
+      "rank_pantheon": 72,
+    },
+    {
+      "birthyear": 1973,
+      "name": "Adrien Brody",
+      "hpi": 65.9307732591791,
+      "slug": "Adrien_Brody",
+      "occupation": "ACTOR",
+      "views": 31102,
+      "rank": 203,
+      "title": "Adrien_Brody",
+      "lang": "en",
+      "pid": "200750",
+      "date": "2025-01-26",
+      "rank_pantheon": 73,
+    },
+    {
+      "birthyear": 1971,
+      "name": "Marco Rubio",
+      "hpi": 52.9913698202636,
+      "slug": "Marco_Rubio",
+      "occupation": "POLITICIAN",
+      "views": 31045,
+      "rank": 204,
+      "title": "Marco_Rubio",
+      "lang": "en",
+      "pid": "5502549",
+      "date": "2025-01-26",
+      "rank_pantheon": 74,
+    },
+    {
+      "birthyear": 1975,
+      "name": "Sutton Foster",
+      "hpi": 40.41899512074,
+      "slug": "Sutton_Foster",
+      "occupation": "ACTOR",
+      "views": 30680,
+      "rank": 205,
+      "title": "Sutton_Foster",
+      "lang": "en",
+      "pid": "1212502",
+      "date": "2025-01-26",
+      "rank_pantheon": 75,
+    },
+    {
+      "birthyear": 1999,
+      "name": "Lily-Rose Depp",
+      "hpi": 52.661216970271,
+      "slug": "Lily-Rose_Depp",
+      "occupation": "ACTOR",
+      "views": 30483,
+      "rank": 208,
+      "title": "Lily-Rose_Depp",
+      "lang": "en",
+      "pid": "43615641",
+      "date": "2025-01-26",
+      "rank_pantheon": 76,
+    },
+    {
+      "birthyear": 1998,
+      "name": "Kylian Mbappé",
+      "hpi": 66.0915056379949,
+      "slug": "Kylian_Mbappé",
+      "occupation": "SOCCER PLAYER",
+      "views": 30307,
+      "rank": 210,
+      "title": "Kylian_Mbappé",
+      "lang": "en",
+      "pid": "48711857",
+      "date": "2025-01-26",
+      "rank_pantheon": 77,
+    },
+    {
+      "birthyear": 1889,
+      "name": "Adolf Hitler",
+      "hpi": 94.5901664063134,
+      "slug": "Adolf_Hitler",
+      "occupation": "POLITICIAN",
+      "views": 30242,
+      "rank": 212,
+      "title": "Adolf_Hitler",
+      "lang": "en",
+      "pid": "2731583",
+      "date": "2025-01-26",
+      "rank_pantheon": 78,
+    },
+    {
+      "birthyear": 1976,
+      "name": "Ryan Reynolds",
+      "hpi": 64.9692035044237,
+      "slug": "Ryan_Reynolds",
+      "occupation": "ACTOR",
+      "views": 30054,
+      "rank": 216,
+      "title": "Ryan_Reynolds",
+      "lang": "en",
+      "pid": "731111",
+      "date": "2025-01-26",
+      "rank_pantheon": 79,
+    },
+    {
+      "birthyear": 1936,
+      "name": "Robert Redford",
+      "hpi": 76.3522904173836,
+      "slug": "Robert_Redford",
+      "occupation": "ACTOR",
+      "views": 29349,
+      "rank": 223,
+      "title": "Robert_Redford",
+      "lang": "en",
+      "pid": "61982",
+      "date": "2025-01-26",
+      "rank_pantheon": 80,
+    },
+    {
+      "birthyear": 1980,
+      "name": "Macaulay Culkin",
+      "hpi": 65.5635163617696,
+      "slug": "Macaulay_Culkin",
+      "occupation": "ACTOR",
+      "views": 29063,
+      "rank": 227,
+      "title": "Macaulay_Culkin",
+      "lang": "en",
+      "pid": "212860",
+      "date": "2025-01-26",
+      "rank_pantheon": 81,
+    },
+    {
+      "birthyear": 1958,
+      "name": "Droupadi Murmu",
+      "hpi": 67.3348005259043,
+      "slug": "Droupadi_Murmu",
+      "occupation": "POLITICIAN",
+      "views": 29012,
+      "rank": 228,
+      "title": "Droupadi_Murmu",
+      "lang": "en",
+      "pid": "46686811",
+      "date": "2025-01-26",
+      "rank_pantheon": 82,
+    },
+    {
+      "birthyear": 1989,
+      "name": "Dakota Johnson",
+      "hpi": 58.6043011844892,
+      "slug": "Dakota_Johnson",
+      "occupation": "ACTOR",
+      "views": 28796,
+      "rank": 229,
+      "title": "Dakota_Johnson",
+      "lang": "en",
+      "pid": "7000810",
+      "date": "2025-01-26",
+      "rank_pantheon": 83,
+    },
+    {
+      "birthyear": 1925,
+      "name": "Paul Newman",
+      "hpi": 76.7021313161821,
+      "slug": "Paul_Newman",
+      "occupation": "ACTOR",
+      "views": 28752,
+      "rank": 231,
+      "title": "Paul_Newman",
+      "lang": "en",
+      "pid": "49706",
+      "date": "2025-01-26",
+      "rank_pantheon": 84,
+    },
+    {
+      "birthyear": 1974,
+      "name": "Robbie Williams",
+      "hpi": 64.9097825073982,
+      "slug": "Robbie_Williams",
+      "occupation": "SINGER",
+      "views": 28519,
+      "rank": 235,
+      "title": "Robbie_Williams",
+      "lang": "en",
+      "pid": "39010",
+      "date": "2025-01-26",
+      "rank_pantheon": 85,
+    },
+    {
+      "birthyear": 1969,
+      "name": "Michael Sheen",
+      "hpi": 60.9156793207202,
+      "slug": "Michael_Sheen",
+      "occupation": "ACTOR",
+      "views": 28465,
+      "rank": 236,
+      "title": "Michael_Sheen",
+      "lang": "en",
+      "pid": "277795",
+      "date": "2025-01-26",
+      "rank_pantheon": 86,
+    },
+    {
+      "birthyear": 1843,
+      "name": "William McKinley",
+      "hpi": 72.4423348055268,
+      "slug": "William_McKinley",
+      "occupation": "POLITICIAN",
+      "views": 28213,
+      "rank": 241,
+      "title": "William_McKinley",
+      "lang": "en",
+      "pid": "33521",
+      "date": "2025-01-26",
+      "rank_pantheon": 87,
+    },
+    {
+      "birthyear": 1999,
+      "name": "Sabrina Carpenter",
+      "hpi": 56.3616181703989,
+      "slug": "Sabrina_Carpenter",
+      "occupation": "ACTOR",
+      "views": 28166,
+      "rank": 242,
+      "title": "Sabrina_Carpenter",
+      "lang": "en",
+      "pid": "36791152",
+      "date": "2025-01-26",
+      "rank_pantheon": 88,
+    },
+    {
+      "birthyear": 1996,
+      "name": "Daniil Medvedev",
+      "hpi": 56.5320071915756,
+      "slug": "Daniil_Medvedev",
+      "occupation": "TENNIS PLAYER",
+      "views": 28023,
+      "rank": 244,
+      "title": "Daniil_Medvedev",
+      "lang": "en",
+      "pid": "48268960",
+      "date": "2025-01-26",
+      "rank_pantheon": 89,
+    },
+    {
+      "birthyear": 1997,
+      "name": "Kylie Jenner",
+      "hpi": 59.3668008009643,
+      "slug": "Kylie_Jenner",
+      "occupation": "MODEL",
+      "views": 27881,
+      "rank": 246,
+      "title": "Kylie_Jenner",
+      "lang": "en",
+      "pid": "21881809",
+      "date": "2025-01-26",
+      "rank_pantheon": 90,
+    },
+    {
+      "birthyear": 1949,
+      "name": "John Belushi",
+      "hpi": 70.7008119941257,
+      "slug": "John_Belushi",
+      "occupation": "ACTOR",
+      "views": 27850,
+      "rank": 247,
+      "title": "John_Belushi",
+      "lang": "en",
+      "pid": "16384",
+      "date": "2025-01-26",
+      "rank_pantheon": 91,
+    },
+    {
+      "birthyear": 1956,
+      "name": "Mel Gibson",
+      "hpi": 76.1624160496894,
+      "slug": "Mel_Gibson",
+      "occupation": "ACTOR",
+      "views": 27812,
+      "rank": 248,
+      "title": "Mel_Gibson",
+      "lang": "en",
+      "pid": "44219",
+      "date": "2025-01-26",
+      "rank_pantheon": 92,
+    },
+    {
+      "birthyear": 1982,
+      "name": "Kieran Culkin",
+      "hpi": 56.8982134892329,
+      "slug": "Kieran_Culkin",
+      "occupation": "ACTOR",
+      "views": 27796,
+      "rank": 249,
+      "title": "Kieran_Culkin",
+      "lang": "en",
+      "pid": "1503734",
+      "date": "2025-01-26",
+      "rank_pantheon": 93,
+    },
+    {
+      "birthyear": 1943,
+      "name": "Chevy Chase",
+      "hpi": 65.3154813408069,
+      "slug": "Chevy_Chase",
+      "occupation": "COMEDIAN",
+      "views": 27754,
+      "rank": 251,
+      "title": "Chevy_Chase",
+      "lang": "en",
+      "pid": "102973",
+      "date": "2025-01-26",
+      "rank_pantheon": 94,
+    },
+    {
+      "birthyear": 1915,
+      "name": "David Stirling",
+      "hpi": 58.9641345964943,
+      "slug": "David_Stirling",
+      "occupation": "MILITARY PERSONNEL",
+      "views": 27533,
+      "rank": 254,
+      "title": "David_Stirling",
+      "lang": "en",
+      "pid": "56111",
+      "date": "2025-01-26",
+      "rank_pantheon": 95,
+    },
+    {
+      "birthyear": 1981,
+      "name": "Roger Federer",
+      "hpi": 68.1711063896381,
+      "slug": "Roger_Federer",
+      "occupation": "TENNIS PLAYER",
+      "views": 27038,
+      "rank": 261,
+      "title": "Roger_Federer",
+      "lang": "en",
+      "pid": "262376",
+      "date": "2025-01-26",
+      "rank_pantheon": 96,
+    },
+    {
+      "birthyear": 1967,
+      "name": "Gavin Newsom",
+      "hpi": 54.5406800418594,
+      "slug": "Gavin_Newsom",
+      "occupation": "POLITICIAN",
+      "views": 27007,
+      "rank": 263,
+      "title": "Gavin_Newsom",
+      "lang": "en",
+      "pid": "418947",
+      "date": "2025-01-26",
+      "rank_pantheon": 97,
+    },
+    {
+      "birthyear": 1989,
+      "name": "Travis Kelce",
+      "hpi": 48.0989185498608,
+      "slug": "Travis_Kelce",
+      "occupation": "AMERICAN FOOTBALL PLAYER",
+      "views": 26767,
+      "rank": 270,
+      "title": "Travis_Kelce",
+      "lang": "en",
+      "pid": "38384954",
+      "date": "2025-01-26",
+      "rank_pantheon": 98,
+    },
+    {
+      "birthyear": 1912,
+      "name": "Woody Guthrie",
+      "hpi": 63.6274001091968,
+      "slug": "Woody_Guthrie",
+      "occupation": "MUSICIAN",
+      "views": 26361,
+      "rank": 278,
+      "title": "Woody_Guthrie",
+      "lang": "en",
+      "pid": "33278",
+      "date": "2025-01-26",
+      "rank_pantheon": 99,
+    },
+    {
+      "birthyear": 1937,
+      "name": "Garrett Morris",
+      "hpi": 52.5424054034191,
+      "slug": "Garrett_Morris",
+      "occupation": "ACTOR",
+      "views": 26152,
+      "rank": 282,
+      "title": "Garrett_Morris",
+      "lang": "en",
+      "pid": "102980",
+      "date": "2025-01-26",
+      "rank_pantheon": 100,
+    },
+  ]);
 }
