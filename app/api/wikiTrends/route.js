@@ -256,13 +256,20 @@ export async function GET(request) {
       .sort((a, b) => a.rank - b.rank)
       .map((d, i) => ({...d, rank_pantheon: i + 1}));
 
-    await axios.post("https://api.pantheon.world/trend", todaysBiosForDb, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization":
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
-      },
-    });
+    try {
+      await axios.post("https://api.pantheon.world/trend", todaysBiosForDb, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
+        },
+      });
+    } catch (error) {
+      // Ignore 409 Conflict errors, but log other errors
+      if (!error.response || error.response.status !== 409) {
+        console.error("Error posting to Pantheon trends:", error.message);
+      }
+    }
 
     if (occupation) {
       return Response.json(
