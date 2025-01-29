@@ -80,7 +80,7 @@ export async function GET(request) {
   );
 
   const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
-  const trendApiUrl = `https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}${occupationCut}`;
+  const trendApiUrl = `https://api.pantheon.world/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}&slug=neq.cleopatra${occupationCut}`;
 
   const todaysBiosFromDbResp = await axios
     .get(trendApiUrl)
@@ -105,7 +105,7 @@ export async function GET(request) {
     if (occupation) {
       const todaysBiosFromDbCheck = await axios
         .get(
-          `https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&limit=1`
+          `https://api.pantheon.world/trend?date=eq.${year}-${month}-${day}&slug=neq.cleopatra&lang=eq.${lang}&limit=1`
         )
         .catch(
           e => (console.log("Pantheon trends read Error:", e), {data: []})
@@ -130,7 +130,7 @@ export async function GET(request) {
     ) {
       const todaysBiosFromDbResp2 = await axios
         .get(
-          `https://api.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&lang=eq.${lang}${occupationCut}`
+          `https://api.pantheon.world/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&slug=neq.cleopatra&lang=eq.${lang}${occupationCut}`
         )
         .catch(
           e => (console.log("Pantheon trends read Error:", e), {data: []})
@@ -146,7 +146,9 @@ export async function GET(request) {
     if (!topPageViewsJson.items || !Array.isArray(topPageViewsJson.items)) {
       return Response.json([]);
     }
-    const trendingArticles = topPageViewsJson.items[0].articles;
+    const trendingArticles = topPageViewsJson.items[0].articles.filter(
+      article => article.article !== "Cleopatra"
+    );
     const trendingArticlesLookup = {};
     const chunks = trendingArticles.length / 50;
     const trendingPeoplePantheonUrls = [];
