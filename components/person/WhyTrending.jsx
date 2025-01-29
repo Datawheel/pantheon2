@@ -1,9 +1,7 @@
 "use client";
 
 import {useState} from "react";
-import SectionLayout from "/components/common/SectionLayout";
 import Spinner from "/components/Spinner";
-import {Button, Spinner as BPSpinner} from "@blueprintjs/core";
 import {micromark} from "micromark";
 import "./WhyTrending.css";
 
@@ -66,33 +64,17 @@ export default function WhyTrending({person, isTrending, slug, title}) {
           disabled={loading}
           className="why-trending-button"
         >
-          {loading ? (
-            <>
-              Generating answer...
-              <BPSpinner
-                size={20}
-                style={{
-                  display: "inline-block",
-                  marginLeft: "8px",
-                  verticalAlign: "middle",
-                }}
-              />
-            </>
-          ) : (
-            <>
-              Find out why {person.name} is trending
-              <img
-                src="https://static.pantheon.world/icons/icon-spark-pen.png"
-                alt="Spark pen icon"
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  marginLeft: "8px",
-                  verticalAlign: "middle",
-                }}
-              />
-            </>
-          )}
+          Find out why {person.name} is trending
+          <img
+            src="https://static.pantheon.world/icons/icon-spark-pen.png"
+            alt="Spark pen icon"
+            style={{
+              width: "20px",
+              height: "20px",
+              marginLeft: "8px",
+              verticalAlign: "middle",
+            }}
+          />
         </button>
       )}
 
