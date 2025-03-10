@@ -356,7 +356,7 @@ export default function Navigation() {
                     </a>
                   </li>
                   <li>
-                    <a href="/app/trivia" className="item-link">
+                    <a href="/game/trivia" className="item-link">
                       Trivia
                     </a>
                   </li>

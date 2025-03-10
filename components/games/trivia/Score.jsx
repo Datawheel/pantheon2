@@ -46,7 +46,7 @@ const Score = ({answers, questions, gameIdShare}) => {
                 resultToShare +
                 correctAnswers.length +
                 "0%" +
-                "\nhttps://pantheon.world/app/trivia" +
+                "\nhttps://pantheon.world/game/trivia" +
                 "\n#pantheon #trivia" +
                 "\nWhat about you?"
             );
