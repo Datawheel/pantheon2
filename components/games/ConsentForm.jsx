@@ -54,7 +54,7 @@ export default function ConsentForm({
       await fetch("/api/createConsent", requestOptions);
 
       if (buttonType === "trivia") {
-        window.location.href = "/app/trivia";
+        window.location.href = "/game/trivia";
       }
     },
     [executeRecaptcha]

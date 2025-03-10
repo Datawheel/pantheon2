@@ -107,28 +107,26 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
   }
 
   // wikipedia excerpt
-  if (wikiExtract) {
-    if (wikiExtract.query) {
-      if (wikiExtract.query.pages) {
-        if (
-          wikiExtract.query.pages[`${person.id}`] &&
-          wikiExtract.query.pages[`${person.id}`].extract
-        ) {
-          wikiSentence = wikiExtract.query.pages[`${person.id}`].extract;
-          // take up until last full sentence
-          wikiSentence = wikiSentence.slice(0, wikiSentence.lastIndexOf(". "));
-          // remove line breaks
-          wikiSentence = wikiSentence.replace(/(\r\n|\n|\r)/gm, " ");
-          // remove all wiki markup (replace all instances of 2 or more `=` signs)
-          wikiSentence = wikiSentence.replace(/={2,}[\w\s]+={2,}/g, "");
-          // remove double spaces
-          wikiSentence = wikiSentence.replace(/  +/g, " ");
-          wikiSlug = wikiExtract.query.pages[`${person.id}`].title.replace(
-            " ",
-            "_"
-          );
-        }
+  if (wikiExtract && wikiExtract.query && wikiExtract.query.pages) {
+    const page = wikiExtract.query.pages[person.id];
+    if (page && page.extract) {
+      wikiSentence = page.extract;
+      if (wikiSentence.length > 1000) {
+        // take up until last full sentence
+        wikiSentence = wikiSentence.slice(0, wikiSentence.lastIndexOf(". "));
+        // remove line breaks
+        wikiSentence = wikiSentence.replace(/(\r\n|\n|\r)/gm, " ");
+        // remove all wiki markup (replace all instances of 2 or more `=` signs)
+        wikiSentence = wikiSentence.replace(/={2,}[\w\s]+={2,}/g, "");
+        // remove double spaces
+        wikiSentence = wikiSentence.replace(/  +/g, " ");
+        // add final period back in
+        wikiSentence = wikiSentence + ".";
       }
+      wikiSlug = wikiExtract.query.pages[`${person.id}`].title.replace(
+        " ",
+        "_"
+      );
     }
   }
   // return <div>another new intro here...</div>;
@@ -166,7 +164,7 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
           </h3>
           {wikiSentence ? (
             <p>
-              {wikiSentence}.{" "}
+              {wikiSentence}{" "}
               <a
                 href={`https://en.wikipedia.org/wiki/${wikiSlug}`}
                 target="_blank"
