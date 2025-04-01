@@ -145,15 +145,15 @@ const SearchComponent = () => {
                   <a href={`/profile/${result.profile_type}/${result.slug}`}>
                     {index === activeIndex && "→ "}
                     {result.name}
+                    <sub>
+                      {result.primary_meta ? (
+                        <span>{result.primary_meta}</span>
+                      ) : null}
+                      {result.secondary_meta ? (
+                        <span>{result.secondary_meta}</span>
+                      ) : null}
+                    </sub>
                   </a>
-                  <sub>
-                    {result.primary_meta ? (
-                      <span>{result.primary_meta}</span>
-                    ) : null}
-                    {result.secondary_meta ? (
-                      <span>{result.secondary_meta}</span>
-                    ) : null}
-                  </sub>
                 </li>
               ))}
             </ul>

@@ -110,20 +110,6 @@ export default async function Home() {
         </div>
       </div>
 
-      <div className="announcement-block">
-        <h2>New: Notable Deaths of 2024</h2>
-        <p>
-          As we reflect on the passing of time, we&apos;ve created a dedicated
-          page to honor and remember the notable figures we lost in 2024.
-          Explore our new{" "}
-          <Link href="/en/profile/deaths/2024">
-            In Memoriam: Notable Deaths of 2024
-          </Link>{" "}
-          page, where we list the biographies of influential celebrities,
-          artists, leaders, and cultural icons who passed away this year.
-        </p>
-      </div>
-
       <TrendingGrid
         title="Trending Profiles Today"
         allowLangChange={true}
@@ -159,6 +145,18 @@ export default async function Home() {
         initialTrendingAll={recentPassings}
         defaultLang="en"
       />
+
+      <div className="announcement-block">
+        <h2>Notable Deaths of 2025</h2>
+        <p>
+          Want to see the complete list of notable figures we've lost in 2025?
+          Visit our{" "}
+          <Link href="/en/profile/deaths/2025">Notable Deaths of 2025</Link>{" "}
+          page for a comprehensive collection of biographies featuring
+          influential personalities, including celebrities, artists, leaders,
+          and cultural icons who have passed away this year.
+        </p>
+      </div>
 
       <TrendingGrid
         title="Trending Singers Today"

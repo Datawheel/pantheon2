@@ -12,6 +12,6 @@ export function middleware(request) {
 
 export const config = {
   matcher: [
-    "/((?!api|static|_next|favicon.ico|robots.txt)(?!.*\\/[^\\/]*\\.[^\\/]{2,4}$).*)",
+    "/((?!api|static|_next|favicon.ico|robots.txt|ads.txt)(?!.*\\/[^\\/]*\\.[^\\/]{2,4}$).*)",
   ],
 };
