@@ -149,8 +149,8 @@ export default async function Home() {
       <div className="announcement-block">
         <h2>Notable Deaths of 2025</h2>
         <p>
-          Want to see the complete list of notable figures we've lost in 2025?
-          Visit our{" "}
+          Want to see the complete list of notable figures we&apos;ve lost in
+          2025? Visit our{" "}
           <Link href="/en/profile/deaths/2025">Notable Deaths of 2025</Link>{" "}
           page for a comprehensive collection of biographies featuring
           influential personalities, including celebrities, artists, leaders,
