@@ -24,11 +24,11 @@ const GoogleAdSense = ({
   }, []);
 
   return (
-    <div className="my-4">
+    <div className="my-4" style={{minHeight: "250px", minWidth: "300px"}}>
       <ins
         ref={adRef}
         className="adsbygoogle"
-        style={{display: "block"}}
+        style={{display: "block", minHeight: "250px", minWidth: "300px"}}
         data-ad-client={adClient}
         data-ad-slot={adSlot}
         data-ad-format={adFormat}
