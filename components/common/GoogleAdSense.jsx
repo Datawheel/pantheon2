@@ -24,7 +24,10 @@ const GoogleAdSense = ({
   }, []);
 
   return (
-    <div className="my-4" style={{minHeight: "250px", minWidth: "300px"}}>
+    <div
+      className="my-4"
+      style={{minHeight: "250px", minWidth: "300px", margin: "0 0 40px"}}
+    >
       <ins
         ref={adRef}
         className="adsbygoogle"
