@@ -4,6 +4,9 @@ import {toTitleCase} from "../../utils/vizHelpers";
 import {FORMATTERS} from "../../utils/consts";
 import "../../common/Section.css";
 import "./TopTen.css";
+import GoogleAdSense from "../../common/GoogleAdSense";
+import GoogleAdSenseScript from "../../common/GoogleAdSenseScript";
+import React from "react";
 
 const getSummary = (wikiSummaries, id) => {
   if (wikiSummaries && wikiSummaries.query) {
@@ -41,6 +44,7 @@ export default async function TopTen({country, occupation, people}) {
   const wikiPageSummaries = await getWikiPageSummaries(top10Ids);
   return (
     <section className="profile-section top-10">
+      <GoogleAdSenseScript />
       <h2>Top {people.length >= 10 ? 10 : people.length}</h2>
       <p>
         The following people are considered by Pantheon to be the{" "}
@@ -48,7 +52,7 @@ export default async function TopTen({country, occupation, people}) {
         {toTitleCase(plural(occupation.occupation))} of all time. This list of
         famous {country.demonym} {toTitleCase(plural(occupation.occupation))} is
         sorted by HPI (Historical Popularity Index), a metric that aggregates
-        information on a biography’s online popularity.
+        information on a biography&apos;s online popularity.
         {people.length >= 10 ? (
           <>
             {" "}
@@ -103,45 +107,53 @@ export default async function TopTen({country, occupation, people}) {
           </div>
         </div>
         {people.slice(1, 10).map((person, i) => (
-          <div className="top-person" key={person.id}>
-            <div className="top-person-img">
-              <PersonImage
-                fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                src={`/profile/people/${person.id}.jpg`}
-                alt={`Photo of ${person.name}`}
+          <React.Fragment key={person.id}>
+            <div className="top-person">
+              <div className="top-person-img">
+                <PersonImage
+                  fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                  src={`/profile/people/${person.id}.jpg`}
+                  alt={`Photo of ${person.name}`}
+                />
+              </div>
+              <div className="top-person-details">
+                <h3>
+                  {i + 2}.{" "}
+                  <a href={`/profile/person/${person.slug}`}>
+                    {person.name}{" "}
+                    {person.deathyear ? (
+                      <span>
+                        ({person.birthyear} - {person.deathyear})
+                      </span>
+                    ) : (
+                      <span>(b. {person.birthyear})</span>
+                    )}
+                  </a>
+                </h3>
+                <p>
+                  With an HPI of {FORMATTERS.decimal(person.hpi)}, {person.name}{" "}
+                  is the {FORMATTERS.ordinal(i + 2)} most famous{" "}
+                  {country.demonym} {toTitleCase(occupation.occupation)}. &nbsp;
+                  {person.gender
+                    ? person.gender === "M"
+                      ? "His"
+                      : "Her"
+                    : "Their"}{" "}
+                  biography has been translated into {person.l} different
+                  languages.
+                </p>
+                <p className="wiki-summary">
+                  {getSummary(wikiPageSummaries, person.id)}
+                </p>
+              </div>
+            </div>
+            {(i === 1 || i === 6) && (
+              <GoogleAdSense
+                adClient="ca-pub-1706971377772539"
+                adSlot="2596594359"
               />
-            </div>
-            <div className="top-person-details">
-              <h3>
-                {i + 2}.{" "}
-                <a href={`/profile/person/${person.slug}`}>
-                  {person.name}{" "}
-                  {person.deathyear ? (
-                    <span>
-                      ({person.birthyear} - {person.deathyear})
-                    </span>
-                  ) : (
-                    <span>(b. {person.birthyear})</span>
-                  )}
-                </a>
-              </h3>
-              <p>
-                With an HPI of {FORMATTERS.decimal(person.hpi)}, {person.name}{" "}
-                is the {FORMATTERS.ordinal(i + 2)} most famous {country.demonym}{" "}
-                {toTitleCase(occupation.occupation)}. &nbsp;
-                {person.gender
-                  ? person.gender === "M"
-                    ? "His"
-                    : "Her"
-                  : "Their"}{" "}
-                biography has been translated into {person.l} different
-                languages.
-              </p>
-              <p className="wiki-summary">
-                {getSummary(wikiPageSummaries, person.id)}
-              </p>
-            </div>
-          </div>
+            )}
+          </React.Fragment>
         ))}
       </div>
     </section>
