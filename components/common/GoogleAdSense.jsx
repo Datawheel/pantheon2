@@ -6,7 +6,8 @@ const GoogleAdSense = ({
   adClient,
   adSlot,
   adFormat = "fluid",
-  adLayoutKey = "-f1-1f+i5-pl-fa",
+  adLayoutKey = null,
+  style = {},
 }) => {
   const adRef = useRef(null);
 
@@ -24,20 +25,19 @@ const GoogleAdSense = ({
   }, []);
 
   return (
-    <div
-      className="my-4"
-      style={{minHeight: "250px", minWidth: "300px", margin: "0 0 40px"}}
-    >
-      <ins
-        ref={adRef}
-        className="adsbygoogle"
-        style={{display: "block", minHeight: "250px", minWidth: "300px"}}
-        data-ad-client={adClient}
-        data-ad-slot={adSlot}
-        data-ad-format={adFormat}
-        data-ad-layout-key={adLayoutKey}
-      />
-    </div>
+    <ins
+      ref={adRef}
+      className="adsbygoogle"
+      style={
+        style
+          ? style
+          : {display: "block", minHeight: "250px", minWidth: "300px"}
+      }
+      data-ad-client={adClient}
+      data-ad-slot={adSlot}
+      data-ad-format={adFormat}
+      {...(adLayoutKey ? {"data-ad-layout-key": adLayoutKey} : {})}
+    />
   );
 };
 

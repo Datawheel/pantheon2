@@ -149,11 +149,20 @@ export default async function TopTen({country, occupation, people}) {
               </div>
             </div>
             {(i === 1 || i === 6) && (
-              <GoogleAdSense
-                adClient="ca-pub-1706971377772539"
-                adLayoutKey="-fy-4i+hl-6o-xh"
-                adSlot={i === 1 ? "5507259348" : "3048020496"}
-              />
+              <div
+                className="my-4"
+                style={{
+                  minHeight: "250px",
+                  minWidth: "300px",
+                  margin: "0 0 40px",
+                }}
+              >
+                <GoogleAdSense
+                  adClient="ca-pub-1706971377772539"
+                  adLayoutKey="-fy-4i+hl-6o-xh"
+                  adSlot={i === 1 ? "5507259348" : "3048020496"}
+                />
+              </div>
             )}
           </React.Fragment>
         ))}
