@@ -17,6 +17,7 @@ import Movies from "/components/person/Movies";
 import WhyTrending from "/components/person/WhyTrending";
 import Footer from "/components/person/Footer";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import GoogleAdSense from "/components/common/GoogleAdSense";
 
 async function getPerson(id) {
   const res = await fetch(
@@ -281,10 +282,33 @@ export default async function Page({params: {id}}) {
           wikiExtract={wikiExtract}
         />
       </div>
-      {filteredSection.map((section, key) =>
+      {filteredSection.slice(0, 3).map((section, key) =>
         cloneElement(section.content, {
           key,
           id: key + 1,
+          slug: section.slug,
+          title: section.title,
+        })
+      )}
+
+      <section className="profile-section" style={{textAlign: "center"}}>
+        {/* Adsense Ad after the first section */}
+        <GoogleAdSense
+          adClient="ca-pub-1706971377772539"
+          adSlot="4694641051"
+          style={{
+            display: "inline-block",
+            width: "792px",
+            height: "120px",
+            margin: "0 0 40px",
+          }}
+        />
+      </section>
+
+      {filteredSection.slice(3).map((section, key) =>
+        cloneElement(section.content, {
+          key: key + 2, // +2 to keep unique keys
+          id: key + 2,
           slug: section.slug,
           title: section.title,
         })
