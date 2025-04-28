@@ -7,7 +7,7 @@ const GoogleAdSense = ({
   adSlot,
   adFormat = "fluid",
   adLayoutKey = null,
-  style = {},
+  style = null,
 }) => {
   const adRef = useRef(null);
 
