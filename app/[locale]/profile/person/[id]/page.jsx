@@ -18,7 +18,7 @@ import WhyTrending from "/components/person/WhyTrending";
 import Footer from "/components/person/Footer";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import GoogleAdSense from "/components/common/GoogleAdSense";
-
+import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
 async function getPerson(id) {
   const res = await fetch(
     `${BASE_API}/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`,
@@ -272,6 +272,7 @@ export default async function Page({params: {id}}) {
 
   return (
     <div className="person">
+      <GoogleAdSenseScript />
       <Header person={person} />
       <div className="about-section">
         <ProfileNav sections={filteredSection} />
