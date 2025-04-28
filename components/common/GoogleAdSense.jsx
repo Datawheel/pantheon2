@@ -8,6 +8,7 @@ const GoogleAdSense = ({
   adFormat = "fluid",
   adLayoutKey = null,
   style = null,
+  fullWidthResponsive = false,
 }) => {
   const adRef = useRef(null);
 
@@ -37,6 +38,7 @@ const GoogleAdSense = ({
       data-ad-slot={adSlot}
       data-ad-format={adFormat}
       {...(adLayoutKey ? {"data-ad-layout-key": adLayoutKey} : {})}
+      {...(fullWidthResponsive ? {"data-full-width-responsive": "true"} : {})}
     />
   );
 };

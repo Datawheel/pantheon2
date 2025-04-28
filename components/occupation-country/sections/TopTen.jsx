@@ -106,7 +106,19 @@ export default async function TopTen({country, occupation, people}) {
             </p>
           </div>
         </div>
-        <GoogleAdSense adClient="ca-pub-1706971377772539" adSlot="2596594359" />
+        <div
+          className="my-4"
+          style={{
+            minHeight: "250px",
+            minWidth: "300px",
+            margin: "0 0 40px",
+          }}
+        >
+          <GoogleAdSense
+            adClient="ca-pub-1706971377772539"
+            adSlot="2596594359"
+          />
+        </div>
         {people.slice(1, 10).map((person, i) => (
           <React.Fragment key={person.id}>
             <div className="top-person">

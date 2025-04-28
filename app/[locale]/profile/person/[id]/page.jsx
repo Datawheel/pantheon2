@@ -19,6 +19,7 @@ import Footer from "/components/person/Footer";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import GoogleAdSense from "/components/common/GoogleAdSense";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
+
 async function getPerson(id) {
   const res = await fetch(
     `${BASE_API}/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`,
@@ -297,9 +298,12 @@ export default async function Page({params: {id}}) {
         <GoogleAdSense
           adClient="ca-pub-1706971377772539"
           adSlot="4694641051"
+          adFormat="auto"
+          fullWidthResponsive={true}
           style={{
-            display: "inline-block",
-            width: "792px",
+            display: "block",
+            width: "100%",
+            maxWidth: "792px",
             height: "120px",
             margin: "0 0 40px",
           }}
