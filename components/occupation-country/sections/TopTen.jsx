@@ -82,10 +82,11 @@ export default async function TopTen({country, occupation, people}) {
                 {number1.name}{" "}
                 {number1.deathyear ? (
                   <span>
-                    ({number1.birthyear} - {number1.deathyear})
+                    ({FORMATTERS.year(number1.birthyear)} -{" "}
+                    {FORMATTERS.year(number1.deathyear)})
                   </span>
                 ) : (
-                  <span>(b. {number1.birthyear})</span>
+                  <span>(b. {FORMATTERS.year(number1.birthyear)})</span>
                 )}
               </a>
             </h3>
@@ -136,10 +137,11 @@ export default async function TopTen({country, occupation, people}) {
                     {person.name}{" "}
                     {person.deathyear ? (
                       <span>
-                        ({person.birthyear} - {person.deathyear})
+                        ({FORMATTERS.year(person.birthyear)} -{" "}
+                        {FORMATTERS.year(person.deathyear)})
                       </span>
                     ) : (
-                      <span>(b. {person.birthyear})</span>
+                      <span>(b. {FORMATTERS.year(person.birthyear)})</span>
                     )}
                   </a>
                 </h3>
