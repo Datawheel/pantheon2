@@ -15,11 +15,12 @@ import News from "/components/person/News";
 //  Twitter from "/components/person/tter";
 import Movies from "/components/person/Movies";
 import WhyTrending from "/components/person/WhyTrending";
+import Rankless from "/components/person/Rankless";
 import Footer from "/components/person/Footer";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import GoogleAdSense from "/components/common/GoogleAdSense";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
-
+import rankless from "/data/rankless.json";
 async function getPerson(id) {
   const res = await fetch(
     `${BASE_API}/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`,
@@ -252,6 +253,14 @@ export default async function Page({params: {id}}) {
       title: "Trending",
       slug: "why_trending",
       content: <WhyTrending person={person} isTrending={isTrending} />,
+    });
+  }
+
+  if (rankless[person.id]) {
+    sections.unshift({
+      title: "Rankless",
+      slug: "rankless",
+      content: <Rankless person={person} ranklessUrl={rankless[person.id]} />,
     });
   }
 
