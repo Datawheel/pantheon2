@@ -4,7 +4,13 @@ import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 import Image from "next/image";
 
-const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
+const Intro = ({
+  person,
+  personRanks,
+  totalPageViews,
+  wikiExtract,
+  ranklessUrl,
+}) => {
   const {
     occupation_rank: occupationRank,
     occupation_rank_prev: occupationRankPrev,
@@ -270,6 +276,16 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
               ) : (
                 ""
               )}
+              {ranklessUrl ? (
+                <span>
+                  {" "}
+                  Learn more about{" "}
+                  <a href={ranklessUrl}>
+                    {person.name}&apos;s academic impact at Rankless
+                  </a>
+                  .
+                </span>
+              ) : null}
             </>
           </p>
           {person.famous_for ? <p>{person.famous_for}</p> : null}
@@ -279,15 +295,4 @@ const Intro = ({person, personRanks, totalPageViews, wikiExtract}) => {
   );
 };
 
-// Intro.propTypes = {
-//   person: PropTypes.object
-// };
-//
-// function mapStateToProps(state) {
-//   return {
-//     person: state.personProfile.person
-//   };
-// }
-
-// export default connect(mapStateToProps)(Intro);
 export default Intro;
