@@ -1,0 +1,42 @@
+@import "../../styles/mixins.css";
+
+.rankless-container {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 1024px;
+  padding: 18px 0;
+}
+
+.rankless-button {
+  background-color: rgba(75, 88, 180, .9);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  display: inline-block;
+}
+
+.rankless-button svg {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.rankless-button:hover {
+  background-color: rgba(75, 88, 180, 1);
+  text-decoration: none;
+  color: white;
+}
+
+.rankless-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+
