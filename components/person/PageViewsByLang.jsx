@@ -155,27 +155,29 @@ export default async function PageViewsByLang({person, slug, title}) {
     colorIndex++;
   });
 
-  const series = Object.values(seriesMap).map(({name, family, values}) => ({
-    name: family,
-    type: "line",
-    stack: "views",
-    symbol: "none",
-    areaStyle: {},
-    emphasis: {focus: "series"},
-    itemStyle: {
-      color: familyColors[family],
-    },
-    lineStyle: {
-      color: familyColors[family],
-    },
-    areaStyle: {
-      color: familyColors[family],
-    },
-    data: allDates.map(date => ({
-      value: values[date] || 0,
-      langLabel: name, // <- store original language name
-    })),
-  }));
+  const series = Object.values(seriesMap)
+    .map(({name, family, values}) => ({
+      name: family,
+      type: "line",
+      stack: "views",
+      symbol: "none",
+      areaStyle: {},
+      emphasis: {focus: "series"},
+      itemStyle: {
+        color: familyColors[family],
+      },
+      lineStyle: {
+        color: familyColors[family],
+      },
+      areaStyle: {
+        color: familyColors[family],
+      },
+      data: allDates.map(date => ({
+        value: values[date] || 0,
+        langLabel: name, // <- store original language name
+      })),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   // First, calculate the maximum point
   const totalsByDate = allDates.map((date, dateIndex) => {
