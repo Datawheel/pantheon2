@@ -58,31 +58,6 @@ async function getPersonRanks(id) {
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
-async function getWikiPageViews(personName) {
-  const wikiSlug = personName.replace(/ /g, "_");
-  const dateobj = new Date();
-  const year = dateobj.getFullYear();
-  const month = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  const apiUrl = `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`;
-  try {
-    const res = await fetch(apiUrl, {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT}, // Cache for 7 days
-    });
-    // Check if the response is ok (status in the range 200-299)
-    if (!res.ok)
-      throw new Error("Network response for getWikiPageViews failed.");
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Failed to fetch wiki page views (person page):", error);
-    // Return a default object with items as an empty array
-    return {items: []};
-  }
-}
-
 async function getWikiExtract(personId) {
   const res = await fetch(
     `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=${personId}&format=json&exlimit=1&origin=*`,
@@ -164,15 +139,11 @@ export default async function Page({params: {id}}) {
     return notFound();
   }
 
-  const wikiPageViewsData = getWikiPageViews(person.name);
   const wikiExtractData = getWikiExtract(person.id);
   // const newsArticlesData = getNewsArticles(person.id);
   // const tweetsData = getTweets(person.id);
 
-  const [wikiPageViews, wikiExtract] = await Promise.all([
-    wikiPageViewsData,
-    wikiExtractData,
-  ]);
+  const [wikiExtract] = await Promise.all([wikiExtractData]);
 
   let movies = [];
   if (["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)) {
@@ -184,15 +155,11 @@ export default async function Page({params: {id}}) {
     books = await getBooks(person.id);
   }
 
-  const totalPageViews = wikiPageViews?.items
-    ? wikiPageViews?.items.reduce((sum, d) => sum + d.views, 0)
-    : 0;
-
   const sections = [
     {
       title: "Memorability Metrics",
       slug: "metrics",
-      content: <MemMetrics pageViews={wikiPageViews} person={person} />,
+      content: <MemMetrics person={person} />,
     },
     // {
     //   title: "In the news",
@@ -281,7 +248,6 @@ export default async function Page({params: {id}}) {
         <Intro
           person={person}
           personRanks={personRanks}
-          totalPageViews={totalPageViews}
           wikiExtract={wikiExtract}
           ranklessUrl={rankless[person.id]}
         />
