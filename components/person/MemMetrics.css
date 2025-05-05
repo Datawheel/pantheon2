@@ -1,10 +1,10 @@
 @import "../../styles/mixins.css";
 
 .metrics-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: wrap;
+  display: flex;           /* establish flex formatting context */
+  width: 100%;             /* full width of its parent */
+  /* optional: add a gap between columns */
+  /* gap: 1rem; */
 
   @media (max-width: 970px) {
     flex-direction: column;
@@ -116,4 +116,54 @@ iframe.yasiv-youtube {
     line-height: 1.2;
     margin-top: 0.5em;
   }
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.stat-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+}
+.stat-title {
+  width: 110px;
+  flex: 0 0 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+
+  & h4 {
+    @mixin calloutText;
+    font-size: 26px;
+    margin: 0 0 4px 0;
+  }
+
+  & p.stat-title-text {
+    @mixin smallCaps;
+    min-width: auto;
+    font-size: 16px;
+    line-height: 1.15 !important;
+    margin: 0 0 2px 0;
+    width: 100%;
+  }
+
+  & p.stat-title-desc {
+    font-size: 10px;
+    line-height: 1.15 !important;
+    width: 100%;
+  }
+  
+}
+
+.stat-bullet {
+  flex: 1 1 0;
+  align-self: stretch;
+  width: 100%;
+  height: auto;
 }

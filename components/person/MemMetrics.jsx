@@ -1,34 +1,61 @@
+"use client";
+
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import MemMetricsAreaPlot from "./MemMetricsAreaPlot";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
+import {useEffect, useState} from "react";
+import {BASE_API} from "@/app/constants";
+import MemMetricsBullet from "./MemMetricsBullet";
+export default function MemMetrics({person, slug, title}) {
+  const [loading, setLoading] = useState(true);
+  const [wikiPageViewsPast30Days, setWikiPageViewsPast30Days] = useState([]);
+  const [occupationData, setOccupationData] = useState(null);
+  const [totalViews, setTotalViews] = useState(0);
 
-async function getWikiPageViewsPast30Days(personId) {
-  const res = await fetch(
-    `https://pantheon.world/api/wikiTrendDetails?pid=${personId}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-    }
-  );
-  const contentType = res.headers.get("content-type");
-  if (contentType && contentType.indexOf("application/json") !== -1) {
-    return res.json();
-  } else {
-    const text = await res.text();
-    throw new Error(`Unexpected response format: ${text}`);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Calculate date one year ago
+        const oneYearAgo = new Date();
+        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+        const formattedDate = oneYearAgo.toISOString().split("T")[0];
+
+        // Make API calls concurrently
+        const [occupationResponse, totalViewsResponse] = await Promise.all([
+          fetch(
+            `${BASE_API}/pageviews_occupation?occupation=eq.${person.occupation?.id}`
+          ),
+          // fetch(
+          //   `${BASE_API}/pageviews?select=total_views:views.sum()&wp_id=eq.${person.id}&date=gte.${formattedDate}`
+          // ),
+          fetch(`${BASE_API}/pageviews_rolling_12mo?wp_id=eq.${person.id}`),
+        ]);
+
+        const [occupationData, totalViewsData] = await Promise.all([
+          occupationResponse.json(),
+          totalViewsResponse.json(),
+        ]);
+
+        setOccupationData(occupationData[0] || null);
+        setTotalViews(totalViewsData[0]?.total_views || 0);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [person.id, person.occupation?.id]);
+
+  if (loading) {
+    return (
+      <SectionLayout slug={slug} title={title}>
+        <div>Loading...</div>
+      </SectionLayout>
+    );
   }
-}
-
-export default async function MemMetrics({pageViews, person, slug, title}) {
-  let wikiPageViewsPast30Days = [];
-  // try {
-  //   wikiPageViewsPast30Days = await getWikiPageViewsPast30Days(person.id);
-  // } catch (error) {
-  //   console.error("Failed to fetch wiki page views!!");
-  // }
 
   const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
   const domainColor =
@@ -43,12 +70,6 @@ export default async function MemMetrics({pageViews, person, slug, title}) {
     index: i,
     color: domainColor,
   }));
-  const totalPageviews = pageViews?.items
-    ? pageViews?.items
-        ?.filter(pv => pv.views)
-        .map(pv => pv.views)
-        .reduce((total, newVal) => total + newVal, 0)
-    : 0;
 
   return (
     <SectionLayout slug={slug} title={title}>
@@ -60,7 +81,6 @@ export default async function MemMetrics({pageViews, person, slug, title}) {
               max-width="560"
               width="100%"
               height="100%"
-              frameBorder="0"
               allowFullScreen
             />
           ) : (
@@ -74,11 +94,49 @@ export default async function MemMetrics({pageViews, person, slug, title}) {
             </button>
           )}
         </div>
-        {isTrending ? <MemMetricsAreaPlot trendData={trendData} /> : null}
-        <ul className="metrics-list">
+        <div className="stats-list">
+          {totalViews > 0 && occupationData ? (
+            <div className="stat-container">
+              <div className="stat-title">
+                <h4>{FORMATTERS.bigNum(totalViews || 0)}</h4>
+                <p className="stat-title-text">Page Views</p>
+                <p className="stat-title-desc">Past 12 months</p>
+              </div>
+              <div className="stat-bullet">
+                <MemMetricsBullet
+                  value={totalViews}
+                  compareValue={occupationData.pageviews_avg}
+                  compareValueTitle={person.occupation?.id}
+                />
+              </div>
+            </div>
+          ) : null}
+          {totalViews > 0 && occupationData ? (
+            <div className="stat-container">
+              <div className="stat-title">
+                <h4>{FORMATTERS.decimal(person.hpi)}</h4>
+                <p className="stat-title-text">HPI</p>
+                <p className="stat-title-desc">Historical Popularity Index</p>
+              </div>
+              <div className="stat-bullet">
+                <MemMetricsBullet
+                  value={person.hpi}
+                  compareValue={person.occupation?.hpi_avg || 0}
+                  compareValueTitle={person.occupation?.id}
+                />
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        {/* <ul className="metrics-list">
           <li className="metric">
-            <h4>{FORMATTERS.bigNum(totalPageviews)}</h4>
-            <p>Page Views (PV)</p>
+            <h4>{FORMATTERS.bigNum(totalViews || 0)}</h4>
+            <p>Page Views (PV) - past year</p>
+          </li>
+          <li className="metric">
+            <h4>{FORMATTERS.bigNum(occupationData || 0)}</h4>
+            <p>OccupationPage Views (PV) - past year</p>
           </li>
           <li className="metric">
             <h4>{FORMATTERS.decimal(person.hpi)}</h4>
@@ -96,13 +154,7 @@ export default async function MemMetrics({pageViews, person, slug, title}) {
             <h4>{FORMATTERS.decimal(person.coefficient_of_variation)}</h4>
             <p>Coefficient of Variation (CV)</p>
           </li>
-          {/* {isTrending
-            ? <li className="metric">
-              <h4>{FORMATTERS.decimal(slope)}</h4>
-              <p>30 day pageview slope</p>
-            </li>
-            : null} */}
-        </ul>
+        </ul> */}
       </div>
     </SectionLayout>
   );

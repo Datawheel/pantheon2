@@ -4,13 +4,7 @@ import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 import Image from "next/image";
 
-const Intro = ({
-  person,
-  personRanks,
-  totalPageViews,
-  wikiExtract,
-  ranklessUrl,
-}) => {
+const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
   const {
     occupation_rank: occupationRank,
     occupation_rank_prev: occupationRankPrev,
@@ -200,10 +194,10 @@ const Intro = ({
             </p>
           )}
           <p>
-            <>
+            {/* <>
               Since 2007, the English Wikipedia page of {person.name} has
               received more than {FORMATTERS.commas(totalPageViews)} page views.{" "}
-            </>
+            </> */}
             <>
               {person.gender
                 ? person.gender === "M"
