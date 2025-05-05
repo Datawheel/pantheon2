@@ -1,12 +1,12 @@
 "use client";
 
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
-import MemMetricsAreaPlot from "./MemMetricsAreaPlot";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 import {useEffect, useState} from "react";
 import {BASE_API} from "@/app/constants";
 import MemMetricsBullet from "./MemMetricsBullet";
+
 export default function MemMetrics({person, slug, title}) {
   const [loading, setLoading] = useState(true);
   const [wikiPageViewsPast30Days, setWikiPageViewsPast30Days] = useState([]);
@@ -26,9 +26,6 @@ export default function MemMetrics({person, slug, title}) {
           fetch(
             `${BASE_API}/pageviews_occupation?occupation=eq.${person.occupation?.id}`
           ),
-          // fetch(
-          //   `${BASE_API}/pageviews?select=total_views:views.sum()&wp_id=eq.${person.id}&date=gte.${formattedDate}`
-          // ),
           fetch(`${BASE_API}/pageviews_rolling_12mo?wp_id=eq.${person.id}`),
         ]);
 
