@@ -2,6 +2,7 @@
 
 import {useEffect, useRef} from "react";
 import * as echarts from "echarts";
+import {FORMATTERS} from "/components/utils/consts";
 
 export default function EChart({baseOption, style}) {
   const chartRef = useRef(null);
@@ -48,6 +49,13 @@ export default function EChart({baseOption, style}) {
         symbol: "none",
       }));
     }
+
+    option.media = [
+      {
+        query: {maxWidth: 600},
+        option: {yAxis: {axisLabel: {formatter: v => FORMATTERS.bigNum(v)}}},
+      },
+    ];
 
     chart.setOption(option);
 

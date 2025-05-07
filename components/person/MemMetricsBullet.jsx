@@ -1,6 +1,7 @@
 import React, {useRef, useEffect} from "react";
 import * as echarts from "echarts";
 import {toTitleCase} from "/components/utils/vizHelpers";
+import {FORMATTERS} from "/components/utils/consts";
 
 const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
   const chartRef = useRef(null);
@@ -114,6 +115,20 @@ const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
           },
           z: 2,
           markLine,
+        },
+      ],
+      media: [
+        {
+          query: {
+            maxWidth: 600,
+          },
+          option: {
+            xAxis: {
+              axisLabel: {
+                formatter: v => FORMATTERS.bigNum(v),
+              },
+            },
+          },
         },
       ],
     };
