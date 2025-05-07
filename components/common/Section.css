@@ -13,6 +13,11 @@
     margin: 60px 7.2vw;
   }
 
+  /* on mobile: keep the 60px top/bottom but drop left/right margins */
+  @media (max-width: 550px) {
+    margin: 60px 8px;
+  }
+
   & + .profile-section {
     margin-top: 90px;
   }

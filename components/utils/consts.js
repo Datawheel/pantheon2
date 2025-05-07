@@ -72,7 +72,7 @@ export const FORMATTERS = {
   commas: format(","),
   decimal: format(",.2f"),
   share: format(",.2%"),
-  bigNum: format(".2s"),
+  bigNum: n => (n === 0 ? "0" : format(".2s")(n)),
   shareWhole: format(",.0%"),
   date: timeFormat("%B %d, %Y"),
   dateShort: timeFormat("%m/%d/%y"),
