@@ -21,6 +21,9 @@ export default function EChart({baseOption, style}) {
       //     return `<pre>${JSON.stringify(params, null, 2)}</pre>`;
       //   },
       formatter: function (params) {
+        // Count number of non-zero values at this x-axis point
+        const numLangs = params.filter(item => item.data.value > 0).length;
+
         const sorted = [...params]
           .sort((a, b) => b.data.value - a.data.value)
           .slice(0, 10);
@@ -38,7 +41,15 @@ export default function EChart({baseOption, style}) {
         });
 
         const title = sorted[0]?.axisValueLabel || "";
-        return `<strong>${title}</strong><br/>` + lines.join("");
+        return (
+          `<strong>${title}</strong><br/>` +
+          lines.join("") +
+          (numLangs > 10
+            ? `<span style="font-size:10px;color:gray;">(and ${
+                numLangs - 10
+              } others)</span>`
+            : "")
+        );
       },
     };
 
@@ -47,6 +58,18 @@ export default function EChart({baseOption, style}) {
       option.series = option.series.map(s => ({
         ...s,
         symbol: "none",
+      }));
+    }
+
+    // Ensure dates are formatted
+    if (option.xAxis) {
+      // Convert single xAxis object to array if needed
+      option.xAxis = Array.isArray(option.xAxis)
+        ? option.xAxis
+        : [option.xAxis];
+      option.xAxis = option.xAxis.map(x => ({
+        ...x,
+        axisLabel: {formatter: value => value},
       }));
     }
 

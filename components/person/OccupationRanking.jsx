@@ -10,6 +10,7 @@ import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
 import {toTitleCase} from "../utils/vizHelpers";
 import SectionLayout from "../common/SectionLayout";
+import {BASE_API} from "@/app/constants";
 
 async function getOccupationRankings(
   occupationId,
@@ -17,7 +18,7 @@ async function getOccupationRankings(
   occupationRankHigh
 ) {
   const res = await fetch(
-    `https://api.pantheon.world/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`
+    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`
   );
   return res.json();
 }

@@ -95,19 +95,36 @@ export default function PageViewsByLang({person, slug, title}) {
   }
 
   // Group by date and language
-  const familyColors = {};
-  const colorPalette = [
-    "#5470C6",
-    "#91CC75",
-    "#EE6666",
-    "#73C0DE",
-    "#FAC858",
-    "#3BA272",
-    "#FC8452",
-    "#9A60B4",
-    "#EA7CCC",
+  [
+    "#5470c6",
+    "#91cc75",
+    "#fac858",
+    "#ee6666",
+    "#73c0de",
+    "#3ba272",
+    "#fc8452",
+    "#9a60b4",
+    "#ea7ccc",
   ];
-  let colorIndex = 0;
+  const familyColors = {
+    "Indo-European": "#5470c6", // Indo-European
+    "Sino-Tibetan": "#91cc75", // Sino-Tibetan
+    "Afro-Asiatic": "#fac858", // Afro-Asiatic
+    "Altaic": "#ee6666", // Altaic
+    "Dravidian": "#73c0de", // Dravidian
+    "Niger-Congo": "#3ba272", // Niger-Congo
+    "Austro-Asiatic": "#fc8452", // Austro-Asiatic
+    "Tai-Kadai": "#9a60b4", // Tai-Kadai
+    "Austronesian": "#ea7ccc", // Austronesian
+    "Uralic": "#5470c6",
+    "Caucasian": "#91cc75",
+    "Niger-Kordofanian": "#fac858",
+    "Creoles and pidgins": "#ee6666",
+    "Amerindian": "#9a60b4",
+    "Tai": "#3ba272",
+    "Turkic": "#fc8452",
+    "": "#ccc",
+  };
 
   const allDatesSet = new Set();
   const seriesMap = {};
@@ -143,12 +160,6 @@ export default function PageViewsByLang({person, slug, title}) {
     return dateA - dateB;
   });
 
-  // Assign each family a color
-  familyLegendSet.forEach(family => {
-    familyColors[family] = colorPalette[colorIndex % colorPalette.length];
-    colorIndex++;
-  });
-
   const series = Object.values(seriesMap)
     .map(({name, family, values}) => ({
       name: family,
@@ -158,13 +169,13 @@ export default function PageViewsByLang({person, slug, title}) {
       areaStyle: {},
       emphasis: {focus: "series"},
       itemStyle: {
-        color: familyColors[family],
+        color: familyColors[family] || familyColors[""],
       },
       lineStyle: {
-        color: familyColors[family],
+        color: familyColors[family] || familyColors[""],
       },
       areaStyle: {
-        color: familyColors[family],
+        color: familyColors[family] || familyColors[""],
       },
       data: allDates.map(date => ({
         value: values[date] || 0,
