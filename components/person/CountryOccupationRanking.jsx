@@ -56,6 +56,15 @@ export default async function CountryRanking({
     bplaceCountryOccupationRankHigh
   );
   const me = birthCountryRankings.find(rank => rank.slug === person.slug);
+  if (!me) {
+    return (
+      <SectionLayout slug={slug} title={title}>
+        <p>
+          {person.name} is not ranked in {person.bplace_country.country}
+        </p>
+      </SectionLayout>
+    );
+  }
   const betterRankedBirthPeers = birthCountryRankings.filter(
     p =>
       p.bplace_country_occupation_rank_unique <
