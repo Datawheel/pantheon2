@@ -145,7 +145,6 @@ export default async function Page() {
     "sparta",
     "oakland-california",
     "valencia",
-    "lvivhabsburg-empire",
     "vilnius",
     "basel",
     "karlsruhe",

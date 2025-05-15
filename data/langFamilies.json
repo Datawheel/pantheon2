@@ -423,13 +423,13 @@
     "primary_family_name": ""
   },
   "cdo": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "zhx",
+    "family_name": "Sinitic",
+    "lang_code3": "cdo",
     "language": "Min Dong",
     "language_local": "M\u00ecng-d\u0115\u0324ng-ng\u1e73\u0304",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "sit",
+    "primary_family_name": "Sino-Tibetan"
   },
   "ce": {
     "family_code": "cau",
@@ -468,13 +468,13 @@
     "primary_family_name": ""
   },
   "chr": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "xnd",
+    "family_name": "Na-Dene",
+    "lang_code3": "chr",
     "language": "Cherokee",
     "language_local": "\u13e3\u13b3\u13a9",
     "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_name": "Amerindian"
   },
   "chy": {
     "family_code": "",
@@ -801,13 +801,13 @@
     "primary_family_name": "Indo-European"
   },
   "frp": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "itc",
+    "family_name": "Italic",
+    "lang_code3": "frp",
     "language": "Franco-Proven\u00e7al",
     "language_local": "arpetan",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "ine",
+    "primary_family_name": "Indo-European"
   },
   "frr": {
     "family_code": "gem",
@@ -1413,13 +1413,13 @@
     "primary_family_name": "Indo-European"
   },
   "ksh": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "gem",
+    "family_name": "Germanic",
+    "lang_code3": "ksh",
     "language": "Ripuarian",
     "language_local": "Ripoarisch",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "ine",
+    "primary_family_name": "Indo-European"
   },
   "ku": {
     "family_code": "ira",
@@ -1773,13 +1773,13 @@
     "primary_family_name": "Sino-Tibetan"
   },
   "myv": {
-    "family_code": "",
-    "family_name": "",
-    "lang_code3": "",
+    "family_code": "urj",
+    "family_name": "Uralic",
+    "lang_code3": "myv",
     "language": "Erzya",
     "language_local": "\u044d\u0440\u0437\u044f\u043d\u044c",
-    "primary_family_code": "",
-    "primary_family_name": ""
+    "primary_family_code": "urj",
+    "primary_family_name": "Uralic"
   },
   "mzn": {
     "family_code": "ira",

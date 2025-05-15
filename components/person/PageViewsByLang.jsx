@@ -155,9 +155,26 @@ export default function PageViewsByLang({person, slug, title}) {
   });
 
   const allDates = Array.from(allDatesSet).sort((a, b) => {
-    const dateA = new Date(a);
-    const dateB = new Date(b);
-    return dateA - dateB;
+    const [monthA, yearA] = a.split(" ");
+    const [monthB, yearB] = b.split(" ");
+    const months = {
+      "Jan": 0,
+      "Feb": 1,
+      "Mar": 2,
+      "Apr": 3,
+      "May": 4,
+      "Jun": 5,
+      "Jul": 6,
+      "Aug": 7,
+      "Sep": 8,
+      "Oct": 9,
+      "Nov": 10,
+      "Dec": 11,
+    };
+    if (yearA !== yearB) {
+      return parseInt(yearA) - parseInt(yearB);
+    }
+    return months[monthA] - months[monthB];
   });
 
   const series = Object.values(seriesMap)
