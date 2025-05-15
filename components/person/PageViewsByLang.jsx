@@ -27,6 +27,9 @@ const formatTimeSeriesData = pageviewsData => {
 
   Object.entries(langGroups).forEach(([lang, items]) => {
     numLangs++;
+    // if (!langFamilies[lang]) {
+    //   console.log(lang);
+    // }
     const langFamily = langFamilies[lang] || {
       family_code: "",
       family_name: "",
@@ -118,11 +121,14 @@ export default function PageViewsByLang({person, slug, title}) {
     "Austronesian": "#ea7ccc", // Austronesian
     "Uralic": "#5470c6",
     "Caucasian": "#91cc75",
-    "Niger-Kordofanian": "#fac858",
-    "Creoles and pidgins": "#ee6666",
+    "Niger-Kordofanian": "#ee6666",
+    "Creoles and pidgins": "#fac858",
     "Amerindian": "#9a60b4",
     "Tai": "#3ba272",
     "Turkic": "#fc8452",
+    "Malayo-Polynesian": "#ea7ccc",
+    "Italic": "#5470c6",
+    "Algic": "#91cc75",
     "": "#ccc",
   };
 
