@@ -103,7 +103,7 @@ const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
           data: [value],
           barWidth: 20,
           itemStyle: {
-            color: "#5470C6",
+            color: "#B12D11",
           },
           label: {
             show: true,

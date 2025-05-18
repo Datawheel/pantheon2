@@ -2,7 +2,6 @@
 
 import langFamilies from "/data/langFamilies.json";
 import PageViewsByLangSummary from "/components/person/PageViewsByLangSummary";
-// import PageViewsByLangAreaPlot from "/components/person/PageViewByLangAreaPlot";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 import {useEffect, useState} from "react";
@@ -10,7 +9,10 @@ import dynamic from "next/dynamic";
 import {BASE_API} from "@/app/constants";
 
 // Load EChart only on the client
-const EChart = dynamic(() => import("/components/EChart"), {ssr: false});
+const PageViewsByLangAreaPlot = dynamic(
+  () => import("/components/person/PageViewByLangAreaPlot"),
+  {ssr: false}
+);
 
 const formatTimeSeriesData = pageviewsData => {
   let langsTs = [];
@@ -98,38 +100,34 @@ export default function PageViewsByLang({person, slug, title}) {
   }
 
   // Group by date and language
-  [
-    "#5470c6",
-    "#91cc75",
-    "#fac858",
-    "#ee6666",
-    "#73c0de",
-    "#3ba272",
-    "#fc8452",
-    "#9a60b4",
-    "#ea7ccc",
-  ];
+  // const langFamColors = {
+  //   "afa": "#cdc84c",
+  //   "cau": "#0E5E5B",
+  //   "": "#67AF8C",
+  //   "ine": "#B12D11",
+  //   "nic": "#732945",
+  //   "tut": "#4C5ED7",
+  //   "crp": "#4F680A",
+  //   "sit": "#D28629",
+  //   "map": "#260348",
+  //   "urj": "#160B5B",
+  //   "dra": "#162A6D",
+  //   "tai": "#255A7F",
+  // };
   const familyColors = {
-    "Indo-European": "#5470c6", // Indo-European
-    "Sino-Tibetan": "#91cc75", // Sino-Tibetan
-    "Afro-Asiatic": "#fac858", // Afro-Asiatic
-    "Altaic": "#ee6666", // Altaic
-    "Dravidian": "#73c0de", // Dravidian
-    "Niger-Congo": "#3ba272", // Niger-Congo
-    "Austro-Asiatic": "#fc8452", // Austro-Asiatic
-    "Tai-Kadai": "#9a60b4", // Tai-Kadai
-    "Austronesian": "#ea7ccc", // Austronesian
-    "Uralic": "#5470c6",
-    "Caucasian": "#91cc75",
-    "Niger-Kordofanian": "#ee6666",
-    "Creoles and pidgins": "#fac858",
-    "Amerindian": "#9a60b4",
-    "Tai": "#3ba272",
-    "Turkic": "#fc8452",
-    "Malayo-Polynesian": "#ea7ccc",
-    "Italic": "#5470c6",
-    "Algic": "#91cc75",
-    "": "#ccc",
+    "Indo-European": "#B12D11", // Indo-European
+    "Sino-Tibetan": "#D28629", // Sino-Tibetan
+    "Afro-Asiatic": "#cdc84c", // Afro-Asiatic
+    "Altaic": "#4C5ED7", // Altaic
+    "Dravidian": "#162A6D", // Dravidian
+    "Austronesian": "#260348", // Austronesian
+    "Uralic": "#160B5B",
+    "Caucasian": "#0E5E5B",
+    "Niger-Kordofanian": "#732945",
+    "Creoles and pidgins": "#4F680A",
+    "Amerindian": "#67AF8C",
+    "Tai": "#255A7F",
+    "": "#67AF8C",
   };
 
   const allDatesSet = new Set();
@@ -291,7 +289,7 @@ export default function PageViewsByLang({person, slug, title}) {
           timeSeriesData={timeSeriesData}
           numLangs={numLangs}
         /> */}
-        <EChart baseOption={option} />
+        <PageViewsByLangAreaPlot baseOption={option} />
       </div>
     </SectionLayout>
   );

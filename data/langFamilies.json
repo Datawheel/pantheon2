@@ -2300,8 +2300,8 @@
     "lang_code3": "roa-rup",
     "language": "Aromanian",
     "language_local": "arm\u00e3neashti",
-    "primary_family_code": "itc",
-    "primary_family_name": "Italic"
+    "primary_family_code": "ine",
+    "primary_family_name": "Indo-European"
   },
   "roa-tara": {
     "family_code": "itc",
@@ -2750,8 +2750,8 @@
     "lang_code3": "tpi",
     "language": "Tok Pisin",
     "language_local": "Tok Pisin",
-    "primary_family_code": "poz",
-    "primary_family_name": "Malayo-Polynesian"
+    "primary_family_code": "map",
+    "primary_family_name": "Austronesian"
   },
   "tr": {
     "family_code": "trk",
@@ -2831,8 +2831,8 @@
     "lang_code3": "tyv",
     "language": "Tuvan",
     "language_local": "\u0442\u044b\u0432\u0430 \u0434\u044b\u043b",
-    "primary_family_code": "tur",
-    "primary_family_name": "Turkic"
+    "primary_family_code": "tut",
+    "primary_family_name": "Altaic"
   },
   "udm": {
     "family_code": "tur",
@@ -2840,8 +2840,8 @@
     "lang_code3": "udm",
     "language": "Udmurt",
     "language_local": "\u0443\u0434\u043c\u0443\u0440\u0442",
-    "primary_family_code": "tur",
-    "primary_family_name": "Turkic"
+    "primary_family_code": "tut",
+    "primary_family_name": "Altaic"
   },
   "ug": {
     "family_code": "trk",
