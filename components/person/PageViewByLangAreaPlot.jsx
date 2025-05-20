@@ -1,21 +1,3 @@
-// "use client";
-// import {StackedArea} from "d3plus-react";
-// import {FORMATTERS} from "../utils/consts";
-
-// const langFamColors = {
-//   "afa": "#cdc84c",
-//   "cau": "#0E5E5B",
-//   "": "#67AF8C",
-//   "ine": "#B12D11",
-//   "nic": "#732945",
-//   "tut": "#4C5ED7",
-//   "crp": "#4F680A",
-//   "sit": "#D28629",
-//   "map": "#260348",
-//   "urj": "#160B5B",
-//   "dra": "#162A6D",
-//   "tai": "#255A7F",
-// };
 "use client";
 
 import {useEffect, useRef} from "react";
