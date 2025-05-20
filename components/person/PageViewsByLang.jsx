@@ -99,27 +99,12 @@ export default function PageViewsByLang({person, slug, title}) {
     );
   }
 
-  // Group by date and language
-  // const langFamColors = {
-  //   "afa": "#cdc84c",
-  //   "cau": "#0E5E5B",
-  //   "": "#67AF8C",
-  //   "ine": "#B12D11",
-  //   "nic": "#732945",
-  //   "tut": "#4C5ED7",
-  //   "crp": "#4F680A",
-  //   "sit": "#D28629",
-  //   "map": "#260348",
-  //   "urj": "#160B5B",
-  //   "dra": "#162A6D",
-  //   "tai": "#255A7F",
-  // };
   const familyColors = {
-    "Indo-European": "#B12D11", // Indo-European
-    "Sino-Tibetan": "#D28629", // Sino-Tibetan
-    "Afro-Asiatic": "#cdc84c", // Afro-Asiatic
-    "Altaic": "#4C5ED7", // Altaic
-    "Dravidian": "#162A6D", // Dravidian
+    "Indo-European": "#B12D11", // red
+    "Sino-Tibetan": "#D28629", // orange
+    "Afro-Asiatic": "#cdc84c", // yellow
+    "Altaic": "#4C5ED7", // blue
+    "Dravidian": "#162A6D", // green
     "Austronesian": "#260348", // Austronesian
     "Uralic": "#160B5B",
     "Caucasian": "#0E5E5B",
