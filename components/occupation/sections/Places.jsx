@@ -4,7 +4,7 @@ import AnchorList from "../../utils/AnchorList";
 import {toTitleCase} from "../../utils/vizHelpers";
 import SectionLayout from "../../common/SectionLayout";
 import dynamic from "next/dynamic";
-import {COLORS_CONTINENT} from "../../utils/consts";
+
 // Load EChart only on the client
 const PlacesTmap = dynamic(
   () => import("/components/occupation/sections/vizes/PlacesTmap"),
@@ -134,7 +134,7 @@ export default function Places({people, occupation, title, slug}) {
         left: 0,
         right: 0,
         width: "100%",
-        height: "100%",
+        height: "calc(100% - 30px)",
         breadcrumb: {show: false},
         label: {
           rich: {
