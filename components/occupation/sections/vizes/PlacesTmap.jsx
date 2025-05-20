@@ -2,7 +2,6 @@
 
 import {useEffect, useRef} from "react";
 import * as echarts from "echarts";
-import {FORMATTERS} from "/components/utils/consts";
 import {COLORS_CONTINENT} from "../../../utils/consts";
 
 function assignColorsFromParent(data, COLORS_CONTINENT) {
