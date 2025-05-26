@@ -9,6 +9,7 @@ import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
 import {toTitleCase} from "../utils/vizHelpers";
 import SectionLayout from "../common/SectionLayout";
+import {BASE_API} from "@/app/constants";
 
 async function getBirthCountryRankings(
   occupationId,
@@ -17,7 +18,7 @@ async function getBirthCountryRankings(
   bplaceCountryOccupationRankHigh
 ) {
   const res = await fetch(
-    `https://api.pantheon.world/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${birthCountryId}&bplace_country_occupation_rank_unique=gte.${bplaceCountryOccupationRankLow}&bplace_country_occupation_rank_unique=lte.${bplaceCountryOccupationRankHigh}&order=bplace_country_occupation_rank_unique&select=bplace_country,occupation,hpi,slug,bplace_country_occupation_rank,bplace_country_occupation_rank_unique,gender,name,id,deathyear,birthyear`
+    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${birthCountryId}&bplace_country_occupation_rank_unique=gte.${bplaceCountryOccupationRankLow}&bplace_country_occupation_rank_unique=lte.${bplaceCountryOccupationRankHigh}&order=bplace_country_occupation_rank_unique&select=bplace_country,occupation,hpi,slug,bplace_country_occupation_rank,bplace_country_occupation_rank_unique,gender,name,id,deathyear,birthyear`
   );
   return res.json();
 }

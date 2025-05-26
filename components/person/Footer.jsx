@@ -7,6 +7,7 @@ import {
   NUM_RANKINGS_PRE,
   NUM_RANKINGS_POST,
 } from "../utils/consts";
+import {BASE_API} from "@/app/constants";
 import {toTitleCase} from "../utils/vizHelpers";
 import "../../components/common/Footer.css";
 import "tippy.js/dist/tippy.css"; // optional
@@ -24,7 +25,7 @@ async function getOccupationRankings(
   occupationRankHigh
 ) {
   const res = await fetch(
-    `https://api.pantheon.world/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`
+    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`
   );
   return res.json();
 }
