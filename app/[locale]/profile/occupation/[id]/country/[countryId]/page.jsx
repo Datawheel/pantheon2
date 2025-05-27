@@ -73,7 +73,17 @@ async function getAllOccupationsInCountry(countryId) {
 
 async function getPeople(occupationId, countryId) {
   const res = await fetch(
-    `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev,l`,
+    `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleHpi(occupationId, countryId) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,l,l_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -112,12 +122,28 @@ export default async function Page({params: {id, countryId}}) {
     getCountry(countryId),
   ]);
 
-  const [allCountriesInOccupation, allOccupationsInCountry, people] =
-    await Promise.all([
-      getAllCountriesInOccupation(occupation.occupation),
-      getAllOccupationsInCountry(country.id),
-      getPeople(occupation.id, country.id),
-    ]);
+  const [
+    allCountriesInOccupation,
+    allOccupationsInCountry,
+    peopleAttrs,
+    peopleHpi,
+  ] = await Promise.all([
+    getAllCountriesInOccupation(occupation.occupation),
+    getAllOccupationsInCountry(country.id),
+    getPeople(occupation.id, country.id),
+    getPeopleHpi(occupation.id, country.id),
+  ]);
+
+  // Merge peopleHpi data into people array
+  const people = peopleAttrs
+    .map(person => {
+      const hpiData = peopleHpi.find(hpi => hpi.id === person.id);
+      return {
+        ...person,
+        ...(hpiData || {}), // Spread hpiData if found, otherwise spread empty object
+      };
+    })
+    .sort((a, b) => b.hpi - a.hpi);
 
   const attrs = occupations.reduce((obj, d) => {
     obj[d.id] = d;
