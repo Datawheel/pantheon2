@@ -64,7 +64,17 @@ async function getPlaceRanks(placeRankLow, placeRankHigh) {
 
 async function getPeopleBornHere(placeId) {
   const res = await fetch(
-    `${BASE_API}/person?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`,
+    `${BASE_API}/person?bplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleBornHereHpi(placeId) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -74,7 +84,17 @@ async function getPeopleBornHere(placeId) {
 
 async function getPeopleDiedHere(placeId) {
   const res = await fetch(
-    `${BASE_API}/person?dplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,deathyear,alive`
+    `${BASE_API}/person?dplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`
+  );
+  return res.json();
+}
+
+async function getPeopleDiedHereHpi(placeId) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
   );
   return res.json();
 }
@@ -113,23 +133,40 @@ export default async function Page({params: {id}}) {
   );
   const placeRanks = await getPlaceRanks(placeRankLow, placeRankHigh);
 
-  let [peopleBornHere, peopleDiedHere] = await Promise.all([
-    getPeopleBornHere(place.id),
-    getPeopleDiedHere(place.id),
-  ]);
+  let [peopleBornHere, peopleDiedHere, peopleBornHereHpi, peopleDiedHereHpi] =
+    await Promise.all([
+      getPeopleBornHere(place.id),
+      getPeopleDiedHere(place.id),
+      getPeopleBornHereHpi(place.id),
+      getPeopleDiedHereHpi(place.id),
+    ]);
   // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
   // we calculate and add them...
   peopleBornHere =
     peopleBornHere && peopleBornHere.length
       ? peopleBornHere
+          .map((d, i) => {
+            const hpiData = peopleBornHereHpi.find(hpi => hpi.id === d.id);
+            return {
+              ...d,
+              bplace_name_rank: i + 1,
+              ...(hpiData || {}),
+            };
+          })
           .sort((personA, personB) => personB.hpi - personA.hpi)
-          .map((d, i) => ({...d, bplace_name_rank: i + 1}))
       : [];
   peopleDiedHere =
     peopleDiedHere && peopleDiedHere.length
       ? peopleDiedHere
+          .map((d, i) => {
+            const hpiData = peopleDiedHereHpi.find(hpi => hpi.id === d.id);
+            return {
+              ...d,
+              dplace_name_rank: i + 1,
+              ...(hpiData || {}),
+            };
+          })
           .sort((personA, personB) => personB.hpi - personA.hpi)
-          .map((d, i) => ({...d, dplace_name_rank: i + 1}))
       : [];
 
   const attrs = occupations.reduce((obj, d) => {

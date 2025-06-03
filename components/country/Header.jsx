@@ -47,8 +47,8 @@ export default async function Header({country}) {
   }
 
   const countryImg = country.img_link
-    ? `/images/profile/country/${country.slug}.jpg`
-    : "/images/profile/placeholder_place_profile.jpg";
+    ? `https://static.pantheon.world/profile/country/${country.slug}.jpg`
+    : "https://static.pantheon.world/images/profile/placeholder_place_profile.jpg";
 
   return (
     <header className="hero">

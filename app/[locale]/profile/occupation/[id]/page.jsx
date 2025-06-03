@@ -53,7 +53,17 @@ async function getOccupation(occupationId) {
 
 async function getPeople(occupationId) {
   const res = await fetch(
-    `${BASE_API}/person?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,hpi,gender,birthyear,deathyear,alive,hpi_prev`,
+    `${BASE_API}/person?occupation=eq.${occupationId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleHpi(occupationId) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -95,7 +105,19 @@ export default async function Page({params: {id}}) {
     getOccupations(),
   ]);
 
-  const people = await getPeople(occupation.id);
+  const [peopleAttrs, peopleHpi] = await Promise.all([
+    getPeople(occupation.id),
+    getPeopleHpi(occupation.id),
+  ]);
+
+  const people = peopleAttrs.map(person => {
+    const hpiData = peopleHpi.find(hpi => hpi.id === person.id);
+    return {
+      ...person,
+      ...(hpiData || {}),
+    };
+  });
+
   // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
   // we calculate and add them...
   // peopleBornHere =

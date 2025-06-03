@@ -55,7 +55,17 @@ async function getEra(eraId) {
 
 async function getPeopleBornInEra(startYear, endYear) {
   const res = await fetch(
-    `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(*),occupation_id:occupation,*`,
+    `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(*),occupation_id:occupation,*`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleBornInEraHpi(startYear, endYear) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -65,7 +75,17 @@ async function getPeopleBornInEra(startYear, endYear) {
 
 async function getPeopleDiedInEra(startYear, endYear) {
   const res = await fetch(
-    `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*`,
+    `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleDiedInEraHpi(startYear, endYear) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -101,22 +121,33 @@ export default async function Page({params: {id}}) {
     getOccupations(),
   ]);
 
-  const [peopleBornInEra, peopleDiedInEra] = await Promise.all([
+  const [
+    peopleBornInEraAttrs,
+    peopleDiedInEraAttrs,
+    peopleBornInEraHpi,
+    peopleDiedInEraHpi,
+  ] = await Promise.all([
     getPeopleBornInEra(era.start_year, era.end_year),
     getPeopleDiedInEra(era.start_year, era.end_year),
+    getPeopleBornInEraHpi(era.start_year, era.end_year),
+    getPeopleDiedInEraHpi(era.start_year, era.end_year),
   ]);
-  // // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
-  // // we calculate and add them...
-  // peopleBornHere =
-  //   !peopleBornHere ||
-  //   peopleBornHere
-  //     .sort((personA, personB) => personB.hpi - personA.hpi)
-  //     .map((d, i) => ({ ...d, bplace_country_rank_unique: i + 1 }));
-  // peopleDiedHere =
-  //   !peopleDiedHere ||
-  //   peopleDiedHere
-  //     .sort((personA, personB) => personB.hpi - personA.hpi)
-  //     .map((d, i) => ({ ...d, dplace_country_rank_unique: i + 1 }));
+
+  const peopleBornInEra = peopleBornInEraAttrs.map(person => {
+    const hpiData = peopleBornInEraHpi.find(hpi => hpi.id === person.id);
+    return {
+      ...person,
+      ...(hpiData || {}),
+    };
+  });
+
+  const peopleDiedInEra = peopleDiedInEraAttrs.map(person => {
+    const hpiData = peopleDiedInEraHpi.find(hpi => hpi.id === person.id);
+    return {
+      ...person,
+      ...(hpiData || {}),
+    };
+  });
 
   const attrs = occupations.reduce((obj, d) => {
     obj[d.id] = d;
