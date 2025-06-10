@@ -5,7 +5,6 @@ import {
   dataRequestFailed,
 } from "../../features/exploreSlice";
 import dataFormatter from "../../components/utils/dataFormatter";
-import {BASE_API} from "/app/constants";
 
 const getQueryArgs = exploreState => {
   const {
@@ -61,7 +60,7 @@ const getQueryArgs = exploreState => {
   return queryStr;
 };
 
-const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
+const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
   const {
     city,
     country,
@@ -148,11 +147,17 @@ const makeApiUrl = (places, exploreState, pageIndex, sortBy) => {
 
   const onlyShowNewFilter = onlyShowNew ? "&hpi_prev=is.null" : "";
 
-  const apiUrl = `${BASE_API}/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
+  const apiUrl = `${baseApi}/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
   return apiUrl;
 };
 
-const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
+const fetchDataFromApi = async (
+  baseApi,
+  places,
+  exploreState,
+  pageOverride,
+  sortBy
+) => {
   const {
     dataPageIndex,
     page,
@@ -167,7 +172,7 @@ const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
     typeof pageOverride === "number" && !isNaN(pageOverride)
       ? pageOverride
       : dataPageIndex;
-  const apiUrl = makeApiUrl(places, exploreState, pageIndex, sortBy);
+  const apiUrl = makeApiUrl(baseApi, places, exploreState, pageIndex, sortBy);
   try {
     const response = await fetch(apiUrl, {
       headers: {Prefer: "count=estimated"},
@@ -209,6 +214,7 @@ const fetchDataFromApi = async (places, exploreState, pageOverride, sortBy) => {
 };
 
 export async function fetchDataAndDispatch(
+  baseApi,
   places,
   exploreState,
   dispatch,
@@ -220,6 +226,7 @@ export async function fetchDataAndDispatch(
   dispatch(dataRequested());
   try {
     const responseData = await fetchDataFromApi(
+      baseApi,
       places,
       exploreState,
       pageOverride,

@@ -159,7 +159,7 @@ export default async function Page({params: {id}}) {
     {
       title: "Memorability Metrics",
       slug: "metrics",
-      content: <MemMetrics person={person} />,
+      content: <MemMetrics person={person} personRanks={personRanks} />,
     },
     // {
     //   title: "In the news",

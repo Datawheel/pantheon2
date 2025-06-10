@@ -32,6 +32,7 @@ export default async function Page() {
   return (
     <div className="explore">
       <Explore
+        baseApi={BASE_API}
         places={nestedPlaces}
         occupations={occupations}
         pageType="rankings"

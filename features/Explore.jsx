@@ -30,7 +30,7 @@ import {
 import "./Explore.css";
 import VizShell from "../components/explore/viz/VizShell";
 
-function Explore({places, occupations, pageType}) {
+function Explore({baseApi, places, occupations, pageType}) {
   const {
     firstLoad,
     data,
@@ -105,7 +105,14 @@ function Explore({places, occupations, pageType}) {
 
   useEffect(() => {
     if (!firstLoad) {
-      fetchDataAndDispatch(places, exploreState, dispatch, router, pathname);
+      fetchDataAndDispatch(
+        baseApi,
+        places,
+        exploreState,
+        dispatch,
+        router,
+        pathname
+      );
     }
   }, [
     firstLoad,
@@ -153,7 +160,7 @@ function Explore({places, occupations, pageType}) {
         <Controls nestedOccupations={nestedOccupations} places={places} />
         {data ? (
           pageType === "rankings" ? (
-            <RankingTable places={places} />
+            <RankingTable baseApi={baseApi} places={places} />
           ) : (
             <VizShell occupations={occupations} />
           )

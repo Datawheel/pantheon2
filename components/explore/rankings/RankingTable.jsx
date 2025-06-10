@@ -8,7 +8,7 @@ import {fetchDataAndDispatch} from "../../../components/utils/exploreHelpers";
 import {updateDataPageIndex} from "../../../features/exploreSlice";
 import "./Rankings.css";
 
-export default function RankingTable({places}) {
+export default function RankingTable({baseApi, places}) {
   const exploreState = useSelector(state => state.explore);
   const {data, dataCount, dataPageIndex, show} = exploreState;
   const dispatch = useDispatch();
@@ -74,6 +74,7 @@ export default function RankingTable({places}) {
 
   useEffect(() => {
     fetchDataAndDispatch(
+      baseApi,
       places,
       exploreState,
       dispatch,
@@ -94,6 +95,7 @@ export default function RankingTable({places}) {
     setPageInputVal(pageNum);
     dispatch(updateDataPageIndex(pageNum));
     fetchDataAndDispatch(
+      baseApi,
       places,
       exploreState,
       dispatch,

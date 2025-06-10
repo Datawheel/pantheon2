@@ -7,9 +7,8 @@ import {useEffect, useState} from "react";
 import {BASE_API} from "@/app/constants";
 import MemMetricsBullet from "./MemMetricsBullet";
 
-export default function MemMetrics({person, slug, title}) {
+export default function MemMetrics({person, personRanks, slug, title}) {
   const [loading, setLoading] = useState(true);
-  const [wikiPageViewsPast30Days, setWikiPageViewsPast30Days] = useState([]);
   const [occupationData, setOccupationData] = useState(null);
   const [totalViews, setTotalViews] = useState(0);
 
@@ -19,7 +18,6 @@ export default function MemMetrics({person, slug, title}) {
         // Calculate date one year ago
         const oneYearAgo = new Date();
         oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-        const formattedDate = oneYearAgo.toISOString().split("T")[0];
 
         // Make API calls concurrently
         const [occupationResponse, totalViewsResponse] = await Promise.all([
@@ -53,20 +51,6 @@ export default function MemMetrics({person, slug, title}) {
       </SectionLayout>
     );
   }
-
-  const isTrending = wikiPageViewsPast30Days && wikiPageViewsPast30Days.length;
-  const domainColor =
-    COLORS_DOMAIN[
-      person?.occupation?.domain
-        .toLowerCase()
-        .replace("& ", "")
-        .replace(/ /g, "-")
-    ];
-  const trendData = wikiPageViewsPast30Days.map((d, i) => ({
-    ...d,
-    index: i,
-    color: domainColor,
-  }));
 
   return (
     <SectionLayout slug={slug} title={title}>
@@ -111,13 +95,13 @@ export default function MemMetrics({person, slug, title}) {
           {totalViews > 0 && occupationData ? (
             <div className="stat-container">
               <div className="stat-title">
-                <h4>{FORMATTERS.decimal(person.hpi)}</h4>
+                <h4>{FORMATTERS.decimal(personRanks.hpi)}</h4>
                 <p className="stat-title-text">HPI</p>
                 <p className="stat-title-desc">Historical Popularity Index</p>
               </div>
               <div className="stat-bullet">
                 <MemMetricsBullet
-                  value={person.hpi}
+                  value={personRanks.hpi}
                   compareValue={person.occupation?.hpi_avg || 0}
                   compareValueTitle={person.occupation?.id}
                 />
