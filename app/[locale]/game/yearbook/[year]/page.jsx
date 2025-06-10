@@ -6,7 +6,17 @@ import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getPeopleBornInYear(year) {
   const res = await fetch(
-    `${BASE_API}/person?select=name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)&birthyear=eq.${year}&hpi=gte.4&order=hpi.desc.nullslast`,
+    `${BASE_API}/person?select=name,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug)&birthyear=eq.${year}`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleBornInYearHpi(year) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?birthyear=eq.${year}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views&hpi=gte.4`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -15,7 +25,21 @@ async function getPeopleBornInYear(year) {
 }
 
 export default async function Page({params: {year}}) {
-  const peopleBornInYear = await getPeopleBornInYear(year);
+  const [peopleBornInYearAttrs, peopleBornInYearHpi] = await Promise.all([
+    getPeopleBornInYear(year),
+    getPeopleBornInYearHpi(year),
+  ]);
+
+  const peopleBornInYear = peopleBornInYearAttrs
+    .map(person => {
+      const hpiData = peopleBornInYearHpi.find(hpi => hpi.id === person.id);
+      return {
+        ...person,
+        ...(hpiData || {}),
+      };
+    })
+    .filter(person => person.hpi)
+    .sort((personA, personB) => personB.hpi - personA.hpi);
 
   const topPersonM = peopleBornInYear.find(d => d.gender === "M");
   const topPersonF = peopleBornInYear.find(d => d.gender === "F");
