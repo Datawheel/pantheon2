@@ -5,7 +5,7 @@
 // export default nextConfig;
 // module.exports = CacheHandler;
 
-module.exports = () => ({
-  cacheHandler: require.resolve("./cache-handler.js"),
-  output: "standalone",
-});
+// module.exports = () => ({
+//   cacheHandler: require.resolve("./cache-handler.js"),
+//   output: "standalone",
+// });
