@@ -16,6 +16,13 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env*.production
+
+# pm2 ecosystem config
+ecosystem.config.js
+
+# pm2 logs
+pm2.log
 
 # vercel
 .vercel
@@ -23,9 +30,6 @@ yarn-error.log*
 # docker files
 dockerfiles/nginx/certs/*
 dockerfiles/nginx/conf.d/default.conf
-
-# pm2 ecosystem config
-ecosystem.config.js
 
 # compiled python files
 *.pyc
