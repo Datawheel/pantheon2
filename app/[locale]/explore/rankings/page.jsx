@@ -3,7 +3,7 @@ import Explore from "/features/Explore";
 import {BASE_API} from "/app/constants";
 async function getPlaces() {
   const res = await fetch(
-    `${BASE_API}/place?select=id,place,lat,lon,slug,country:country_fk(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died`
+    `${BASE_API}/place?select=id,place,lat,lon,slug,country:country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died`
   );
   return res.json();
 }
