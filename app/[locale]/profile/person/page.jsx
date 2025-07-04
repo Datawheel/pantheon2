@@ -1,14 +1,22 @@
 import {redirect} from "next/navigation";
 
-async function getTopPeople() {
+async function getTopPeopleHpi() {
   const res = await fetch(
-    "https://api.pantheon.world/person?limit=1000&order=hpi.desc.nullslast"
+    "https://api.pantheon.world/person_hpi?yr=eq.2025&select=person_id,hpi&order=hpi.desc.nullslast&limit=100"
+  );
+  return res.json();
+}
+
+async function getTopPeople(ids) {
+  const res = await fetch(
+    `https://api.pantheon.world/person?id=in.(${ids.join(",")})`
   );
   return res.json();
 }
 
 export default async function Page() {
-  const topPeople = await getTopPeople();
+  const topPeopleHpi = await getTopPeopleHpi();
+  const topPeople = await getTopPeople(topPeopleHpi.map(p => p.person_id));
   // random 250 candidates
   const randomPeople = [
     "Ernst_von_Weizsäcker",
