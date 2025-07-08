@@ -251,7 +251,7 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
                 : !person.bplace_country
                 ? ""
                 : ""}
-              {bplaceCountryOccupationRank ? (
+              {bplaceCountryOccupationRank && person.bplace_country ? (
                 <span>
                   {" "}
                   and the{" "}
