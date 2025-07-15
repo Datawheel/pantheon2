@@ -31,6 +31,13 @@ async function getOccupationRankings(
 }
 
 export default async function Footer({person, personRanks}) {
+  if (
+    !personRanks ||
+    !person.occupation ||
+    !personRanks.occupation_rank_unique
+  ) {
+    return null;
+  }
   const wikiRelatedPeople = await getWikiRelatedPeople(person.slug);
   const occupationRankLow = Math.max(
     1,

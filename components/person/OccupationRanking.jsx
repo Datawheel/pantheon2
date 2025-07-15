@@ -29,6 +29,13 @@ export default async function OccupationRanking({
   slug,
   title,
 }) {
+  if (
+    !personRanks ||
+    !person.occupation ||
+    !personRanks.occupation_rank_unique
+  ) {
+    return null;
+  }
   const occupationRankLow = Math.max(
     1,
     parseInt(personRanks.occupation_rank_unique, 10) - NUM_RANKINGS_PRE

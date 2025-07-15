@@ -33,7 +33,7 @@ async function getDeathYearRankings(
 }
 
 export default async function YearRanking({person, personRanks, title, slug}) {
-  if (!person.birthyear) {
+  if (!person.birthyear || !personRanks || !personRanks.birthyear_rank_unique) {
     return null;
   }
   // Calculate min/max for birthyear peers
