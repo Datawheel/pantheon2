@@ -83,7 +83,7 @@ async function getPeople(occupationId, countryId) {
 
 async function getPeopleHpi(occupationId, countryId) {
   const res = await fetch(
-    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,l,l_prev,non_en_page_views`,
+    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }

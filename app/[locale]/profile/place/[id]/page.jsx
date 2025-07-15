@@ -91,7 +91,7 @@ async function getPeopleDiedHere(placeId) {
 
 async function getPeopleDiedHereHpi(placeId) {
   const res = await fetch(
-    `${BASE_API}/person_ranks?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
+    `${BASE_API}/person_ranks?dplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
