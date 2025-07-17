@@ -110,13 +110,15 @@ export default async function Page({params: {id}}) {
     getPeopleHpi(occupation.id),
   ]);
 
-  const people = peopleAttrs.map(person => {
-    const hpiData = peopleHpi.find(hpi => hpi.id === person.id);
-    return {
-      ...person,
-      ...(hpiData || {}),
-    };
-  });
+  const people = peopleAttrs
+    .map(person => {
+      const hpiData = peopleHpi.find(hpi => hpi.id === person.id);
+      return {
+        ...person,
+        ...(hpiData || {}),
+      };
+    })
+    .sort((a, b) => b.hpi - a.hpi);
 
   // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
   // we calculate and add them...

@@ -127,7 +127,7 @@ export default function People({country, occupation, people, title, slug}) {
             <div className="rank-title">
               <h3>
                 Newly Added {country.demonym}{" "}
-                {toTitleCase(plural(occupation.occupation))} (2024)
+                {toTitleCase(plural(occupation.occupation))} (2025)
               </h3>
               <Link
                 href={`/explore/rankings?show=people&occupation=${occupation.id}&place=${country.country_code}&new=true`}

@@ -120,7 +120,7 @@ export default function People({occupation, people, title, slug}) {
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>
-                Newly Added {toTitleCase(plural(occupation.occupation))} (2024)
+                Newly Added {toTitleCase(plural(occupation.occupation))} (2025)
               </h3>
               <Link
                 href={`/explore/rankings?show=people&occupation=${occupation.id}`}
