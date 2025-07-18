@@ -1,4 +1,5 @@
 "use client";
+import {useState} from "react";
 import {useSelector} from "react-redux";
 import VizControl from "./VizControl";
 import ShowControl from "./ShowControl";
@@ -9,15 +10,21 @@ import OccupationControl from "./OccupationControl";
 import MetricCutoffControl from "./MetricCutoffControl";
 import OnlyShowNewControl from "./OnlyShowNewControl";
 
-const toggleSidePanel = () => {
-  console.log("toggle side panel!");
-};
-
 export default function Controls({places, nestedOccupations}) {
   const {page, show} = useSelector(state => state.explore);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleSidePanel = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
-    <div className="explore-controls viz-explorer" id="side-panel">
+    <div
+      className={`explore-controls viz-explorer ${
+        isMobileMenuOpen ? "mobile-show" : ""
+      }`}
+      id="side-panel"
+    >
       {/* desktop title*/}
       <div className="control-header desktop">
         <h2 className="viz-explorer">Visualizations</h2>
