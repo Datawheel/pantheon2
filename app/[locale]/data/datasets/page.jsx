@@ -7,6 +7,17 @@ export default async function Page() {
       <h2>Pantheon 2.0 datasets</h2>
       <dl className="download-dl">
         <dt>
+          <a href="https://storage.googleapis.com/pantheon-public-data/person_2025_update.csv.bz2">
+            2025 Person Dataset
+          </a>
+        </dt>
+        <dd>
+          A bzip compressed comma delimited file containing a row of data per
+          person found in the Panthon 2.0 version released in 2025.
+        </dd>
+      </dl>
+      <dl className="download-dl">
+        <dt>
           <a href="https://storage.googleapis.com/pantheon-public-data/person_2020_update.csv.bz2">
             2020 Person Dataset
           </a>

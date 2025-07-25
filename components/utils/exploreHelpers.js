@@ -116,7 +116,7 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
   }
 
   let limitOffset = "";
-  let table = "person";
+  let table = "person_ranks";
   if (page === "rankings") {
     if (show.type === "people") {
       limitOffset = `&limit=50&offset=${PAGE_SIZE * pageIndex}`;
