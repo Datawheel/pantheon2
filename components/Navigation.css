@@ -27,7 +27,7 @@
       display: inline-block;
     }
 
-    &.explore-link::before, &.game-link::before {
+    &.explore-link::before {
       background: url('/images/nav/explore.svg') no-repeat;
       background-size: contain;
     }
@@ -44,6 +44,11 @@
 
     &.about-link::before {
       background: url("/images/nav/about.svg") no-repeat;
+      background-size: contain;
+    }
+
+    &.game-link::before {
+      background: url('/images/nav/explore.svg') no-repeat;
       background-size: contain;
     }
 
@@ -190,6 +195,13 @@
     }
 
     &.data-link::before {
+      left: -19px;
+      top: -4px;
+      width: 15px;
+      height: 15px;
+    }
+
+    &.game-link::before {
       left: -19px;
       top: -4px;
       width: 15px;
@@ -410,6 +422,13 @@
     }
 
     &.data-link::before {
+      left: -28px;
+      margin-top: -3px;
+      width: 22px;
+      height: 22px;
+    }
+
+    &.game-link::before {
       left: -28px;
       margin-top: -3px;
       width: 22px;

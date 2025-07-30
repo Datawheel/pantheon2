@@ -188,12 +188,12 @@ export default function Navigation() {
               </li>
               <li>
                 <Link href="/game/birthle" className="item-link">
-                  ◼Birthle
+                  ◼ Birthle
                 </Link>
               </li>
               <li>
                 <Link href="/game/trivia" className="item-link">
-                  ◼Trivia
+                  ◼ Trivia
                 </Link>
               </li>
             </ul>
@@ -320,9 +320,11 @@ export default function Navigation() {
               </a>
               {mobileSubnav === "data" ? (
                 <ul className="sub-items">
-                  {/* <li><a href="/data/datasets">Download</a></li> */}
                   <li>
                     <a href="/data/permissions">Permissions</a>
+                  </li>
+                  <li>
+                    <a href="/data/datasets">Download</a>
                   </li>
                   <li>
                     <a href="/data/api">API</a>
@@ -330,12 +332,6 @@ export default function Navigation() {
                 </ul>
               ) : null}
             </li>
-            {/* <li className="item" onClick={toggleSubNav}>
-              <a className="item-link data-link" onClick={toggleSubNavSib}>Apps</a>
-              <ul className="sub-items">
-                <li><a href="/app/yearbook">Yearbook</a></li>
-              </ul>
-            </li> */}
             <li className="item" onClick={() => toggleSubNav("games")}>
               <a
                 className="item-link game-link"
