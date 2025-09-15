@@ -150,10 +150,10 @@ export async function GET(request) {
       article => article.article !== "Cleopatra"
     );
     const trendingArticlesLookup = {};
-    const chunks = trendingArticles.length / 50;
+    const chunks = trendingArticles.length / 45;
     const trendingPeoplePantheonUrls = [];
     for (let i = 0; i < chunks; i++) {
-      const currentArticlesChunk = trendingArticles.slice(i * 50, (i + 1) * 50);
+      const currentArticlesChunk = trendingArticles.slice(i * 45, (i + 1) * 45);
       const trendingArticlesQuery = [];
 
       // validate URLs for non-english slugs
