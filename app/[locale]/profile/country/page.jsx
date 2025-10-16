@@ -149,7 +149,6 @@ export default async function Page() {
     "martinique",
     "niger",
     "tajikistan",
-    "bosnia-herzegovina",
   ];
   const redirectSlug =
     countryCandidates[Math.floor(Math.random() * countryCandidates.length)];
