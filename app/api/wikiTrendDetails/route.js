@@ -65,7 +65,11 @@ export async function GET(request) {
     // Determine available language editions for this person
     const availableLangsApi = `https://en.wikipedia.org/w/api.php?action=query&prop=langlinks&pageids=${wikiId}&lllimit=500&llprop=langname|url&format=json&origin=*`;
     const availableLangsResp = await axios
-      .get(availableLangsApi)
+      .get(availableLangsApi, {
+        headers: {
+          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+        }
+      })
       .catch(
         e => (
           console.log("Wiki Trending Error:", e), {error: "Wiki ID not found"}
@@ -107,7 +111,11 @@ export async function GET(request) {
           langReqs.map(url =>
             throttle(async () => {
               const res = await axios
-                .get(url)
+                .get(url, {
+                  headers: {
+                    'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+                  }
+                })
                 .catch(() => ({data: {items: []}}));
               return res.data ? res.data.items : [];
             })

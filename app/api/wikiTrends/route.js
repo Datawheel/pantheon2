@@ -115,7 +115,11 @@ export async function GET(request) {
       }
     }
     const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
-    const topPageViewsResp = await axios.get(wikiPageViewsURL).catch(e => {
+    const topPageViewsResp = await axios.get(wikiPageViewsURL, {
+      headers: {
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+      }
+    }).catch(e => {
       if (e.response) {
         return {data: [], error: e.response.data};
       }
@@ -124,6 +128,7 @@ export async function GET(request) {
     const topPageViewsJson = topPageViewsResp.data;
     if (
       topPageViewsResp.error &&
+      topPageViewsResp.error.detail &&
       topPageViewsResp.error.detail.includes(
         "The date(s) you used are valid, but we either do not have data for those date(s)"
       )
@@ -163,7 +168,12 @@ export async function GET(request) {
           .join("|");
         const wikiLangLinksResp = await axios
           .get(
-            `https://${lang}.wikipedia.org/w/api.php?action=query&titles=${wikiLangTitles}&prop=langlinks&lllimit=500&llprop=url&lllang=en&format=json`
+            `https://${lang}.wikipedia.org/w/api.php?action=query&titles=${wikiLangTitles}&prop=langlinks&lllimit=500&llprop=url&lllang=en&format=json`,
+            {
+              headers: {
+                'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+              }
+            }
           )
           .catch(e => (console.log("Wiki Langlinks Error:", e), {data: []}));
         const wikiLangLinksJson = wikiLangLinksResp.data;

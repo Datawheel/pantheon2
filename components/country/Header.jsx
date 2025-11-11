@@ -13,7 +13,12 @@ async function getWikiPageViews(countryName) {
     "$10$2"
   );
   const res = await fetch(
-    `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${countryName}/monthly/20110101/${year}${month}01`
+    `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${countryName}/monthly/20110101/${year}${month}01`,
+    {
+      headers: {
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+      }
+    }
   );
   return res.json();
 }

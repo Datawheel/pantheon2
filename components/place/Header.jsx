@@ -14,7 +14,12 @@ async function getWikiPageViews(placeName) {
     "$10$2"
   );
   const res = await fetch(
-    `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`
+    `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`,
+    {
+      headers: {
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+      }
+    }
   );
   return res.json();
 }
@@ -22,7 +27,12 @@ async function getWikiPageViews(placeName) {
 async function getWikiSummary(placeName) {
   const wikiSlug = placeName;
   const res = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/summary/${wikiSlug}`
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${wikiSlug}`,
+    {
+      headers: {
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+      }
+    }
   );
   return res.json();
 }

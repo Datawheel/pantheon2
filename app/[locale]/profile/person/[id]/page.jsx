@@ -62,6 +62,9 @@ async function getWikiExtract(personId) {
   const res = await fetch(
     `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=${personId}&format=json&exlimit=1&origin=*`,
     {
+      headers: {
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+      },
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
   );

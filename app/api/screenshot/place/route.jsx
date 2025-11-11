@@ -37,7 +37,12 @@ export async function GET(request) {
   const {country: countryName, country_code} = country;
 
   const wikiRes = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/summary/${name}`
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${name}`,
+    {
+      headers: {
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+      }
+    }
   );
   const wiki = await wikiRes.json();
   const {originalimage} = wiki;

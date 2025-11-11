@@ -10,7 +10,11 @@ export async function GET(request) {
     wikiSlug
   )}`;
   const topRelatedResp = await axios
-    .get(wikiRelatedURL)
+    .get(wikiRelatedURL, {
+      headers: {
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+      }
+    })
     .catch(
       e => (
         console.log(`Wiki Related API Error: No page for ${wikiSlug} found.`),

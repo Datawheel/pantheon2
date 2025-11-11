@@ -6,7 +6,12 @@ import "../common/Intro.css";
 
 async function getWikiSummary(countryName) {
   const res = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/summary/${countryName}`
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${countryName}`,
+    {
+      headers: {
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+      }
+    }
   );
   return res.json();
 }

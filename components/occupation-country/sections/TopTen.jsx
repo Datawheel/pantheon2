@@ -29,6 +29,7 @@ async function getWikiPageSummaries(top10Ids) {
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
+        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
       },
     }
   );

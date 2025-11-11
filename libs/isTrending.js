@@ -42,7 +42,13 @@ export async function isTrending(slug) {
     );
 
     // === 3) Fetch all 3 days in parallel ===
-    const fetchPromises = wikiUrls.map(url => fetch(url));
+    const fetchPromises = wikiUrls.map(url =>
+      fetch(url, {
+        headers: {
+          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+        }
+      })
+    );
     const responses = await Promise.all(fetchPromises);
 
     // === 4) Convert each response to JSON. Some might fail (e.g., data not published yet). ===
