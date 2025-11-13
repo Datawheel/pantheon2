@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {FORMATTERS} from "/components/utils/consts";
+import {toTitleCase} from "/components/utils/vizHelpers";
 import YearbookSidebar from "/components/games/YearbookSidebar";
 import "/components/games/Yearbook.css";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
@@ -112,7 +113,14 @@ export default async function Page({params: {year}}) {
                         <tr>
                           <td colSpan="2">
                             {person.occupation
-                              ? person.occupation.occupation
+                              ? toTitleCase(person.occupation.occupation)
+                              : ""}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan="2">
+                            {person.bplace_country
+                              ? person.bplace_country.country
                               : ""}
                           </td>
                         </tr>
