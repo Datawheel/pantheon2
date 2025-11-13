@@ -196,6 +196,11 @@ export default function Navigation() {
                   ◼ Trivia
                 </Link>
               </li>
+              <li>
+                <a href="https://trivia.rocks/" target="_blank" rel="noopener noreferrer" className="item-link">
+                  TuneTrivia <span className="new-badge">new!</span>
+                </a>
+              </li>
             </ul>
           </li>
           <li className="item">
@@ -354,6 +359,11 @@ export default function Navigation() {
                   <li>
                     <a href="/game/trivia" className="item-link">
                       Trivia
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://trivia.rocks/" target="_blank" rel="noopener noreferrer" className="item-link">
+                      TuneTrivia <span className="new-badge">new!</span>
                     </a>
                   </li>
                 </ul>

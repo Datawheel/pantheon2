@@ -524,3 +524,15 @@ body.frozen {
     }
   }
 }
+
+.new-badge {
+  background-color: #ff6b6b;
+  color: white;
+  font-size: 0.7em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 4px;
+  font-weight: 600;
+  text-transform: lowercase;
+  vertical-align: middle;
+}
