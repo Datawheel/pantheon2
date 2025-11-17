@@ -42,7 +42,9 @@ const PeopleGrid = ({bios, occupation, year}) => (
             <p className="person-card__age">
               Age {parseInt(profile.deathyear) - parseInt(profile.birthyear)}
             </p>
-            <p className="person-card__hpi">HPI: {profile.hpi.toFixed(2)}</p>
+            {profile.hpi && (
+              <p className="person-card__hpi">HPI: {profile.hpi.toFixed(2)}</p>
+            )}
           </div>
         </a>
       ))}

@@ -103,6 +103,11 @@ export default function Navigation() {
                   Eras
                 </a>
               </li>
+              <li>
+                <a href="/profile/deaths/2025" className="item-link">
+                  Deaths
+                </a>
+              </li>
             </ul>
           </li>
           <li className="item home-link">
@@ -295,6 +300,9 @@ export default function Navigation() {
                   </li>
                   <li>
                     <a href="/profile/era">Eras</a>
+                  </li>
+                  <li>
+                    <a href="/profile/deaths/2025">Deaths</a>
                   </li>
                 </ul>
               ) : null}

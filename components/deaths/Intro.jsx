@@ -161,7 +161,7 @@ export default function Intro({year, people, occupation}) {
             &laquo; view {parseInt(year) - 1} deaths
           </a>
         </div>
-        {parseInt(year) + 1 < 2025 ? (
+        {parseInt(year) + 1 <= new Date().getFullYear() ? (
           <div>
             <a
               href={

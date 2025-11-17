@@ -8,7 +8,17 @@ import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 
 async function getPeopleDiedThisYear(yearNum) {
   const res = await fetch(
-    `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`,
+    `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleDiedThisYearHpi(yearNum) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi,hpi_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -27,7 +37,9 @@ export async function generateMetadata({params}, parent) {
     title: `${year} Celebrity Deaths | Pantheon`,
     openGraph: {
       images: [
-        `https://static.pantheon.world/profile/deaths/deaths-${year}.jpg`,
+        `${
+          process.env.URL || "https://pantheon.world"
+        }/api/screenshot/deaths?year=${year}`,
         ...previousImages,
       ],
     },
@@ -41,7 +53,20 @@ export default async function Page({params: {id: year}}) {
     return new Response("Not Found", {status: 404});
   }
 
-  const peopleDiedThisYear = await getPeopleDiedThisYear(yearNum);
+  // Fetch both person data and HPI data in parallel
+  const [peopleDiedThisYearAttrs, peopleDiedThisYearHpi] = await Promise.all([
+    getPeopleDiedThisYear(yearNum),
+    getPeopleDiedThisYearHpi(yearNum),
+  ]);
+
+  // Merge the results
+  const peopleDiedThisYear = peopleDiedThisYearAttrs.map(person => {
+    const hpiData = peopleDiedThisYearHpi.find(hpi => hpi.id === person.id);
+    return {
+      ...person,
+      ...(hpiData || {}),
+    };
+  });
 
   const sections = [
     {
