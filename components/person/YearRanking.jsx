@@ -76,6 +76,11 @@ export default async function YearRanking({person, personRanks, title, slug}) {
 
   const meBy = birthYearRanking.find(rank => rank.slug === person.slug);
 
+  // If person not found in birth year rankings (can happen with stale cache), return null
+  if (!meBy) {
+    return null;
+  }
+
   // return <div>year ranking to come...</div>;
 
   let betterBirthPeers = null,
@@ -135,12 +140,15 @@ export default async function YearRanking({person, personRanks, title, slug}) {
 
   if (deathYearRanking.length) {
     meDy = deathYearRanking.find(rank => rank.slug === person.slug);
-    const betterRankedDeathPeers = deathYearRanking.filter(
-      p => p.deathyear_rank_unique < meDy.deathyear_rank_unique
-    );
-    const worseRankedDeathPeers = deathYearRanking.filter(
-      p => p.deathyear_rank_unique > meDy.deathyear_rank_unique
-    );
+
+    // Only process death year peers if person found in rankings
+    if (meDy) {
+      const betterRankedDeathPeers = deathYearRanking.filter(
+        p => p.deathyear_rank_unique < meDy.deathyear_rank_unique
+      );
+      const worseRankedDeathPeers = deathYearRanking.filter(
+        p => p.deathyear_rank_unique > meDy.deathyear_rank_unique
+      );
     if (betterRankedDeathPeers.length) {
       betterDeathPeers = (
         <span>
@@ -182,6 +190,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
           .
         </span>
       );
+    }
     }
   }
 

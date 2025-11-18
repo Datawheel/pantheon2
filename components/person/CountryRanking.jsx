@@ -49,6 +49,12 @@ export default async function CountryRanking({
     bplaceCountryRankHigh
   );
   const me = birthCountryRankings.find(rank => rank.slug === person.slug);
+
+  // If person not found in rankings (can happen with stale cache), return null
+  if (!me) {
+    return null;
+  }
+
   const betterRankedBirthPeers = birthCountryRankings.filter(
     p => p.bplace_country_rank_unique < me.bplace_country_rank_unique
   );
