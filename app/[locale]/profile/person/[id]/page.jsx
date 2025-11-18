@@ -227,9 +227,9 @@ export default async function Page({params: {id}}) {
   }
 
   const filteredSection = sections.filter(section => {
-    if (section.slug === "news_articles" && !newsArticles.length) {
-      return false;
-    }
+    // if (section.slug === "news_articles" && !newsArticles.length) {
+    //   return false;
+    // }
     // if (section.slug === "twitter" && !twitterData?.timeline?.length) {
     //   return false;
     // }

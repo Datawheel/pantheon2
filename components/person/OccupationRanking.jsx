@@ -50,6 +50,12 @@ export default async function OccupationRanking({
     occupationRankHigh
   );
   const me = occupationRankings.find(rank => rank.slug === person.slug);
+
+  // If person not found in rankings (can happen with stale cache), return null
+  if (!me) {
+    return null;
+  }
+
   const betterRankedPeers = occupationRankings.filter(
     p => p.occupation_rank_unique < me.occupation_rank_unique
   );
