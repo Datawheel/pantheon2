@@ -10,7 +10,7 @@ export default function Intro({year, people, occupation}) {
   const router = useRouter();
   const peopleSortedByHPI = people
     .filter(person =>
-      occupation ? person.occupation.id === occupation.id : true
+      occupation ? person.occupation?.id === occupation.id : true
     )
     .sort((a, b) => b.hpi - a.hpi);
 

@@ -26,7 +26,17 @@ async function getOccupation(occupationId) {
 
 async function getPeopleDiedThisYear(yearNum) {
   const res = await fetch(
-    `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,hpi,hpi_prev,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`,
+    `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleDiedThisYearHpi(yearNum) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi,hpi_prev,non_en_page_views`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -61,7 +71,21 @@ export default async function Page({params: {id: year, occupationId}}) {
 
   const occupation = await getOccupation(occupationId);
 
-  const peopleDiedThisYear = await getPeopleDiedThisYear(yearNum);
+  // Fetch both person data and HPI data in parallel
+  const [peopleDiedThisYearAttrs, peopleDiedThisYearHpi] = await Promise.all([
+    getPeopleDiedThisYear(yearNum),
+    getPeopleDiedThisYearHpi(yearNum),
+  ]);
+
+  // Merge the results
+  const peopleDiedThisYear = peopleDiedThisYearAttrs.map(person => {
+    const hpiData = peopleDiedThisYearHpi.find(hpi => hpi.id === person.id);
+    return {
+      ...person,
+      ...(hpiData || {}),
+    };
+  });
+
   const peopleDiedThisYearFiltered = peopleDiedThisYear.filter(
     person => person.occupation_id === occupation.id
   );
@@ -123,7 +147,7 @@ export default async function Page({params: {id: year, occupationId}}) {
             &laquo; view {parseInt(year) - 1} deaths
           </a>
         </div>
-        {parseInt(year) + 1 < 2025 ? (
+        {parseInt(year) + 1 <= new Date().getFullYear() ? (
           <div>
             <a
               href={`/profile/deaths/${parseInt(year) + 1}`}
