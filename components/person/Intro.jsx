@@ -204,12 +204,12 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
                   ? "His"
                   : "Her"
                 : "Their"}{" "}
-              biography is available in {person.l} different languages on
+              biography is available in {personRanks.l} different languages on
               Wikipedia
-              {person.l_prev && person.l !== person.l_prev
-                ? ` (${person.l > person.l_prev ? "up" : "down"} from ${
-                    person.l_prev
-                  } in 2019)`
+              {personRanks.l_prev && personRanks.l !== personRanks.l_prev
+                ? ` (${
+                    personRanks.l > personRanks.l_prev ? "up" : "down"
+                  } from ${personRanks.l_prev} in 2024)`
                 : ""}
               .{" "}
             </>
@@ -225,7 +225,7 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
               {occupationRankPrev && occupationRankPrev !== occupationRank
                 ? ` (${
                     occupationRank < occupationRankPrev ? "up" : "down"
-                  } from ${FORMATTERS.ordinal(occupationRankPrev)} in 2019)`
+                  } from ${FORMATTERS.ordinal(occupationRankPrev)} in 2024)`
                 : ""}
             </>
             <>
