@@ -23,6 +23,25 @@ const calcRankDeltas = (arrOfBios, day1Ago, day2Ago) => {
   return biosWithRankDeltas;
 };
 
+// Helper: get a YYYY, MM, DD for a given number of days ago in Eastern Time
+function getEasternDateComponents(daysAgo = 0) {
+  const now = new Date();
+
+  // Convert "now" to Eastern Time
+  const easternNow = new Date(
+    now.toLocaleString("en-US", {timeZone: "America/New_York"})
+  );
+
+  // Go back N days
+  easternNow.setDate(easternNow.getDate() - daysAgo);
+
+  const year = easternNow.getFullYear();
+  const month = String(easternNow.getMonth() + 1).padStart(2, "0");
+  const day = String(easternNow.getDate()).padStart(2, "0");
+
+  return {year, month, day};
+}
+
 export async function GET(request) {
   const {searchParams} = new URL(request.url);
   const searchParamLang = searchParams.get("lang");
@@ -59,25 +78,15 @@ export async function GET(request) {
       ? searchParamOccupation
       : null;
   const limit = parseInt(searchParamLimit, 10) || 100;
-  const dateobj = new Date();
-  // set date to yesterday
-  dateobj.setDate(dateobj.getDate() - 1);
-  const year = dateobj.getFullYear();
-  const month = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  const day = `${dateobj.getDate()}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
-  dateobj.setDate(dateobj.getDate() - 1);
-  const year2DaysAgo = dateobj.getFullYear();
-  const month2DaysAgo = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  const day2DaysAgo = `${dateobj.getDate()}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
+
+  // Yesterday in ET
+  const {year, month, day} = getEasternDateComponents(1);
+  // Two days ago in ET
+  const {
+    year: year2DaysAgo,
+    month: month2DaysAgo,
+    day: day2DaysAgo,
+  } = getEasternDateComponents(2);
 
   const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
   const trendApiUrl = `${process.env.BASE_API}/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}&slug=neq.cleopatra${occupationCut}`;
@@ -115,16 +124,19 @@ export async function GET(request) {
       }
     }
     const wikiPageViewsURL = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/${lang}.wikipedia/all-access/${year}/${month}/${day}`;
-    const topPageViewsResp = await axios.get(wikiPageViewsURL, {
-      headers: {
-        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-      }
-    }).catch(e => {
-      if (e.response) {
-        return {data: [], error: e.response.data};
-      }
-      return {data: []};
-    });
+    const topPageViewsResp = await axios
+      .get(wikiPageViewsURL, {
+        headers: {
+          "User-Agent":
+            "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+        },
+      })
+      .catch(e => {
+        if (e.response) {
+          return {data: [], error: e.response.data};
+        }
+        return {data: []};
+      });
     const topPageViewsJson = topPageViewsResp.data;
     if (
       topPageViewsResp.error &&
@@ -171,8 +183,9 @@ export async function GET(request) {
             `https://${lang}.wikipedia.org/w/api.php?action=query&titles=${wikiLangTitles}&prop=langlinks&lllimit=500&llprop=url&lllang=en&format=json`,
             {
               headers: {
-                'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-              }
+                "User-Agent":
+                  "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+              },
             }
           )
           .catch(e => (console.log("Wiki Langlinks Error:", e), {data: []}));
