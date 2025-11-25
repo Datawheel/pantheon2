@@ -90,6 +90,38 @@
     display: none;
   }
 
+  & .person-image-wrapper {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+
+    @media (min-width: 751px) {
+      margin-right: 15vw;
+      height: 100%;
+      filter: grayscale(100%) contrast(105%) brightness(105%);
+    }
+  }
+
+  & .twitter-icon-link {
+    position: absolute;
+    bottom: 12px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    padding: 4px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    z-index: 10;
+
+    &:hover {
+      opacity: 1;
+      border-bottom: none;
+    }
+  }
+
   & .intro-text {
     z-index: 3;
 

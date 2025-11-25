@@ -57,7 +57,7 @@ export default async function Page() {
     "oslo",
     "glasgow",
     "naples",
-    "kiev",
+    "kyiv",
     "istanbul",
     "dallas",
     "bucharest",

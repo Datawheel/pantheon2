@@ -10,8 +10,9 @@ async function getWikiSummary(placeName) {
     `https://en.wikipedia.org/api/rest_v1/page/summary/${placeName}`,
     {
       headers: {
-        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-      }
+        "User-Agent":
+          "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+      },
     }
   );
   return res.json();
@@ -89,7 +90,7 @@ export default async function Intro({
             ) : null}
             {peopleBornHere.length ? (
               <span>
-                Memorable people born in {place.place} include{" "}
+                The most famous people from {place.place} are{" "}
                 <AnchorList
                   items={peopleBornHere.slice(0, 3)}
                   name={d => d.name}
@@ -101,7 +102,7 @@ export default async function Intro({
             {peopleDiedHere.length ? (
               <span>
                 {" "}
-                Memorable people who died in {place.place} include{" "}
+                The most famous people who died in {place.place} are{" "}
                 <AnchorList
                   items={peopleDiedHere.slice(0, 3)}
                   name={d => d.name}

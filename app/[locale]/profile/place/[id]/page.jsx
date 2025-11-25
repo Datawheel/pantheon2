@@ -149,11 +149,14 @@ export default async function Page({params: {id}}) {
             const hpiData = peopleBornHereHpi.find(hpi => hpi.id === d.id);
             return {
               ...d,
-              bplace_name_rank: i + 1,
               ...(hpiData || {}),
             };
           })
           .sort((personA, personB) => personB.hpi - personA.hpi)
+          .map((d, i) => ({
+            ...d,
+            bplace_name_rank: i + 1,
+          }))
       : [];
   peopleDiedHere =
     peopleDiedHere && peopleDiedHere.length
@@ -162,11 +165,14 @@ export default async function Page({params: {id}}) {
             const hpiData = peopleDiedHereHpi.find(hpi => hpi.id === d.id);
             return {
               ...d,
-              dplace_name_rank: i + 1,
               ...(hpiData || {}),
             };
           })
           .sort((personA, personB) => personB.hpi - personA.hpi)
+          .map((d, i) => ({
+            ...d,
+            dplace_name_rank: i + 1,
+          }))
       : [];
 
   const attrs = occupations.reduce((obj, d) => {

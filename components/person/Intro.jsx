@@ -147,11 +147,28 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
         </div>
       </div>
       <div className="intro-content">
-        <PersonImage
-          fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-          src={`/profile/people/${person.id}.jpg`}
-          alt={`Photo of ${person.name}`}
-        />
+        <div className="person-image-wrapper">
+          <PersonImage
+            fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+            src={`/profile/people/${person.id}.jpg`}
+            alt={`Photo of ${person.name}`}
+          />
+          {person.twitter && (
+            <a
+              href={`https://x.com/${person.twitter}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="twitter-icon-link"
+            >
+              <Image
+                src="/images/logos/logo_x.png"
+                alt="X (Twitter) profile"
+                width={20}
+                height={20}
+              />
+            </a>
+          )}
+        </div>
         <div className="intro-text">
           <h3>
             <Image
