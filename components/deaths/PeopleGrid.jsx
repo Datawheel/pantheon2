@@ -51,12 +51,16 @@ const PeopleGrid = ({bios, occupation, year}) => (
     </div>
     <div className="view-more-link">
       {occupation ? (
-        <Link href="/explore/rankings?show=people&years=2024,2024&yearType=deathyear">
+        <Link
+          href={`/explore/rankings?show=people&years=${year},${year}&yearType=deathyear`}
+        >
           View Full List of {plural(toTitleCase(occupation.occupation))} that
           died in {year} →
         </Link>
       ) : (
-        <Link href="/explore/rankings?show=people&years=2024,2024&yearType=deathyear">
+        <Link
+          href={`/explore/rankings?show=people&years=${year},${year}&yearType=deathyear`}
+        >
           View Full List of {year} Deaths Ranked by HPI →
         </Link>
       )}
