@@ -17,11 +17,23 @@ async function getWikiPageViews(placeName) {
     `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`,
     {
       headers: {
-        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-      }
+        "User-Agent":
+          "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+      },
     }
   );
-  return res.json();
+  const data = await res.json();
+
+  // Filter out current incomplete month
+  if (data.items) {
+    const currentYearMonth = `${year}${month}`;
+    data.items = data.items.filter(item => {
+      const itemYearMonth = item.timestamp.substring(0, 6);
+      return itemYearMonth !== currentYearMonth;
+    });
+  }
+
+  return data;
 }
 
 async function getWikiSummary(placeName) {
@@ -30,8 +42,9 @@ async function getWikiSummary(placeName) {
     `https://en.wikipedia.org/api/rest_v1/page/summary/${wikiSlug}`,
     {
       headers: {
-        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-      }
+        "User-Agent":
+          "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+      },
     }
   );
   return res.json();

@@ -20,7 +20,18 @@ async function getWikiPageViews(countryName) {
       }
     }
   );
-  return res.json();
+  const data = await res.json();
+
+  // Filter out current incomplete month
+  if (data.items) {
+    const currentYearMonth = `${year}${month}`;
+    data.items = data.items.filter(item => {
+      const itemYearMonth = item.timestamp.substring(0, 6);
+      return itemYearMonth !== currentYearMonth;
+    });
+  }
+
+  return data;
 }
 
 export default async function Header({country}) {
