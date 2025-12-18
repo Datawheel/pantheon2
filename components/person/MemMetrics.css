@@ -167,3 +167,37 @@ iframe.yasiv-youtube {
   width: 100%;
   height: auto;
 }
+
+.chart-view-toggle {
+  display: flex;
+  gap: 0;
+  margin: 20px 0;
+  border: 1px solid var(--colorTan, #ccc);
+  border-radius: 4px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.chart-view-toggle button {
+  background: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  border-right: 1px solid var(--colorTan, #ccc);
+}
+
+.chart-view-toggle button:last-child {
+  border-right: none;
+}
+
+.chart-view-toggle button:hover {
+  background-color: var(--colorSand, #f4f4f1);
+}
+
+.chart-view-toggle button.active {
+  background-color: var(--colorCtrl, #4C5ED7);
+  color: white;
+  font-weight: bold;
+}

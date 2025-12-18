@@ -58,10 +58,49 @@ const formatTimeSeriesData = pageviewsData => {
   return [langsTs, numLangs];
 };
 
+const calculateCumulativeLanguages = (timeSeriesData, allDates) => {
+  // First pass: group languages by date (O(m) where m = data points)
+  const languagesByDate = {};
+
+  timeSeriesData.forEach(d => {
+    const yearMonth = d.date.slice(0, 7);
+    const [year, month] = yearMonth.split("/");
+    const itemDate = new Date(year, parseInt(month) - 1);
+    const label = itemDate.toLocaleString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+
+    if (!languagesByDate[label]) {
+      languagesByDate[label] = new Set();
+    }
+    languagesByDate[label].add(d.lang);
+  });
+
+  // Second pass: accumulate languages over time (O(n) where n = dates)
+  const languagesSeen = new Set();
+  const cumulativeData = [];
+
+  allDates.forEach(date => {
+    // Add any new languages from this date
+    if (languagesByDate[date]) {
+      languagesByDate[date].forEach(lang => languagesSeen.add(lang));
+    }
+
+    cumulativeData.push({
+      date: date,
+      count: languagesSeen.size,
+    });
+  });
+
+  return cumulativeData;
+};
+
 export default function PageViewsByLang({person, slug, title}) {
   const [timeSeriesData, setTimeSeriesData] = useState([]);
   const [numLangs, setNumLangs] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState("pageviews"); // 'pageviews' | 'editions'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -204,7 +243,7 @@ export default function PageViewsByLang({person, slug, title}) {
     totalsByDate[0]
   );
 
-  const option = {
+  const pageviewsOption = {
     grid: {
       left: "4%",
       right: "4%",
@@ -263,6 +302,94 @@ export default function PageViewsByLang({person, slug, title}) {
     ],
   };
 
+  // Select which option to use based on view mode
+  // Only calculate language editions option when user clicks that view
+  let option;
+  if (viewMode === "editions") {
+    // Calculate cumulative languages data only when needed
+    const cumulativeLanguagesData = calculateCumulativeLanguages(
+      timeSeriesData,
+      allDates
+    );
+
+    option = {
+      grid: {
+        left: "4%",
+        right: "4%",
+        bottom: "15%",
+        containLabel: true,
+      },
+      legend: {
+        show: false,
+      },
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        data: allDates,
+      },
+      yAxis: {
+        type: "value",
+        name: "Cumulative language editions",
+        nameLocation: "middle",
+        nameGap: 35,
+        nameTextStyle: {
+          fontSize: 16,
+        },
+        minInterval: 1,
+      },
+      tooltip: {
+        trigger: "axis",
+        formatter: function (params) {
+          const date = params[0].axisValueLabel;
+          const count = params[0].data;
+          return `<strong>${date}</strong><br/>Language editions: <strong>${count}</strong>`;
+        },
+      },
+      series: [
+        {
+          name: "Language Editions",
+          type: "line",
+          step: "end",
+          symbol: "circle",
+          symbolSize: 6,
+          lineStyle: {
+            color: "#36687F",
+            width: 2,
+          },
+          itemStyle: {
+            color: "#36687F",
+          },
+          data: cumulativeLanguagesData.map(d => d.count),
+          markPoint: {
+            symbol: "circle",
+            symbolSize: 8,
+            itemStyle: {
+              color: "#B12D11",
+            },
+            data: [
+              {
+                type: "max",
+                label: {
+                  show: true,
+                  formatter: function (params) {
+                    return `${params.name}\n${params.value} editions`;
+                  },
+                  position: "top",
+                  distance: 10,
+                  textStyle: {
+                    fontSize: 12,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ],
+    };
+  } else {
+    option = pageviewsOption;
+  }
+
   return (
     <SectionLayout slug={slug} title={title}>
       <div>
@@ -270,6 +397,20 @@ export default function PageViewsByLang({person, slug, title}) {
           timeSeriesData={timeSeriesData}
           person={person}
         />
+        <div className="chart-view-toggle">
+          <button
+            className={viewMode === "pageviews" ? "active" : ""}
+            onClick={() => setViewMode("pageviews")}
+          >
+            Page Views
+          </button>
+          <button
+            className={viewMode === "editions" ? "active" : ""}
+            onClick={() => setViewMode("editions")}
+          >
+            Language Editions
+          </button>
+        </div>
         {/* <PageViewsByLangAreaPlot
           timeSeriesData={timeSeriesData}
           numLangs={numLangs}

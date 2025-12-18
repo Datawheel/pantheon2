@@ -15,43 +15,52 @@ export default function PageViewByLangAreaPlot({baseOption, style}) {
     const option = JSON.parse(JSON.stringify(baseOption));
 
     // Inject safe tooltip formatter for top 10 sorted
-    option.tooltip = {
-      trigger: "axis",
-      //   formatter: function (params) {
-      //     return `<pre>${JSON.stringify(params, null, 2)}</pre>`;
-      //   },
-      formatter: function (params) {
-        // Count number of non-zero values at this x-axis point
-        const numLangs = params.filter(item => item.data.value > 0).length;
+    // Only override if baseOption doesn't already have a custom formatter
+    if (!baseOption.tooltip?.formatter) {
+      option.tooltip = {
+        trigger: "axis",
+        //   formatter: function (params) {
+        //     return `<pre>${JSON.stringify(params, null, 2)}</pre>`;
+        //   },
+        formatter: function (params) {
+          // Handle both data structures: number or {value, langLabel}
+          const getValue = (item) => {
+            return typeof item.data === 'number' ? item.data : item.data.value;
+          };
 
-        const sorted = [...params]
-          .sort((a, b) => b.data.value - a.data.value)
-          .slice(0, 10);
+          // Count number of non-zero values at this x-axis point
+          const numLangs = params.filter(item => getValue(item) > 0).length;
 
-        const lines = sorted.map(item => {
-          const lang = item.data.langLabel || item.seriesName;
-          return `
-              <div>
-                <span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${
-                  item.color
-                };"></span>
-                ${lang}: <strong>${item.data.value.toLocaleString()}</strong>
-              </div>
-            `;
-        });
+          const sorted = [...params]
+            .sort((a, b) => getValue(b) - getValue(a))
+            .slice(0, 10);
 
-        const title = sorted[0]?.axisValueLabel || "";
-        return (
-          `<strong>${title}</strong><br/>` +
-          lines.join("") +
-          (numLangs > 10
-            ? `<span style="font-size:10px;color:gray;">(and ${
-                numLangs - 10
-              } others)</span>`
-            : "")
-        );
-      },
-    };
+          const lines = sorted.map(item => {
+            const value = getValue(item);
+            const lang = item.data.langLabel || item.seriesName;
+            return `
+                <div>
+                  <span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${
+                    item.color
+                  };"></span>
+                  ${lang}: <strong>${value.toLocaleString()}</strong>
+                </div>
+              `;
+          });
+
+          const title = sorted[0]?.axisValueLabel || "";
+          return (
+            `<strong>${title}</strong><br/>` +
+            lines.join("") +
+            (numLangs > 10
+              ? `<span style="font-size:10px;color:gray;">(and ${
+                  numLangs - 10
+                } others)</span>`
+              : "")
+          );
+        },
+      };
+    }
 
     // Ensure all series use symbol: 'none'
     if (option.series) {
