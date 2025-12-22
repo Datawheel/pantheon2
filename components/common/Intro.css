@@ -101,9 +101,7 @@
 
     @media (max-width: 750px) {
       margin-bottom: 24px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
+      align-self: center;
     }
 
     @media (min-width: 751px) {
@@ -114,6 +112,7 @@
   }
 
   & .twitter-icon-link {
+    cursor: pointer;
     position: absolute;
     bottom: 12px;
     right: 8px;

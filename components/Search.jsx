@@ -37,7 +37,7 @@ const SearchComponent = () => {
   }, [inputValue]);
 
   useEffect(() => {
-    if (!isSearchVisible) return;
+    if (!isSearchVisible || !results || !results.length) return;
     const handleKeyDown = event => {
       if (event.key === "ArrowUp") {
         setActiveIndex(

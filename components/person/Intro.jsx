@@ -161,7 +161,7 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
               className="twitter-icon-link"
             >
               <Image
-                src="/images/logos/logo_x.png"
+                src="/images/logos/icons-x-logo-50.png"
                 alt="X (Twitter) profile"
                 width={20}
                 height={20}
