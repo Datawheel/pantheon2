@@ -4,24 +4,51 @@ const axios = require("axios");
 const dedupe = (item, index, self) =>
   self.findIndex(obj => obj.slug === item.slug) === index;
 
-const calcRankDeltas = (arrOfBios, day1Ago, day2Ago) => {
-  const day2AgoRanks = arrOfBios
-    .filter(d => d.date === day2Ago)
+const chunk = (arr, size) => {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) {
+    out.push(arr.slice(i, i + size));
+  }
+  return out;
+};
+
+const buildSlugOrFilter = slugs =>
+  slugs.map(slug => `slug.eq."${encodeURIComponent(slug)}"`).join(",");
+
+const fetchRankMap = async ({date, lang, slugs}) => {
+  if (!slugs.length) return {};
+  const slugChunks = chunk(slugs, 45);
+  const rankResp = await Promise.all(
+    slugChunks.map(slugChunk =>
+      axios
+        .get(
+          `${
+            process.env.BASE_API
+          }/trend?date=eq.${date}&lang=eq.${lang}&select=slug,rank_pantheon&or=(${buildSlugOrFilter(
+            slugChunk
+          )})`
+        )
+        .catch(
+          e => (console.log("Pantheon trends rank read Error:", e), {data: []})
+        )
+    )
+  );
+  return rankResp
+    .flatMap(resp => resp.data)
     .reduce((obj, item) => {
-      obj[item.slug] = item;
+      obj[item.slug] = item.rank_pantheon;
       return obj;
     }, {});
-  const biosWithRankDeltas = arrOfBios
-    .filter(d => d.date === day1Ago)
-    .map(d =>
-      Object.assign({}, d, {
-        rank_delta: day2AgoRanks[d.slug]
-          ? day2AgoRanks[d.slug].rank_pantheon - d.rank_pantheon
-          : null,
-      })
-    );
-  return biosWithRankDeltas;
 };
+
+const addRankDeltas = (arrOfBios, prevRankMap) =>
+  arrOfBios.map(d => ({
+    ...d,
+    rank_delta:
+      prevRankMap[d.slug] !== undefined
+        ? prevRankMap[d.slug] - d.rank_pantheon
+        : null,
+  }));
 
 // Helper: get a YYYY, MM, DD for a given number of days ago in Eastern Time
 function getEasternDateComponents(daysAgo = 0) {
@@ -89,22 +116,24 @@ export async function GET(request) {
   } = getEasternDateComponents(2);
 
   const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
-  const trendApiUrl = `${process.env.BASE_API}/trend?or=(date.eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo},date.eq.${year}-${month}-${day})&lang=eq.${lang}&slug=neq.cleopatra${occupationCut}`;
+  const trendApiUrl = `${process.env.BASE_API}/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&slug=neq.cleopatra${occupationCut}&order=rank_pantheon.asc&limit=${limit}`;
 
   const todaysBiosFromDbResp = await axios
     .get(trendApiUrl)
     .catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
 
-  const todaysBiosFromDb = calcRankDeltas(
-    todaysBiosFromDbResp.data,
-    `${year}-${month}-${day}`,
-    `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`
-  );
+  const todaysBiosFromDb = todaysBiosFromDbResp.data;
 
   if (todaysBiosFromDb.length) {
+    const prevRankMap = await fetchRankMap({
+      date: `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`,
+      lang,
+      slugs: todaysBiosFromDb.map(d => d.slug),
+    });
+    const todaysBiosWithDeltas = addRankDeltas(todaysBiosFromDb, prevRankMap);
     // console.log(`\n~~FOUND IN DB! (lang:${lang}|occupation:${occupation})~~\n`);
     return Response.json(
-      [...todaysBiosFromDb]
+      [...todaysBiosWithDeltas]
         .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
         .filter(dedupe)
         .slice(0, limit)
@@ -296,15 +325,22 @@ export async function GET(request) {
       }
     }
 
+    const prevRankMap = await fetchRankMap({
+      date: `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`,
+      lang,
+      slugs: todaysBiosForDb.map(d => d.slug),
+    });
+    const todaysBiosWithDeltas = addRankDeltas(todaysBiosForDb, prevRankMap);
+
     if (occupation) {
       return Response.json(
-        todaysBiosForDb
+        todaysBiosWithDeltas
           .filter(dedupe)
           .filter(d => d.occupation === occupation)
           .slice(0, limit)
       );
     }
 
-    return Response.json(todaysBiosForDb.filter(dedupe).slice(0, limit));
+    return Response.json(todaysBiosWithDeltas.filter(dedupe).slice(0, limit));
   }
 }

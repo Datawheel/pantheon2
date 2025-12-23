@@ -144,6 +144,8 @@ export default async function Home() {
         allowLangChange={false}
         initialTrendingAll={recentPassings}
         defaultLang="en"
+        showTrendIndicator={false}
+        showDates={true}
       />
 
       <div className="announcement-block">

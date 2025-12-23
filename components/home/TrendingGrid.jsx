@@ -33,6 +33,8 @@ export default function TrendingGrid({
   initialTrendingAll,
   defaultLang,
   occupation,
+  showTrendIndicator = true,
+  showDates = false,
 }) {
   const [trendingAll, setTrendingAll] = useState(initialTrendingAll);
   const [trendingLangEdition, setTrendingLangEdition] = useState(defaultLang);
@@ -86,6 +88,8 @@ export default function TrendingGrid({
               ? trendingAll.sort((a, b) => a.rank - b.rank).slice(0, 16)
               : trendingAll.slice(0, 16)
           }
+          showTrendIndicator={showTrendIndicator}
+          showDates={showDates}
         />
       ) : (
         <div className="loading-trends">

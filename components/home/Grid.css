@@ -99,6 +99,44 @@
         display: none;
       }
 
+      & .trend-indicator {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 0 4px;
+        font-size: 10px;
+        line-height: 1;
+        z-index: 4;
+        color: #2f6f9f;
+      }
+
+      & .trend-indicator svg {
+        width: 10px;
+        height: 10px;
+        fill: currentColor;
+      }
+
+      & .trend-indicator-text {
+        font-weight: 600;
+      }
+
+      & .trend-indicator.up {
+        color: #2c7a7b;
+      }
+
+      & .trend-indicator.down {
+        color: #9b2c2c;
+      }
+
       & .rank_delta {
         color: black;
         position: absolute;
