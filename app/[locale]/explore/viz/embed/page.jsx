@@ -1,7 +1,7 @@
 import {nest} from "d3-collection";
 import Explore from "/features/Explore";
 import {BASE_API} from "/app/constants";
-import {getPlaces, getOccupations} from "./data";
+import {getPlaces, getOccupations} from "../data";
 
 export default async function Page() {
   const [places, occupations] = await Promise.all([
@@ -18,14 +18,14 @@ export default async function Page() {
     .filter(countryData => countryData.country);
 
   return (
-    <div className="explore">
+    <div className="explore embed">
       <Explore
         baseApi={BASE_API}
         places={nestedPlaces}
         occupations={occupations}
         pageType="viz"
+        embed={true}
       />
-      <div className="explore-body"></div>
     </div>
   );
 }

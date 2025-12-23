@@ -30,7 +30,7 @@ import {
 import "./Explore.css";
 import VizShell from "../components/explore/viz/VizShell";
 
-function Explore({baseApi, places, occupations, pageType}) {
+function Explore({baseApi, places, occupations, pageType, embed = false}) {
   const {
     firstLoad,
     data,
@@ -111,7 +111,10 @@ function Explore({baseApi, places, occupations, pageType}) {
         exploreState,
         dispatch,
         router,
-        pathname
+        pathname,
+        undefined,
+        undefined,
+        !embed
       );
     }
   }, [
@@ -145,6 +148,29 @@ function Explore({baseApi, places, occupations, pageType}) {
     metricSentence = "Only showing newly added biographies (as of 2024)";
   }
 
+  const vizContent = data ? (
+    pageType === "rankings" ? (
+      <RankingTable baseApi={baseApi} places={places} />
+    ) : (
+      <VizShell occupations={occupations} />
+    )
+  ) : (
+    <div style={{position: "relative", width: "100%"}}>
+      <Spinner />
+    </div>
+  );
+
+  if (embed) {
+    return (
+      <div className="explore-embed">
+        <div className="explore-head">
+          <VizTitle places={places} nestedOccupations={nestedOccupations} />
+        </div>
+        <div className="explore-body">{vizContent}</div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="explore-head">
@@ -158,17 +184,7 @@ function Explore({baseApi, places, occupations, pageType}) {
       </div>
       <div className="explore-body">
         <Controls nestedOccupations={nestedOccupations} places={places} />
-        {data ? (
-          pageType === "rankings" ? (
-            <RankingTable baseApi={baseApi} places={places} />
-          ) : (
-            <VizShell occupations={occupations} />
-          )
-        ) : (
-          <div style={{position: "relative", width: "100%"}}>
-            <Spinner />
-          </div>
-        )}
+        {vizContent}
       </div>
     </div>
   );

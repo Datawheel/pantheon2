@@ -6,10 +6,54 @@
   --viz-height: 70vh;
 }
 
+.embed {
+  --viz-height: 100%;
+  min-height: 100vh;
+}
+
 .explore-container {
   width: 100%;
   margin: 90px auto 5px;
   box-sizing: border-box;
+}
+
+.embed .explore-container {
+  margin: 0;
+}
+
+.embed .explore,
+.embed .rankings {
+  padding: 0;
+}
+
+.embed main,
+.embed .explore-container,
+.embed .explore,
+.embed .explore-embed {
+  height: 100%;
+}
+
+.embed main {
+  min-height: 100vh;
+}
+
+.embed .explore-embed {
+  display: flex;
+  flex-direction: column;
+}
+
+.embed .explore-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.embed .explore-head {
+  margin: 0 0 10px;
+}
+
+.embed .explore-viz-container {
+  height: 100%;
+  min-height: 0;
 }
 
 .explore-title {

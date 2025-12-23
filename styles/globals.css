@@ -27,6 +27,21 @@ body {
   }
 }
 
+html, body {
+  height: 100%;
+}
+
+body.embed {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body.embed main {
+  flex: 1;
+  display: flex;
+}
+
 a {
   color: #0f74d1;
 }

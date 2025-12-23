@@ -221,7 +221,8 @@ export async function fetchDataAndDispatch(
   router,
   pathname,
   pageOverride,
-  sortBy
+  sortBy,
+  shouldUpdateRoute = true
 ) {
   dispatch(dataRequested());
   try {
@@ -233,8 +234,10 @@ export async function fetchDataAndDispatch(
       sortBy
     );
     dispatch(dataReceived(responseData));
-    const queryStr = getQueryArgs(exploreState);
-    router.push(pathname + queryStr);
+    if (shouldUpdateRoute) {
+      const queryStr = getQueryArgs(exploreState);
+      router.push(pathname + queryStr);
+    }
   } catch (error) {
     dispatch(dataRequestFailed(error.message));
   }

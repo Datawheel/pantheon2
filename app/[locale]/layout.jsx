@@ -1,19 +1,37 @@
 "use client";
 import {GoogleAnalytics} from "@next/third-parties/google";
 import {D3plusContext} from "d3plus-react";
+import dynamic from "next/dynamic";
+import {usePathname} from "next/navigation";
 import {useD3plusConfig} from "/themes/useD3plusConfig";
 import ReduxProvider from "/components/ReduxProvider";
-import Navigation from "/components/Navigation";
-import Footer from "/components/Footer";
 import NextTopLoader from "nextjs-toploader";
 // import Search from "/components/Search";
 import "/styles/globals.css";
 
 import {SearchProvider} from "/contexts/SearchContext";
-import SearchComponent from "/components/Search";
+
+const Navigation = dynamic(() => import("/components/Navigation"));
+const Footer = dynamic(() => import("/components/Footer"));
+const SearchComponent = dynamic(() => import("/components/Search"));
 
 export default function Layout({children}) {
   const config = useD3plusConfig();
+  const pathname = usePathname();
+  const isVizEmbed = pathname.includes("/explore/viz/embed");
+  const bodyContent = (
+    <body className={isVizEmbed ? "embed" : undefined}>
+      {isVizEmbed ? null : <NextTopLoader color="#363636" />}
+      {isVizEmbed ? null : <SearchComponent />}
+      {isVizEmbed ? null : <Navigation />}
+      <main>
+        <D3plusContext.Provider value={config}>
+          <ReduxProvider>{children}</ReduxProvider>
+        </D3plusContext.Provider>
+      </main>
+      {isVizEmbed ? null : <Footer />}
+    </body>
+  );
   return (
     <html lang="en">
       <head>
@@ -32,19 +50,7 @@ export default function Layout({children}) {
           rel="stylesheet"
         />
       </head>
-      <SearchProvider>
-        <body>
-          <NextTopLoader color="#363636" />
-          <SearchComponent />
-          <Navigation />
-          <main>
-            <D3plusContext.Provider value={config}>
-              <ReduxProvider>{children}</ReduxProvider>
-            </D3plusContext.Provider>
-          </main>
-          <Footer />
-        </body>
-      </SearchProvider>
+      {isVizEmbed ? bodyContent : <SearchProvider>{bodyContent}</SearchProvider>}
       <GoogleAnalytics gaId="G-56HH4RQ1J2" />
     </html>
   );
