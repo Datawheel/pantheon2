@@ -25,8 +25,9 @@ export default function WhyTrending({person, isTrending, slug, title}) {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch the reason.");
+        const errorData = await response.json().catch(() => ({}));
+        console.error("WhyTrending API error:", errorData);
+        throw new Error("Unable to load the trending reason right now.");
       }
 
       const data = await response.json();
@@ -49,7 +50,10 @@ export default function WhyTrending({person, isTrending, slug, title}) {
         setError(data.message || "The person is not trending.");
       }
     } catch (err) {
-      setError(err.message || "An unexpected error occurred.");
+      console.error("WhyTrending error:", err);
+      setError(
+        "Unable to load trending data right now. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
