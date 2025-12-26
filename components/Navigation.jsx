@@ -114,9 +114,9 @@ export default function Navigation() {
             <a href="/" className="home">
               <Image
                 width={140}
-                height={30}
+                height={20}
                 className="logo"
-                src="/images/logos/pantheon_logo_xmas.png"
+                src="/images/logos/logo_pantheon.svg"
                 alt="Pantheon"
               />
             </a>
@@ -238,9 +238,9 @@ export default function Navigation() {
             <a href="/" className="home">
               <Image
                 width={93}
-                height={20}
+                height={13}
                 className="logo"
-                src="/images/logos/pantheon_logo_xmas.png"
+                src="/images/logos/logo_pantheon.svg"
                 alt="Pantheon"
               />
             </a>

@@ -85,10 +85,10 @@ export default async function Home() {
           <div className="home-head-title">
             <h1>
               <Image
-                src="/images/logos/pantheon_logo_xmas.png"
+                src="/images/logos/logo_pantheon.svg"
                 alt="Pantheon logo"
                 width={348}
-                height={74}
+                height={49}
               />
             </h1>
             <HomeSearch />
