@@ -82,6 +82,7 @@ export async function GET(request) {
       "en",
       "fr",
       "de",
+      "hu",
       "it",
       "ja",
       "pl",
