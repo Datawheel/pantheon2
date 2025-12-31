@@ -68,7 +68,12 @@ export default async function DeathsByMonth({year, people}) {
                 most famous people to pass away in {monthName} were{" "}
                 <AnchorList
                   items={[...peopleInMonth]
-                    .sort((a, b) => b.hpi - a.hpi)
+                    .sort((a, b) => {
+                      if (!a.hpi && !b.hpi) return 0;
+                      if (!a.hpi) return 1;
+                      if (!b.hpi) return -1;
+                      return b.hpi - a.hpi;
+                    })
                     .slice(0, 3)}
                   name={d => `${d.name} (HPI: ${d?.hpi?.toFixed(2)})`}
                   url={d => `/profile/person/${d.slug}/`}

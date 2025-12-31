@@ -1,18 +1,27 @@
 "use client";
 
+import {plural} from "pluralize";
 import AnchorList from "../utils/AnchorList";
 import {toTitleCase} from "../utils/vizHelpers";
 import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 import {useRouter} from "next/navigation";
 
-export default function Intro({year, people, occupation}) {
+export default function Intro({year, people, occupation, country}) {
   const router = useRouter();
   const peopleSortedByHPI = people
-    .filter(person =>
-      occupation ? person.occupation?.id === occupation.id : true
-    )
-    .sort((a, b) => b.hpi - a.hpi);
+    .filter(person => {
+      if (occupation) return person.occupation?.id === occupation.id;
+      if (country) return person.bplace_country?.id === country.id;
+      return true;
+    })
+    .sort((a, b) => {
+      // Handle undefined HPI values to prevent NaN in sort comparison
+      if (!a.hpi && !b.hpi) return 0;
+      if (!a.hpi) return 1;
+      if (!b.hpi) return -1;
+      return b.hpi - a.hpi;
+    });
 
   const occupationCounts = people.reduce((acc, person) => {
     if (person.occupation) {
@@ -27,6 +36,20 @@ export default function Intro({year, people, occupation}) {
     }
     return acc;
   }, []);
+
+  const countryCounts = people.reduce((acc, person) => {
+    if (person.bplace_country) {
+      const countryId = person.bplace_country.id;
+      if (!acc[countryId]) {
+        acc[countryId] = {
+          count: 0,
+          country: person.bplace_country,
+        };
+      }
+      acc[countryId].count++;
+    }
+    return acc;
+  }, {});
 
   const cityDiedCounts = peopleSortedByHPI.reduce((acc, person) => {
     if (person.dplace_geonameid) {
@@ -132,6 +155,7 @@ export default function Intro({year, people, occupation}) {
             router.push(path);
           }}
           value={occupation?.occupation_slug || ""}
+          disabled={!!country}
         >
           <option value="">All Occupations</option>
           {Object.values(occupationCounts)
@@ -146,6 +170,29 @@ export default function Intro({year, people, occupation}) {
             ))}
         </select>
       </div>
+      <div className="occupation-filter">
+        <label htmlFor="country-select">Filter by Nationality: </label>
+        <select
+          id="country-select"
+          onChange={e => {
+            const path = e.target.value
+              ? `/profile/deaths/${year}/country/${e.target.value}`
+              : `/profile/deaths/${year}`;
+            router.push(path);
+          }}
+          value={country?.slug || ""}
+          disabled={!!occupation}
+        >
+          <option value="">All Countries</option>
+          {Object.values(countryCounts)
+            .sort((a, b) => b.count - a.count)
+            .map(({country, count}) => (
+              <option key={country.id} value={country.slug}>
+                {country.country} ({count})
+              </option>
+            ))}
+        </select>
+      </div>
       <div className="year-navigation">
         <div>
           <a
@@ -154,11 +201,20 @@ export default function Intro({year, people, occupation}) {
                 ? `/profile/deaths/${parseInt(year) - 1}/occupation/${
                     occupation.occupation_slug
                   }`
+                : country
+                ? `/profile/deaths/${parseInt(year) - 1}/country/${
+                    country.slug
+                  }`
                 : `/profile/deaths/${parseInt(year) - 1}`
             }
             className="year-navigation-link"
           >
             &laquo; view {parseInt(year) - 1} deaths
+            {occupation
+              ? ` (${plural(occupation.occupation.toLowerCase())})`
+              : country
+              ? ` (${country.country})`
+              : ""}
           </a>
         </div>
         {parseInt(year) + 1 <= new Date().getFullYear() ? (
@@ -169,11 +225,21 @@ export default function Intro({year, people, occupation}) {
                   ? `/profile/deaths/${parseInt(year) + 1}/occupation/${
                       occupation.occupation_slug
                     }`
+                  : country
+                  ? `/profile/deaths/${parseInt(year) + 1}/country/${
+                      country.slug
+                    }`
                   : `/profile/deaths/${parseInt(year) + 1}`
               }
               className="year-navigation-link"
             >
-              view {parseInt(year) + 1} deaths &raquo;
+              view {parseInt(year) + 1} deaths
+              {occupation
+                ? ` (${plural(occupation.occupation.toLowerCase())})`
+                : country
+                ? ` (${country.country})`
+                : ""}{" "}
+              &raquo;
             </a>
           </div>
         ) : null}

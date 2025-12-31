@@ -4,7 +4,7 @@ import AnchorList from "../utils/AnchorList";
 import {plural} from "pluralize";
 import {toTitleCase} from "../utils/vizHelpers";
 
-export default async function TopPeople({occupation, year, people}) {
+export default async function TopPeople({occupation, country, year, people}) {
   const peopleSortedByHPI = people.sort((a, b) => {
     // Handle undefined HPI values to prevent NaN in sort comparison
     if (!a.hpi && !b.hpi) return 0;
@@ -23,6 +23,8 @@ export default async function TopPeople({occupation, year, people}) {
   );
   const typeOfCeleb = occupation
     ? plural(occupation.occupation.toLowerCase())
+    : country
+    ? `${country.demonym.toLowerCase()} celebrities`
     : "celebrities";
   return (
     <section className="profile-section">
@@ -30,6 +32,10 @@ export default async function TopPeople({occupation, year, people}) {
         <h2>
           {year} Deaths: Honoring Lives and Legacies of{" "}
           {plural(toTitleCase(occupation.occupation))}
+        </h2>
+      ) : country ? (
+        <h2>
+          {year} Deaths: Honoring Lives and Legacies of {country.demonym} People
         </h2>
       ) : (
         <h2>{year} Deaths: Honoring Lives and Legacies</h2>
@@ -63,7 +69,6 @@ export default async function TopPeople({occupation, year, people}) {
           most famous people to have died in {year} based on cultural impact.
         </p>
       </div>
-
       <PeopleGrid
         bios={peopleSortedByHPI.slice(0, 16)}
         occupation={occupation}
