@@ -5,7 +5,13 @@ import {plural} from "pluralize";
 import {toTitleCase} from "../utils/vizHelpers";
 
 export default async function TopPeople({occupation, year, people}) {
-  const peopleSortedByHPI = people.sort((a, b) => b.hpi - a.hpi);
+  const peopleSortedByHPI = people.sort((a, b) => {
+    // Handle undefined HPI values to prevent NaN in sort comparison
+    if (!a.hpi && !b.hpi) return 0;
+    if (!a.hpi) return 1; // People without HPI go to the end
+    if (!b.hpi) return -1;
+    return b.hpi - a.hpi; // Sort by HPI descending
+  });
   const topActors = peopleSortedByHPI.filter(p =>
     ["ACTOR"].includes(p.occupation?.occupation)
   );
