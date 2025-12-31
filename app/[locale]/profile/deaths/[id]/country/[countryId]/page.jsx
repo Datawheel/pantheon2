@@ -1,0 +1,155 @@
+import ProfileNav from "/components/common/Nav";
+import {cloneElement} from "react";
+import Intro from "/components/deaths/Intro";
+import Header from "/components/deaths/Header";
+import TopPeople from "/components/deaths/TopPeople";
+import DeathsByMonth from "/components/deaths/DeathsByMonth";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+
+async function getCountry(countryId) {
+  const res = await fetch(`${BASE_API}/country?slug=eq.${countryId}`, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch country: ${res.status}`);
+  }
+
+  const data = await res.json();
+
+  // Return first item if array has content, otherwise empty object
+  return Array.isArray(data) && data.length > 0 ? data[0] : {};
+}
+
+async function getPeopleDiedThisYear(yearNum) {
+  const res = await fetch(
+    `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(id,country,slug,demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+async function getPeopleDiedThisYearHpi(yearNum) {
+  const res = await fetch(
+    `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi,hpi_prev,non_en_page_views`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  return res.json();
+}
+
+export async function generateMetadata({params}, parent) {
+  // read route params
+  const year = params.id;
+  const countryId = params.countryId;
+  const country = await getCountry(countryId);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${year} ${country.country || "Country"} Deaths | Pantheon`,
+    openGraph: {
+      images: [
+        `https://static.pantheon.world/profile/deaths/deaths-${year}.jpg`,
+        ...previousImages,
+      ],
+    },
+  };
+}
+
+export default async function Page({params: {id: year, countryId}}) {
+  // Check if year is a valid integer > 2000
+  const yearNum = parseInt(year);
+  if (isNaN(yearNum) || yearNum < 2000) {
+    return new Response("Not Found", {status: 404});
+  }
+
+  const country = await getCountry(countryId);
+
+  // Fetch both person data and HPI data in parallel
+  const [peopleDiedThisYearAttrs, peopleDiedThisYearHpi] = await Promise.all([
+    getPeopleDiedThisYear(yearNum),
+    getPeopleDiedThisYearHpi(yearNum),
+  ]);
+
+  // Merge the results
+  const peopleDiedThisYear = peopleDiedThisYearAttrs.map(person => {
+    const hpiData = peopleDiedThisYearHpi.find(hpi => hpi.id === person.id);
+    return {
+      ...person,
+      ...(hpiData || {}),
+    };
+  });
+
+  // Filter by birth country (nationality)
+  const peopleDiedThisYearFiltered = peopleDiedThisYear.filter(
+    person => person.bplace_country?.id === country.id
+  );
+
+  const sections = [
+    {
+      slug: "people",
+      title: "People",
+      content: (
+        <TopPeople
+          country={country}
+          year={year}
+          people={peopleDiedThisYearFiltered}
+        />
+      ),
+    },
+    {
+      slug: "deaths-by-month",
+      title: "Deaths by Month",
+      content: (
+        <DeathsByMonth
+          country={country}
+          year={year}
+          people={peopleDiedThisYearFiltered}
+        />
+      ),
+    },
+  ];
+
+  return (
+    <div className="person">
+      <Header country={country} year={year} people={peopleDiedThisYearFiltered} />
+      <div className="about-section">
+        <ProfileNav sections={sections} />
+        <Intro country={country} year={year} people={peopleDiedThisYear} />
+      </div>
+      {sections.map((section, key) =>
+        cloneElement(section.content, {
+          key,
+          id: key + 1,
+          slug: section.slug,
+          title: section.title,
+        })
+      )}
+      <div className="year-navigation">
+        <div>
+          <a
+            href={`/profile/deaths/${parseInt(year) - 1}/country/${countryId}`}
+            className="year-navigation-link"
+          >
+            &laquo; view {parseInt(year) - 1} deaths ({country.country})
+          </a>
+        </div>
+        {parseInt(year) + 1 <= new Date().getFullYear() ? (
+          <div>
+            <a
+              href={`/profile/deaths/${parseInt(year) + 1}/country/${countryId}`}
+              className="year-navigation-link"
+            >
+              view {parseInt(year) + 1} deaths ({country.country}) &raquo;
+            </a>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
