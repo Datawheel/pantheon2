@@ -41,6 +41,40 @@ const fetchRankMap = async ({date, lang, slugs}) => {
     }, {});
 };
 
+// Helper: Try to fetch rank data from previous days until we find some
+const fetchPreviousRankMap = async ({currentDate, lang, slugs, maxDaysBack = 7}) => {
+  // Parse the current date to get a Date object
+  const [year, month, day] = currentDate.split('-').map(Number);
+  const date = new Date(year, month - 1, day); // month is 0-indexed in Date
+
+  // Try each previous day up to maxDaysBack
+  for (let daysBack = 1; daysBack <= maxDaysBack; daysBack++) {
+    const prevDate = new Date(date);
+    prevDate.setDate(date.getDate() - daysBack);
+
+    const prevYear = prevDate.getFullYear();
+    const prevMonth = String(prevDate.getMonth() + 1).padStart(2, '0');
+    const prevDay = String(prevDate.getDate()).padStart(2, '0');
+    const prevDateStr = `${prevYear}-${prevMonth}-${prevDay}`;
+
+    const rankMap = await fetchRankMap({
+      date: prevDateStr,
+      lang,
+      slugs,
+    });
+
+    // If we found data, return it
+    if (Object.keys(rankMap).length > 0) {
+      console.log(`Found previous rank data from ${prevDateStr} (${daysBack} days back)`);
+      return rankMap;
+    }
+  }
+
+  // No data found in the last maxDaysBack days
+  console.log(`No previous rank data found in the last ${maxDaysBack} days`);
+  return {};
+};
+
 const addRankDeltas = (arrOfBios, prevRankMap) =>
   arrOfBios.map(d => ({
     ...d,
@@ -109,12 +143,6 @@ export async function GET(request) {
 
   // Yesterday in ET
   const {year, month, day} = getEasternDateComponents(1);
-  // Two days ago in ET
-  const {
-    year: year2DaysAgo,
-    month: month2DaysAgo,
-    day: day2DaysAgo,
-  } = getEasternDateComponents(2);
 
   const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
   const trendApiUrl = `${process.env.BASE_API}/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&slug=neq.cleopatra${occupationCut}&order=rank_pantheon.asc&limit=${limit}`;
@@ -126,8 +154,8 @@ export async function GET(request) {
   const todaysBiosFromDb = todaysBiosFromDbResp.data;
 
   if (todaysBiosFromDb.length) {
-    const prevRankMap = await fetchRankMap({
-      date: `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`,
+    const prevRankMap = await fetchPreviousRankMap({
+      currentDate: `${year}-${month}-${day}`,
       lang,
       slugs: todaysBiosFromDb.map(d => d.slug),
     });
@@ -175,9 +203,11 @@ export async function GET(request) {
         "The date(s) you used are valid, but we either do not have data for those date(s)"
       )
     ) {
+      // Wikipedia doesn't have data for yesterday, try previous days
+      const {year: year2DaysAgo, month: month2DaysAgo, day: day2DaysAgo} = getEasternDateComponents(2);
       const todaysBiosFromDbResp2 = await axios
         .get(
-          `${process.env.BASE_API}/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo})&slug=neq.cleopatra&lang=eq.${lang}${occupationCut}`
+          `${process.env.BASE_API}/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}&slug=neq.cleopatra&lang=eq.${lang}${occupationCut}`
         )
         .catch(
           e => (console.log("Pantheon trends read Error:", e), {data: []})
@@ -326,8 +356,8 @@ export async function GET(request) {
       }
     }
 
-    const prevRankMap = await fetchRankMap({
-      date: `${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}`,
+    const prevRankMap = await fetchPreviousRankMap({
+      currentDate: `${year}-${month}-${day}`,
       lang,
       slugs: todaysBiosForDb.map(d => d.slug),
     });
