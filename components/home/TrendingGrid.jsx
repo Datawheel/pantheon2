@@ -1,6 +1,7 @@
 "use client";
 
 import {useState} from "react";
+import {useRouter} from "next/navigation";
 import Grid from "/components/home/Grid";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
@@ -31,6 +32,7 @@ export default function TrendingGrid({
   showTrendIndicator = true,
   showDates = false,
 }) {
+  const router = useRouter();
   const [trendingAll, setTrendingAll] = useState(initialTrendingAll);
   const [trendingLangEdition, setTrendingLangEdition] = useState(defaultLang);
   const [loading, setLoading] = useState(false);
@@ -52,11 +54,14 @@ export default function TrendingGrid({
     setLoading(false);
   };
 
-  // Handle language change dynamically
+  // Handle language change - navigate to new locale URL
   const handleLanguageChange = e => {
     const selectedLang = e.target.value;
+    // Immediately update dropdown for responsive feel
     setTrendingLangEdition(selectedLang);
-    fetchTrendingData(selectedLang);
+    setLoading(true);
+    // Navigate to the new locale URL
+    router.push(`/${selectedLang}`);
   };
 
   return (

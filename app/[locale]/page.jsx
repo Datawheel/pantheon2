@@ -3,15 +3,20 @@ import Link from "next/link";
 import Image from "next/image";
 import TrendingGrid from "/components/home/TrendingGrid";
 import {REVALIDATE_PERIODS} from "/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import HomeSearch from "/components/home/HomeSearch";
 const baseUrl = process.env.URL || "https://pantheon.world";
 
-export default async function Home() {
+export default async function Home({params}) {
+  const locale = params?.locale || DEFAULT_LOCALE;
+  // Validate locale, fallback to default if invalid
+  const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+
   const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
-  // Fetch initial data server-side (default language: "en")
+  // Fetch initial data server-side using the URL locale
   const trendingAll = await fetch(
-    `${baseUrl}/api/wikiTrends?lang=en&limit=16`,
+    `${baseUrl}/api/wikiTrends?lang=${lang}&limit=16`,
     {
       next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
     }
@@ -37,7 +42,7 @@ export default async function Home() {
     });
 
   const trendingSingers = await fetch(
-    `${baseUrl}/api/wikiTrends?lang=en&limit=16&occupation=SINGER`,
+    `${baseUrl}/api/wikiTrends?lang=${lang}&limit=16&occupation=SINGER`,
     {
       next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
     }
@@ -50,7 +55,7 @@ export default async function Home() {
     });
 
   const trendingActors = await fetch(
-    `${baseUrl}/api/wikiTrends?lang=en&limit=16&occupation=ACTOR`,
+    `${baseUrl}/api/wikiTrends?lang=${lang}&limit=16&occupation=ACTOR`,
     {
       next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
     }
@@ -114,7 +119,7 @@ export default async function Home() {
         title="Trending Profiles Today"
         allowLangChange={true}
         initialTrendingAll={trendingAll}
-        defaultLang="en"
+        defaultLang={lang}
       />
 
       <div className="profile-grid">
@@ -143,7 +148,7 @@ export default async function Home() {
         title="Recent Passings"
         allowLangChange={false}
         initialTrendingAll={recentPassings}
-        defaultLang="en"
+        defaultLang={lang}
         showTrendIndicator={false}
         showDates={true}
       />
@@ -164,7 +169,7 @@ export default async function Home() {
         title="Trending Singers Today"
         allowLangChange={true}
         initialTrendingAll={trendingSingers}
-        defaultLang="en"
+        defaultLang={lang}
         occupation="SINGER"
       />
 
@@ -172,7 +177,7 @@ export default async function Home() {
         title="Trending Actors Today"
         allowLangChange={true}
         initialTrendingAll={trendingActors}
-        defaultLang="en"
+        defaultLang={lang}
         occupation="ACTOR"
       />
 
