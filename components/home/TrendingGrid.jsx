@@ -4,6 +4,7 @@ import {useState} from "react";
 import Grid from "/components/home/Grid";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
+import {SUPPORTED_LOCALES, LOCALE_NAMES, DEFAULT_LOCALE} from "/app/locales";
 
 const LangSelector = ({handleLanguageChange, trendingLangEdition}) => (
   <Select
@@ -13,18 +14,11 @@ const LangSelector = ({handleLanguageChange, trendingLangEdition}) => (
     onChange={handleLanguageChange}
     value={trendingLangEdition}
   >
-    <option value="ar">Arabic</option>
-    <option value="zh">Chinese</option>
-    <option value="nl">Dutch</option>
-    <option value="en">English</option>
-    <option value="fr">French</option>
-    <option value="de">German</option>
-    <option value="hu">Hungarian</option>
-    <option value="it">Italian</option>
-    <option value="ja">Japanese</option>
-    <option value="pt">Portuguese</option>
-    <option value="ru">Russian</option>
-    <option value="es">Spanish</option>
+    {SUPPORTED_LOCALES.map(locale => (
+      <option key={locale} value={locale}>
+        {LOCALE_NAMES[locale]}
+      </option>
+    ))}
   </Select>
 );
 

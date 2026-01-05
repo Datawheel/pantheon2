@@ -1,5 +1,6 @@
 const createThrottle = require("async-throttle");
 const axios = require("axios");
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 
 const dedupe = (item, index, self) =>
   self.findIndex(obj => obj.slug === item.slug) === index;
@@ -42,9 +43,14 @@ const fetchRankMap = async ({date, lang, slugs}) => {
 };
 
 // Helper: Try to fetch rank data from previous days until we find some
-const fetchPreviousRankMap = async ({currentDate, lang, slugs, maxDaysBack = 7}) => {
+const fetchPreviousRankMap = async ({
+  currentDate,
+  lang,
+  slugs,
+  maxDaysBack = 7,
+}) => {
   // Parse the current date to get a Date object
-  const [year, month, day] = currentDate.split('-').map(Number);
+  const [year, month, day] = currentDate.split("-").map(Number);
   const date = new Date(year, month - 1, day); // month is 0-indexed in Date
 
   // Try each previous day up to maxDaysBack
@@ -53,8 +59,8 @@ const fetchPreviousRankMap = async ({currentDate, lang, slugs, maxDaysBack = 7})
     prevDate.setDate(date.getDate() - daysBack);
 
     const prevYear = prevDate.getFullYear();
-    const prevMonth = String(prevDate.getMonth() + 1).padStart(2, '0');
-    const prevDay = String(prevDate.getDate()).padStart(2, '0');
+    const prevMonth = String(prevDate.getMonth() + 1).padStart(2, "0");
+    const prevDay = String(prevDate.getDate()).padStart(2, "0");
     const prevDateStr = `${prevYear}-${prevMonth}-${prevDay}`;
 
     const rankMap = await fetchRankMap({
@@ -65,7 +71,9 @@ const fetchPreviousRankMap = async ({currentDate, lang, slugs, maxDaysBack = 7})
 
     // If we found data, return it
     if (Object.keys(rankMap).length > 0) {
-      console.log(`Found previous rank data from ${prevDateStr} (${daysBack} days back)`);
+      console.log(
+        `Found previous rank data from ${prevDateStr} (${daysBack} days back)`
+      );
       return rankMap;
     }
   }
@@ -108,24 +116,9 @@ export async function GET(request) {
   const searchParamLang = searchParams.get("lang");
   const searchParamOccupation = searchParams.get("occupation");
   const searchParamLimit = searchParams.get("limit");
-  const lang =
-    [
-      "ar",
-      "zh",
-      "nl",
-      "en",
-      "fr",
-      "de",
-      "hu",
-      "it",
-      "ja",
-      "pl",
-      "pt",
-      "ru",
-      "es",
-    ].indexOf(searchParamLang) !== -1
-      ? searchParamLang
-      : "en";
+  const lang = SUPPORTED_LOCALES.indexOf(searchParamLang) !== -1
+    ? searchParamLang
+    : DEFAULT_LOCALE;
   const occupation =
     [
       "SOCCER PLAYER",
@@ -204,7 +197,11 @@ export async function GET(request) {
       )
     ) {
       // Wikipedia doesn't have data for yesterday, try previous days
-      const {year: year2DaysAgo, month: month2DaysAgo, day: day2DaysAgo} = getEasternDateComponents(2);
+      const {
+        year: year2DaysAgo,
+        month: month2DaysAgo,
+        day: day2DaysAgo,
+      } = getEasternDateComponents(2);
       const todaysBiosFromDbResp2 = await axios
         .get(
           `${process.env.BASE_API}/trend?date=eq.${year2DaysAgo}-${month2DaysAgo}-${day2DaysAgo}&slug=neq.cleopatra&lang=eq.${lang}${occupationCut}`

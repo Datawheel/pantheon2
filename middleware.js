@@ -1,10 +1,11 @@
 // middleware.ts (or src/middleware.ts)
 import {NextResponse} from "next/server";
 import {createI18nMiddleware} from "next-international/middleware";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "./app/locales";
 
 const I18nMiddleware = createI18nMiddleware({
-  locales: ["en"],
-  defaultLocale: "en",
+  locales: SUPPORTED_LOCALES,
+  defaultLocale: DEFAULT_LOCALE,
   urlMappingStrategy: "rewriteDefault",
 });
 
