@@ -7,6 +7,7 @@ import Grid from "/components/home/Grid";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
 import {SUPPORTED_LOCALES, LOCALE_NAMES, DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
 
 const LangSelector = ({handleLanguageChange, trendingLangEdition}) => (
   <Select
@@ -70,6 +71,8 @@ export default function TrendingGrid({
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
+  const t = getTranslations(trendingLangEdition);
+
   return (
     <div className="profile-grid">
       <div className="grid-title-container">
@@ -77,13 +80,13 @@ export default function TrendingGrid({
         {allowLangChange ? (
           <p className="grid-subtitle">
             <span className="grid-select-label">
-              Top profiles by pageviews for the{" "}
+              {t.home.topProfilesBy}{" "}
             </span>
             <LangSelector
               handleLanguageChange={handleLanguageChange}
               trendingLangEdition={trendingLangEdition}
             />
-            <span className="grid-select-label"> wikipedia edition</span>
+            <span className="grid-select-label"> {t.home.wikipediaEdition}</span>
           </p>
         ) : null}
       </div>

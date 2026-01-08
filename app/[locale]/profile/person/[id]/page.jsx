@@ -22,9 +22,9 @@ import GoogleAdSense from "/components/common/GoogleAdSense";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
 import rankless from "/data/rankless.json";
 
-async function getPerson(id) {
+async function getPerson(id, lang = "en") {
   const res = await fetch(
-    `${BASE_API}/person?slug=eq.${id}&select=occupation(*),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),*`,
+    `${BASE_API}/person?slug=eq.${id}&select=occupation(*,${lang}_occupation:translations->${lang}->>occupation),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),translations,*`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -59,9 +59,14 @@ async function getPersonRanks(id) {
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
-async function getWikiExtract(personId) {
+async function getWikiExtract(personSlug, localizedName, lang = "en") {
+  // Use localized name if available, otherwise use slug converted to title format
+  const title = localizedName || personSlug.replace(/_/g, " ");
+
   const res = await fetch(
-    `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=${personId}&format=json&exlimit=1&origin=*`,
+    `https://${lang}.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&titles=${encodeURIComponent(
+      title
+    )}&format=json&exlimit=1&origin=*`,
     {
       headers: {
         "User-Agent":
@@ -135,9 +140,10 @@ async function getPersonTrending(slug, userLang, date) {
 export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
+  const locale = params.locale || DEFAULT_LOCALE;
 
   // fetch data
-  const person = await getPerson(id);
+  const person = await getPerson(id, locale);
 
   if (!person) {
     return {
@@ -148,11 +154,14 @@ export async function generateMetadata({params}, parent) {
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 
+  // Get localized name for metadata
+  const localizedName = person.translations?.[params.locale] || person.name;
+
   return {
-    title: `${person.name} Biography | Pantheon`,
+    title: `${localizedName} Biography | Pantheon`,
     openGraph: {
       images: [
-        `https://pantheon.world/api/screenshot/person?id=${person.id}`,
+        `https://pantheon.world/api/screenshot/person?id=${person.id}&locale=${params.locale}`,
         ...previousImages,
       ],
     },
@@ -173,7 +182,7 @@ export default async function Page({params: {id, locale}}) {
     easternNow.getMonth() + 1
   ).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
 
-  const personData = getPerson(id);
+  const personData = getPerson(id, lang);
   const personRanksData = getPersonRanks(id);
   const personTrendingData = getPersonTrending(id, lang, yesterday);
 
@@ -187,7 +196,14 @@ export default async function Page({params: {id, locale}}) {
     return notFound();
   }
 
-  const wikiExtractData = getWikiExtract(person.id);
+  // Get localized name from translations column, fallback to English name
+  const localizedName = person.translations?.[lang] || person.name;
+
+  // Get localized occupation from translations column, fallback to English occupation
+  const localizedOccupation =
+    person.occupation?.[`${lang}_occupation`] || person.occupation?.occupation;
+
+  const wikiExtractData = getWikiExtract(person.slug, localizedName, lang);
   // const newsArticlesData = getNewsArticles(person.id);
   // const tweetsData = getTweets(person.id);
 
@@ -207,7 +223,16 @@ export default async function Page({params: {id, locale}}) {
     {
       title: "Memorability Metrics",
       slug: "metrics",
-      content: <MemMetrics person={person} personRanks={personRanks} />,
+      content: (
+        <MemMetrics
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
+          personRanks={personRanks}
+        />
+      ),
     },
     // {
     //   title: "In the news",
@@ -217,35 +242,86 @@ export default async function Page({params: {id, locale}}) {
     {
       title: "Notable Works",
       slug: "books",
-      content: <Books person={person} books={books} />,
+      content: (
+        <Books
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
+          books={books}
+        />
+      ),
     },
     {
-      title: `Page views of ${person.name} by language`,
+      title: `Page views of ${localizedName} by language`,
       slug: "page-views-by-lang",
-      content: <PageViewsByLang person={person} />,
+      content: (
+        <PageViewsByLang
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
+        />
+      ),
     },
     {
-      title: `Among ${plural(person.occupation.occupation)}`,
+      title: `Among ${plural(localizedOccupation)}`,
       slug: "occupation_peers",
-      content: <OccupationRanking person={person} personRanks={personRanks} />,
+      content: (
+        <OccupationRanking
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
+          personRanks={personRanks}
+        />
+      ),
     },
     {
       title: "Contemporaries",
       slug: "year_peers",
-      content: <YearRanking person={person} personRanks={personRanks} />,
+      content: (
+        <YearRanking
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
+          personRanks={personRanks}
+        />
+      ),
     },
     {
       title: `In ${person?.bplace_country?.country}`,
       slug: "country_peers",
-      content: <CountryRanking person={person} personRanks={personRanks} />,
+      content: (
+        <CountryRanking
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
+          personRanks={personRanks}
+        />
+      ),
     },
     {
-      title: `Among ${plural(person.occupation.occupation)} In ${
+      title: `Among ${plural(localizedOccupation)} In ${
         person?.bplace_country?.country
       }`,
       slug: "country_occupation_peers",
       content: (
-        <CountryOccupationRanking person={person} personRanks={personRanks} />
+        <CountryOccupationRanking
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
+          personRanks={personRanks}
+        />
       ),
     },
     // {
@@ -259,7 +335,16 @@ export default async function Page({params: {id, locale}}) {
           ? "Filmography"
           : "Television and Movie Roles",
       slug: "movies",
-      content: <Movies person={person} movies={movies} />,
+      content: (
+        <Movies
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
+          movies={movies}
+        />
+      ),
     },
   ];
 
@@ -269,7 +354,11 @@ export default async function Page({params: {id, locale}}) {
       slug: "why_trending",
       content: (
         <WhyTrending
-          person={person}
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
           trendingData={personTrending}
           currentLang={lang}
         />
@@ -297,17 +386,26 @@ export default async function Page({params: {id, locale}}) {
     <div className="person">
       <GoogleAdSenseScript />
       <Header
-        person={person}
+        person={{
+          ...person,
+          name: localizedName,
+          occupation: {...person.occupation, occupation: localizedOccupation},
+        }}
         trendingData={personTrending}
         currentLang={lang}
       />
       <div className="about-section">
         <ProfileNav sections={filteredSection} />
         <Intro
-          person={person}
+          person={{
+            ...person,
+            name: localizedName,
+            occupation: {...person.occupation, occupation: localizedOccupation},
+          }}
           personRanks={personRanks}
           wikiExtract={wikiExtract}
           ranklessUrl={rankless[person.id]}
+          lang={lang}
         />
       </div>
       {filteredSection.slice(0, 3).map((section, key) =>
@@ -344,7 +442,14 @@ export default async function Page({params: {id, locale}}) {
           title: section.title,
         })
       )}
-      <Footer person={person} personRanks={personRanks} />
+      <Footer
+        person={{
+          ...person,
+          name: localizedName,
+          occupation: {...person.occupation, occupation: localizedOccupation},
+        }}
+        personRanks={personRanks}
+      />
     </div>
   );
 }

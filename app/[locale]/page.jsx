@@ -4,6 +4,7 @@ import Image from "next/image";
 import TrendingGrid from "/components/home/TrendingGrid";
 import {REVALIDATE_PERIODS} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
 import HomeSearch from "/components/home/HomeSearch";
 const baseUrl = process.env.URL || "https://pantheon.world";
 
@@ -11,6 +12,7 @@ export default async function Home({params}) {
   const locale = params?.locale || DEFAULT_LOCALE;
   // Validate locale, fallback to default if invalid
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
 
   const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
@@ -100,23 +102,22 @@ export default async function Home({params}) {
           </div>
 
           <div className="home-head-content">
-            <h2>Explore human collective memory!</h2>
+            <h2>{t.home.tagline}</h2>
             <p>
-              Pantheon helps you discover the geography and dynamics of our
-              planet&apos;s history.
+              {t.home.subtitle}
             </p>
             <h3 className="home-explore-links">
-              Explore <Link href="/profile/person">People</Link>,{" "}
-              <Link href="/profile/place">Places</Link>,{" "}
-              <Link href="/profile/occupation">Occupations</Link>, and{" "}
-              <Link href="/profile/era">Eras</Link>
+              {t.home.explore} <Link href={`/${lang}/profile/person`}>{t.home.people}</Link>,{" "}
+              <Link href={`/${lang}/profile/place`}>{t.home.places}</Link>,{" "}
+              <Link href={`/${lang}/profile/occupation`}>{t.home.occupations}</Link>, {t.home.and}{" "}
+              <Link href={`/${lang}/profile/era`}>{t.home.eras}</Link>
             </h3>
           </div>
         </div>
       </div>
 
       <TrendingGrid
-        title="Trending Profiles Today"
+        title={t.home.trendingProfiles}
         allowLangChange={true}
         initialTrendingAll={trendingAll}
         defaultLang={lang}
@@ -125,28 +126,22 @@ export default async function Home({params}) {
 
       <div className="profile-grid">
         <p className="post">
-          <strong>Pantheon</strong> is an observatory of collective memory
-          focused on biographies with a presence in at least{" "}
-          <strong>15 languages</strong> in Wikipedia. We have data on more than
-          85,000 biographies, organized by countries, cities, occupations, and
-          eras. Explore this data to learn about the characters that shape human
-          culture. <strong>Pantheon</strong> began as a project at the
-          Collective Learning group at MIT. Today it is developed by{" "}
+          <strong>Pantheon</strong> {t.home.about}{" "}
+          <strong>15 {t.home.languages}</strong> {t.home.aboutContinued} <strong>Pantheon</strong> {t.home.aboutDeveloped}{" "}
           <a
             href="https://datawheel.us/"
             target="_blank"
             rel="noopener noreferrer"
             className="item-link feedback-link"
           >
-            Datawheel
+            {t.home.datawheel}
           </a>
-          , a company specialized in the creation of data distribution and
-          visualization solutions.
+          {t.home.aboutDatawheel}
         </p>
       </div>
 
       <TrendingGrid
-        title="Recent Passings"
+        title={t.home.recentPassings}
         allowLangChange={false}
         initialTrendingAll={recentPassings}
         defaultLang={lang}
@@ -155,19 +150,16 @@ export default async function Home({params}) {
       />
 
       <div className="announcement-block">
-        <h2>Notable Deaths of 2025</h2>
+        <h2>{t.home.notableDeaths}</h2>
         <p>
-          Want to see the complete list of notable figures we&apos;ve lost in
-          2025? Visit our{" "}
-          <Link href="/en/profile/deaths/2025">Notable Deaths of 2025</Link>{" "}
-          page for a comprehensive collection of biographies featuring
-          influential personalities, including celebrities, artists, leaders,
-          and cultural icons who have passed away this year.
+          {t.home.notableDeathsText}{" "}
+          <Link href={`/${lang}/profile/deaths/2025`}>{t.home.notableDeathsLink}</Link>{" "}
+          {t.home.notableDeathsContinued}
         </p>
       </div>
 
       <TrendingGrid
-        title="Trending Singers Today"
+        title={t.home.trendingSingers}
         allowLangChange={true}
         initialTrendingAll={trendingSingers}
         defaultLang={lang}
@@ -175,7 +167,7 @@ export default async function Home({params}) {
       />
 
       <TrendingGrid
-        title="Trending Actors Today"
+        title={t.home.trendingActors}
         allowLangChange={true}
         initialTrendingAll={trendingActors}
         defaultLang={lang}

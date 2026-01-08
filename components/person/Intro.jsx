@@ -4,7 +4,7 @@ import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 import Image from "next/image";
 
-const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
+const Intro = ({person, personRanks, wikiExtract, ranklessUrl, lang = "en"}) => {
   const {
     occupation_rank: occupationRank,
     occupation_rank_prev: occupationRankPrev,
@@ -108,7 +108,9 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
 
   // wikipedia excerpt
   if (wikiExtract && wikiExtract.query && wikiExtract.query.pages) {
-    const page = wikiExtract.query.pages[person.id];
+    // Get the first page object (since we're querying by title, page ID will be language-specific)
+    const pageId = Object.keys(wikiExtract.query.pages)[0];
+    const page = wikiExtract.query.pages[pageId];
     if (page && page.extract) {
       wikiSentence = page.extract;
       if (wikiSentence.length > 1000) {
@@ -123,10 +125,7 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
         // add final period back in
         wikiSentence = wikiSentence + ".";
       }
-      wikiSlug = wikiExtract.query.pages[`${person.id}`].title.replace(
-        " ",
-        "_"
-      );
+      wikiSlug = page.title.replace(/ /g, "_");
     }
   }
   // return <div>another new intro here...</div>;
@@ -183,7 +182,7 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl}) => {
             <p>
               {wikiSentence}{" "}
               <a
-                href={`https://en.wikipedia.org/wiki/${wikiSlug}`}
+                href={`https://${lang}.wikipedia.org/wiki/${wikiSlug}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

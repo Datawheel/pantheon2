@@ -34,6 +34,8 @@ export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
+  const locale = searchParams.get("locale") || "en";
+
   if (!id) {
     return new NextResponse("Not Found", {status: 404});
   }
@@ -46,7 +48,7 @@ export async function GET(request) {
   ).then(res => res.arrayBuffer());
 
   const res = await fetch(
-    `${BASE_API}/person?id=eq.${id}&select=name,occupation(occupation,domain_slug),birthyear,deathyear`
+    `${BASE_API}/person?id=eq.${id}&select=name,translations,occupation(occupation,domain_slug,${locale}_occupation:translations->${locale}->>occupation),birthyear,deathyear`
   );
   // const person = await res.json();
   const data = await res.json();
@@ -54,7 +56,12 @@ export async function GET(request) {
   // Return first item if array has content, otherwise empty object
   const person = Array.isArray(data) && data.length > 0 ? data[0] : {};
 
-  const {name, occupation, birthyear, deathyear} = person;
+  // Get localized name, fallback to English name
+  const localizedName = person.translations?.[locale] || person.name;
+  const {occupation, birthyear, deathyear} = person;
+
+  // Get localized occupation, fallback to English occupation
+  const localizedOccupation = occupation?.[`${locale}_occupation`] || occupation?.occupation;
 
   if (!name) {
     return new NextResponse("ID mismatch", {status: 404});
@@ -195,7 +202,7 @@ export async function GET(request) {
               margin: "0 auto 10px",
             }}
           >
-            {occupation?.occupation}
+            {localizedOccupation}
           </h2>
           <h1
             style={{
@@ -211,7 +218,7 @@ export async function GET(request) {
               textAlign: "center",
             }}
           >
-            {name}
+            {localizedName}
           </h1>
           <p
             style={{
