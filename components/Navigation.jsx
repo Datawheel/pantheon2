@@ -40,7 +40,7 @@ export default function Navigation() {
           <li className="item">
             <a
               href="/explore/rankings?show=people"
-              className="item-link profiles-link dd"
+              className="item-link rankings-link dd"
             >
               Rankings
             </a>
@@ -183,7 +183,7 @@ export default function Navigation() {
                   : "item-link explore-link dd"
               }
             >
-              ◼ Games
+              Games
             </Link>
             <ul className="sub-items">
               <li>
@@ -210,14 +210,14 @@ export default function Navigation() {
           </li>
           <li className="item">
             <Link
-              href="/game/yearbook"
+              href="/news"
               className={
-                pathname === "/game/yearbook"
-                  ? "active item-link explore-link"
-                  : "item-link explore-link"
+                pathname?.startsWith("/news") || pathname?.includes("/news")
+                  ? "active item-link news-link"
+                  : "item-link news-link"
               }
             >
-              Yearbook
+              News
             </Link>
           </li>
           <li className="search-btn">
@@ -376,6 +376,11 @@ export default function Navigation() {
                   </li>
                 </ul>
               ) : null}
+            </li>
+            <li className="item">
+              <a href="/news" className="item-link news-link">
+                News
+              </a>
             </li>
             <li className="item">
               <a href="/data/api" className="item-link api-link">

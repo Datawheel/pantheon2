@@ -33,7 +33,7 @@
     }
 
     &.rankings-link::before {
-      background: url('/images/nav/rankings.svg') no-repeat;
+      background: url('/images/nav/api.svg') no-repeat;
       background-size: contain;
     }
 
@@ -79,6 +79,11 @@
 
     &.feedback-link::before {
       background: url('/images/icons/icon-email.svg') no-repeat;
+      background-size: contain;
+    }
+
+    &.news-link::before {
+      background: url('/images/nav/news.svg') no-repeat;
       background-size: contain;
     }
   }
@@ -211,6 +216,13 @@
     &.api-link::before {
       left: -22px;
       top: -3px;
+      width: 18px;
+      height: 18px;
+    }
+
+    &.news-link::before {
+      left: -21px;
+      top: -4px;
       width: 18px;
       height: 18px;
     }
@@ -468,6 +480,13 @@
       margin-top: -2px;
       width: 20px;
       height: 20px;
+    }
+
+    &.news-link::before {
+      left: -31px;
+      margin-top: -4px;
+      width: 25px;
+      height: 25px;
     }
   }
 

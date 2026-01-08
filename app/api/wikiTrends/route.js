@@ -1,6 +1,7 @@
 const createThrottle = require("async-throttle");
 const axios = require("axios");
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+const {generateTrendingReason} = require("../../../libs/trendingReasons.js");
 
 const dedupe = (item, index, self) =>
   self.findIndex(obj => obj.slug === item.slug) === index;
@@ -92,6 +93,12 @@ const addRankDeltas = (arrOfBios, prevRankMap) =>
         : null,
   }));
 
+const stripReasonFields = (arrOfBios) =>
+  arrOfBios.map(d => {
+    const {trending_reason, llm_provider, llm_metadata, trending_reason_generated_at, ...rest} = d;
+    return rest;
+  });
+
 // Helper: get a YYYY, MM, DD for a given number of days ago in Eastern Time
 function getEasternDateComponents(daysAgo = 0) {
   const now = new Date();
@@ -111,14 +118,123 @@ function getEasternDateComponents(daysAgo = 0) {
   return {year, month, day};
 }
 
+// Helper: Process bios and generate missing trending reasons
+async function processMissingTrendingReasons(bios, lang, date, force = false) {
+  const biosNeedingReasons = force
+    ? bios
+    : bios.filter(bio => !bio.trending_reason);
+
+  if (biosNeedingReasons.length === 0) {
+    return bios;
+  }
+
+  console.log(
+    `${force ? "Force regenerating" : "Generating"} trending reasons for ${
+      biosNeedingReasons.length
+    } people...`
+  );
+
+  // Generate reasons with throttling to avoid rate limits
+  const throttle = createThrottle(5); // 5 concurrent requests max
+  const reasonsPromises = biosNeedingReasons.map(bio =>
+    throttle(async () => {
+      const result = await generateTrendingReason(bio, lang);
+      if (result) {
+        return {
+          slug: bio.slug,
+          date,
+          lang,
+          trending_reason: result.story,
+          llm_provider: "perplexity",
+          llm_metadata: {
+            model: "sonar",
+            temperature: 0.2,
+            citations: result.citations,
+            usage: result.usage,
+          },
+          trending_reason_generated_at: new Date().toISOString(),
+        };
+      }
+      return null;
+    })
+  );
+
+  const generatedReasons = await Promise.all(reasonsPromises);
+  const validReasons = generatedReasons.filter(r => r !== null);
+
+  // Update database with new trending reasons using upsert
+  if (validReasons.length > 0) {
+    try {
+      await axios.post(
+        `${process.env.BASE_API}/trend?on_conflict=slug,date,lang`,
+        validReasons.map(r => ({
+          slug: r.slug,
+          date: r.date,
+          lang: r.lang,
+          trending_reason: r.trending_reason,
+          llm_provider: r.llm_provider,
+          llm_metadata: r.llm_metadata,
+          trending_reason_generated_at: r.trending_reason_generated_at,
+        })),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Prefer: "resolution=merge-duplicates,return=representation",
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
+          },
+        }
+      );
+      console.log(
+        `Upserted ${validReasons.length} trending reasons in database`
+      );
+    } catch (error) {
+      console.error("Error upserting trending reasons:", error.message);
+      if (error.response) {
+        console.error(`  Status: ${error.response.status}`);
+        console.error(
+          `  Response:`,
+          JSON.stringify(error.response.data, null, 2)
+        );
+      }
+    }
+
+    // Merge the generated reasons back into the bios array
+    const reasonsMap = validReasons.reduce((acc, reason) => {
+      acc[reason.slug] = reason;
+      return acc;
+    }, {});
+
+    return bios.map(bio => {
+      if (reasonsMap[bio.slug]) {
+        return {
+          ...bio,
+          trending_reason: reasonsMap[bio.slug].trending_reason,
+          llm_provider: reasonsMap[bio.slug].llm_provider,
+          llm_metadata: reasonsMap[bio.slug].llm_metadata,
+          trending_reason_generated_at:
+            reasonsMap[bio.slug].trending_reason_generated_at,
+        };
+      }
+      return bio;
+    });
+  }
+
+  return bios;
+}
+
 export async function GET(request) {
   const {searchParams} = new URL(request.url);
   const searchParamLang = searchParams.get("lang");
   const searchParamOccupation = searchParams.get("occupation");
   const searchParamLimit = searchParams.get("limit");
-  const lang = SUPPORTED_LOCALES.indexOf(searchParamLang) !== -1
-    ? searchParamLang
-    : DEFAULT_LOCALE;
+  const searchParamDate = searchParams.get("date");
+  const includeReason = searchParams.get("reason") === "true";
+  const forceRegenerate = searchParams.get("force") === "true";
+  const lang =
+    SUPPORTED_LOCALES.indexOf(searchParamLang) !== -1
+      ? searchParamLang
+      : DEFAULT_LOCALE;
   const occupation =
     [
       "SOCCER PLAYER",
@@ -134,25 +250,54 @@ export async function GET(request) {
       : null;
   const limit = parseInt(searchParamLimit, 10) || 100;
 
-  // Yesterday in ET
-  const {year, month, day} = getEasternDateComponents(1);
+  // Use provided date or default to yesterday in ET
+  let year, month, day;
+  if (searchParamDate) {
+    // Parse the provided date (format: YYYY-MM-DD)
+    const dateObj = new Date(searchParamDate + "T12:00:00Z");
+    year = dateObj.getFullYear();
+    month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    day = String(dateObj.getDate()).padStart(2, "0");
+  } else {
+    // Default to yesterday in ET
+    ({year, month, day} = getEasternDateComponents(1));
+  }
 
   const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
-  const trendApiUrl = `${process.env.BASE_API}/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&slug=neq.cleopatra${occupationCut}&order=rank_pantheon.asc&limit=${limit}`;
+  const reasonFields = includeReason
+    ? ",trending_reason,llm_provider,llm_metadata,trending_reason_generated_at"
+    : "";
+  const trendApiUrl = `${process.env.BASE_API}/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&slug=neq.cleopatra${occupationCut}&select=*${reasonFields}&order=rank_pantheon.asc&limit=${limit}`;
 
   const todaysBiosFromDbResp = await axios
     .get(trendApiUrl)
     .catch(e => (console.log("Pantheon trends read Error:", e), {data: []}));
 
-  const todaysBiosFromDb = todaysBiosFromDbResp.data;
+  let todaysBiosFromDb = todaysBiosFromDbResp.data;
 
   if (todaysBiosFromDb.length) {
+    // Generate missing trending reasons (or force regenerate if flag is set)
+    if (includeReason) {
+      todaysBiosFromDb = await processMissingTrendingReasons(
+        todaysBiosFromDb,
+        lang,
+        `${year}-${month}-${day}`,
+        forceRegenerate
+      );
+    }
+
     const prevRankMap = await fetchPreviousRankMap({
       currentDate: `${year}-${month}-${day}`,
       lang,
       slugs: todaysBiosFromDb.map(d => d.slug),
     });
-    const todaysBiosWithDeltas = addRankDeltas(todaysBiosFromDb, prevRankMap);
+    let todaysBiosWithDeltas = addRankDeltas(todaysBiosFromDb, prevRankMap);
+
+    // Strip reason fields if not requested
+    if (!includeReason) {
+      todaysBiosWithDeltas = stripReasonFields(todaysBiosWithDeltas);
+    }
+
     // console.log(`\n~~FOUND IN DB! (lang:${lang}|occupation:${occupation})~~\n`);
     return Response.json(
       [...todaysBiosWithDeltas]
@@ -209,12 +354,17 @@ export async function GET(request) {
         .catch(
           e => (console.log("Pantheon trends read Error:", e), {data: []})
         );
-      return Response.json(
-        [...todaysBiosFromDbResp2.data]
-          .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
-          .filter(dedupe)
-          .slice(0, limit)
-      );
+      let fallbackData = [...todaysBiosFromDbResp2.data]
+        .sort((a, b) => a.rank_pantheon - b.rank_pantheon)
+        .filter(dedupe)
+        .slice(0, limit);
+
+      // Strip reason fields if not requested
+      if (!includeReason) {
+        fallbackData = stripReasonFields(fallbackData);
+      }
+
+      return Response.json(fallbackData);
     }
     // create API URLs from list of people
     if (!topPageViewsJson.items || !Array.isArray(topPageViewsJson.items)) {
@@ -353,12 +503,31 @@ export async function GET(request) {
       }
     }
 
+    // Generate missing trending reasons for newly added bios (or force regenerate if flag is set)
+    let todaysBiosWithReasons = todaysBiosForDb;
+    if (includeReason) {
+      todaysBiosWithReasons = await processMissingTrendingReasons(
+        todaysBiosForDb,
+        lang,
+        `${year}-${month}-${day}`,
+        forceRegenerate
+      );
+    }
+
     const prevRankMap = await fetchPreviousRankMap({
       currentDate: `${year}-${month}-${day}`,
       lang,
-      slugs: todaysBiosForDb.map(d => d.slug),
+      slugs: todaysBiosWithReasons.map(d => d.slug),
     });
-    const todaysBiosWithDeltas = addRankDeltas(todaysBiosForDb, prevRankMap);
+    let todaysBiosWithDeltas = addRankDeltas(
+      todaysBiosWithReasons,
+      prevRankMap
+    );
+
+    // Strip reason fields if not requested
+    if (!includeReason) {
+      todaysBiosWithDeltas = stripReasonFields(todaysBiosWithDeltas);
+    }
 
     if (occupation) {
       return Response.json(
