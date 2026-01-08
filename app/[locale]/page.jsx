@@ -120,6 +120,7 @@ export default async function Home({params}) {
         allowLangChange={true}
         initialTrendingAll={trendingAll}
         defaultLang={lang}
+        showNewsButton={true}
       />
 
       <div className="profile-grid">

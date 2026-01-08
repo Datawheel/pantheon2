@@ -2,6 +2,7 @@
 
 import {useState} from "react";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
 import Grid from "/components/home/Grid";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
@@ -31,6 +32,7 @@ export default function TrendingGrid({
   occupation,
   showTrendIndicator = true,
   showDates = false,
+  showNewsButton = false,
 }) {
   const router = useRouter();
   const [trendingAll, setTrendingAll] = useState(initialTrendingAll);
@@ -64,6 +66,10 @@ export default function TrendingGrid({
     router.push(`/${selectedLang}`);
   };
 
+  // Get today's date for the news link
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+
   return (
     <div className="profile-grid">
       <div className="grid-title-container">
@@ -94,6 +100,13 @@ export default function TrendingGrid({
       ) : (
         <div className="loading-trends">
           <Spinner />
+        </div>
+      )}
+      {showNewsButton && (
+        <div className="trending-news-button-container">
+          <Link href={`/${trendingLangEdition}/news?date=${today}`} className="trending-news-link">
+            Find out why these people are trending
+          </Link>
         </div>
       )}
     </div>

@@ -98,7 +98,7 @@ function getEasternDateComponents(daysAgo = 0) {
 
   // Convert "now" to Eastern Time
   const easternNow = new Date(
-    now.toLocaleString("en-US", {timeZone: "America/New_York"})
+    now.toLocaleString("en-US", {timeZone: "America/Godthab"})
   );
 
   // Go back N days
@@ -371,10 +371,7 @@ export async function GET(request) {
       lang,
       slugs: todaysBiosForDb.map(d => d.slug),
     });
-    const todaysBiosWithDeltas = addRankDeltas(
-      todaysBiosForDb,
-      prevRankMap
-    );
+    const todaysBiosWithDeltas = addRankDeltas(todaysBiosForDb, prevRankMap);
 
     if (occupation) {
       return Response.json(

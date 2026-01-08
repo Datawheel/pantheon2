@@ -1,8 +1,12 @@
+"use client";
+
 // import {Suspense} from "react";
 import {max as D3Max, min as D3Min} from "d3-array";
 import dayjs from "dayjs";
+import {Tooltip} from "@blueprintjs/core";
 // import HeaderLine from "./HeaderLine";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
+import {LOCALE_NAMES} from "/app/locales";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
@@ -41,7 +45,7 @@ import "../../styles/mouse.css";
 //   return res.json();
 // }
 
-export default async function Header({person}) {
+export default function Header({person, trendingData = {}, currentLang}) {
   // const {items: wikiPageViews} = await getWikiPageViews(person.name);
   const wikiPageViews = null;
   // const isTrendingData = await getIsTrending(person.id);
@@ -93,6 +97,32 @@ export default async function Header({person}) {
         </div>
       </div>
       <div className="info">
+        {/* Language rank badges */}
+        {trendingData.isTrending && trendingData.ranksByLang && (
+          <div className="language-rank-badges-header">
+            {Object.entries(trendingData.ranksByLang)
+              .sort(([langA, rankA], [langB, rankB]) => {
+                if (langA === currentLang) return -1;
+                if (langB === currentLang) return 1;
+                return rankA - rankB;
+              })
+              .slice(0, 5)
+              .map(([langCode, rank]) => (
+                <Tooltip
+                  key={langCode}
+                  content={`Rank #${rank} in ${LOCALE_NAMES[langCode]}`}
+                >
+                  <div
+                    className={`lang-rank-badge ${langCode === currentLang ? 'current-lang' : ''}`}
+                  >
+                    <span className="lang-code">{langCode.toUpperCase()}</span>
+                    <span className="lang-rank">{rank}</span>
+                  </div>
+                </Tooltip>
+              ))}
+          </div>
+        )}
+
         {/* {isTrending ? <div className="trending-cont">Trending</div> : null} */}
         <h2 className="profile-type">
           {person.occupation ? person.occupation.occupation : ""}

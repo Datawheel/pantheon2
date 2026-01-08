@@ -196,6 +196,66 @@ header {
   }
 }
 
+.language-rank-badges-header {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  max-width: 180px;
+  z-index: 10;
+  justify-content: flex-end;
+}
+
+.info .lang-rank-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.7rem;
+  line-height: 1;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.info .lang-rank-badge.current-lang {
+  background: rgba(184, 147, 98, 0.95);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.info .lang-code {
+  font-size: 0.55rem;
+  margin-bottom: 0.1rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+.info .lang-rank {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+@media (max-width: 750px) {
+  .language-rank-badges-header {
+    top: 0.3rem;
+    right: 0.3rem;
+    gap: 0.3rem;
+  }
+  .info .lang-rank-badge {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
 .top-desc {
   @mixin contextLabel;
   margin-top: 0;

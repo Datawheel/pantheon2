@@ -851,3 +851,29 @@
 .announcement-block a:hover {
   color: #004499;
 }
+
+.trending-news-button-container {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.trending-news-link {
+  display: inline-block;
+  background-color: var(--colorAqua);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+.trending-news-link:hover {
+  background-color: var(--colorSpring);
+  color: white;
+  text-decoration: none;
+}

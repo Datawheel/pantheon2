@@ -1,102 +1,39 @@
-"use client";
-
-import {useState} from "react";
-import Spinner from "/components/Spinner";
 import {micromark} from "micromark";
+import Link from "next/link";
 import "./WhyTrending.css";
 
-export default function WhyTrending({person, isTrending, slug, title}) {
-  const [loading, setLoading] = useState(false);
-  const [reason, setReason] = useState(null);
-  const [reasonHtml, setReasonHtml] = useState(null);
-  const [error, setError] = useState(null);
+export default function WhyTrending({person, trendingData, currentLang = "en"}) {
+  const reason = trendingData?.trendingReason;
+  const citations = trendingData?.llmMetadata?.citations || [];
 
-  const handleWhyTrending = async () => {
-    setLoading(true);
-    setReason(null);
-    setError(null);
+  // Convert markdown to HTML using micromark
+  let reasonHtml = "";
+  if (reason) {
+    reasonHtml = micromark(reason);
+    // Format citations as superscripts
+    const regex = /(\[\d+\])+/g;
+    reasonHtml = reasonHtml.replace(regex, match => {
+      const numbers = match.match(/\d+/g);
+      return `<sup>${numbers.join(",")}</sup>`;
+    });
+  }
 
-    try {
-      const response = await fetch(`/api/whyTrending?slug=${person.slug}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("WhyTrending API error:", errorData);
-        throw new Error("Unable to load the trending reason right now.");
-      }
-
-      const data = await response.json();
-
-      if (data.isTrending) {
-        // setReason(data.reason);
-        setReason(data.reason);
-        let htmlReason = micromark(data.reason.choices[0].message.content);
-        // Define the regex pattern
-        const regex = /(\[\d+\])+/g;
-
-        // Perform the replacement
-        htmlReason = htmlReason.replace(regex, match => {
-          const numbers = match.match(/\d+/g);
-          const formattedNumbers = numbers.join(",");
-          return `<sup>${formattedNumbers}</sup>`;
-        });
-        setReasonHtml(htmlReason);
-      } else {
-        setError(data.message || "The person is not trending.");
-      }
-    } catch (err) {
-      console.error("WhyTrending error:", err);
-      setError(
-        "Unable to load trending data right now. Please try again later."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Get today's date for the news link
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
   return (
     <div className="why-trending-container">
       <h2>{person.name} is trending today!</h2>
-      {isTrending && !reason && (
-        <button
-          onClick={handleWhyTrending}
-          disabled={loading}
-          className="why-trending-button"
-        >
-          Find out why {person.name} is trending
-          <img
-            src="https://static.pantheon.world/icons/icon-spark-pen.png"
-            alt="Spark pen icon"
-            style={{
-              width: "20px",
-              height: "20px",
-              marginLeft: "8px",
-              verticalAlign: "middle",
-            }}
-          />
-        </button>
-      )}
-
-      {loading && (
-        <div className="loader-container">
-          <Spinner />
-        </div>
-      )}
-
-      {reason && (
+      {reason ? (
         <div className="reason-container">
-          <h3>Reason for Trending:</h3>
+          <h3>Why {person.name} is Trending:</h3>
           <p dangerouslySetInnerHTML={{__html: reasonHtml}} />
-          {reason.citations && reason.citations.length > 0 && (
+          {citations.length > 0 && (
             <div className="citations-container">
               <h4>References:</h4>
               <ol>
-                {reason.citations.map((citation, index) => (
+                {citations.map((citation, index) => (
                   <li key={index}>
                     <a
                       href={citation}
@@ -111,13 +48,17 @@ export default function WhyTrending({person, isTrending, slug, title}) {
             </div>
           )}
         </div>
-      )}
-
-      {error && (
-        <div className="error-container">
-          <p>Error: {error}</p>
+      ) : (
+        <div className="no-reason-container">
+          <p>
+            {person.name} is trending today across multiple Wikipedia language editions.
+            Check back later for a detailed summary.
+          </p>
         </div>
       )}
+      <Link href={`/${currentLang}/news?date=${today}`} className="view-news-button">
+        View more trending people &gt;&gt;
+      </Link>
     </div>
   );
 }

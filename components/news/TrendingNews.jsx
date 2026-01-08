@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import {micromark} from "micromark";
+import {Tooltip} from "@blueprintjs/core";
 import {SUPPORTED_LOCALES, LOCALE_NAMES} from "/app/locales";
 import {getTranslations} from "/app/translations";
 import PersonImage from "/components/utils/PersonImage";
@@ -59,14 +60,17 @@ export default function TrendingNews({languageSections, currentLang, currentDate
           {langRankEntries.length > 0 && (
             <div className="language-rank-badges">
               {langRankEntries.map(([langCode, rank]) => (
-                <div
+                <Tooltip
                   key={langCode}
-                  className={`lang-rank-badge ${langCode === currentLang ? 'current-lang' : ''}`}
-                  title={`Rank #${rank} in ${LOCALE_NAMES[langCode]}`}
+                  content={`Rank #${rank} in ${LOCALE_NAMES[langCode]}`}
                 >
-                  <span className="lang-code">{langCode.toUpperCase()}</span>
-                  <span className="lang-rank">{rank}</span>
-                </div>
+                  <div
+                    className={`lang-rank-badge ${langCode === currentLang ? 'current-lang' : ''}`}
+                  >
+                    <span className="lang-code">{langCode.toUpperCase()}</span>
+                    <span className="lang-rank">{rank}</span>
+                  </div>
+                </Tooltip>
               ))}
             </div>
           )}

@@ -17,6 +17,7 @@ import Movies from "/components/person/Movies";
 import WhyTrending from "/components/person/WhyTrending";
 import Footer from "/components/person/Footer";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import GoogleAdSense from "/components/common/GoogleAdSense";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
 import rankless from "/data/rankless.json";
@@ -63,7 +64,8 @@ async function getWikiExtract(personId) {
     `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&pageids=${personId}&format=json&exlimit=1&origin=*`,
     {
       headers: {
-        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+        "User-Agent":
+          "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
       },
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -95,9 +97,39 @@ async function getMovies(personId) {
   return res.json();
 }
 
-async function getIsTrending(slug) {
-  const res = await fetch(`${process.env.URL}/api/isTrending?slug=${slug}`);
-  return res.json();
+async function getPersonTrending(slug, userLang, date) {
+  const baseApi = process.env.BASE_API || "https://api.pantheon.world";
+
+  // Fetch trending records across all languages (top 12 only)
+  const trendRecords = await fetch(
+    `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.12&date=eq.${date}`,
+    {next: {revalidate: REVALIDATE_PERIODS.SHORT}}
+  )
+    .then(r => r.json())
+    .catch(() => []);
+
+  // Build ranksByLang map
+  const ranksByLang = trendRecords.reduce((acc, record) => {
+    acc[record.lang] = record.rank_pantheon;
+    return acc;
+  }, {});
+
+  // Fetch localized reason
+  const reasonRecords = await fetch(
+    `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}`,
+    {next: {revalidate: REVALIDATE_PERIODS.SHORT}}
+  )
+    .then(r => r.json())
+    .catch(() => []);
+
+  return {
+    isTrending: trendRecords.length > 0,
+    languages: trendRecords.map(r => r.lang),
+    ranksByLang,
+    trendingReason: reasonRecords[0]?.reason || null,
+    llmMetadata: reasonRecords[0]?.llm_metadata || null,
+    localizedName: reasonRecords[0]?.title || null,
+  };
 }
 
 export async function generateMetadata({params}, parent) {
@@ -127,15 +159,28 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {id}}) {
+export default async function Page({params: {id, locale}}) {
+  // Extract locale and calculate yesterday's date
+  const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+
+  // Calculate yesterday's date using same pattern as wikiTrends (New York timezone)
+  const now = new Date();
+  const easternNow = new Date(
+    now.toLocaleString("en-US", {timeZone: "America/New_York"})
+  );
+  easternNow.setDate(easternNow.getDate() - 1);
+  const yesterday = `${easternNow.getFullYear()}-${String(
+    easternNow.getMonth() + 1
+  ).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
+
   const personData = getPerson(id);
   const personRanksData = getPersonRanks(id);
-  const isTrendingData = getIsTrending(id);
+  const personTrendingData = getPersonTrending(id, lang, yesterday);
 
-  const [person, personRanks, isTrending] = await Promise.all([
+  const [person, personRanks, personTrending] = await Promise.all([
     personData,
     personRanksData,
-    isTrendingData,
+    personTrendingData,
   ]);
 
   if (!person) {
@@ -218,11 +263,17 @@ export default async function Page({params: {id}}) {
     },
   ];
 
-  if (isTrending.isTrending) {
+  if (personTrending.isTrending) {
     sections.unshift({
       title: "Trending",
       slug: "why_trending",
-      content: <WhyTrending person={person} isTrending={isTrending} />,
+      content: (
+        <WhyTrending
+          person={person}
+          trendingData={personTrending}
+          currentLang={lang}
+        />
+      ),
     });
   }
 
@@ -245,7 +296,11 @@ export default async function Page({params: {id}}) {
   return (
     <div className="person">
       <GoogleAdSenseScript />
-      <Header person={person} />
+      <Header
+        person={person}
+        trendingData={personTrending}
+        currentLang={lang}
+      />
       <div className="about-section">
         <ProfileNav sections={filteredSection} />
         <Intro
