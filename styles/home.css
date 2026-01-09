@@ -1,11 +1,17 @@
 @import './mixins.css';
 
+.container {
+  position: relative;
+  overflow: hidden;
+}
+
 .bg-design {
   left: -50px;
   opacity: 0.5;
   position: absolute;
   top: 20px;
   width: 240px;
+  z-index: 0;
   &.bg-design-r {
     left: auto;
     right: -20px;

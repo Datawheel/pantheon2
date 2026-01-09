@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {REVALIDATE_PERIODS} from "/app/constants";
+import {getTranslations} from "/app/translations";
 import TrendingNews from "/components/news/TrendingNews";
 
 const baseUrl = process.env.URL || "https://pantheon.world";
@@ -8,11 +9,11 @@ const baseUrl = process.env.URL || "https://pantheon.world";
 export async function generateMetadata({params}) {
   const locale = params?.locale || DEFAULT_LOCALE;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
 
   return {
-    title: `Who is Trending Today? - Pantheon`,
-    description:
-      "Daily summaries of historical figures and trending personalities",
+    title: `${t.news.pageTitle} - Pantheon`,
+    description: t.news.pageSubtitle,
   };
 }
 

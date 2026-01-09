@@ -72,14 +72,14 @@ export default async function Home({params}) {
   return (
     <div className="container">
       <title>Pantheon</title>
-      <Image
+      <img
         className="bg-design"
         src="/images/home/printing.png"
         alt="old school printing press"
         width={400}
         height={423}
       />
-      <Image
+      <img
         className="bg-design bg-design-r"
         src="/images/home/film.png"
         alt="old school film camera"

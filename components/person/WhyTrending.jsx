@@ -2,7 +2,11 @@ import {micromark} from "micromark";
 import Link from "next/link";
 import "./WhyTrending.css";
 
-export default function WhyTrending({person, trendingData, currentLang = "en"}) {
+export default function WhyTrending({
+  person,
+  trendingData,
+  currentLang = "en",
+}) {
   const reason = trendingData?.trendingReason;
   const citations = trendingData?.llmMetadata?.citations || [];
 
@@ -20,7 +24,10 @@ export default function WhyTrending({person, trendingData, currentLang = "en"}) 
 
   // Get today's date for the news link
   const now = new Date();
-  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(now.getDate()).padStart(2, "0")}`;
 
   return (
     <div className="why-trending-container">
@@ -51,13 +58,16 @@ export default function WhyTrending({person, trendingData, currentLang = "en"}) 
       ) : (
         <div className="no-reason-container">
           <p>
-            {person.name} is trending today across multiple Wikipedia language editions.
-            Check back later for a detailed summary.
+            {person.name} is trending today across multiple Wikipedia language
+            editions. Check back later for a detailed summary.
           </p>
         </div>
       )}
-      <Link href={`/${currentLang}/news?date=${today}`} className="view-news-button">
-        View more trending people &gt;&gt;
+      <Link
+        href={`/${currentLang}/news?date=${today}`}
+        className="view-news-button"
+      >
+        View more trending people →
       </Link>
     </div>
   );
