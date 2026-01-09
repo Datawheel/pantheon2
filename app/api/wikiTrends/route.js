@@ -349,6 +349,7 @@ export async function GET(request) {
     // sort and add ranking
     const todaysBiosForDb = todaysBiosForDbUnsorted
       .sort((a, b) => a.rank - b.rank)
+      .filter(dedupe) // Remove duplicates before inserting
       .map((d, i) => ({...d, rank_pantheon: i + 1}));
 
     try {
@@ -360,7 +361,7 @@ export async function GET(request) {
         },
       });
     } catch (error) {
-      // Ignore 409 Conflict errors, but log other errors
+      // Ignore 409 Conflict errors (duplicate data), but log other errors
       if (!error.response || error.response.status !== 409) {
         console.error("Error posting to Pantheon trends:", error.message);
       }

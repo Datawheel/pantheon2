@@ -1,6 +1,7 @@
 // UI translations for different languages
 export const translations = {
   en: {
+    stillAlive: "today",
     home: {
       tagline: "Explore human collective memory!",
       subtitle:
@@ -51,6 +52,7 @@ export const translations = {
     },
   },
   es: {
+    stillAlive: "presente",
     home: {
       tagline: "¡Explora la memoria colectiva humana!",
       subtitle:
@@ -101,6 +103,7 @@ export const translations = {
     },
   },
   fr: {
+    stillAlive: "aujourd'hui",
     home: {
       tagline: "Explorez la mémoire collective humaine !",
       subtitle:
@@ -152,6 +155,7 @@ export const translations = {
     },
   },
   de: {
+    stillAlive: "heute",
     home: {
       tagline: "Erkunden Sie das kollektive Gedächtnis der Menschheit!",
       subtitle:
@@ -203,6 +207,7 @@ export const translations = {
     },
   },
   ru: {
+    stillAlive: "настоящее время",
     home: {
       tagline: "Исследуйте коллективную память человечества!",
       subtitle:
@@ -254,6 +259,7 @@ export const translations = {
     },
   },
   zh: {
+    stillAlive: "至今",
     home: {
       tagline: "探索人类集体记忆！",
       subtitle: "Pantheon帮助您发现我们星球历史的地理和动态。",
@@ -300,6 +306,7 @@ export const translations = {
     },
   },
   ja: {
+    stillAlive: "現在",
     home: {
       tagline: "人類の集合的記憶を探求しよう！",
       subtitle:
@@ -349,6 +356,7 @@ export const translations = {
     },
   },
   ar: {
+    stillAlive: "حتى اليوم",
     home: {
       tagline: "استكشف الذاكرة الجماعية للبشرية!",
       subtitle: "يساعدك Pantheon على اكتشاف جغرافية وديناميكية تاريخ كوكبنا.",
@@ -397,6 +405,7 @@ export const translations = {
     },
   },
   it: {
+    stillAlive: "presente",
     home: {
       tagline: "Esplora la memoria collettiva umana!",
       subtitle:
@@ -448,6 +457,7 @@ export const translations = {
     },
   },
   pt: {
+    stillAlive: "presente",
     home: {
       tagline: "Explore a memória coletiva humana!",
       subtitle:
@@ -498,6 +508,7 @@ export const translations = {
     },
   },
   hu: {
+    stillAlive: "napjainkig",
     home: {
       tagline: "Fedezze fel az emberiség kollektív emlékezetét!",
       subtitle:
@@ -548,6 +559,7 @@ export const translations = {
     },
   },
   nl: {
+    stillAlive: "heden",
     home: {
       tagline: "Verken het collectieve geheugen van de mensheid!",
       subtitle:
@@ -599,6 +611,7 @@ export const translations = {
     },
   },
   pl: {
+    stillAlive: "obecnie",
     home: {
       tagline: "Odkryj zbiorową pamięć ludzkości!",
       subtitle:

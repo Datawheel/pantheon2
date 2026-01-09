@@ -2,7 +2,7 @@
 import {GoogleAnalytics} from "@next/third-parties/google";
 import {D3plusContext} from "d3plus-react";
 import dynamic from "next/dynamic";
-import {usePathname} from "next/navigation";
+import {usePathname, useParams} from "next/navigation";
 import {useD3plusConfig} from "/themes/useD3plusConfig";
 import ReduxProvider from "/components/ReduxProvider";
 import NextTopLoader from "nextjs-toploader";
@@ -18,6 +18,9 @@ const SearchComponent = dynamic(() => import("/components/Search"));
 export default function Layout({children}) {
   const config = useD3plusConfig();
   const pathname = usePathname();
+  const params = useParams();
+  const locale = params?.locale || "en";
+  const isRTL = locale === "ar";
   const isVizEmbed = pathname.includes("/explore/viz/embed");
   const bodyContent = (
     <body className={isVizEmbed ? "embed" : undefined}>
@@ -33,7 +36,7 @@ export default function Layout({children}) {
     </body>
   );
   return (
-    <html lang="en">
+    <html lang={locale} dir={isRTL ? "rtl" : "ltr"}>
       <head>
         <link
           data-rh="true"

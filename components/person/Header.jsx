@@ -7,6 +7,7 @@ import {Tooltip} from "@blueprintjs/core";
 // import HeaderLine from "./HeaderLine";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import {LOCALE_NAMES} from "/app/locales";
+import {getTranslations} from "/app/translations";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
@@ -45,7 +46,9 @@ import "../../styles/mouse.css";
 //   return res.json();
 // }
 
-export default function Header({person, trendingData = {}, currentLang}) {
+export default function Header({person, trendingData = {}, currentLang = "en"}) {
+  const t = getTranslations(currentLang);
+
   // const {items: wikiPageViews} = await getWikiPageViews(person.name);
   const wikiPageViews = null;
   // const isTrendingData = await getIsTrending(person.id);
@@ -133,7 +136,7 @@ export default function Header({person, trendingData = {}, currentLang}) {
             {FORMATTERS.year(person.birthyear)} -{" "}
             {person.deathyear
               ? `${FORMATTERS.year(person.deathyear)}`
-              : "Today"}
+              : t.stillAlive}
           </p>
         ) : null}
         {/* <pre>
