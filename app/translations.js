@@ -3,7 +3,8 @@ export const translations = {
   en: {
     home: {
       tagline: "Explore human collective memory!",
-      subtitle: "Pantheon helps you discover the geography and dynamics of our planet's history.",
+      subtitle:
+        "Pantheon helps you discover the geography and dynamics of our planet's history.",
       explore: "Explore",
       people: "People",
       places: "Places",
@@ -13,17 +14,23 @@ export const translations = {
       trendingProfiles: "Trending Profiles Today",
       topProfilesBy: "Top profiles by pageviews for the",
       wikipediaEdition: "wikipedia edition",
-      about: "is an observatory of collective memory focused on biographies with a presence in at least",
+      about:
+        "is an observatory of collective memory focused on biographies with a presence in at least",
       languages: "languages",
-      aboutContinued: "in Wikipedia. We have data on more than 85,000 biographies, organized by countries, cities, occupations, and eras. Explore this data to learn about the characters that shape human culture.",
-      aboutDeveloped: "began as a project at the Collective Learning group at MIT. Today it is developed by",
+      aboutContinued:
+        "in Wikipedia. We have data on more than 85,000 biographies, organized by countries, cities, occupations, and eras. Explore this data to learn about the characters that shape human culture.",
+      aboutDeveloped:
+        "began as a project at the Collective Learning group at MIT. Today it is developed by",
       datawheel: "Datawheel",
-      aboutDatawheel: ", a company specialized in the creation of data distribution and visualization solutions.",
+      aboutDatawheel:
+        ", a company specialized in the creation of data distribution and visualization solutions.",
       recentPassings: "Recent Passings",
       notableDeaths: "Notable Deaths of 2025",
-      notableDeathsText: "Want to see the complete list of notable figures we've lost in 2025? Visit our",
+      notableDeathsText:
+        "Want to see the complete list of notable figures we've lost in 2025? Visit our",
       notableDeathsLink: "Notable Deaths of 2025",
-      notableDeathsContinued: "page for a comprehensive collection of biographies featuring influential personalities, including celebrities, artists, leaders, and cultural icons who have passed away this year.",
+      notableDeathsContinued:
+        "page for a comprehensive collection of biographies featuring influential personalities, including celebrities, artists, leaders, and cultural icons who have passed away this year.",
       trendingSingers: "Trending Singers Today",
       trendingActors: "Trending Actors Today",
     },
@@ -36,11 +43,18 @@ export const translations = {
       noData: "No trending data available for this date.",
       unknown: "Unknown",
     },
+    trending: {
+      isTrendingToday: "{name} is trending today!",
+      whyTrending: "Why {name} is Trending:",
+      references: "References:",
+      viewMoreTrending: "View more trending people",
+    },
   },
   es: {
     home: {
       tagline: "¡Explora la memoria colectiva humana!",
-      subtitle: "Pantheon te ayuda a descubrir la geografía y la dinámica de la historia de nuestro planeta.",
+      subtitle:
+        "Pantheon te ayuda a descubrir la geografía y la dinámica de la historia de nuestro planeta.",
       explore: "Explorar",
       people: "Personas",
       places: "Lugares",
@@ -50,17 +64,23 @@ export const translations = {
       trendingProfiles: "Perfiles en Tendencia Hoy",
       topProfilesBy: "Perfiles principales por vistas de página para la",
       wikipediaEdition: "edición de wikipedia",
-      about: "es un observatorio de memoria colectiva enfocado en biografías con presencia en al menos",
+      about:
+        "es un observatorio de memoria colectiva enfocado en biografías con presencia en al menos",
       languages: "idiomas",
-      aboutContinued: "en Wikipedia. Tenemos datos de más de 85,000 biografías, organizadas por países, ciudades, ocupaciones y épocas. Explora estos datos para conocer los personajes que dan forma a la cultura humana.",
-      aboutDeveloped: "comenzó como un proyecto en el grupo de Aprendizaje Colectivo del MIT. Hoy es desarrollado por",
+      aboutContinued:
+        "en Wikipedia. Tenemos datos de más de 85,000 biografías, organizadas por países, ciudades, ocupaciones y épocas. Explora estos datos para conocer los personajes que dan forma a la cultura humana.",
+      aboutDeveloped:
+        "comenzó como un proyecto en el grupo de Aprendizaje Colectivo del MIT. Hoy es desarrollado por",
       datawheel: "Datawheel",
-      aboutDatawheel: ", una empresa especializada en la creación de soluciones de distribución y visualización de datos.",
+      aboutDatawheel:
+        ", una empresa especializada en la creación de soluciones de distribución y visualización de datos.",
       recentPassings: "Fallecimientos Recientes",
       notableDeaths: "Muertes Notables de 2025",
-      notableDeathsText: "¿Quieres ver la lista completa de figuras notables que hemos perdido en 2025? Visita nuestra",
+      notableDeathsText:
+        "¿Quieres ver la lista completa de figuras notables que hemos perdido en 2025? Visita nuestra",
       notableDeathsLink: "Muertes Notables de 2025",
-      notableDeathsContinued: "página para una colección completa de biografías con personalidades influyentes, incluyendo celebridades, artistas, líderes e íconos culturales que han fallecido este año.",
+      notableDeathsContinued:
+        "página para una colección completa de biografías con personalidades influyentes, incluyendo celebridades, artistas, líderes e íconos culturales que han fallecido este año.",
       trendingSingers: "Cantantes en Tendencia Hoy",
       trendingActors: "Actores en Tendencia Hoy",
     },
@@ -73,11 +93,18 @@ export const translations = {
       noData: "No hay datos de tendencias disponibles para esta fecha.",
       unknown: "Desconocido",
     },
+    trending: {
+      isTrendingToday: "¡{name} es tendencia hoy!",
+      whyTrending: "¿Por qué {name} es tendencia?",
+      references: "Fuentes:",
+      viewMoreTrending: "Ver más personas en tendencia",
+    },
   },
   fr: {
     home: {
       tagline: "Explorez la mémoire collective humaine !",
-      subtitle: "Pantheon vous aide à découvrir la géographie et la dynamique de l'histoire de notre planète.",
+      subtitle:
+        "Pantheon vous aide à découvrir la géographie et la dynamique de l'histoire de notre planète.",
       explore: "Explorer",
       people: "Personnes",
       places: "Lieux",
@@ -87,34 +114,48 @@ export const translations = {
       trendingProfiles: "Profils Tendance Aujourd'hui",
       topProfilesBy: "Meilleurs profils par vues de page pour l'",
       wikipediaEdition: "édition de wikipédia",
-      about: "est un observatoire de la mémoire collective axé sur les biographies présentes dans au moins",
+      about:
+        "est un observatoire de la mémoire collective axé sur les biographies présentes dans au moins",
       languages: "langues",
-      aboutContinued: "sur Wikipédia. Nous disposons de données sur plus de 85 000 biographies, organisées par pays, villes, professions et époques. Explorez ces données pour en savoir plus sur les personnages qui façonnent la culture humaine.",
-      aboutDeveloped: "a commencé comme un projet du groupe Collective Learning au MIT. Aujourd'hui, il est développé par",
+      aboutContinued:
+        "sur Wikipédia. Nous disposons de données sur plus de 85 000 biographies, organisées par pays, villes, professions et époques. Explorez ces données pour en savoir plus sur les personnages qui façonnent la culture humaine.",
+      aboutDeveloped:
+        "a commencé comme un projet du groupe Collective Learning au MIT. Aujourd'hui, il est développé par",
       datawheel: "Datawheel",
-      aboutDatawheel: ", une entreprise spécialisée dans la création de solutions de distribution et de visualisation de données.",
+      aboutDatawheel:
+        ", une entreprise spécialisée dans la création de solutions de distribution et de visualisation de données.",
       recentPassings: "Décès Récents",
       notableDeaths: "Décès Notables de 2025",
-      notableDeathsText: "Vous voulez voir la liste complète des personnalités notables que nous avons perdues en 2025 ? Visitez notre",
+      notableDeathsText:
+        "Vous voulez voir la liste complète des personnalités notables que nous avons perdues en 2025 ? Visitez notre",
       notableDeathsLink: "Décès Notables de 2025",
-      notableDeathsContinued: "page pour une collection complète de biographies présentant des personnalités influentes, y compris des célébrités, des artistes, des dirigeants et des icônes culturelles décédés cette année.",
+      notableDeathsContinued:
+        "page pour une collection complète de biographies présentant des personnalités influentes, y compris des célébrités, des artistes, des dirigeants et des icônes culturelles décédés cette année.",
       trendingSingers: "Chanteurs Tendance Aujourd'hui",
       trendingActors: "Acteurs Tendance Aujourd'hui",
     },
     news: {
       pageTitle: "Qui est en tendance aujourd'hui?",
-      pageSubtitle: "Résumés quotidiens de personnages historiques (généré par IA)",
+      pageSubtitle:
+        "Résumés quotidiens de personnages historiques (généré par IA)",
       trendingIn: "Tendance en",
       selectDate: "Sélectionner une date différente",
       references: "Références:",
       noData: "Aucune donnée de tendance disponible pour cette date.",
       unknown: "Inconnu",
     },
+    trending: {
+      isTrendingToday: "{name} est en tendance aujourd'hui !",
+      whyTrending: "Pourquoi {name} est en tendance ?",
+      references: "Sources :",
+      viewMoreTrending: "Voir plus de personnes en tendance",
+    },
   },
   de: {
     home: {
       tagline: "Erkunden Sie das kollektive Gedächtnis der Menschheit!",
-      subtitle: "Pantheon hilft Ihnen, die Geografie und Dynamik der Geschichte unseres Planeten zu entdecken.",
+      subtitle:
+        "Pantheon hilft Ihnen, die Geografie und Dynamik der Geschichte unseres Planeten zu entdecken.",
       explore: "Erkunden",
       people: "Personen",
       places: "Orte",
@@ -124,34 +165,48 @@ export const translations = {
       trendingProfiles: "Heute im Trend",
       topProfilesBy: "Top-Profile nach Seitenaufrufen für die",
       wikipediaEdition: "Wikipedia-Ausgabe",
-      about: "ist ein Observatorium des kollektiven Gedächtnisses, das sich auf Biografien mit Präsenz in mindestens",
+      about:
+        "ist ein Observatorium des kollektiven Gedächtnisses, das sich auf Biografien mit Präsenz in mindestens",
       languages: "Sprachen",
-      aboutContinued: "in Wikipedia konzentriert. Wir haben Daten von mehr als 85.000 Biografien, organisiert nach Ländern, Städten, Berufen und Epochen. Erkunden Sie diese Daten, um mehr über die Persönlichkeiten zu erfahren, die die menschliche Kultur prägen.",
-      aboutDeveloped: "begann als Projekt der Collective Learning-Gruppe am MIT. Heute wird es entwickelt von",
+      aboutContinued:
+        "in Wikipedia konzentriert. Wir haben Daten von mehr als 85.000 Biografien, organisiert nach Ländern, Städten, Berufen und Epochen. Erkunden Sie diese Daten, um mehr über die Persönlichkeiten zu erfahren, die die menschliche Kultur prägen.",
+      aboutDeveloped:
+        "begann als Projekt der Collective Learning-Gruppe am MIT. Heute wird es entwickelt von",
       datawheel: "Datawheel",
-      aboutDatawheel: ", einem Unternehmen, das sich auf die Erstellung von Datenvertriebs- und Visualisierungslösungen spezialisiert hat.",
+      aboutDatawheel:
+        ", einem Unternehmen, das sich auf die Erstellung von Datenvertriebs- und Visualisierungslösungen spezialisiert hat.",
       recentPassings: "Kürzliche Todesfälle",
       notableDeaths: "Bedeutende Todesfälle von 2025",
-      notableDeathsText: "Möchten Sie die vollständige Liste der bemerkenswerten Persönlichkeiten sehen, die wir 2025 verloren haben? Besuchen Sie unsere",
+      notableDeathsText:
+        "Möchten Sie die vollständige Liste der bemerkenswerten Persönlichkeiten sehen, die wir 2025 verloren haben? Besuchen Sie unsere",
       notableDeathsLink: "Bedeutende Todesfälle von 2025",
-      notableDeathsContinued: "Seite für eine umfassende Sammlung von Biografien einflussreicher Persönlichkeiten, darunter Prominente, Künstler, Führungspersönlichkeiten und kulturelle Ikonen, die dieses Jahr verstorben sind.",
+      notableDeathsContinued:
+        "Seite für eine umfassende Sammlung von Biografien einflussreicher Persönlichkeiten, darunter Prominente, Künstler, Führungspersönlichkeiten und kulturelle Ikonen, die dieses Jahr verstorben sind.",
       trendingSingers: "Sänger im Trend Heute",
       trendingActors: "Schauspieler im Trend Heute",
     },
     news: {
       pageTitle: "Wer ist heute im Trend?",
-      pageSubtitle: "Tägliche Zusammenfassungen historischer Persönlichkeiten (von KI generiert)",
+      pageSubtitle:
+        "Tägliche Zusammenfassungen historischer Persönlichkeiten (von KI generiert)",
       trendingIn: "Im Trend in",
       selectDate: "Wählen Sie ein anderes Datum",
       references: "Referenzen:",
       noData: "Keine Trenddaten für dieses Datum verfügbar.",
       unknown: "Unbekannt",
     },
+    trending: {
+      isTrendingToday: "{name} ist heute im Trend!",
+      whyTrending: "Warum {name} im Trend ist:",
+      references: "Quellen:",
+      viewMoreTrending: "Weitere Trendpersonen ansehen",
+    },
   },
   ru: {
     home: {
       tagline: "Исследуйте коллективную память человечества!",
-      subtitle: "Pantheon помогает вам открыть географию и динамику истории нашей планеты.",
+      subtitle:
+        "Pantheon помогает вам открыть географию и динамику истории нашей планеты.",
       explore: "Исследовать",
       people: "Люди",
       places: "Места",
@@ -161,28 +216,41 @@ export const translations = {
       trendingProfiles: "Популярные Профили Сегодня",
       topProfilesBy: "Лучшие профили по просмотрам страниц для",
       wikipediaEdition: "издания Википедии",
-      about: "это обсерватория коллективной памяти, сосредоточенная на биографиях, присутствующих как минимум в",
+      about:
+        "это обсерватория коллективной памяти, сосредоточенная на биографиях, присутствующих как минимум в",
       languages: "языках",
-      aboutContinued: "в Википедии. У нас есть данные о более чем 85 000 биографий, организованных по странам, городам, профессиям и эпохам. Исследуйте эти данные, чтобы узнать о персонажах, которые формируют человеческую культуру.",
-      aboutDeveloped: "начался как проект группы Collective Learning в MIT. Сегодня он разрабатывается",
+      aboutContinued:
+        "в Википедии. У нас есть данные о более чем 85 000 биографий, организованных по странам, городам, профессиям и эпохам. Исследуйте эти данные, чтобы узнать о персонажах, которые формируют человеческую культуру.",
+      aboutDeveloped:
+        "начался как проект группы Collective Learning в MIT. Сегодня он разрабатывается",
       datawheel: "Datawheel",
-      aboutDatawheel: ", компанией, специализирующейся на создании решений для распространения и визуализации данных.",
+      aboutDatawheel:
+        ", компанией, специализирующейся на создании решений для распространения и визуализации данных.",
       recentPassings: "Недавние Уходы",
       notableDeaths: "Известные Смерти 2025 Года",
-      notableDeathsText: "Хотите увидеть полный список известных личностей, которых мы потеряли в 2025 году? Посетите нашу",
+      notableDeathsText:
+        "Хотите увидеть полный список известных личностей, которых мы потеряли в 2025 году? Посетите нашу",
       notableDeathsLink: "Известные Смерти 2025 Года",
-      notableDeathsContinued: "страницу для полной коллекции биографий влиятельных личностей, включая знаменитостей, артистов, лидеров и культурных икон, которые скончались в этом году.",
+      notableDeathsContinued:
+        "страницу для полной коллекции биографий влиятельных личностей, включая знаменитостей, артистов, лидеров и культурных икон, которые скончались в этом году.",
       trendingSingers: "Популярные Певцы Сегодня",
       trendingActors: "Популярные Актеры Сегодня",
     },
     news: {
       pageTitle: "Кто в тренде сегодня?",
-      pageSubtitle: "Ежедневные сводки о исторических личностях (сгенерировано ИИ)",
+      pageSubtitle:
+        "Ежедневные сводки о исторических личностях (сгенерировано ИИ)",
       trendingIn: "В тренде в",
       selectDate: "Выберите другую дату",
       references: "Ссылки:",
       noData: "Нет данных о трендах для этой даты.",
       unknown: "Неизвестно",
+    },
+    trending: {
+      isTrendingToday: "{name} сегодня в тренде!",
+      whyTrending: "Почему {name} в тренде:",
+      references: "Источники:",
+      viewMoreTrending: "Показать больше людей в тренде",
     },
   },
   zh: {
@@ -200,15 +268,18 @@ export const translations = {
       wikipediaEdition: "维基百科版本",
       about: "是一个专注于集体记忆的观测站，关注至少在",
       languages: "种语言",
-      aboutContinued: "的维基百科中出现的传记。我们拥有超过85,000个传记的数据，按国家、城市、职业和时代组织。探索这些数据，了解塑造人类文化的人物。",
+      aboutContinued:
+        "的维基百科中出现的传记。我们拥有超过85,000个传记的数据，按国家、城市、职业和时代组织。探索这些数据，了解塑造人类文化的人物。",
       aboutDeveloped: "最初是麻省理工学院集体学习小组的一个项目。今天它由",
       datawheel: "Datawheel",
       aboutDatawheel: "开发，这是一家专门从事数据分发和可视化解决方案的公司。",
       recentPassings: "最近去世",
       notableDeaths: "2025年著名人物逝世",
-      notableDeathsText: "想查看我们在2025年失去的著名人物的完整名单吗？访问我们的",
+      notableDeathsText:
+        "想查看我们在2025年失去的著名人物的完整名单吗？访问我们的",
       notableDeathsLink: "2025年著名人物逝世",
-      notableDeathsContinued: "页面，查看包括名人、艺术家、领导者和文化偶像在内的今年去世的有影响力人物的全面传记集。",
+      notableDeathsContinued:
+        "页面，查看包括名人、艺术家、领导者和文化偶像在内的今年去世的有影响力人物的全面传记集。",
       trendingSingers: "今日热门歌手",
       trendingActors: "今日热门演员",
     },
@@ -221,11 +292,18 @@ export const translations = {
       noData: "此日期无趋势数据。",
       unknown: "未知",
     },
+    trending: {
+      isTrendingToday: "{name} 今天正在流行！",
+      whyTrending: "{name} 为何走红：",
+      references: "来源: ",
+      viewMoreTrending: "查看更多热门人物",
+    },
   },
   ja: {
     home: {
       tagline: "人類の集合的記憶を探求しよう！",
-      subtitle: "Pantheonは、私たちの惑星の歴史の地理と動態を発見するのに役立ちます。",
+      subtitle:
+        "Pantheonは、私たちの惑星の歴史の地理と動態を発見するのに役立ちます。",
       explore: "探索",
       people: "人物",
       places: "場所",
@@ -237,15 +315,20 @@ export const translations = {
       wikipediaEdition: "ウィキペディア版",
       about: "は、少なくとも",
       languages: "言語",
-      aboutContinued: "のウィキペディアに存在する伝記に焦点を当てた集合的記憶の観測所です。私たちは、国、都市、職業、時代別に整理された85,000以上の伝記のデータを持っています。このデータを探索して、人間文化を形作る人物について学びましょう。",
-      aboutDeveloped: "は、MITのCollective Learningグループのプロジェクトとして始まりました。今日、それは",
+      aboutContinued:
+        "のウィキペディアに存在する伝記に焦点を当てた集合的記憶の観測所です。私たちは、国、都市、職業、時代別に整理された85,000以上の伝記のデータを持っています。このデータを探索して、人間文化を形作る人物について学びましょう。",
+      aboutDeveloped:
+        "は、MITのCollective Learningグループのプロジェクトとして始まりました。今日、それは",
       datawheel: "Datawheel",
-      aboutDatawheel: "によって開発されています。これは、データ配信と可視化ソリューションの作成を専門とする会社です。",
+      aboutDatawheel:
+        "によって開発されています。これは、データ配信と可視化ソリューションの作成を専門とする会社です。",
       recentPassings: "最近の訃報",
       notableDeaths: "2025年の著名人の死",
-      notableDeathsText: "2025年に失った著名人の完全なリストを見たいですか？私たちの",
+      notableDeathsText:
+        "2025年に失った著名人の完全なリストを見たいですか？私たちの",
       notableDeathsLink: "2025年の著名人の死",
-      notableDeathsContinued: "ページにアクセスして、今年亡くなった有名人、芸術家、指導者、文化的アイコンなど、影響力のある人物の伝記の包括的なコレクションをご覧ください。",
+      notableDeathsContinued:
+        "ページにアクセスして、今年亡くなった有名人、芸術家、指導者、文化的アイコンなど、影響力のある人物の伝記の包括的なコレクションをご覧ください。",
       trendingSingers: "本日のトレンド歌手",
       trendingActors: "本日のトレンド俳優",
     },
@@ -257,6 +340,12 @@ export const translations = {
       references: "参考文献：",
       noData: "この日付の トレンドデータはありません。",
       unknown: "不明",
+    },
+    trending: {
+      isTrendingToday: "{name} が今日のトレンドです！",
+      whyTrending: "{name} がトレンドの理由",
+      references: "出典：",
+      viewMoreTrending: "他のトレンド人物を見る",
     },
   },
   ar: {
@@ -274,32 +363,44 @@ export const translations = {
       wikipediaEdition: "إصدار ويكيبيديا",
       about: "هو مرصد للذاكرة الجماعية يركز على السير الذاتية الموجودة في",
       languages: "لغة على الأقل",
-      aboutContinued: "في ويكيبيديا. لدينا بيانات عن أكثر من 85,000 سيرة ذاتية، منظمة حسب البلدان والمدن والمهن والعصور. استكشف هذه البيانات للتعرف على الشخصيات التي تشكل الثقافة الإنسانية.",
-      aboutDeveloped: "بدأ كمشروع في مجموعة التعلم الجماعي في معهد ماساتشوستس للتكنولوجيا. اليوم تم تطويره بواسطة",
+      aboutContinued:
+        "في ويكيبيديا. لدينا بيانات عن أكثر من 85,000 سيرة ذاتية، منظمة حسب البلدان والمدن والمهن والعصور. استكشف هذه البيانات للتعرف على الشخصيات التي تشكل الثقافة الإنسانية.",
+      aboutDeveloped:
+        "بدأ كمشروع في مجموعة التعلم الجماعي في معهد ماساتشوستس للتكنولوجيا. اليوم تم تطويره بواسطة",
       datawheel: "Datawheel",
       aboutDatawheel: "، وهي شركة متخصصة في إنشاء حلول توزيع وتصور البيانات.",
       recentPassings: "الوفيات الأخيرة",
       notableDeaths: "الوفيات البارزة لعام 2025",
-      notableDeathsText: "هل تريد رؤية القائمة الكاملة للشخصيات البارزة التي فقدناها في عام 2025؟ قم بزيارة",
+      notableDeathsText:
+        "هل تريد رؤية القائمة الكاملة للشخصيات البارزة التي فقدناها في عام 2025؟ قم بزيارة",
       notableDeathsLink: "الوفيات البارزة لعام 2025",
-      notableDeathsContinued: "صفحتنا للحصول على مجموعة شاملة من السير الذاتية للشخصيات المؤثرة، بما في ذلك المشاهير والفنانين والقادة والأيقونات الثقافية الذين توفوا هذا العام.",
+      notableDeathsContinued:
+        "صفحتنا للحصول على مجموعة شاملة من السير الذاتية للشخصيات المؤثرة، بما في ذلك المشاهير والفنانين والقادة والأيقونات الثقافية الذين توفوا هذا العام.",
       trendingSingers: "المطربون الرائجون اليوم",
       trendingActors: "الممثلون الرائجون اليوم",
     },
     news: {
       pageTitle: "من هو في الموضة اليوم؟",
-      pageSubtitle: "ملخصات يومية للشخصيات التاريخية (تم إنشاؤها بواسطة الذكاء الاصطناعي)",
+      pageSubtitle:
+        "ملخصات يومية للشخصيات التاريخية (تم إنشاؤها بواسطة الذكاء الاصطناعي)",
       trendingIn: "رائج في",
       selectDate: "اختر تاريخًا مختلفًا",
       references: "المراجع:",
       noData: "لا تتوفر بيانات الاتجاهات لهذا التاريخ.",
       unknown: "غير معروف",
     },
+    trending: {
+      isTrendingToday: "{name} رائج اليوم!",
+      whyTrending: "لماذا {name} رائج:",
+      references: "المصادر:",
+      viewMoreTrending: "عرض المزيد من الأشخاص الرائجين",
+    },
   },
   it: {
     home: {
       tagline: "Esplora la memoria collettiva umana!",
-      subtitle: "Pantheon ti aiuta a scoprire la geografia e le dinamiche della storia del nostro pianeta.",
+      subtitle:
+        "Pantheon ti aiuta a scoprire la geografia e le dinamiche della storia del nostro pianeta.",
       explore: "Esplora",
       people: "Persone",
       places: "Luoghi",
@@ -309,34 +410,48 @@ export const translations = {
       trendingProfiles: "Profili di Tendenza Oggi",
       topProfilesBy: "Profili principali per visualizzazioni di pagina per l'",
       wikipediaEdition: "edizione di wikipedia",
-      about: "è un osservatorio della memoria collettiva focalizzato su biografie con presenza in almeno",
+      about:
+        "è un osservatorio della memoria collettiva focalizzato su biografie con presenza in almeno",
       languages: "lingue",
-      aboutContinued: "su Wikipedia. Abbiamo dati su oltre 85.000 biografie, organizzate per paesi, città, professioni ed ere. Esplora questi dati per conoscere i personaggi che plasmano la cultura umana.",
-      aboutDeveloped: "è iniziato come progetto del gruppo Collective Learning al MIT. Oggi è sviluppato da",
+      aboutContinued:
+        "su Wikipedia. Abbiamo dati su oltre 85.000 biografie, organizzate per paesi, città, professioni ed ere. Esplora questi dati per conoscere i personaggi che plasmano la cultura umana.",
+      aboutDeveloped:
+        "è iniziato come progetto del gruppo Collective Learning al MIT. Oggi è sviluppato da",
       datawheel: "Datawheel",
-      aboutDatawheel: ", un'azienda specializzata nella creazione di soluzioni di distribuzione e visualizzazione dati.",
+      aboutDatawheel:
+        ", un'azienda specializzata nella creazione di soluzioni di distribuzione e visualizzazione dati.",
       recentPassings: "Scomparse Recenti",
       notableDeaths: "Morti Notevoli del 2025",
-      notableDeathsText: "Vuoi vedere l'elenco completo delle figure notevoli che abbiamo perso nel 2025? Visita la nostra",
+      notableDeathsText:
+        "Vuoi vedere l'elenco completo delle figure notevoli che abbiamo perso nel 2025? Visita la nostra",
       notableDeathsLink: "Morti Notevoli del 2025",
-      notableDeathsContinued: "pagina per una raccolta completa di biografie di personalità influenti, tra cui celebrità, artisti, leader e icone culturali scomparse quest'anno.",
+      notableDeathsContinued:
+        "pagina per una raccolta completa di biografie di personalità influenti, tra cui celebrità, artisti, leader e icone culturali scomparse quest'anno.",
       trendingSingers: "Cantanti di Tendenza Oggi",
       trendingActors: "Attori di Tendenza Oggi",
     },
     news: {
       pageTitle: "Chi è di tendenza oggi?",
-      pageSubtitle: "Riassunti quotidiani di personaggi storici (generato da IA)",
+      pageSubtitle:
+        "Riassunti quotidiani di personaggi storici (generato da IA)",
       trendingIn: "Di tendenza in",
       selectDate: "Seleziona una data diversa",
       references: "Riferimenti:",
       noData: "Nessun dato di tendenza disponibile per questa data.",
       unknown: "Sconosciuto",
     },
+    trending: {
+      isTrendingToday: "{name} è di tendenza oggi!",
+      whyTrending: "Perché {name} è di tendenza:",
+      references: "Fonti:",
+      viewMoreTrending: "Vedi altre persone di tendenza",
+    },
   },
   pt: {
     home: {
       tagline: "Explore a memória coletiva humana!",
-      subtitle: "Pantheon ajuda você a descobrir a geografia e a dinâmica da história do nosso planeta.",
+      subtitle:
+        "Pantheon ajuda você a descobrir a geografia e a dinâmica da história do nosso planeta.",
       explore: "Explorar",
       people: "Pessoas",
       places: "Lugares",
@@ -346,17 +461,23 @@ export const translations = {
       trendingProfiles: "Perfis em Alta Hoje",
       topProfilesBy: "Principais perfis por visualizações de página para a",
       wikipediaEdition: "edição da wikipédia",
-      about: "é um observatório da memória coletiva focado em biografias com presença em pelo menos",
+      about:
+        "é um observatório da memória coletiva focado em biografias com presença em pelo menos",
       languages: "idiomas",
-      aboutContinued: "na Wikipédia. Temos dados sobre mais de 85.000 biografias, organizadas por países, cidades, ocupações e eras. Explore esses dados para conhecer os personagens que moldam a cultura humana.",
-      aboutDeveloped: "começou como um projeto no grupo Collective Learning do MIT. Hoje é desenvolvido pela",
+      aboutContinued:
+        "na Wikipédia. Temos dados sobre mais de 85.000 biografias, organizadas por países, cidades, ocupações e eras. Explore esses dados para conhecer os personagens que moldam a cultura humana.",
+      aboutDeveloped:
+        "começou como um projeto no grupo Collective Learning do MIT. Hoje é desenvolvido pela",
       datawheel: "Datawheel",
-      aboutDatawheel: ", uma empresa especializada na criação de soluções de distribuição e visualização de dados.",
+      aboutDatawheel:
+        ", uma empresa especializada na criação de soluções de distribuição e visualização de dados.",
       recentPassings: "Falecimentos Recentes",
       notableDeaths: "Mortes Notáveis de 2025",
-      notableDeathsText: "Quer ver a lista completa de figuras notáveis que perdemos em 2025? Visite nossa",
+      notableDeathsText:
+        "Quer ver a lista completa de figuras notáveis que perdemos em 2025? Visite nossa",
       notableDeathsLink: "Mortes Notáveis de 2025",
-      notableDeathsContinued: "página para uma coleção abrangente de biografias de personalidades influentes, incluindo celebridades, artistas, líderes e ícones culturais que faleceram este ano.",
+      notableDeathsContinued:
+        "página para uma coleção abrangente de biografias de personalidades influentes, incluindo celebridades, artistas, líderes e ícones culturais que faleceram este ano.",
       trendingSingers: "Cantores em Alta Hoje",
       trendingActors: "Atores em Alta Hoje",
     },
@@ -369,11 +490,18 @@ export const translations = {
       noData: "Nenhum dado de tendência disponível para esta data.",
       unknown: "Desconhecido",
     },
+    trending: {
+      isTrendingToday: "{name} está em alta hoje!",
+      whyTrending: "Por que {name} está em alta?",
+      references: "Referências:",
+      viewMoreTrending: "Ver mais pessoas em alta",
+    },
   },
   hu: {
     home: {
       tagline: "Fedezze fel az emberiség kollektív emlékezetét!",
-      subtitle: "A Pantheon segít felfedezni bolygónk történetének földrajzát és dinamikáját.",
+      subtitle:
+        "A Pantheon segít felfedezni bolygónk történetének földrajzát és dinamikáját.",
       explore: "Felfedezés",
       people: "Emberek",
       places: "Helyek",
@@ -385,32 +513,45 @@ export const translations = {
       wikipediaEdition: "wikipédia kiadáshoz",
       about: "a kollektív memória megfigyelője, amely legalább",
       languages: "nyelven",
-      aboutContinued: "jelenlévő életrajzokra összpontosít a Wikipédián. Több mint 85 000 életrajz adataival rendelkezünk, országok, városok, foglalkozások és korszakok szerint rendszerezve. Fedezze fel ezeket az adatokat, hogy megismerje az emberi kultúrát formáló személyiségeket.",
-      aboutDeveloped: "az MIT Collective Learning csoportjának projektjeként indult. Ma a",
+      aboutContinued:
+        "jelenlévő életrajzokra összpontosít a Wikipédián. Több mint 85 000 életrajz adataival rendelkezünk, országok, városok, foglalkozások és korszakok szerint rendszerezve. Fedezze fel ezeket az adatokat, hogy megismerje az emberi kultúrát formáló személyiségeket.",
+      aboutDeveloped:
+        "az MIT Collective Learning csoportjának projektjeként indult. Ma a",
       datawheel: "Datawheel",
-      aboutDatawheel: " fejleszti, egy adatterjesztési és vizualizációs megoldások létrehozására szakosodott vállalat.",
+      aboutDatawheel:
+        " fejleszti, egy adatterjesztési és vizualizációs megoldások létrehozására szakosodott vállalat.",
       recentPassings: "Közelmúltbeli Elhunytak",
       notableDeaths: "2025 Kiemelkedő Halálozásai",
-      notableDeathsText: "Szeretné látni a 2025-ben elvesztett kiemelkedő személyiségek teljes listáját? Látogassa meg a",
+      notableDeathsText:
+        "Szeretné látni a 2025-ben elvesztett kiemelkedő személyiségek teljes listáját? Látogassa meg a",
       notableDeathsLink: "2025 Kiemelkedő Halálozásai",
-      notableDeathsContinued: "oldalunkat a befolyásos személyiségek átfogó életrajzi gyűjteményéért, beleértve a hírességeket, művészeket, vezetőket és kulturális ikonokat, akik idén hunytak el.",
+      notableDeathsContinued:
+        "oldalunkat a befolyásos személyiségek átfogó életrajzi gyűjteményéért, beleértve a hírességeket, művészeket, vezetőket és kulturális ikonokat, akik idén hunytak el.",
       trendingSingers: "Ma Felkapott Énekesek",
       trendingActors: "Ma Felkapott Színészek",
     },
     news: {
       pageTitle: "Ki a felkapott ma?",
-      pageSubtitle: "Történelmi személyiségek napi összefoglalói (AI által generálva)",
+      pageSubtitle:
+        "Történelmi személyiségek napi összefoglalói (AI által generálva)",
       trendingIn: "Felkapott:",
       selectDate: "Válasszon más dátumot",
       references: "Hivatkozások:",
       noData: "Nincs elérhető trendinformáció ehhez a dátumhoz.",
       unknown: "Ismeretlen",
     },
+    trending: {
+      isTrendingToday: "{name} ma felkapott!",
+      whyTrending: "Miért felkapott {name}:",
+      references: "Hivatkozások:",
+      viewMoreTrending: "További felkapott személyek",
+    },
   },
   nl: {
     home: {
       tagline: "Verken het collectieve geheugen van de mensheid!",
-      subtitle: "Pantheon helpt je de geografie en dynamiek van de geschiedenis van onze planeet te ontdekken.",
+      subtitle:
+        "Pantheon helpt je de geografie en dynamiek van de geschiedenis van onze planeet te ontdekken.",
       explore: "Verkennen",
       people: "Mensen",
       places: "Plaatsen",
@@ -420,34 +561,48 @@ export const translations = {
       trendingProfiles: "Trending Profielen Vandaag",
       topProfilesBy: "Topprofielen op basis van paginaweergaven voor de",
       wikipediaEdition: "wikipedia-editie",
-      about: "is een observatorium van collectief geheugen gericht op biografieën met aanwezigheid in minstens",
+      about:
+        "is een observatorium van collectief geheugen gericht op biografieën met aanwezigheid in minstens",
       languages: "talen",
-      aboutContinued: "op Wikipedia. We hebben gegevens over meer dan 85.000 biografieën, georganiseerd per land, stad, beroep en tijdperk. Verken deze gegevens om meer te leren over de karakters die de menselijke cultuur vormgeven.",
-      aboutDeveloped: "begon als een project bij de Collective Learning-groep aan MIT. Vandaag wordt het ontwikkeld door",
+      aboutContinued:
+        "op Wikipedia. We hebben gegevens over meer dan 85.000 biografieën, georganiseerd per land, stad, beroep en tijdperk. Verken deze gegevens om meer te leren over de karakters die de menselijke cultuur vormgeven.",
+      aboutDeveloped:
+        "begon als een project bij de Collective Learning-groep aan MIT. Vandaag wordt het ontwikkeld door",
       datawheel: "Datawheel",
-      aboutDatawheel: ", een bedrijf gespecialiseerd in het creëren van datadistributie- en visualisatieoplossingen.",
+      aboutDatawheel:
+        ", een bedrijf gespecialiseerd in het creëren van datadistributie- en visualisatieoplossingen.",
       recentPassings: "Recente Overlijdens",
       notableDeaths: "Opmerkelijke Sterfgevallen van 2025",
-      notableDeathsText: "Wil je de volledige lijst zien van opmerkelijke figuren die we in 2025 verloren hebben? Bezoek onze",
+      notableDeathsText:
+        "Wil je de volledige lijst zien van opmerkelijke figuren die we in 2025 verloren hebben? Bezoek onze",
       notableDeathsLink: "Opmerkelijke Sterfgevallen van 2025",
-      notableDeathsContinued: "pagina voor een uitgebreide verzameling biografieën van invloedrijke persoonlijkheden, waaronder beroemdheden, artiesten, leiders en culturele iconen die dit jaar zijn overleden.",
+      notableDeathsContinued:
+        "pagina voor een uitgebreide verzameling biografieën van invloedrijke persoonlijkheden, waaronder beroemdheden, artiesten, leiders en culturele iconen die dit jaar zijn overleden.",
       trendingSingers: "Trending Zangers Vandaag",
       trendingActors: "Trending Acteurs Vandaag",
     },
     news: {
       pageTitle: "Wie is vandaag trending?",
-      pageSubtitle: "Dagelijkse samenvattingen van historische figuren (gegenereerd door AI)",
+      pageSubtitle:
+        "Dagelijkse samenvattingen van historische figuren (gegenereerd door AI)",
       trendingIn: "Trending in",
       selectDate: "Selecteer een andere datum",
       references: "Referenties:",
       noData: "Geen trendgegevens beschikbaar voor deze datum.",
       unknown: "Onbekend",
     },
+    trending: {
+      isTrendingToday: "{name} is vandaag trending!",
+      whyTrending: "Waarom {name} trending is:",
+      references: "Referenties:",
+      viewMoreTrending: "Meer trending mensen bekijken",
+    },
   },
   pl: {
     home: {
       tagline: "Odkryj zbiorową pamięć ludzkości!",
-      subtitle: "Pantheon pomaga odkryć geografię i dynamikę historii naszej planety.",
+      subtitle:
+        "Pantheon pomaga odkryć geografię i dynamikę historii naszej planety.",
       explore: "Odkrywaj",
       people: "Ludzie",
       places: "Miejsca",
@@ -457,28 +612,41 @@ export const translations = {
       trendingProfiles: "Profile w Trendach Dzisiaj",
       topProfilesBy: "Najlepsze profile według wyświetleń strony dla",
       wikipediaEdition: "edycji wikipedii",
-      about: "to obserwatorium pamięci zbiorowej skupione na biografiach obecnych w co najmniej",
+      about:
+        "to obserwatorium pamięci zbiorowej skupione na biografiach obecnych w co najmniej",
       languages: "językach",
-      aboutContinued: "w Wikipedii. Mamy dane dotyczące ponad 85 000 biografii, zorganizowanych według krajów, miast, zawodów i epok. Odkrywaj te dane, aby poznać postacie kształtujące kulturę ludzką.",
-      aboutDeveloped: "rozpoczął się jako projekt grupy Collective Learning na MIT. Dziś jest rozwijany przez",
+      aboutContinued:
+        "w Wikipedii. Mamy dane dotyczące ponad 85 000 biografii, zorganizowanych według krajów, miast, zawodów i epok. Odkrywaj te dane, aby poznać postacie kształtujące kulturę ludzką.",
+      aboutDeveloped:
+        "rozpoczął się jako projekt grupy Collective Learning na MIT. Dziś jest rozwijany przez",
       datawheel: "Datawheel",
-      aboutDatawheel: ", firmę specjalizującą się w tworzeniu rozwiązań dystrybucji i wizualizacji danych.",
+      aboutDatawheel:
+        ", firmę specjalizującą się w tworzeniu rozwiązań dystrybucji i wizualizacji danych.",
       recentPassings: "Niedawne Zgony",
       notableDeaths: "Znaczące Zgony 2025",
-      notableDeathsText: "Chcesz zobaczyć pełną listę znaczących postaci, które straciliśmy w 2025 roku? Odwiedź naszą",
+      notableDeathsText:
+        "Chcesz zobaczyć pełną listę znaczących postaci, które straciliśmy w 2025 roku? Odwiedź naszą",
       notableDeathsLink: "Znaczące Zgony 2025",
-      notableDeathsContinued: "stronę, aby uzyskać obszerną kolekcję biografii wpływowych osobistości, w tym celebrytów, artystów, liderów i ikon kulturowych, którzy zmarli w tym roku.",
+      notableDeathsContinued:
+        "stronę, aby uzyskać obszerną kolekcję biografii wpływowych osobistości, w tym celebrytów, artystów, liderów i ikon kulturowych, którzy zmarli w tym roku.",
       trendingSingers: "Piosenkarze w Trendach Dzisiaj",
       trendingActors: "Aktorzy w Trendach Dzisiaj",
     },
     news: {
       pageTitle: "Kto jest dziś w trendach?",
-      pageSubtitle: "Codzienne podsumowania postaci historycznych (wygenerowane przez AI)",
+      pageSubtitle:
+        "Codzienne podsumowania postaci historycznych (wygenerowane przez AI)",
       trendingIn: "W trendach w",
       selectDate: "Wybierz inną datę",
       references: "Odniesienia:",
       noData: "Brak danych o trendach dla tej daty.",
       unknown: "Nieznany",
+    },
+    trending: {
+      isTrendingToday: "{name} jest dziś w trendach!",
+      whyTrending: "Dlaczego {name} jest w trendach:",
+      references: "Źródła:",
+      viewMoreTrending: "Zobacz więcej osób w trendach",
     },
   },
 };

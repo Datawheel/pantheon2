@@ -1,5 +1,6 @@
 import {micromark} from "micromark";
 import Link from "next/link";
+import {getTranslations} from "/app/translations";
 import "./WhyTrending.css";
 
 export default function WhyTrending({
@@ -7,6 +8,7 @@ export default function WhyTrending({
   trendingData,
   currentLang = "en",
 }) {
+  const t = getTranslations(currentLang);
   const reason = trendingData?.trendingReason;
   const citations = trendingData?.llmMetadata?.citations || [];
 
@@ -31,14 +33,14 @@ export default function WhyTrending({
 
   return (
     <div className="why-trending-container">
-      <h2>{person.name} is trending today!</h2>
+      <h2>{t.trending.isTrendingToday.replace("{name}", person.name)}</h2>
       {reason ? (
         <div className="reason-container">
-          <h3>Why {person.name} is Trending:</h3>
+          <h3>{t.trending.whyTrending.replace("{name}", person.name)}</h3>
           <p dangerouslySetInnerHTML={{__html: reasonHtml}} />
           {citations.length > 0 && (
             <div className="citations-container">
-              <h4>References:</h4>
+              <h4>{t.trending.references}</h4>
               <ol>
                 {citations.map((citation, index) => (
                   <li key={index}>
@@ -67,7 +69,7 @@ export default function WhyTrending({
         href={`/${currentLang}/news?date=${today}`}
         className="view-news-button"
       >
-        View more trending people →
+        {t.trending.viewMoreTrending} →
       </Link>
     </div>
   );

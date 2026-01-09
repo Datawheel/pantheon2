@@ -55,12 +55,12 @@ const Grid = ({bios, showDates, showTrendIndicator = true}) => (
             ) : null}
             <PersonImage
               src={`/profile/people/${profile.pid || profile.id}.jpg`}
-              alt={`Photo of ${profile.name}`}
+              alt={`Photo of ${profile.title || profile.name}`}
               fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
             />
           </div>
           <div className="grid-box-title-container">
-            {profile.name}
+            {profile.title || profile.name}
             {showDates ? (
               <div className="grid-box-title-dates">
                 {profile.birthyear} - {profile.deathyear}
