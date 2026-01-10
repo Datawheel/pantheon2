@@ -2,8 +2,10 @@
 import {useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {usePathname} from "next/navigation";
+import {usePathname, useParams} from "next/navigation";
 import {useSearchVisibility} from "/contexts/SearchContext";
+import {getTranslations} from "/app/translations";
+import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "/app/locales";
 
 export default function Navigation() {
   const {setSearchVisible} = useSearchVisibility();
@@ -11,6 +13,10 @@ export default function Navigation() {
   const [mobileSubnav, setMobileSubnav] = useState(null);
 
   const pathname = usePathname();
+  const params = useParams();
+  const locale = params?.locale || DEFAULT_LOCALE;
+  const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
 
   const toggleSubNav = subnavType => {
     subnavType === mobileSubnav
@@ -33,85 +39,85 @@ export default function Navigation() {
             </span>
           </li>
           <li className="item">
-            <a href="/explore/viz" className="item-link explore-link">
-              Visualizations
+            <a href={`/${lang}/explore/viz`} className="item-link explore-link">
+              {t.nav.visualizations}
             </a>
           </li>
           <li className="item">
             <a
-              href="/explore/rankings?show=people"
+              href={`/${lang}/explore/rankings?show=people`}
               className="item-link rankings-link dd"
             >
-              Rankings
+              {t.nav.rankings}
             </a>
             <ul className="sub-items">
               <li>
-                <a href="/explore/rankings?show=people" className="item-link">
-                  People
+                <a href={`/${lang}/explore/rankings?show=people`} className="item-link">
+                  {t.nav.people}
                 </a>
               </li>
               <li>
-                <a href="/explore/rankings?show=places" className="item-link">
-                  Places
+                <a href={`/${lang}/explore/rankings?show=places`} className="item-link">
+                  {t.nav.places}
                 </a>
               </li>
               <li>
                 <a
-                  href="/explore/rankings?show=occupations"
+                  href={`/${lang}/explore/rankings?show=occupations`}
                   className="item-link"
                 >
-                  Occupations
+                  {t.nav.occupations}
                 </a>
               </li>
             </ul>
           </li>
           <li className="item">
-            <a href="/profile/person" className="item-link profiles-link dd">
-              Profiles
+            <a href={`/${lang}/profile/person`} className="item-link profiles-link dd">
+              {t.nav.profiles}
             </a>
             <ul className="sub-items">
               <li>
-                <a href="/profile/person" className="item-link">
-                  People
+                <a href={`/${lang}/profile/person`} className="item-link">
+                  {t.nav.people}
                 </a>
               </li>
               <li>
-                <a href="/profile/place" className="item-link">
-                  Places
+                <a href={`/${lang}/profile/place`} className="item-link">
+                  {t.nav.places}
                 </a>
               </li>
               <li>
-                <a href="/profile/country" className="item-link">
-                  Countries
+                <a href={`/${lang}/profile/country`} className="item-link">
+                  {t.nav.countries}
                 </a>
               </li>
               <li>
-                <a href="/profile/occupation" className="item-link">
-                  Occupations
+                <a href={`/${lang}/profile/occupation`} className="item-link">
+                  {t.nav.occupations}
                 </a>
               </li>
               <li>
                 <a
-                  href="/profile/select-occupation-country"
+                  href={`/${lang}/profile/select-occupation-country`}
                   className="item-link"
                 >
-                  Occupation / Country
+                  {t.nav.occupationCountry}
                 </a>
               </li>
               <li>
-                <a href="/profile/era" className="item-link">
-                  Eras
+                <a href={`/${lang}/profile/era`} className="item-link">
+                  {t.nav.eras}
                 </a>
               </li>
               <li>
-                <a href="/profile/deaths/2025" className="item-link">
-                  Deaths
+                <a href={`/${lang}/profile/deaths/2025`} className="item-link">
+                  {t.nav.deaths}
                 </a>
               </li>
             </ul>
           </li>
           <li className="item home-link">
-            <a href="/" className="home">
+            <a href={`/${lang}`} className="home">
               <Image
                 width={140}
                 height={20}
@@ -135,89 +141,89 @@ export default function Navigation() {
             </li> */}
           <li className="item">
             <Link
-              href="/data/faq"
+              href={`/${lang}/data/faq`}
               className={
-                pathname === "/data/faq"
+                pathname === `/${lang}/data/faq`
                   ? "active item-link about-link"
                   : "item-link about-link"
               }
             >
-              About
+              {t.nav.about}
             </Link>
           </li>
           <li className="item">
             <Link
-              href="/data/permissions"
+              href={`/${lang}/data/permissions`}
               className={
-                pathname === "/data/permissions"
+                pathname === `/${lang}/data/permissions`
                   ? "active item-link data-link dd"
                   : "item-link data-link dd"
               }
             >
-              Data
+              {t.nav.data}
             </Link>
             <ul className="sub-items">
               <li>
-                <Link href="/data/permissions" className="item-link">
-                  Permissions
+                <Link href={`/${lang}/data/permissions`} className="item-link">
+                  {t.nav.permissions}
                 </Link>
               </li>
               <li>
-                <Link href="/data/datasets" className="item-link">
-                  Download
+                <Link href={`/${lang}/data/datasets`} className="item-link">
+                  {t.nav.download}
                 </Link>
               </li>
               <li>
-                <Link href="/data/api" className="item-link">
-                  API
+                <Link href={`/${lang}/data/api`} className="item-link">
+                  {t.nav.api}
                 </Link>
               </li>
             </ul>
           </li>
           <li className="item">
             <Link
-              href="/game/yearbook"
+              href={`/${lang}/game/yearbook`}
               className={
-                pathname === "/game/yearbook"
+                pathname === `/${lang}/game/yearbook`
                   ? "active item-link explore-link dd"
                   : "item-link explore-link dd"
               }
             >
-              Games
+              {t.nav.games}
             </Link>
             <ul className="sub-items">
               <li>
-                <Link href="/game/yearbook" className="item-link">
-                  Yearbook
+                <Link href={`/${lang}/game/yearbook`} className="item-link">
+                  {t.nav.yearbook}
                 </Link>
               </li>
               <li>
-                <Link href="/game/birthle" className="item-link">
-                  ◼ Birthle
+                <Link href={`/${lang}/game/birthle`} className="item-link">
+                  ◼ {t.nav.birthle}
                 </Link>
               </li>
               <li>
-                <Link href="/game/trivia" className="item-link">
-                  ◼ Trivia
+                <Link href={`/${lang}/game/trivia`} className="item-link">
+                  ◼ {t.nav.trivia}
                 </Link>
               </li>
               <li>
                 <a href="https://trivia.rocks/" target="_blank" rel="noopener noreferrer" className="item-link">
-                  TuneTrivia <span className="new-badge">new!</span>
+                  TuneTrivia <span className="new-badge">{t.nav.newBadge}</span>
                 </a>
               </li>
             </ul>
           </li>
           <li className="item">
             <Link
-              href="/news"
+              href={`/${lang}/news`}
               className={
-                pathname?.startsWith("/news") || pathname?.includes("/news")
+                pathname?.startsWith(`/${lang}/news`) || pathname?.includes("/news")
                   ? "active item-link news-link"
                   : "item-link news-link"
               }
             >
-              News
+              {t.nav.news}
             </Link>
           </li>
           <li className="search-btn">
@@ -226,7 +232,7 @@ export default function Navigation() {
                 width={18}
                 height={18}
                 src="/images/icons/icon-search.svg"
-                alt="Search"
+                alt={t.nav.search}
               />
             </button>
           </li>
@@ -235,7 +241,7 @@ export default function Navigation() {
       {mobileNavVisible ? (
         <div className="globalNav mobileNavigation">
           <div className="logo-container">
-            <a href="/" className="home">
+            <a href={`/${lang}`} className="home">
               <Image
                 width={93}
                 height={13}
@@ -258,18 +264,18 @@ export default function Navigation() {
           </div>
           <ul className="items">
             <li className="item">
-              <a href="/" className="item-link home-link">
-                Home
+              <a href={`/${lang}`} className="item-link home-link">
+                {t.nav.home}
               </a>
             </li>
             <li className="item">
-              <a href="/explore/viz" className="item-link explore-link">
-                Visualizations
+              <a href={`/${lang}/explore/viz`} className="item-link explore-link">
+                {t.nav.visualizations}
               </a>
             </li>
             <li className="item">
-              <a href="/explore/rankings" className="item-link rankings-link">
-                Rankings
+              <a href={`/${lang}/explore/rankings`} className="item-link rankings-link">
+                {t.nav.rankings}
               </a>
             </li>
             <li className="item" onClick={() => toggleSubNav("profiles")}>
@@ -277,32 +283,32 @@ export default function Navigation() {
                 className="item-link profiles-link"
                 onClick={e => e.preventDefault()}
               >
-                Profiles
+                {t.nav.profiles}
               </a>
               {mobileSubnav === "profiles" ? (
                 <ul className="sub-items">
                   <li>
-                    <a href="/profile/person">People</a>
+                    <a href={`/${lang}/profile/person`}>{t.nav.people}</a>
                   </li>
                   <li>
-                    <a href="/profile/place">Places</a>
+                    <a href={`/${lang}/profile/place`}>{t.nav.places}</a>
                   </li>
                   <li>
-                    <a href="/profile/country">Countries</a>
+                    <a href={`/${lang}/profile/country`}>{t.nav.countries}</a>
                   </li>
                   <li>
-                    <a href="/profile/occupation">Occupations</a>
+                    <a href={`/${lang}/profile/occupation`}>{t.nav.occupations}</a>
                   </li>
                   <li>
-                    <a href="/profile/select-occupation-country">
-                      Occupation / Country
+                    <a href={`/${lang}/profile/select-occupation-country`}>
+                      {t.nav.occupationCountry}
                     </a>
                   </li>
                   <li>
-                    <a href="/profile/era">Eras</a>
+                    <a href={`/${lang}/profile/era`}>{t.nav.eras}</a>
                   </li>
                   <li>
-                    <a href="/profile/deaths/2025">Deaths</a>
+                    <a href={`/${lang}/profile/deaths/2025`}>{t.nav.deaths}</a>
                   </li>
                 </ul>
               ) : null}
@@ -320,8 +326,8 @@ export default function Navigation() {
               </ul>
             </li> */}
             <li className="item">
-              <a href="/data/faq" className="item-link about-link">
-                About
+              <a href={`/${lang}/data/faq`} className="item-link about-link">
+                {t.nav.about}
               </a>
             </li>
             <li className="item" onClick={() => toggleSubNav("data")}>
@@ -329,18 +335,18 @@ export default function Navigation() {
                 className="item-link data-link"
                 onClick={e => e.preventDefault()}
               >
-                Data
+                {t.nav.data}
               </a>
               {mobileSubnav === "data" ? (
                 <ul className="sub-items">
                   <li>
-                    <a href="/data/permissions">Permissions</a>
+                    <a href={`/${lang}/data/permissions`}>{t.nav.permissions}</a>
                   </li>
                   <li>
-                    <a href="/data/datasets">Download</a>
+                    <a href={`/${lang}/data/datasets`}>{t.nav.download}</a>
                   </li>
                   <li>
-                    <a href="/data/api">API</a>
+                    <a href={`/${lang}/data/api`}>{t.nav.api}</a>
                   </li>
                 </ul>
               ) : null}
@@ -350,48 +356,48 @@ export default function Navigation() {
                 className="item-link game-link"
                 onClick={e => e.preventDefault()}
               >
-                Games
+                {t.nav.games}
               </a>
               {mobileSubnav === "games" ? (
                 <ul className="sub-items">
                   <li>
-                    <Link href="/game/yearbook" className="item-link">
-                      Yearbook
+                    <Link href={`/${lang}/game/yearbook`} className="item-link">
+                      {t.nav.yearbook}
                     </Link>
                   </li>
                   <li>
-                    <a href="/game/birthle" className="item-link">
-                      Birthle
+                    <a href={`/${lang}/game/birthle`} className="item-link">
+                      {t.nav.birthle}
                     </a>
                   </li>
                   <li>
-                    <a href="/game/trivia" className="item-link">
-                      Trivia
+                    <a href={`/${lang}/game/trivia`} className="item-link">
+                      {t.nav.trivia}
                     </a>
                   </li>
                   <li>
                     <a href="https://trivia.rocks/" target="_blank" rel="noopener noreferrer" className="item-link">
-                      TuneTrivia <span className="new-badge">new!</span>
+                      TuneTrivia <span className="new-badge">{t.nav.newBadge}</span>
                     </a>
                   </li>
                 </ul>
               ) : null}
             </li>
             <li className="item">
-              <a href="/news" className="item-link news-link">
-                News
+              <a href={`/${lang}/news`} className="item-link news-link">
+                {t.nav.news}
               </a>
             </li>
             <li className="item">
-              <a href="/data/api" className="item-link api-link">
-                API
+              <a href={`/${lang}/data/api`} className="item-link api-link">
+                {t.nav.api}
               </a>
             </li>
             <li
               className="item search-link item-link"
               onClick={() => setSearchVisible(true)}
             >
-              Search
+              {t.nav.search}
             </li>
             <li className="item">
               <a
@@ -400,11 +406,11 @@ export default function Navigation() {
                 rel="noopener noreferrer"
                 className="item-link feedback-link"
               >
-                Give Feedback
+                {t.nav.giveFeedback}
               </a>
             </li>
             <li className="item item-link citation-link">
-              Usage Citation
+              {t.nav.usageCitation}
               <input
                 readOnly
                 type="text"

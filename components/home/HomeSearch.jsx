@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import {useSearchVisibility} from "/contexts/SearchContext";
+import {getTranslations} from "/app/translations";
 
-export default function HomeSearch() {
+export default function HomeSearch({lang = "en"}) {
   const {setSearchVisible} = useSearchVisibility();
+  const t = getTranslations(lang);
 
   return (
     <div className="home-search">
@@ -15,7 +17,7 @@ export default function HomeSearch() {
         height={22}
       />
       <a onClick={() => setSearchVisible(true)}>
-        Search people, places, &amp; occupations
+        {t.home.searchPlaceholder}
       </a>
     </div>
   );

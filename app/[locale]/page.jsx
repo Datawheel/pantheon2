@@ -98,7 +98,7 @@ export default async function Home({params}) {
                 height={49}
               />
             </h1>
-            <HomeSearch />
+            <HomeSearch lang={lang} />
           </div>
 
           <div className="home-head-content">

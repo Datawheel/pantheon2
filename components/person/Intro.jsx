@@ -1,10 +1,12 @@
 import PersonImage from "../utils/PersonImage";
 import {toTitleCase} from "../utils/vizHelpers";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
+import {getTranslations} from "/app/translations";
 import "../common/Intro.css";
 import Image from "next/image";
 
 const Intro = ({person, personRanks, wikiExtract, ranklessUrl, lang = "en"}) => {
+  const t = getTranslations(lang);
   const {
     occupation_rank: occupationRank,
     occupation_rank_prev: occupationRankPrev,
@@ -106,7 +108,8 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl, lang = "en"}) => 
     }
   }
 
-  // wikipedia excerpt
+  // wikipedia excerpt and URL
+  let wikiUrl;
   if (wikiExtract && wikiExtract.query && wikiExtract.query.pages) {
     // Get the first page object (since we're querying by title, page ID will be language-specific)
     const pageId = Object.keys(wikiExtract.query.pages)[0];
@@ -125,7 +128,13 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl, lang = "en"}) => 
         // add final period back in
         wikiSentence = wikiSentence + ".";
       }
-      wikiSlug = page.title.replace(/ /g, "_");
+      // Use the actual Wikipedia URL from the API (includes proper slug with disambiguation)
+      wikiUrl = page.fullurl;
+      // Fallback: construct URL from title if fullurl not available
+      if (!wikiUrl) {
+        wikiSlug = page.title.replace(/ /g, "_");
+        wikiUrl = `https://${lang}.wikipedia.org/wiki/${wikiSlug}`;
+      }
     }
   }
   // return <div>another new intro here...</div>;
@@ -182,11 +191,11 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl, lang = "en"}) => 
             <p>
               {wikiSentence}{" "}
               <a
-                href={`https://${lang}.wikipedia.org/wiki/${wikiSlug}`}
+                href={wikiUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Read more on Wikipedia
+                {t.readMoreWikipedia}
               </a>
             </p>
           ) : (

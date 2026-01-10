@@ -1,8 +1,21 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import {usePathname, useParams} from "next/navigation";
+import {SUPPORTED_LOCALES, LOCALE_NATIVE_NAMES, DEFAULT_LOCALE} from "/app/locales";
 
-const Footer = () => (
+const Footer = () => {
+  const pathname = usePathname();
+  const params = useParams();
+  const currentLocale = params?.locale || DEFAULT_LOCALE;
+  const lang = SUPPORTED_LOCALES.includes(currentLocale) ? currentLocale : DEFAULT_LOCALE;
+
+  // Get the current path without locale prefix for language switching
+  const pathWithoutLocale = pathname?.replace(`/${lang}`, "") || "/";
+
+  return (
+  <>
   <div className="global-footer">
     <ul className="items site-map">
       <li className="item">
@@ -214,6 +227,22 @@ const Footer = () => (
       </ul>
     </div>
   </div>
-);
+
+  <div className="language-switcher">
+    {SUPPORTED_LOCALES.map((locale, index) => (
+      <React.Fragment key={locale}>
+        {index > 0 && <span className="separator">•</span>}
+        <Link
+          href={`/${locale}${pathWithoutLocale}`}
+          className={locale === lang ? "active" : ""}
+        >
+          {LOCALE_NATIVE_NAMES[locale]}
+        </Link>
+      </React.Fragment>
+    ))}
+  </div>
+  </>
+  );
+};
 
 export default Footer;

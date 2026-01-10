@@ -300,7 +300,7 @@ export async function GET(request) {
           );
           trendingArticlesLookup[article.article] = {
             ...article,
-            title: article.article,
+            title: article.article.replace(/_/g, " "),
           };
         });
         // trendingArticlesQuery = currentArticlesChunk.map(p => `slug.eq.${encodeURIComponent(p.article)}`);

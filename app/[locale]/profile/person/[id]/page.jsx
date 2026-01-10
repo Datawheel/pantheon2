@@ -60,22 +60,69 @@ async function getPersonRanks(id) {
 }
 
 async function getWikiExtract(personSlug, localizedName, lang = "en") {
-  // Use localized name if available, otherwise use slug converted to title format
-  const title = localizedName || personSlug.replace(/_/g, " ");
+  const headers = {
+    "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+  };
+  const revalidate = {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}};
 
-  const res = await fetch(
-    `https://${lang}.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=4&explaintext&exsectionformat=wiki&exintro&titles=${encodeURIComponent(
-      title
-    )}&format=json&exlimit=1&origin=*`,
-    {
-      headers: {
-        "User-Agent":
-          "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-      },
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
+  // For English, use the slug directly
+  if (lang === "en") {
+    const res = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info&inprop=url&exsentences=4&explaintext&exsectionformat=wiki&exintro&titles=${encodeURIComponent(
+        personSlug
+      )}&format=json&exlimit=1&origin=*`,
+      {headers, ...revalidate}
+    );
+    return res.json();
+  }
+
+  // Step 1: Get langlink from English Wikipedia to target language
+  const langLinkRes = await fetch(
+    `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(
+      personSlug
+    )}&prop=langlinks&lllimit=500&llprop=url&lllang=${lang}&format=json&origin=*`,
+    {headers, ...revalidate}
   );
-  return res.json();
+  const langLinkData = await langLinkRes.json();
+
+  // Extract the langlink URL and title
+  let targetTitle = null;
+  let targetUrl = null;
+
+  if (langLinkData.query && langLinkData.query.pages) {
+    const pageId = Object.keys(langLinkData.query.pages)[0];
+    const page = langLinkData.query.pages[pageId];
+
+    if (page.langlinks && page.langlinks.length > 0) {
+      const langLink = page.langlinks[0];
+      targetTitle = langLink["*"];
+      targetUrl = langLink.url;
+    }
+  }
+
+  // If no langlink found, fall back to using the slug or localized name
+  if (!targetTitle) {
+    targetTitle = localizedName || personSlug.replace(/_/g, " ");
+  }
+
+  // Step 2: Get extract from target language Wikipedia
+  const extractRes = await fetch(
+    `https://${lang}.wikipedia.org/w/api.php?action=query&prop=extracts|info&inprop=url&exsentences=4&explaintext&exsectionformat=wiki&exintro&titles=${encodeURIComponent(
+      targetTitle
+    )}&format=json&exlimit=1&origin=*`,
+    {headers, ...revalidate}
+  );
+  const extractData = await extractRes.json();
+
+  // If we got a URL from langlinks, inject it into the extract data
+  if (targetUrl && extractData.query && extractData.query.pages) {
+    const pageId = Object.keys(extractData.query.pages)[0];
+    if (extractData.query.pages[pageId]) {
+      extractData.query.pages[pageId].fullurl = targetUrl;
+    }
+  }
+
+  return extractData;
 }
 
 // async function getNewsArticles(personId) {
