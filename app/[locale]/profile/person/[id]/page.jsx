@@ -61,7 +61,8 @@ async function getPersonRanks(id) {
 
 async function getWikiExtract(personSlug, localizedName, lang = "en") {
   const headers = {
-    "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+    "User-Agent":
+      "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
   };
   const revalidate = {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}};
 
@@ -184,11 +185,11 @@ async function getPersonTrending(slug, userLang, date) {
   };
 }
 
-async function getPageViews(slug, lang = "en") {
+async function getPageViews(personId, lang = "en") {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
 
   const pageviews = await fetch(
-    `${baseApi}/pageviews?lang=eq.${lang}&slug=eq.${slug}&select=date,views&order=date.asc`,
+    `${baseApi}/pageviews?lang=eq.${lang}&id=eq.${personId}&select=date,views&order=date.asc`,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}
   )
     .then(r => r.json())
@@ -245,24 +246,19 @@ export default async function Page({params: {id, locale}}) {
   const personData = getPerson(id, lang);
   const personRanksData = getPersonRanks(id);
   const personTrendingData = getPersonTrending(id, lang, yesterday);
-  const pageViewsData = getPageViews(id, lang);
 
-  const [person, personRanks, personTrending, pageViews] = await Promise.all([
+  const [person, personRanks, personTrending] = await Promise.all([
     personData,
     personRanksData,
     personTrendingData,
-    pageViewsData,
   ]);
-
-  console.log(`PageViews data for ${id} (${lang}):`, {
-    count: pageViews?.length || 0,
-    first: pageViews?.[0],
-    last: pageViews?.[pageViews.length - 1]
-  });
 
   if (!person) {
     return notFound();
   }
+
+  // Fetch pageviews using person.id (needs numeric ID, not slug)
+  const pageViews = await getPageViews(person.id, lang);
 
   // Get localized name from translations column, fallback to English name
   const localizedName = person.translations?.[lang] || person.name;
