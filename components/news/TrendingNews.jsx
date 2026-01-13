@@ -15,7 +15,16 @@ dayjs.extend(advancedFormat);
 export default function TrendingNews({languageSections, currentLang, currentDate}) {
   const router = useRouter();
   const t = getTranslations(currentLang);
-  const formattedDate = dayjs(currentDate).format("dddd, MMMM DD, YYYY");
+
+  // Format date in the current language using Intl.DateTimeFormat
+  const dateObj = new Date(currentDate + "T12:00:00Z");
+  const formattedDate = new Intl.DateTimeFormat(currentLang, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(dateObj);
+
   const dateValue = dayjs(currentDate).format("YYYY-MM-DD");
 
   const handleLanguageChange = lang => {
