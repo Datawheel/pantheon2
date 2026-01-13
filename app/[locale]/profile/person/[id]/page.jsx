@@ -189,7 +189,7 @@ async function getPageViews(personId, lang = "en") {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
 
   const pageviews = await fetch(
-    `${baseApi}/pageviews?lang=eq.${lang}&id=eq.${personId}&select=date,views&order=date.asc`,
+    `${baseApi}/pageviews?lang=eq.${lang}&wp_id=eq.${personId}&select=date,views&order=date.asc`,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}
   )
     .then(r => r.json())
