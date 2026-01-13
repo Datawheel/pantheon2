@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import {Tooltip} from "@blueprintjs/core";
 // import HeaderLine from "./HeaderLine";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
-import {LOCALE_NAMES} from "/app/locales";
+import {getLocalizedLanguageName} from "/app/locales";
 import {getTranslations} from "/app/translations";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
@@ -113,7 +113,7 @@ export default function Header({person, trendingData = {}, currentLang = "en"}) 
               .map(([langCode, rank]) => (
                 <Tooltip
                   key={langCode}
-                  content={`Rank #${rank} in ${LOCALE_NAMES[langCode]}`}
+                  content={`Rank #${rank} in ${getLocalizedLanguageName(langCode, currentLang)}`}
                 >
                   <div
                     className={`lang-rank-badge ${langCode === currentLang ? 'current-lang' : ''}`}

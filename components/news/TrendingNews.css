@@ -114,11 +114,16 @@
 }
 
 .trending-language-section {
-  margin-bottom: 4rem;
+  margin-bottom: 6rem;
 }
 
 .trending-language-section:last-child {
   margin-bottom: 0;
+}
+
+.trending-language-section:not(:first-child) {
+  padding-top: 3rem;
+  border-top: 3px solid #f0f0f0;
 }
 
 .trending-section-title {

@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import {micromark} from "micromark";
 import {Tooltip} from "@blueprintjs/core";
-import {SUPPORTED_LOCALES, LOCALE_NAMES} from "/app/locales";
+import {SUPPORTED_LOCALES, getLocalizedLanguageName} from "/app/locales";
 import {getTranslations} from "/app/translations";
 import PersonImage from "/components/utils/PersonImage";
 import "./TrendingNews.css";
@@ -71,7 +71,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
               {langRankEntries.map(([langCode, rank]) => (
                 <Tooltip
                   key={langCode}
-                  content={`Rank #${rank} in ${LOCALE_NAMES[langCode]}`}
+                  content={`Rank #${rank} in ${getLocalizedLanguageName(langCode, currentLang)}`}
                 >
                   <div
                     className={`lang-rank-badge ${langCode === currentLang ? 'current-lang' : ''}`}
@@ -164,7 +164,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
           languagesWithPeople.map(lang => (
             <div key={lang} className="trending-language-section">
               <h2 className="trending-section-title">
-                {t.news.trendingIn} {LOCALE_NAMES[lang]}
+                {t.news.trendingIn} {getLocalizedLanguageName(lang, currentLang)}
               </h2>
 
               <div className="trending-news-grid">

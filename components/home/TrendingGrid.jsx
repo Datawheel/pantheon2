@@ -6,10 +6,10 @@ import Link from "next/link";
 import Grid from "/components/home/Grid";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
-import {SUPPORTED_LOCALES, LOCALE_NAMES, DEFAULT_LOCALE} from "/app/locales";
+import {SUPPORTED_LOCALES, getLocalizedLanguageName, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
 
-const LangSelector = ({handleLanguageChange, trendingLangEdition}) => (
+const LangSelector = ({handleLanguageChange, trendingLangEdition, currentLang}) => (
   <Select
     label=""
     className="home-select"
@@ -19,7 +19,7 @@ const LangSelector = ({handleLanguageChange, trendingLangEdition}) => (
   >
     {SUPPORTED_LOCALES.map(locale => (
       <option key={locale} value={locale}>
-        {LOCALE_NAMES[locale]}
+        {getLocalizedLanguageName(locale, currentLang)}
       </option>
     ))}
   </Select>
@@ -85,6 +85,7 @@ export default function TrendingGrid({
             <LangSelector
               handleLanguageChange={handleLanguageChange}
               trendingLangEdition={trendingLangEdition}
+              currentLang={trendingLangEdition}
             />
             <span className="grid-select-label"> {t.home.wikipediaEdition}</span>
           </p>

@@ -51,3 +51,24 @@ export const LOCALE_NATIVE_NAMES = {
 };
 
 export const DEFAULT_LOCALE = "en";
+
+/**
+ * Get localized language name using Intl.DisplayNames API
+ * @param {string} langCode - The language code to translate (e.g., "en", "fr")
+ * @param {string} displayLang - The language to display the name in (e.g., "pt" for Portuguese)
+ * @returns {string} - The translated language name
+ *
+ * Examples:
+ *   getLocalizedLanguageName("en", "pt") => "inglês"
+ *   getLocalizedLanguageName("fr", "es") => "francés"
+ *   getLocalizedLanguageName("ja", "en") => "Japanese"
+ */
+export function getLocalizedLanguageName(langCode, displayLang = "en") {
+  try {
+    const displayNames = new Intl.DisplayNames([displayLang], { type: "language" });
+    return displayNames.of(langCode);
+  } catch (error) {
+    // Fallback to native name if Intl fails
+    return LOCALE_NATIVE_NAMES[langCode] || LOCALE_NAMES[langCode] || langCode;
+  }
+}
