@@ -8,6 +8,7 @@ import {Tooltip} from "@blueprintjs/core";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import {getLocalizedLanguageName} from "/app/locales";
 import {getTranslations} from "/app/translations";
+import PageViewsChart from "./PageViewsChart";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
@@ -46,7 +47,7 @@ import "../../styles/mouse.css";
 //   return res.json();
 // }
 
-export default function Header({person, trendingData = {}, currentLang = "en"}) {
+export default function Header({person, trendingData = {}, currentLang = "en", pageViews = []}) {
   const t = getTranslations(currentLang);
 
   // const {items: wikiPageViews} = await getWikiPageViews(person.name);
@@ -139,11 +140,7 @@ export default function Header({person, trendingData = {}, currentLang = "en"}) 
               : t.stillAlive}
           </p>
         ) : null}
-        {/* <pre>
-          <Suspense fallback={<div>Loading...</div>}>
-            <HeaderLine pageViewData={pageViewData} />
-          </Suspense>
-        </pre> */}
+        <PageViewsChart pageviewsData={pageViews} lang={currentLang} />
       </div>
       <div className="mouse">
         <span className="mouse-scroll"></span>

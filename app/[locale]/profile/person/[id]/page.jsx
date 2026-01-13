@@ -184,6 +184,19 @@ async function getPersonTrending(slug, userLang, date) {
   };
 }
 
+async function getPageViews(slug, lang = "en") {
+  const baseApi = process.env.BASE_API || "https://api.pantheon.world";
+
+  const pageviews = await fetch(
+    `${baseApi}/pageviews?lang=eq.${lang}&slug=eq.${slug}&select=date,views&order=date.asc`,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}
+  )
+    .then(r => r.json())
+    .catch(() => []);
+
+  return Array.isArray(pageviews) ? pageviews : [];
+}
+
 export async function generateMetadata({params}, parent) {
   // read route params
   const id = params.id;
@@ -232,12 +245,20 @@ export default async function Page({params: {id, locale}}) {
   const personData = getPerson(id, lang);
   const personRanksData = getPersonRanks(id);
   const personTrendingData = getPersonTrending(id, lang, yesterday);
+  const pageViewsData = getPageViews(id, lang);
 
-  const [person, personRanks, personTrending] = await Promise.all([
+  const [person, personRanks, personTrending, pageViews] = await Promise.all([
     personData,
     personRanksData,
     personTrendingData,
+    pageViewsData,
   ]);
+
+  console.log(`PageViews data for ${id} (${lang}):`, {
+    count: pageViews?.length || 0,
+    first: pageViews?.[0],
+    last: pageViews?.[pageViews.length - 1]
+  });
 
   if (!person) {
     return notFound();
@@ -440,6 +461,7 @@ export default async function Page({params: {id, locale}}) {
         }}
         trendingData={personTrending}
         currentLang={lang}
+        pageViews={pageViews}
       />
       <div className="about-section">
         <ProfileNav sections={filteredSection} />

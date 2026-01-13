@@ -256,6 +256,38 @@ header {
   }
 }
 
+.pageviews-chart-container {
+  margin-top: 24px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.pageviews-chart {
+  width: 100%;
+  height: 120px !important;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.pageviews-label {
+  font-size: 10px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+@media (max-width: 750px) {
+  .pageviews-chart {
+    height: 100px;
+  }
+  .pageviews-label {
+    font-size: 9px;
+  }
+}
+
 .top-desc {
   @mixin contextLabel;
   margin-top: 0;
