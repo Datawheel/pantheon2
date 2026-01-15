@@ -2,6 +2,52 @@
 export const translations = {
   en: {
     stillAlive: "today",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        const possessive = gender === "M" ? "His" : gender === "F" ? "Her" : "Their";
+
+        let sentence = `${possessive} biography is available in ${l} different languages on Wikipedia`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "up" : "down"} from ${l_prev} in 2024)`;
+        }
+        sentence += ". ";
+
+        sentence += `${name} is the ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} most popular <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "up" : "down"} from ${formatOrdinal(occupationRankPrev)} in 2024)`;
+        }
+
+        if (country) {
+          sentence += `, the ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} most popular biography from <a href="/profile/place/${countrySlug}">${country}</a>`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "up" : "down"} from ${formatOrdinal(bplaceCountryRankPrev)} in 2019)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` and the ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} most popular <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation}</a>`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Visualizations",
       rankings: "Rankings",
@@ -30,6 +76,7 @@ export const translations = {
       newBadge: "new!",
     },
     readMoreWikipedia: "Read more on Wikipedia",
+    learnMoreRankless: "Learn more about {name}'s academic impact at Rankless",
     home: {
       tagline: "Explore human collective memory!",
       subtitle:
@@ -82,6 +129,52 @@ export const translations = {
   },
   es: {
     stillAlive: "presente",
+    learnMoreRankless: "Más información sobre el impacto académico de {name} en Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        let sentence = `Su biografía está disponible en ${l} idiomas diferentes en Wikipedia`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "aumentó" : "disminuyó"} de ${l_prev} en 2024)`;
+        }
+        sentence += ". ";
+
+        const article = gender === "F" ? "la" : "el";
+        sentence += `${name} es ${article} ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> más popular`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "subió" : "bajó"} del ${formatOrdinal(occupationRankPrev)} en 2024)`;
+        }
+
+        if (country) {
+          sentence += `, ${article} ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} biografía más popular de <a href="/profile/place/${countrySlug}">${country}</a>`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "subió" : "bajó"} del ${formatOrdinal(bplaceCountryRankPrev)} en 2019)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` y ${article} ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation}</a> más popular`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Visualizaciones",
       rankings: "Clasificaciones",
@@ -162,6 +255,52 @@ export const translations = {
   },
   fr: {
     stillAlive: "aujourd'hui",
+    learnMoreRankless: "En savoir plus sur l'impact académique de {name} sur Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        let sentence = `Sa biographie est disponible en ${l} langues différentes sur Wikipédia`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "en hausse" : "en baisse"} de ${l_prev} en 2024)`;
+        }
+        sentence += ". ";
+
+        const article = gender === "F" ? "la" : "le";
+        sentence += `${name} est ${article} ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> ${article === "la" ? "la plus populaire" : "le plus populaire"}`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "en hausse" : "en baisse"} du ${formatOrdinal(occupationRankPrev)} en 2024)`;
+        }
+
+        if (country) {
+          sentence += `, ${article} ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} biographie la plus populaire ${country.startsWith("É") || country.startsWith("I") ? "d'" : "de "}${country ? `<a href="/profile/place/${countrySlug}">${country}</a>` : ""}`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "en hausse" : "en baisse"} du ${formatOrdinal(bplaceCountryRankPrev)} en 2019)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` et ${article} ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation} ${demonym.toLowerCase()}</a> ${article === "la" ? "la plus populaire" : "le plus populaire"}`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Visualisations",
       rankings: "Classements",
@@ -243,6 +382,54 @@ export const translations = {
   },
   de: {
     stillAlive: "heute",
+    learnMoreRankless: "Erfahren Sie mehr über {name}s akademischen Einfluss bei Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        const possessive = gender === "M" ? "Seine" : gender === "F" ? "Ihre" : "Die";
+
+        let sentence = `${possessive} Biografie ist in ${l} verschiedenen Sprachen auf Wikipedia verfügbar`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "gestiegen" : "gesunken"} von ${l_prev} im Jahr 2024)`;
+        }
+        sentence += ". ";
+
+        const article = gender === "F" ? "die" : "der";
+        sentence += `${name} ist ${article} ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} beliebteste <a href="/profile/occupation/${occupationSlug}">${occupation}</a>`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "gestiegen" : "gesunken"} vom ${formatOrdinal(occupationRankPrev)} im Jahr 2024)`;
+        }
+
+        if (country) {
+          sentence += `, die ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} beliebteste Biografie aus <a href="/profile/place/${countrySlug}">${country}</a>`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "gestiegen" : "gesunken"} vom ${formatOrdinal(bplaceCountryRankPrev)} im Jahr 2019)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` und ${article} ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} beliebteste <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation}</a>`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Visualisierungen",
       rankings: "Ranglisten",
@@ -324,6 +511,53 @@ export const translations = {
   },
   ru: {
     stillAlive: "настоящее время",
+    learnMoreRankless: "Узнайте больше о академическом влиянии {name} на Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        const possessive = gender === "M" ? "Его" : gender === "F" ? "Её" : "Их";
+
+        let sentence = `${possessive} биография доступна на ${l} различных языках в Википедии`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "рост" : "снижение"} с ${l_prev} в 2024 году)`;
+        }
+        sentence += ". ";
+
+        sentence += `${name} — ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} самый популярный <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "рост" : "снижение"} с ${formatOrdinal(occupationRankPrev)} в 2024 году)`;
+        }
+
+        if (country) {
+          sentence += `, ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} самая популярная биография из <a href="/profile/place/${countrySlug}">${country}</a>`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "рост" : "снижение"} с ${formatOrdinal(bplaceCountryRankPrev)} в 2019 году)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` и ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} самый популярный <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation.toLowerCase()}</a>`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Визуализации",
       rankings: "Рейтинги",
@@ -405,6 +639,53 @@ export const translations = {
   },
   zh: {
     stillAlive: "至今",
+    learnMoreRankless: "在Rankless上了解更多关于{name}的学术影响",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        const possessive = gender === "M" ? "他" : gender === "F" ? "她" : "他们";
+
+        let sentence = `${possessive}的传记有${l}种不同语言的维基百科版本`;
+        if (l_prev && l !== l_prev) {
+          sentence += `（${l > l_prev ? "增加" : "减少"}自2024年的${l_prev}种）`;
+        }
+        sentence += "。";
+
+        sentence += `${name}是第${occupationRank === 1 ? "" : formatOrdinal(occupationRank)}最受欢迎的<a href="/profile/occupation/${occupationSlug}">${occupation}</a>`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += `（${occupationRank < occupationRankPrev ? "上升" : "下降"}自2024年的第${formatOrdinal(occupationRankPrev)}）`;
+        }
+
+        if (country) {
+          sentence += `，第${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""}最受欢迎的<a href="/profile/place/${countrySlug}">${country}</a>传记`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += `（${bplaceCountryRank < bplaceCountryRankPrev ? "上升" : "下降"}自2019年的第${formatOrdinal(bplaceCountryRankPrev)}）`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += `，以及第${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""}最受欢迎的<a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym}${occupation}</a>`;
+          }
+        }
+
+        sentence += "。";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "可视化",
       rankings: "排名",
@@ -481,6 +762,53 @@ export const translations = {
   },
   ja: {
     stillAlive: "現在",
+    learnMoreRankless: "Ranklessで{name}の学術的影響について詳しく知る",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        const possessive = gender === "M" ? "彼" : gender === "F" ? "彼女" : "その人物";
+
+        let sentence = `${possessive}の伝記は${l}の異なる言語のウィキペディアで利用可能です`;
+        if (l_prev && l !== l_prev) {
+          sentence += `（2024年の${l_prev}から${l > l_prev ? "増加" : "減少"}）`;
+        }
+        sentence += "。";
+
+        sentence += `${name}は${occupationRank === 1 ? "" : "第" + formatOrdinal(occupationRank)}最も人気のある<a href="/profile/occupation/${occupationSlug}">${occupation}</a>です`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += `（2024年の第${formatOrdinal(occupationRankPrev)}から${occupationRank < occupationRankPrev ? "上昇" : "下降"}）`;
+        }
+
+        if (country) {
+          sentence += `、<a href="/profile/place/${countrySlug}">${country}</a>出身で${bplaceCountryRank !== 1 ? "第" + formatOrdinal(bplaceCountryRank) : ""}最も人気のある伝記`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += `（2019年の第${formatOrdinal(bplaceCountryRankPrev)}から${bplaceCountryRank < bplaceCountryRankPrev ? "上昇" : "下降"}）`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += `、そして${bplaceCountryOccupationRank !== 1 ? "第" + formatOrdinal(bplaceCountryOccupationRank) : ""}最も人気のある<a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym}の${occupation}</a>です`;
+          }
+        }
+
+        sentence += "。";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "可視化",
       rankings: "ランキング",
@@ -560,6 +888,54 @@ export const translations = {
   },
   ar: {
     stillAlive: "حتى اليوم",
+    learnMoreRankless: "تعرف على المزيد حول التأثير الأكاديمي لـ {name} في Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        const biographyWord = gender === "F" ? "سيرتها الذاتية" : "سيرته الذاتية";
+
+        let sentence = `${biographyWord} متاحة بـ ${l} لغة مختلفة في ويكيبيديا`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "زيادة" : "انخفاض"} من ${l_prev} في 2024)`;
+        }
+        sentence += ". ";
+
+        const isPopular = gender === "F" ? "الأكثر شعبية" : "الأكثر شعبية";
+        sentence += `${name} هو ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation}</a> ${isPopular}`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "ارتفع" : "انخفض"} من ${formatOrdinal(occupationRankPrev)} في 2024)`;
+        }
+
+        if (country) {
+          sentence += `، ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} السيرة الذاتية الأكثر شعبية من <a href="/profile/place/${countrySlug}">${country}</a>`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "ارتفع" : "انخفض"} من ${formatOrdinal(bplaceCountryRankPrev)} في 2019)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` و${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation} ${demonym}</a> ${isPopular}`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "التصورات",
       rankings: "التصنيفات",
@@ -638,6 +1014,53 @@ export const translations = {
   },
   it: {
     stillAlive: "presente",
+    learnMoreRankless: "Scopri di più sull'impatto accademico di {name} su Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        let sentence = `La sua biografia è disponibile in ${l} lingue diverse su Wikipedia`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "in aumento" : "in calo"} da ${l_prev} nel 2024)`;
+        }
+        sentence += ". ";
+
+        const article = gender === "F" ? "la" : "il";
+        const popular = gender === "F" ? "più popolare" : "più popolare";
+        sentence += `${name} è ${article} ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> ${popular}`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "in aumento" : "in calo"} dal ${formatOrdinal(occupationRankPrev)} nel 2024)`;
+        }
+
+        if (country) {
+          sentence += `, la ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} biografia più popolare ${country.startsWith("I") || country.startsWith("E") ? "d'" : "di "}${country ? `<a href="/profile/place/${countrySlug}">${country}</a>` : ""}`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "in aumento" : "in calo"} dal ${formatOrdinal(bplaceCountryRankPrev)} nel 2019)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` e ${article} ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation} ${demonym.toLowerCase()}</a> ${popular}`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Visualizzazioni",
       rankings: "Classifiche",
@@ -719,6 +1142,53 @@ export const translations = {
   },
   pt: {
     stillAlive: "presente",
+    learnMoreRankless: "Saiba mais sobre o impacto acadêmico de {name} no Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        let sentence = `Sua biografia está disponível em ${l} idiomas diferentes na Wikipédia`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "aumento" : "redução"} de ${l_prev} em 2024)`;
+        }
+        sentence += ". ";
+
+        const article = gender === "F" ? "a" : "o";
+        const popular = gender === "F" ? "mais popular" : "mais popular";
+        sentence += `${name} é ${article} ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> ${popular}`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "subiu" : "caiu"} do ${formatOrdinal(occupationRankPrev)} em 2024)`;
+        }
+
+        if (country) {
+          sentence += `, a ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} biografia mais popular ${country.startsWith("A") || country.startsWith("E") || country.startsWith("I") || country.startsWith("O") || country.startsWith("U") ? "d" : "de "}${country ? `<a href="/profile/place/${countrySlug}">${country}</a>` : ""}`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "subiu" : "caiu"} do ${formatOrdinal(bplaceCountryRankPrev)} em 2019)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` e ${article} ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation} ${demonym.toLowerCase()}</a> ${popular}`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Visualizações",
       rankings: "Classificações",
@@ -799,6 +1269,51 @@ export const translations = {
   },
   hu: {
     stillAlive: "napjainkig",
+    learnMoreRankless: "Tudjon meg többet {name} akadémiai hatásáról a Rankless-en",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        let sentence = `Életrajza ${l} különböző nyelven érhető el a Wikipédián`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "növekedés" : "csökkenés"} ${l_prev}-ről 2024-ben)`;
+        }
+        sentence += ". ";
+
+        sentence += `${name} a ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} legnépszerűbb <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "növekedés" : "csökkenés"} a ${formatOrdinal(occupationRankPrev)}-ről 2024-ben)`;
+        }
+
+        if (country) {
+          sentence += `, a ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} legnépszerűbb életrajz <a href="/profile/place/${countrySlug}">${country}</a> országából`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "növekedés" : "csökkenés"} a ${formatOrdinal(bplaceCountryRankPrev)}-ről 2019-ben)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` és a ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} legnépszerűbb <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation.toLowerCase()}</a>`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Vizualizációk",
       rankings: "Rangsorok",
@@ -879,6 +1394,53 @@ export const translations = {
   },
   nl: {
     stillAlive: "heden",
+    learnMoreRankless: "Meer informatie over de academische impact van {name} op Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        const possessive = gender === "M" ? "Zijn" : gender === "F" ? "Haar" : "Hun";
+
+        let sentence = `${possessive} biografie is beschikbaar in ${l} verschillende talen op Wikipedia`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "toegenomen" : "afgenomen"} van ${l_prev} in 2024)`;
+        }
+        sentence += ". ";
+
+        sentence += `${name} is de ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} populairste <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "gestegen" : "gedaald"} van ${formatOrdinal(occupationRankPrev)} in 2024)`;
+        }
+
+        if (country) {
+          sentence += `, de ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} populairste biografie uit <a href="/profile/place/${countrySlug}">${country}</a>`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "gestegen" : "gedaald"} van ${formatOrdinal(bplaceCountryRankPrev)} in 2019)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` en de ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} populairste <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation.toLowerCase()}</a>`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Visualisaties",
       rankings: "Rankings",
@@ -960,6 +1522,53 @@ export const translations = {
   },
   pl: {
     stillAlive: "obecnie",
+    learnMoreRankless: "Dowiedz się więcej o akademickim wpływie {name} na Rankless",
+    intro: {
+      rankingSentence: ({
+        name,
+        gender,
+        l,
+        l_prev,
+        occupationRank,
+        occupationRankPrev,
+        occupation,
+        occupationSlug,
+        bplaceCountryRank,
+        bplaceCountryRankPrev,
+        country,
+        countrySlug,
+        bplaceCountryOccupationRank,
+        demonym,
+        formatOrdinal,
+      }) => {
+        const possessive = gender === "M" ? "Jego" : gender === "F" ? "Jej" : "Ich";
+
+        let sentence = `${possessive} biografia jest dostępna w ${l} różnych językach w Wikipedii`;
+        if (l_prev && l !== l_prev) {
+          sentence += ` (${l > l_prev ? "wzrost" : "spadek"} z ${l_prev} w 2024 roku)`;
+        }
+        sentence += ". ";
+
+        sentence += `${name} jest ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} najpopularniejszym <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        if (occupationRankPrev && occupationRankPrev !== occupationRank) {
+          sentence += ` (${occupationRank < occupationRankPrev ? "wzrost" : "spadek"} z ${formatOrdinal(occupationRankPrev)} w 2024 roku)`;
+        }
+
+        if (country) {
+          sentence += `, ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} najpopularniejszą biografią z <a href="/profile/place/${countrySlug}">${country}</a>`;
+          if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "wzrost" : "spadek"} z ${formatOrdinal(bplaceCountryRankPrev)} w 2019 roku)`;
+          }
+
+          if (bplaceCountryOccupationRank) {
+            sentence += ` oraz ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} najpopularniejszym <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym.toLowerCase()} ${occupation.toLowerCase()}</a>`;
+          }
+        }
+
+        sentence += ".";
+        return sentence;
+      },
+    },
     nav: {
       visualizations: "Wizualizacje",
       rankings: "Rankingi",

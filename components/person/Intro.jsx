@@ -5,7 +5,13 @@ import {getTranslations} from "/app/translations";
 import "../common/Intro.css";
 import Image from "next/image";
 
-const Intro = ({person, personRanks, wikiExtract, ranklessUrl, lang = "en"}) => {
+const Intro = ({
+  person,
+  personRanks,
+  wikiExtract,
+  ranklessUrl,
+  lang = "en",
+}) => {
   const t = getTranslations(lang);
   const {
     occupation_rank: occupationRank,
@@ -190,123 +196,36 @@ const Intro = ({person, personRanks, wikiExtract, ranklessUrl, lang = "en"}) => 
           {wikiSentence ? (
             <p>
               {wikiSentence}{" "}
-              <a
-                href={wikiUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={wikiUrl} target="_blank" rel="noopener noreferrer">
                 {t.readMoreWikipedia}
               </a>
             </p>
-          ) : (
-            <p>
-              {person.name} {person.deathyear ? "was" : "is"} a{" "}
-              <a
-                href={`/profile/occupation/${person.occupation.occupation_slug}`}
-              >
-                {person.occupation.occupation.toLowerCase()}
-              </a>
-              {!person.bplace_country && !person.bplace_name ? (
-                <span>. </span>
-              ) : (
-                <span> {fromSentence}</span>
-              )}
-              {person.deathyear
-                ? `${person.name} died at ${age} years old in ${FORMATTERS.year(
-                    person.deathyear.name
-                  )}.`
-                : `${person.name} is currently ${age} years old.`}
-            </p>
-          )}
-          <p>
-            {/* <>
-              Since 2007, the English Wikipedia page of {person.name} has
-              received more than {FORMATTERS.commas(totalPageViews)} page views.{" "}
-            </> */}
-            <>
-              {person.gender
-                ? person.gender === "M"
-                  ? "His"
-                  : "Her"
-                : "Their"}{" "}
-              biography is available in {personRanks.l} different languages on
-              Wikipedia
-              {personRanks.l_prev && personRanks.l !== personRanks.l_prev
-                ? ` (${
-                    personRanks.l > personRanks.l_prev ? "up" : "down"
-                  } from ${personRanks.l_prev} in 2024)`
-                : ""}
-              .{" "}
-            </>
-            <>
-              {person.name} is the{" "}
-              {occupationRank === 1 ? "" : FORMATTERS.ordinal(occupationRank)}{" "}
-              most popular{" "}
-              <a
-                href={`/profile/occupation/${person.occupation.occupation_slug}`}
-              >
-                {person.occupation.occupation.toLowerCase()}
-              </a>
-              {occupationRankPrev && occupationRankPrev !== occupationRank
-                ? ` (${
-                    occupationRank < occupationRankPrev ? "up" : "down"
-                  } from ${FORMATTERS.ordinal(occupationRankPrev)} in 2024)`
-                : ""}
-            </>
-            <>
-              {!person.bplace_country ? (
-                <span>.</span>
-              ) : (
-                <span>
-                  , the{" "}
-                  {bplaceCountryRank !== 1
-                    ? FORMATTERS.ordinal(bplaceCountryRank)
-                    : ""}{" "}
-                  most popular biography from{" "}
-                  <a href={`/profile/place/${person.bplace_country.slug}`}>
-                    {person.bplace_country.country}
-                  </a>
-                </span>
-              )}
-              {bplaceCountryRankPrev &&
-              bplaceCountryRankPrev !== bplaceCountryRank
-                ? ` (${
-                    bplaceCountryRank < bplaceCountryRankPrev ? "up" : "down"
-                  } from ${FORMATTERS.ordinal(bplaceCountryRankPrev)} in 2019)`
-                : !person.bplace_country
-                ? ""
-                : ""}
-              {bplaceCountryOccupationRank && person.bplace_country ? (
-                <span>
-                  {" "}
-                  and the{" "}
-                  {bplaceCountryOccupationRank !== 1
-                    ? FORMATTERS.ordinal(bplaceCountryOccupationRank)
-                    : ""}{" "}
-                  most popular{" "}
-                  <a
-                    href={`/profile/occupation/${person.occupation.occupation_slug}/country/${person.bplace_country.slug}`}
-                  >
-                    {person.bplace_country.demonym}{" "}
-                    {toTitleCase(person.occupation.occupation)}
-                  </a>
-                  .
-                </span>
-              ) : (
-                ""
-              )}
-              {ranklessUrl ? (
-                <span>
-                  {" "}
-                  Learn more about{" "}
-                  <a href={ranklessUrl}>
-                    {person.name}&apos;s academic impact at Rankless
-                  </a>
-                  .
-                </span>
-              ) : null}
-            </>
-          </p>
+          ) : null}
+          <p
+            dangerouslySetInnerHTML={{
+              __html:
+                t.intro.rankingSentence({
+                  name: person.name,
+                  gender: person.gender,
+                  l: personRanks.l,
+                  l_prev: personRanks.l_prev,
+                  occupationRank,
+                  occupationRankPrev,
+                  occupation: person.occupation.occupation,
+                  occupationSlug: person.occupation.occupation_slug,
+                  bplaceCountryRank,
+                  bplaceCountryRankPrev,
+                  country: person.bplace_country?.country,
+                  countrySlug: person.bplace_country?.slug,
+                  bplaceCountryOccupationRank,
+                  demonym: person.bplace_country?.demonym,
+                  formatOrdinal: FORMATTERS.ordinal,
+                }) +
+                (ranklessUrl
+                  ? ` <a href="${ranklessUrl}">${t.learnMoreRankless.replace("{name}", person.name)}</a>.`
+                  : ""),
+            }}
+          />
           {person.famous_for ? <p>{person.famous_for}</p> : null}
         </div>
       </div>

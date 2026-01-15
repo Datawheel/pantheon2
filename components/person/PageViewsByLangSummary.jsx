@@ -5,8 +5,17 @@ import dayjs from "dayjs";
 import {Tooltip} from "@blueprintjs/core";
 import {FORMATTERS} from "../utils/consts";
 import AnchorList from "../utils/AnchorList";
+import {SUPPORTED_LOCALES} from "/app/locales";
 
 export default function PageViewsByLangSummary({timeSeriesData, person}) {
+  // Helper function to generate URL - Pantheon for supported langs, Wikipedia otherwise
+  const getLanguageUrl = (langCode, wikiUrl) => {
+    if (SUPPORTED_LOCALES.includes(langCode)) {
+      return `/${langCode}/profile/person/${person.slug}`;
+    }
+    return wikiUrl;
+  };
+
   // get most recent month
   const latestDate = D3Max(timeSeriesData, d => dayjs(d.date, "YYYY/MM/DD"));
 
@@ -74,13 +83,19 @@ export default function PageViewsByLangSummary({timeSeriesData, person}) {
   // console.log("dataPrevPastYearAgg", dataPrevPastYearAgg);
   // console.log("dataProjectGrowth", dataProjectGrowth);
 
+  const topLangUrl = getLanguageUrl(dataPastYearAgg[0].language.toLowerCase(), dataPastYearAgg[0].pageUrl);
+  const isTopLangExternal = !SUPPORTED_LOCALES.includes(dataPastYearAgg[0].language.toLowerCase());
+
   return (
     <p>
       Over the past year {person.name} has had the most page views in the{" "}
       <Tooltip
         content={`${dataPastYearAgg[0].language} (${dataPastYearAgg[0].language_local}) is a ${dataPastYearAgg[0].family_name} language in the ${dataPastYearAgg[0].primary_family_name} family of languages.`}
       >
-        <a href={dataPastYearAgg[0].pageUrl} target="_blank" rel="noopener">
+        <a
+          href={topLangUrl}
+          {...(isTopLangExternal && { target: "_blank", rel: "noopener" })}
+        >
           {dataPastYearAgg[0].language} wikipedia edition
         </a>
       </Tooltip>{" "}
@@ -88,7 +103,7 @@ export default function PageViewsByLangSummary({timeSeriesData, person}) {
       <AnchorList
         items={dataPastYearAgg.slice(1, 3)}
         name={d => `${d.language} (${FORMATTERS.commas(d.views)})`}
-        url={d => d.pageUrl}
+        url={d => getLanguageUrl(d.language.toLowerCase(), d.pageUrl)}
         tooltip={d =>
           `${d.language} (${d.language_local}) is a ${d.family_name} language in the ${d.primary_family_name} family of languages.`
         }
@@ -98,7 +113,7 @@ export default function PageViewsByLangSummary({timeSeriesData, person}) {
       <AnchorList
         items={dataProjectGrowth.slice(0, 3)}
         name={d => `${d.language} (${FORMATTERS.share(d.growthPct)})`}
-        url={d => d.pageUrl}
+        url={d => getLanguageUrl(d.language.toLowerCase(), d.pageUrl)}
         tooltip={d =>
           `${d.language} (${d.language_local}) is a ${d.family_name} language in the ${d.primary_family_name} family of languages.`
         }
