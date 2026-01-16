@@ -64,7 +64,7 @@ async function getPlaceRanks(placeRankLow, placeRankHigh) {
 
 async function getPeopleBornHere(placeId) {
   const res = await fetch(
-    `${BASE_API}/person?bplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
+    `${BASE_API}/person?bplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -84,7 +84,7 @@ async function getPeopleBornHereHpi(placeId) {
 
 async function getPeopleDiedHere(placeId) {
   const res = await fetch(
-    `${BASE_API}/person?dplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`
+    `${BASE_API}/person?dplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`
   );
   return res.json();
 }

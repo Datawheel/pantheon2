@@ -51,7 +51,7 @@ async function getCountryRanks(countryRankLow, countryRankHigh) {
 
 async function getPeopleBornHere(countryId) {
   const res = await fetch(
-    `${BASE_API}/person?bplace_country=eq.${countryId}&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
+    `${BASE_API}/person?bplace_country=eq.${countryId}&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -71,7 +71,7 @@ async function getPeopleBornHereHpi(countryId) {
 
 async function getPeopleDiedHere(countryId) {
   const res = await fetch(
-    `${BASE_API}/person?dplace_country=eq.${countryId}&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
+    `${BASE_API}/person?dplace_country=eq.${countryId}&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }

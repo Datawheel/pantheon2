@@ -55,7 +55,7 @@ async function getEra(eraId) {
 
 async function getPeopleBornInEra(startYear, endYear) {
   const res = await fetch(
-    `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(*),occupation_id:occupation,*`,
+    `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -75,7 +75,7 @@ async function getPeopleBornInEraHpi(startYear, endYear) {
 
 async function getPeopleDiedInEra(startYear, endYear) {
   const res = await fetch(
-    `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(*),occupation_id:occupation,*`,
+    `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
