@@ -219,6 +219,8 @@ const Intro = ({
                   countrySlug: person.bplace_country?.slug,
                   bplaceCountryOccupationRank,
                   demonym: person.bplace_country?.demonym,
+                  nationalityAdj: person.bplace_country?.nationalityAdj,
+                  fromCountry: person.bplace_country?.fromCountry,
                   formatOrdinal: FORMATTERS.ordinal,
                 }) +
                 (ranklessUrl
@@ -226,7 +228,7 @@ const Intro = ({
                   : ""),
             }}
           />
-          {person.famous_for ? <p>{person.famous_for}</p> : null}
+          {person.famous_for && lang === "en" ? <p>{person.famous_for}</p> : null}
         </div>
       </div>
     </section>
