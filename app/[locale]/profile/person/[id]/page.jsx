@@ -24,7 +24,7 @@ import rankless from "/data/rankless.json";
 
 async function getPerson(id, lang = "en") {
   const res = await fetch(
-    `${BASE_API}/person?slug=eq.${id}&select=occupation(*,${lang}_occupation:translations->${lang}->>occupation),bplace_geonameid(*),bplace_country(*),dplace_geonameid(*),translations,*`,
+    `${BASE_API}/person?slug=eq.${id}&select=*,occupation(id,occupation,occupation_slug,domain_slug,num_born,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place),dplace_geonameid(slug,place)`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -48,7 +48,7 @@ async function getPerson(id, lang = "en") {
 }
 
 async function getPersonRanks(id) {
-  const res = await fetch(`${BASE_API}/person_ranks?slug=eq.${id}`, {
+  const res = await fetch(`${BASE_API}/person_ranks?slug=eq.${id}&select=l,l_prev,hpi,occupation_rank,occupation_rank_prev,bplace_country_rank,bplace_country_rank_prev,bplace_country_occupation_rank,occupation_rank_unique,bplace_country_rank_unique,bplace_country_occupation_rank_unique,birthyear_rank_unique,deathyear_rank_unique,bplace_country`, {
     method: "GET",
     next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
   });
@@ -155,7 +155,7 @@ async function getPersonTrending(slug, userLang, date) {
 
   // Fetch trending records across all languages (top 12 only)
   const trendRecords = await fetch(
-    `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.12&date=eq.${date}`,
+    `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.12&date=eq.${date}&select=lang,rank_pantheon`,
     {next: {revalidate: REVALIDATE_PERIODS.SHORT}}
   )
     .then(r => r.json())
@@ -169,7 +169,7 @@ async function getPersonTrending(slug, userLang, date) {
 
   // Fetch localized reason
   const reasonRecords = await fetch(
-    `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}`,
+    `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}&select=reason,llm_metadata,title`,
     {next: {revalidate: REVALIDATE_PERIODS.SHORT}}
   )
     .then(r => r.json())
@@ -267,6 +267,26 @@ export default async function Page({params: {id, locale}}) {
   const localizedOccupation =
     person.occupation?.[`${lang}_occupation`] || person.occupation?.occupation;
 
+  // Get localized country fields from translations column
+  const localizedCountry = person.bplace_country?.[`${lang}_country`] || person.bplace_country?.country;
+  const localizedDemonym = person.bplace_country?.[`${lang}_demonym`] || person.bplace_country?.demonym;
+  const localizedNationalityAdj = person.bplace_country?.[`${lang}_nationality_adj`] || person.bplace_country?.nationality_adj_plural_m;
+  const localizedFromCountry = person.bplace_country?.[`${lang}_from_country`];
+
+  // Create localized person object to avoid repetition
+  const localizedPerson = {
+    ...person,
+    name: localizedName,
+    occupation: {...person.occupation, occupation: localizedOccupation},
+    bplace_country: person.bplace_country ? {
+      ...person.bplace_country,
+      country: localizedCountry,
+      demonym: localizedDemonym,
+      nationalityAdj: localizedNationalityAdj,
+      fromCountry: localizedFromCountry,
+    } : null,
+  };
+
   const wikiExtractData = getWikiExtract(person.slug, localizedName, lang);
   // const newsArticlesData = getNewsArticles(person.id);
   // const tweetsData = getTweets(person.id);
@@ -289,11 +309,7 @@ export default async function Page({params: {id, locale}}) {
       slug: "metrics",
       content: (
         <MemMetrics
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           personRanks={personRanks}
         />
       ),
@@ -308,11 +324,7 @@ export default async function Page({params: {id, locale}}) {
       slug: "books",
       content: (
         <Books
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           books={books}
         />
       ),
@@ -322,11 +334,7 @@ export default async function Page({params: {id, locale}}) {
       slug: "page-views-by-lang",
       content: (
         <PageViewsByLang
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
         />
       ),
     },
@@ -335,11 +343,7 @@ export default async function Page({params: {id, locale}}) {
       slug: "occupation_peers",
       content: (
         <OccupationRanking
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           personRanks={personRanks}
         />
       ),
@@ -349,41 +353,27 @@ export default async function Page({params: {id, locale}}) {
       slug: "year_peers",
       content: (
         <YearRanking
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           personRanks={personRanks}
         />
       ),
     },
     {
-      title: `In ${person?.bplace_country?.country}`,
+      title: `In ${localizedCountry}`,
       slug: "country_peers",
       content: (
         <CountryRanking
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           personRanks={personRanks}
         />
       ),
     },
     {
-      title: `Among ${plural(localizedOccupation)} In ${
-        person?.bplace_country?.country
-      }`,
+      title: `Among ${plural(localizedOccupation)} In ${localizedCountry}`,
       slug: "country_occupation_peers",
       content: (
         <CountryOccupationRanking
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           personRanks={personRanks}
         />
       ),
@@ -401,11 +391,7 @@ export default async function Page({params: {id, locale}}) {
       slug: "movies",
       content: (
         <Movies
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           movies={movies}
         />
       ),
@@ -418,11 +404,7 @@ export default async function Page({params: {id, locale}}) {
       slug: "why_trending",
       content: (
         <WhyTrending
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           trendingData={personTrending}
           currentLang={lang}
         />
@@ -450,11 +432,7 @@ export default async function Page({params: {id, locale}}) {
     <div className="person">
       <GoogleAdSenseScript />
       <Header
-        person={{
-          ...person,
-          name: localizedName,
-          occupation: {...person.occupation, occupation: localizedOccupation},
-        }}
+        person={localizedPerson}
         trendingData={personTrending}
         currentLang={lang}
         pageViews={pageViews}
@@ -462,11 +440,7 @@ export default async function Page({params: {id, locale}}) {
       <div className="about-section">
         <ProfileNav sections={filteredSection} />
         <Intro
-          person={{
-            ...person,
-            name: localizedName,
-            occupation: {...person.occupation, occupation: localizedOccupation},
-          }}
+          person={localizedPerson}
           personRanks={personRanks}
           wikiExtract={wikiExtract}
           ranklessUrl={rankless[person.id]}
@@ -508,11 +482,7 @@ export default async function Page({params: {id, locale}}) {
         })
       )}
       <Footer
-        person={{
-          ...person,
-          name: localizedName,
-          occupation: {...person.occupation, occupation: localizedOccupation},
-        }}
+        person={localizedPerson}
         personRanks={personRanks}
       />
     </div>
