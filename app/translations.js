@@ -563,7 +563,16 @@ export const translations = {
         demonym,
         nationalityAdj,
         formatOrdinal,
+        fromCountry,
       }) => {
+        // Helper function for Russian ordinals (use -е/-й for nominative, -м for locative)
+        // Returns "1-е место", "2-е место", "3-е место", etc.
+        const russianOrdinal = (num, useLocative = false) => {
+          if (num === 1) return useLocative ? "1-м" : "1-е";
+          if (num === 3) return useLocative ? "3-м" : "3-е";
+          return useLocative ? `${num}-м` : `${num}-е`;
+        };
+
         const possessive = gender === "M" ? "Его" : gender === "F" ? "Её" : "Их";
 
         let sentence = `${possessive} биография доступна на ${l} различных языках в Википедии`;
@@ -572,19 +581,37 @@ export const translations = {
         }
         sentence += ". ";
 
-        sentence += `${name} — ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} самый популярный <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        // First clause: occupation ranking - use "занимает X-е место среди..." structure
+        if (occupationRank === 1) {
+          sentence += `${name} занимает 1-е место среди самых популярных <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        } else {
+          sentence += `${name} занимает ${russianOrdinal(occupationRank)} место среди самых популярных <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
-          sentence += ` (${occupationRank < occupationRankPrev ? "рост" : "снижение"} с ${formatOrdinal(occupationRankPrev)} в 2024 году)`;
+          sentence += ` (${occupationRank < occupationRankPrev ? "рост" : "снижение"} с ${russianOrdinal(occupationRankPrev)} места в 2024 году)`;
         }
 
         if (country) {
-          sentence += `, ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} самая популярная биография из <a href="/profile/place/${countrySlug}">${country}</a>`;
+          // Second clause: country biography ranking
+          // Use from_country from database if available, otherwise use "из {country}"
+          const countryPrep = fromCountry || `из ${country}`;
+
+          if (bplaceCountryRank === 1) {
+            sentence += `, занимает 1-е место среди самых популярных биографий <a href="/profile/place/${countrySlug}">${countryPrep}</a>`;
+          } else {
+            sentence += `, занимает ${russianOrdinal(bplaceCountryRank)} место среди самых популярных биографий <a href="/profile/place/${countrySlug}">${countryPrep}</a>`;
+          }
           if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
-            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "рост" : "снижение"} с ${formatOrdinal(bplaceCountryRankPrev)} в 2019 году)`;
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "рост" : "снижение"} с ${russianOrdinal(bplaceCountryRankPrev)} места в 2019 году)`;
           }
 
+          // Third clause: occupation + country ranking - proper Russian word order
           if (bplaceCountryOccupationRank) {
-            sentence += ` и ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} самый популярный <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation.toLowerCase()}</a>`;
+            if (bplaceCountryOccupationRank === 1) {
+              sentence += ` и занимает 1-е место среди <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${country}</a>`;
+            } else {
+              sentence += ` и занимает ${russianOrdinal(bplaceCountryOccupationRank)} место среди <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${country}</a>`;
+            }
           }
         }
 
@@ -832,26 +859,46 @@ export const translations = {
       }) => {
         const possessive = gender === "M" ? "彼" : gender === "F" ? "彼女" : "その人物";
 
-        let sentence = `${possessive}の伝記は${l}の異なる言語のウィキペディアで利用可能です`;
+        let sentence = `${possessive}の伝記はウィキペディアで${l}言語で利用可能です`;
         if (l_prev && l !== l_prev) {
-          sentence += `（2024年の${l_prev}から${l > l_prev ? "増加" : "減少"}）`;
+          sentence += `（2024年の${l_prev}言語から${l > l_prev ? "増加" : "減少"}）`;
         }
         sentence += "。";
 
-        sentence += `${name}は${occupationRank === 1 ? "" : "第" + formatOrdinal(occupationRank)}最も人気のある<a href="/profile/occupation/${occupationSlug}">${occupation}</a>です`;
+        // First clause: occupation ranking with proper Japanese structure
+        // Use "最も人気のある〜の中で第X位" pattern
+        if (occupationRank === 1) {
+          sentence += `${name}は、最も人気のある<a href="/profile/occupation/${occupationSlug}">${occupation}</a>の中で第1位`;
+        } else {
+          sentence += `${name}は、最も人気のある<a href="/profile/occupation/${occupationSlug}">${occupation}</a>の中で第${occupationRank}位`;
+        }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
-          sentence += `（2024年の第${formatOrdinal(occupationRankPrev)}から${occupationRank < occupationRankPrev ? "上昇" : "下降"}）`;
+          sentence += `（2024年の第${occupationRankPrev}位から${occupationRank < occupationRankPrev ? "順位を上げ" : "順位を下げ"}）`;
         }
 
         if (country) {
-          sentence += `、<a href="/profile/place/${countrySlug}">${country}</a>出身で${bplaceCountryRank !== 1 ? "第" + formatOrdinal(bplaceCountryRank) : ""}最も人気のある伝記`;
+          // Second clause: country biography ranking
+          if (bplaceCountryRank === 1) {
+            sentence += `、<a href="/profile/place/${countrySlug}">${country}</a>人物の伝記の中で第1位`;
+          } else {
+            sentence += `、<a href="/profile/place/${countrySlug}">${country}</a>人物の伝記の中で第${bplaceCountryRank}位`;
+          }
           if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
-            sentence += `（2019年の第${formatOrdinal(bplaceCountryRankPrev)}から${bplaceCountryRank < bplaceCountryRankPrev ? "上昇" : "下降"}）`;
+            sentence += `（2019年の第${bplaceCountryRankPrev}位から${bplaceCountryRank < bplaceCountryRankPrev ? "順位を上げ" : "順位を下げ"}）`;
           }
 
+          // Third clause: occupation + country ranking
           if (bplaceCountryOccupationRank) {
-            sentence += `、そして${bplaceCountryOccupationRank !== 1 ? "第" + formatOrdinal(bplaceCountryOccupationRank) : ""}最も人気のある<a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym}の${occupation}</a>です`;
+            if (bplaceCountryOccupationRank === 1) {
+              sentence += `、また最も人気のある<a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${country}人${occupation}</a>の中で第1位に位置しています`;
+            } else {
+              sentence += `、また最も人気のある<a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${country}人${occupation}</a>の中で第${bplaceCountryOccupationRank}位に位置しています`;
+            }
+          } else {
+            sentence += "に位置しています";
           }
+        } else {
+          sentence += "に位置しています";
         }
 
         sentence += "。";
@@ -1090,27 +1137,66 @@ export const translations = {
         nationalityAdj,
         formatOrdinal,
       }) => {
-        let sentence = `La sua biografia è disponibile in ${l} lingue diverse su Wikipedia`;
+        // Helper function for Italian ordinals (use ° for masculine, ª for feminine)
+        const italianOrdinal = (num, isFeminine = false) => {
+          if (num === 1) return isFeminine ? "prima" : "primo";
+          return `${num}${isFeminine ? 'ª' : '°'}`;
+        };
+
+        // Helper function to get correct article + preposition for country
+        const getCountryPreposition = (countryName) => {
+          // Check if country starts with vowel
+          const firstChar = countryName.charAt(0).toUpperCase();
+          if (['A', 'E', 'I', 'O', 'U'].includes(firstChar)) {
+            return "dell'";
+          }
+          // Default to della for most countries (feminine in Italian)
+          return "della ";
+        };
+
+        let sentence = `La sua biografia è disponibile in ${l} lingue su Wikipedia`;
         if (l_prev && l !== l_prev) {
-          sentence += ` (${l > l_prev ? "in aumento" : "in calo"} da ${l_prev} nel 2024)`;
+          sentence += ` (${l > l_prev ? "in aumento rispetto a" : "in calo rispetto a"} ${l_prev} nel 2024)`;
         }
         sentence += ". ";
 
         const article = gender === "F" ? "la" : "il";
-        const popular = gender === "F" ? "più popolare" : "più popolare";
-        sentence += `${name} è ${article} ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> ${popular}`;
+
+        // First clause: occupation ranking
+        if (occupationRank === 1) {
+          sentence += `${name} è ${article} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> più ${gender === "F" ? "popolare" : "popolare"}`;
+        } else {
+          const rankStr = italianOrdinal(occupationRank, gender === "F");
+          sentence += `${name} è ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> più ${gender === "F" ? "popolare" : "popolare"}`;
+        }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
-          sentence += ` (${occupationRank < occupationRankPrev ? "in aumento" : "in calo"} dal ${formatOrdinal(occupationRankPrev)} nel 2024)`;
+          const prevRankStr = italianOrdinal(occupationRankPrev, gender === "F");
+          sentence += ` (${occupationRank < occupationRankPrev ? "in aumento dal" : "in calo dal"} ${prevRankStr} nel 2024)`;
         }
 
         if (country) {
-          sentence += `, la ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} biografia più popolare ${country.startsWith("I") || country.startsWith("E") ? "d'" : "di "}${country ? `<a href="/profile/place/${countrySlug}">${country}</a>` : ""}`;
+          const countryPrep = getCountryPreposition(country);
+
+          // Second clause: country biography ranking - "biografia" is feminine
+          if (bplaceCountryRank === 1) {
+            sentence += `, la biografia più popolare <a href="/profile/place/${countrySlug}">${countryPrep}${country}</a>`;
+          } else {
+            const rankStr = italianOrdinal(bplaceCountryRank, true);
+            sentence += `, la ${rankStr} biografia più popolare <a href="/profile/place/${countrySlug}">${countryPrep}${country}</a>`;
+          }
           if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
-            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "in aumento" : "in calo"} dal ${formatOrdinal(bplaceCountryRankPrev)} nel 2019)`;
+            const prevRankStr = italianOrdinal(bplaceCountryRankPrev, true);
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "in aumento dal" : "in calo dal"} ${prevRankStr} nel 2019)`;
           }
 
+          // Third clause: occupation + country ranking - correct word order
           if (bplaceCountryOccupationRank) {
-            sentence += ` e ${article} ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation} ${demonym.toLowerCase()}</a> ${popular}`;
+            if (bplaceCountryOccupationRank === 1) {
+              sentence += ` e ${article} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} più ${gender === "F" ? "popolare" : "popolare"} ${countryPrep}${country}</a>`;
+            } else {
+              const rankStr = italianOrdinal(bplaceCountryOccupationRank, gender === "F");
+              sentence += ` e ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} più ${gender === "F" ? "popolare" : "popolare"} ${countryPrep}${country}</a>`;
+            }
           }
         }
 
@@ -1217,29 +1303,59 @@ export const translations = {
         bplaceCountryOccupationRank,
         demonym,
         nationalityAdj,
+        fromCountry,
         formatOrdinal,
       }) => {
-        let sentence = `Sua biografia está disponível em ${l} idiomas diferentes na Wikipédia`;
+        // Helper function for Portuguese ordinals (use º for masculine, ª for feminine)
+        const portugueseOrdinal = (num, isFeminine = false) => {
+          if (num === 1) return isFeminine ? "1ª" : "1º";
+          return `${num}${isFeminine ? 'ª' : 'º'}`;
+        };
+
+        let sentence = `Sua biografia está disponível em ${l} idiomas na Wikipédia`;
         if (l_prev && l !== l_prev) {
-          sentence += ` (${l > l_prev ? "aumento" : "redução"} de ${l_prev} em 2024)`;
+          sentence += ` (${l > l_prev ? "aumento em relação a" : "redução em relação a"} ${l_prev} em 2024)`;
         }
         sentence += ". ";
 
         const article = gender === "F" ? "a" : "o";
-        const popular = gender === "F" ? "mais popular" : "mais popular";
-        sentence += `${name} é ${article} ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> ${popular}`;
+
+        // First clause: occupation ranking
+        if (occupationRank === 1) {
+          sentence += `${name} é ${article} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> mais ${gender === "F" ? "popular" : "popular"}`;
+        } else {
+          const rankStr = portugueseOrdinal(occupationRank, gender === "F");
+          sentence += `${name} é ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> mais ${gender === "F" ? "popular" : "popular"}`;
+        }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
-          sentence += ` (${occupationRank < occupationRankPrev ? "subiu" : "caiu"} do ${formatOrdinal(occupationRankPrev)} em 2024)`;
+          const prevRankStr = portugueseOrdinal(occupationRankPrev, gender === "F");
+          sentence += ` (${occupationRank < occupationRankPrev ? "subiu do" : "caiu do"} ${prevRankStr} em 2024)`;
         }
 
         if (country) {
-          sentence += `, a ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} biografia mais popular ${country.startsWith("A") || country.startsWith("E") || country.startsWith("I") || country.startsWith("O") || country.startsWith("U") ? "d" : "de "}${country ? `<a href="/profile/place/${countrySlug}">${country}</a>` : ""}`;
+          // Use from_country from database (e.g., "da Grécia") instead of guessing
+          const countryPrep = fromCountry || `de ${country}`;
+
+          // Second clause: country biography ranking - "biografia" is feminine
+          if (bplaceCountryRank === 1) {
+            sentence += `, a biografia mais popular <a href="/profile/place/${countrySlug}">${countryPrep}</a>`;
+          } else {
+            const rankStr = portugueseOrdinal(bplaceCountryRank, true);
+            sentence += `, a ${rankStr} biografia mais popular <a href="/profile/place/${countrySlug}">${countryPrep}</a>`;
+          }
           if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
-            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "subiu" : "caiu"} do ${formatOrdinal(bplaceCountryRankPrev)} em 2019)`;
+            const prevRankStr = portugueseOrdinal(bplaceCountryRankPrev, true);
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "subiu do" : "caiu do"} ${prevRankStr} em 2019)`;
           }
 
+          // Third clause: occupation + country ranking - correct word order
           if (bplaceCountryOccupationRank) {
-            sentence += ` e ${article} ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation} ${demonym.toLowerCase()}</a> ${popular}`;
+            if (bplaceCountryOccupationRank === 1) {
+              sentence += ` e ${article} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} mais ${gender === "F" ? "popular" : "popular"} ${countryPrep}</a>`;
+            } else {
+              const rankStr = portugueseOrdinal(bplaceCountryOccupationRank, gender === "F");
+              sentence += ` e ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} mais ${gender === "F" ? "popular" : "popular"} ${countryPrep}</a>`;
+            }
           }
         }
 
@@ -1613,6 +1729,12 @@ export const translations = {
         nationalityAdj,
         formatOrdinal,
       }) => {
+        // Helper function for Polish ordinals (use period: 6., 5., 4.)
+        const polishOrdinal = (num) => {
+          if (num === 1) return "1.";
+          return `${num}.`;
+        };
+
         const possessive = gender === "M" ? "Jego" : gender === "F" ? "Jej" : "Ich";
 
         let sentence = `${possessive} biografia jest dostępna w ${l} różnych językach w Wikipedii`;
@@ -1621,19 +1743,37 @@ export const translations = {
         }
         sentence += ". ";
 
-        sentence += `${name} jest ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} najpopularniejszym <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        // First clause: occupation ranking
+        // NOTE: occupation should be in INSTRUMENTAL case in database for Polish (e.g., "filozofem" not "filozof")
+        if (occupationRank === 1) {
+          sentence += `${name} jest najpopularniejszym <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        } else {
+          sentence += `${name} jest ${polishOrdinal(occupationRank)} najpopularniejszym <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
-          sentence += ` (${occupationRank < occupationRankPrev ? "wzrost" : "spadek"} z ${formatOrdinal(occupationRankPrev)} w 2024 roku)`;
+          sentence += ` (${occupationRank < occupationRankPrev ? "wzrost" : "spadek"} z ${polishOrdinal(occupationRankPrev)} w 2024 roku)`;
         }
 
         if (country) {
-          sentence += `, ${bplaceCountryRank !== 1 ? formatOrdinal(bplaceCountryRank) : ""} najpopularniejszą biografią z <a href="/profile/place/${countrySlug}">${country}</a>`;
+          // Second clause: country biography ranking
+          // NOTE: country should be in GENITIVE case in database for Polish (e.g., "Grecji" not "Grecja")
+          if (bplaceCountryRank === 1) {
+            sentence += `, najpopularniejszą biografią <a href="/profile/place/${countrySlug}">${country}</a>`;
+          } else {
+            sentence += `, ${polishOrdinal(bplaceCountryRank)} najpopularniejszą biografią <a href="/profile/place/${countrySlug}">${country}</a>`;
+          }
           if (bplaceCountryRankPrev && bplaceCountryRankPrev !== bplaceCountryRank) {
-            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "wzrost" : "spadek"} z ${formatOrdinal(bplaceCountryRankPrev)} w 2019 roku)`;
+            sentence += ` (${bplaceCountryRank < bplaceCountryRankPrev ? "wzrost" : "spadek"} z ${polishOrdinal(bplaceCountryRankPrev)} w 2019 roku)`;
           }
 
+          // Third clause: occupation + country ranking
+          // Correct Polish word order: "X. najpopularniejszym filozofem Grecji"
           if (bplaceCountryOccupationRank) {
-            sentence += ` oraz ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} najpopularniejszym <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym.toLowerCase()} ${occupation.toLowerCase()}</a>`;
+            if (bplaceCountryOccupationRank === 1) {
+              sentence += ` oraz najpopularniejszym <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${country}</a>`;
+            } else {
+              sentence += ` oraz ${polishOrdinal(bplaceCountryOccupationRank)} najpopularniejszym <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${country}</a>`;
+            }
           }
         }
 
