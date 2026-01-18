@@ -1,9 +1,23 @@
 import {plural} from "pluralize";
 import {COLORS_DOMAIN} from "../utils/consts";
+import {getTranslations} from "/app/translations";
+import {DEFAULT_LOCALE} from "/app/locales";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
-export default function Header({occupation, country, people}) {
+export default function Header({occupation, country, people, locale = DEFAULT_LOCALE}) {
+  const t = getTranslations(locale);
+
+  // For English, use plural form; for other languages, use the occupation as-is
+  const occupationDisplay = locale === "en"
+    ? plural(occupation.occupation)
+    : occupation.occupation;
+
+  // Use from_country from database if available (e.g., "da Dinamarca"), otherwise use generic translation
+  const countryPart = country.fromCountry
+    ? country.fromCountry
+    : `${t.occupationCountry.from} ${country.country}`;
+
   return (
     <header className="hero">
       <div className="bg-container">
@@ -31,9 +45,9 @@ export default function Header({occupation, country, people}) {
         </div>
       </div>
       <div className="info">
-        <h2 className="profile-type">The Most Famous</h2>
+        <h2 className="profile-type">{t.occupationCountry.theMostFamous}</h2>
         <h1 className="profile-name">
-          {plural(occupation.occupation)} from {country.country}
+          {occupationDisplay} {countryPart}
         </h1>
       </div>
       <div className="mouse">

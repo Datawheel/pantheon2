@@ -7,6 +7,8 @@ import Lifespans from "/components/occupation-country/sections/Lifespans";
 import Footer from "/components/occupation-country/sections/Footer";
 import {toTitleCase} from "/components/utils/vizHelpers";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
 
 async function getOccupations() {
   const res = await fetch(
@@ -18,9 +20,9 @@ async function getOccupations() {
   return res.json();
 }
 
-async function getOccupation(occupationId) {
+async function getOccupation(occupationId, lang = "en") {
   const res = await fetch(
-    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`,
+    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}&select=*,${lang}_occupation:translations->${lang}->>occupation`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -36,10 +38,13 @@ async function getOccupation(occupationId) {
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
-async function getCountry(countryId) {
-  const res = await fetch(`${BASE_API}/country?slug=eq.${countryId}`, {
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
+async function getCountry(countryId, lang = "en") {
+  const res = await fetch(
+    `${BASE_API}/country?slug=eq.${countryId}&select=*,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym_m_plural,${lang}_from_country:translations->${lang}->>from_country`,
+    {
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
 
   if (!res.ok) {
     throw new Error(`Failed to fetch country: ${res.status}`);
@@ -51,9 +56,9 @@ async function getCountry(countryId) {
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
-async function getAllCountriesInOccupation(occupationId) {
+async function getAllCountriesInOccupation(occupationId, lang = "en") {
   const res = await fetch(
-    `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast`,
+    `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country)`,
     {
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
     }
@@ -93,19 +98,29 @@ async function getPeopleHpi(occupationId, countryId) {
 
 export async function generateMetadata({params}, parent) {
   // read route params
-  const {id, countryId} = params;
+  const {locale, id, countryId} = params;
+  const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
 
   // fetch data
-  const occupation = await getOccupation(id);
-  const country = await getCountry(countryId);
+  const occupation = await getOccupation(id, lang);
+  const country = await getCountry(countryId, lang);
+
+  // Get localized names, fallback to English
+  const localizedOccupation = occupation[`${lang}_occupation`] || occupation.occupation;
+  const localizedCountry = country[`${lang}_country`] || country.country;
+  const localizedDemonym = country[`${lang}_demonym`] || country.demonym;
 
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 
+  // For English, use plural form; for other languages, use the localized occupation as-is
+  const occupationDisplay = lang === "en"
+    ? toTitleCase(plural(localizedOccupation))
+    : localizedOccupation;
+
   return {
-    title: `Greatest ${country.demonym} ${toTitleCase(
-      plural(occupation.occupation)
-    )} | Pantheon`,
+    title: `${t.occupationCountry.greatest} ${localizedDemonym} ${occupationDisplay} | Pantheon`,
     openGraph: {
       images: [
         `/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}`,
@@ -115,11 +130,13 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {id, countryId}}) {
+export default async function Page({params: {locale, id, countryId}}) {
+  const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+
   const [occupations, occupation, country] = await Promise.all([
     getOccupations(),
-    getOccupation(id),
-    getCountry(countryId),
+    getOccupation(id, lang),
+    getCountry(countryId, lang),
   ]);
 
   const [
@@ -128,7 +145,7 @@ export default async function Page({params: {id, countryId}}) {
     peopleAttrs,
     peopleHpi,
   ] = await Promise.all([
-    getAllCountriesInOccupation(occupation.occupation),
+    getAllCountriesInOccupation(occupation.occupation, lang),
     getAllOccupationsInCountry(country.id),
     getPeople(occupation.id, country.id),
     getPeopleHpi(occupation.id, country.id),
@@ -150,21 +167,46 @@ export default async function Page({params: {id, countryId}}) {
     return obj;
   }, {});
 
+  // Get localized names, fallback to English
+  const localizedOccupation = occupation[`${lang}_occupation`] || occupation.occupation;
+  const localizedCountry = country[`${lang}_country`] || country.country;
+  const localizedDemonym = country[`${lang}_demonym`] || country.demonym;
+  const localizedFromCountry = country[`${lang}_from_country`];
+
+  // Create localized versions of occupation and country to pass to components
+  const localizedOccupationObj = {
+    ...occupation,
+    occupation: localizedOccupation,
+  };
+
+  const localizedCountryObj = {
+    ...country,
+    country: localizedCountry,
+    demonym: localizedDemonym,
+    fromCountry: localizedFromCountry,
+  };
+
   return (
     <div className="person">
-      <Header country={country} occupation={occupation} people={people} />
+      <Header
+        country={localizedCountryObj}
+        occupation={localizedOccupationObj}
+        people={people}
+        locale={lang}
+      />
       <div className="about-section">
         {/* <ProfileNav sections={this.sections} /> */}
         <Intro
-          country={country}
-          occupation={occupation}
+          country={localizedCountryObj}
+          occupation={localizedOccupationObj}
           allCountriesInOccupation={allCountriesInOccupation}
+          locale={lang}
         />
       </div>
-      <TopTen country={country} occupation={occupation} people={people} />
+      <TopTen country={localizedCountryObj} occupation={localizedOccupationObj} people={people} locale={lang} />
       <People
-        country={country}
-        occupation={occupation}
+        country={localizedCountryObj}
+        occupation={localizedOccupationObj}
         people={people}
         title={"People"}
         slug={"people"}
@@ -172,7 +214,7 @@ export default async function Page({params: {id, countryId}}) {
       <Lifespans
         attrs={attrs}
         people={people}
-        occupation={occupation}
+        occupation={localizedOccupationObj}
         slug={"overlapping-lives"}
         title={"Overlapping Lives"}
       />

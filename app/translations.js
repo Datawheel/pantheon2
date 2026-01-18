@@ -2,6 +2,42 @@
 export const translations = {
   en: {
     stillAlive: "today",
+    occupationCountry: {
+      theMostFamous: "The Most Famous",
+      from: "from",
+      greatest: "Greatest",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        let text = `This page contains a list of the greatest ${demonym} ${occupationPlural}. `;
+        text += `The pantheon dataset contains ${totalCount} ${occupationPlural}, ${countryCount} of which were born in ${country}. `;
+        if (rank) {
+          text += `This makes ${country} the birth place of the ${rank} most number of ${occupationPlural}`;
+          if (countriesBehind) {
+            text += ` behind ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "and",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `The following people are considered by Pantheon to be the ${count === 10 ? "top 10" : ""} most legendary ${demonym} ${occupationPlural} of all time. This list of famous ${demonym} ${occupationPlural} is sorted by HPI (Historical Popularity Index), a metric that aggregates information on a biography's online popularity.`,
+      visitRankings: "Visit the rankings page to view the entire list of",
+      top: "Top",
+      withHpi: ({hpi, name}) => `With an HPI of ${hpi}, ${name}`,
+      isMostFamous: ({demonym, occupation}) => `is the most famous ${demonym} ${occupation}.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `is the ${rank} most famous ${demonym} ${occupation}.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} biography has been translated into ${count} different languages`,
+      onWikipedia: "on wikipedia",
+    },
+    selectOccupationCountry: {
+      heading: "Select an occupation and country",
+      pleaseSelect: "Please select an occupation and country combination to see the most memorable biographies",
+      selectOccupation: "Select an occupation",
+      selectCountry: "Select a country",
+      goToProfile: "Go to profile",
+      whoAreTheMostFamous: "Who are the most famous...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -75,6 +111,11 @@ export const translations = {
       giveFeedback: "Give Feedback",
       usageCitation: "Usage Citation",
       newBadge: "new!",
+      explore: "Explore",
+      apps: "Apps",
+      reportDataError: "Report Data Error",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
     },
     readMoreWikipedia: "Read more on Wikipedia",
     learnMoreRankless: "Learn more about {name}'s academic impact at Rankless",
@@ -131,6 +172,84 @@ export const translations = {
   es: {
     stillAlive: "presente",
     learnMoreRankless: "Más información sobre el impacto académico de {name} en Rankless",
+    nav: {
+      visualizations: "Visualizaciones",
+      rankings: "Clasificaciones",
+      profiles: "Perfiles",
+      people: "Personas",
+      places: "Lugares",
+      countries: "Países",
+      occupations: "Ocupaciones",
+      occupationCountry: "Ocupación / País",
+      eras: "Eras",
+      deaths: "Muertes",
+      about: "Acerca de",
+      data: "Datos",
+      permissions: "Permisos",
+      download: "Descargar",
+      api: "API",
+      games: "Juegos",
+      yearbook: "Anuario",
+      birthle: "Birthle",
+      trivia: "Trivia",
+      news: "Noticias",
+      search: "Buscar",
+      home: "Inicio",
+      giveFeedback: "Dar Retroalimentación",
+      usageCitation: "Citación de Uso",
+      newBadge: "¡nuevo!",
+      explore: "Explorar",
+      apps: "Aplicaciones",
+      reportDataError: "Reportar Error de Datos",
+      privacyPolicy: "Política de Privacidad",
+      termsOfService: "Términos de Servicio",
+    },
+    occupationCountry: {
+      theMostFamous: "Los Más Famosos",
+      from: "de",
+      greatest: "Los Mejores",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Spanish ordinals
+        const formatSpanishOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          if (num === 1) return "primer";
+          if (num === 3) return "tercer";
+          return `${num}º`;
+        };
+
+        let text = `Esta página contiene una lista de los mejores ${occupationPlural} ${demonym}. `;
+        text += `El conjunto de datos de Pantheon contiene ${totalCount} ${occupationPlural}, ${countryCount} de los cuales nacieron en ${country}. `;
+        if (rank) {
+          const spanishRank = formatSpanishOrdinal(rank);
+          text += `Esto hace de ${country} el ${spanishRank} lugar de nacimiento del mayor número de ${occupationPlural}`;
+          if (countriesBehind) {
+            text += ` después de ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "y",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `Las siguientes personas son consideradas por Pantheon como ${count === 10 ? "los 10" : ""} ${occupationPlural} ${demonym} más legendarios de todos los tiempos. Esta lista de ${occupationPlural} ${demonym} famosos está ordenada por HPI (Índice de Popularidad Histórica), una métrica que agrega información sobre la popularidad en línea de una biografía.`,
+      visitRankings: "Visite la página de clasificaciones para ver la lista completa de",
+      top: "Top",
+      withHpi: ({hpi, name}) => `Con un HPI de ${hpi}, ${name}`,
+      isMostFamous: ({demonym, occupation}) => `es ${demonym === demonym.toLowerCase() ? "el" : "la"} ${occupation} ${demonym} más famoso.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `es ${demonym === demonym.toLowerCase() ? "el" : "la"} ${rank} ${occupation} ${demonym} más famoso.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} biografía ha sido traducida a ${count} idiomas diferentes`,
+      onWikipedia: "en Wikipedia",
+    },
+    selectOccupationCountry: {
+      heading: "Seleccione una ocupación y un país",
+      pleaseSelect: "Seleccione una combinación de ocupación y país para ver las biografías más memorables",
+      selectOccupation: "Seleccione una ocupación",
+      selectCountry: "Seleccione un país",
+      goToProfile: "Ir al perfil",
+      whoAreTheMostFamous: "¿Quiénes son los más famosos...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -265,6 +384,83 @@ export const translations = {
   fr: {
     stillAlive: "aujourd'hui",
     learnMoreRankless: "En savoir plus sur l'impact académique de {name} sur Rankless",
+    nav: {
+      visualizations: "Visualisations",
+      rankings: "Classements",
+      profiles: "Profils",
+      people: "Personnes",
+      places: "Lieux",
+      countries: "Pays",
+      occupations: "Professions",
+      occupationCountry: "Profession / Pays",
+      eras: "Époques",
+      deaths: "Décès",
+      about: "À Propos",
+      data: "Données",
+      permissions: "Autorisations",
+      download: "Télécharger",
+      api: "API",
+      games: "Jeux",
+      yearbook: "Annuaire",
+      birthle: "Birthle",
+      trivia: "Anecdotes",
+      news: "Actualités",
+      search: "Rechercher",
+      home: "Accueil",
+      giveFeedback: "Donner Votre Avis",
+      usageCitation: "Citation d'Utilisation",
+      newBadge: "nouveau !",
+      explore: "Explorer",
+      apps: "Applications",
+      reportDataError: "Signaler une Erreur de Données",
+      privacyPolicy: "Politique de Confidentialité",
+      termsOfService: "Conditions d'Utilisation",
+    },
+    occupationCountry: {
+      theMostFamous: "Les Plus Célèbres",
+      from: "de",
+      greatest: "Les Meilleurs",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for French ordinals
+        const formatFrenchOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          if (num === 1) return "premier";
+          return `${num}e`;
+        };
+
+        let text = `Cette page contient une liste des plus grands ${occupationPlural} ${demonym}. `;
+        text += `L'ensemble de données Pantheon contient ${totalCount} ${occupationPlural}, dont ${countryCount} sont nés en ${country}. `;
+        if (rank) {
+          const frenchRank = formatFrenchOrdinal(rank);
+          text += `Cela fait de ${country} le ${frenchRank} lieu de naissance du plus grand nombre de ${occupationPlural}`;
+          if (countriesBehind) {
+            text += ` après ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "et",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `Les personnes suivantes sont considérées par Pantheon comme ${count === 10 ? "les 10" : ""} ${occupationPlural} ${demonym} les plus légendaires de tous les temps. Cette liste de ${occupationPlural} ${demonym} célèbres est triée par HPI (Indice de Popularité Historique), une métrique qui agrège les informations sur la popularité en ligne d'une biographie.`,
+      visitRankings: "Visitez la page de classements pour voir la liste complète de",
+      top: "Top",
+      withHpi: ({hpi, name}) => `Avec un HPI de ${hpi}, ${name}`,
+      isMostFamous: ({demonym, occupation}) => `est le ${occupation} ${demonym} le plus célèbre.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `est le ${rank} ${occupation} ${demonym} le plus célèbre.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} biographie a été traduite en ${count} langues différentes`,
+      onWikipedia: "sur Wikipédia",
+    },
+    selectOccupationCountry: {
+      heading: "Sélectionnez une profession et un pays",
+      pleaseSelect: "Veuillez sélectionner une combinaison de profession et de pays pour voir les biographies les plus mémorables",
+      selectOccupation: "Sélectionnez une profession",
+      selectCountry: "Sélectionnez un pays",
+      goToProfile: "Aller au profil",
+      whoAreTheMostFamous: "Qui sont les plus célèbres...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -415,6 +611,82 @@ export const translations = {
   de: {
     stillAlive: "heute",
     learnMoreRankless: "Erfahren Sie mehr über {name}s akademischen Einfluss bei Rankless",
+    nav: {
+      visualizations: "Visualisierungen",
+      rankings: "Ranglisten",
+      profiles: "Profile",
+      people: "Personen",
+      places: "Orte",
+      countries: "Länder",
+      occupations: "Berufe",
+      occupationCountry: "Beruf / Land",
+      eras: "Epochen",
+      deaths: "Todesfälle",
+      about: "Über",
+      data: "Daten",
+      permissions: "Berechtigungen",
+      download: "Herunterladen",
+      api: "API",
+      games: "Spiele",
+      yearbook: "Jahrbuch",
+      birthle: "Birthle",
+      trivia: "Wissenswertes",
+      news: "Nachrichten",
+      search: "Suchen",
+      home: "Startseite",
+      giveFeedback: "Feedback Geben",
+      usageCitation: "Nutzungszitat",
+      newBadge: "neu!",
+      explore: "Erkunden",
+      apps: "Apps",
+      reportDataError: "Datenfehler Melden",
+      privacyPolicy: "Datenschutzrichtlinie",
+      termsOfService: "Nutzungsbedingungen",
+    },
+    occupationCountry: {
+      theMostFamous: "Die Berühmtesten",
+      from: "aus",
+      greatest: "Die Größten",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for German ordinals
+        const formatGermanOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          return `${num}.`;
+        };
+
+        let text = `Diese Seite enthält eine Liste der größten ${demonym} ${occupationPlural}. `;
+        text += `Der Pantheon-Datensatz enthält ${totalCount} ${occupationPlural}, von denen ${countryCount} in ${country} geboren wurden. `;
+        if (rank) {
+          const germanRank = formatGermanOrdinal(rank);
+          text += `Dies macht ${country} zum ${germanRank} Geburtsort der größten Anzahl von ${occupationPlural}`;
+          if (countriesBehind) {
+            text += ` nach ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "und",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `Die folgenden Personen werden von Pantheon als ${count === 10 ? "die 10" : ""} legendärsten ${demonym} ${occupationPlural} aller Zeiten angesehen. Diese Liste berühmter ${demonym} ${occupationPlural} ist nach HPI (Historical Popularity Index) sortiert, einer Metrik, die Informationen über die Online-Popularität einer Biografie aggregiert.`,
+      visitRankings: "Besuchen Sie die Ranking-Seite, um die vollständige Liste der",
+      top: "Top",
+      withHpi: ({hpi, name}) => `Mit einem HPI von ${hpi} ist ${name}`,
+      isMostFamous: ({demonym, occupation}) => `der berühmteste ${demonym} ${occupation}.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `der ${rank} berühmteste ${demonym} ${occupation}.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} Biografie wurde in ${count} verschiedene Sprachen übersetzt`,
+      onWikipedia: "auf Wikipedia",
+    },
+    selectOccupationCountry: {
+      heading: "Wählen Sie einen Beruf und ein Land",
+      pleaseSelect: "Bitte wählen Sie eine Kombination aus Beruf und Land, um die denkwürdigsten Biografien zu sehen",
+      selectOccupation: "Wählen Sie einen Beruf",
+      selectCountry: "Wählen Sie ein Land",
+      goToProfile: "Zum Profil gehen",
+      whoAreTheMostFamous: "Wer sind die berühmtesten...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -545,6 +817,82 @@ export const translations = {
   ru: {
     stillAlive: "настоящее время",
     learnMoreRankless: "Узнайте больше о академическом влиянии {name} на Rankless",
+    nav: {
+      visualizations: "Визуализации",
+      rankings: "Рейтинги",
+      profiles: "Профили",
+      people: "Люди",
+      places: "Места",
+      countries: "Страны",
+      occupations: "Профессии",
+      occupationCountry: "Профессия / Страна",
+      eras: "Эпохи",
+      deaths: "Смерти",
+      about: "О Проекте",
+      data: "Данные",
+      permissions: "Разрешения",
+      download: "Скачать",
+      api: "API",
+      games: "Игры",
+      yearbook: "Ежегодник",
+      birthle: "Birthle",
+      trivia: "Викторина",
+      news: "Новости",
+      search: "Поиск",
+      home: "Главная",
+      giveFeedback: "Оставить Отзыв",
+      usageCitation: "Цитирование Использования",
+      newBadge: "новое!",
+      explore: "Исследовать",
+      apps: "Приложения",
+      reportDataError: "Сообщить об Ошибке в Данных",
+      privacyPolicy: "Политика Конфиденциальности",
+      termsOfService: "Условия Использования",
+    },
+    occupationCountry: {
+      theMostFamous: "Самые Известные",
+      from: "из",
+      greatest: "Лучшие",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Russian ordinals
+        const formatRussianOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          return `${num}-м`;
+        };
+
+        let text = `Эта страница содержит список величайших ${demonym} ${occupationPlural}. `;
+        text += `Набор данных Pantheon содержит ${totalCount} ${occupationPlural}, ${countryCount} из которых родились в ${country}. `;
+        if (rank) {
+          const russianRank = formatRussianOrdinal(rank);
+          text += `Это делает ${country} ${russianRank} местом рождения наибольшего числа ${occupationPlural}`;
+          if (countriesBehind) {
+            text += ` после ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "и",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `Следующие люди считаются Pantheon ${count === 10 ? "10" : ""} самыми легендарными ${demonym} ${occupationPlural} всех времен. Этот список знаменитых ${demonym} ${occupationPlural} отсортирован по HPI (Индекс исторической популярности), метрике, которая агрегирует информацию об онлайн-популярности биографии.`,
+      visitRankings: "Посетите страницу рейтингов, чтобы просмотреть полный список",
+      top: "Топ",
+      withHpi: ({hpi, name}) => `С HPI ${hpi}, ${name}`,
+      isMostFamous: ({demonym, occupation}) => `является самым известным ${demonym} ${occupation}.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `является ${rank} самым известным ${demonym} ${occupation}.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} биография была переведена на ${count} различных языков`,
+      onWikipedia: "в Википедии",
+    },
+    selectOccupationCountry: {
+      heading: "Выберите профессию и страну",
+      pleaseSelect: "Пожалуйста, выберите комбинацию профессии и страны, чтобы увидеть самые запоминающиеся биографии",
+      selectOccupation: "Выберите профессию",
+      selectCountry: "Выберите страну",
+      goToProfile: "Перейти к профилю",
+      whoAreTheMostFamous: "Кто самые известные...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -701,6 +1049,82 @@ export const translations = {
   zh: {
     stillAlive: "至今",
     learnMoreRankless: "在Rankless上了解更多关于{name}的学术影响",
+    nav: {
+      visualizations: "可视化",
+      rankings: "排名",
+      profiles: "档案",
+      people: "人物",
+      places: "地点",
+      countries: "国家",
+      occupations: "职业",
+      occupationCountry: "职业 / 国家",
+      eras: "时代",
+      deaths: "逝世",
+      about: "关于",
+      data: "数据",
+      permissions: "权限",
+      download: "下载",
+      api: "API",
+      games: "游戏",
+      yearbook: "年鉴",
+      birthle: "Birthle",
+      trivia: "冷知识",
+      news: "新闻",
+      search: "搜索",
+      home: "首页",
+      giveFeedback: "提供反馈",
+      usageCitation: "使用引用",
+      newBadge: "新！",
+      explore: "探索",
+      apps: "应用",
+      reportDataError: "报告数据错误",
+      privacyPolicy: "隐私政策",
+      termsOfService: "服务条款",
+    },
+    occupationCountry: {
+      theMostFamous: "最著名的",
+      from: "来自",
+      greatest: "最伟大的",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Chinese ordinals (use 第X)
+        const formatChineseOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          return `第${num}`;
+        };
+
+        let text = `本页面包含了最伟大的${country}${occupationPlural}名单。`;
+        text += `Pantheon数据集包含${totalCount}名${occupationPlural}，其中${countryCount}人出生在${country}。`;
+        if (rank) {
+          const chineseRank = formatChineseOrdinal(rank);
+          text += `这使${country}成为${chineseRank}多${occupationPlural}的出生地`;
+          if (countriesBehind) {
+            text += `，仅次于${countriesBehind}。`;
+          } else {
+            text += `。`;
+          }
+        }
+        return text;
+      },
+      and: "和",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `以下人物被Pantheon认为是有史以来${count === 10 ? "十大" : ""}最具传奇色彩的${demonym}${occupationPlural}。这份著名的${demonym}${occupationPlural}名单按HPI（历史流行度指数）排序，该指标汇总了传记在线流行度的信息。`,
+      visitRankings: "访问排名页面查看完整列表",
+      top: "前",
+      withHpi: ({hpi, name}) => `${name}的HPI为${hpi}，`,
+      isMostFamous: ({demonym, occupation}) => `是最著名的${demonym}${occupation}。`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `是${rank}最著名的${demonym}${occupation}。`,
+      biographyTranslated: ({possessive, count}) => `${possessive}传记已被翻译成${count}种不同语言`,
+      onWikipedia: "在维基百科上",
+    },
+    selectOccupationCountry: {
+      heading: "选择职业和国家",
+      pleaseSelect: "请选择职业和国家组合以查看最令人难忘的传记",
+      selectOccupation: "选择职业",
+      selectCountry: "选择国家",
+      goToProfile: "前往个人资料",
+      whoAreTheMostFamous: "谁是最著名的...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -838,6 +1262,82 @@ export const translations = {
   ja: {
     stillAlive: "現在",
     learnMoreRankless: "Ranklessで{name}の学術的影響について詳しく知る",
+    nav: {
+      visualizations: "視覚化",
+      rankings: "ランキング",
+      profiles: "プロフィール",
+      people: "人物",
+      places: "場所",
+      countries: "国",
+      occupations: "職業",
+      occupationCountry: "職業 / 国",
+      eras: "時代",
+      deaths: "死亡",
+      about: "について",
+      data: "データ",
+      permissions: "許可",
+      download: "ダウンロード",
+      api: "API",
+      games: "ゲーム",
+      yearbook: "年鑑",
+      birthle: "Birthle",
+      trivia: "トリビア",
+      news: "ニュース",
+      search: "検索",
+      home: "ホーム",
+      giveFeedback: "フィードバックを送る",
+      usageCitation: "使用と引用",
+      newBadge: "新着！",
+      explore: "探索",
+      apps: "アプリ",
+      reportDataError: "データエラーを報告",
+      privacyPolicy: "プライバシーポリシー",
+      termsOfService: "利用規約",
+    },
+    occupationCountry: {
+      theMostFamous: "最も有名な",
+      from: "出身の",
+      greatest: "最も偉大な",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Japanese ordinals (use 第X位)
+        const formatJapaneseOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          return `第${num}位`;
+        };
+
+        let text = `このページには、最も偉大な${country}の${occupationPlural}のリストが含まれています。`;
+        text += `Pantheonデータセットには${totalCount}人の${occupationPlural}が含まれており、そのうち${countryCount}人が${country}で生まれました。`;
+        if (rank) {
+          const japaneseRank = formatJapaneseOrdinal(rank);
+          text += `これにより、${country}は${occupationPlural}の出生地として${japaneseRank}となります`;
+          if (countriesBehind) {
+            text += `（${countriesBehind}に次ぐ）。`;
+          } else {
+            text += `。`;
+          }
+        }
+        return text;
+      },
+      and: "と",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `以下の人々は、Pantheonによって史上${count === 10 ? "トップ10" : ""}最も伝説的な${demonym}${occupationPlural}と見なされています。この有名な${demonym}${occupationPlural}のリストは、HPI（歴史的人気度指数）でソートされています。これは伝記のオンライン人気度に関する情報を集約する指標です。`,
+      visitRankings: "ランキングページにアクセスして、完全なリストを表示してください",
+      top: "トップ",
+      withHpi: ({hpi, name}) => `HPIが${hpi}の${name}は、`,
+      isMostFamous: ({demonym, occupation}) => `最も有名な${demonym}${occupation}です。`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `${rank}最も有名な${demonym}${occupation}です。`,
+      biographyTranslated: ({possessive, count}) => `${possessive}伝記は${count}の異なる言語に翻訳されています`,
+      onWikipedia: "ウィキペディアで",
+    },
+    selectOccupationCountry: {
+      heading: "職業と国を選択",
+      pleaseSelect: "最も記憶に残る伝記を表示するには、職業と国の組み合わせを選択してください",
+      selectOccupation: "職業を選択",
+      selectCountry: "国を選択",
+      goToProfile: "プロフィールに移動",
+      whoAreTheMostFamous: "最も有名なのは誰...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -985,6 +1485,82 @@ export const translations = {
   ar: {
     stillAlive: "حتى اليوم",
     learnMoreRankless: "تعرف على المزيد حول التأثير الأكاديمي لـ {name} في Rankless",
+    nav: {
+      visualizations: "التصورات",
+      rankings: "التصنيفات",
+      profiles: "الملفات الشخصية",
+      people: "الأشخاص",
+      places: "الأماكن",
+      countries: "البلدان",
+      occupations: "المهن",
+      occupationCountry: "المهنة / البلد",
+      eras: "العصور",
+      deaths: "الوفيات",
+      about: "حول",
+      data: "البيانات",
+      permissions: "الأذونات",
+      download: "تحميل",
+      api: "API",
+      games: "الألعاب",
+      yearbook: "كتاب السنة",
+      birthle: "Birthle",
+      trivia: "معلومات عامة",
+      news: "الأخبار",
+      search: "بحث",
+      home: "الرئيسية",
+      giveFeedback: "إعطاء رأيك",
+      usageCitation: "الاستخدام والاقتباس",
+      newBadge: "جديد!",
+      explore: "استكشاف",
+      apps: "التطبيقات",
+      reportDataError: "الإبلاغ عن خطأ في البيانات",
+      privacyPolicy: "سياسة الخصوصية",
+      termsOfService: "شروط الخدمة",
+    },
+    occupationCountry: {
+      theMostFamous: "الأكثر شهرة",
+      from: "من",
+      greatest: "الأعظم",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Arabic ordinals (keep the number as-is)
+        const formatArabicOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          return `${num}`;
+        };
+
+        let text = `تحتوي هذه الصفحة على قائمة بأعظم ${occupationPlural} ${demonym}. `;
+        text += `تحتوي مجموعة بيانات Pantheon على ${totalCount} ${occupationPlural}، ولد منهم ${countryCount} في ${country}. `;
+        if (rank) {
+          const arabicRank = formatArabicOrdinal(rank);
+          text += `وهذا يجعل ${country} مسقط رأس ${arabicRank} أكبر عدد من ${occupationPlural}`;
+          if (countriesBehind) {
+            text += ` بعد ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "و",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `يعتبر Pantheon الأشخاص التاليين ${count === 10 ? "أفضل 10" : ""} ${occupationPlural} ${demonym} الأكثر أسطورية على الإطلاق. يتم ترتيب هذه القائمة من ${occupationPlural} ${demonym} المشهورين حسب HPI (مؤشر الشعبية التاريخية)، وهو مقياس يجمع المعلومات حول شعبية السيرة الذاتية عبر الإنترنت.`,
+      visitRankings: "قم بزيارة صفحة التصنيفات لعرض القائمة الكاملة لـ",
+      top: "أفضل",
+      withHpi: ({hpi, name}) => `بـ HPI ${hpi}، ${name}`,
+      isMostFamous: ({demonym, occupation}) => `هو ${occupation} ${demonym} الأكثر شهرة.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `هو ${rank} ${occupation} ${demonym} الأكثر شهرة.`,
+      biographyTranslated: ({possessive, count}) => `تمت ترجمة ${possessive} سيرته الذاتية إلى ${count} لغة مختلفة`,
+      onWikipedia: "في ويكيبيديا",
+    },
+    selectOccupationCountry: {
+      heading: "اختر مهنة وبلد",
+      pleaseSelect: "يرجى اختيار مزيج من المهنة والبلد لرؤية السير الذاتية الأكثر تميزًا",
+      selectOccupation: "اختر مهنة",
+      selectCountry: "اختر بلد",
+      goToProfile: "الذهاب إلى الملف الشخصي",
+      whoAreTheMostFamous: "من هم الأكثر شهرة...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -1118,6 +1694,84 @@ export const translations = {
   it: {
     stillAlive: "presente",
     learnMoreRankless: "Scopri di più sull'impatto accademico di {name} su Rankless",
+    nav: {
+      visualizations: "Visualizzazioni",
+      rankings: "Classifiche",
+      profiles: "Profili",
+      people: "Persone",
+      places: "Luoghi",
+      countries: "Paesi",
+      occupations: "Professioni",
+      occupationCountry: "Professione / Paese",
+      eras: "Epoche",
+      deaths: "Decessi",
+      about: "Chi Siamo",
+      data: "Dati",
+      permissions: "Permessi",
+      download: "Scarica",
+      api: "API",
+      games: "Giochi",
+      yearbook: "Annuario",
+      birthle: "Birthle",
+      trivia: "Curiosità",
+      news: "Notizie",
+      search: "Cerca",
+      home: "Home",
+      giveFeedback: "Lascia un Feedback",
+      usageCitation: "Citazione d'Uso",
+      newBadge: "nuovo!",
+      explore: "Esplora",
+      apps: "App",
+      reportDataError: "Segnala Errore nei Dati",
+      privacyPolicy: "Informativa sulla Privacy",
+      termsOfService: "Termini di Servizio",
+    },
+    occupationCountry: {
+      theMostFamous: "I Più Famosi",
+      from: "di",
+      greatest: "I Migliori",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Italian ordinals (use ° for masculine)
+        const formatItalianOrdinal = (rankStr) => {
+          // Extract number from rank string like "10th"
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          if (num === 1) return "primo";
+          return `${num}°`;
+        };
+
+        let text = `Questa pagina contiene un elenco dei più grandi ${occupationPlural} ${demonym}. `;
+        text += `Il dataset Pantheon contiene ${totalCount} ${occupationPlural}, ${countryCount} dei quali sono nati in ${country}. `;
+        if (rank) {
+          const italianRank = formatItalianOrdinal(rank);
+          text += `Questo fa della ${country} il ${italianRank} luogo di nascita del maggior numero di ${occupationPlural}`;
+          if (countriesBehind) {
+            text += `, dopo ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "e",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `Le seguenti persone sono considerate da Pantheon ${count === 10 ? "i 10" : ""} ${occupationPlural} ${demonym} più leggendari di tutti i tempi. Questo elenco di famosi ${occupationPlural} ${demonym} è ordinato per HPI (Indice di Popolarità Storica), una metrica che aggrega informazioni sulla popolarità online di una biografia.`,
+      visitRankings: "Visita la pagina delle classifiche per visualizzare l'elenco completo di",
+      top: "Top",
+      withHpi: ({hpi, name}) => `Con un HPI di ${hpi}, ${name}`,
+      isMostFamous: ({demonym, occupation}) => `è il ${occupation} ${demonym} più famoso.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `è il ${rank} ${occupation} ${demonym} più famoso.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} sua biografia è stata tradotta in ${count} lingue diverse`,
+      onWikipedia: "su Wikipedia",
+    },
+    selectOccupationCountry: {
+      heading: "Seleziona una professione e un paese",
+      pleaseSelect: "Seleziona una combinazione di professione e paese per vedere le biografie più memorabili",
+      selectOccupation: "Seleziona una professione",
+      selectCountry: "Seleziona un paese",
+      goToProfile: "Vai al profilo",
+      whoAreTheMostFamous: "Chi sono i più famosi...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -1286,6 +1940,83 @@ export const translations = {
   pt: {
     stillAlive: "presente",
     learnMoreRankless: "Saiba mais sobre o impacto acadêmico de {name} no Rankless",
+    nav: {
+      visualizations: "Visualizações",
+      rankings: "Classificações",
+      profiles: "Perfis",
+      people: "Pessoas",
+      places: "Lugares",
+      countries: "Países",
+      occupations: "Profissões",
+      occupationCountry: "Profissão / País",
+      eras: "Eras",
+      deaths: "Mortes",
+      about: "Sobre",
+      data: "Dados",
+      permissions: "Permissões",
+      download: "Baixar",
+      api: "API",
+      games: "Jogos",
+      yearbook: "Anuário",
+      birthle: "Birthle",
+      trivia: "Curiosidades",
+      news: "Notícias",
+      search: "Pesquisar",
+      home: "Início",
+      giveFeedback: "Dar Feedback",
+      usageCitation: "Citação de Uso",
+      newBadge: "novo!",
+      explore: "Explorar",
+      apps: "Aplicativos",
+      reportDataError: "Relatar Erro de Dados",
+      privacyPolicy: "Política de Privacidade",
+      termsOfService: "Termos de Serviço",
+    },
+    occupationCountry: {
+      theMostFamous: "Os Mais Famosos",
+      from: "de",
+      greatest: "Os Melhores",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Portuguese ordinals (use º for masculine)
+        const formatPortugueseOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          if (num === 1) return "1º";
+          return `${num}º`;
+        };
+
+        let text = `Esta página contém uma lista dos maiores ${occupationPlural} ${demonym}. `;
+        text += `O conjunto de dados Pantheon contém ${totalCount} ${occupationPlural}, ${countryCount} dos quais nasceram em ${country}. `;
+        if (rank) {
+          const portugueseRank = formatPortugueseOrdinal(rank);
+          text += `Isso faz de ${country} o ${portugueseRank} lugar de nascimento do maior número de ${occupationPlural}`;
+          if (countriesBehind) {
+            text += `, depois de ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "e",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `As seguintes pessoas são consideradas pela Pantheon como ${count === 10 ? "os 10" : ""} ${occupationPlural} ${demonym} mais lendários de todos os tempos. Esta lista de ${occupationPlural} ${demonym} famosos está ordenada por HPI (Índice de Popularidade Histórica), uma métrica que agrega informações sobre a popularidade online de uma biografia.`,
+      visitRankings: "Visite a página de classificações para ver a lista completa de",
+      top: "Top",
+      withHpi: ({hpi, name}) => `Com um HPI de ${hpi}, ${name}`,
+      isMostFamous: ({demonym, occupation}) => `é o ${occupation} ${demonym} mais famoso.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `é o ${rank} ${occupation} ${demonym} mais famoso.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} biografia foi traduzida para ${count} idiomas diferentes`,
+      onWikipedia: "na Wikipédia",
+    },
+    selectOccupationCountry: {
+      heading: "Selecione uma profissão e um país",
+      pleaseSelect: "Selecione uma combinação de profissão e país para ver as biografias mais memoráveis",
+      selectOccupation: "Selecione uma profissão",
+      selectCountry: "Selecione um país",
+      goToProfile: "Ir para o perfil",
+      whoAreTheMostFamous: "Quem são os mais famosos...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -1444,6 +2175,82 @@ export const translations = {
   hu: {
     stillAlive: "napjainkig",
     learnMoreRankless: "Tudjon meg többet {name} akadémiai hatásáról a Rankless-en",
+    nav: {
+      visualizations: "Vizualizációk",
+      rankings: "Rangsorok",
+      profiles: "Profilok",
+      people: "Emberek",
+      places: "Helyek",
+      countries: "Országok",
+      occupations: "Foglalkozások",
+      occupationCountry: "Foglalkozás / Ország",
+      eras: "Korszakok",
+      deaths: "Halálozások",
+      about: "Rólunk",
+      data: "Adatok",
+      permissions: "Engedélyek",
+      download: "Letöltés",
+      api: "API",
+      games: "Játékok",
+      yearbook: "Évkönyv",
+      birthle: "Birthle",
+      trivia: "Kvíz",
+      news: "Hírek",
+      search: "Keresés",
+      home: "Kezdőlap",
+      giveFeedback: "Visszajelzés Küldése",
+      usageCitation: "Használati Idézet",
+      newBadge: "új!",
+      explore: "Felfedezés",
+      apps: "Alkalmazások",
+      reportDataError: "Adathiba Jelentése",
+      privacyPolicy: "Adatvédelmi Irányelvek",
+      termsOfService: "Szolgáltatási Feltételek",
+    },
+    occupationCountry: {
+      theMostFamous: "A Leghíresebbek",
+      from: "országából",
+      greatest: "A Legnagyobbak",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Hungarian ordinals (use period)
+        const formatHungarianOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          return `${num}.`;
+        };
+
+        let text = `Ez az oldal a legnagyobb ${demonym} ${occupationPlural} listáját tartalmazza. `;
+        text += `A Pantheon adatkészlet ${totalCount} ${occupationPlural} adatait tartalmazza, ebből ${countryCount} született ${country} országában. `;
+        if (rank) {
+          const hungarianRank = formatHungarianOrdinal(rank);
+          text += `Ez teszi ${country} országát a ${hungarianRank} legtöbb ${occupationPlural} szülőhelyévé`;
+          if (countriesBehind) {
+            text += ` ${countriesBehind} után.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "és",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `A következő személyeket a Pantheon ${count === 10 ? "a 10" : ""} leglegendásabb ${demonym} ${occupationPlural} között tartja számon minden idők. Ez a híres ${demonym} ${occupationPlural} lista HPI (Történelmi Népszerűségi Index) szerint van rendezve, amely egy biográfia online népszerűségéről összesíti az információkat.`,
+      visitRankings: "Látogassa meg a ranglisták oldalát a teljes lista megtekintéséhez",
+      top: "Top",
+      withHpi: ({hpi, name}) => `${hpi} HPI-vel ${name}`,
+      isMostFamous: ({demonym, occupation}) => `a leghíresebb ${demonym} ${occupation}.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `a ${rank} leghíresebb ${demonym} ${occupation}.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} életrajza ${count} különböző nyelvre lett lefordítva`,
+      onWikipedia: "a Wikipédián",
+    },
+    selectOccupationCountry: {
+      heading: "Válasszon foglalkozást és országot",
+      pleaseSelect: "Kérjük, válasszon egy foglalkozás és ország kombinációt a legmaradandóbb életrajzok megtekintéséhez",
+      selectOccupation: "Válasszon foglalkozást",
+      selectCountry: "Válasszon országot",
+      goToProfile: "Ugrás a profilhoz",
+      whoAreTheMostFamous: "Kik a leghíresebbek...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -1570,6 +2377,82 @@ export const translations = {
   nl: {
     stillAlive: "heden",
     learnMoreRankless: "Meer informatie over de academische impact van {name} op Rankless",
+    nav: {
+      visualizations: "Visualisaties",
+      rankings: "Ranglijsten",
+      profiles: "Profielen",
+      people: "Mensen",
+      places: "Plaatsen",
+      countries: "Landen",
+      occupations: "Beroepen",
+      occupationCountry: "Beroep / Land",
+      eras: "Tijdperken",
+      deaths: "Overlijdens",
+      about: "Over",
+      data: "Gegevens",
+      permissions: "Toestemmingen",
+      download: "Downloaden",
+      api: "API",
+      games: "Spellen",
+      yearbook: "Jaarboek",
+      birthle: "Birthle",
+      trivia: "Weetjes",
+      news: "Nieuws",
+      search: "Zoeken",
+      home: "Home",
+      giveFeedback: "Geef Feedback",
+      usageCitation: "Gebruikscitaat",
+      newBadge: "nieuw!",
+      explore: "Verkennen",
+      apps: "Apps",
+      reportDataError: "Gegevensfout Melden",
+      privacyPolicy: "Privacybeleid",
+      termsOfService: "Gebruiksvoorwaarden",
+    },
+    occupationCountry: {
+      theMostFamous: "De Beroemdste",
+      from: "uit",
+      greatest: "De Grootste",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Dutch ordinals (use -e or -de)
+        const formatDutchOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          return `${num}e`;
+        };
+
+        let text = `Deze pagina bevat een lijst van de grootste ${demonym} ${occupationPlural}. `;
+        text += `De Pantheon-dataset bevat ${totalCount} ${occupationPlural}, waarvan ${countryCount} geboren zijn in ${country}. `;
+        if (rank) {
+          const dutchRank = formatDutchOrdinal(rank);
+          text += `Dit maakt ${country} de ${dutchRank} geboorteplaats van het grootste aantal ${occupationPlural}`;
+          if (countriesBehind) {
+            text += ` na ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "en",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `De volgende personen worden door Pantheon beschouwd als ${count === 10 ? "de 10" : ""} meest legendarische ${demonym} ${occupationPlural} aller tijden. Deze lijst van beroemde ${demonym} ${occupationPlural} is gesorteerd op HPI (Historical Popularity Index), een metriek die informatie over de online populariteit van een biografie aggregeert.`,
+      visitRankings: "Bezoek de ranglijstpagina om de volledige lijst te bekijken van",
+      top: "Top",
+      withHpi: ({hpi, name}) => `Met een HPI van ${hpi} is ${name}`,
+      isMostFamous: ({demonym, occupation}) => `de beroemdste ${demonym} ${occupation}.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `de ${rank} beroemdste ${demonym} ${occupation}.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} biografie is vertaald in ${count} verschillende talen`,
+      onWikipedia: "op Wikipedia",
+    },
+    selectOccupationCountry: {
+      heading: "Selecteer een beroep en land",
+      pleaseSelect: "Selecteer een combinatie van beroep en land om de meest gedenkwaardige biografieën te zien",
+      selectOccupation: "Selecteer een beroep",
+      selectCountry: "Selecteer een land",
+      goToProfile: "Ga naar profiel",
+      whoAreTheMostFamous: "Wie zijn de beroemdste...",
+    },
     intro: {
       rankingSentence: ({
         name,
@@ -1710,6 +2593,82 @@ export const translations = {
   pl: {
     stillAlive: "obecnie",
     learnMoreRankless: "Dowiedz się więcej o akademickim wpływie {name} na Rankless",
+    nav: {
+      visualizations: "Wizualizacje",
+      rankings: "Rankingi",
+      profiles: "Profile",
+      people: "Ludzie",
+      places: "Miejsca",
+      countries: "Kraje",
+      occupations: "Zawody",
+      occupationCountry: "Zawód / Kraj",
+      eras: "Epoki",
+      deaths: "Zgony",
+      about: "O Nas",
+      data: "Dane",
+      permissions: "Uprawnienia",
+      download: "Pobierz",
+      api: "API",
+      games: "Gry",
+      yearbook: "Rocznik",
+      birthle: "Birthle",
+      trivia: "Ciekawostki",
+      news: "Aktualności",
+      search: "Szukaj",
+      home: "Strona Główna",
+      giveFeedback: "Prześlij Opinię",
+      usageCitation: "Cytowanie Użycia",
+      newBadge: "nowe!",
+      explore: "Odkrywaj",
+      apps: "Aplikacje",
+      reportDataError: "Zgłoś Błąd w Danych",
+      privacyPolicy: "Polityka Prywatności",
+      termsOfService: "Warunki Usługi",
+    },
+    occupationCountry: {
+      theMostFamous: "Najsławniejsi",
+      from: "z",
+      greatest: "Najwięksi",
+      introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
+        // Helper function for Polish ordinals (use period)
+        const formatPolishOrdinal = (rankStr) => {
+          const num = parseInt(rankStr);
+          if (isNaN(num)) return rankStr;
+          return `${num}.`;
+        };
+
+        let text = `Ta strona zawiera listę największych ${demonym} ${occupationPlural}. `;
+        text += `Zbiór danych Pantheon zawiera ${totalCount} ${occupationPlural}, z których ${countryCount} urodziło się w ${country}. `;
+        if (rank) {
+          const polishRank = formatPolishOrdinal(rank);
+          text += `To sprawia, że ${country} jest ${polishRank} miejscem urodzenia największej liczby ${occupationPlural}`;
+          if (countriesBehind) {
+            text += ` po ${countriesBehind}.`;
+          } else {
+            text += `.`;
+          }
+        }
+        return text;
+      },
+      and: "i",
+      topTenIntro: ({count, demonym, occupationPlural}) =>
+        `Następujące osoby są uważane przez Pantheon za ${count === 10 ? "10" : ""} najbardziej legendarnych ${demonym} ${occupationPlural} wszech czasów. Ta lista słynnych ${demonym} ${occupationPlural} jest posortowana według HPI (Historyczny Indeks Popularności), metryki, która agreguje informacje o popularności biografii w Internecie.`,
+      visitRankings: "Odwiedź stronę rankingów, aby zobaczyć pełną listę",
+      top: "Top",
+      withHpi: ({hpi, name}) => `Z HPI ${hpi}, ${name}`,
+      isMostFamous: ({demonym, occupation}) => `jest najbardziej znanym ${demonym} ${occupation}.`,
+      isRankMostFamous: ({rank, demonym, occupation}) => `jest ${rank} najbardziej znanym ${demonym} ${occupation}.`,
+      biographyTranslated: ({possessive, count}) => `${possessive} biografia została przetłumaczona na ${count} różnych języków`,
+      onWikipedia: "w Wikipedii",
+    },
+    selectOccupationCountry: {
+      heading: "Wybierz zawód i kraj",
+      pleaseSelect: "Wybierz kombinację zawodu i kraju, aby zobaczyć najbardziej niezapomniane biografie",
+      selectOccupation: "Wybierz zawód",
+      selectCountry: "Wybierz kraj",
+      goToProfile: "Przejdź do profilu",
+      whoAreTheMostFamous: "Kto jest najbardziej znany...",
+    },
     intro: {
       rankingSentence: ({
         name,
