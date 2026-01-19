@@ -8,6 +8,18 @@
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
+@media (max-width: 768px) {
+  .trending-excerpt-container {
+    margin: 0.25rem 0 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .trending-excerpt-container {
+    margin: 0.15rem 0 0.15rem;
+  }
+}
+
 .trending-excerpt-container.visible {
   opacity: 1;
   transform: translateY(0);
@@ -40,35 +52,11 @@
   filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.1));
 }
 
-/* Default desktop (4 columns in first row) - calculate position based on grid position */
+/* 4 columns layout (same for all screen sizes) */
 .trending-excerpt-bubble[data-grid-position="0"]::before { left: 12.5%; }
 .trending-excerpt-bubble[data-grid-position="1"]::before { left: 37.5%; }
 .trending-excerpt-bubble[data-grid-position="2"]::before { left: 62.5%; }
 .trending-excerpt-bubble[data-grid-position="3"]::before { left: 87.5%; }
-
-/* Tablet (3 columns) */
-@media (max-width: 900px) {
-  .trending-excerpt-bubble[data-grid-position="0"]::before { left: 16.66%; }
-  .trending-excerpt-bubble[data-grid-position="1"]::before { left: 50%; }
-  .trending-excerpt-bubble[data-grid-position="2"]::before { left: 83.33%; }
-  .trending-excerpt-bubble[data-grid-position="3"]::before { left: 50%; }
-}
-
-/* Mobile (2 columns) */
-@media (max-width: 600px) {
-  .trending-excerpt-bubble[data-grid-position="0"]::before { left: 25%; }
-  .trending-excerpt-bubble[data-grid-position="1"]::before { left: 75%; }
-  .trending-excerpt-bubble[data-grid-position="2"]::before { left: 25%; }
-  .trending-excerpt-bubble[data-grid-position="3"]::before { left: 75%; }
-}
-
-/* Small mobile (1 column) */
-@media (max-width: 400px) {
-  .trending-excerpt-bubble[data-grid-position="0"]::before,
-  .trending-excerpt-bubble[data-grid-position="1"]::before,
-  .trending-excerpt-bubble[data-grid-position="2"]::before,
-  .trending-excerpt-bubble[data-grid-position="3"]::before { left: 50%; }
-}
 
 .trending-excerpt-header {
   font-size: 1.35rem;
@@ -145,41 +133,52 @@
 /* Mobile responsive styles */
 @media (max-width: 768px) {
   .trending-excerpt-bubble {
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 1.25rem;
     border-radius: 12px;
   }
 
   .trending-excerpt-bubble::before {
-    border-left-width: 15px;
-    border-right-width: 15px;
-    border-bottom-width: 15px;
-    top: -15px;
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-bottom-width: 10px;
+    top: -10px;
   }
 
   .trending-excerpt-header {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
   }
 
   .trending-excerpt-text {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin: 0.5rem 0 0.75rem;
   }
 
   .trending-excerpt-link {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     padding: 0.4rem 0.8rem;
   }
 }
 
 @media (max-width: 480px) {
   .trending-excerpt-bubble {
-    padding: 1rem 1.25rem;
+    padding: 0.75rem 0.875rem;
+  }
+
+  .trending-excerpt-bubble::before {
+    border-left-width: 8px;
+    border-right-width: 8px;
+    border-bottom-width: 8px;
+    top: -8px;
   }
 
   .trending-excerpt-header {
-    font-size: 1.15rem;
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
   }
 
   .trending-excerpt-text {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
+    margin: 0.4rem 0 0.6rem;
   }
 }
