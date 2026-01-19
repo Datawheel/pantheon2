@@ -1,4 +1,5 @@
 import PersonImage from "/components/utils/PersonImage";
+import TrendingExcerpt from "/components/home/TrendingExcerpt";
 
 const TrendIndicator = ({rankDelta}) => {
   let type = null;
@@ -44,33 +45,47 @@ const TrendIndicator = ({rankDelta}) => {
   );
 };
 
-const Grid = ({bios, showDates, showTrendIndicator = true}) => (
-  <ul className="grid-row">
-    {bios.map(profile => (
-      <li className="grid-box" key={profile.pid || profile.id}>
-        <a href={`/profile/person/${profile.slug}`}>
-          <div className="grid-box-bg-container">
-            {showTrendIndicator ? (
-              <TrendIndicator rankDelta={profile.rank_delta} />
-            ) : null}
-            <PersonImage
-              src={`/profile/people/${profile.pid || profile.id}.jpg`}
-              alt={`Photo of ${profile.title || profile.name}`}
-              fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-            />
-          </div>
-          <div className="grid-box-title-container">
-            {profile.title || profile.name}
-            {showDates ? (
-              <div className="grid-box-title-dates">
-                {profile.birthyear} - {profile.deathyear}
+const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = null}) => {
+  return (
+    <ul className="grid-row">
+      {bios.map((profile, index) => (
+        <>
+          <li className="grid-box" key={profile.pid || profile.id}>
+            <a href={`/profile/person/${profile.slug}`}>
+              <div className="grid-box-bg-container">
+                {showTrendIndicator ? (
+                  <TrendIndicator rankDelta={profile.rank_delta} />
+                ) : null}
+                <PersonImage
+                  src={`/profile/people/${profile.pid || profile.id}.jpg`}
+                  alt={`Photo of ${profile.title || profile.name}`}
+                  fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                />
               </div>
-            ) : null}
-          </div>
-        </a>
-      </li>
-    ))}
-  </ul>
-);
+              <div className="grid-box-title-container">
+                {profile.title || profile.name}
+                {showDates ? (
+                  <div className="grid-box-title-dates">
+                    {profile.birthyear} - {profile.deathyear}
+                  </div>
+                ) : null}
+              </div>
+            </a>
+          </li>
+          {/* Insert excerpt after first row (index 3 = after 4th person) */}
+          {index === 3 && trendingExcerpt && (
+            <li className="grid-excerpt-item" key="excerpt">
+              <TrendingExcerpt
+                trendingPeople={trendingExcerpt.trendingPeople}
+                currentLang={trendingExcerpt.currentLang}
+                allBios={bios}
+              />
+            </li>
+          )}
+        </>
+      ))}
+    </ul>
+  );
+};
 
 export default Grid;

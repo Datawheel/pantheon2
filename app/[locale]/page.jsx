@@ -7,6 +7,7 @@ import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
 import HomeSearch from "/components/home/HomeSearch";
 const baseUrl = process.env.URL || "https://pantheon.world";
+const apiBaseUrl = process.env.BASE_API || "https://api.pantheon.world";
 
 export default async function Home({params}) {
   const locale = params?.locale || DEFAULT_LOCALE;
@@ -69,6 +70,57 @@ export default async function Home({params}) {
       return [];
     });
 
+  // Fetch trending reasons for top trending people
+  // Use yesterday's date (same as news page logic)
+  const now = new Date();
+  const easternNow = new Date(now.toLocaleString("en-US", {timeZone: "America/Godthab"}));
+  easternNow.setDate(easternNow.getDate() - 1);
+  const yesterday = `${easternNow.getFullYear()}-${String(easternNow.getMonth() + 1).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
+
+  // Get slugs from top trending people (first 5 to check for reasons)
+  const topTrendingSlugs = trendingAll.slice(0, 5).map(p => p.slug).filter(Boolean);
+
+  // Fetch trending reasons for these people
+  let trendingWithReasons = [];
+  if (topTrendingSlugs.length > 0) {
+    try {
+      const reasonsData = await fetch(
+        `${apiBaseUrl}/trend_news?date=eq.${yesterday}&lang=eq.${lang}&slug=in.(${topTrendingSlugs.join(",")})&select=slug,title,reason,llm_metadata`,
+        {
+          next: {revalidate: REVALIDATE_PERIODS.SHORT * 2},
+        }
+      )
+        .then(res => res.json())
+        .then(data => (Array.isArray(data) ? data : []))
+        .catch(error => {
+          console.error(`Error fetching trending reasons for ${lang}:`, error);
+          return [];
+        });
+
+      // Build a map of slug -> reason data
+      const reasonsMap = reasonsData.reduce((acc, item) => {
+        acc[item.slug] = {
+          trending_reason: item.reason || "",
+          llm_metadata: item.llm_metadata,
+          localized_name: item.title || "",
+        };
+        return acc;
+      }, {});
+
+      // Merge reasons with trending people
+      trendingWithReasons = trendingAll
+        .filter(person => reasonsMap[person.slug])
+        .map(person => ({
+          ...person,
+          trending_reason: reasonsMap[person.slug].trending_reason,
+          llm_metadata: reasonsMap[person.slug].llm_metadata,
+          localized_name: reasonsMap[person.slug].localized_name,
+        }));
+    } catch (error) {
+      console.error("Error processing trending reasons:", error);
+    }
+  }
+
   return (
     <div className="container">
       <title>Pantheon</title>
@@ -122,6 +174,7 @@ export default async function Home({params}) {
         initialTrendingAll={trendingAll}
         defaultLang={lang}
         showNewsButton={true}
+        trendingWithReasons={trendingWithReasons}
       />
 
       <div className="profile-grid">

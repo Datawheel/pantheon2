@@ -34,6 +34,7 @@ export default function TrendingGrid({
   showTrendIndicator = true,
   showDates = false,
   showNewsButton = false,
+  trendingWithReasons = [],
 }) {
   const router = useRouter();
   const [trendingAll, setTrendingAll] = useState(initialTrendingAll);
@@ -100,6 +101,14 @@ export default function TrendingGrid({
           }
           showTrendIndicator={showTrendIndicator}
           showDates={showDates}
+          trendingExcerpt={
+            trendingWithReasons.length > 0 && showNewsButton
+              ? {
+                  trendingPeople: trendingWithReasons,
+                  currentLang: trendingLangEdition,
+                }
+              : null
+          }
         />
       ) : (
         <div className="loading-trends">

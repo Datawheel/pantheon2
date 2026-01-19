@@ -152,6 +152,8 @@ export const translations = {
       trendingSingers: "Trending Singers Today",
       trendingActors: "Trending Actors Today",
       searchPlaceholder: "Search people, places, & occupations",
+      isTrending: "is trending today",
+      readFullStory: "Read full story",
     },
     news: {
       pageTitle: "Who is Trending Today?",
@@ -364,6 +366,8 @@ export const translations = {
       trendingSingers: "Cantantes en Tendencia Hoy",
       trendingActors: "Actores en Tendencia Hoy",
       searchPlaceholder: "Buscar personas, lugares y ocupaciones",
+      isTrending: "es tendencia hoy",
+      readFullStory: "Leer la historia completa",
     },
     news: {
       pageTitle: "¿Quién es tendencia hoy?",
@@ -590,6 +594,8 @@ export const translations = {
       trendingSingers: "Chanteurs Tendance Aujourd'hui",
       trendingActors: "Acteurs Tendance Aujourd'hui",
       searchPlaceholder: "Rechercher des personnes, des lieux et des professions",
+      isTrending: "est en tendance aujourd'hui",
+      readFullStory: "Lire l'histoire complète",
     },
     news: {
       pageTitle: "Qui est en tendance aujourd'hui?",
@@ -796,6 +802,8 @@ export const translations = {
       trendingSingers: "Sänger im Trend Heute",
       trendingActors: "Schauspieler im Trend Heute",
       searchPlaceholder: "Personen, Orte und Berufe suchen",
+      isTrending: "ist heute im Trend",
+      readFullStory: "Vollständige Geschichte lesen",
     },
     news: {
       pageTitle: "Wer ist heute im Trend?",
@@ -1028,6 +1036,8 @@ export const translations = {
       trendingSingers: "Популярные Певцы Сегодня",
       trendingActors: "Популярные Актеры Сегодня",
       searchPlaceholder: "Поиск людей, мест и профессий",
+      isTrending: "в тренде сегодня",
+      readFullStory: "Читать полную историю",
     },
     news: {
       pageTitle: "Кто в тренде сегодня?",
@@ -1242,6 +1252,8 @@ export const translations = {
       trendingSingers: "今日热门歌手",
       trendingActors: "今日热门演员",
       searchPlaceholder: "搜索人物、地点和职业",
+      isTrending: "今日热门",
+      readFullStory: "阅读完整故事",
     },
     news: {
       pageTitle: "今日热门人物",
@@ -1465,6 +1477,8 @@ export const translations = {
       trendingSingers: "本日のトレンド歌手",
       trendingActors: "本日のトレンド俳優",
       searchPlaceholder: "人物、場所、職業を検索",
+      isTrending: "は本日のトレンドです",
+      readFullStory: "全文を読む",
     },
     news: {
       pageTitle: "今日のトレンド人物",
@@ -1673,6 +1687,8 @@ export const translations = {
       trendingSingers: "المطربون الرائجون اليوم",
       trendingActors: "الممثلون الرائجون اليوم",
       searchPlaceholder: "البحث عن الأشخاص والأماكن والمهن",
+      isTrending: "رائج اليوم",
+      readFullStory: "اقرأ القصة الكاملة",
     },
     news: {
       pageTitle: "من هو في الموضة اليوم؟",
@@ -1919,6 +1935,8 @@ export const translations = {
       trendingSingers: "Cantanti di Tendenza Oggi",
       trendingActors: "Attori di Tendenza Oggi",
       searchPlaceholder: "Cerca persone, luoghi e professioni",
+      isTrending: "è di tendenza oggi",
+      readFullStory: "Leggi la storia completa",
     },
     news: {
       pageTitle: "Chi è di tendenza oggi?",
@@ -2155,6 +2173,8 @@ export const translations = {
       trendingSingers: "Cantores em Alta Hoje",
       trendingActors: "Atores em Alta Hoje",
       searchPlaceholder: "Pesquisar pessoas, lugares e profissões",
+      isTrending: "está em alta hoje",
+      readFullStory: "Ler história completa",
     },
     news: {
       pageTitle: "Quem está em alta hoje?",
@@ -2356,6 +2376,8 @@ export const translations = {
       trendingSingers: "Ma Felkapott Énekesek",
       trendingActors: "Ma Felkapott Színészek",
       searchPlaceholder: "Személyek, helyek és foglalkozások keresése",
+      isTrending: "ma felkapott",
+      readFullStory: "Teljes történet elolvasása",
     },
     news: {
       pageTitle: "Ki a felkapott ma?",
@@ -2572,6 +2594,8 @@ export const translations = {
       trendingSingers: "Trending Zangers Vandaag",
       trendingActors: "Trending Acteurs Vandaag",
       searchPlaceholder: "Zoek personen, plaatsen en beroepen",
+      isTrending: "is vandaag trending",
+      readFullStory: "Lees het volledige verhaal",
     },
     news: {
       pageTitle: "Wie is vandaag trending?",
@@ -2801,6 +2825,8 @@ export const translations = {
       trendingSingers: "Piosenkarze w Trendach Dzisiaj",
       trendingActors: "Aktorzy w Trendach Dzisiaj",
       searchPlaceholder: "Szukaj osób, miejsc i zawodów",
+      isTrending: "jest dzisiaj w trendach",
+      readFullStory: "Przeczytaj pełną historię",
     },
     news: {
       pageTitle: "Kto jest dziś w trendach?",
