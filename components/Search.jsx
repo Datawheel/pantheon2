@@ -63,8 +63,7 @@ const SearchComponent = () => {
   // Function to fetch data from API
   const fetchData = async query => {
     if (!query || query.length < 3) {
-      // fetchLatestTrendData();
-      setResults(null);
+      fetchLatestTrendData();
       return;
     }
     try {

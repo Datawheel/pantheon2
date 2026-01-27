@@ -174,7 +174,6 @@ export async function GET(request) {
         .slice(0, limit)
     );
   } else {
-    // console.log("\n***NOT FOUND IN DB!****\n");
     if (occupation) {
       const todaysBiosFromDbCheck = await axios
         .get(
