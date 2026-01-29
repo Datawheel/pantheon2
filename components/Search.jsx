@@ -41,7 +41,7 @@ const SearchComponent = () => {
     const handleKeyDown = event => {
       if (event.key === "ArrowUp") {
         setActiveIndex(
-          prevIndex => (prevIndex - 1 + results.length) % results.length
+          prevIndex => (prevIndex - 1 + results.length) % results.length,
         );
       } else if (event.key === "ArrowDown") {
         setActiveIndex(prevIndex => (prevIndex + 1) % results.length);
@@ -68,14 +68,9 @@ const SearchComponent = () => {
     }
     try {
       setShowTrending(false);
-      let userQueryCleaned = trim(query).split(" ");
-      userQueryCleaned = userQueryCleaned.map(strip);
-      const lastItem = userQueryCleaned[userQueryCleaned.length - 1];
-      userQueryCleaned[userQueryCleaned.length - 1] = `${lastItem}:*`;
-      userQueryCleaned = userQueryCleaned.join("%26");
-
+      const cleanedQuery = trim(query);
       const response = await axios.get(
-        `https://api.pantheon.world/search?document=fts.${userQueryCleaned}&order=weight.desc.nullslast&limit=100`
+        `https://api.pantheon.world/rpc/search_hybrid?q=${cleanedQuery}&lim=50`,
       );
       setResults(response.data);
     } catch (error) {
