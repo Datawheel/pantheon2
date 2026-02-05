@@ -3,6 +3,7 @@
 import {useState, useEffect} from "react";
 import Link from "next/link";
 import {getTranslations} from "/app/translations";
+import {PUBLIC_API} from "@/app/constants";
 import "./TrendingExcerpt.css";
 
 export default function TrendingExcerpt({trendingPeople, currentLang, allBios = []}) {
@@ -25,7 +26,7 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
 
       try {
         const response = await fetch(
-          `https://api.pantheon.world/trend_news?date=eq.${yesterday}&lang=eq.${currentLang}&slug=in.(${firstRowSlugs.join(",")})&select=slug,title,reason,llm_metadata`,
+          `${PUBLIC_API}/trend_news?date=eq.${yesterday}&lang=eq.${currentLang}&slug=in.(${firstRowSlugs.join(",")})&select=slug,title,reason,llm_metadata`,
           {cache: "force-cache"}
         );
         const data = await response.json();

@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import {useRef, useEffect, useState} from "react";
+import {PUBLIC_API} from "@/app/constants";
 import Link from "next/link";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import PersonImage from "./PersonImage";
@@ -92,7 +93,7 @@ export default function PhotoCarousel({
           )},${rankAccessor},slug,gender,name,id,birthyear,deathyear`;
           // console.log("morePeopleUrl", morePeopleUrl);
           const newPeopleResults = await axios.get(
-            `https://api.pantheon.world${morePeopleUrl}`
+            `${PUBLIC_API}${morePeopleUrl}`
           );
           const replacementPeople = newPeopleResults.data.sort(
             (personA, personB) => personA[rankAccessor] - personB[rankAccessor]

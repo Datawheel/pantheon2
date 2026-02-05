@@ -6,7 +6,7 @@ import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 import {useEffect, useState} from "react";
 import dynamic from "next/dynamic";
-import {BASE_API} from "@/app/constants";
+import {PUBLIC_API} from "@/app/constants";
 
 // Load EChart only on the client
 const PageViewsByLangAreaPlot = dynamic(
@@ -106,7 +106,7 @@ export default function PageViewsByLang({person, slug, title}) {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${BASE_API}/pageviews?wp_id=eq.${person.id}`
+          `${PUBLIC_API}/pageviews?wp_id=eq.${person.id}`
         );
         const data = await response.json();
         const [formattedData, langCount] = formatTimeSeriesData(data);

@@ -3,6 +3,7 @@ import {strip, trim} from "d3plus-text";
 import axios from "axios";
 import {Icon, NonIdealState} from "@blueprintjs/core";
 import {useSearchVisibility} from "/contexts/SearchContext";
+import {PUBLIC_API} from "@/app/constants";
 import "/components/Search.css";
 
 const SearchComponent = () => {
@@ -70,7 +71,7 @@ const SearchComponent = () => {
       setShowTrending(false);
       const cleanedQuery = trim(query);
       const response = await axios.get(
-        `https://api.pantheon.world/rpc/search_hybrid?q=${cleanedQuery}&lim=50`,
+        `${PUBLIC_API}/rpc/search_hybrid?q=${cleanedQuery}&lim=50`,
       );
       setResults(response.data);
     } catch (error) {

@@ -4,7 +4,7 @@ import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 import {useEffect, useState} from "react";
-import {BASE_API} from "@/app/constants";
+import {PUBLIC_API} from "@/app/constants";
 import MemMetricsBullet from "./MemMetricsBullet";
 
 export default function MemMetrics({person, personRanks, slug, title}) {
@@ -22,9 +22,9 @@ export default function MemMetrics({person, personRanks, slug, title}) {
         // Make API calls concurrently
         const [occupationResponse, totalViewsResponse] = await Promise.all([
           fetch(
-            `${BASE_API}/pageviews_occupation?occupation=eq.${person.occupation?.id}`
+            `${PUBLIC_API}/pageviews_occupation?occupation=eq.${person.occupation?.id}`
           ),
-          fetch(`${BASE_API}/pageviews_rolling_12mo?wp_id=eq.${person.id}`),
+          fetch(`${PUBLIC_API}/pageviews_rolling_12mo?wp_id=eq.${person.id}`),
         ]);
 
         const [occupationData, totalViewsData] = await Promise.all([
