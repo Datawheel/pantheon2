@@ -22,17 +22,31 @@ import GoogleAdSense from "/components/common/GoogleAdSense";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
 import rankless from "/data/rankless.json";
 
-async function getPerson(id, lang = "en") {
-  const res = await fetch(
-    `${BASE_API}/person?slug=eq.${id}&select=*,occupation(id,occupation,occupation_slug,domain_slug,num_born,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place),dplace_geonameid(slug,place)`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+// Safe JSON fetch with logging for debugging HTML responses
+async function safeFetchJson(url, options = {}, fallback = null) {
+  try {
+    const res = await fetch(url, options);
+    if (!res.ok) {
+      console.error(`[safeFetchJson] HTTP ${res.status} for: ${url}`);
+      return fallback;
     }
-  );
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[safeFetchJson] Got HTML instead of JSON for: ${url}`);
+      console.error(`[safeFetchJson] HTML preview: ${text.slice(0, 200)}`);
+      return fallback;
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[safeFetchJson] Error for ${url}: ${e.message}`);
+    return fallback;
+  }
+}
 
-  if (!res.ok) return null;
+async function getPerson(id, lang = "en") {
+  const url = `${BASE_API}/person?slug=eq.${id}&select=*,occupation(id,occupation,occupation_slug,domain_slug,num_born,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place),dplace_geonameid(slug,place)`;
+  const data = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, null);
 
-  const data = await res.json().catch(() => null);
   if (!data) return null;
 
   // Check if the specific message exists in the response
@@ -45,14 +59,8 @@ async function getPerson(id, lang = "en") {
 }
 
 async function getPersonRanks(id) {
-  const res = await fetch(`${BASE_API}/person_ranks?slug=eq.${id}&select=l,l_prev,hpi,occupation_rank,occupation_rank_prev,bplace_country_rank,bplace_country_rank_prev,bplace_country_occupation_rank,occupation_rank_unique,bplace_country_rank_unique,bplace_country_occupation_rank_unique,birthyear_rank_unique,deathyear_rank_unique,bplace_country`, {
-    method: "GET",
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
-
-  if (!res.ok) return {};
-
-  const data = await res.json().catch(() => null);
+  const url = `${BASE_API}/person_ranks?slug=eq.${id}&select=l,l_prev,hpi,occupation_rank,occupation_rank_prev,bplace_country_rank,bplace_country_rank_prev,bplace_country_occupation_rank,occupation_rank_unique,bplace_country_rank_unique,bplace_country_occupation_rank_unique,birthyear_rank_unique,deathyear_rank_unique,bplace_country`;
+  const data = await safeFetchJson(url, {method: "GET", next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 
   // Return first item if array has content, otherwise empty object
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
@@ -63,29 +71,17 @@ async function getWikiExtract(personSlug, localizedName, lang = "en") {
     "User-Agent":
       "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
   };
-  const revalidate = {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}};
+  const options = {headers, next: {revalidate: REVALIDATE_PERIODS.DEFAULT}};
 
   // For English, use the slug directly
   if (lang === "en") {
-    const res = await fetch(
-      `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info&inprop=url&exsentences=4&explaintext&exsectionformat=wiki&exintro&titles=${encodeURIComponent(
-        personSlug
-      )}&format=json&exlimit=1&origin=*`,
-      {headers, ...revalidate}
-    );
-    if (!res.ok) return {};
-    return res.json().catch(() => ({}));
+    const url = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|info&inprop=url&exsentences=4&explaintext&exsectionformat=wiki&exintro&titles=${encodeURIComponent(personSlug)}&format=json&exlimit=1&origin=*`;
+    return await safeFetchJson(url, options, {});
   }
 
   // Step 1: Get langlink from English Wikipedia to target language
-  const langLinkRes = await fetch(
-    `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(
-      personSlug
-    )}&prop=langlinks&lllimit=500&llprop=url&lllang=${lang}&format=json&origin=*`,
-    {headers, ...revalidate}
-  );
-  if (!langLinkRes.ok) return {};
-  const langLinkData = await langLinkRes.json().catch(() => ({}));
+  const langLinkUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(personSlug)}&prop=langlinks&lllimit=500&llprop=url&lllang=${lang}&format=json&origin=*`;
+  const langLinkData = await safeFetchJson(langLinkUrl, options, {});
 
   // Extract the langlink URL and title
   let targetTitle = null;
@@ -108,14 +104,8 @@ async function getWikiExtract(personSlug, localizedName, lang = "en") {
   }
 
   // Step 2: Get extract from target language Wikipedia
-  const extractRes = await fetch(
-    `https://${lang}.wikipedia.org/w/api.php?action=query&prop=extracts|info&inprop=url&exsentences=4&explaintext&exsectionformat=wiki&exintro&titles=${encodeURIComponent(
-      targetTitle
-    )}&format=json&exlimit=1&origin=*`,
-    {headers, ...revalidate}
-  );
-  if (!extractRes.ok) return {};
-  const extractData = await extractRes.json().catch(() => ({}));
+  const extractUrl = `https://${lang}.wikipedia.org/w/api.php?action=query&prop=extracts|info&inprop=url&exsentences=4&explaintext&exsectionformat=wiki&exintro&titles=${encodeURIComponent(targetTitle)}&format=json&exlimit=1&origin=*`;
+  const extractData = await safeFetchJson(extractUrl, options, {});
 
   // If we got a URL from langlinks, inject it into the extract data
   if (targetUrl && extractData.query && extractData.query.pages) {
@@ -139,66 +129,46 @@ async function getWikiExtract(personSlug, localizedName, lang = "en") {
 // }
 
 async function getBooks(personId) {
-  const res = await fetch(`${process.env.URL}/api/books?id=${personId}`, {
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
-  if (!res.ok) return [];
-  return res.json().catch(() => []);
+  const url = `${process.env.URL}/api/books?id=${personId}`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getMovies(personId) {
-  const res = await fetch(`${process.env.URL}/api/movies?id=${personId}`, {
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
-  if (!res.ok) return [];
-  return res.json().catch(() => []);
+  const url = `${process.env.URL}/api/movies?id=${personId}`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPersonTrending(slug, userLang, date) {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
 
   // Fetch trending records across all languages (top 12 only)
-  const trendRecords = await fetch(
-    `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.12&date=eq.${date}&select=lang,rank_pantheon`,
-    {next: {revalidate: REVALIDATE_PERIODS.SHORT}}
-  )
-    .then(r => r.json())
-    .catch(() => []);
+  const trendUrl = `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.12&date=eq.${date}&select=lang,rank_pantheon`;
+  const trendRecords = await safeFetchJson(trendUrl, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
 
   // Build ranksByLang map
-  const ranksByLang = trendRecords.reduce((acc, record) => {
+  const ranksByLang = (trendRecords || []).reduce((acc, record) => {
     acc[record.lang] = record.rank_pantheon;
     return acc;
   }, {});
 
   // Fetch localized reason
-  const reasonRecords = await fetch(
-    `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}&select=reason,llm_metadata,title`,
-    {next: {revalidate: REVALIDATE_PERIODS.SHORT}}
-  )
-    .then(r => r.json())
-    .catch(() => []);
+  const reasonUrl = `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}&select=reason,llm_metadata,title`;
+  const reasonRecords = await safeFetchJson(reasonUrl, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
 
   return {
-    isTrending: trendRecords.length > 0,
-    languages: trendRecords.map(r => r.lang),
+    isTrending: (trendRecords || []).length > 0,
+    languages: (trendRecords || []).map(r => r.lang),
     ranksByLang,
-    trendingReason: reasonRecords[0]?.reason || null,
-    llmMetadata: reasonRecords[0]?.llm_metadata || null,
-    localizedName: reasonRecords[0]?.title || null,
+    trendingReason: reasonRecords?.[0]?.reason || null,
+    llmMetadata: reasonRecords?.[0]?.llm_metadata || null,
+    localizedName: reasonRecords?.[0]?.title || null,
   };
 }
 
 async function getPageViews(personId, lang = "en") {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
-
-  const pageviews = await fetch(
-    `${baseApi}/pageviews?lang=eq.${lang}&wp_id=eq.${personId}&select=date,views&order=date.asc`,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}
-  )
-    .then(r => r.json())
-    .catch(() => []);
-
+  const url = `${baseApi}/pageviews?lang=eq.${lang}&wp_id=eq.${personId}&select=date,views&order=date.asc`;
+  const pageviews = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
   return Array.isArray(pageviews) ? pageviews : [];
 }
 
