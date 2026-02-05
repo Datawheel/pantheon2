@@ -30,21 +30,18 @@ async function getPerson(id, lang = "en") {
     }
   );
 
-  // Clone the response to check the body for the no rows message
-  const clonedRes = res.clone();
+  if (!res.ok) return null;
 
-  // Attempt to parse the cloned response as JSON to inspect the message
-  const data = await clonedRes.json().catch(() => null);
+  const data = await res.json().catch(() => null);
+  if (!data) return null;
 
   // Check if the specific message exists in the response
-  if (data && data.details && data.details.includes("Results contain 0 rows")) {
+  if (data.details && data.details.includes("Results contain 0 rows")) {
     return null;
   }
 
-  const jsonData = await res.json();
-
   // Return first item if array has content, otherwise empty object
-  return Array.isArray(jsonData) && jsonData.length > 0 ? jsonData[0] : null;
+  return Array.isArray(data) && data.length > 0 ? data[0] : null;
 }
 
 async function getPersonRanks(id) {
@@ -53,7 +50,9 @@ async function getPersonRanks(id) {
     next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
   });
 
-  const data = await res.json();
+  if (!res.ok) return {};
+
+  const data = await res.json().catch(() => null);
 
   // Return first item if array has content, otherwise empty object
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
@@ -74,7 +73,8 @@ async function getWikiExtract(personSlug, localizedName, lang = "en") {
       )}&format=json&exlimit=1&origin=*`,
       {headers, ...revalidate}
     );
-    return res.json();
+    if (!res.ok) return {};
+    return res.json().catch(() => ({}));
   }
 
   // Step 1: Get langlink from English Wikipedia to target language
@@ -84,7 +84,8 @@ async function getWikiExtract(personSlug, localizedName, lang = "en") {
     )}&prop=langlinks&lllimit=500&llprop=url&lllang=${lang}&format=json&origin=*`,
     {headers, ...revalidate}
   );
-  const langLinkData = await langLinkRes.json();
+  if (!langLinkRes.ok) return {};
+  const langLinkData = await langLinkRes.json().catch(() => ({}));
 
   // Extract the langlink URL and title
   let targetTitle = null;
@@ -113,7 +114,8 @@ async function getWikiExtract(personSlug, localizedName, lang = "en") {
     )}&format=json&exlimit=1&origin=*`,
     {headers, ...revalidate}
   );
-  const extractData = await extractRes.json();
+  if (!extractRes.ok) return {};
+  const extractData = await extractRes.json().catch(() => ({}));
 
   // If we got a URL from langlinks, inject it into the extract data
   if (targetUrl && extractData.query && extractData.query.pages) {
@@ -140,14 +142,16 @@ async function getBooks(personId) {
   const res = await fetch(`${process.env.URL}/api/books?id=${personId}`, {
     next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
   });
-  return res.json();
+  if (!res.ok) return [];
+  return res.json().catch(() => []);
 }
 
 async function getMovies(personId) {
   const res = await fetch(`${process.env.URL}/api/movies?id=${personId}`, {
     next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
   });
-  return res.json();
+  if (!res.ok) return [];
+  return res.json().catch(() => []);
 }
 
 async function getPersonTrending(slug, userLang, date) {

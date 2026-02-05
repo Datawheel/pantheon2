@@ -63,7 +63,7 @@ export async function GET(request) {
   // Get localized occupation, fallback to English occupation
   const localizedOccupation = occupation?.[`${locale}_occupation`] || occupation?.occupation;
 
-  if (!name) {
+  if (!localizedName) {
     return new NextResponse("ID mismatch", {status: 404});
   }
   const backgroundColor = COLORS_DOMAIN[occupation.domain_slug];
