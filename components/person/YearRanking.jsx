@@ -15,10 +15,24 @@ async function getBirthYearRankings(
   birthYearRankLow,
   birthYearRankHigh
 ) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?birthyear=eq.${birthYear}&birthyear_rank_unique=gte.${birthYearRankLow}&birthyear_rank_unique=lte.${birthYearRankHigh}&order=birthyear_rank_unique&select=occupation,bplace_country,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear`
-  );
-  return res.json();
+  try {
+    const res = await fetch(
+      `${BASE_API}/person_ranks?birthyear=eq.${birthYear}&birthyear_rank_unique=gte.${birthYearRankLow}&birthyear_rank_unique=lte.${birthYearRankHigh}&order=birthyear_rank_unique&select=occupation,bplace_country,hpi,birthyear_rank,birthyear_rank_unique,slug,gender,name,id,birthyear,deathyear`
+    );
+    if (!res.ok) {
+      console.error(`[getBirthYearRankings] HTTP ${res.status}`);
+      return [];
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getBirthYearRankings] Got HTML instead of JSON`);
+      return [];
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getBirthYearRankings] Error: ${e.message}`);
+    return [];
+  }
 }
 
 async function getDeathYearRankings(
@@ -26,10 +40,24 @@ async function getDeathYearRankings(
   deathYearRankLow,
   deathYearRankHigh
 ) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?deathyear=eq.${deathyear}&deathyear_rank_unique=gte.${deathYearRankLow}&deathyear_rank_unique=lte.${deathYearRankHigh}&order=deathyear_rank_unique&select=occupation,dplace_country,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear`
-  );
-  return res.json();
+  try {
+    const res = await fetch(
+      `${BASE_API}/person_ranks?deathyear=eq.${deathyear}&deathyear_rank_unique=gte.${deathYearRankLow}&deathyear_rank_unique=lte.${deathYearRankHigh}&order=deathyear_rank_unique&select=occupation,dplace_country,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear`
+    );
+    if (!res.ok) {
+      console.error(`[getDeathYearRankings] HTTP ${res.status}`);
+      return [];
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getDeathYearRankings] Got HTML instead of JSON`);
+      return [];
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getDeathYearRankings] Error: ${e.message}`);
+    return [];
+  }
 }
 
 export default async function YearRanking({person, personRanks, title, slug}) {

@@ -26,6 +26,10 @@ export default async function NewsPage({params, searchParams}) {
   const targetDate = dateParam ? dayjs(dateParam) : dayjs();
   const formattedDate = targetDate.format("YYYY-MM-DD");
 
+  // Get model from query params (perplexity or grok)
+  const modelParam = searchParams?.model;
+  const currentModel = ["perplexity", "grok"].includes(modelParam) ? modelParam : "perplexity";
+
   // Fetch data from 1 day prior (trending data is for previous day)
   const dataFetchDate = targetDate.subtract(1, "day").format("YYYY-MM-DD");
 
@@ -128,7 +132,7 @@ export default async function NewsPage({params, searchParams}) {
       const reasonsData = await fetch(
         `${
           process.env.BASE_API || "https://api.pantheon.world"
-        }/trend_news?date=eq.${dataFetchDate}&lang=eq.${lang}&select=slug,title,reason,llm_metadata`,
+        }/trend_news?date=eq.${dataFetchDate}&lang=eq.${lang}&llm_provider=eq.${currentModel}&select=slug,title,reason,llm_metadata`,
         {
           next: {revalidate: REVALIDATE_PERIODS.SHORT * 2},
         }
@@ -173,6 +177,7 @@ export default async function NewsPage({params, searchParams}) {
       languageSections={languageSections}
       currentLang={lang}
       currentDate={formattedDate}
+      currentModel={currentModel}
     />
   );
 }

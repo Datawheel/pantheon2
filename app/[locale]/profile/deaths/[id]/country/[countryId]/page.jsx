@@ -5,40 +5,21 @@ import Header from "/components/deaths/Header";
 import TopPeople from "/components/deaths/TopPeople";
 import DeathsByMonth from "/components/deaths/DeathsByMonth";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
 
 async function getCountry(countryId) {
-  const res = await fetch(`${BASE_API}/country?slug=eq.${countryId}`, {
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch country: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  // Return first item if array has content, otherwise empty object
-  return Array.isArray(data) && data.length > 0 ? data[0] : {};
+  const url = `${BASE_API}/country?slug=eq.${countryId}`;
+  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
 }
 
 async function getPeopleDiedThisYear(yearNum) {
-  const res = await fetch(
-    `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(id,country,slug,demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(id,country,slug,demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedThisYearHpi(yearNum) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi,hpi_prev,non_en_page_views`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 export async function generateMetadata({params}, parent) {

@@ -12,9 +12,13 @@ import "./TrendingNews.css";
 
 dayjs.extend(advancedFormat);
 
-export default function TrendingNews({languageSections, currentLang, currentDate}) {
+export default function TrendingNews({languageSections, currentLang, currentDate, currentModel}) {
   const router = useRouter();
   const t = getTranslations(currentLang);
+
+  const handleModelChange = model => {
+    router.push(`/${currentLang}/news?date=${dateValue}&model=${model}`);
+  };
 
   // Format date in the current language using Intl.DateTimeFormat
   const dateObj = new Date(currentDate + "T12:00:00Z");
@@ -28,12 +32,12 @@ export default function TrendingNews({languageSections, currentLang, currentDate
   const dateValue = dayjs(currentDate).format("YYYY-MM-DD");
 
   const handleLanguageChange = lang => {
-    router.push(`/${lang}/news?date=${dateValue}`);
+    router.push(`/${lang}/news?date=${dateValue}&model=${currentModel}`);
   };
 
   const handleDateChange = e => {
     const newDate = e.target.value;
-    router.push(`/${currentLang}/news?date=${newDate}`);
+    router.push(`/${currentLang}/news?date=${newDate}&model=${currentModel}`);
   };
 
   // Get trending reason from API data
@@ -152,6 +156,24 @@ export default function TrendingNews({languageSections, currentLang, currentDate
             min="2026-01-05"
             max={dayjs().format("YYYY-MM-DD")}
           />
+        </div>
+
+        <div className="model-selector">
+          <label>{t.news?.selectModel || "AI Model"}:</label>
+          <div className="model-toggle">
+            <button
+              className={`model-btn ${currentModel === "perplexity" ? "active" : ""}`}
+              onClick={() => handleModelChange("perplexity")}
+            >
+              Perplexity
+            </button>
+            <button
+              className={`model-btn ${currentModel === "grok" ? "active" : ""}`}
+              onClick={() => handleModelChange("grok")}
+            >
+              Grok
+            </button>
+          </div>
         </div>
       </div>
 

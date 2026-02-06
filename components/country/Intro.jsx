@@ -5,15 +5,29 @@ import {plural} from "pluralize";
 import "../common/Intro.css";
 
 async function getWikiSummary(countryName) {
-  const res = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/summary/${countryName}`,
-    {
-      headers: {
-        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+  try {
+    const res = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${countryName}`,
+      {
+        headers: {
+          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+        }
       }
+    );
+    if (!res.ok) {
+      console.error(`[getWikiSummary] HTTP ${res.status} for: ${countryName}`);
+      return null;
     }
-  );
-  return res.json();
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getWikiSummary] Got HTML instead of JSON for: ${countryName}`);
+      return null;
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getWikiSummary] Error for ${countryName}: ${e.message}`);
+    return null;
+  }
 }
 
 export default async function Intro({

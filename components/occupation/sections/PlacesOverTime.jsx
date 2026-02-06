@@ -6,10 +6,25 @@ import {toTitleCase} from "../../utils/vizHelpers";
 import {COLORS_CONTINENT} from "../../utils/consts";
 import {FORMATTERS} from "../../utils/consts";
 import SectionLayout from "../../common/SectionLayout";
+import {BASE_API} from "/app/constants";
 
 async function getEras() {
-  const res = await fetch("https://api.pantheon.world/era?order=start_year");
-  return res.json();
+  try {
+    const res = await fetch(`${BASE_API}/era?order=start_year`);
+    if (!res.ok) {
+      console.error(`[getEras] HTTP ${res.status}`);
+      return [];
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getEras] Got HTML instead of JSON`);
+      return [];
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getEras] Error: ${e.message}`);
+    return [];
+  }
 }
 
 export default async function PlacesOverTime({
@@ -35,9 +50,9 @@ export default async function PlacesOverTime({
     .key(p => p.era)
     .entries(people.filter(p => p.era))
     .sort((a, b) => b.values.length - a.values.length);
-  const eraWithMostPeople = eras.filter(
-    e => e.id.toString() === peopleByEra[0].key
-  )[0];
+  const eraWithMostPeople = peopleByEra.length && eras.length
+    ? eras.find(e => e.id.toString() === peopleByEra[0].key)
+    : null;
 
   const tmapBornData = people
     .filter(
@@ -187,13 +202,17 @@ export default async function PlacesOverTime({
             name={d => d.name}
             url={d => `/profile/person/${d.slug}/`}
           />
-          .&nbsp; The concentration of{" "}
-          {plural(occupation.occupation.toLowerCase())} was largest during the{" "}
-          <a href={`/profile/era/${eraWithMostPeople.slug}`}>
-            {eraWithMostPeople.name}
-          </a>
-          , which lasted from {FORMATTERS.year(eraWithMostPeople.start_year)} to{" "}
-          {FORMATTERS.year(eraWithMostPeople.end_year)}. Some birth or death
+          .&nbsp;{eraWithMostPeople ? (
+            <>
+              {" "}The concentration of{" "}
+              {plural(occupation.occupation.toLowerCase())} was largest during the{" "}
+              <a href={`/profile/era/${eraWithMostPeople.slug}`}>
+                {eraWithMostPeople.name}
+              </a>
+              , which lasted from {FORMATTERS.year(eraWithMostPeople.start_year)} to{" "}
+              {FORMATTERS.year(eraWithMostPeople.end_year)}.
+            </>
+          ) : null} Some birth or death
           locations for earlier {plural(occupation.occupation.toLowerCase())}{" "}
           are unknown, which may account for timeline differences below.
         </p>

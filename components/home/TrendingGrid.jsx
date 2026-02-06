@@ -50,7 +50,18 @@ export default function TrendingGrid({
       const res = await fetch(trendingUrl, {
         cache: "force-cache", // Use browser cache if available
       });
-      const data = await res.json();
+      if (!res.ok) {
+        console.error(`Error fetching trending data: HTTP ${res.status}`);
+        setLoading(false);
+        return;
+      }
+      const text = await res.text();
+      if (text.startsWith("<")) {
+        console.error("Error fetching trending data: Got HTML instead of JSON");
+        setLoading(false);
+        return;
+      }
+      const data = JSON.parse(text);
       setTrendingAll(data);
     } catch (error) {
       console.error("Error fetching trending data:", error);

@@ -14,10 +14,24 @@ async function getBirthCountryRankings(
   birthCountryRankLow,
   birthCountryRankHigh
 ) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?bplace_country=eq.${birthCountryId}&bplace_country_rank_unique=gte.${birthCountryRankLow}&bplace_country_rank_unique=lte.${birthCountryRankHigh}&order=bplace_country_rank_unique&select=bplace_country,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,deathyear,birthyear,occupation`
-  );
-  return res.json();
+  try {
+    const res = await fetch(
+      `${BASE_API}/person_ranks?bplace_country=eq.${birthCountryId}&bplace_country_rank_unique=gte.${birthCountryRankLow}&bplace_country_rank_unique=lte.${birthCountryRankHigh}&order=bplace_country_rank_unique&select=bplace_country,hpi,bplace_country_rank,bplace_country_rank_unique,slug,gender,name,id,deathyear,birthyear,occupation`
+    );
+    if (!res.ok) {
+      console.error(`[getBirthCountryRankings] HTTP ${res.status}`);
+      return [];
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getBirthCountryRankings] Got HTML instead of JSON`);
+      return [];
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getBirthCountryRankings] Error: ${e.message}`);
+    return [];
+  }
 }
 
 export default async function CountryRanking({

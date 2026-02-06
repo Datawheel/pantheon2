@@ -13,90 +13,46 @@ import {
 import OccupationTrends from "../../../../../components/place/sections/OccupationTrends";
 import Lifespans from "../../../../../components/place/sections/Lifespans";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
 
 async function getPlace(id) {
-  const res = await fetch(`${BASE_API}/place?slug=eq.${id}`);
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch place: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  // Return first item if array has content, otherwise empty object
-  return Array.isArray(data) && data.length > 0 ? data[0] : {};
+  const url = `${BASE_API}/place?slug=eq.${id}`;
+  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
 }
 
 async function getOccupations() {
-  const res = await fetch(
-    `${BASE_API}/occupation?order=num_born.desc.nullslast`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getCountry(countryId) {
-  const res = await fetch(`${BASE_API}/country?id=eq.${countryId}`, {
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch country: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  // Return first item if array has content, otherwise empty object
-  return Array.isArray(data) && data.length > 0 ? data[0] : {};
+  const url = `${BASE_API}/country?id=eq.${countryId}`;
+  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
 }
 
 async function getPlaceRanks(placeRankLow, placeRankHigh) {
-  const res = await fetch(
-    `${BASE_API}/place?born_rank_unique=gte.${placeRankLow}&born_rank_unique=lte.${placeRankHigh}&order=born_rank_unique`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/place?born_rank_unique=gte.${placeRankLow}&born_rank_unique=lte.${placeRankHigh}&order=born_rank_unique`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleBornHere(placeId) {
-  const res = await fetch(
-    `${BASE_API}/person?bplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person?bplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleBornHereHpi(placeId) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person_ranks?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedHere(placeId) {
-  const res = await fetch(
-    `${BASE_API}/person?dplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`
-  );
-  return res.json();
+  const url = `${BASE_API}/person?dplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedHereHpi(placeId) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?dplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person_ranks?dplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 export async function generateMetadata({params}, parent) {

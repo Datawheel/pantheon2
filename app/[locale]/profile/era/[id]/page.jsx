@@ -13,84 +13,41 @@ import Occupations from "/components/era/sections/Occupations";
 //   NUM_RANKINGS_POST,
 // } from "/components/utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
 
 async function getOccupations() {
-  const res = await fetch(
-    `${BASE_API}/occupation?order=num_born.desc.nullslast`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getEras() {
-  const res = await fetch(`${BASE_API}/era?order=start_year`, {
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
-  return res.json();
+  const url = `${BASE_API}/era?order=start_year`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getEra(eraId) {
-  const res = await fetch(`${BASE_API}/era?slug=eq.${eraId}`, {
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch era: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  // Return first item if array has content, otherwise empty object
-  return Array.isArray(data) && data.length > 0 ? data[0] : {};
+  const url = `${BASE_API}/era?slug=eq.${eraId}`;
+  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
 }
 
-// async function getCountryRanks(countryRankLow, countryRankHigh) {
-//   const res = await fetch(
-//     `https://api.pantheon.world/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`
-//   );
-//   return res.json();
-// }
-
 async function getPeopleBornInEra(startYear, endYear) {
-  const res = await fetch(
-    `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleBornInEraHpi(startYear, endYear) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person_ranks?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedInEra(startYear, endYear) {
-  const res = await fetch(
-    `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedInEraHpi(startYear, endYear) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person_ranks?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 export async function generateMetadata({params}, parent) {

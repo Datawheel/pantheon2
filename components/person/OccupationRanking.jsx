@@ -17,10 +17,24 @@ async function getOccupationRankings(
   occupationRankLow,
   occupationRankHigh
 ) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`
-  );
-  return res.json();
+  try {
+    const res = await fetch(
+      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`
+    );
+    if (!res.ok) {
+      console.error(`[getOccupationRankings] HTTP ${res.status}`);
+      return [];
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getOccupationRankings] Got HTML instead of JSON`);
+      return [];
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getOccupationRankings] Error: ${e.message}`);
+    return [];
+  }
 }
 
 export default async function OccupationRanking({

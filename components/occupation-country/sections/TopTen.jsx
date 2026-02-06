@@ -31,17 +31,31 @@ async function getLanguageLinks(pageIds, targetLang) {
     return null;
   }
 
-  const res = await fetch(
-    `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=langlinks&lllang=${targetLang}&pageids=${pageIds}&origin=*`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-      },
+  try {
+    const res = await fetch(
+      `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=langlinks&lllang=${targetLang}&pageids=${pageIds}&origin=*`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+        },
+      }
+    );
+    if (!res.ok) {
+      console.error(`[getLanguageLinks] HTTP ${res.status}`);
+      return null;
     }
-  );
-  return res.json();
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getLanguageLinks] Got HTML instead of JSON`);
+      return null;
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getLanguageLinks] Error: ${e.message}`);
+    return null;
+  }
 }
 
 async function getWikiPageSummaries(top10Ids, locale = "en") {
@@ -66,17 +80,31 @@ async function getWikiPageSummaries(top10Ids, locale = "en") {
 
   if (wikiLang === "en") {
     // Fetch from English Wikipedia directly
-    const res = await fetch(
-      `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&pageids=${top10Ids}&origin=*`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-        },
+    try {
+      const res = await fetch(
+        `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&pageids=${top10Ids}&origin=*`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+          },
+        }
+      );
+      if (!res.ok) {
+        console.error(`[getWikiPageSummaries] HTTP ${res.status}`);
+        return { query: { pages: {} } };
       }
-    );
-    return res.json();
+      const text = await res.text();
+      if (text.startsWith("<")) {
+        console.error(`[getWikiPageSummaries] Got HTML instead of JSON`);
+        return { query: { pages: {} } };
+      }
+      return JSON.parse(text);
+    } catch (e) {
+      console.error(`[getWikiPageSummaries] Error: ${e.message}`);
+      return { query: { pages: {} } };
+    }
   }
 
   // First, get language links from English Wikipedia
@@ -102,17 +130,32 @@ async function getWikiPageSummaries(top10Ids, locale = "en") {
 
   // Fetch summaries from the localized Wikipedia using titles
   const titles = Object.values(pageIdToLocalizedTitle).join("|");
-  const res = await fetch(
-    `https://${wikiLang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${encodeURIComponent(titles)}&origin=*`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-      },
+  let localizedData;
+  try {
+    const res = await fetch(
+      `https://${wikiLang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${encodeURIComponent(titles)}&origin=*`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
+        },
+      }
+    );
+    if (!res.ok) {
+      console.error(`[getWikiPageSummaries] HTTP ${res.status} for localized wiki`);
+      return { query: { pages: {} } };
     }
-  );
-  const localizedData = await res.json();
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getWikiPageSummaries] Got HTML instead of JSON for localized wiki`);
+      return { query: { pages: {} } };
+    }
+    localizedData = JSON.parse(text);
+  } catch (e) {
+    console.error(`[getWikiPageSummaries] Error for localized wiki: ${e.message}`);
+    return { query: { pages: {} } };
+  }
 
   // Map the localized page IDs back to original English page IDs
   if (!localizedData.query || !localizedData.query.pages) {
