@@ -11,6 +11,10 @@ import {
 } from "../../utils/vizHelpers";
 
 export default function PStacked({data, occupations, show, yearType}) {
+  if (!data || !data.length || !occupations || !occupations.length) {
+    return <div>No data available</div>;
+  }
+
   let depth = 2;
   let dataFilter = d => d.occupation;
   const occsObj = occupations.reduce((obj, d) => ({...obj, [d.id]: d}), {});

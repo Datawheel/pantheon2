@@ -2,7 +2,10 @@ import PlacesMap from "./vizes/PlacesMap";
 import SectionLayout from "../../common/SectionLayout";
 
 export default function Places({country, peopleBorn, peopleDied, slug, title}) {
-  const tmapBornData = peopleBorn
+  const safePeopleBorn = peopleBorn || [];
+  const safePeopleDied = peopleDied || [];
+
+  const tmapBornData = safePeopleBorn
     .filter(p => p.birthyear !== null)
     .sort((a, b) => b.l - a.l);
 
@@ -28,7 +31,7 @@ export default function Places({country, peopleBorn, peopleDied, slug, title}) {
     d.place_coord.reverse();
   });
 
-  const tmapDeathData = peopleDied
+  const tmapDeathData = safePeopleDied
     .filter(p => p.deathyear !== null && p.occupation !== null)
     .sort((a, b) => b.l - a.l);
 

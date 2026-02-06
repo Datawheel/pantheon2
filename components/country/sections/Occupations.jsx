@@ -12,7 +12,10 @@ export default async function Occupations({
   title,
   slug,
 }) {
-  const tmapBornData = peopleBorn
+  const safePeopleBorn = peopleBorn || [];
+  const safePeopleDied = peopleDied || [];
+
+  const tmapBornData = safePeopleBorn
     .filter(p => p.birthyear !== null && p.occupation !== null)
     .sort((a, b) => b.l - a.l);
 
@@ -23,7 +26,7 @@ export default async function Occupations({
     d.place = d.bplace_geonameid;
   });
 
-  const tmapDeathData = peopleDied
+  const tmapDeathData = safePeopleDied
     .filter(p => p.deathyear !== null && p.occupation !== null)
     .sort((a, b) => b.l - a.l);
 
@@ -42,7 +45,7 @@ export default async function Occupations({
       num_born: leaves.length,
       occupation: leaves[0].occupation,
     }))
-    .entries(peopleBorn.filter(d => d.occupation_id))
+    .entries(safePeopleBorn.filter(d => d.occupation_id && d.occupation))
     .sort((a, b) => b.value.num_born - a.value.num_born)
     .map(d => d.value);
   const occupationsDied = nest()
@@ -51,7 +54,7 @@ export default async function Occupations({
       num_died: leaves.length,
       occupation: leaves[0].occupation,
     }))
-    .entries(peopleDied.filter(d => d.occupation_id))
+    .entries(safePeopleDied.filter(d => d.occupation_id && d.occupation))
     .sort((a, b) => b.value.num_died - a.value.num_died)
     .map(d => d.value);
 
@@ -61,7 +64,7 @@ export default async function Occupations({
         <p>
           Most individuals born in present day {country.country} were&nbsp;
           <AnchorList
-            items={occupationsBorn.slice(0, 5)}
+            items={occupationsBorn.slice(0, 5).filter(d => d.occupation)}
             name={d =>
               `${plural(d.occupation.occupation.toLowerCase())} (${d.num_born})`
             }
@@ -69,7 +72,7 @@ export default async function Occupations({
           />
           ,&nbsp; while most who died were&nbsp;
           <AnchorList
-            items={occupationsDied.slice(0, 5)}
+            items={occupationsDied.slice(0, 5).filter(d => d.occupation)}
             name={d =>
               `${plural(d.occupation.occupation.toLowerCase())} (${d.num_died})`
             }

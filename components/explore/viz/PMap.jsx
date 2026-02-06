@@ -3,6 +3,10 @@ import {RESET} from "d3plus-common";
 import {groupTooltip} from "../../utils/vizHelpers";
 
 export default function PMap({data}) {
+  if (!data || !data.length) {
+    return <div>No data available</div>;
+  }
+
   const geomapData = data
     .filter(
       d =>

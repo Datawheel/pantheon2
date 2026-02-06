@@ -11,18 +11,20 @@ export default async function PeopleRanking({
   title,
   slug,
 }) {
-  const newPeopleBorn = peopleBorn
+  const safePeopleBorn = peopleBorn || [];
+  const safePeopleDied = peopleDied || [];
+  const newPeopleBorn = safePeopleBorn
     .filter(p => !p.hpi_prev)
     .sort((personA, personB) => personB.hpi - personA.hpi);
-  const newPeopleDied = peopleDied
+  const newPeopleDied = safePeopleDied
     .filter(p => !p.hpi_prev)
     .sort((personA, personB) => personB.hpi - personA.hpi);
-  const youngestBirthyear = Math.max(...peopleBorn.map(r => r.birthyear));
-  const oldestBirthyear = Math.min(...peopleBorn.map(r => r.birthyear));
-  const moreDeaths = peopleDied.length > peopleBorn.length ? true : false;
+  const youngestBirthyear = safePeopleBorn.length ? Math.max(...safePeopleBorn.map(r => r.birthyear)) : 0;
+  const oldestBirthyear = safePeopleBorn.length ? Math.min(...safePeopleBorn.map(r => r.birthyear)) : 0;
+  const moreDeaths = safePeopleDied.length > safePeopleBorn.length ? true : false;
 
-  const topRankingBorn = peopleBorn.slice(0, 12);
-  const topRankingDied = peopleDied.slice(0, 12);
+  const topRankingBorn = safePeopleBorn.slice(0, 12);
+  const topRankingDied = safePeopleDied.slice(0, 12);
   const placeQueryParamId = country.country_code || country.id;
 
   return (
@@ -38,21 +40,21 @@ export default async function PeopleRanking({
             </span>
           )}
           , present day {country.country} was the birth place of{" "}
-          {FORMATTERS.commas(peopleBorn.length)} globally memorable people,
+          {FORMATTERS.commas(safePeopleBorn.length)} globally memorable people,
           including{" "}
           <AnchorList
-            items={peopleBorn.slice(0, 3)}
+            items={safePeopleBorn.slice(0, 3).filter(d => d.slug)}
             name={d => d.name}
             url={d => `/profile/person/${d.slug}/`}
           />
           .{" "}
           {topRankingDied.length ? (
             <span>
-              Additionaly, {FORMATTERS.commas(peopleDied.length)} globally
+              Additionaly, {FORMATTERS.commas(safePeopleDied.length)} globally
               memorable people have passed away in present day {country.country}{" "}
               including{" "}
               <AnchorList
-                items={peopleDied.slice(0, 3)}
+                items={safePeopleDied.slice(0, 3).filter(d => d.slug)}
                 name={d => d.name}
                 url={d => `/profile/person/${d.slug}/`}
               />
@@ -76,7 +78,7 @@ export default async function PeopleRanking({
             <PhotoCarousel
               people={topRankingBorn}
               rankAccessor={"bplace_country_rank_unique"}
-              peopleAll={peopleBorn}
+              peopleAll={safePeopleBorn}
               showOccupation={true}
             />
           </div>
@@ -112,7 +114,7 @@ export default async function PeopleRanking({
             <PhotoCarousel
               people={topRankingDied}
               rankAccessor={"dplace_country_rank_unique"}
-              peopleAll={peopleDied}
+              peopleAll={safePeopleDied}
               showOccupation={true}
             />
           </div>

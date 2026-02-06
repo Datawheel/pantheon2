@@ -276,7 +276,8 @@ export async function GET(request) {
             enArticle &&
             enArticle.langlinks &&
             enArticle.langlinks.length &&
-            enArticle.langlinks[0]["*"]
+            enArticle.langlinks[0]["*"] &&
+            enArticle.langlinks[0].url
           ) {
             const enSlug = enArticle.langlinks[0].url.replace(
               "https://en.wikipedia.org/wiki/",

@@ -42,7 +42,7 @@ export default async function Intro({
       num_born: leaves.length,
       occupation: leaves[0].occupation,
     }))
-    .entries(peopleBornHere.filter(d => d.occupation_id))
+    .entries((peopleBornHere || []).filter(d => d.occupation_id && d.occupation))
     .sort((a, b) => b.value.num_born - a.value.num_born)
     .map(d => d.value)
     .slice(0, 2);
@@ -52,7 +52,7 @@ export default async function Intro({
       num_died: leaves.length,
       occupation: leaves[0].occupation,
     }))
-    .entries(peopleDiedHere.filter(d => d.occupation_id))
+    .entries((peopleDiedHere || []).filter(d => d.occupation_id && d.occupation))
     .sort((a, b) => b.value.num_died - a.value.num_died)
     .map(d => d.value)
     .slice(0, 2);
@@ -104,35 +104,35 @@ export default async function Intro({
                 .{" "}
               </span>
             ) : null}
-            {peopleBornHere.length ? (
+            {peopleBornHere && peopleBornHere.length ? (
               <span>
                 Memorable people born in present day {country.country} include{" "}
                 <AnchorList
-                  items={peopleBornHere.slice(0, 3)}
+                  items={peopleBornHere.slice(0, 3).filter(d => d.slug)}
                   name={d => d.name}
                   url={d => `/profile/person/${d.slug}/`}
                 />
                 .
               </span>
             ) : null}
-            {peopleDiedHere ? (
+            {peopleDiedHere && peopleDiedHere.length ? (
               <span>
                 {" "}
                 Memorable people who died in {country.country} include{" "}
                 <AnchorList
-                  items={peopleDiedHere.slice(0, 3)}
+                  items={peopleDiedHere.slice(0, 3).filter(d => d.slug)}
                   name={d => d.name}
                   url={d => `/profile/person/${d.slug}/`}
                 />
                 .
               </span>
             ) : null}
-            {occupationsBorn ? (
+            {occupationsBorn && occupationsBorn.length ? (
               <span>
                 {" "}
                 {country.country} has been the birth place of many{" "}
                 <AnchorList
-                  items={occupationsBorn}
+                  items={occupationsBorn.filter(d => d.occupation)}
                   name={d => plural(d.occupation.occupation.toLowerCase())}
                   url={d =>
                     `/profile/occupation/${d.occupation.occupation_slug}/`
@@ -140,12 +140,12 @@ export default async function Intro({
                 />
               </span>
             ) : null}
-            {occupationsDied ? (
+            {occupationsDied && occupationsDied.length ? (
               <span>
                 {" "}
                 and the death place of many{" "}
                 <AnchorList
-                  items={occupationsDied}
+                  items={occupationsDied.filter(d => d.occupation)}
                   name={d => plural(d.occupation.occupation.toLowerCase())}
                   url={d =>
                     `/profile/occupation/${d.occupation.occupation_slug}/`

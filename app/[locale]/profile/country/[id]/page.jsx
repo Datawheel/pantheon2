@@ -96,36 +96,32 @@ export default async function Page({params: {id}}) {
     ]);
   // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
   // we calculate and add them...
-  peopleBornHere =
-    !peopleBornHere ||
-    peopleBornHere
-      .map((d, i) => {
-        const hpiData = peopleBornHereHpi.find(hpi => hpi.id === d.id);
-        return {
-          ...d,
-          ...(hpiData || {}),
-        };
-      })
-      .sort((personA, personB) => personB.hpi - personA.hpi)
-      .map((d, i) => ({
+  peopleBornHere = (peopleBornHere || [])
+    .map((d, i) => {
+      const hpiData = peopleBornHereHpi.find(hpi => hpi.id === d.id);
+      return {
         ...d,
-        bplace_country_rank_unique: i + 1,
-      }));
-  peopleDiedHere =
-    !peopleDiedHere ||
-    peopleDiedHere
-      .map((d, i) => {
-        const hpiData = peopleDiedHereHpi.find(hpi => hpi.id === d.id);
-        return {
-          ...d,
-          ...(hpiData || {}),
-        };
-      })
-      .sort((personA, personB) => personB.hpi - personA.hpi)
-      .map((d, i) => ({
+        ...(hpiData || {}),
+      };
+    })
+    .sort((personA, personB) => personB.hpi - personA.hpi)
+    .map((d, i) => ({
+      ...d,
+      bplace_country_rank_unique: i + 1,
+    }));
+  peopleDiedHere = (peopleDiedHere || [])
+    .map((d, i) => {
+      const hpiData = peopleDiedHereHpi.find(hpi => hpi.id === d.id);
+      return {
         ...d,
-        dplace_country_rank_unique: i + 1,
-      }));
+        ...(hpiData || {}),
+      };
+    })
+    .sort((personA, personB) => personB.hpi - personA.hpi)
+    .map((d, i) => ({
+      ...d,
+      dplace_country_rank_unique: i + 1,
+    }));
 
   const attrs = occupations.reduce((obj, d) => {
     obj[d.id] = d;

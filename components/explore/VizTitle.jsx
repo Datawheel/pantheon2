@@ -25,9 +25,10 @@ export default function VizTitle({places, nestedOccupations}) {
     occupationSubject = genderedPronoun;
   } else {
     if (occupation.includes(",")) {
-      thisOcc = nestedOccupations
+      const domainObj = nestedOccupations
         .map(no => no.domain)
-        .find(no => no.id === occupation).name;
+        .find(no => no.id === occupation);
+      thisOcc = domainObj ? domainObj.name : occupation;
       occupationSubject = `${genderedPronoun} in ${thisOcc.toLowerCase()} occupations`;
       // occupationSubject = `${genderedPronoun} in ${occupation.toLowerCase()} occupations`;
     } else {
@@ -54,7 +55,9 @@ export default function VizTitle({places, nestedOccupations}) {
         const cityObj = merge(places.map(p => p.cities)).find(
           c => `${c.id}` === city
         );
-        fromLocation = ` born in ${cityObj.place}, ${countryObj.country}`;
+        if (cityObj) {
+          fromLocation = ` born in ${cityObj.place}, ${countryObj.country}`;
+        }
       } else {
         fromLocation = ` ${bornOrDeceased} in present day ${countryObj.country}`;
       }

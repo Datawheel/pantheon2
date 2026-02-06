@@ -2,7 +2,8 @@ import SectionLayout from "../../common/SectionLayout";
 import PeoplePriestley from "../../place/sections/vizes/PeoplePriestley";
 
 const Lifespans = ({attrs, country, peopleBorn, title, slug}) => {
-  const tmapBornData = peopleBorn
+  const safePeopleBorn = peopleBorn || [];
+  const tmapBornData = safePeopleBorn
     .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.occupation)
     .sort((a, b) => b.langs - a.langs);
 

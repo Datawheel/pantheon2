@@ -4,6 +4,10 @@ import dayjs from "dayjs";
 import {FORMATTERS} from "../utils/consts";
 
 export default function HeaderLine({pageViewData}) {
+  if (!pageViewData || !pageViewData.length) {
+    return null;
+  }
+
   return (
     <div>
       <LinePlot

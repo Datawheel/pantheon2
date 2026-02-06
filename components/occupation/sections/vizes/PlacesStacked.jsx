@@ -63,7 +63,9 @@ export default function PlacesStacked({baseOption, style, cohorts}) {
           const highlightedValue = params.find(
             p => p.seriesName === highlighted
           );
-          ttipHtml += `<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${highlightedValue.color};"></span><span style="background-color: #fff9c4; padding: 2px 4px; border-radius: 3px;"><b>${highlighted}: ${highlightedValue.value}</b></span>`;
+          if (highlightedValue) {
+            ttipHtml += `<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${highlightedValue.color};"></span><span style="background-color: #fff9c4; padding: 2px 4px; border-radius: 3px;"><b>${highlighted}: ${highlightedValue.value}</b></span>`;
+          }
         }
         if (numCountries > 15) {
           ttipHtml += `<br/><span style="font-size:10px;color:gray;">(and ${

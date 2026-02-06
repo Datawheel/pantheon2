@@ -14,12 +14,14 @@ const OccupationTrends = ({
   slug,
   title,
 }) => {
+  const safePeopleBorn = peopleBorn || [];
+  const safePeopleDied = peopleDied || [];
   const currentYear = new Date().getFullYear();
   const topModern = nest()
     .key(d => d.occupation.id)
     .sortValues((a, b) => b.langs - a.langs)
     .entries(
-      peopleBorn.filter(
+      safePeopleBorn.filter(
         d => d.birthyear >= currentYear - 100 && d.occupation !== null
       )
     )
@@ -27,14 +29,14 @@ const OccupationTrends = ({
   const topOverall = nest()
     .key(d => d.occupation.id)
     .sortValues((a, b) => b.langs - a.langs)
-    .entries(peopleBorn.filter(d => d.occupation !== null))
+    .entries(safePeopleBorn.filter(d => d.occupation !== null))
     .sort((a, b) => b.values.length - a.values.length);
   const occupationsLookup = occupations.reduce((obj, item) => {
     obj[`${item.id}`] = item;
     return obj;
   }, {});
 
-  const tmapBornData = peopleBorn
+  const tmapBornData = safePeopleBorn
     .filter(p => p.birthyear !== null && p.occupation !== null)
     .sort((a, b) => b.langs - a.langs);
 
@@ -45,7 +47,7 @@ const OccupationTrends = ({
     d.place = d.bplace_geonameid;
   });
 
-  const tmapDeathData = peopleDied
+  const tmapDeathData = safePeopleDied
     .filter(p => p.deathyear !== null && p.occupation !== null)
     .sort((a, b) => b.langs - a.langs);
 
@@ -63,7 +65,7 @@ const OccupationTrends = ({
     d => d.birthyear
   );
   const [deathBuckets, deathTicks] = calculateYearBucket(
-    peopleDied,
+    safePeopleDied,
     d => d.deathyear
   );
 
@@ -75,7 +77,7 @@ const OccupationTrends = ({
     <SectionLayout slug={slug} title={title}>
       <div className="section-body">
         <div>
-          {topModern.length ? (
+          {topModern.length && occupationsLookup[topModern[0].key] ? (
             <p>
               Over the past 100 years,{" "}
               <a
@@ -90,30 +92,34 @@ const OccupationTrends = ({
               have been the top profession of globally memorable people born in
               present day {country.country}, including{" "}
               <AnchorList
-                items={topModern[0].values.slice(0, 3)}
+                items={topModern[0].values.slice(0, 3).filter(d => d.slug)}
                 name={d => d.name}
                 url={d => `/profile/person/${d.slug}`}
               />
               . Whereas, throughout history,{" "}
-              <a
-                href={`/profile/occupation/${
-                  occupationsLookup[topOverall[0].key].occupation_slug
-                }`}
-              >
-                {plural(
-                  occupationsLookup[topOverall[0].key].occupation.toLowerCase()
-                )}
-              </a>{" "}
-              have been the profession with the most memorable people born in
-              present day {country.country}, including{" "}
-              <AnchorList
-                items={topOverall[0].values.slice(0, 3)}
-                name={d => d.name}
-                url={d => `/profile/person/${d.slug}`}
-              />
-              .
+              {topOverall.length && occupationsLookup[topOverall[0].key] ? (
+                <>
+                  <a
+                    href={`/profile/occupation/${
+                      occupationsLookup[topOverall[0].key].occupation_slug
+                    }`}
+                  >
+                    {plural(
+                      occupationsLookup[topOverall[0].key].occupation.toLowerCase()
+                    )}
+                  </a>{" "}
+                  have been the profession with the most memorable people born in
+                  present day {country.country}, including{" "}
+                  <AnchorList
+                    items={topOverall[0].values.slice(0, 3).filter(d => d.slug)}
+                    name={d => d.name}
+                    url={d => `/profile/person/${d.slug}`}
+                  />
+                  .
+                </>
+              ) : null}
             </p>
-          ) : (
+          ) : topOverall.length && occupationsLookup[topOverall[0].key] ? (
             <p>
               Throughout history{" "}
               <a
@@ -128,13 +134,13 @@ const OccupationTrends = ({
               have been the profession with the most memorable people born in
               present day {country.country}, including{" "}
               <AnchorList
-                items={topOverall[0].values.slice(0, 3)}
+                items={topOverall[0].values.slice(0, 3).filter(d => d.slug)}
                 name={d => d.name}
                 url={d => `/profile/person/${d.slug}`}
               />
               .
             </p>
-          )}
+          ) : null}
         </div>
         <OccupationsStackedArea
           attrs={attrs}
