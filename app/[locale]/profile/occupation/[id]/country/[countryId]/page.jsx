@@ -10,90 +10,62 @@ import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
 
-async function getOccupations() {
-  const res = await fetch(
-    `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+// Safe JSON fetch with logging for debugging HTML responses
+async function safeFetchJson(url, options = {}, fallback = null) {
+  try {
+    const res = await fetch(url, options);
+    if (!res.ok) {
+      console.error(`[safeFetchJson] HTTP ${res.status} for: ${url}`);
+      return fallback;
     }
-  );
-  return res.json();
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[safeFetchJson] Got HTML instead of JSON for: ${url}`);
+      console.error(`[safeFetchJson] HTML preview: ${text.slice(0, 200)}`);
+      return fallback;
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[safeFetchJson] Error for ${url}: ${e.message}`);
+    return fallback;
+  }
+}
+
+async function getOccupations() {
+  const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getOccupation(occupationId, lang = "en") {
-  const res = await fetch(
-    `${BASE_API}/occupation?occupation_slug=eq.${occupationId}&select=*,${lang}_occupation:translations->${lang}->>occupation`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch occupation: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  // Return first item if array has content, otherwise empty object
+  const url = `${BASE_API}/occupation?occupation_slug=eq.${occupationId}&select=*,${lang}_occupation:translations->${lang}->>occupation`;
+  const data = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
 async function getCountry(countryId, lang = "en") {
-  const res = await fetch(
-    `${BASE_API}/country?slug=eq.${countryId}&select=*,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym_m_plural,${lang}_from_country:translations->${lang}->>from_country`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch country: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  // Return first item if array has content, otherwise empty object
+  const url = `${BASE_API}/country?slug=eq.${countryId}&select=*,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym_m_plural,${lang}_from_country:translations->${lang}->>from_country`;
+  const data = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
 }
 
 async function getAllCountriesInOccupation(occupationId, lang = "en") {
-  const res = await fetch(
-    `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country)`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country)`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getAllOccupationsInCountry(countryId) {
-  const res = await fetch(
-    `${BASE_API}/occupation_country?country=eq.${countryId}&order=num_people.desc.nullslast`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/occupation_country?country=eq.${countryId}&order=num_people.desc.nullslast`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeople(occupationId, countryId) {
-  const res = await fetch(
-    `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleHpi(occupationId, countryId) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 export async function generateMetadata({params}, parent) {
