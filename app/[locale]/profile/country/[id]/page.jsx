@@ -13,80 +13,41 @@ import {
   NUM_RANKINGS_POST,
 } from "/components/utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
 
 async function getOccupations() {
-  const res = await fetch(
-    `${BASE_API}/occupation?order=num_born.desc.nullslast`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getCountry(countryId) {
-  const res = await fetch(`${BASE_API}/country?slug=eq.${countryId}`, {
-    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch country: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  // Return first item if array has content, otherwise empty object
-  return Array.isArray(data) && data.length > 0 ? data[0] : {};
+  const url = `${BASE_API}/country?slug=eq.${countryId}`;
+  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
 }
 
 async function getCountryRanks(countryRankLow, countryRankHigh) {
-  const res = await fetch(
-    `${BASE_API}/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleBornHere(countryId) {
-  const res = await fetch(
-    `${BASE_API}/person?bplace_country=eq.${countryId}&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person?bplace_country=eq.${countryId}&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleBornHereHpi(countryId) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedHere(countryId) {
-  const res = await fetch(
-    `${BASE_API}/person?dplace_country=eq.${countryId}&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person?dplace_country=eq.${countryId}&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedHereHpi(countryId) {
-  const res = await fetch(
-    `${BASE_API}/person_ranks?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
-  );
-  return res.json();
+  const url = `${BASE_API}/person_ranks?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 export async function generateMetadata({params}, parent) {

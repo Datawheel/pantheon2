@@ -10,7 +10,7 @@ import {toTitleCase} from "/components/utils/vizHelpers";
 import {FORMATTERS} from "/components/utils/consts";
 import "/components/occupation-country/SelectOccupationCountry.css";
 import Image from "next/image";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {PUBLIC_API} from "/app/constants";
 import {getTranslations} from "/app/translations";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 
@@ -37,36 +37,26 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchMyData() {
-      const getOccupations = await fetch(
-        `${BASE_API}/occupation?order=num_born.desc.nullslast&select=*,${locale}_occupation:translations->${locale}->>occupation`,
-        {
-          next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-        }
-      );
-      const getCountries = await fetch(
-        `${BASE_API}/country?order=num_born.desc.nullslast&select=*,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural`,
-        {
-          next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-        }
-      );
-      const getOccupationsInCountry = await fetch(
-        `${BASE_API}/occupation_country?num_people=gte.18&select=*,occupation_data:occupation!occupation(occupation_slug,occupation,${locale}_occupation:translations->${locale}->>occupation),country_data:country!country(slug,country,demonym,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural)`,
-        {
-          next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-        }
-      );
       try {
-        const responses = await Promise.all([
-          getOccupations,
-          getCountries,
-          getOccupationsInCountry,
+        const [occupationsRes, countriesRes, occupationsInCountryRes] = await Promise.all([
+          fetch(`${PUBLIC_API}/occupation?order=num_born.desc.nullslast&select=*,${locale}_occupation:translations->${locale}->>occupation`),
+          fetch(`${PUBLIC_API}/country?order=num_born.desc.nullslast&select=*,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural`),
+          fetch(`${PUBLIC_API}/occupation_country?num_people=gte.18&select=*,occupation_data:occupation!occupation(occupation_slug,occupation,${locale}_occupation:translations->${locale}->>occupation),country_data:country!country(slug,country,demonym,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural)`)
         ]);
 
-        const initialData = await Promise.all(
-          responses.map(response => response.json())
-        );
+        // Check for errors and parse JSON safely
+        const parseResponse = async (res) => {
+          if (!res.ok) return [];
+          const text = await res.text();
+          if (text.startsWith("<")) return [];
+          try { return JSON.parse(text); } catch { return []; }
+        };
 
-        const [occupations, countries, occupationsInCountry] = initialData;
+        const [occupations, countries, occupationsInCountry] = await Promise.all([
+          parseResponse(occupationsRes),
+          parseResponse(countriesRes),
+          parseResponse(occupationsInCountryRes)
+        ]);
 
         // Map localized occupation names
         const localizedOccupations = occupations.map(occ => ({
@@ -120,23 +110,27 @@ export default function Page() {
   useEffect(() => {
     setSelection1(occupation);
     async function fetchOccupationData() {
-      const getOccupationsInCountry = await fetch(
-        `${BASE_API}/occupation_country?occupation_slug=eq.${occupation}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,demonym,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural)`,
-        {
-          next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-        }
-      );
-      const countriesData = await getOccupationsInCountry.json();
+      try {
+        const res = await fetch(
+          `${PUBLIC_API}/occupation_country?occupation_slug=eq.${occupation}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,demonym,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural)`
+        );
+        if (!res.ok) return;
+        const text = await res.text();
+        if (text.startsWith("<")) return;
+        const countriesData = JSON.parse(text);
 
-      // Map localized country names from embedded country_data
-      const localizedCountries = countriesData.map(item => ({
-        ...item,
-        country: item.country_data?.[`${locale}_country`] || item.country_data?.country || item.country,
-        country_slug: item.country_data?.slug || item.country_slug,
-        slug: item.country_data?.slug || item.country_slug,
-      }));
+        // Map localized country names from embedded country_data
+        const localizedCountries = countriesData.map(item => ({
+          ...item,
+          country: item.country_data?.[`${locale}_country`] || item.country_data?.country || item.country,
+          country_slug: item.country_data?.slug || item.country_slug,
+          slug: item.country_data?.slug || item.country_slug,
+        }));
 
-      setCountries(localizedCountries);
+        setCountries(localizedCountries);
+      } catch (error) {
+        console.error("Error fetching occupation data:", error);
+      }
     }
     fetchOccupationData();
   }, [occupation, locale]);
