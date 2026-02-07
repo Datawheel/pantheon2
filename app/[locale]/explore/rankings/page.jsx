@@ -1,6 +1,6 @@
 import {nest} from "d3-collection";
 import Explore from "/features/Explore";
-import {BASE_API} from "/app/constants";
+import {BASE_API, PUBLIC_API} from "/app/constants";
 import {safeFetchJson} from "/app/utils/safeFetch";
 
 async function getPlaces() {
@@ -30,7 +30,7 @@ export default async function Page() {
   return (
     <div className="explore">
       <Explore
-        baseApi={BASE_API}
+        baseApi={PUBLIC_API}
         places={nestedPlaces}
         occupations={occupations}
         pageType="rankings"

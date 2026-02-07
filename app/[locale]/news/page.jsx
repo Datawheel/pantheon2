@@ -28,7 +28,7 @@ export default async function NewsPage({params, searchParams}) {
 
   // Get model from query params (perplexity or grok)
   const modelParam = searchParams?.model;
-  const currentModel = ["perplexity", "grok"].includes(modelParam) ? modelParam : "perplexity";
+  const currentModel = ["perplexity", "grok"].includes(modelParam) ? modelParam : "grok";
 
   // Fetch data from 1 day prior (trending data is for previous day)
   const dataFetchDate = targetDate.subtract(1, "day").format("YYYY-MM-DD");

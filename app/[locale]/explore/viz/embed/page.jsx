@@ -1,6 +1,6 @@
 import {nest} from "d3-collection";
 import Explore from "/features/Explore";
-import {BASE_API} from "/app/constants";
+import {PUBLIC_API} from "/app/constants";
 import {getPlaces, getOccupations} from "../data";
 
 export default async function Page() {
@@ -20,7 +20,7 @@ export default async function Page() {
   return (
     <div className="explore embed">
       <Explore
-        baseApi={BASE_API}
+        baseApi={PUBLIC_API}
         places={nestedPlaces}
         occupations={occupations}
         pageType="viz"
