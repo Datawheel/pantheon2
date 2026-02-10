@@ -2,13 +2,13 @@ import PersonImage from "../utils/PersonImage";
 import {toTitleCase} from "../utils/vizHelpers";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import {getTranslations} from "/app/translations";
+import WikiExtract from "./WikiExtract";
 import "../common/Intro.css";
 import Image from "next/image";
 
 const Intro = ({
   person,
   personRanks,
-  wikiExtract,
   ranklessUrl,
   lang = "en",
 }) => {
@@ -31,7 +31,7 @@ const Intro = ({
         : new Date().getFullYear() - person.birthyear;
   }
 
-  let fromSentence, wikiSentence, wikiSlug;
+  let fromSentence;
   if (person.bplace_country) {
     if (!person.bplace_geonameid) {
       // Example test case person:
@@ -114,35 +114,6 @@ const Intro = ({
     }
   }
 
-  // wikipedia excerpt and URL
-  let wikiUrl;
-  if (wikiExtract && wikiExtract.query && wikiExtract.query.pages) {
-    // Get the first page object (since we're querying by title, page ID will be language-specific)
-    const pageId = Object.keys(wikiExtract.query.pages)[0];
-    const page = wikiExtract.query.pages[pageId];
-    if (page && page.extract) {
-      wikiSentence = page.extract;
-      if (wikiSentence.length > 1000) {
-        // take up until last full sentence
-        wikiSentence = wikiSentence.slice(0, wikiSentence.lastIndexOf(". "));
-        // remove line breaks
-        wikiSentence = wikiSentence.replace(/(\r\n|\n|\r)/gm, " ");
-        // remove all wiki markup (replace all instances of 2 or more `=` signs)
-        wikiSentence = wikiSentence.replace(/={2,}[\w\s]+={2,}/g, "");
-        // remove double spaces
-        wikiSentence = wikiSentence.replace(/  +/g, " ");
-        // add final period back in
-        wikiSentence = wikiSentence + ".";
-      }
-      // Use the actual Wikipedia URL from the API (includes proper slug with disambiguation)
-      wikiUrl = page.fullurl;
-      // Fallback: construct URL from title if fullurl not available
-      if (!wikiUrl) {
-        wikiSlug = page.title.replace(/ /g, "_");
-        wikiUrl = `https://${lang}.wikipedia.org/wiki/${wikiSlug}`;
-      }
-    }
-  }
   // return <div>another new intro here...</div>;
 
   return (
@@ -193,14 +164,11 @@ const Intro = ({
             />{" "}
             {person.name}
           </h3>
-          {wikiSentence ? (
-            <p>
-              {wikiSentence}{" "}
-              <a href={wikiUrl} target="_blank" rel="noopener noreferrer">
-                {t.readMoreWikipedia}
-              </a>
-            </p>
-          ) : null}
+          <WikiExtract
+            personSlug={person.slug}
+            localizedName={person.name}
+            lang={lang}
+          />
           <p
             dangerouslySetInnerHTML={{
               __html:
