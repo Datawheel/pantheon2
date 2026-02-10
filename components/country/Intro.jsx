@@ -4,37 +4,12 @@ import {nest} from "d3-collection";
 import {plural} from "pluralize";
 import "../common/Intro.css";
 
-async function getWikiSummary(countryName) {
-  try {
-    const res = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${countryName}`,
-      {
-        headers: {
-          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-        }
-      }
-    );
-    if (!res.ok) {
-      console.error(`[getWikiSummary] HTTP ${res.status} for: ${countryName}`);
-      return null;
-    }
-    const text = await res.text();
-    if (text.startsWith("<")) {
-      console.error(`[getWikiSummary] Got HTML instead of JSON for: ${countryName}`);
-      return null;
-    }
-    return JSON.parse(text);
-  } catch (e) {
-    console.error(`[getWikiSummary] Error for ${countryName}: ${e.message}`);
-    return null;
-  }
-}
-
-export default async function Intro({
+export default function Intro({
   country,
   countryRanks,
   peopleBornHere,
   peopleDiedHere,
+  wikiSummary,
 }) {
   const occupationsBorn = nest()
     .key(d => d.occupation.id)
@@ -60,8 +35,6 @@ export default async function Intro({
     ? countryRanks.findIndex(c => c.country === country.country)
     : null;
   let wikiLink, wikiSentence;
-
-  const wikiSummary = await getWikiSummary(country.country);
 
   // wikipedia summary
   if (wikiSummary) {

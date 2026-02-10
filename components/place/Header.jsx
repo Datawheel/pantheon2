@@ -5,86 +5,12 @@ import HeaderLine from "./HeaderLine";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
-async function getWikiPageViews(placeName) {
-  const wikiSlug = placeName;
-  const dateobj = new Date();
-  const year = dateobj.getFullYear();
-  const month = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  try {
-    const res = await fetch(
-      `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`,
-      {
-        headers: {
-          "User-Agent":
-            "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-        },
-      }
-    );
-    if (!res.ok) {
-      console.error(`[getWikiPageViews] HTTP ${res.status} for: ${placeName}`);
-      return {items: null};
-    }
-    const text = await res.text();
-    if (text.startsWith("<")) {
-      console.error(`[getWikiPageViews] Got HTML instead of JSON for: ${placeName}`);
-      return {items: null};
-    }
-    const data = JSON.parse(text);
-
-    // Filter out current incomplete month
-    if (data.items) {
-      const currentYearMonth = `${year}${month}`;
-      data.items = data.items.filter(item => {
-        const itemYearMonth = item.timestamp.substring(0, 6);
-        return itemYearMonth !== currentYearMonth;
-      });
-    }
-
-    return data;
-  } catch (e) {
-    console.error(`[getWikiPageViews] Error for ${placeName}: ${e.message}`);
-    return {items: null};
-  }
-}
-
-async function getWikiSummary(placeName) {
-  const wikiSlug = placeName;
-  try {
-    const res = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${wikiSlug}`,
-      {
-        headers: {
-          "User-Agent":
-            "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-        },
-      }
-    );
-    if (!res.ok) {
-      console.error(`[getWikiSummary] HTTP ${res.status} for: ${placeName}`);
-      return null;
-    }
-    const text = await res.text();
-    if (text.startsWith("<")) {
-      console.error(`[getWikiSummary] Got HTML instead of JSON for: ${placeName}`);
-      return null;
-    }
-    return JSON.parse(text);
-  } catch (e) {
-    console.error(`[getWikiSummary] Error for ${placeName}: ${e.message}`);
-    return null;
-  }
-}
-
-export default async function Header({place, country}) {
-  const {items: wikiPageViews} = await getWikiPageViews(place.place);
-  const wikiSummary = await getWikiSummary(place.place);
+export default function Header({place, country, wikiSummary, wikiPageViews}) {
+  const wikiPageViewItems = wikiPageViews?.items || null;
 
   let pageViewData = null;
-  if (wikiPageViews) {
-    pageViewData = wikiPageViews.map(pv => ({
+  if (wikiPageViewItems) {
+    pageViewData = wikiPageViewItems.map(pv => ({
       ...pv,
       date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(
         4,

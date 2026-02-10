@@ -15,6 +15,73 @@ import {
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
 
+async function getWikiSummary(countryName) {
+  try {
+    const res = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(countryName)}`,
+      {
+        headers: {
+          "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+          "Api-User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+        },
+        next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+      }
+    );
+    if (!res.ok) {
+      console.error(`[getWikiSummary] HTTP ${res.status} for: ${countryName}`);
+      return null;
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getWikiSummary] Got HTML instead of JSON for: ${countryName}`);
+      return null;
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getWikiSummary] Error for ${countryName}: ${e.message}`);
+    return null;
+  }
+}
+
+async function getWikiPageViews(countryName) {
+  const dateobj = new Date();
+  const year = dateobj.getFullYear();
+  const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
+  try {
+    const res = await fetch(
+      `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${encodeURIComponent(countryName)}/monthly/20110101/${year}${month}01`,
+      {
+        headers: {
+          "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+          "Api-User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+        },
+        next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+      }
+    );
+    if (!res.ok) {
+      console.error(`[getWikiPageViews] HTTP ${res.status} for: ${countryName}`);
+      return {items: null};
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getWikiPageViews] Got HTML instead of JSON for: ${countryName}`);
+      return {items: null};
+    }
+    const data = JSON.parse(text);
+    if (data.items) {
+      const currentYearMonth = `${year}${month}`;
+      data.items = data.items.filter(item => {
+        const itemYearMonth = item.timestamp.substring(0, 6);
+        return itemYearMonth !== currentYearMonth;
+      });
+    }
+    return data;
+  } catch (e) {
+    console.error(`[getWikiPageViews] Error for ${countryName}: ${e.message}`);
+    return {items: null};
+  }
+}
+
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
@@ -75,6 +142,11 @@ export default async function Page({params: {id}}) {
   const [country, occupations] = await Promise.all([
     getCountry(id),
     getOccupations(),
+  ]);
+
+  const [wikiSummary, wikiPageViewsData] = await Promise.all([
+    getWikiSummary(country.country),
+    getWikiPageViews(country.country),
   ]);
 
   const countryRankLow = Math.max(
@@ -192,7 +264,7 @@ export default async function Page({params: {id}}) {
 
   return (
     <div className="person">
-      <Header country={country} />
+      <Header country={country} wikiPageViews={wikiPageViewsData} />
       <div className="about-section">
         {/* <ProfileNav sections={sections} /> */}
         <Intro
@@ -200,6 +272,7 @@ export default async function Page({params: {id}}) {
           countryRanks={countryRanks}
           peopleBornHere={peopleBornHere}
           peopleDiedHere={peopleDiedHere}
+          wikiSummary={wikiSummary}
         />
       </div>
       {sections.map((section, key) =>

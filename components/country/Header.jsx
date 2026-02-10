@@ -5,55 +5,12 @@ import HeaderLine from "./HeaderLine";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
-async function getWikiPageViews(countryName) {
-  const dateobj = new Date();
-  const year = dateobj.getFullYear();
-  const month = `${dateobj.getMonth() + 1}`.replace(
-    /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
-  );
-  try {
-    const res = await fetch(
-      `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${countryName}/monthly/20110101/${year}${month}01`,
-      {
-        headers: {
-          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-        }
-      }
-    );
-    if (!res.ok) {
-      console.error(`[getWikiPageViews] HTTP ${res.status} for: ${countryName}`);
-      return {items: null};
-    }
-    const text = await res.text();
-    if (text.startsWith("<")) {
-      console.error(`[getWikiPageViews] Got HTML instead of JSON for: ${countryName}`);
-      return {items: null};
-    }
-    const data = JSON.parse(text);
-
-    // Filter out current incomplete month
-    if (data.items) {
-      const currentYearMonth = `${year}${month}`;
-      data.items = data.items.filter(item => {
-        const itemYearMonth = item.timestamp.substring(0, 6);
-        return itemYearMonth !== currentYearMonth;
-      });
-    }
-
-    return data;
-  } catch (e) {
-    console.error(`[getWikiPageViews] Error for ${countryName}: ${e.message}`);
-    return {items: null};
-  }
-}
-
-export default async function Header({country}) {
-  const {items: wikiPageViews} = await getWikiPageViews(country.country);
+export default function Header({country, wikiPageViews}) {
+  const wikiPageViewItems = wikiPageViews?.items || null;
 
   let pageViewData = null;
-  if (wikiPageViews) {
-    pageViewData = wikiPageViews.map(pv => ({
+  if (wikiPageViewItems) {
+    pageViewData = wikiPageViewItems.map(pv => ({
       ...pv,
       date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(
         4,

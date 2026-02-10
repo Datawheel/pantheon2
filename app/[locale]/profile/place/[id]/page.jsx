@@ -15,6 +15,73 @@ import Lifespans from "../../../../../components/place/sections/Lifespans";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
 
+async function getWikiSummary(placeName) {
+  try {
+    const res = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(placeName)}`,
+      {
+        headers: {
+          "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+          "Api-User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+        },
+        next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+      }
+    );
+    if (!res.ok) {
+      console.error(`[getWikiSummary] HTTP ${res.status} for: ${placeName}`);
+      return null;
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getWikiSummary] Got HTML instead of JSON for: ${placeName}`);
+      return null;
+    }
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(`[getWikiSummary] Error for ${placeName}: ${e.message}`);
+    return null;
+  }
+}
+
+async function getWikiPageViews(placeName) {
+  const dateobj = new Date();
+  const year = dateobj.getFullYear();
+  const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
+  try {
+    const res = await fetch(
+      `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${encodeURIComponent(placeName)}/monthly/20110101/${year}${month}01`,
+      {
+        headers: {
+          "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+          "Api-User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+        },
+        next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+      }
+    );
+    if (!res.ok) {
+      console.error(`[getWikiPageViews] HTTP ${res.status} for: ${placeName}`);
+      return {items: null};
+    }
+    const text = await res.text();
+    if (text.startsWith("<")) {
+      console.error(`[getWikiPageViews] Got HTML instead of JSON for: ${placeName}`);
+      return {items: null};
+    }
+    const data = JSON.parse(text);
+    if (data.items) {
+      const currentYearMonth = `${year}${month}`;
+      data.items = data.items.filter(item => {
+        const itemYearMonth = item.timestamp.substring(0, 6);
+        return itemYearMonth !== currentYearMonth;
+      });
+    }
+    return data;
+  } catch (e) {
+    console.error(`[getWikiPageViews] Error for ${placeName}: ${e.message}`);
+    return {items: null};
+  }
+}
+
 async function getPlace(id) {
   const url = `${BASE_API}/place?slug=eq.${id}`;
   return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
@@ -78,7 +145,11 @@ export default async function Page({params: {id}}) {
     getPlace(id),
     getOccupations(),
   ]);
-  const country = await getCountry(place.country);
+  const [country, wikiSummary, wikiPageViewsData] = await Promise.all([
+    getCountry(place.country),
+    getWikiSummary(place.place),
+    getWikiPageViews(place.place),
+  ]);
   const placeRankLow = Math.max(
     1,
     parseInt(place.born_rank_unique, 10) - NUM_RANKINGS_PRE
@@ -197,7 +268,7 @@ export default async function Page({params: {id}}) {
 
   return (
     <div className="person">
-      <Header place={place} country={country} />
+      <Header place={place} country={country} wikiSummary={wikiSummary} wikiPageViews={wikiPageViewsData} />
       <div className="about-section">
         <ProfileNav sections={sections} />
         {placeRanks && placeRanks.length ? (
@@ -207,6 +278,7 @@ export default async function Page({params: {id}}) {
             placeRanks={placeRanks}
             peopleBornHere={peopleBornHere}
             peopleDiedHere={peopleDiedHere}
+            wikiSummary={wikiSummary}
           />
         ) : null}
       </div>
