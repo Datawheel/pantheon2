@@ -14,11 +14,11 @@ export default function Header({place, country, wikiSummary, wikiPageViews}) {
       ...pv,
       date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(
         4,
-        6
+        6,
       )}/${pv.timestamp.substring(6, 8)}`,
     }));
     const mostRecentDate = d3Max(pageViewData, d =>
-      dayjs(d.date, "YYYY/MM/DD")
+      dayjs(d.date, "YYYY/MM/DD"),
     );
     const oldestDate = d3Min(pageViewData, d => dayjs(d.date, "YYYY/MM/DD"));
     pageViewData.push({
@@ -34,10 +34,11 @@ export default function Header({place, country, wikiSummary, wikiPageViews}) {
   }
 
   let placeImg = place.img_link
-    ? `/images/profile/place/${place.id}.jpg`
+    ? `https://static.pantheon.world/profile/place/${place.id}.jpg`
     : country && country.img_link
-    ? `/images/profile/place/${country.id}.jpg`
-    : "/images/profile/placeholder_place_profile.jpg";
+      ? `https://static.pantheon.world/profile/country/${country.slug}.jpg`
+      : "https://static.pantheon.world/profile/placeholder_place_profile.jpg";
+
   if (wikiSummary?.originalimage) {
     placeImg = wikiSummary.originalimage.source;
   }

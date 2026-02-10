@@ -14,11 +14,11 @@ export default function Header({country, wikiPageViews}) {
       ...pv,
       date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(
         4,
-        6
+        6,
       )}/${pv.timestamp.substring(6, 8)}`,
     }));
     const mostRecentDate = D3Max(pageViewData, d =>
-      dayjs(d.date, "YYYY/MM/DD")
+      dayjs(d.date, "YYYY/MM/DD"),
     );
     const oldestDate = D3Min(pageViewData, d => dayjs(d.date, "YYYY/MM/DD"));
     pageViewData.push({
@@ -35,7 +35,7 @@ export default function Header({country, wikiPageViews}) {
 
   const countryImg = country.img_link
     ? `https://static.pantheon.world/profile/country/${country.slug}.jpg`
-    : "https://static.pantheon.world/images/profile/placeholder_place_profile.jpg";
+    : "https://static.pantheon.world/profile/placeholder_place_profile.jpg";
 
   return (
     <header className="hero">
