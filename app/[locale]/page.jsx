@@ -22,7 +22,7 @@ export default async function Home({params}) {
     `${baseUrl}/api/wikiTrends?lang=${lang}&limit=16`,
     {
       next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
-    }
+    },
   )
     .then(res => res.json())
     .then(data => (Array.isArray(data) ? data : []))
@@ -35,7 +35,7 @@ export default async function Home({params}) {
     `https://api.pantheon.world/person?alive=is.false&deathdate=gte.${date30DaysAgo}&select=wd_id,name,slug,birthyear,deathyear,id&order=deathdate.desc&limit=16`,
     {
       next: {revalidate: 3600 * 12}, // Cache for 12 hours
-    }
+    },
   )
     .then(res => res.json())
     .then(data => (Array.isArray(data) ? data : []))
@@ -44,11 +44,25 @@ export default async function Home({params}) {
       return [];
     });
 
+  const recentlyAdded = await fetch(
+    `${apiBaseUrl}/person_hpi?created_at=gte.${date30DaysAgo}&select=created_at,person:person_id(wd_id,name,slug,birthyear,deathyear,id)&order=created_at.desc&limit=16`,
+    {
+      next: {revalidate: 3600 * 12}, // Cache for 12 hours
+    },
+  )
+    .then(res => res.json())
+    .then(data => (Array.isArray(data) ? data : []))
+    .then(data => data.map(d => ({...d.person, created_at: d.created_at})).filter(d => d.slug))
+    .catch(error => {
+      console.error("Error fetching recently added data:", error);
+      return [];
+    });
+
   const trendingSingers = await fetch(
     `${baseUrl}/api/wikiTrends?lang=${lang}&limit=16&occupation=SINGER`,
     {
       next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
-    }
+    },
   )
     .then(res => res.json())
     .then(data => (Array.isArray(data) ? data : []))
@@ -61,7 +75,7 @@ export default async function Home({params}) {
     `${baseUrl}/api/wikiTrends?lang=${lang}&limit=16&occupation=ACTOR`,
     {
       next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
-    }
+    },
   )
     .then(res => res.json())
     .then(data => (Array.isArray(data) ? data : []))
@@ -73,12 +87,17 @@ export default async function Home({params}) {
   // Fetch trending reasons for top trending people
   // Use yesterday's date (same as news page logic)
   const now = new Date();
-  const easternNow = new Date(now.toLocaleString("en-US", {timeZone: "America/Godthab"}));
+  const easternNow = new Date(
+    now.toLocaleString("en-US", {timeZone: "America/Godthab"}),
+  );
   easternNow.setDate(easternNow.getDate() - 1);
   const yesterday = `${easternNow.getFullYear()}-${String(easternNow.getMonth() + 1).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
 
   // Get slugs from top trending people (first 5 to check for reasons)
-  const topTrendingSlugs = trendingAll.slice(0, 5).map(p => p.slug).filter(Boolean);
+  const topTrendingSlugs = trendingAll
+    .slice(0, 5)
+    .map(p => p.slug)
+    .filter(Boolean);
 
   // Fetch trending reasons for these people
   let trendingWithReasons = [];
@@ -88,7 +107,7 @@ export default async function Home({params}) {
         `${apiBaseUrl}/trend_news?date=eq.${yesterday}&lang=eq.${lang}&slug=in.(${topTrendingSlugs.join(",")})&select=slug,title,reason,llm_metadata`,
         {
           next: {revalidate: REVALIDATE_PERIODS.SHORT * 2},
-        }
+        },
       )
         .then(res => res.json())
         .then(data => (Array.isArray(data) ? data : []))
@@ -155,13 +174,15 @@ export default async function Home({params}) {
 
           <div className="home-head-content">
             <h2>{t.home.tagline}</h2>
-            <p>
-              {t.home.subtitle}
-            </p>
+            <p>{t.home.subtitle}</p>
             <h3 className="home-explore-links">
-              {t.home.explore} <Link href={`/${lang}/profile/person`}>{t.home.people}</Link>,{" "}
+              {t.home.explore}{" "}
+              <Link href={`/${lang}/profile/person`}>{t.home.people}</Link>,{" "}
               <Link href={`/${lang}/profile/place`}>{t.home.places}</Link>,{" "}
-              <Link href={`/${lang}/profile/occupation`}>{t.home.occupations}</Link>, {t.home.and}{" "}
+              <Link href={`/${lang}/profile/occupation`}>
+                {t.home.occupations}
+              </Link>
+              , {t.home.and}{" "}
               <Link href={`/${lang}/profile/era`}>{t.home.eras}</Link>
             </h3>
           </div>
@@ -177,10 +198,19 @@ export default async function Home({params}) {
         trendingWithReasons={trendingWithReasons}
       />
 
+      <TrendingGrid
+        title={t.home.recentlyAdded}
+        allowLangChange={false}
+        initialTrendingAll={recentlyAdded}
+        defaultLang={lang}
+        showTrendIndicator={false}
+      />
+
       <div className="profile-grid">
         <p className="post">
           <strong>Pantheon</strong> {t.home.about}{" "}
-          <strong>15 {t.home.languages}</strong> {t.home.aboutContinued} <strong>Pantheon</strong> {t.home.aboutDeveloped}{" "}
+          <strong>15 {t.home.languages}</strong> {t.home.aboutContinued}{" "}
+          <strong>Pantheon</strong> {t.home.aboutDeveloped}{" "}
           <a
             href="https://datawheel.us/"
             target="_blank"
@@ -206,7 +236,9 @@ export default async function Home({params}) {
         <h2>{t.home.notableDeaths}</h2>
         <p>
           {t.home.notableDeathsText}{" "}
-          <Link href={`/${lang}/profile/deaths/2025`}>{t.home.notableDeathsLink}</Link>{" "}
+          <Link href={`/${lang}/profile/deaths/2025`}>
+            {t.home.notableDeathsLink}
+          </Link>{" "}
           {t.home.notableDeathsContinued}
         </p>
       </div>
