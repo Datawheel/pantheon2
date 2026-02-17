@@ -162,16 +162,16 @@ export default function TrendingNews({languageSections, currentLang, currentDate
           <label>{t.news?.selectModel || "AI Model"}:</label>
           <div className="model-toggle">
             <button
-              className={`model-btn ${currentModel === "perplexity" ? "active" : ""}`}
-              onClick={() => handleModelChange("perplexity")}
-            >
-              Perplexity
-            </button>
-            <button
               className={`model-btn ${currentModel === "grok" ? "active" : ""}`}
               onClick={() => handleModelChange("grok")}
             >
               Grok
+            </button>
+            <button
+              className={`model-btn ${currentModel === "gemini" ? "active" : ""}`}
+              onClick={() => handleModelChange("gemini")}
+            >
+              Gemini
             </button>
           </div>
         </div>

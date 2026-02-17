@@ -26,9 +26,9 @@ export default async function NewsPage({params, searchParams}) {
   const targetDate = dateParam ? dayjs(dateParam) : dayjs();
   const formattedDate = targetDate.format("YYYY-MM-DD");
 
-  // Get model from query params (perplexity or grok)
+  // Get model from query params (grok or gemini)
   const modelParam = searchParams?.model;
-  const currentModel = ["perplexity", "grok"].includes(modelParam) ? modelParam : "grok";
+  const currentModel = ["grok", "gemini"].includes(modelParam) ? modelParam : "grok";
 
   // Fetch data from 1 day prior (trending data is for previous day)
   const dataFetchDate = targetDate.subtract(1, "day").format("YYYY-MM-DD");
