@@ -9,8 +9,11 @@ import {
 } from "../utils/consts";
 import {BASE_API} from "@/app/constants";
 import {toTitleCase} from "../utils/vizHelpers";
+import PersonImage from "../utils/PersonImage";
 import "../../components/common/Footer.css";
 import "tippy.js/dist/tippy.css"; // optional
+
+const PERSON_FALLBACK = "https://static.pantheon.world/icons/icon-person.svg";
 
 async function getWikiRelatedPeople(personSlug) {
   try {
@@ -112,15 +115,17 @@ export default async function Footer({person, personRanks}) {
 
           {belowMe ? (
             <li className="footer-carousel-item">
-              <div className="footer-carousel-item-photo">
-                <a
-                  aria-label={`${belowMe.name} profile`}
-                  href={`/profile/person/${belowMe.slug}`}
-                  style={{
-                    backgroundImage: `url(https://static.pantheon.world/profile/people/${belowMe.id}.jpg)`,
-                  }}
-                ></a>
-              </div>
+              <a
+                className="footer-carousel-item-photo"
+                aria-label={`${belowMe.name} profile`}
+                href={`/profile/person/${belowMe.slug}`}
+              >
+                <PersonImage
+                  src={`/profile/people/${belowMe.id}.jpg`}
+                  alt={belowMe.name}
+                  fallbackSrc={PERSON_FALLBACK}
+                />
+              </a>
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/person/${belowMe.slug}`}>{belowMe.name}</a>
               </h4>
@@ -130,15 +135,17 @@ export default async function Footer({person, personRanks}) {
 
           {aboveMe ? (
             <li className="footer-carousel-item">
-              <div className="footer-carousel-item-photo">
-                <a
-                  aria-label={`${aboveMe.name} profile`}
-                  href={`/profile/person/${aboveMe.slug}`}
-                  style={{
-                    backgroundImage: `url(https://static.pantheon.world/profile/people/${aboveMe.id}.jpg)`,
-                  }}
-                ></a>
-              </div>
+              <a
+                className="footer-carousel-item-photo"
+                aria-label={`${aboveMe.name} profile`}
+                href={`/profile/person/${aboveMe.slug}`}
+              >
+                <PersonImage
+                  src={`/profile/people/${aboveMe.id}.jpg`}
+                  alt={aboveMe.name}
+                  fallbackSrc={PERSON_FALLBACK}
+                />
+              </a>
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/person/${aboveMe.slug}`}>{aboveMe.name}</a>
               </h4>
@@ -194,17 +201,17 @@ export default async function Footer({person, personRanks}) {
           {wikiRelatedPeople.length
             ? wikiRelatedPeople.map(relatedBio => (
                 <li className="footer-carousel-item" key={relatedBio.id}>
-                  <div className="footer-carousel-item-photo">
-                    {/* <Tippy content={relatedBio.extract}> */}
-                    <a
-                      aria-label={`${relatedBio.name} profile`}
-                      href={`/profile/person/${relatedBio.slug}`}
-                      style={{
-                        backgroundImage: `url(https://static.pantheon.world/profile/people/${relatedBio.id}.jpg)`,
-                      }}
-                    ></a>
-                    {/* </Tippy> */}
-                  </div>
+                  <a
+                    className="footer-carousel-item-photo"
+                    aria-label={`${relatedBio.name} profile`}
+                    href={`/profile/person/${relatedBio.slug}`}
+                  >
+                    <PersonImage
+                      src={`/profile/people/${relatedBio.id}.jpg`}
+                      alt={relatedBio.name}
+                      fallbackSrc={PERSON_FALLBACK}
+                    />
+                  </a>
                   <h4 className="footer-carousel-item-title">
                     <a href={`/profile/person/${relatedBio.slug}`}>
                       {relatedBio.name}

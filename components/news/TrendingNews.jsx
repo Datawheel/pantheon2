@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import {micromark} from "micromark";
 import {Tooltip} from "@blueprintjs/core";
-import {SUPPORTED_LOCALES, getLocalizedLanguageName} from "/app/locales";
+import {SUPPORTED_LOCALES, getLocalizedLanguageName, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
 import PersonImage from "/components/utils/PersonImage";
 import "./TrendingNews.css";
@@ -15,6 +15,7 @@ dayjs.extend(advancedFormat);
 export default function TrendingNews({languageSections, currentLang, currentDate, currentModel}) {
   const router = useRouter();
   const t = getTranslations(currentLang);
+  const localePrefix = currentLang === DEFAULT_LOCALE ? "" : `/${currentLang}`;
 
   const handleModelChange = model => {
     router.push(`/${currentLang}/news?date=${dateValue}&model=${model}`);
@@ -63,7 +64,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
     return (
       <div key={person.id || person.slug} className="trending-news-card">
         <div className="trending-news-image-container">
-          <a href={`/profile/person/${person.slug}`}>
+          <a href={`${localePrefix}/profile/person/${person.slug}`}>
             <PersonImage
               src={`/profile/people/${person.pid || person.id}.jpg`}
               alt={`Photo of ${person.localized_name || person.name}`}
@@ -91,7 +92,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
 
       <div className="trending-news-info">
         <h3 className="trending-news-person-name">
-          <a href={`/profile/person/${person.slug}`}>
+          <a href={`${localePrefix}/profile/person/${person.slug}`}>
             {person.localized_name || person.name}
           </a>
         </h3>

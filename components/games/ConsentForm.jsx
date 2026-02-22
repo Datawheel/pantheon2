@@ -1,10 +1,12 @@
 "use client";
 import {useCallback, useEffect, useRef, useState} from "react";
+import {useParams, usePathname} from "next/navigation";
 import {Button, Dialog} from "@blueprintjs/core";
 import "./ConsentForm.css";
 import {useI18n} from "../../locales/client";
 import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
 import {v4 as uuidv4} from "uuid";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 
 export default function ConsentForm({
   isOpenConsentForm,
@@ -16,6 +18,22 @@ export default function ConsentForm({
   setScoreDB,
 }) {
   const t = useI18n();
+  const params = useParams();
+  const pathname = usePathname();
+
+  // Determine locale from params or pathname
+  const getLocale = () => {
+    if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
+      return params.locale;
+    }
+    const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(/|$)`));
+    if (pathMatch) {
+      return pathMatch[1];
+    }
+    return DEFAULT_LOCALE;
+  };
+  const locale = getLocale();
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
   const consentText = t("text.game.popup.consent-form");
   const [rKey, setRKey] = useState(Math.random() * (100 - 50) + 50);
   const isMounted = useRef(true);
@@ -38,7 +56,7 @@ export default function ConsentForm({
 
       const data = {
         user_id: localStorage.getItem("mptoken"),
-        locale: "en",
+        locale,
         universe,
         url: window.location.href,
         token,
@@ -54,7 +72,7 @@ export default function ConsentForm({
       await fetch("/api/createConsent", requestOptions);
 
       if (buttonType === "trivia") {
-        window.location.href = "/game/trivia";
+        window.location.href = `${localePrefix}/game/trivia`;
       }
     },
     [executeRecaptcha]
@@ -124,7 +142,7 @@ export default function ConsentForm({
             key={"consentno"}
             id={"consentno"}
             className="bp5-button lite"
-            onClick={() => (window.location.href = "/data/faq")}
+            onClick={() => (window.location.href = `${localePrefix}/data/faq`)}
           >
             Do not accept
           </Button>

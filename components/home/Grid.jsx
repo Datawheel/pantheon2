@@ -45,13 +45,13 @@ const TrendIndicator = ({rankDelta}) => {
   );
 };
 
-const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = null}) => {
+const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = null, localePrefix = ""}) => {
   return (
     <ul className="grid-row">
       {bios.map((profile, index) => (
         <>
           <li className="grid-box" key={profile.pid || profile.id}>
-            <a href={`/profile/person/${profile.slug}`}>
+            <a href={`${localePrefix}/profile/person/${profile.slug}`}>
               <div className="grid-box-bg-container">
                 {showTrendIndicator ? (
                   <TrendIndicator rankDelta={profile.rank_delta} />

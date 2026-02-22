@@ -5,10 +5,27 @@ import AnchorList from "../utils/AnchorList";
 import {toTitleCase} from "../utils/vizHelpers";
 import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
-import {useRouter} from "next/navigation";
+import {useRouter, useParams, usePathname} from "next/navigation";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 
 export default function Intro({year, people, occupation, country}) {
   const router = useRouter();
+  const params = useParams();
+  const pathname = usePathname();
+
+  // Determine locale from params or pathname
+  const getLocale = () => {
+    if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
+      return params.locale;
+    }
+    const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(/|$)`));
+    if (pathMatch) {
+      return pathMatch[1];
+    }
+    return DEFAULT_LOCALE;
+  };
+  const locale = getLocale();
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
   const peopleSortedByHPI = people
     .filter(person => {
       if (occupation) return person.occupation?.id === occupation.id;
@@ -90,13 +107,13 @@ export default function Intro({year, people, occupation, country}) {
             <AnchorList
               items={peopleSortedByHPI.slice(0, 5)}
               name={d => d.name}
-              url={d => `/profile/person/${d.slug}/`}
+              url={d => `${localePrefix}/profile/person/${d.slug}/`}
             />
             . The cities with the most deaths were{" "}
             <AnchorList
               items={topCities}
               name={d => `${d.city.place} (${d.count})`}
-              url={d => `/profile/place/${d.city.slug}/`}
+              url={d => `${localePrefix}/profile/place/${d.city.slug}/`}
             />
             .{" "}
             {!occupation ? (
@@ -108,7 +125,7 @@ export default function Intro({year, people, occupation, country}) {
                     `${toTitleCase(d.occupation.occupation)} (${d.count})`
                   }
                   url={d =>
-                    `/profile/deaths/${year}/occupation/${d.occupation.occupation_slug}/`
+                    `${localePrefix}/profile/deaths/${year}/occupation/${d.occupation.occupation_slug}/`
                   }
                 />
                 .
@@ -150,8 +167,8 @@ export default function Intro({year, people, occupation, country}) {
           id="occupation-select"
           onChange={e => {
             const path = e.target.value
-              ? `/profile/deaths/${year}/occupation/${e.target.value}`
-              : `/profile/deaths/${year}`;
+              ? `${localePrefix}/profile/deaths/${year}/occupation/${e.target.value}`
+              : `${localePrefix}/profile/deaths/${year}`;
             router.push(path);
           }}
           value={occupation?.occupation_slug || ""}
@@ -176,8 +193,8 @@ export default function Intro({year, people, occupation, country}) {
           id="country-select"
           onChange={e => {
             const path = e.target.value
-              ? `/profile/deaths/${year}/country/${e.target.value}`
-              : `/profile/deaths/${year}`;
+              ? `${localePrefix}/profile/deaths/${year}/country/${e.target.value}`
+              : `${localePrefix}/profile/deaths/${year}`;
             router.push(path);
           }}
           value={country?.slug || ""}
@@ -198,14 +215,14 @@ export default function Intro({year, people, occupation, country}) {
           <a
             href={
               occupation
-                ? `/profile/deaths/${parseInt(year) - 1}/occupation/${
+                ? `${localePrefix}/profile/deaths/${parseInt(year) - 1}/occupation/${
                     occupation.occupation_slug
                   }`
                 : country
-                ? `/profile/deaths/${parseInt(year) - 1}/country/${
+                ? `${localePrefix}/profile/deaths/${parseInt(year) - 1}/country/${
                     country.slug
                   }`
-                : `/profile/deaths/${parseInt(year) - 1}`
+                : `${localePrefix}/profile/deaths/${parseInt(year) - 1}`
             }
             className="year-navigation-link"
           >
@@ -222,14 +239,14 @@ export default function Intro({year, people, occupation, country}) {
             <a
               href={
                 occupation
-                  ? `/profile/deaths/${parseInt(year) + 1}/occupation/${
+                  ? `${localePrefix}/profile/deaths/${parseInt(year) + 1}/occupation/${
                       occupation.occupation_slug
                     }`
                   : country
-                  ? `/profile/deaths/${parseInt(year) + 1}/country/${
+                  ? `${localePrefix}/profile/deaths/${parseInt(year) + 1}/country/${
                       country.slug
                     }`
-                  : `/profile/deaths/${parseInt(year) + 1}`
+                  : `${localePrefix}/profile/deaths/${parseInt(year) + 1}`
               }
               className="year-navigation-link"
             >

@@ -5,15 +5,18 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 import {toTitleCase} from "../utils/vizHelpers";
 import Link from "next/link";
 import {plural} from "pluralize";
+import {DEFAULT_LOCALE} from "/app/locales";
 
 dayjs.extend(advancedFormat);
 
-const PeopleGrid = ({bios, occupation, year}) => (
+const PeopleGrid = ({bios, occupation, year, lang = "en"}) => {
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+  return (
   <>
     <div className="people-grid">
       {bios.map(profile => (
         <a
-          href={`/profile/person/${profile.slug}`}
+          href={`${localePrefix}/profile/person/${profile.slug}`}
           className="person-card"
           key={profile.pid || profile.id}
         >
@@ -52,14 +55,14 @@ const PeopleGrid = ({bios, occupation, year}) => (
     <div className="view-more-link">
       {occupation ? (
         <Link
-          href={`/explore/rankings?show=people&years=${year},${year}&yearType=deathyear`}
+          href={`${localePrefix}/explore/rankings?show=people&years=${year},${year}&yearType=deathyear`}
         >
           View Full List of {plural(toTitleCase(occupation.occupation))} that
           died in {year} →
         </Link>
       ) : (
         <Link
-          href={`/explore/rankings?show=people&years=${year},${year}&yearType=deathyear`}
+          href={`${localePrefix}/explore/rankings?show=people&years=${year},${year}&yearType=deathyear`}
         >
           View Full List of {year} Deaths Ranked by HPI →
         </Link>
@@ -67,5 +70,7 @@ const PeopleGrid = ({bios, occupation, year}) => (
     </div>
   </>
 );
+
+};
 
 export default PeopleGrid;

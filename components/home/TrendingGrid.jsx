@@ -84,6 +84,7 @@ export default function TrendingGrid({
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
   const t = getTranslations(trendingLangEdition);
+  const localePrefix = trendingLangEdition === DEFAULT_LOCALE ? "" : `/${trendingLangEdition}`;
 
   return (
     <div className="profile-grid">
@@ -112,6 +113,7 @@ export default function TrendingGrid({
           }
           showTrendIndicator={showTrendIndicator}
           showDates={showDates}
+          localePrefix={localePrefix}
           trendingExcerpt={
             trendingWithReasons.length > 0 && showNewsButton
               ? {

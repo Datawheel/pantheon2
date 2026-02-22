@@ -1,5 +1,6 @@
 "use client";
 import {useCallback, useEffect, useRef, useState} from "react";
+import {useParams, usePathname} from "next/navigation";
 // import useTrait from "./useTrait";
 // import Game from "./Game";
 import ConsentForm from "../ConsentForm";
@@ -13,6 +14,7 @@ import Results from "./Results";
 // import fetchPersons from "./fetchPersons";
 import {v4 as uuidv4} from "uuid";
 import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import "./Trivia.css";
 
 const TIME_PER_QUESTION = 15;
@@ -26,6 +28,23 @@ function convertTZ(date, tzString) {
 }
 
 function Trivia({questions}) {
+  const params = useParams();
+  const pathname = usePathname();
+
+  // Determine locale from params or pathname
+  const getLocale = () => {
+    if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
+      return params.locale;
+    }
+    const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(/|$)`));
+    if (pathMatch) {
+      return pathMatch[1];
+    }
+    return DEFAULT_LOCALE;
+  };
+  const locale = getLocale();
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+
   const timer = useRef(null);
   const difference =
     +convertTZ(new Date(), "Europe/Paris") -
@@ -74,7 +93,7 @@ function Trivia({questions}) {
           setSaveConsent(false);
           setIsOpenConsentForm(false);
         } else {
-          window.location.href = "/game/birthle";
+          window.location.href = `${localePrefix}/game/birthle`;
         }
       });
   };

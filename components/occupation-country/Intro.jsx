@@ -8,6 +8,7 @@ import "../common/Intro.css";
 
 export default function Intro({country, occupation, allCountriesInOccupation, locale = DEFAULT_LOCALE}) {
   const t = getTranslations(locale);
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
   const allCountriesInOccupationSorted = allCountriesInOccupation.sort(
     (a, b) => {
       if (b.num_people === a.num_people) {
@@ -30,10 +31,10 @@ export default function Intro({country, occupation, allCountriesInOccupation, lo
     : occupation.occupation;
 
   // Create occupation link
-  const occupationLink = `<a href="/profile/occupation/${occupation.occupation_slug}">${occupationPlural}</a>`;
+  const occupationLink = `<a href="${localePrefix}/profile/occupation/${occupation.occupation_slug}">${occupationPlural}</a>`;
 
   // Create country link
-  const countryLink = `<a href="/profile/country/${country.slug}">${country.country}</a>`;
+  const countryLink = `<a href="${localePrefix}/profile/country/${country.slug}">${country.country}</a>`;
 
   // Format numbers with proper locale
   const totalCount = occupation.num_born.toLocaleString(locale);
@@ -48,7 +49,7 @@ export default function Intro({country, occupation, allCountriesInOccupation, lo
     const countryLinks = countriesAheadInRanking.map(d => {
       // Use localized country name if available, fallback to English
       const countryName = d.country_data?.[`${locale}_country`] || d.country_data?.country || d.country;
-      return `<a href="/profile/occupation/${occupation.occupation_slug}/country/${d.country_slug}/">${countryName}</a>`;
+      return `<a href="${localePrefix}/profile/occupation/${occupation.occupation_slug}/country/${d.country_slug}/">${countryName}</a>`;
     });
     if (countryLinks.length === 1) {
       countriesBehindText = countryLinks[0];

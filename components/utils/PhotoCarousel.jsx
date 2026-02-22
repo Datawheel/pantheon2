@@ -18,6 +18,7 @@ export default function PhotoCarousel({
   rankAccessor,
   showOccupation,
   peopleAll,
+  localePrefix = "",
 }) {
   const [lowerBound, setLowerBound] = useState(null);
   const [upperBound, setUpperBound] = useState(null);
@@ -166,7 +167,7 @@ export default function PhotoCarousel({
                     : "#efefef",
                 }}
               >
-                <Link href={`/profile/person/${person.slug}/`}>
+                <Link href={`${localePrefix}/profile/person/${person.slug}/`}>
                   <PersonImage
                     src={`/profile/people/${person.id}.jpg`}
                     alt={`Photo of ${person.name}`}
@@ -175,7 +176,7 @@ export default function PhotoCarousel({
                 </Link>
               </div>
               <h2>
-                <Link href={`/profile/person/${person.slug}/`}>
+                <Link href={`${localePrefix}/profile/person/${person.slug}/`}>
                   {person.name}
                 </Link>
               </h2>

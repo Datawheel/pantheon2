@@ -266,6 +266,13 @@
   transition: transform 0.3s ease;
 }
 
+.trending-news-image-container img.is-fallback {
+  object-fit: contain;
+  padding: 20%;
+  box-sizing: border-box;
+  background: var(--colorSlate, #4a4a4a);
+}
+
 .trending-news-card:hover .trending-news-image-container img {
   transform: scale(1.05);
 }

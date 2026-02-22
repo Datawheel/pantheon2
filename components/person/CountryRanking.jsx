@@ -8,6 +8,7 @@ import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
 import SectionLayout from "../common/SectionLayout";
 import {BASE_API} from "@/app/constants";
+import {DEFAULT_LOCALE} from "/app/locales";
 
 async function getBirthCountryRankings(
   birthCountryId,
@@ -39,7 +40,10 @@ export default async function CountryRanking({
   personRanks,
   title,
   slug,
+  lang = "en",
 }) {
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+
   if (!person.bplace_country) {
     return null;
   }
@@ -85,7 +89,7 @@ export default async function CountryRanking({
           <AnchorList
             items={betterRankedBirthPeers}
             name={d => `${d.name} (${d.birthyear})`}
-            url={d => `/profile/person/${d.slug}/`}
+            url={d => `${localePrefix}/profile/person/${d.slug}/`}
           />
         }
         .{" "}
@@ -101,7 +105,7 @@ export default async function CountryRanking({
           <AnchorList
             items={worseRankedBirthPeers}
             name={d => `${d.name} (${d.birthyear})`}
-            url={d => `/profile/person/${d.slug}/`}
+            url={d => `${localePrefix}/profile/person/${d.slug}/`}
           />
         }
         .
@@ -114,7 +118,7 @@ export default async function CountryRanking({
       <div>
         <p>
           Among people born in{" "}
-          <a href={`/profile/country/${person.bplace_country.slug}`}>
+          <a href={`${localePrefix}/profile/country/${person.bplace_country.slug}`}>
             {person.bplace_country.country}
           </a>
           , {person.name} ranks{" "}
@@ -123,18 +127,18 @@ export default async function CountryRanking({
           {betterBirthPeers}
           {worseBirthPeers}
           {/* { ranking.deathcountryPeers.length
-             ? <span>&nbsp;Among people deceased in <a href={`/profile/country/${person.deathcountry.slug}`}>{person.deathcountry.name}</a>, {person.name} ranks {ranking.me.deathcountry_rank_unique} out of {person.deathcountry.num_died}.&nbsp;</span>
+             ? <span>&nbsp;Among people deceased in <a href={`${localePrefix}/profile/country/${person.deathcountry.slug}`}>{person.deathcountry.name}</a>, {person.name} ranks {ranking.me.deathcountry_rank_unique} out of {person.deathcountry.num_died}.&nbsp;</span>
              : null} */}
         </p>
         <div className="rank-title">
           <h3>
             Others born in{" "}
-            <a href={`/profile/country/${person.bplace_country.slug}`}>
+            <a href={`${localePrefix}/profile/country/${person.bplace_country.slug}`}>
               {person.bplace_country.country}
             </a>
           </h3>
           <a
-            href={`/explore/rankings?show=people&place=${person.bplace_country.country_code}`}
+            href={`${localePrefix}/explore/rankings?show=people&place=${person.bplace_country.country_code}`}
           >
             Go to all Rankings
           </a>
@@ -144,6 +148,7 @@ export default async function CountryRanking({
           people={birthCountryRankings}
           rankAccessor="bplace_country_rank_unique"
           showOccupation={true}
+          localePrefix={localePrefix}
         />
       </div>
     </SectionLayout>

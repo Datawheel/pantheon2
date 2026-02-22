@@ -1,14 +1,31 @@
 "use client";
 import {Fragment, useState} from "react";
-import {useRouter} from "next/navigation";
+import {useRouter, useParams, usePathname} from "next/navigation";
 import Link from "next/link";
 import {AnchorButton, Collapse} from "@blueprintjs/core";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 
 import "../../styles/Misc.css";
 import "../../styles/About.css";
 
 export default function YearbookSidebar({year}) {
   const router = useRouter();
+  const params = useParams();
+  const pathname = usePathname();
+
+  // Determine locale from params or pathname
+  const getLocale = () => {
+    if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
+      return params.locale;
+    }
+    const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(/|$)`));
+    if (pathMatch) {
+      return pathMatch[1];
+    }
+    return DEFAULT_LOCALE;
+  };
+  const locale = getLocale();
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
   const decade = year ? Math.floor(year / 10) * 10 : 1900;
   const [openDecade, setOpenDecade] = useState(decade);
 
@@ -16,7 +33,7 @@ export default function YearbookSidebar({year}) {
     // Get the selected value
     const selectedValue = event.target.value;
     // Update the URL
-    router.push(`/game/yearbook/${selectedValue}`);
+    router.push(`${localePrefix}/game/yearbook/${selectedValue}`);
   };
 
   return (
@@ -40,7 +57,7 @@ export default function YearbookSidebar({year}) {
                   {[...Array(10).keys()].reverse().map(yearIndex => (
                     <li key={1900 + decade * 10 + yearIndex}>
                       <Link
-                        href={`/game/yearbook/${
+                        href={`${localePrefix}/game/yearbook/${
                           1900 + decade * 10 + yearIndex
                         }`}
                         className="item-link"
@@ -60,7 +77,7 @@ export default function YearbookSidebar({year}) {
         <div className="next">
           {parseInt(year, 10) < 2000 ? (
             <Link
-              href={`/game/yearbook/${parseInt(year, 10) + 1}`}
+              href={`${localePrefix}/game/yearbook/${parseInt(year, 10) + 1}`}
               className="bp3-button bp3-minimal bp3-icon-chevron-left"
             >
               {parseInt(year, 10) + 1}
@@ -80,7 +97,7 @@ export default function YearbookSidebar({year}) {
         <div className="prev">
           {parseInt(year, 10) > 1900 ? (
             <Link
-              href={`/game/yearbook/${parseInt(year, 10) - 1}`}
+              href={`${localePrefix}/game/yearbook/${parseInt(year, 10) - 1}`}
               className="bp3-button bp3-minimal"
             >
               {parseInt(year, 10) - 1}

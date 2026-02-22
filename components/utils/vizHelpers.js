@@ -109,11 +109,11 @@ export const groupTooltip = (data, accessor = () => []) => ({
   },
 });
 
-export const on = (category, accessor) => ({
+export const on = (category, accessor, localePrefix = "") => ({
   "click.shape": d => {
     const id = accessor(d);
     if (!(id instanceof Array)) {
-      window.location.href = `/profile/${category}/${id}`;
+      window.location.href = `${localePrefix}/profile/${category}/${id}`;
     }
   },
 });

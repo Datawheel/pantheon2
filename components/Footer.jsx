@@ -14,7 +14,22 @@ const Footer = () => {
   const t = getTranslations(lang);
 
   // Get the current path without locale prefix for language switching
-  const pathWithoutLocale = pathname?.replace(`/${lang}`, "") || "/";
+  // Use regex with lookahead to remove locale prefix while preserving the path
+  const localePattern = new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(?=/|$)`);
+  let pathWithoutLocale = pathname || "/";
+  const localeMatch = pathWithoutLocale.match(localePattern);
+  if (localeMatch) {
+    // Remove the locale prefix (e.g., /fr from /fr/profile/person/x)
+    // Use slice to get everything after the matched locale prefix
+    pathWithoutLocale = pathWithoutLocale.slice(localeMatch[0].length);
+    // Ensure we have at least "/" for the root path (homepage)
+    if (!pathWithoutLocale) {
+      pathWithoutLocale = "/";
+    }
+  }
+
+  // Debug: uncomment to see values
+  // console.log('pathname:', pathname, 'pathWithoutLocale:', pathWithoutLocale);
 
   return (
   <>
@@ -231,17 +246,24 @@ const Footer = () => {
   </div>
 
   <div className="language-switcher">
-    {SUPPORTED_LOCALES.map((locale, index) => (
-      <React.Fragment key={locale}>
-        {index > 0 && <span className="separator">•</span>}
-        <Link
-          href={`/${locale}${pathWithoutLocale}`}
-          className={locale === lang ? "active" : ""}
-        >
-          {LOCALE_NATIVE_NAMES[locale]}
-        </Link>
-      </React.Fragment>
-    ))}
+    {SUPPORTED_LOCALES.map((locale, index) => {
+      // For English, don't include /en prefix if using rewrites
+      const href = locale === DEFAULT_LOCALE
+        ? pathWithoutLocale
+        : `/${locale}${pathWithoutLocale}`;
+      return (
+        <React.Fragment key={locale}>
+          {index > 0 && <span className="separator">•</span>}
+          {/* Use regular <a> tag to force full page reload when switching languages */}
+          <a
+            href={href}
+            className={locale === lang ? "active" : ""}
+          >
+            {LOCALE_NATIVE_NAMES[locale]}
+          </a>
+        </React.Fragment>
+      );
+    })}
   </div>
   </>
   );

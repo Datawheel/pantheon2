@@ -4,9 +4,11 @@ import {useState, useEffect} from "react";
 import Link from "next/link";
 import {getTranslations} from "/app/translations";
 import {PUBLIC_API} from "@/app/constants";
+import {DEFAULT_LOCALE} from "/app/locales";
 import "./TrendingExcerpt.css";
 
 export default function TrendingExcerpt({trendingPeople, currentLang, allBios = []}) {
+  const localePrefix = currentLang === DEFAULT_LOCALE ? "" : `/${currentLang}`;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [trendingReasons, setTrendingReasons] = useState({});
@@ -115,7 +117,7 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
       <div className="trending-excerpt-bubble" data-grid-position={arrowPosition}>
         <div className="trending-excerpt-header">
           <strong>
-            <Link href={`/profile/person/${currentPerson.slug}`} className="excerpt-person-link">
+            <Link href={`${localePrefix}/profile/person/${currentPerson.slug}`} className="excerpt-person-link">
               {currentPerson.localized_name || currentPerson.title || currentPerson.name}
             </Link>
           </strong>

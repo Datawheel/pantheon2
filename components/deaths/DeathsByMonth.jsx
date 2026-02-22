@@ -4,6 +4,7 @@ import "../common/Section.css";
 import AnchorList from "../utils/AnchorList";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import {DEFAULT_LOCALE} from "/app/locales";
 import "./DeathsByMonth.css";
 
 dayjs.extend(utc);
@@ -24,7 +25,8 @@ const months = [
   "December",
 ];
 
-export default async function DeathsByMonth({year, people}) {
+export default async function DeathsByMonth({year, people, lang = "en"}) {
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   // Group by death month
   const groupedByMonth = people.reduce((acc, person) => {
     if (person.deathdate) {
@@ -76,7 +78,7 @@ export default async function DeathsByMonth({year, people}) {
                     })
                     .slice(0, 3)}
                   name={d => `${d.name} (HPI: ${d?.hpi?.toFixed(2)})`}
-                  url={d => `/profile/person/${d.slug}/`}
+                  url={d => `${localePrefix}/profile/person/${d.slug}/`}
                 />
                 .
               </p>
@@ -85,7 +87,7 @@ export default async function DeathsByMonth({year, people}) {
               <div className="people-grid">
                 {peopleInMonth.map(person => (
                   <a
-                    href={`/profile/person/${person.slug}`}
+                    href={`${localePrefix}/profile/person/${person.slug}`}
                     key={person.id}
                     className="person-card"
                   >

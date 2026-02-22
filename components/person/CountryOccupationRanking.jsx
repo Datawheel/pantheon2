@@ -10,6 +10,7 @@ import PhotoCarousel from "../utils/PhotoCarousel";
 import {toTitleCase} from "../utils/vizHelpers";
 import SectionLayout from "../common/SectionLayout";
 import {BASE_API} from "@/app/constants";
+import {DEFAULT_LOCALE} from "/app/locales";
 
 async function getBirthCountryRankings(
   occupationId,
@@ -42,7 +43,10 @@ export default async function CountryRanking({
   personRanks,
   title,
   slug,
+  lang = "en",
 }) {
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+
   if (!person.bplace_country) {
     return null;
   }
@@ -100,7 +104,7 @@ export default async function CountryRanking({
           <AnchorList
             items={betterRankedBirthPeers}
             name={d => `${d.name} (${d.birthyear})`}
-            url={d => `/profile/person/${d.slug}/`}
+            url={d => `${localePrefix}/profile/person/${d.slug}/`}
           />
         }
         .{" "}
@@ -116,7 +120,7 @@ export default async function CountryRanking({
           <AnchorList
             items={worseRankedBirthPeers}
             name={d => `${d.name} (${d.birthyear})`}
-            url={d => `/profile/person/${d.slug}/`}
+            url={d => `${localePrefix}/profile/person/${d.slug}/`}
           />
         }
         .
@@ -129,7 +133,7 @@ export default async function CountryRanking({
       <div>
         <p>
           Among {plural(person.occupation.occupation.toLowerCase())} born in{" "}
-          <a href={`/profile/country/${person.bplace_country.slug}`}>
+          <a href={`${localePrefix}/profile/country/${person.bplace_country.slug}`}>
             {person.bplace_country.country}
           </a>
           , {person.name} ranks{" "}
@@ -143,14 +147,14 @@ export default async function CountryRanking({
         <div className="rank-title">
           <h3>
             <a
-              href={`/profile/occupation/${person.occupation.occupation_slug}/country/${person.bplace_country.slug}`}
+              href={`${localePrefix}/profile/occupation/${person.occupation.occupation_slug}/country/${person.bplace_country.slug}`}
             >
               {person.bplace_country.demonym} born{" "}
               {toTitleCase(plural(person.occupation.occupation.toLowerCase()))}
             </a>
           </h3>
           <a
-            href={`/explore/rankings?show=people&place=${person.bplace_country.country_code}&occupation=${person.occupation.id}`}
+            href={`${localePrefix}/explore/rankings?show=people&place=${person.bplace_country.country_code}&occupation=${person.occupation.id}`}
           >
             Go to all Rankings
           </a>
@@ -159,6 +163,7 @@ export default async function CountryRanking({
           me={person}
           people={birthCountryRankings}
           rankAccessor="bplace_country_occupation_rank_unique"
+          localePrefix={localePrefix}
         />
       </div>
     </SectionLayout>

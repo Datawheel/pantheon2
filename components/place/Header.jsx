@@ -2,10 +2,12 @@ import {Suspense} from "react";
 import {max as d3Max, min as d3Min} from "d3-array";
 import dayjs from "dayjs";
 import HeaderLine from "./HeaderLine";
+import {DEFAULT_LOCALE} from "/app/locales";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
-export default function Header({place, country, wikiSummary, wikiPageViews}) {
+export default function Header({place, country, wikiSummary, wikiPageViews, lang = "en"}) {
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const wikiPageViewItems = wikiPageViews?.items || null;
 
   let pageViewData = null;
@@ -70,7 +72,7 @@ export default function Header({place, country, wikiSummary, wikiPageViews}) {
 
         {country ? (
           <p className="date-subtitle">
-            <a href={`/profile/country/${country.slug}`}>{country.country}</a>
+            <a href={`${localePrefix}/profile/country/${country.slug}`}>{country.country}</a>
           </p>
         ) : null}
         {/* <p className="date-subtitle">{ FORMATTERS.year(country.soverign_date) === 0 ? "1AD" : FORMATTERS.year(country.soverign_date) } - Today</p> */}
@@ -134,7 +136,7 @@ export default function Header({place, country, wikiSummary, wikiPageViews}) {
 //           : <h1 className="profile-name">{place.place}</h1>
 //         }
 
-//         {country ? <p className="date-subtitle"><a href={`/profile/country/${country.slug}`}>{country.country}</a></p> : null}
+//         {country ? <p className="date-subtitle"><a href={`${localePrefix}/profile/country/${country.slug}`}>{country.country}</a></p> : null}
 //         {/* <p className="date-subtitle">{ FORMATTERS.year(country.soverign_date) === 0 ? "1AD" : FORMATTERS.year(country.soverign_date) } - Today</p> */}
 //         <pre>
 //           {pageViewData

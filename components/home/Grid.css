@@ -182,6 +182,12 @@
         position: absolute;
         z-index: 2;
 
+        & .image {
+          width: 100%;
+          height: 100%;
+          background-color: var(--colorSlate, #4a4a4a);
+        }
+
         & img {
           display: block;
           /* width: 231px;
@@ -189,6 +195,12 @@
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+
+        & img.is-fallback {
+          object-fit: contain;
+          padding: 20%;
+          box-sizing: border-box;
         }
       }
 

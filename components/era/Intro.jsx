@@ -1,9 +1,11 @@
 import AnchorList from "../utils/AnchorList";
 import {FORMATTERS} from "../utils/consts";
 import {nest} from "d3-collection";
+import {DEFAULT_LOCALE} from "/app/locales";
 import "../common/Intro.css";
 
-export default function Intro({era, eras, peopleBorn, peopleDied}) {
+export default function Intro({era, eras, peopleBorn, peopleDied, lang = "en"}) {
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const currentEraIndex = eras.findIndex(e => e.slug === era.slug);
   const prevEra = currentEraIndex > 0 ? eras[currentEraIndex - 1] : null;
   const nextEra =
@@ -13,22 +15,22 @@ export default function Intro({era, eras, peopleBorn, peopleDied}) {
     nextPrevSentence = (
       <span>
         This Era was preceded by the{" "}
-        <a href={`/profile/era/${prevEra.slug}`}>{prevEra.name}</a> and followed
-        by the <a href={`/profile/era/${nextEra.slug}`}>{nextEra.name}</a>.
+        <a href={`${localePrefix}/profile/era/${prevEra.slug}`}>{prevEra.name}</a> and followed
+        by the <a href={`${localePrefix}/profile/era/${nextEra.slug}`}>{nextEra.name}</a>.
       </span>
     );
   } else if (prevEra) {
     nextPrevSentence = (
       <span>
         This Era was preceded by the{" "}
-        <a href={`/profile/era/${prevEra.slug}`}>{prevEra.name}</a>.
+        <a href={`${localePrefix}/profile/era/${prevEra.slug}`}>{prevEra.name}</a>.
       </span>
     );
   } else if (nextEra) {
     nextPrevSentence = (
       <span>
         This Era was followed by the{" "}
-        <a href={`/profile/era/${nextEra.slug}`}>{nextEra.name}</a>.
+        <a href={`${localePrefix}/profile/era/${nextEra.slug}`}>{nextEra.name}</a>.
       </span>
     );
   }
@@ -55,14 +57,14 @@ export default function Intro({era, eras, peopleBorn, peopleDied}) {
             <AnchorList
               items={peopleBorn.slice(0, 3)}
               name={d => `${d.name}`}
-              url={d => `/profile/person/${d.slug}/`}
+              url={d => `${localePrefix}/profile/person/${d.slug}/`}
             />
             . The most important cities in this era, ranked by number of deaths,
             were{" "}
             <AnchorList
               items={cities.slice(0, 3)}
               name={d => `${d.city.place} (${d.num_died})`}
-              url={d => `/profile/place/${d.city.slug}/`}
+              url={d => `${localePrefix}/profile/place/${d.city.slug}/`}
             />
             .
           </p>
@@ -71,7 +73,7 @@ export default function Intro({era, eras, peopleBorn, peopleDied}) {
           {eras.map(e => (
             <li key={e.slug} className="item era-time">
               <a
-                href={`/profile/era/${e.slug}`}
+                href={`${localePrefix}/profile/era/${e.slug}`}
                 className={
                   e.slug === era.slug
                     ? "item-link era-time-link active"

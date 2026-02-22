@@ -179,6 +179,7 @@ async function getWikiPageSummaries(top10Ids, locale = "en") {
 
 export default async function TopTen({country, occupation, people, locale = DEFAULT_LOCALE}) {
   const t = getTranslations(locale);
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
   const number1 = people[0];
   const top10Ids = people
     .slice(0, 10)
@@ -208,7 +209,7 @@ export default async function TopTen({country, occupation, people, locale = DEFA
             {" "}
             {t.occupationCountry.visitRankings}{" "}
             <a
-              href={`/explore/rankings?show=people&place=${country.country_code}&occupation=${occupation.occupation}`}
+              href={`${localePrefix}/explore/rankings?show=people&place=${country.country_code}&occupation=${occupation.occupation}`}
             >
               {country.demonym} {occupationPlural}
             </a>
@@ -228,7 +229,7 @@ export default async function TopTen({country, occupation, people, locale = DEFA
           <div className="top-person-details">
             <h3>
               1.{" "}
-              <a href={`/profile/person/${number1.slug}`}>
+              <a href={`${localePrefix}/profile/person/${number1.slug}`}>
                 {number1.name}{" "}
                 {number1.deathyear ? (
                   <span>
@@ -287,7 +288,7 @@ export default async function TopTen({country, occupation, people, locale = DEFA
               <div className="top-person-details">
                 <h3>
                   {i + 2}.{" "}
-                  <a href={`/profile/person/${person.slug}`}>
+                  <a href={`${localePrefix}/profile/person/${person.slug}`}>
                     {person.name}{" "}
                     {person.deathyear ? (
                       <span>

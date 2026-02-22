@@ -2,11 +2,29 @@ import React, {useState, useEffect, useRef} from "react";
 import {strip, trim} from "d3plus-text";
 import axios from "axios";
 import {Icon, NonIdealState} from "@blueprintjs/core";
+import {useParams, usePathname} from "next/navigation";
 import {useSearchVisibility} from "/contexts/SearchContext";
 import {PUBLIC_API} from "@/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import "/components/Search.css";
 
 const SearchComponent = () => {
+  const params = useParams();
+  const pathname = usePathname();
+
+  // Determine locale from params or pathname
+  const getLocale = () => {
+    if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
+      return params.locale;
+    }
+    // Check pathname for locale
+    const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(/|$)`));
+    if (pathMatch) {
+      return pathMatch[1];
+    }
+    return DEFAULT_LOCALE;
+  };
+  const locale = getLocale();
   const [inputValue, setInputValue] = useState("");
   const [results, setResults] = useState([]);
   const [showTrending, setShowTrending] = useState(true);
@@ -17,7 +35,7 @@ const SearchComponent = () => {
 
   useEffect(() => {
     fetchLatestTrendData();
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     if (isSearchVisible && inputRef.current) {
@@ -49,7 +67,8 @@ const SearchComponent = () => {
       } else if (event.key === "Enter" && activeIndex !== -1) {
         // Follow the link for the active item
         const activeItem = results[activeIndex];
-        window.location.href = `/profile/${activeItem.profile_type}/${activeItem.slug}`;
+        const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+        window.location.href = `${localePrefix}/profile/${activeItem.profile_type}/${activeItem.slug}`;
       }
     };
 
@@ -83,7 +102,7 @@ const SearchComponent = () => {
   // Function to fetch latest trend data from API
   const fetchLatestTrendData = async query => {
     try {
-      const response = await axios.get(`/api/wikiTrends?lang=en&limit=12`);
+      const response = await axios.get(`/api/wikiTrends?lang=${locale}&limit=12`);
       const results = response.data.map(d => ({
         name: d.name,
         profile_type: "person",
@@ -137,7 +156,7 @@ const SearchComponent = () => {
                   key={`person_${result.slug}`}
                   className={`result-${result.profile_type}`}
                 >
-                  <a href={`/profile/${result.profile_type}/${result.slug}`}>
+                  <a href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/profile/${result.profile_type}/${result.slug}`}>
                     {index === activeIndex && "→ "}
                     {result.name}
                     <sub>

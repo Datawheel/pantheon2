@@ -1,9 +1,28 @@
 "use client";
 import {Geomap} from "d3plus-react";
+import {useParams, usePathname} from "next/navigation";
 // import VizWrapper from "../../../common/VizWrapper";
 import {groupTooltip, on} from "../../../utils/vizHelpers";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 
 export default function PlacesMap({place, data, title}) {
+  const params = useParams();
+  const pathname = usePathname();
+
+  // Determine locale from params or pathname
+  const getLocale = () => {
+    if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
+      return params.locale;
+    }
+    const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(/|$)`));
+    if (pathMatch) {
+      return pathMatch[1];
+    }
+    return DEFAULT_LOCALE;
+  };
+  const locale = getLocale();
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+
   return (
     <div>
       <Geomap
@@ -14,7 +33,7 @@ export default function PlacesMap({place, data, title}) {
           depth: 1,
           // fitFilter: `${country.country_num}`,
           groupBy: ["event", "place_name"],
-          on: on("place", d => d.dplace_geonameid.slug),
+          on: on("place", d => d.dplace_geonameid.slug, localePrefix),
           shapeConfig: {
             fill: d =>
               d.event.toLowerCase().indexOf("birth") > 0

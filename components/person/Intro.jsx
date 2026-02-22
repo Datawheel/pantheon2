@@ -2,6 +2,7 @@ import PersonImage from "../utils/PersonImage";
 import {toTitleCase} from "../utils/vizHelpers";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import {getTranslations} from "/app/translations";
+import {DEFAULT_LOCALE} from "/app/locales";
 import WikiExtract from "./WikiExtract";
 import "../common/Intro.css";
 import Image from "next/image";
@@ -13,6 +14,7 @@ const Intro = ({
   lang = "en",
 }) => {
   const t = getTranslations(lang);
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const {
     occupation_rank: occupationRank,
     occupation_rank_prev: occupationRankPrev,
@@ -42,7 +44,7 @@ const Intro = ({
         <span>
           {" "}
           in {birthplace}
-          <a href={`/profile/place/${person.bplace_country.slug}`}>
+          <a href={`${localePrefix}/profile/place/${person.bplace_country.slug}`}>
             {person.bplace_country.country}
           </a>
         </span>
@@ -63,11 +65,11 @@ const Intro = ({
         <span>
           born in {FORMATTERS.year(person.birthyear)} in {person.bplace_name},{" "}
           {person.geacron_name} which is now part of modern day{" "}
-          <a href={`/profile/place/${person.bplace_geonameid.slug}`}>
+          <a href={`${localePrefix}/profile/place/${person.bplace_geonameid.slug}`}>
             {person.bplace_geonameid.place}
           </a>
           ,{" "}
-          <a href={`/profile/place/${person.bplace_country.slug}`}>
+          <a href={`${localePrefix}/profile/place/${person.bplace_country.slug}`}>
             {person.bplace_country.country}
           </a>
           .{" "}
@@ -75,11 +77,11 @@ const Intro = ({
       ) : null;
     } else {
       const birthplace = person.bplace_geonameid.state ? (
-        <a href={`/profile/place/${person.bplace_geonameid.slug}`}>
+        <a href={`${localePrefix}/profile/place/${person.bplace_geonameid.slug}`}>
           {person.bplace_geonameid.place}, {person.bplace_geonameid.state}
         </a>
       ) : (
-        <a href={`/profile/place/${person.bplace_geonameid.slug}`}>
+        <a href={`${localePrefix}/profile/place/${person.bplace_geonameid.slug}`}>
           {person.bplace_geonameid.place}
         </a>
       );
@@ -91,7 +93,7 @@ const Intro = ({
           <span>
             born in {FORMATTERS.year(person.birthyear.name)} in{" "}
             {person.bplace_name},{" "}
-            <a href={`/profile/country/${person.bplace_country.slug}`}>
+            <a href={`${localePrefix}/profile/country/${person.bplace_country.slug}`}>
               {person.bplace_country.country}
             </a>{" "}
             which is near {birthplace}.{" "}
@@ -104,7 +106,7 @@ const Intro = ({
         fromSentence = person.birthyear ? (
           <span>
             born in {FORMATTERS.year(person.birthyear.name)} in {birthplace},{" "}
-            <a href={`/profile/country/${person.bplace_country.slug}`}>
+            <a href={`${localePrefix}/profile/country/${person.bplace_country.slug}`}>
               {person.bplace_country.country}
             </a>
             .{" "}

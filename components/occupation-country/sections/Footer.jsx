@@ -1,11 +1,14 @@
 import {plural} from "pluralize";
 import {toTitleCase} from "../../utils/vizHelpers";
+import {DEFAULT_LOCALE} from "/app/locales";
 import "../../common/Footer.css";
 
 export default function Footer({
   allCountriesInOccupation,
   allOccupationsInCountry,
+  locale = "en",
 }) {
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
   return (
     <footer className="profile-footer">
       <div className="footer-container">
@@ -21,7 +24,7 @@ export default function Footer({
                   aria-label={`Top ${toTitleCase(
                     plural(countryOccupation.occupation)
                   )} from ${countryOccupation.country}`}
-                  href={`/profile/occupation/${countryOccupation.occupation_slug}/country/${countryOccupation.country_slug}`}
+                  href={`${localePrefix}/profile/occupation/${countryOccupation.occupation_slug}/country/${countryOccupation.country_slug}`}
                   style={{
                     backgroundImage: `url(https://static.pantheon.world/profile/country/${countryOccupation.country_slug}.jpg)`,
                   }}
@@ -29,7 +32,7 @@ export default function Footer({
               </div>
               <h4 className="footer-carousel-item-title">
                 <a
-                  href={`/profile/occupation/${countryOccupation.occupation_slug}/country/${countryOccupation.country_slug}`}
+                  href={`${localePrefix}/profile/occupation/${countryOccupation.occupation_slug}/country/${countryOccupation.country_slug}`}
                 >
                   Top {toTitleCase(plural(countryOccupation.occupation))}
                 </a>
@@ -47,7 +50,7 @@ export default function Footer({
                   aria-label={`Top ${toTitleCase(
                     plural(occupationCountry.occupation)
                   )} from ${occupationCountry.country}`}
-                  href={`/profile/occupation/${occupationCountry.occupation_slug}/country/${occupationCountry.country_slug}`}
+                  href={`${localePrefix}/profile/occupation/${occupationCountry.occupation_slug}/country/${occupationCountry.country_slug}`}
                   style={{
                     backgroundImage: `url(https://static.pantheon.world/profile/occupation/${occupationCountry.occupation_slug}.jpg)`,
                   }}
@@ -55,7 +58,7 @@ export default function Footer({
               </div>
               <h4 className="footer-carousel-item-title">
                 <a
-                  href={`/profile/occupation/${occupationCountry.occupation_slug}/country/${occupationCountry.country_slug}`}
+                  href={`${localePrefix}/profile/occupation/${occupationCountry.occupation_slug}/country/${occupationCountry.country_slug}`}
                 >
                   Top {toTitleCase(plural(occupationCountry.occupation))}
                 </a>
