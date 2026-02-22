@@ -68,22 +68,46 @@ async function getPeopleHpi(occupationId, countryId) {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export async function generateMetadata({params}, parent) {
-  // read route params
   const {locale, id, countryId} = params;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
+  const baseUrl = process.env.URL || "https://pantheon.world";
 
   // fetch data
   const occupation = await getOccupation(id, lang);
   const country = await getCountry(countryId, lang);
+
+  if (!occupation || !occupation.occupation || !country || !country.country) {
+    return {title: "Not Found | Pantheon"};
+  }
 
   // Get localized names, fallback to English
   const localizedOccupation = occupation[`${lang}_occupation`] || occupation.occupation;
   const localizedCountry = country[`${lang}_country`] || country.country;
   const localizedDemonym = country[`${lang}_demonym`] || country.demonym;
 
-  // optionally access and extend (rather than replace) parent metadata
+  // Get count of people for this occupation + country
+  const countRes = await fetch(
+    `${BASE_API}/person_ranks?occupation=eq.${occupation.id}&bplace_country=eq.${country.id}&select=id`,
+    {
+      headers: {"Prefer": "count=exact"},
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  const contentRange = countRes.headers.get("content-range");
+  let totalCount = 0;
+  if (contentRange) {
+    const match = contentRange.match(/\/(\d+)/);
+    if (match) {
+      totalCount = parseInt(match[1], 10);
+    }
+  }
+
   const previousImages = (await parent).openGraph?.images || [];
 
   // For English, use plural form; for other languages, use the localized occupation as-is
@@ -91,13 +115,31 @@ export async function generateMetadata({params}, parent) {
     ? toTitleCase(plural(localizedOccupation))
     : localizedOccupation;
 
+  const occupationSingular = toTitleCase(localizedOccupation);
+
+  const title = `${t.occupationCountry.greatest} ${localizedDemonym} ${occupationDisplay} | Pantheon`;
+  const description = `Discover the ${formatNumber(totalCount)} most famous ${localizedDemonym} ${occupationDisplay.toLowerCase()} in history. Explore notable ${occupationSingular.toLowerCase()} profiles from ${localizedCountry} ranked by historical significance.`;
+
   return {
-    title: `${t.occupationCountry.greatest} ${localizedDemonym} ${occupationDisplay} | Pantheon`,
+    title,
+    description,
+    keywords: `${localizedDemonym} ${occupationDisplay.toLowerCase()}, famous ${occupationDisplay.toLowerCase()} from ${localizedCountry}, ${localizedCountry} ${occupationSingular.toLowerCase()}, notable ${localizedDemonym} ${occupationDisplay.toLowerCase()}`,
     openGraph: {
+      title,
+      description,
+      type: "website",
       images: [
-        `/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}`,
+        `${baseUrl}/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}`,
         ...previousImages,
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://pantheon.world/${lang}/profile/occupation/${id}/country/${countryId}`,
     },
   };
 }

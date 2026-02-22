@@ -117,23 +117,64 @@ async function getPeopleDiedHereHpi(countryId) {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export async function generateMetadata({params}, parent) {
-  // read route params
-  const id = params.id;
+  const {id, locale} = params;
+  const baseUrl = process.env.URL || "https://pantheon.world";
+  const lang = locale || "en";
 
   // fetch data
   const country = await getCountry(id);
 
-  // optionally access and extend (rather than replace) parent metadata
+  if (!country || !country.country) {
+    return {title: "Country Not Found | Pantheon"};
+  }
+
+  // Get count of notable people
+  const countRes = await fetch(
+    `${BASE_API}/person_ranks?bplace_country=eq.${country.id}&select=id`,
+    {
+      headers: {"Prefer": "count=exact"},
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  const contentRange = countRes.headers.get("content-range");
+  let totalCount = 0;
+  if (contentRange) {
+    const match = contentRange.match(/\/(\d+)/);
+    if (match) {
+      totalCount = parseInt(match[1], 10);
+    }
+  }
+
   const previousImages = (await parent).openGraph?.images || [];
 
+  const title = `Famous People from ${country.country} | ${formatNumber(totalCount)} Notable ${country.country} People | Pantheon`;
+  const description = `Explore ${formatNumber(totalCount)} historically significant people born in ${country.country}. Discover the most famous ${country.demonym || country.country} celebrities, leaders, artists, scientists, athletes and more throughout history.`;
+
   return {
-    title: `${country.country} | Pantheon`,
+    title,
+    description,
+    keywords: `${country.country} famous people, famous ${country.demonym || country.country} people, ${country.country} celebrities, notable people from ${country.country}, ${country.country} historical figures`,
     openGraph: {
+      title,
+      description,
+      type: "website",
       images: [
-        `https://pantheon.world/api/screenshot/country?id=${id}`,
+        `${baseUrl}/api/screenshot/country?id=${id}`,
         ...previousImages,
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://pantheon.world/${lang}/profile/country/${id}`,
     },
   };
 }

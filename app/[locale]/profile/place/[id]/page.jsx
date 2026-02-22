@@ -122,20 +122,68 @@ async function getPeopleDiedHereHpi(placeId) {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export async function generateMetadata({params}, parent) {
-  // read route params
-  const {id} = params;
+  const {id, locale} = params;
+  const baseUrl = process.env.URL || "https://pantheon.world";
+  const lang = locale || "en";
 
   // fetch data
   const place = await getPlace(id);
 
-  // optionally access and extend (rather than replace) parent metadata
+  if (!place || !place.place) {
+    return {title: "Place Not Found | Pantheon"};
+  }
+
+  // Get country info
+  const country = await getCountry(place.country);
+
+  // Get count of notable people born here
+  const countRes = await fetch(
+    `${BASE_API}/person_ranks?bplace_geonameid=eq.${place.id}&select=id`,
+    {
+      headers: {"Prefer": "count=exact"},
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    }
+  );
+  const contentRange = countRes.headers.get("content-range");
+  let totalCount = 0;
+  if (contentRange) {
+    const match = contentRange.match(/\/(\d+)/);
+    if (match) {
+      totalCount = parseInt(match[1], 10);
+    }
+  }
+
   const previousImages = (await parent).openGraph?.images || [];
 
+  const countryName = country?.country || "";
+  const title = `Famous People from ${place.place}${countryName ? `, ${countryName}` : ""} | ${formatNumber(totalCount)} Notable People | Pantheon`;
+  const description = `Explore ${formatNumber(totalCount)} historically significant people born in ${place.place}${countryName ? `, ${countryName}` : ""}. Discover famous celebrities, leaders, artists, scientists, athletes and more from this city throughout history.`;
+
   return {
-    title: `${place.place} | Pantheon`,
+    title,
+    description,
+    keywords: `${place.place} famous people, famous people from ${place.place}, ${place.place} celebrities, notable people born in ${place.place}, ${place.place} historical figures${countryName ? `, ${countryName} famous people` : ""}`,
     openGraph: {
-      images: [`/api/screenshot/place?id=${id}`, ...previousImages],
+      title,
+      description,
+      type: "website",
+      images: [
+        `${baseUrl}/api/screenshot/place?id=${id}`,
+        ...previousImages,
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://pantheon.world/${lang}/profile/place/${id}`,
     },
   };
 }
