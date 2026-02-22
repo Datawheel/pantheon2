@@ -1,6 +1,6 @@
 "use client";
 
-import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
+import {FORMATTERS} from "../utils/consts";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 import {useEffect, useState} from "react";
@@ -22,7 +22,7 @@ export default function MemMetrics({person, personRanks, slug, title}) {
         // Make API calls concurrently
         const [occupationResponse, totalViewsResponse] = await Promise.all([
           fetch(
-            `${PUBLIC_API}/pageviews_occupation?occupation=eq.${person.occupation?.id}`
+            `${PUBLIC_API}/pageviews_occupation?occupation=eq.${person.occupation?.id}`,
           ),
           fetch(`${PUBLIC_API}/pageviews_rolling_12mo?wp_id=eq.${person.id}`),
         ]);
@@ -109,33 +109,6 @@ export default function MemMetrics({person, personRanks, slug, title}) {
             </div>
           ) : null}
         </div>
-
-        {/* <ul className="metrics-list">
-          <li className="metric">
-            <h4>{FORMATTERS.bigNum(totalViews || 0)}</h4>
-            <p>Page Views (PV) - past year</p>
-          </li>
-          <li className="metric">
-            <h4>{FORMATTERS.bigNum(occupationData || 0)}</h4>
-            <p>OccupationPage Views (PV) - past year</p>
-          </li>
-          <li className="metric">
-            <h4>{FORMATTERS.decimal(person.hpi)}</h4>
-            <p>Historical Popularity Index (HPI)</p>
-          </li>
-          <li className="metric">
-            <h4>{person.l}</h4>
-            <p>Languages Editions (L)</p>
-          </li>
-          <li className="metric">
-            <h4>{FORMATTERS.decimal(person.l_)}</h4>
-            <p>Effective Languages (L*)</p>
-          </li>
-          <li className="metric">
-            <h4>{FORMATTERS.decimal(person.coefficient_of_variation)}</h4>
-            <p>Coefficient of Variation (CV)</p>
-          </li>
-        </ul> */}
       </div>
     </SectionLayout>
   );

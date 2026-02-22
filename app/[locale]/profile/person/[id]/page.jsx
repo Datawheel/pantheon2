@@ -44,8 +44,12 @@ async function safeFetchJson(url, options = {}, fallback = null) {
 }
 
 async function getPerson(id, lang = "en") {
-  const url = `${BASE_API}/person?slug=eq.${id}&select=*,occupation(id,occupation,occupation_slug,domain_slug,num_born,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place),dplace_geonameid(slug,place)`;
-  const data = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, null);
+  const url = `${BASE_API}/person?slug=eq.${id}&select=*,occupation(id,occupation,occupation_slug,domain_slug,num_born,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place),dplace_geonameid(slug,place)`;
+  const data = await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    null,
+  );
 
   if (!data) return null;
 
@@ -60,7 +64,11 @@ async function getPerson(id, lang = "en") {
 
 async function getPersonRanks(id) {
   const url = `${BASE_API}/person_ranks?slug=eq.${id}&select=l,l_prev,hpi,occupation_rank,occupation_rank_prev,bplace_country_rank,bplace_country_rank_prev,bplace_country_occupation_rank,occupation_rank_unique,bplace_country_rank_unique,bplace_country_occupation_rank_unique,birthyear_rank_unique,deathyear_rank_unique,bplace_country`;
-  const data = await safeFetchJson(url, {method: "GET", next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  const data = await safeFetchJson(
+    url,
+    {method: "GET", next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 
   // Return first item if array has content, otherwise empty object
   return Array.isArray(data) && data.length > 0 ? data[0] : {};
@@ -78,12 +86,20 @@ async function getPersonRanks(id) {
 
 async function getBooks(personId) {
   const url = `${process.env.URL}/api/books?id=${personId}`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getMovies(personId) {
   const url = `${process.env.URL}/api/movies?id=${personId}`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPersonTrending(slug, userLang, date) {
@@ -91,7 +107,11 @@ async function getPersonTrending(slug, userLang, date) {
 
   // Fetch trending records across all languages (top 12 only)
   const trendUrl = `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.12&date=eq.${date}&select=lang,rank_pantheon`;
-  const trendRecords = await safeFetchJson(trendUrl, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
+  const trendRecords = await safeFetchJson(
+    trendUrl,
+    {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
+    [],
+  );
 
   // Build ranksByLang map
   const ranksByLang = (trendRecords || []).reduce((acc, record) => {
@@ -101,7 +121,11 @@ async function getPersonTrending(slug, userLang, date) {
 
   // Fetch localized reason
   const reasonUrl = `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}&select=reason,llm_metadata,title`;
-  const reasonRecords = await safeFetchJson(reasonUrl, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
+  const reasonRecords = await safeFetchJson(
+    reasonUrl,
+    {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
+    [],
+  );
 
   return {
     isTrending: (trendRecords || []).length > 0,
@@ -116,7 +140,11 @@ async function getPersonTrending(slug, userLang, date) {
 async function getPageViews(personId, lang = "en") {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
   const url = `${baseApi}/pageviews?lang=eq.${lang}&wp_id=eq.${personId}&select=date,views&order=date.asc`;
-  const pageviews = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  const pageviews = await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
   return Array.isArray(pageviews) ? pageviews : [];
 }
 
@@ -158,11 +186,11 @@ export default async function Page({params: {id, locale}}) {
   // Calculate yesterday's date using same pattern as wikiTrends (New York timezone)
   const now = new Date();
   const easternNow = new Date(
-    now.toLocaleString("en-US", {timeZone: "America/New_York"})
+    now.toLocaleString("en-US", {timeZone: "America/New_York"}),
   );
   easternNow.setDate(easternNow.getDate() - 1);
   const yesterday = `${easternNow.getFullYear()}-${String(
-    easternNow.getMonth() + 1
+    easternNow.getMonth() + 1,
   ).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
 
   const personData = getPerson(id, lang);
@@ -190,9 +218,15 @@ export default async function Page({params: {id, locale}}) {
     person.occupation?.[`${lang}_occupation`] || person.occupation?.occupation;
 
   // Get localized country fields from translations column
-  const localizedCountry = person.bplace_country?.[`${lang}_country`] || person.bplace_country?.country;
-  const localizedDemonym = person.bplace_country?.[`${lang}_demonym`] || person.bplace_country?.demonym;
-  const localizedNationalityAdj = person.bplace_country?.[`${lang}_nationality_adj`] || person.bplace_country?.nationality_adj_plural_m;
+  const localizedCountry =
+    person.bplace_country?.[`${lang}_country`] ||
+    person.bplace_country?.country;
+  const localizedDemonym =
+    person.bplace_country?.[`${lang}_demonym`] ||
+    person.bplace_country?.demonym;
+  const localizedNationalityAdj =
+    person.bplace_country?.[`${lang}_nationality_adj`] ||
+    person.bplace_country?.nationality_adj_plural_m;
   const localizedFromCountry = person.bplace_country?.[`${lang}_from_country`];
 
   // Create localized person object to avoid repetition
@@ -200,13 +234,15 @@ export default async function Page({params: {id, locale}}) {
     ...person,
     name: localizedName,
     occupation: {...person.occupation, occupation: localizedOccupation},
-    bplace_country: person.bplace_country ? {
-      ...person.bplace_country,
-      country: localizedCountry,
-      demonym: localizedDemonym,
-      nationalityAdj: localizedNationalityAdj,
-      fromCountry: localizedFromCountry,
-    } : null,
+    bplace_country: person.bplace_country
+      ? {
+          ...person.bplace_country,
+          country: localizedCountry,
+          demonym: localizedDemonym,
+          nationalityAdj: localizedNationalityAdj,
+          fromCountry: localizedFromCountry,
+        }
+      : null,
   };
 
   // const newsArticlesData = getNewsArticles(person.id);
@@ -227,10 +263,7 @@ export default async function Page({params: {id, locale}}) {
       title: "Memorability Metrics",
       slug: "metrics",
       content: (
-        <MemMetrics
-          person={localizedPerson}
-          personRanks={personRanks}
-        />
+        <MemMetrics person={localizedPerson} personRanks={personRanks} />
       ),
     },
     // {
@@ -241,50 +274,32 @@ export default async function Page({params: {id, locale}}) {
     {
       title: "Notable Works",
       slug: "books",
-      content: (
-        <Books
-          person={localizedPerson}
-          books={books}
-        />
-      ),
+      content: <Books person={localizedPerson} books={books} />,
     },
     {
       title: `Page views of ${localizedName} by language`,
       slug: "page-views-by-lang",
-      content: (
-        <PageViewsByLang
-          person={localizedPerson}
-        />
-      ),
+      content: <PageViewsByLang person={localizedPerson} />,
     },
     {
       title: `Among ${plural(localizedOccupation)}`,
       slug: "occupation_peers",
       content: (
-        <OccupationRanking
-          person={localizedPerson}
-          personRanks={personRanks}
-        />
+        <OccupationRanking person={localizedPerson} personRanks={personRanks} />
       ),
     },
     {
       title: "Contemporaries",
       slug: "year_peers",
       content: (
-        <YearRanking
-          person={localizedPerson}
-          personRanks={personRanks}
-        />
+        <YearRanking person={localizedPerson} personRanks={personRanks} />
       ),
     },
     {
       title: `In ${localizedCountry}`,
       slug: "country_peers",
       content: (
-        <CountryRanking
-          person={localizedPerson}
-          personRanks={personRanks}
-        />
+        <CountryRanking person={localizedPerson} personRanks={personRanks} />
       ),
     },
     {
@@ -308,12 +323,7 @@ export default async function Page({params: {id, locale}}) {
           ? "Filmography"
           : "Television and Movie Roles",
       slug: "movies",
-      content: (
-        <Movies
-          person={localizedPerson}
-          movies={movies}
-        />
-      ),
+      content: <Movies person={localizedPerson} movies={movies} />,
     },
   ];
 
@@ -371,7 +381,7 @@ export default async function Page({params: {id, locale}}) {
           id: key + 1,
           slug: section.slug,
           title: section.title,
-        })
+        }),
       )}
 
       <section className="profile-section" style={{textAlign: "center"}}>
@@ -397,12 +407,9 @@ export default async function Page({params: {id, locale}}) {
           id: key + 2,
           slug: section.slug,
           title: section.title,
-        })
+        }),
       )}
-      <Footer
-        person={localizedPerson}
-        personRanks={personRanks}
-      />
+      <Footer person={localizedPerson} personRanks={personRanks} />
     </div>
   );
 }

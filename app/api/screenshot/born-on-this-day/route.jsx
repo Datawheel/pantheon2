@@ -1,11 +1,26 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
-import {plural} from "pluralize";
 
 export const runtime = "edge";
 
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+// Month names for display
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+function formatDateForDisplay(month, day) {
+  const monthNum = parseInt(month, 10);
+  const dayNum = parseInt(day, 10);
+  const monthName = MONTH_NAMES[monthNum - 1];
+
+  // Add ordinal suffix
+  const suffix = dayNum === 1 || dayNum === 21 || dayNum === 31 ? "st"
+    : dayNum === 2 || dayNum === 22 ? "nd"
+    : dayNum === 3 || dayNum === 23 ? "rd"
+    : "th";
+
+  return `${monthName} ${dayNum}${suffix}`;
 }
 
 async function fetchPersonImage(id) {
@@ -34,11 +49,23 @@ async function fetchPersonImage(id) {
 export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
-  const occupationQueryId = searchParams.get("occupation");
-  const countryQueryId = searchParams.get("country");
+  const date = searchParams.get("date");
 
-  if (!occupationQueryId || !countryQueryId) {
-    return new NextResponse("Not Found", {status: 404});
+  if (!date) {
+    return new NextResponse("Date parameter required (MM-DD format)", {status: 400});
+  }
+
+  const [month, day] = date.split("-");
+
+  if (!month || !day || month.length !== 2 || day.length !== 2) {
+    return new NextResponse("Invalid date format. Use MM-DD", {status: 400});
+  }
+
+  const monthNum = parseInt(month, 10);
+  const dayNum = parseInt(day, 10);
+
+  if (isNaN(monthNum) || isNaN(dayNum) || monthNum < 1 || monthNum > 12 || dayNum < 1 || dayNum > 31) {
+    return new NextResponse("Invalid date values", {status: 400});
   }
 
   // Load font
@@ -46,56 +73,27 @@ export async function GET(request) {
     new URL("../../../../public/fonts/Marcellus-Regular.ttf", import.meta.url)
   ).then(res => res.arrayBuffer());
 
-  // Fetch occupation and country data in parallel
-  const [occupationRes, countryRes] = await Promise.all([
-    fetch(`${BASE_API}/occupation?occupation_slug=eq.${occupationQueryId}`),
-    fetch(`${BASE_API}/country?country_code=eq.${countryQueryId}`),
-  ]);
+  // Fetch people born on this day
+  const peopleBornOnDay = await fetch(
+    `${BASE_API}/rpc/born_on_day?m=${month}&d=${day}&lang=en`
+  )
+    .then(res => res.json())
+    .then(data => Array.isArray(data) ? data : [])
+    .catch(error => {
+      console.error("Error fetching people:", error);
+      return [];
+    });
 
-  const occupationData = await occupationRes.json();
-  const countryData = await countryRes.json();
-
-  const occupation = Array.isArray(occupationData) && occupationData.length > 0
-    ? occupationData[0]
-    : {};
-  const country = Array.isArray(countryData) && countryData.length > 0
-    ? countryData[0]
-    : {};
-
-  const {occupation: occupationName, id: occupationId} = occupation;
-  const {country: countryName, id: countryId} = country;
-
-  if (!occupationName || !countryName) {
-    return new NextResponse("Not Found", {status: 404});
-  }
-
-  // Fetch top people and total count in parallel
-  const [topPeopleRes, countRes] = await Promise.all([
-    fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,name&limit=16`
-    ),
-    fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&select=id`,
-      {headers: {"Prefer": "count=exact"}}
-    ),
-  ]);
-
-  const topPeople = await topPeopleRes.json();
-
-  // Get total count from headers
-  const contentRange = countRes.headers.get("content-range");
-  let totalCount = 0;
-  if (contentRange) {
-    const match = contentRange.match(/\/(\d+)/);
-    if (match) {
-      totalCount = parseInt(match[1], 10);
-    }
-  }
+  // Sort by HPI and take top 16
+  const topPeople = peopleBornOnDay
+    .filter(p => p.hpi)
+    .sort((a, b) => b.hpi - a.hpi)
+    .slice(0, 16);
 
   // Fetch images for top people
   const peopleWithImages = await Promise.all(
     topPeople.map(async person => {
-      const imageData = await fetchPersonImage(person.id);
+      const imageData = await fetchPersonImage(person.person_id);
       return {
         ...person,
         imageData,
@@ -103,6 +101,7 @@ export async function GET(request) {
     })
   );
 
+  const displayDate = formatDateForDisplay(month, day);
   const backgroundColor = "#f4f4f1";
 
   return new ImageResponse(
@@ -126,7 +125,7 @@ export async function GET(request) {
             justifyContent: "center",
             width: "50%",
             height: "100%",
-            padding: "0 50px",
+            padding: "0 60px",
             position: "relative",
             zIndex: 10,
           }}
@@ -151,56 +150,62 @@ export async function GET(request) {
               fontFamily: "Marcellus,Times,serif",
               textTransform: "uppercase",
               fontWeight: "400",
-              letterSpacing: ".2rem",
-              fontSize: "2.4rem",
-              margin: "10px 0",
+              letterSpacing: ".3rem",
+              fontSize: "3rem",
+              margin: "0",
               textAlign: "center",
-              lineHeight: 1.2,
             }}
           >
-            {plural(occupationName)}
+            BORN ON
           </h1>
-          <h3
-            style={{
-              color: "#9e978d",
-              fontFamily: "Marcellus,Times,serif",
-              textTransform: "uppercase",
-              fontWeight: "400",
-              letterSpacing: ".15rem",
-              fontSize: "1.4rem",
-              margin: "5px 0",
-              textAlign: "center",
-            }}
-          >
-            from
-          </h3>
           <h1
             style={{
               color: "#363636",
               fontFamily: "Marcellus,Times,serif",
               textTransform: "uppercase",
               fontWeight: "400",
-              letterSpacing: ".2rem",
-              fontSize: "2.4rem",
-              margin: "10px 0",
+              letterSpacing: ".3rem",
+              fontSize: "3rem",
+              margin: "0",
               textAlign: "center",
-              lineHeight: 1.2,
             }}
           >
-            {countryName}
+            THIS DAY
           </h1>
-          {totalCount > 0 && (
-            <p
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              marginTop: "30px",
+              padding: "20px 40px",
+              background: "linear-gradient(135deg, #0088cc 0%, #005588 100%)",
+              borderRadius: "8px",
+            }}
+          >
+            <span
               style={{
-                color: "#9e978d",
-                fontSize: "1.4rem",
-                marginTop: "30px",
+                color: "#ffffff",
+                fontFamily: "Marcellus,Times,serif",
+                fontWeight: "400",
+                letterSpacing: ".2rem",
+                fontSize: "2.5rem",
                 textAlign: "center",
               }}
             >
-              {formatNumber(totalCount)} notable {totalCount === 1 ? "person" : "people"}
-            </p>
-          )}
+              {displayDate}
+            </span>
+          </div>
+          <p
+            style={{
+              color: "#9e978d",
+              fontSize: "1.2rem",
+              marginTop: "30px",
+              textAlign: "center",
+            }}
+          >
+            {peopleBornOnDay.length > 0 ? `${peopleBornOnDay.length} famous people` : "Explore birthdays"}
+          </p>
         </div>
 
         {/* Right column - Grid of portraits */}
@@ -226,7 +231,7 @@ export async function GET(request) {
           >
             {peopleWithImages.slice(0, 16).map((person, index) => (
               <div
-                key={person.id || index}
+                key={person.person_id || index}
                 style={{
                   width: "130px",
                   height: "130px",
