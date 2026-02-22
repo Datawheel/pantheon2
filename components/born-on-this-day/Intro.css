@@ -1,0 +1,119 @@
+.intro-section.born-on-this-day .date-picker-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.intro-section.born-on-this-day .date-picker-section h4 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.intro-section.born-on-this-day .date-picker-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-section.born-on-this-day .date-select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.intro-section.born-on-this-day .date-select:focus {
+  outline: none;
+  border-color: #4b4a48;
+}
+
+.intro-section.born-on-this-day .date-go-btn,
+.intro-section.born-on-this-day .date-today-btn {
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.intro-section.born-on-this-day .date-go-btn {
+  background: #fff;
+  color: #4b4a48;
+  font-weight: 600;
+}
+
+.intro-section.born-on-this-day .date-go-btn:hover {
+  background: #f0f0f0;
+}
+
+.intro-section.born-on-this-day .date-today-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.intro-section.born-on-this-day .date-today-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.intro-section.born-on-this-day .day-navigation {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.intro-section.born-on-this-day .day-nav-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.intro-section.born-on-this-day .day-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+  color: white;
+}
+
+@media (max-width: 750px) {
+  .intro-section.born-on-this-day .date-picker-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .intro-section.born-on-this-day .date-select {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .intro-section.born-on-this-day .date-go-btn,
+  .intro-section.born-on-this-day .date-today-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .intro-section.born-on-this-day .day-navigation {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .intro-section.born-on-this-day .day-nav-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}

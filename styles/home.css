@@ -858,6 +858,21 @@
   color: #004499;
 }
 
+.announcement-block.birthday-announcement {
+  background-color: #e6f3ff;
+  border-left-color: #0088cc;
+}
+
+.announcement-block.birthday-announcement h2 .new-badge {
+  font-size: 0.7rem;
+  background: #0088cc;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
 .trending-news-button-container {
   text-align: center;
   margin-top: 20px;

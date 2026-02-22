@@ -82,6 +82,11 @@ export default function Navigation() {
                 </a>
               </li>
               <li>
+                <a href={`/${lang}/profile/born-on-this-day`} className="item-link">
+                  {t.nav.bornOnThisDay || "Born on This Day"} <span className="new-badge">{t.nav.newBadge}</span>
+                </a>
+              </li>
+              <li>
                 <a href={`/${lang}/profile/place`} className="item-link">
                   {t.nav.places}
                 </a>
@@ -289,6 +294,11 @@ export default function Navigation() {
                 <ul className="sub-items">
                   <li>
                     <a href={`/${lang}/profile/person`}>{t.nav.people}</a>
+                  </li>
+                  <li>
+                    <a href={`/${lang}/profile/born-on-this-day`}>
+                      {t.nav.bornOnThisDay || "Born on This Day"} <span className="new-badge">{t.nav.newBadge}</span>
+                    </a>
                   </li>
                   <li>
                     <a href={`/${lang}/profile/place`}>{t.nav.places}</a>

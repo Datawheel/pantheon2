@@ -64,6 +64,11 @@ const Footer = () => {
             </a>
           </li>
           <li>
+            <a href={`/${lang}/profile/born-on-this-day`} className="item-link">
+              {t.nav.bornOnThisDay || "Born on This Day"}
+            </a>
+          </li>
+          <li>
             <a href={`/${lang}/profile/place`} className="item-link">
               {t.nav.places}
             </a>

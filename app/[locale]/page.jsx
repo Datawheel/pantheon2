@@ -198,6 +198,16 @@ export default async function Home({params}) {
         trendingWithReasons={trendingWithReasons}
       />
 
+      <div className="announcement-block birthday-announcement">
+        <h2>{t.home.bornOnThisDay || "Born on This Day"} <span className="new-badge">{t.nav?.newBadge || "new!"}</span></h2>
+        <p>
+          {t.home.bornOnThisDayText || "Discover which famous people share your birthday! Explore our new birthday pages to find celebrities, historical figures, and notable personalities born on any day of the year."}{" "}
+          <Link href={`/${lang}/profile/born-on-this-day`}>
+            {t.home.bornOnThisDayLink || "See who was born today"} &rarr;
+          </Link>
+        </p>
+      </div>
+
       <TrendingGrid
         title={t.home.recentlyAdded}
         allowLangChange={false}
