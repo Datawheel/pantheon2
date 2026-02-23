@@ -1,272 +1,242 @@
-"use client";
-import {useEffect, useState} from "react";
-import {useRouter, useParams} from "next/navigation";
-import axios from "axios";
-import {nest} from "d3-collection";
-import {plural} from "pluralize";
-import Select from "/components/common/Select";
-import FancyButton from "/components/common/FancyButton";
-import {toTitleCase} from "/components/utils/vizHelpers";
-import {FORMATTERS} from "/components/utils/consts";
-import "/components/occupation-country/SelectOccupationCountry.css";
+import Link from "next/link";
 import Image from "next/image";
-import {PUBLIC_API} from "/app/constants";
+import {plural} from "pluralize";
+import OccupationCountrySelector from "/components/occupation-country/OccupationCountrySelector";
+import {toTitleCase} from "/components/utils/vizHelpers";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {safeFetchJson} from "/app/utils/safeFetch";
 import {getTranslations} from "/app/translations";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import "/components/occupation-country/SelectOccupationCountry.css";
 
-export default function Page() {
-  const {push} = useRouter();
-  const params = useParams();
+async function getOccupations(lang) {
+  const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=*,${lang}_occupation:translations->${lang}->>occupation`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+}
+
+async function getCountries(lang) {
+  const url = `${BASE_API}/country?order=country.asc&select=*,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+}
+
+async function getAllCombinations(lang) {
+  // Fetch all occupation-country combinations with at least 1 person
+  const url = `${BASE_API}/occupation_country?num_people=gte.1&order=num_people.desc&select=*,occupation_data:occupation!occupation(occupation_slug,occupation,${lang}_occupation:translations->${lang}->>occupation),country_data:country!country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym)`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+}
+
+export async function generateMetadata({params}) {
+  const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
+  const t = getTranslations(locale);
+  const baseUrl = process.env.URL || "https://pantheon.world";
+
+  const title = `${t.selectOccupationCountry.heading} | Pantheon`;
+  const description = t.selectOccupationCountry.pleaseSelect;
+
+  return {
+    title,
+    description,
+    keywords: "famous people by occupation and country, occupation country profiles, historical figures by profession, celebrities by nationality",
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: [`${baseUrl}/images/logos/logo_pantheon.svg`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://pantheon.world/${locale}/profile/select-occupation-country`,
+    },
+  };
+}
+
+export default async function Page({params}) {
   const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
   const t = getTranslations(locale);
 
-  const selection2Entity = "product";
+  const [occupationsRaw, countriesRaw, allCombinations] = await Promise.all([
+    getOccupations(locale),
+    getCountries(locale),
+    getAllCombinations(locale),
+  ]);
 
-  const countryIconPath = "/images/icons/country";
-  const productIconPath = "/images/icons/product";
-  const countryDefaultIcon = `${countryIconPath}/country.svg`;
-  const productDefaultIcon = `${productIconPath}/product.svg`;
+  // Localize occupations
+  const occupations = occupationsRaw.map(occ => ({
+    ...occ,
+    occupation: occ[`${locale}_occupation`] || occ.occupation,
+  }));
 
-  const [selection1, setSelection1] = useState("soccer-player");
-  const [selection2, setSelection2] = useState("united-states");
-  const [occupations, setOccupations] = useState([]);
-  const [countries, setCountries] = useState([]);
-  const [occupationsInCountry, setOccupationsInCountry] = useState([]);
+  // Localize countries
+  const countries = countriesRaw.map(country => ({
+    ...country,
+    country: country[`${locale}_country`] || country.country,
+    demonym: country[`${locale}_demonym`] || country.demonym,
+  })).filter(c => c.continent);
 
-  const [occupation, setOccupation] = useState("soccer-player");
+  // Process all combinations and group by country
+  const combinationsByCountry = {};
+  allCombinations.forEach(combo => {
+    const countrySlug = combo.country_data?.slug;
+    if (!countrySlug) return;
 
-  useEffect(() => {
-    async function fetchMyData() {
-      try {
-        const [occupationsRes, countriesRes, occupationsInCountryRes] = await Promise.all([
-          fetch(`${PUBLIC_API}/occupation?order=num_born.desc.nullslast&select=*,${locale}_occupation:translations->${locale}->>occupation`),
-          fetch(`${PUBLIC_API}/country?order=num_born.desc.nullslast&select=*,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural`),
-          fetch(`${PUBLIC_API}/occupation_country?num_people=gte.18&select=*,occupation_data:occupation!occupation(occupation_slug,occupation,${locale}_occupation:translations->${locale}->>occupation),country_data:country!country(slug,country,demonym,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural)`)
-        ]);
-
-        // Check for errors and parse JSON safely
-        const parseResponse = async (res) => {
-          if (!res.ok) return [];
-          const text = await res.text();
-          if (text.startsWith("<")) return [];
-          try { return JSON.parse(text); } catch { return []; }
-        };
-
-        const [occupations, countries, occupationsInCountry] = await Promise.all([
-          parseResponse(occupationsRes),
-          parseResponse(countriesRes),
-          parseResponse(occupationsInCountryRes)
-        ]);
-
-        // Map localized occupation names
-        const localizedOccupations = occupations.map(occ => ({
-          ...occ,
-          occupation: occ[`${locale}_occupation`] || occ.occupation,
-        }));
-
-        // Map localized country names and demonyms
-        const localizedCountries = countries.map(country => ({
-          ...country,
-          country: country[`${locale}_country`] || country.country,
-          demonym: country[`${locale}_demonym`] || country.demonym,
-        }));
-
-        setOccupations(localizedOccupations);
-        setCountries(localizedCountries);
-
-        const numPeopleSum = occupationsInCountry.reduce(
-          (a, b) => a + (b.num_people || 0),
-          0
-        );
-        let occupationsInCountryNested = occupationsInCountry.map(d => {
-          const rca =
-            d.num_people /
-            d.num_people_country /
-            (d.num_people_occupation / numPeopleSum);
-          return {...d, rca};
-        });
-        occupationsInCountryNested = nest()
-          .key(d => d.country_slug)
-          .rollup(leaves => leaves.sort((a, b) => b.rca - a.rca).slice(0, 5))
-          .entries(occupationsInCountry)
-          .map(d => {
-            const countryData = d.value[0].country_data;
-            const c = {
-              ...countryData,
-              id: d.value[0].country,
-              country: countryData[`${locale}_country`] || countryData.country,
-              demonym: countryData[`${locale}_demonym`] || countryData.demonym,
-            };
-            return {values: d.value, country: c};
-          });
-        setOccupationsInCountry(occupationsInCountryNested);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    if (!combinationsByCountry[countrySlug]) {
+      combinationsByCountry[countrySlug] = {
+        country: combo.country_data?.[`${locale}_country`] || combo.country_data?.country,
+        countrySlug,
+        demonym: combo.country_data?.[`${locale}_demonym`] || combo.country_data?.demonym,
+        occupations: [],
+      };
     }
-    fetchMyData();
-  }, [locale]);
 
-  useEffect(() => {
-    setSelection1(occupation);
-    async function fetchOccupationData() {
-      try {
-        const res = await fetch(
-          `${PUBLIC_API}/occupation_country?occupation_slug=eq.${occupation}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,demonym,${locale}_country:translations->${locale}->>country,${locale}_demonym:translations->${locale}->>demonym_m_plural)`
-        );
-        if (!res.ok) return;
-        const text = await res.text();
-        if (text.startsWith("<")) return;
-        const countriesData = JSON.parse(text);
+    combinationsByCountry[countrySlug].occupations.push({
+      occupation: combo.occupation_data?.[`${locale}_occupation`] || combo.occupation_data?.occupation,
+      occupationSlug: combo.occupation_data?.occupation_slug,
+      numPeople: combo.num_people,
+    });
+  });
 
-        // Map localized country names from embedded country_data
-        const localizedCountries = countriesData.map(item => ({
-          ...item,
-          country: item.country_data?.[`${locale}_country`] || item.country_data?.country || item.country,
-          country_slug: item.country_data?.slug || item.country_slug,
-          slug: item.country_data?.slug || item.country_slug,
-        }));
+  // Sort occupations within each country by num_people and take top 5
+  Object.values(combinationsByCountry).forEach(country => {
+    country.occupations.sort((a, b) => b.numPeople - a.numPeople);
+    country.occupations = country.occupations.slice(0, 5);
+  });
 
-        setCountries(localizedCountries);
-      } catch (error) {
-        console.error("Error fetching occupation data:", error);
+  // Group countries by first letter (alphabetically)
+  const countriesByLetter = {};
+  Object.values(combinationsByCountry)
+    .filter(c => c.occupations.length > 0)
+    .sort((a, b) => a.country.localeCompare(b.country))
+    .forEach(country => {
+      const firstLetter = country.country.charAt(0).toUpperCase();
+      if (!countriesByLetter[firstLetter]) {
+        countriesByLetter[firstLetter] = [];
       }
-    }
-    fetchOccupationData();
-  }, [occupation, locale]);
+      countriesByLetter[firstLetter].push(country);
+    });
+
+  // Get sorted letters
+  const sortedLetters = Object.keys(countriesByLetter).sort();
+
+  // Get popular combinations for the featured section (top 24)
+  const popularCombos = allCombinations
+    .slice(0, 24)
+    .map(combo => ({
+      occupation: combo.occupation_data?.[`${locale}_occupation`] || combo.occupation_data?.occupation,
+      occupationSlug: combo.occupation_data?.occupation_slug,
+      country: combo.country_data?.[`${locale}_country`] || combo.country_data?.country,
+      countrySlug: combo.country_data?.slug,
+      demonym: combo.country_data?.[`${locale}_demonym`] || combo.country_data?.demonym,
+      numPeople: combo.num_people,
+    }));
 
   return (
-    <div className="welcome">
-      {/* welcome text */}
-      <div className="welcome-intro">
-        <h1
-          className="welcome-intro-heading u-font-lg u-margin-top-off"
-          aria-label={t.selectOccupationCountry.heading}
-        >
-          {t.selectOccupationCountry.heading}
-        </h1>
-      </div>
+    <div className="select-occupation-country-page">
+      {/* Hero Section with Selector */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="hero-title">{t.selectOccupationCountry.heading}</h1>
+          <p className="hero-subtitle">{t.selectOccupationCountry.pleaseSelect}</p>
 
-      {/* entity selection form */}
-      <div className="welcome-form-outer">
-        <div className="welcome-form-inner">
-          <h2 className="u-visually-hidden">
-            {t.selectOccupationCountry.pleaseSelect}
-          </h2>
-
-          {/* the form */}
-          <form onSubmit={evt => evt.preventDefault()} className="welcome-form">
-            {/* entity 1 */}
-            <div className="welcome-form-select-wrapper">
-              <Select
-                label="occupation"
-                className="welcome-form-select"
-                fontSize="lg"
-                onChange={evt => setOccupation(evt.target.value)}
-              >
-                <option disabled={true}>{t.selectOccupationCountry.selectOccupation}</option>
-                {occupations.map(occupation => (
-                  <option
-                    value={occupation.occupation_slug}
-                    key={occupation.occupation_slug}
-                  >
-                    {locale === "en" ? toTitleCase(occupation.occupation) : occupation.occupation}
-                  </option>
-                ))}
-              </Select>
-            </div>
-
-            {/* entity 2 */}
-            {/* <div className="welcome-form-select-wrapper" disabled={selection1 === null}> */}
-            <div className="welcome-form-select-wrapper" disabled={false}>
-              <Select
-                label="country"
-                className="welcome-form-select"
-                fontSize="lg"
-                onChange={evt => setSelection2(evt.target.value)}
-              >
-                <option disabled={true}>{t.selectOccupationCountry.selectCountry}</option>
-                {countries.map(country => (
-                  <option
-                    value={country.country_slug || country.slug}
-                    key={country.country_slug || country.slug}
-                  >
-                    {country.num_people
-                      ? `${country.country} (${country.num_people.toLocaleString(locale)})`
-                      : country.country}
-                  </option>
-                ))}
-              </Select>
-            </div>
-
-            {/* submit button submits the form */}
-            <div className="welcome-form-button-wrapper">
-              <FancyButton
-                icon="arrow-right"
-                disabled={selection1 === "unspecified"}
-                onClick={() =>
-                  push(
-                    `/${locale}/profile/occupation/${selection1}/country/${selection2}`
-                  )
-                }
-              >
-                {t.selectOccupationCountry.goToProfile}
-              </FancyButton>
-            </div>
-          </form>
+          <OccupationCountrySelector
+            initialOccupations={occupations}
+            initialCountries={countries.slice(0, 50)}
+            locale={locale}
+            labels={{
+              selectOccupation: t.selectOccupationCountry.selectOccupation,
+              selectCountry: t.selectOccupationCountry.selectCountry,
+              goToProfile: t.selectOccupationCountry.goToProfile,
+            }}
+          />
         </div>
-      </div>
+      </section>
 
-      {/* welcome text */}
-      <div className="sample-ctr-occs">
-        <h2
-          className="welcome-intro-heading u-font-lg u-margin-top-off"
-          aria-label="The most famous occupation / country combinations"
-        >
-          {t.selectOccupationCountry.whoAreTheMostFamous}
-        </h2>
-        <ul className="sample-ctr-occs-list">
-          {occupationsInCountry.map(aCountry => (
-            <li key={aCountry.country.slug}>
-              <ul className="sample-ctr-occs">
-                {aCountry.values.map(occupationInCountry => {
-                  // Get localized occupation name from embedded occupation_data
-                  const localizedOccupation = occupationInCountry.occupation_data?.[`${locale}_occupation`] ||
-                                              occupationInCountry.occupation_data?.occupation ||
-                                              occupationInCountry.occupation;
+      {/* Popular Combinations */}
+      <section className="popular-section">
+        <div className="section-container">
+          <h2 className="section-title">{t.selectOccupationCountry.whoAreTheMostFamous}</h2>
+          <div className="popular-grid">
+            {popularCombos.map(combo => (
+              <Link
+                key={`${combo.occupationSlug}-${combo.countrySlug}`}
+                href={`/${locale}/profile/occupation/${combo.occupationSlug}/country/${combo.countrySlug}`}
+                className="popular-card"
+              >
+                <Image
+                  src={`/images/icons/country/${combo.countrySlug}.svg`}
+                  alt={combo.country}
+                  width={24}
+                  height={24}
+                  className="popular-flag"
+                />
+                <span className="popular-text">
+                  {combo.demonym}{" "}
+                  {locale === "en" ? toTitleCase(plural(combo.occupation)) : combo.occupation}
+                </span>
+                <span className="popular-count">{combo.numPeople?.toLocaleString(locale)}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                  // For English, use plural form with toTitleCase; for other languages, use the occupation as-is
-                  const occupationDisplay = locale === "en"
-                    ? toTitleCase(plural(localizedOccupation))
-                    : localizedOccupation;
+      {/* Alphabet Navigation */}
+      <nav className="alphabet-nav">
+        <div className="section-container">
+          <div className="alphabet-links">
+            {sortedLetters.map(letter => (
+              <a key={letter} href={`#letter-${letter}`} className="alphabet-link">
+                {letter}
+              </a>
+            ))}
+          </div>
+        </div>
+      </nav>
 
-                  return (
-                    <li
-                      key={`${occupationInCountry.country_slug}-${occupationInCountry.occupation_slug}`}
-                    >
-                      <a
-                        href={`/${locale}/profile/occupation/${occupationInCountry.occupation_slug}/country/${occupationInCountry.country_slug}`}
-                      >
-                        <Image
-                          className="country-flag"
-                          src={`/images/icons/country/${aCountry.country.slug}.svg`}
-                          alt={`Round icon flag of ${aCountry.country.country}`}
-                          width={20}
-                          height={20}
-                        />
-                        <span>
-                          {aCountry.country.demonym}{" "}
-                          {occupationDisplay}
-                        </span>
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </li>
+      {/* Browse by Country (Alphabetical) */}
+      <section className="browse-section browse-alphabetical">
+        <div className="section-container">
+          <h2 className="section-title">Browse by Country</h2>
+
+          {sortedLetters.map(letter => (
+            <div key={letter} id={`letter-${letter}`} className="letter-section">
+              <h3 className="letter-heading">{letter}</h3>
+              <div className="countries-grid">
+                {countriesByLetter[letter].map(country => (
+                  <div key={country.countrySlug} className="country-card">
+                    <div className="country-header">
+                      <Image
+                        src={`/images/icons/country/${country.countrySlug}.svg`}
+                        alt={country.country}
+                        width={24}
+                        height={24}
+                        className="country-flag"
+                      />
+                      <span className="country-name">{country.country}</span>
+                    </div>
+                    <ul className="country-occupations">
+                      {country.occupations.map(occ => (
+                        <li key={occ.occupationSlug}>
+                          <Link
+                            href={`/${locale}/profile/occupation/${occ.occupationSlug}/country/${country.countrySlug}`}
+                          >
+                            {country.demonym}{" "}
+                            {locale === "en" ? toTitleCase(plural(occ.occupation)) : occ.occupation}
+                            <span className="occ-count">({occ.numPeople?.toLocaleString(locale)})</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
           ))}
-        </ul>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }
