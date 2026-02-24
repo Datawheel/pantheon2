@@ -178,11 +178,16 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
+
 .trending-card-link {
   display: block;
   padding: 1.25rem 1.25rem 1rem;
   text-decoration: none;
   color: var(--colorStone);
+}
+
+.trending-card-link:hover {
+  text-decoration: none;
 }
 
 .trending-card-header {

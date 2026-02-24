@@ -2,6 +2,7 @@ import {plural} from "pluralize";
 import Header from "/components/occupation-country/Header";
 import Intro from "/components/occupation-country/Intro";
 import TrendingBanner from "/components/occupation-country/TrendingBanner";
+import TrendingPeople from "/components/occupation-country/sections/TrendingPeople";
 import TopTen from "/components/occupation-country/sections/TopTen";
 import People from "/components/occupation-country/sections/People";
 import Lifespans from "/components/occupation-country/sections/Lifespans";
@@ -60,7 +61,7 @@ async function getAllOccupationsInCountry(countryId) {
 }
 
 async function getPeople(occupationId, countryId) {
-  const url = `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  const url = `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive,famous_for`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
@@ -227,6 +228,13 @@ export default async function Page({params: {locale, id, countryId}}) {
           impressions={trendingStatus.impr_curr}
         />
       )}
+      <TrendingPeople
+        occupation={localizedOccupationObj}
+        country={localizedCountryObj}
+        countryName={country.country}
+        countrySlug={country.slug}
+        locale={lang}
+      />
       <div className="about-section">
         {/* <ProfileNav sections={this.sections} /> */}
         <Intro

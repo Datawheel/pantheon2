@@ -1,57 +1,275 @@
-@import "../../../styles/mixins.css";
+/* ============================================
+   Top 10 Section - Compact List Layout
+   ============================================ */
 
-.top-10 {
-  & h2 {
-    @mixin priTitle;
-    border-bottom: solid 1px gray;
-    font-size: var(--sizeXL);
-    padding: 0 0 10px 0;
-    margin: 0 0 20px 0;
-    text-align: center;
+.top-10-section {
+  background: var(--colorEggshell);
+  padding: 2.75rem 0;
+}
+
+.top-10-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.top-10-header {
+  margin-bottom: 0.75rem;
+}
+
+.top-10-title {
+  font-family: var(--fontMarcellus);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--colorStone);
+  margin: 0;
+  text-align: left;
+  letter-spacing: 0.02em;
+}
+
+.top-10-intro {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #4a4a4a;
+  max-width: 840px;
+  margin: 0 0 2rem;
+}
+
+.top-10-intro a {
+  color: var(--colorLink);
+  text-decoration: none;
+}
+
+.top-10-intro a:hover {
+  text-decoration: underline;
+}
+
+/* List Layout */
+.top-10-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.top-10-item {
+  margin: 0;
+}
+
+/* Card Styling */
+.top-10-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.top-10-card:hover {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.top-10-card-link {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--colorStone);
+}
+
+.top-10-card-link:hover {
+  text-decoration: none;
+}
+
+.top-10-card-rank {
+  font-weight: 700;
+  font-size: 1rem;
+  background: var(--colorLint);
+  color: var(--colorStone);
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.top-10-card-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--colorLint);
+  flex-shrink: 0;
+}
+
+.top-10-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.top-10-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.top-10-card-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 0.35rem 0;
+  color: var(--colorStone);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-10-card-dates {
+  font-size: 1rem;
+  color: var(--colorMidGray);
+  margin: 0 0 0.5rem 0;
+}
+
+.top-10-card-stats {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.top-10-card-hpi,
+.top-10-card-languages {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4b5563;
+  background: var(--colorLint);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+}
+
+/* Famous For */
+.top-10-famous {
+  padding: 0 1rem 1rem;
+}
+
+.top-10-famous-text,
+.top-10-famous-full {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #4a5568;
+  margin: 0;
+}
+
+.top-10-famous-details {
+  margin: 0;
+}
+
+.top-10-famous-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.top-10-famous-summary::-webkit-details-marker {
+  display: none;
+}
+
+.top-10-famous-excerpt {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #4a5568;
+}
+
+.top-10-famous-toggle {
+  align-self: flex-start;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #9a3412;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(234, 88, 12, 0.4);
+  background: rgba(234, 88, 12, 0.08);
+}
+
+.top-10-famous-toggle.less {
+  display: none;
+}
+
+.top-10-famous-details[open] .top-10-famous-excerpt {
+  display: none;
+}
+
+.top-10-famous-details[open] .top-10-famous-toggle.more {
+  display: none;
+}
+
+.top-10-famous-details[open] .top-10-famous-toggle.less {
+  display: inline-flex;
+}
+
+.top-10-famous-details[open] .top-10-famous-full {
+  margin-top: 0.4rem;
+}
+
+/* Responsive - Larger screens */
+@media (min-width: 1024px) {
+  .top-10-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  & p {
-    font-size: 1.8rem;
-    line-height: calc(1.8rem * 1.7);
-    margin: 0 0 40px;
-    font-weight: 400;
+  .top-10-card-image {
+    width: 72px;
+    height: 72px;
   }
 }
-.top-person {
-  display: flex;
-  margin: 0 0 40px 0;
-  @media (max-width: 800px) {
-    flex-direction: column;
+
+/* Responsive - Mobile */
+@media (max-width: 700px) {
+  .top-10-section {
+    padding: 2rem 0;
   }
-  & .top-person-img {
-    margin: 0 20px 0 0;
-    & img {
-      width: 240px;
-      width: 180px;
-    }
+
+  .top-10-container {
+    padding: 0 1rem;
   }
-  & .top-person-details {
-    & h3 {
-      font-size: var(--sizeXL);
-      margin: 0 0 10px 0;
-      @media (max-width: 800px) {
-        font-size: var(--sizeLarge);
-      }
-    }
-    & p {
-      font-size: var(--sizeML);
-      line-height: calc(1.8rem * 1.6);
-      margin: 0 0 20px;
-      font-weight: 400;
-      width: 100%;
-      @media (max-width: 800px) {
-        font-size: var(--sizeMobileSmall);
-        line-height: calc(1.8rem * 1.4);
-      }
-      &.wiki-summary {
-        font-size: 1.4rem;
-        line-height: calc(1.4rem * 1.7);
-      }
-    }
+
+  .top-10-title {
+    font-size: 2rem;
+  }
+
+  .top-10-intro {
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .top-10-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .top-10-card {
+    padding: 0;
+  }
+
+  .top-10-card-link {
+    padding: 0.85rem;
+  }
+
+  .top-10-card-image {
+    width: 58px;
+    height: 58px;
+  }
+
+  .top-10-card-name {
+    font-size: 1.15rem;
   }
 }
