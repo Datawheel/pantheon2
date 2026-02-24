@@ -27,7 +27,7 @@
 }
 
 .trending-people-title {
-  font-family: var(--fontMarcellus);
+  font-family: var(--fontMarcellus, "Marcellus", "Times New Roman", serif);
   font-size: 2rem;
   font-weight: 400;
   color: var(--colorStone);
@@ -52,30 +52,44 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+  align-items: stretch;
 }
 
 .trending-person-item {
   margin: 0;
+  display: flex;
 }
 
 /* Card Styling */
 .trending-person-card {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
   background: rgba(255, 255, 255, 0.96);
   border-radius: 12px;
-  padding: 1rem;
-  text-decoration: none;
-  color: var(--colorStone);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
   border: 1px solid rgba(235, 120, 35, 0.2);
   position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  flex: 1;
+  height: 100%;
 }
 
 .trending-person-card:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.trending-person-link {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--colorStone);
+}
+
+.trending-person-link:hover {
   text-decoration: none;
 }
 
@@ -129,15 +143,58 @@
 
 .trending-person-dates {
   font-size: 0.9rem;
-  color: var(--colorMidGray);
+  color: var(--colorMidGray, #6b7280);
+  margin: 0;
+}
+
+/* Trending reason toggle (copied from landing page styles) */
+.trending-reason {
+  padding: 1rem 1rem 1.1rem;
+  border-top: 1px solid var(--colorLint);
+  background: #fafaf9;
+}
+
+.trending-reason p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #1a1a1a;
   margin: 0 0 0.5rem 0;
 }
 
-.trending-person-reason {
-  font-size: 0.9rem;
-  color: #7c2d12;
-  margin: 0;
-  line-height: 1.4;
+.trending-reason p:last-of-type {
+  margin-bottom: 0;
+}
+
+.trending-reason-full p {
+  margin-bottom: 0.75rem;
+}
+
+.trending-reason-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  color: #ea580c;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.35rem 0;
+  margin-top: 0.5rem;
+}
+
+.trending-reason-toggle:hover {
+  text-decoration: none;
+}
+
+.trending-reason-toggle:focus,
+.trending-reason-toggle:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.trending-reason-toggle .chevron-icon {
+  transition: transform 0.2s ease;
 }
 
 /* Responsive - Larger screens */
@@ -175,7 +232,7 @@
     grid-template-columns: 1fr;
   }
 
-  .trending-person-card {
+  .trending-person-link {
     padding: 0.85rem;
   }
 
@@ -186,5 +243,17 @@
 
   .trending-person-name {
     font-size: 1.05rem;
+  }
+
+  .trending-reason {
+    padding: 0.85rem 0.85rem 1rem;
+  }
+
+  .trending-reason p {
+    font-size: 1rem;
+  }
+
+  .trending-reason-toggle {
+    font-size: 0.95rem;
   }
 }

@@ -5,6 +5,7 @@ import {FORMATTERS} from "../../utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {DEFAULT_LOCALE, getLocalizedLanguageName} from "/app/locales";
 import {toTitleCase} from "../../utils/vizHelpers";
+import TrendingReasonToggle from "./TrendingReasonToggle";
 import "./TrendingPeople.css";
 
 async function safeFetchJson(url, options = {}, fallback = null) {
@@ -50,30 +51,38 @@ function formatTrendDate(dateStr, locale) {
   }).format(dateObj);
 }
 
-function buildTrendReason(trend, locale) {
-  const langName = trend.lang
-    ? getLocalizedLanguageName(trend.lang, locale)
-    : null;
+function formatLanguageRanks(langRanks, locale) {
+  if (!langRanks || langRanks.length === 0) return null;
+  const parts = langRanks.map(({code, rank}) => {
+    const name = getLocalizedLanguageName(code, locale);
+    if (rank !== undefined && rank !== null && Number.isFinite(rank)) {
+      return `${name} (#${rank})`;
+    }
+    return name;
+  });
+  try {
+    return new Intl.ListFormat(locale, {style: "long", type: "conjunction"}).format(parts);
+  } catch (e) {
+    return parts.join(", ");
+  }
+}
+
+function buildTrendReason({trend, languageRanks}, locale) {
+  const langList = formatLanguageRanks(languageRanks, locale);
   const dateLabel = formatTrendDate(trend.date, locale);
   const parts = [];
 
-  if (trend.rank_pantheon) {
-    parts.push(`rank #${trend.rank_pantheon}`);
-  }
   if (trend.views) {
     parts.push(`${trend.views.toLocaleString(locale)} views`);
+  }
+  if (dateLabel) {
+    parts.push(`on ${dateLabel}`);
   }
 
   const detail = parts.length ? ` (${parts.join(", ")})` : "";
 
-  if (langName && dateLabel) {
-    return `Trending on ${dateLabel} in ${langName} Wikipedia${detail}.`;
-  }
-  if (langName) {
-    return `Trending in ${langName} Wikipedia${detail}.`;
-  }
-  if (dateLabel) {
-    return `Trending on ${dateLabel}${detail}.`;
+  if (langList) {
+    return `Trending in ${langList} Wikipedia${detail}.`;
   }
   if (parts.length) {
     return `Trending this week${detail}.`;
@@ -109,16 +118,47 @@ async function getTrendingPeopleForOccupationCountry({
 
   if (!trendRows.length) return [];
 
-  const bestBySlug = new Map();
+  const groupedBySlug = new Map();
   trendRows.forEach(row => {
     if (!row.slug) return;
-    const existing = bestBySlug.get(row.slug);
-    if (!existing || isBetterTrend(row, existing)) {
-      bestBySlug.set(row.slug, row);
+    const existing = groupedBySlug.get(row.slug) || {
+      best: row,
+      langRanks: {},
+    };
+
+    if (isBetterTrend(row, existing.best)) {
+      existing.best = row;
     }
+
+    if (row.lang) {
+      const existingRank = existing.langRanks[row.lang];
+      const rowRank = row.rank_pantheon ?? Number.POSITIVE_INFINITY;
+      if (existingRank === undefined || rowRank < existingRank) {
+        existing.langRanks[row.lang] = rowRank;
+      }
+    }
+
+    groupedBySlug.set(row.slug, existing);
   });
 
-  const deduped = Array.from(bestBySlug.values())
+  const deduped = Array.from(groupedBySlug.entries())
+    .map(([slug, entry]) => {
+      const languageRanks = Object.entries(entry.langRanks)
+        .sort((a, b) => {
+          const rankDiff = (a[1] ?? Number.POSITIVE_INFINITY) - (b[1] ?? Number.POSITIVE_INFINITY);
+          if (rankDiff !== 0) return rankDiff;
+          return a[0].localeCompare(b[0]);
+        })
+        .map(([code, rank]) => ({
+          code,
+          rank: Number.isFinite(rank) ? rank : null,
+        }));
+      return {
+        ...entry.best,
+        slug,
+        languageRanks,
+      };
+    })
     .sort((a, b) => {
       const rankDiff =
         (a.rank_pantheon ?? Number.POSITIVE_INFINITY) -
@@ -144,7 +184,7 @@ async function getTrendingPeopleForOccupationCountry({
       ...trend,
       ...person,
       id: personId,
-      trendReason: buildTrendReason(trend, locale),
+      trendReason: buildTrendReason({trend, languageRanks: trend.languageRanks}, locale),
     };
   });
 }
@@ -203,34 +243,34 @@ export default async function TrendingPeople({
         <ol className="trending-people-grid">
           {trendingPeople.map((person, index) => (
             <li key={person.slug} className="trending-person-item">
-              <Link
-                href={`${localePrefix}/profile/person/${person.slug}`}
-                className="trending-person-card"
-              >
-                <div className="trending-person-rank">
-                  <span className="trend-rank-global">#{index + 1}</span>
-                </div>
-                <div className="trending-person-image">
-                  <PersonImage
-                    fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                    src={`/profile/people/${person.id}.jpg`}
-                    alt={`Photo of ${person.name}`}
-                  />
-                </div>
-                <div className="trending-person-content">
-                  <h3 className="trending-person-name">{person.name}</h3>
-                  <p className="trending-person-dates">
-                    {person.birthyear && (
-                      person.deathyear
-                        ? `${FORMATTERS.year(person.birthyear)} - ${FORMATTERS.year(person.deathyear)}`
-                        : `b. ${FORMATTERS.year(person.birthyear)}`
-                    )}
-                  </p>
-                  {person.trendReason && (
-                    <p className="trending-person-reason">{person.trendReason}</p>
-                  )}
-                </div>
-              </Link>
+              <div className="trending-person-card">
+                <Link
+                  href={`${localePrefix}/profile/person/${person.slug}`}
+                  className="trending-person-link"
+                >
+                  <div className="trending-person-rank">
+                    <span className="trend-rank-global">#{index + 1}</span>
+                  </div>
+                  <div className="trending-person-image">
+                    <PersonImage
+                      fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                      src={`/profile/people/${person.id}.jpg`}
+                      alt={`Photo of ${person.name}`}
+                    />
+                  </div>
+                  <div className="trending-person-content">
+                    <h3 className="trending-person-name">{person.name}</h3>
+                    <p className="trending-person-dates">
+                      {person.birthyear && (
+                        person.deathyear
+                          ? `${FORMATTERS.year(person.birthyear)} - ${FORMATTERS.year(person.deathyear)}`
+                          : `b. ${FORMATTERS.year(person.birthyear)}`
+                      )}
+                    </p>
+                  </div>
+                </Link>
+                <TrendingReasonToggle reason={person.trendReason} />
+              </div>
             </li>
           ))}
         </ol>

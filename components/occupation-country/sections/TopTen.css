@@ -18,7 +18,7 @@
 }
 
 .top-10-title {
-  font-family: var(--fontMarcellus);
+  font-family: var(--fontMarcellus, "Marcellus", "Times New Roman", serif);
   font-size: 2.5rem;
   font-weight: 400;
   color: var(--colorStone);
@@ -28,19 +28,23 @@
 }
 
 .top-10-intro {
-  font-size: 1.15rem;
-  line-height: 1.7;
+  font-size: var(--sizeBody, 1.05rem);
+  line-height: calc(var(--sizeBody, 1.05rem) * 2);
+  font-weight: 400;
   color: #4a4a4a;
   max-width: 840px;
   margin: 0 0 2rem;
 }
 
 .top-10-intro a {
-  color: var(--colorLink);
-  text-decoration: none;
+  color: currentColor;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .top-10-intro a:hover {
+  color: currentColor;
   text-decoration: underline;
 }
 
@@ -52,10 +56,12 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+  align-items: stretch;
 }
 
 .top-10-item {
   margin: 0;
+  display: flex;
 }
 
 /* Card Styling */
@@ -67,6 +73,8 @@
   flex-direction: column;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
   border: 1px solid rgba(0, 0, 0, 0.06);
+  flex: 1;
+  height: 100%;
 }
 
 .top-10-card:hover {
@@ -133,7 +141,7 @@
 
 .top-10-card-dates {
   font-size: 1rem;
-  color: var(--colorMidGray);
+  color: var(--colorMidGray, #6b7280);
   margin: 0 0 0.5rem 0;
 }
 
@@ -168,6 +176,8 @@
 
 .top-10-famous-details {
   margin: 0;
+  position: relative;
+  padding-bottom: 2.1rem;
 }
 
 .top-10-famous-summary {
@@ -176,6 +186,13 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  padding-bottom: 0;
+}
+
+.top-10-famous-summary:focus,
+.top-10-famous-summary:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .top-10-famous-summary::-webkit-details-marker {
@@ -190,19 +207,26 @@
 
 .top-10-famous-toggle {
   align-self: flex-start;
-  font-size: 0.9rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 1rem;
+  font-weight: 600;
   color: #9a3412;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  border: 1px solid rgba(234, 88, 12, 0.4);
-  background: rgba(234, 88, 12, 0.08);
+  background: none;
+  border: none;
+  padding: 0.35rem 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 .top-10-famous-toggle.less {
   display: none;
+}
+
+.top-10-famous-toggle .chevron-icon {
+  transition: transform 0.2s ease;
 }
 
 .top-10-famous-details[open] .top-10-famous-excerpt {
@@ -248,7 +272,6 @@
   }
 
   .top-10-intro {
-    font-size: 1.05rem;
     margin-bottom: 1.5rem;
   }
 
