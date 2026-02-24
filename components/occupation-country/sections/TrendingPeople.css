@@ -1,0 +1,190 @@
+/* ============================================
+   Trending People Section
+   ============================================ */
+
+.trending-people-section {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  padding: 2.75rem 0;
+  border-bottom: 2px solid #fdba74;
+}
+
+.trending-people-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.trending-people-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.trending-people-icon {
+  font-size: 2rem;
+}
+
+.trending-people-title {
+  font-family: var(--fontMarcellus);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--colorStone);
+  margin: 0;
+  text-align: center;
+}
+
+.trending-people-intro {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #9a3412;
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 2rem;
+}
+
+/* List Layout */
+.trending-people-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.trending-person-item {
+  margin: 0;
+}
+
+/* Card Styling */
+.trending-person-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 12px;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--colorStone);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid rgba(235, 120, 35, 0.2);
+  position: relative;
+}
+
+.trending-person-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+/* Rank Badge */
+.trending-person-rank {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.trend-rank-global {
+  background: #ea580c;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+}
+
+/* Person Image */
+.trending-person-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--colorLint);
+}
+
+.trending-person-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Person Content */
+.trending-person-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.trending-person-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 0.3rem 0;
+  color: var(--colorStone);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trending-person-dates {
+  font-size: 0.9rem;
+  color: var(--colorMidGray);
+  margin: 0 0 0.5rem 0;
+}
+
+.trending-person-reason {
+  font-size: 0.9rem;
+  color: #7c2d12;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Responsive - Larger screens */
+@media (min-width: 1024px) {
+  .trending-people-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .trending-person-image {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 600px) {
+  .trending-people-section {
+    padding: 2rem 0;
+  }
+
+  .trending-people-container {
+    padding: 0 1rem;
+  }
+
+  .trending-people-title {
+    font-size: 1.5rem;
+  }
+
+  .trending-people-intro {
+    font-size: 0.98rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .trending-people-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trending-person-card {
+    padding: 0.85rem;
+  }
+
+  .trending-person-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .trending-person-name {
+    font-size: 1.05rem;
+  }
+}
