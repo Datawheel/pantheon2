@@ -140,6 +140,201 @@
 }
 
 /* ============================================
+   Trending Section
+   ============================================ */
+
+.trending-section {
+  background: var(--colorEggshell);
+  padding: 3rem 0;
+}
+
+.trending-section .section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.trending-icon {
+  font-size: 1.5rem;
+}
+
+.trending-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.trending-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.trending-card:hover {
+  border-color: var(--colorMidGray);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.trending-card-link {
+  display: block;
+  padding: 1.25rem 1.25rem 1rem;
+  text-decoration: none;
+  color: var(--colorStone);
+}
+
+.trending-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.trending-rank {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  background: var(--colorStone);
+  min-width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.trending-flag {
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.trending-text {
+  flex: 1;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--colorStone);
+}
+
+.trending-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  padding-left: 2.75rem;
+}
+
+.trending-count {
+  font-size: 1rem;
+  color: #444;
+  font-weight: 500;
+}
+
+.trending-score {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.trending-reason {
+  padding: 1rem 1.25rem 1.25rem;
+  border-top: 1px solid var(--colorLint);
+  background: #fafaf9;
+}
+
+.trending-reason p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+}
+
+.trending-reason p:last-of-type {
+  margin-bottom: 0;
+}
+
+.trending-reason-full p {
+  margin-bottom: 0.75rem;
+}
+
+.trending-reason ul {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.trending-reason li {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.trending-reason strong {
+  font-weight: 700;
+  color: #000;
+}
+
+.trending-reason-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  color: var(--colorLink);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.35rem 0;
+  margin-top: 0.5rem;
+}
+
+.trending-reason-toggle:hover {
+  text-decoration: underline;
+}
+
+.trending-reason-toggle .chevron-icon {
+  transition: transform 0.2s ease;
+}
+
+@media (min-width: 480px) {
+  .trending-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .trending-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 479px) {
+  .trending-card-link {
+    padding: 0.875rem 1rem;
+  }
+
+  .trending-text {
+    font-size: 1.15rem;
+  }
+
+  .trending-reason {
+    padding: 0.875rem 1rem 1rem;
+  }
+
+  .trending-reason p,
+  .trending-reason li {
+    font-size: 1rem;
+  }
+
+  .trending-reason-toggle {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================
    Popular Combinations Section
    ============================================ */
 

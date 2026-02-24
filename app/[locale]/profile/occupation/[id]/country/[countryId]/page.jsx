@@ -1,6 +1,7 @@
 import {plural} from "pluralize";
 import Header from "/components/occupation-country/Header";
 import Intro from "/components/occupation-country/Intro";
+import TrendingBanner from "/components/occupation-country/TrendingBanner";
 import TopTen from "/components/occupation-country/sections/TopTen";
 import People from "/components/occupation-country/sections/People";
 import Lifespans from "/components/occupation-country/sections/Lifespans";
@@ -66,6 +67,15 @@ async function getPeople(occupationId, countryId) {
 async function getPeopleHpi(occupationId, countryId) {
   const url = `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+}
+
+async function getTrendingStatus(occupationSlug, countrySlug, lang = "en") {
+  // Check if this occupation-country combo is in the trending pages
+  // Only include entries from the last 7 days
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const url = `${BASE_API}/trend_gsc?lang=eq.${lang}&page_type=eq.occupation_country&run_at=gte.${sevenDaysAgo}&page_url=like.*profile/occupation/${occupationSlug}/country/${countrySlug}*&select=page_url,trend_score,reason,clicks_curr,impr_curr&limit=1`;
+  const data = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
+  return data.length > 0 ? data[0] : null;
 }
 
 function formatNumber(num) {
@@ -147,10 +157,11 @@ export async function generateMetadata({params}, parent) {
 export default async function Page({params: {locale, id, countryId}}) {
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
 
-  const [occupations, occupation, country] = await Promise.all([
+  const [occupations, occupation, country, trendingStatus] = await Promise.all([
     getOccupations(),
     getOccupation(id, lang),
     getCountry(countryId, lang),
+    getTrendingStatus(id, countryId, lang),
   ]);
 
   const [
@@ -208,6 +219,14 @@ export default async function Page({params: {locale, id, countryId}}) {
         people={people}
         locale={lang}
       />
+      {trendingStatus && (
+        <TrendingBanner
+          trendScore={trendingStatus.trend_score}
+          reason={trendingStatus.reason}
+          clicks={trendingStatus.clicks_curr}
+          impressions={trendingStatus.impr_curr}
+        />
+      )}
       <div className="about-section">
         {/* <ProfileNav sections={this.sections} /> */}
         <Intro

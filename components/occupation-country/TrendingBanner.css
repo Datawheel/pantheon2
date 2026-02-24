@@ -1,0 +1,147 @@
+/* ============================================
+   Trending Banner Component
+   ============================================ */
+
+.trending-banner {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-bottom: 3px solid #f59e0b;
+}
+
+.trending-banner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.trending-banner-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.trending-banner-icon {
+  font-size: 1.75rem;
+}
+
+.trending-banner-title {
+  font-family: var(--fontMarcellus);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--colorStone);
+  margin: 0;
+}
+
+.trending-banner-score {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #92400e;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  margin-left: auto;
+}
+
+.trending-banner-reason {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.trending-reason-heading {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--colorStone);
+  margin: 0 0 1rem 0;
+}
+
+.trending-reason-content p {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #1a1a1a;
+  margin: 0 0 1rem 0;
+}
+
+.trending-reason-content p:last-child {
+  margin-bottom: 0;
+}
+
+.trending-reason-content ul {
+  margin: 1rem 0;
+  padding-left: 1.75rem;
+}
+
+.trending-reason-content li {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+}
+
+.trending-reason-content strong {
+  font-weight: 700;
+  color: #000;
+}
+
+.trending-reason-content em {
+  font-style: italic;
+  color: #555;
+}
+
+.trending-banner-stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.trending-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.trending-stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--colorStone);
+}
+
+.trending-stat-label {
+  font-size: 0.85rem;
+  color: var(--colorMidGray);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 479px) {
+  .trending-banner-container {
+    padding: 1rem;
+  }
+
+  .trending-banner-title {
+    font-size: 1.35rem;
+  }
+
+  .trending-banner-score {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .trending-banner-reason {
+    padding: 1.25rem;
+  }
+
+  .trending-reason-content p,
+  .trending-reason-content li {
+    font-size: 1.1rem;
+  }
+
+  .trending-banner-stats {
+    gap: 1.5rem;
+  }
+
+  .trending-stat-value {
+    font-size: 1.1rem;
+  }
+}

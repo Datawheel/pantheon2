@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {plural} from "pluralize";
 import OccupationCountrySelector from "/components/occupation-country/OccupationCountrySelector";
+import TrendingSection from "/components/occupation-country/TrendingSection";
 import {toTitleCase} from "/components/utils/vizHelpers";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson} from "/app/utils/safeFetch";
@@ -23,6 +24,14 @@ async function getAllCombinations(lang) {
   // Fetch all occupation-country combinations with at least 1 person
   const url = `${BASE_API}/occupation_country?num_people=gte.1&order=num_people.desc&select=*,occupation_data:occupation!occupation(occupation_slug,occupation,${lang}_occupation:translations->${lang}->>occupation),country_data:country!country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym)`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+}
+
+async function getTrendingPages(lang = "en") {
+  // Fetch top 16 trending occupation-country pages from trend_gsc table
+  // Only include entries from the last 7 days
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const url = `${BASE_API}/trend_gsc?lang=eq.${lang}&page_type=eq.occupation_country&run_at=gte.${sevenDaysAgo}&order=trend_score.desc.nullslast&limit=20&select=page_url,trend_score,reason,reason_summary,clicks_curr,impr_curr`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
 }
 
 export async function generateMetadata({params}) {
@@ -58,10 +67,11 @@ export default async function Page({params}) {
   const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
   const t = getTranslations(locale);
 
-  const [occupationsRaw, countriesRaw, allCombinations] = await Promise.all([
+  const [occupationsRaw, countriesRaw, allCombinations, trendingPagesRaw] = await Promise.all([
     getOccupations(locale),
     getCountries(locale),
     getAllCombinations(locale),
+    getTrendingPages(locale),
   ]);
 
   // Localize occupations
@@ -121,7 +131,41 @@ export default async function Page({params}) {
   // Get sorted letters
   const sortedLetters = Object.keys(countriesByLetter).sort();
 
-  // Get popular combinations for the featured section (top 24)
+  // Process trending pages - filter for occupation-country combos and enrich with data
+  const trendingCombos = trendingPagesRaw
+    .map(trend => {
+      // Parse URL like https://pantheon.world/profile/occupation/cricketer/country/sri-lanka
+      const match = trend.page_url?.match(/\/profile\/occupation\/([^/]+)\/country\/([^/?#]+)/);
+      if (!match) return null;
+
+      const [, occupationSlug, countrySlug] = match;
+
+      // Find matching combo in allCombinations for enriched data
+      const combo = allCombinations.find(
+        c => c.occupation_data?.occupation_slug === occupationSlug &&
+             c.country_data?.slug === countrySlug
+      );
+
+      if (!combo) return null;
+
+      return {
+        occupation: combo.occupation_data?.[`${locale}_occupation`] || combo.occupation_data?.occupation,
+        occupationSlug,
+        country: combo.country_data?.[`${locale}_country`] || combo.country_data?.country,
+        countrySlug,
+        demonym: combo.country_data?.[`${locale}_demonym`] || combo.country_data?.demonym,
+        numPeople: combo.num_people,
+        trendScore: trend.trend_score,
+        reason: trend.reason,
+        reasonSummary: trend.reason_summary,
+        clicks: trend.clicks_curr,
+        impressions: trend.impr_curr,
+      };
+    })
+    .filter(Boolean)
+    .slice(0, 16);
+
+  // Get popular combinations for the featured section (top 24) - fallback if no trending
   const popularCombos = allCombinations
     .slice(0, 24)
     .map(combo => ({
@@ -154,34 +198,42 @@ export default async function Page({params}) {
         </div>
       </section>
 
-      {/* Popular Combinations */}
-      <section className="popular-section">
-        <div className="section-container">
-          <h2 className="section-title">{t.selectOccupationCountry.whoAreTheMostFamous}</h2>
-          <div className="popular-grid">
-            {popularCombos.map(combo => (
-              <Link
-                key={`${combo.occupationSlug}-${combo.countrySlug}`}
-                href={`/${locale}/profile/occupation/${combo.occupationSlug}/country/${combo.countrySlug}`}
-                className="popular-card"
-              >
-                <Image
-                  src={`/images/icons/country/${combo.countrySlug}.svg`}
-                  alt={combo.country}
-                  width={24}
-                  height={24}
-                  className="popular-flag"
-                />
-                <span className="popular-text">
-                  {combo.demonym}{" "}
-                  {locale === "en" ? toTitleCase(plural(combo.occupation)) : combo.occupation}
-                </span>
-                <span className="popular-count">{combo.numPeople?.toLocaleString(locale)}</span>
-              </Link>
-            ))}
+      {/* Trending or Popular Combinations */}
+      {trendingCombos.length > 0 ? (
+        <TrendingSection
+          trendingCombos={trendingCombos}
+          locale={locale}
+          title={t.selectOccupationCountry.trendingThisWeek || "Trending This Week"}
+        />
+      ) : (
+        <section className="popular-section">
+          <div className="section-container">
+            <h2 className="section-title">{t.selectOccupationCountry.whoAreTheMostFamous}</h2>
+            <div className="popular-grid">
+              {popularCombos.map(combo => (
+                <Link
+                  key={`${combo.occupationSlug}-${combo.countrySlug}`}
+                  href={`/${locale}/profile/occupation/${combo.occupationSlug}/country/${combo.countrySlug}`}
+                  className="popular-card"
+                >
+                  <Image
+                    src={`/images/icons/country/${combo.countrySlug}.svg`}
+                    alt={combo.country}
+                    width={24}
+                    height={24}
+                    className="popular-flag"
+                  />
+                  <span className="popular-text">
+                    {combo.demonym}{" "}
+                    {locale === "en" ? toTitleCase(plural(combo.occupation)) : combo.occupation}
+                  </span>
+                  <span className="popular-count">{combo.numPeople?.toLocaleString(locale)}</span>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Alphabet Navigation */}
       <nav className="alphabet-nav">

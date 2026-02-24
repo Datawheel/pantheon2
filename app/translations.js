@@ -37,6 +37,7 @@ export const translations = {
       selectCountry: "Select a country",
       goToProfile: "Go to profile",
       whoAreTheMostFamous: "Who are the most famous...",
+      trendingThisWeek: "Trending This Week",
     },
     intro: {
       rankingSentence: ({
@@ -257,6 +258,7 @@ export const translations = {
       selectCountry: "Seleccione un país",
       goToProfile: "Ir al perfil",
       whoAreTheMostFamous: "¿Quiénes son los más famosos...",
+      trendingThisWeek: "Tendencias Esta Semana",
     },
     intro: {
       rankingSentence: ({
@@ -472,6 +474,7 @@ export const translations = {
       selectCountry: "Sélectionnez un pays",
       goToProfile: "Aller au profil",
       whoAreTheMostFamous: "Qui sont les plus célèbres...",
+      trendingThisWeek: "Tendances Cette Semaine",
     },
     intro: {
       rankingSentence: ({
@@ -703,6 +706,7 @@ export const translations = {
       selectCountry: "Wählen Sie ein Land",
       goToProfile: "Zum Profil gehen",
       whoAreTheMostFamous: "Wer sind die berühmtesten...",
+      trendingThisWeek: "Trends Diese Woche",
     },
     intro: {
       rankingSentence: ({
@@ -913,6 +917,7 @@ export const translations = {
       selectCountry: "Выберите страну",
       goToProfile: "Перейти к профилю",
       whoAreTheMostFamous: "Кто самые известные...",
+      trendingThisWeek: "Тренды Этой Недели",
     },
     intro: {
       rankingSentence: ({
@@ -1148,6 +1153,7 @@ export const translations = {
       selectCountry: "选择国家",
       goToProfile: "前往个人资料",
       whoAreTheMostFamous: "谁是最著名的...",
+      trendingThisWeek: "本周热门",
     },
     intro: {
       rankingSentence: ({
@@ -1364,6 +1370,7 @@ export const translations = {
       selectCountry: "国を選択",
       goToProfile: "プロフィールに移動",
       whoAreTheMostFamous: "最も有名なのは誰...",
+      trendingThisWeek: "今週のトレンド",
     },
     intro: {
       rankingSentence: ({
@@ -1590,6 +1597,7 @@ export const translations = {
       selectCountry: "اختر بلد",
       goToProfile: "الذهاب إلى الملف الشخصي",
       whoAreTheMostFamous: "من هم الأكثر شهرة...",
+      trendingThisWeek: "الرائج هذا الأسبوع",
     },
     intro: {
       rankingSentence: ({
@@ -1804,6 +1812,7 @@ export const translations = {
       selectCountry: "Seleziona un paese",
       goToProfile: "Vai al profilo",
       whoAreTheMostFamous: "Chi sono i più famosi...",
+      trendingThisWeek: "Tendenze Questa Settimana",
     },
     intro: {
       rankingSentence: ({
@@ -2052,6 +2061,7 @@ export const translations = {
       selectCountry: "Selecione um país",
       goToProfile: "Ir para o perfil",
       whoAreTheMostFamous: "Quem são os mais famosos...",
+      trendingThisWeek: "Tendências Esta Semana",
     },
     intro: {
       rankingSentence: ({
@@ -2289,6 +2299,7 @@ export const translations = {
       selectCountry: "Válasszon országot",
       goToProfile: "Ugrás a profilhoz",
       whoAreTheMostFamous: "Kik a leghíresebbek...",
+      trendingThisWeek: "Trendek Ezen a Héten",
     },
     intro: {
       rankingSentence: ({
@@ -2494,6 +2505,7 @@ export const translations = {
       selectCountry: "Selecteer een land",
       goToProfile: "Ga naar profiel",
       whoAreTheMostFamous: "Wie zijn de beroemdste...",
+      trendingThisWeek: "Trending Deze Week",
     },
     intro: {
       rankingSentence: ({
@@ -2714,6 +2726,7 @@ export const translations = {
       selectCountry: "Wybierz kraj",
       goToProfile: "Przejdź do profilu",
       whoAreTheMostFamous: "Kto jest najbardziej znany...",
+      trendingThisWeek: "Trendy w Tym Tygodniu",
     },
     intro: {
       rankingSentence: ({
