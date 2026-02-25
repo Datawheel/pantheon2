@@ -258,43 +258,56 @@ export async function getBornOnThisDayImageResponse({date, locale = "en"}) {
         >
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "8px",
+              display: "flex",
+              flexWrap: "wrap",
+              margin: "-4px",
+              width: 520,
+              height: 520,
+              alignSelf: "center",
             }}
           >
             {peopleWithImages.map((person, index) => (
               <div
                 key={index}
                 style={{
-                  width: "100%",
-                  aspectRatio: "1 / 1",
-                  overflow: "hidden",
-                  backgroundColor: "#e1dcd5",
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  width: "25%",
+                  height: "25%",
+                  padding: "4px",
+                  boxSizing: "border-box",
                 }}
               >
-                {person.imageData ? (
-                  <img
-                    src={person.imageData}
-                    alt={person.name}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      backgroundColor: "#d0c8bf",
-                    }}
-                  />
-                )}
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    height: "100%",
+                    overflow: "hidden",
+                    backgroundColor: "#e1dcd5",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {person.imageData ? (
+                    <img
+                      src={person.imageData}
+                      alt={person.name}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "#d0c8bf",
+                      }}
+                    />
+                  )}
+                </div>
               </div>
             ))}
           </div>

@@ -1,3 +1,4 @@
+import {Fragment} from "react";
 import PersonImage from "/components/utils/PersonImage";
 import TrendingExcerpt from "/components/home/TrendingExcerpt";
 
@@ -49,8 +50,8 @@ const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = nul
   return (
     <ul className="grid-row">
       {bios.map((profile, index) => (
-        <>
-          <li className="grid-box" key={profile.pid || profile.id}>
+        <Fragment key={profile.pid || profile.id}>
+          <li className="grid-box">
             <a href={`${localePrefix}/profile/person/${profile.slug}`}>
               <div className="grid-box-bg-container">
                 {showTrendIndicator ? (
@@ -74,7 +75,7 @@ const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = nul
           </li>
           {/* Insert excerpt after first row (index 3 = after 4th person) */}
           {index === 3 && trendingExcerpt && (
-            <li className="grid-excerpt-item" key="excerpt">
+            <li className="grid-excerpt-item">
               <TrendingExcerpt
                 trendingPeople={trendingExcerpt.trendingPeople}
                 currentLang={trendingExcerpt.currentLang}
@@ -82,7 +83,7 @@ const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = nul
               />
             </li>
           )}
-        </>
+        </Fragment>
       ))}
     </ul>
   );
