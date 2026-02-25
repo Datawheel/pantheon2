@@ -33,6 +33,8 @@ export const translations = {
       trendingIntroSuffix: "in the past 7 days, with a quick note on what drove the spike.",
       trendingThisWeekShort: "Trending this week",
       trendingThisWeekDefault: "Trending this week on Wikipedia",
+      metaTitle: ({demonym, occupationPlural}) => `Greatest ${demonym} ${occupationPlural} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPluralLower, occupationSingularLower, country}) => `Discover the ${countFormatted} most famous ${demonym} ${occupationPluralLower} in history. Explore notable ${occupationSingularLower} profiles from ${country} ranked by historical significance.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon has ${totalCount} people classified as ${demonym} ${occupationPlural} born between ${oldestYear} and ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -330,6 +332,8 @@ export const translations = {
       trendingIntroSuffix: "en los últimos 7 días, con una breve nota sobre qué impulsó el pico.",
       trendingThisWeekShort: "En tendencia esta semana",
       trendingThisWeekDefault: "En tendencia esta semana en Wikipedia",
+      metaTitle: ({demonym, occupationPlural}) => `Los mejores ${occupationPlural} ${demonym} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Descubre los ${countFormatted} ${occupationPlural} ${demonym} más famosos de la historia. Explora perfiles destacados de ${occupationSingular} de ${country} clasificados por relevancia histórica.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon tiene ${totalCount} personas clasificadas como ${occupationPlural} ${demonym} nacidas entre ${oldestYear} y ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -632,6 +636,8 @@ export const translations = {
       trendingIntroSuffix: "au cours des 7 derniers jours, avec une brève note sur la hausse.",
       trendingThisWeekShort: "En tendance cette semaine",
       trendingThisWeekDefault: "En tendance cette semaine sur Wikipedia",
+      metaTitle: ({demonym, occupationPlural}) => `Les plus grands ${occupationPlural} ${demonym} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Découvrez les ${countFormatted} ${occupationPlural} ${demonym} les plus célèbres de l'histoire. Explorez des profils remarquables de ${occupationSingular} de ${country}, classés par importance historique.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon compte ${totalCount} personnes classées comme ${occupationPlural} ${demonym} nées entre ${oldestYear} et ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -950,6 +956,8 @@ export const translations = {
       trendingIntroSuffix: "in den letzten 7 Tagen, mit einer kurzen Erklärung.",
       trendingThisWeekShort: "Diese Woche im Trend",
       trendingThisWeekDefault: "Diese Woche im Trend auf Wikipedia",
+      metaTitle: ({demonym, occupationPlural}) => `Die größten ${demonym} ${occupationPlural} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Entdecken Sie die ${countFormatted} berühmtesten ${demonym} ${occupationPlural} der Geschichte. Erkunden Sie bemerkenswerte ${occupationSingular}-Profile aus ${country}, geordnet nach historischer Bedeutung.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon hat ${totalCount} Personen, die als ${demonym} ${occupationPlural} eingestuft sind und zwischen ${oldestYear} und ${youngestYear} geboren wurden.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -1246,6 +1254,8 @@ export const translations = {
       trendingIntroSuffix: "за последние 7 дней, с кратким объяснением причины всплеска.",
       trendingThisWeekShort: "В тренде на этой неделе",
       trendingThisWeekDefault: "В тренде на этой неделе на Wikipedia",
+      metaTitle: ({demonym, occupationPlural}) => `Самые известные ${demonym} ${occupationPlural} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Откройте для себя ${countFormatted} самых известных ${demonym} ${occupationPlural} в истории. Посмотрите выдающиеся профили ${occupationSingular} из ${country}, ранжированные по исторической значимости.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `В Pantheon ${totalCount} персон, классифицированных как ${demonym} ${occupationPlural}, родившихся между ${oldestYear} и ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -1563,6 +1573,8 @@ export const translations = {
       trendingIntroSuffix: "过去7天，附上简短原因说明。",
       trendingThisWeekShort: "本周热门",
       trendingThisWeekDefault: "本周在维基百科热门",
+      metaTitle: ({demonym, occupationPlural}) => `最著名的${demonym}${occupationPlural} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `探索历史上最著名的${countFormatted}位${demonym}${occupationPlural}。查看来自${country}的著名${occupationSingular}人物档案，按历史影响力排名。`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon 收录了 ${totalCount} 位被归类为${demonym}${occupationPlural}的人，出生于 ${oldestYear} 到 ${youngestYear} 之间。`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -1858,6 +1870,8 @@ export const translations = {
       trendingIntroSuffix: "過去7日間の動向と簡単な理由を添えています。",
       trendingThisWeekShort: "今週のトレンド",
       trendingThisWeekDefault: "今週ウィキペディアでトレンド",
+      metaTitle: ({demonym, occupationPlural}) => `最も有名な${demonym}${occupationPlural} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `歴史上最も有名な${demonym}${occupationPlural} ${countFormatted}人を紹介。${country}出身の著名な${occupationSingular}のプロフィールを歴史的重要性でランキング。`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheonには、${oldestYear}から${youngestYear}の間に生まれた${demonym}${occupationPlural}として分類される人物が${totalCount}人います。`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -2167,6 +2181,8 @@ export const translations = {
       trendingIntroSuffix: "خلال آخر 7 أيام، مع ملاحظة قصيرة حول سبب الارتفاع.",
       trendingThisWeekShort: "الرائج هذا الأسبوع",
       trendingThisWeekDefault: "الرائج هذا الأسبوع على ويكيبيديا",
+      metaTitle: ({demonym, occupationPlural}) => `أشهر ${occupationPlural} ${demonym} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `اكتشف ${countFormatted} من أشهر ${occupationPlural} ${demonym} في التاريخ. استكشف ملفات ${occupationSingular} البارزة من ${country} مرتبة حسب الأهمية التاريخية.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `يضم بانثيون ${totalCount} شخصية مصنفة كـ ${occupationPlural} ${demonym} وُلدوا بين ${oldestYear} و ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -2465,6 +2481,8 @@ export const translations = {
       trendingIntroSuffix: "negli ultimi 7 giorni, con una breve nota sul motivo del picco.",
       trendingThisWeekShort: "Di tendenza questa settimana",
       trendingThisWeekDefault: "Di tendenza questa settimana su Wikipedia",
+      metaTitle: ({demonym, occupationPlural}) => `I più grandi ${occupationPlural} ${demonym} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Scopri i ${countFormatted} ${occupationPlural} ${demonym} più famosi della storia. Esplora i profili notevoli di ${occupationSingular} da ${country} classificati per importanza storica.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon include ${totalCount} persone classificate come ${occupationPlural} ${demonym} nate tra ${oldestYear} e ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -2800,6 +2818,8 @@ export const translations = {
       trendingIntroSuffix: "nos últimos 7 dias, com uma breve nota sobre o motivo do pico.",
       trendingThisWeekShort: "Em alta esta semana",
       trendingThisWeekDefault: "Em alta esta semana na Wikipédia",
+      metaTitle: ({demonym, occupationPlural}) => `Os melhores ${occupationPlural} ${demonym} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Descubra os ${countFormatted} ${occupationPlural} ${demonym} mais famosos da história. Explore perfis notáveis de ${occupationSingular} de ${country} classificados por relevância histórica.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon tem ${totalCount} pessoas classificadas como ${occupationPlural} ${demonym} nascidas entre ${oldestYear} e ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -3152,6 +3172,8 @@ export const translations = {
       trendingIntroSuffix: "az elmúlt 7 napban, rövid magyarázattal a kiugrás okáról.",
       trendingThisWeekShort: "Felkapott ezen a héten",
       trendingThisWeekDefault: "Felkapott ezen a héten a Wikipédián.",
+      metaTitle: ({demonym, occupationPlural}) => `A legnagyobb ${demonym} ${occupationPlural} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Fedezze fel a történelem ${countFormatted} leghíresebb ${demonym} ${occupationPlural} személyét. Ismerje meg ${country} nevezetes ${occupationSingular} profiljait, történelmi jelentőség szerint rangsorolva.`,
     },
     selectOccupationCountry: {
       heading: "Válasszon foglalkozást és országot",
@@ -3398,6 +3420,8 @@ export const translations = {
       trendingIntroSuffix: "in de afgelopen 7 dagen, met een korte toelichting.",
       trendingThisWeekShort: "Trending deze week",
       trendingThisWeekDefault: "Trending deze week op Wikipedia",
+      metaTitle: ({demonym, occupationPlural}) => `De grootste ${demonym} ${occupationPlural} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Ontdek de ${countFormatted} beroemdste ${demonym} ${occupationPlural} uit de geschiedenis. Bekijk opmerkelijke ${occupationSingular}-profielen uit ${country}, gerangschikt op historische betekenis.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon heeft ${totalCount} personen die zijn geclassificeerd als ${demonym} ${occupationPlural}, geboren tussen ${oldestYear} en ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -3704,6 +3728,8 @@ export const translations = {
       trendingIntroSuffix: "z ostatnich 7 dni, z krótkim wyjaśnieniem.",
       trendingThisWeekShort: "W trendach w tym tygodniu",
       trendingThisWeekDefault: "W trendach w tym tygodniu na Wikipedii",
+      metaTitle: ({demonym, occupationPlural}) => `Najbardziej znani ${demonym} ${occupationPlural} | Pantheon`,
+      metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Odkryj ${countFormatted} najbardziej znanych ${demonym} ${occupationPlural} w historii. Poznaj wybitne profile ${occupationSingular} z ${country}, uporządkowane według znaczenia historycznego.`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon zawiera ${totalCount} osób sklasyfikowanych jako ${demonym} ${occupationPlural}, urodzonych między ${oldestYear} a ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {

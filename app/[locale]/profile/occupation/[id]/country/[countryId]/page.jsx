@@ -79,14 +79,16 @@ async function getTrendingStatus(occupationSlug, countrySlug, lang = "en") {
   return data.length > 0 ? data[0] : null;
 }
 
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function formatNumber(num, locale = "en") {
+  return new Intl.NumberFormat(locale).format(num);
 }
 
 export async function generateMetadata({params}, parent) {
   const {locale, id, countryId} = params;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
+  const tEn = getTranslations(DEFAULT_LOCALE);
+  const tc = {...tEn.occupationCountry, ...t.occupationCountry};
   const baseUrl = process.env.URL || "https://pantheon.world";
 
   // fetch data
@@ -128,8 +130,23 @@ export async function generateMetadata({params}, parent) {
 
   const occupationSingular = toTitleCase(localizedOccupation);
 
-  const title = `${t.occupationCountry.greatest} ${localizedDemonym} ${occupationDisplay} | Pantheon`;
-  const description = `Discover the ${formatNumber(totalCount)} most famous ${localizedDemonym} ${occupationDisplay.toLowerCase()} in history. Explore notable ${occupationSingular.toLowerCase()} profiles from ${localizedCountry} ranked by historical significance.`;
+  const title = tc.metaTitle
+    ? tc.metaTitle({
+        demonym: localizedDemonym,
+        occupationPlural: occupationDisplay,
+      })
+    : `${tc.greatest || "Greatest"} ${localizedDemonym} ${occupationDisplay} | Pantheon`;
+  const description = tc.metaDescription
+    ? tc.metaDescription({
+        countFormatted: formatNumber(totalCount, lang),
+        demonym: localizedDemonym,
+        occupationPlural: occupationDisplay,
+        occupationPluralLower: occupationDisplay.toLowerCase(),
+        occupationSingular: occupationSingular,
+        occupationSingularLower: occupationSingular.toLowerCase(),
+        country: localizedCountry,
+      })
+    : `Discover the ${formatNumber(totalCount, lang)} most famous ${localizedDemonym} ${occupationDisplay.toLowerCase()} in history. Explore notable ${occupationSingular.toLowerCase()} profiles from ${localizedCountry} ranked by historical significance.`;
 
   return {
     title,
