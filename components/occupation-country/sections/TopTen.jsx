@@ -21,6 +21,8 @@ function truncateText(text, maxLength = EXCERPT_LENGTH) {
 
 export default function TopTen({country, occupation, people, locale = DEFAULT_LOCALE}) {
   const t = getTranslations(locale);
+  const tEn = getTranslations(DEFAULT_LOCALE);
+  const tc = {...tEn.occupationCountry, ...t.occupationCountry};
   const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
 
   // For English, use plural form with toTitleCase; for other languages, use the occupation as-is
@@ -50,7 +52,9 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
               {" "}
               {t.occupationCountry.visitRankings}{" "}
               <a href={`${localePrefix}/explore/rankings?show=people&place=${country.country_code}&occupation=${occupation.occupation}`}>
-                {country.demonym} {occupationPlural}
+                {locale === "en"
+                  ? `${country.demonym} ${occupationPlural}`
+                  : `${occupationPlural} ${country.demonym}`}
               </a>.
             </>
           )}
@@ -104,7 +108,7 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
                           <summary className="top-10-famous-summary">
                             <span className="top-10-famous-excerpt">{excerpt}</span>
                             <span className="top-10-famous-toggle more">
-                              Read more
+                              {tc.readMore || "Read more"}
                               <svg
                                 className="chevron-icon"
                                 width="12"
@@ -118,7 +122,7 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
                               </svg>
                             </span>
                             <span className="top-10-famous-toggle less">
-                              Show less
+                              {tc.showLess || "Show less"}
                               <svg
                                 className="chevron-icon"
                                 width="12"

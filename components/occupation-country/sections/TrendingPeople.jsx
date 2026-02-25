@@ -4,6 +4,7 @@ import PersonImage from "../../utils/PersonImage";
 import {FORMATTERS} from "../../utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {DEFAULT_LOCALE, getLocalizedLanguageName} from "/app/locales";
+import {getTranslations} from "/app/translations";
 import {toTitleCase} from "../../utils/vizHelpers";
 import TrendingReasonToggle from "./TrendingReasonToggle";
 import "./TrendingPeople.css";
@@ -67,27 +68,34 @@ function formatLanguageRanks(langRanks, locale) {
   }
 }
 
-function buildTrendReason({trend, languageRanks}, locale) {
+function buildTrendReason({trend, languageRanks, translations}, locale) {
   const langList = formatLanguageRanks(languageRanks, locale);
   const dateLabel = formatTrendDate(trend.date, locale);
   const parts = [];
+  const viewsLabel = translations.viewsLabel || "views";
+  const onDate = translations.onDate
+    ? translations.onDate({date: dateLabel})
+    : dateLabel
+      ? `on ${dateLabel}`
+      : null;
 
   if (trend.views) {
-    parts.push(`${trend.views.toLocaleString(locale)} views`);
+    parts.push(`${trend.views.toLocaleString(locale)} ${viewsLabel}`);
   }
-  if (dateLabel) {
-    parts.push(`on ${dateLabel}`);
+  if (onDate) {
+    parts.push(onDate);
   }
 
   const detail = parts.length ? ` (${parts.join(", ")})` : "";
+  const trendingInPrefix = translations.trendingInPrefix || "Trending in";
 
   if (langList) {
-    return `Trending in ${langList} Wikipedia${detail}.`;
+    return `${trendingInPrefix} ${langList} Wikipedia${detail}.`;
   }
   if (parts.length) {
-    return `Trending this week${detail}.`;
+    return `${translations.trendingThisWeekShort || "Trending this week"}${detail}.`;
   }
-  return "Trending this week on Wikipedia.";
+  return translations.trendingThisWeekDefault || "Trending this week on Wikipedia.";
 }
 
 async function fetchTrendRows({occupationId, countryValue, weekStart}) {
@@ -104,6 +112,7 @@ async function getTrendingPeopleForOccupationCountry({
   countryName,
   countrySlug,
   locale,
+  translations,
   limit = 10,
 }) {
   const weekStart = getWeekStartDate();
@@ -184,7 +193,10 @@ async function getTrendingPeopleForOccupationCountry({
       ...trend,
       ...person,
       id: personId,
-      trendReason: buildTrendReason({trend, languageRanks: trend.languageRanks}, locale),
+      trendReason: buildTrendReason(
+        {trend, languageRanks: trend.languageRanks, translations},
+        locale
+      ),
     };
   });
 }
@@ -196,31 +208,47 @@ export default async function TrendingPeople({
   countrySlug,
   locale = DEFAULT_LOCALE,
 }) {
+  const t = getTranslations(locale);
+  const tEn = getTranslations(DEFAULT_LOCALE);
+  const tc = {...tEn.occupationCountry, ...t.occupationCountry};
+  const trendingInPrefix = t.news?.trendingIn || tEn.news?.trendingIn;
   const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
   const occupationPlural = locale === "en"
     ? toTitleCase(plural(occupation.occupation))
     : occupation.occupation;
   const rawFromCountry = country.fromCountry;
-  const hasFromPrefix =
-    rawFromCountry && rawFromCountry.toLowerCase().startsWith("from ");
+  // If fromCountry exists, it's a prepositional form (e.g., "do Japão", "from Japan", "d'Espagne")
+  // that should come after the occupation name, not before
+  const hasFromPrefix = !!rawFromCountry;
   const locationLabel =
     rawFromCountry || (country.country ? `from ${country.country}` : "");
-  const titleLine = locationLabel
-    ? hasFromPrefix
-      ? `Trending ${occupationPlural} ${locationLabel} This Week`
-      : `Trending ${locationLabel} ${occupationPlural} This Week`
-    : `Trending ${occupationPlural} This Week`;
-  const introLine = locationLabel
-    ? hasFromPrefix
-      ? `The top 10 ${occupationPlural} ${locationLabel} trending on Wikipedia`
-      : `The top 10 ${locationLabel} ${occupationPlural} trending on Wikipedia`
-    : `The top 10 ${occupationPlural} trending on Wikipedia`;
+  const titleLine = tc.trendingTitle
+    ? tc.trendingTitle({locationLabel, occupationPlural, hasFromPrefix})
+    : locationLabel
+      ? hasFromPrefix
+        ? `Trending ${occupationPlural} ${locationLabel} This Week`
+        : `Trending ${locationLabel} ${occupationPlural} This Week`
+      : `Trending ${occupationPlural} This Week`;
+  const introLine = tc.trendingIntro
+    ? tc.trendingIntro({locationLabel, occupationPlural, hasFromPrefix})
+    : locationLabel
+      ? hasFromPrefix
+        ? `The top 10 ${occupationPlural} ${locationLabel} trending on Wikipedia`
+        : `The top 10 ${locationLabel} ${occupationPlural} trending on Wikipedia`
+      : `The top 10 ${occupationPlural} trending on Wikipedia`;
 
   const trendingPeople = await getTrendingPeopleForOccupationCountry({
     occupationId: occupation.id,
     countryName,
     countrySlug,
     locale,
+    translations: {
+      viewsLabel: tc.viewsLabel,
+      onDate: tc.onDate,
+      trendingInPrefix,
+      trendingThisWeekShort: tc.trendingThisWeekShort,
+      trendingThisWeekDefault: tc.trendingThisWeekDefault,
+    },
     limit: 10,
   });
 
@@ -237,7 +265,9 @@ export default async function TrendingPeople({
           <h2 className="trending-people-title">{titleLine}</h2>
         </div>
         <p className="trending-people-intro">
-          {introLine} in the past 7 days, with a quick note on what drove the spike.
+          {tc.trendingIntroSuffix
+            ? `${introLine} ${tc.trendingIntroSuffix}`
+            : `${introLine} in the past 7 days, with a quick note on what drove the spike.`}
         </p>
 
         <ol className="trending-people-grid">
@@ -269,7 +299,11 @@ export default async function TrendingPeople({
                     </p>
                   </div>
                 </Link>
-                <TrendingReasonToggle reason={person.trendReason} />
+                <TrendingReasonToggle
+                  reason={person.trendReason}
+                  readMoreLabel={tc.readMore}
+                  showLessLabel={tc.showLess}
+                />
               </div>
             </li>
           ))}

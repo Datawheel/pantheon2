@@ -13,7 +13,11 @@ function truncateText(text, maxLength = EXCERPT_LENGTH) {
   return `${trimmed.slice(0, lastSpace)}...`;
 }
 
-export default function TrendingReasonToggle({reason}) {
+export default function TrendingReasonToggle({
+  reason,
+  readMoreLabel = "Read more",
+  showLessLabel = "Show less",
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   if (!reason) return null;
@@ -40,7 +44,7 @@ export default function TrendingReasonToggle({reason}) {
             aria-expanded="true"
             onClick={() => setIsExpanded(false)}
           >
-            Show less
+            {showLessLabel}
             <svg className="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="6 15 12 9 18 15"></polyline>
             </svg>
@@ -55,7 +59,7 @@ export default function TrendingReasonToggle({reason}) {
             aria-expanded="false"
             onClick={() => setIsExpanded(true)}
           >
-            Read more
+            {readMoreLabel}
             <svg className="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>

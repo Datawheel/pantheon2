@@ -87,8 +87,9 @@ export default function TrendingSection({trendingCombos, locale, title}) {
                     className="trending-flag"
                   />
                   <span className="trending-text">
-                    {combo.demonym}{" "}
-                    {locale === "en" ? toTitleCase(plural(combo.occupation)) : combo.occupation}
+                    {locale === "en"
+                      ? `${combo.demonym} ${toTitleCase(plural(combo.occupation))}`
+                      : `${combo.occupation} ${combo.demonym}`}
                   </span>
                 </div>
                 <div className="trending-stats">

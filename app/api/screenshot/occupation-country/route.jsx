@@ -1,11 +1,17 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {plural} from "pluralize";
+import {getTranslations} from "/app/translations";
+import {DEFAULT_LOCALE} from "/app/locales";
 
 export const runtime = "edge";
 
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function formatNumber(num, locale = "en") {
+  try {
+    return new Intl.NumberFormat(locale).format(num);
+  } catch (e) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 }
 
 async function fetchPersonImage(id) {
@@ -36,10 +42,15 @@ export async function GET(request) {
   const {searchParams} = new URL(request.url);
   const occupationQueryId = searchParams.get("occupation");
   const countryQueryId = searchParams.get("country");
+  const lang = searchParams.get("lang") || DEFAULT_LOCALE;
 
   if (!occupationQueryId || !countryQueryId) {
     return new NextResponse("Not Found", {status: 404});
   }
+
+  const t = getTranslations(lang);
+  const tEn = getTranslations(DEFAULT_LOCALE);
+  const tc = {...tEn.occupationCountry, ...t.occupationCountry};
 
   // Load font
   const MarcellusfontData = await fetch(
@@ -48,8 +59,12 @@ export async function GET(request) {
 
   // Fetch occupation and country data in parallel
   const [occupationRes, countryRes] = await Promise.all([
-    fetch(`${BASE_API}/occupation?occupation_slug=eq.${occupationQueryId}`),
-    fetch(`${BASE_API}/country?country_code=eq.${countryQueryId}`),
+    fetch(
+      `${BASE_API}/occupation?occupation_slug=eq.${occupationQueryId}&select=id,occupation,${lang}_occupation:translations->${lang}->>occupation`
+    ),
+    fetch(
+      `${BASE_API}/country?country_code=eq.${countryQueryId}&select=id,country,${lang}_country:translations->${lang}->>country,${lang}_from_country:translations->${lang}->>from_country`
+    ),
   ]);
 
   const occupationData = await occupationRes.json();
@@ -64,8 +79,11 @@ export async function GET(request) {
 
   const {occupation: occupationName, id: occupationId} = occupation;
   const {country: countryName, id: countryId} = country;
+  const localizedOccupation = occupation?.[`${lang}_occupation`] || occupationName;
+  const localizedCountry = country?.[`${lang}_country`] || countryName;
+  const localizedFromCountry = country?.[`${lang}_from_country`];
 
-  if (!occupationName || !countryName) {
+  if (!localizedOccupation || !localizedCountry) {
     return new NextResponse("Not Found", {status: 404});
   }
 
@@ -158,7 +176,7 @@ export async function GET(request) {
               lineHeight: 1.2,
             }}
           >
-            {plural(occupationName)}
+            {lang === "en" ? plural(localizedOccupation) : localizedOccupation}
           </h1>
           <h3
             style={{
@@ -172,7 +190,7 @@ export async function GET(request) {
               textAlign: "center",
             }}
           >
-            from
+            {localizedFromCountry ? localizedFromCountry : tc.from}
           </h3>
           <h1
             style={{
@@ -187,7 +205,7 @@ export async function GET(request) {
               lineHeight: 1.2,
             }}
           >
-            {countryName}
+            {localizedCountry}
           </h1>
           {totalCount > 0 && (
             <p
@@ -198,7 +216,12 @@ export async function GET(request) {
                 textAlign: "center",
               }}
             >
-              {formatNumber(totalCount)} notable {totalCount === 1 ? "person" : "people"}
+              {tc.notablePeople
+                ? tc.notablePeople({
+                  count: totalCount,
+                  countFormatted: formatNumber(totalCount, lang),
+                })
+                : `${formatNumber(totalCount)} notable ${totalCount === 1 ? "person" : "people"}`}
             </p>
           )}
         </div>

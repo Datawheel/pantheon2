@@ -51,12 +51,12 @@ async function getCountry(countryId, lang = "en") {
 }
 
 async function getAllCountriesInOccupation(occupationId, lang = "en") {
-  const url = `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country)`;
+  const url = `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country,${lang}_from_country:translations->${lang}->>from_country)`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
-async function getAllOccupationsInCountry(countryId) {
-  const url = `${BASE_API}/occupation_country?country=eq.${countryId}&order=num_people.desc.nullslast`;
+async function getAllOccupationsInCountry(countryId, lang = "en") {
+  const url = `${BASE_API}/occupation_country?country=eq.${countryId}&order=num_people.desc.nullslast&select=*,occupation_data:occupation!occupation(occupation_slug,occupation,${lang}_occupation:translations->${lang}->>occupation)`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
@@ -140,7 +140,7 @@ export async function generateMetadata({params}, parent) {
       description,
       type: "website",
       images: [
-        `${baseUrl}/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}`,
+        `${baseUrl}/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}&lang=${lang}`,
         ...previousImages,
       ],
     },
@@ -172,7 +172,7 @@ export default async function Page({params: {locale, id, countryId}}) {
     peopleHpi,
   ] = await Promise.all([
     getAllCountriesInOccupation(occupation.occupation, lang),
-    getAllOccupationsInCountry(country.id),
+    getAllOccupationsInCountry(country.id, lang),
     getPeople(occupation.id, country.id),
     getPeopleHpi(occupation.id, country.id),
   ]);
@@ -222,6 +222,7 @@ export default async function Page({params: {locale, id, countryId}}) {
       />
       {trendingStatus && (
         <TrendingBanner
+          locale={lang}
           trendScore={trendingStatus.trend_score}
           reason={trendingStatus.reason}
           clicks={trendingStatus.clicks_curr}
@@ -251,6 +252,7 @@ export default async function Page({params: {locale, id, countryId}}) {
         people={people}
         title={"People"}
         slug={"people"}
+        locale={lang}
       />
       <Lifespans
         attrs={attrs}
@@ -262,6 +264,7 @@ export default async function Page({params: {locale, id, countryId}}) {
       <Footer
         allCountriesInOccupation={allCountriesInOccupation}
         allOccupationsInCountry={allOccupationsInCountry}
+        locale={lang}
       />
     </div>
   );

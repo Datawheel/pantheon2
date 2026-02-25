@@ -6,6 +6,47 @@ export const translations = {
       theMostFamous: "The Most Famous",
       from: "from",
       greatest: "Greatest",
+      keepExploring: "Keep Exploring",
+      trendingThisWeek: "Trending This Week",
+      trendScoreLabel: "Trend Score",
+      whyTrending: "Why is this trending?",
+      clicksThisWeek: "Clicks this week",
+      impressionsThisWeek: "Impressions this week",
+      readMore: "Read more",
+      showLess: "Show less",
+      notablePeople: ({count, countFormatted}) =>
+        `${countFormatted || count} notable ${count === 1 ? "person" : "people"}`,
+      viewsLabel: "views",
+      onDate: ({date}) => `on ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Trending ${occupationPlural} This Week`;
+        return hasFromPrefix
+          ? `Trending ${occupationPlural} ${locationLabel} This Week`
+          : `Trending ${locationLabel} ${occupationPlural} This Week`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `The top 10 ${occupationPlural} trending on Wikipedia`;
+        return hasFromPrefix
+          ? `The top 10 ${occupationPlural} ${locationLabel} trending on Wikipedia`
+          : `The top 10 ${locationLabel} ${occupationPlural} trending on Wikipedia`;
+      },
+      trendingIntroSuffix: "in the past 7 days, with a quick note on what drove the spike.",
+      trendingThisWeekShort: "Trending this week",
+      trendingThisWeekDefault: "Trending this week on Wikipedia",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon has ${totalCount} people classified as ${demonym} ${occupationPlural} born between ${oldestYear} and ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `Of these ${totalCount}, none of them are still alive today.`;
+        return `Of these ${totalCount}, ${aliveCountFormatted} (${aliveShare}) of them are still alive today.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `The most famous living ${demonym} ${occupationPlural} include `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `The most famous deceased ${demonym} ${occupationPlural} include `,
+      peopleNewAsOf: "April 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `As of ${asOfLabel}, ${countFormatted} new ${demonym} ${occupationPlural} have been added to Pantheon including `,
+      goToAllRankings: "Go to all Rankings",
+      livingTitle: ({demonym, occupationPlural}) => `Living ${demonym} ${occupationPlural}`,
+      deceasedTitle: ({demonym, occupationPlural}) => `Deceased ${demonym} ${occupationPlural}`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `Newly Added ${demonym} ${occupationPlural} (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         let text = `This page contains a list of the greatest ${demonym} ${occupationPlural}. `;
         text += `The pantheon dataset contains ${totalCount} ${occupationPlural}, ${countryCount} of which were born in ${country}. `;
@@ -38,6 +79,7 @@ export const translations = {
       goToProfile: "Go to profile",
       whoAreTheMostFamous: "Who are the most famous...",
       trendingThisWeek: "Trending This Week",
+      browseByCountry: "Browse by Country",
     },
     intro: {
       rankingSentence: ({
@@ -261,6 +303,47 @@ export const translations = {
       theMostFamous: "Los Más Famosos",
       from: "de",
       greatest: "Los Mejores",
+
+      keepExploring: "Sigue explorando",
+      trendingThisWeek: "En tendencia esta semana",
+      trendScoreLabel: "Puntuación de tendencia",
+      whyTrending: "¿Por qué está en tendencia?",
+      clicksThisWeek: "Clics esta semana",
+      impressionsThisWeek: "Impresiones esta semana",
+      readMore: "Leer más",
+      showLess: "Mostrar menos",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} persona${count === 1 ? "" : "s"} destacada${count === 1 ? "" : "s"}`,
+      viewsLabel: "vistas",
+      onDate: ({date}) => `el ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `En tendencia ${occupationPlural} esta semana`;
+        return hasFromPrefix
+          ? `En tendencia ${occupationPlural} ${locationLabel} esta semana`
+          : `En tendencia ${locationLabel} ${occupationPlural} esta semana`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Los 10 ${occupationPlural} con más tendencia en Wikipedia`;
+        return hasFromPrefix
+          ? `Los 10 ${occupationPlural} ${locationLabel} con más tendencia en Wikipedia`
+          : `Los 10 ${locationLabel} ${occupationPlural} con más tendencia en Wikipedia`;
+      },
+      trendingIntroSuffix: "en los últimos 7 días, con una breve nota sobre qué impulsó el pico.",
+      trendingThisWeekShort: "En tendencia esta semana",
+      trendingThisWeekDefault: "En tendencia esta semana en Wikipedia",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon tiene ${totalCount} personas clasificadas como ${occupationPlural} ${demonym} nacidas entre ${oldestYear} y ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `De estas ${totalCount}, ninguna sigue viva hoy.`;
+        return `De estas ${totalCount}, ${aliveCountFormatted} (${aliveShare}) siguen vivas hoy.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `Los ${occupationPlural} ${demonym} vivos más famosos incluyen `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `Los ${occupationPlural} ${demonym} fallecidos más famosos incluyen `,
+      peopleNewAsOf: "abril de 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `A partir de ${asOfLabel}, se han añadido a Pantheon ${countFormatted} nuevos ${occupationPlural} ${demonym}, incluyendo `,
+      goToAllRankings: "Ir a todos los rankings",
+      livingTitle: ({demonym, occupationPlural}) => `Vivos ${occupationPlural} ${demonym}`,
+      deceasedTitle: ({demonym, occupationPlural}) => `Fallecidos ${occupationPlural} ${demonym}`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `Recién añadidos ${occupationPlural} ${demonym} (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Spanish ordinals
         const formatSpanishOrdinal = (rankStr) => {
@@ -303,6 +386,7 @@ export const translations = {
       goToProfile: "Ir al perfil",
       whoAreTheMostFamous: "¿Quiénes son los más famosos...",
       trendingThisWeek: "Tendencias Esta Semana",
+      browseByCountry: "Explorar por país",
     },
     intro: {
       rankingSentence: ({
@@ -521,6 +605,47 @@ export const translations = {
       theMostFamous: "Les Plus Célèbres",
       from: "de",
       greatest: "Les Meilleurs",
+
+      keepExploring: "Continuer à explorer",
+      trendingThisWeek: "Tendances de la semaine",
+      trendScoreLabel: "Score de tendance",
+      whyTrending: "Pourquoi est-ce en tendance ?",
+      clicksThisWeek: "Clics cette semaine",
+      impressionsThisWeek: "Impressions cette semaine",
+      readMore: "Lire la suite",
+      showLess: "Afficher moins",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} personne${count === 1 ? "" : "s"} notable${count === 1 ? "" : "s"}`,
+      viewsLabel: "vues",
+      onDate: ({date}) => `le ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `En tendance ${occupationPlural} cette semaine`;
+        return hasFromPrefix
+          ? `En tendance ${occupationPlural} ${locationLabel} cette semaine`
+          : `En tendance ${locationLabel} ${occupationPlural} cette semaine`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Les 10 ${occupationPlural} en tendance sur Wikipedia`;
+        return hasFromPrefix
+          ? `Les 10 ${occupationPlural} ${locationLabel} en tendance sur Wikipedia`
+          : `Les 10 ${locationLabel} ${occupationPlural} en tendance sur Wikipedia`;
+      },
+      trendingIntroSuffix: "au cours des 7 derniers jours, avec une brève note sur la hausse.",
+      trendingThisWeekShort: "En tendance cette semaine",
+      trendingThisWeekDefault: "En tendance cette semaine sur Wikipedia",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon compte ${totalCount} personnes classées comme ${occupationPlural} ${demonym} nées entre ${oldestYear} et ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `Parmi ces ${totalCount}, aucune n'est encore en vie aujourd'hui.`;
+        return `Parmi ces ${totalCount}, ${aliveCountFormatted} (${aliveShare}) sont encore en vie aujourd'hui.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `Les ${occupationPlural} ${demonym} vivants les plus célèbres incluent `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `Les ${occupationPlural} ${demonym} décédés les plus célèbres incluent `,
+      peopleNewAsOf: "avril 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `En ${asOfLabel}, ${countFormatted} nouveaux ${occupationPlural} ${demonym} ont été ajoutés à Pantheon, notamment `,
+      goToAllRankings: "Voir tous les classements",
+      livingTitle: ({demonym, occupationPlural}) => `${occupationPlural} ${demonym} vivants`,
+      deceasedTitle: ({demonym, occupationPlural}) => `${occupationPlural} ${demonym} décédés`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `${occupationPlural} ${demonym} nouvellement ajoutés (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for French ordinals
         const formatFrenchOrdinal = (rankStr) => {
@@ -562,6 +687,7 @@ export const translations = {
       goToProfile: "Aller au profil",
       whoAreTheMostFamous: "Qui sont les plus célèbres...",
       trendingThisWeek: "Tendances Cette Semaine",
+      browseByCountry: "Parcourir par pays",
     },
     intro: {
       rankingSentence: ({
@@ -797,6 +923,47 @@ export const translations = {
       theMostFamous: "Die Berühmtesten",
       from: "aus",
       greatest: "Die Größten",
+
+      keepExploring: "Weiter erkunden",
+      trendingThisWeek: "Diese Woche im Trend",
+      trendScoreLabel: "Trend-Score",
+      whyTrending: "Warum ist das im Trend?",
+      clicksThisWeek: "Klicks diese Woche",
+      impressionsThisWeek: "Impressionen diese Woche",
+      readMore: "Mehr lesen",
+      showLess: "Weniger anzeigen",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} bemerkenswerte Person${count === 1 ? "" : "en"}`,
+      viewsLabel: "Aufrufe",
+      onDate: ({date}) => `am ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Im Trend ${occupationPlural} diese Woche`;
+        return hasFromPrefix
+          ? `Im Trend ${occupationPlural} ${locationLabel} diese Woche`
+          : `Im Trend ${locationLabel} ${occupationPlural} diese Woche`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Die Top 10 ${occupationPlural} im Trend auf Wikipedia`;
+        return hasFromPrefix
+          ? `Die Top 10 ${occupationPlural} ${locationLabel} im Trend auf Wikipedia`
+          : `Die Top 10 ${locationLabel} ${occupationPlural} im Trend auf Wikipedia`;
+      },
+      trendingIntroSuffix: "in den letzten 7 Tagen, mit einer kurzen Erklärung.",
+      trendingThisWeekShort: "Diese Woche im Trend",
+      trendingThisWeekDefault: "Diese Woche im Trend auf Wikipedia",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon hat ${totalCount} Personen, die als ${demonym} ${occupationPlural} eingestuft sind und zwischen ${oldestYear} und ${youngestYear} geboren wurden.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `Davon ist heute niemand mehr am Leben.`;
+        return `Davon sind ${aliveCountFormatted} (${aliveShare}) heute noch am Leben.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `Die bekanntesten lebenden ${demonym} ${occupationPlural} sind `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `Die bekanntesten verstorbenen ${demonym} ${occupationPlural} sind `,
+      peopleNewAsOf: "April 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `Seit ${asOfLabel} wurden ${countFormatted} neue ${demonym} ${occupationPlural} zu Pantheon hinzugefügt, darunter `,
+      goToAllRankings: "Alle Rankings ansehen",
+      livingTitle: ({demonym, occupationPlural}) => `Lebende ${demonym} ${occupationPlural}`,
+      deceasedTitle: ({demonym, occupationPlural}) => `Verstorbene ${demonym} ${occupationPlural}`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `Neu hinzugefügte ${demonym} ${occupationPlural} (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for German ordinals
         const formatGermanOrdinal = (rankStr) => {
@@ -837,6 +1004,7 @@ export const translations = {
       goToProfile: "Zum Profil gehen",
       whoAreTheMostFamous: "Wer sind die berühmtesten...",
       trendingThisWeek: "Trends Diese Woche",
+      browseByCountry: "Nach Land durchsuchen",
     },
     intro: {
       rankingSentence: ({
@@ -1051,6 +1219,47 @@ export const translations = {
       theMostFamous: "Самые Известные",
       from: "из",
       greatest: "Лучшие",
+
+      keepExploring: "Продолжить исследование",
+      trendingThisWeek: "В тренде на этой неделе",
+      trendScoreLabel: "Оценка тренда",
+      whyTrending: "Почему это в тренде?",
+      clicksThisWeek: "Клики за неделю",
+      impressionsThisWeek: "Показы за неделю",
+      readMore: "Читать далее",
+      showLess: "Скрыть",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} ${count === 1 ? "заметная персона" : "заметных персон"}`,
+      viewsLabel: "просмотров",
+      onDate: ({date}) => `на ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `В тренде ${occupationPlural} на этой неделе`;
+        return hasFromPrefix
+          ? `В тренде ${occupationPlural} ${locationLabel} на этой неделе`
+          : `В тренде ${locationLabel} ${occupationPlural} на этой неделе`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Топ‑10 ${occupationPlural} в тренде на Wikipedia`;
+        return hasFromPrefix
+          ? `Топ‑10 ${occupationPlural} ${locationLabel} в тренде на Wikipedia`
+          : `Топ‑10 ${locationLabel} ${occupationPlural} в тренде на Wikipedia`;
+      },
+      trendingIntroSuffix: "за последние 7 дней, с кратким объяснением причины всплеска.",
+      trendingThisWeekShort: "В тренде на этой неделе",
+      trendingThisWeekDefault: "В тренде на этой неделе на Wikipedia",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `В Pantheon ${totalCount} персон, классифицированных как ${demonym} ${occupationPlural}, родившихся между ${oldestYear} и ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `Из них никто больше не жив.`;
+        return `Из них ${aliveCountFormatted} (${aliveShare}) всё ещё живы.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `Среди самых известных живущих ${demonym} ${occupationPlural}: `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `Среди самых известных умерших ${demonym} ${occupationPlural}: `,
+      peopleNewAsOf: "апрель 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `По состоянию на ${asOfLabel} в Pantheon добавлено ${countFormatted} новых ${demonym} ${occupationPlural}, включая `,
+      goToAllRankings: "Посмотреть все рейтинги",
+      livingTitle: ({demonym, occupationPlural}) => `Живые ${demonym} ${occupationPlural}`,
+      deceasedTitle: ({demonym, occupationPlural}) => `Умершие ${demonym} ${occupationPlural}`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `Недавно добавленные ${demonym} ${occupationPlural} (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Russian ordinals
         const formatRussianOrdinal = (rankStr) => {
@@ -1091,6 +1300,7 @@ export const translations = {
       goToProfile: "Перейти к профилю",
       whoAreTheMostFamous: "Кто самые известные...",
       trendingThisWeek: "Тренды Этой Недели",
+      browseByCountry: "Просмотр по странам",
     },
     intro: {
       rankingSentence: ({
@@ -1330,6 +1540,43 @@ export const translations = {
       theMostFamous: "最著名的",
       from: "来自",
       greatest: "最伟大的",
+
+      keepExploring: "继续探索",
+      trendingThisWeek: "本周热门",
+      trendScoreLabel: "热度分数",
+      whyTrending: "为什么会热门？",
+      clicksThisWeek: "本周点击",
+      impressionsThisWeek: "本周展示",
+      readMore: "阅读更多",
+      showLess: "收起",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} 位知名人物`,
+      viewsLabel: "次浏览",
+      onDate: ({date}) => `${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `本周热门${occupationPlural}`;
+        return `${locationLabel}${occupationPlural}本周热门`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `维基百科上热门的前10名${occupationPlural}`;
+        return `${locationLabel}${occupationPlural}在维基百科热门前10名`;
+      },
+      trendingIntroSuffix: "过去7天，附上简短原因说明。",
+      trendingThisWeekShort: "本周热门",
+      trendingThisWeekDefault: "本周在维基百科热门",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon 收录了 ${totalCount} 位被归类为${demonym}${occupationPlural}的人，出生于 ${oldestYear} 到 ${youngestYear} 之间。`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `其中无人仍在世。`;
+        return `其中 ${aliveCountFormatted} 位（${aliveShare}）仍在世。`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `最著名的在世${demonym}${occupationPlural}包括 `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `最著名的已故${demonym}${occupationPlural}包括 `,
+      peopleNewAsOf: "2024年4月",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `截至${asOfLabel}，Pantheon 新增了 ${countFormatted} 位${demonym}${occupationPlural}，包括 `,
+      goToAllRankings: "查看所有排名",
+      livingTitle: ({demonym, occupationPlural}) => `${demonym}${occupationPlural}（在世）`,
+      deceasedTitle: ({demonym, occupationPlural}) => `${demonym}${occupationPlural}（已故）`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `${demonym}${occupationPlural}（新增，${yearLabel}）`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Chinese ordinals (use 第X)
         const formatChineseOrdinal = (rankStr) => {
@@ -1370,6 +1617,7 @@ export const translations = {
       goToProfile: "前往个人资料",
       whoAreTheMostFamous: "谁是最著名的...",
       trendingThisWeek: "本周热门",
+      browseByCountry: "按国家浏览",
     },
     intro: {
       rankingSentence: ({
@@ -1587,6 +1835,43 @@ export const translations = {
       theMostFamous: "最も有名な",
       from: "出身の",
       greatest: "最も偉大な",
+
+      keepExploring: "さらに探索",
+      trendingThisWeek: "今週のトレンド",
+      trendScoreLabel: "トレンドスコア",
+      whyTrending: "なぜトレンド？",
+      clicksThisWeek: "今週のクリック数",
+      impressionsThisWeek: "今週の表示回数",
+      readMore: "もっと読む",
+      showLess: "折りたたむ",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} 人の著名人`,
+      viewsLabel: "回表示",
+      onDate: ({date}) => `${date}に`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `${occupationPlural}の今週のトレンド`;
+        return `${locationLabel}${occupationPlural}の今週のトレンド`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `ウィキペディアでトレンドの${occupationPlural}トップ10`;
+        return `${locationLabel}${occupationPlural}のウィキペディアトレンドトップ10`;
+      },
+      trendingIntroSuffix: "過去7日間の動向と簡単な理由を添えています。",
+      trendingThisWeekShort: "今週のトレンド",
+      trendingThisWeekDefault: "今週ウィキペディアでトレンド",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheonには、${oldestYear}から${youngestYear}の間に生まれた${demonym}${occupationPlural}として分類される人物が${totalCount}人います。`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `そのうち現在存命の人はいません。`;
+        return `そのうち${aliveCountFormatted}人（${aliveShare}）が現在も存命です。`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `最も有名な存命の${demonym}${occupationPlural}は `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `最も有名な故${demonym}${occupationPlural}は `,
+      peopleNewAsOf: "2024年4月",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `${asOfLabel}時点で、Pantheonには${countFormatted}人の新しい${demonym}${occupationPlural}が追加され、`,
+      goToAllRankings: "すべてのランキングを見る",
+      livingTitle: ({demonym, occupationPlural}) => `存命の${demonym}${occupationPlural}`,
+      deceasedTitle: ({demonym, occupationPlural}) => `故人の${demonym}${occupationPlural}`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `新規追加の${demonym}${occupationPlural}（${yearLabel}）`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Japanese ordinals (use 第X位)
         const formatJapaneseOrdinal = (rankStr) => {
@@ -1627,6 +1912,7 @@ export const translations = {
       goToProfile: "プロフィールに移動",
       whoAreTheMostFamous: "最も有名なのは誰...",
       trendingThisWeek: "今週のトレンド",
+      browseByCountry: "国別に閲覧",
     },
     intro: {
       rankingSentence: ({
@@ -1854,6 +2140,47 @@ export const translations = {
       theMostFamous: "الأكثر شهرة",
       from: "من",
       greatest: "الأعظم",
+
+      keepExploring: "واصل الاستكشاف",
+      trendingThisWeek: "الرائج هذا الأسبوع",
+      trendScoreLabel: "درجة الرواج",
+      whyTrending: "لماذا هذا رائج؟",
+      clicksThisWeek: "النقرات هذا الأسبوع",
+      impressionsThisWeek: "مرات الظهور هذا الأسبوع",
+      readMore: "اقرأ المزيد",
+      showLess: "عرض أقل",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} شخصية بارزة`,
+      viewsLabel: "مشاهدة",
+      onDate: ({date}) => `في ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `الرائج ${occupationPlural} هذا الأسبوع`;
+        return hasFromPrefix
+          ? `الرائج ${occupationPlural} ${locationLabel} هذا الأسبوع`
+          : `الرائج ${locationLabel} ${occupationPlural} هذا الأسبوع`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `أفضل 10 ${occupationPlural} رائجين على ويكيبيديا`;
+        return hasFromPrefix
+          ? `أفضل 10 ${occupationPlural} ${locationLabel} رائجين على ويكيبيديا`
+          : `أفضل 10 ${locationLabel} ${occupationPlural} رائجين على ويكيبيديا`;
+      },
+      trendingIntroSuffix: "خلال آخر 7 أيام، مع ملاحظة قصيرة حول سبب الارتفاع.",
+      trendingThisWeekShort: "الرائج هذا الأسبوع",
+      trendingThisWeekDefault: "الرائج هذا الأسبوع على ويكيبيديا",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `يضم بانثيون ${totalCount} شخصية مصنفة كـ ${occupationPlural} ${demonym} وُلدوا بين ${oldestYear} و ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `ومن بين هؤلاء، لا أحد لا يزال على قيد الحياة اليوم.`;
+        return `ومن بين هؤلاء، لا يزال ${aliveCountFormatted} (${aliveShare}) على قيد الحياة اليوم.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `أشهر ${occupationPlural} ${demonym} الأحياء يشملون `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `أشهر ${occupationPlural} ${demonym} المتوفين يشملون `,
+      peopleNewAsOf: "أبريل 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `اعتبارًا من ${asOfLabel}، تمت إضافة ${countFormatted} ${occupationPlural} ${demonym} جديدة إلى بانثيون بما في ذلك `,
+      goToAllRankings: "عرض جميع التصنيفات",
+      livingTitle: ({demonym, occupationPlural}) => `${occupationPlural} ${demonym} الأحياء`,
+      deceasedTitle: ({demonym, occupationPlural}) => `${occupationPlural} ${demonym} المتوفون`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `${occupationPlural} ${demonym} المضافة حديثًا (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Arabic ordinals (keep the number as-is)
         const formatArabicOrdinal = (rankStr) => {
@@ -1894,6 +2221,7 @@ export const translations = {
       goToProfile: "الذهاب إلى الملف الشخصي",
       whoAreTheMostFamous: "من هم الأكثر شهرة...",
       trendingThisWeek: "الرائج هذا الأسبوع",
+      browseByCountry: "تصفح حسب البلد",
     },
     intro: {
       rankingSentence: ({
@@ -2110,6 +2438,47 @@ export const translations = {
       theMostFamous: "I Più Famosi",
       from: "di",
       greatest: "I Migliori",
+
+      keepExploring: "Continua a esplorare",
+      trendingThisWeek: "Di tendenza questa settimana",
+      trendScoreLabel: "Punteggio trend",
+      whyTrending: "Perché è di tendenza?",
+      clicksThisWeek: "Clic questa settimana",
+      impressionsThisWeek: "Impressioni questa settimana",
+      readMore: "Leggi di più",
+      showLess: "Mostra meno",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} persona${count === 1 ? "" : "e"} notevole${count === 1 ? "" : "i"}`,
+      viewsLabel: "visualizzazioni",
+      onDate: ({date}) => `il ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Di tendenza ${occupationPlural} questa settimana`;
+        return hasFromPrefix
+          ? `Di tendenza ${occupationPlural} ${locationLabel} questa settimana`
+          : `Di tendenza ${locationLabel} ${occupationPlural} questa settimana`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `I 10 ${occupationPlural} di tendenza su Wikipedia`;
+        return hasFromPrefix
+          ? `I 10 ${occupationPlural} ${locationLabel} di tendenza su Wikipedia`
+          : `I 10 ${locationLabel} ${occupationPlural} di tendenza su Wikipedia`;
+      },
+      trendingIntroSuffix: "negli ultimi 7 giorni, con una breve nota sul motivo del picco.",
+      trendingThisWeekShort: "Di tendenza questa settimana",
+      trendingThisWeekDefault: "Di tendenza questa settimana su Wikipedia",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon include ${totalCount} persone classificate come ${occupationPlural} ${demonym} nate tra ${oldestYear} e ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `Di queste ${totalCount}, nessuno è ancora in vita.`;
+        return `Di queste ${totalCount}, ${aliveCountFormatted} (${aliveShare}) sono ancora in vita.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `I ${occupationPlural} ${demonym} viventi più famosi includono `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `I ${occupationPlural} ${demonym} deceduti più famosi includono `,
+      peopleNewAsOf: "aprile 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `A ${asOfLabel}, ${countFormatted} nuovi ${occupationPlural} ${demonym} sono stati aggiunti a Pantheon, tra cui `,
+      goToAllRankings: "Vai a tutte le classifiche",
+      livingTitle: ({demonym, occupationPlural}) => `${occupationPlural} ${demonym} viventi`,
+      deceasedTitle: ({demonym, occupationPlural}) => `${occupationPlural} ${demonym} deceduti`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `${occupationPlural} ${demonym} aggiunti di recente (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Italian ordinals (use ° for masculine)
         const formatItalianOrdinal = (rankStr) => {
@@ -2152,6 +2521,7 @@ export const translations = {
       goToProfile: "Vai al profilo",
       whoAreTheMostFamous: "Chi sono i più famosi...",
       trendingThisWeek: "Tendenze Questa Settimana",
+      browseByCountry: "Esplora per paese",
     },
     intro: {
       rankingSentence: ({
@@ -2403,6 +2773,47 @@ export const translations = {
       theMostFamous: "Os Mais Famosos",
       from: "de",
       greatest: "Os Melhores",
+
+      keepExploring: "Continuar explorando",
+      trendingThisWeek: "Em alta esta semana",
+      trendScoreLabel: "Pontuação de tendência",
+      whyTrending: "Por que está em alta?",
+      clicksThisWeek: "Cliques esta semana",
+      impressionsThisWeek: "Impressões esta semana",
+      readMore: "Leia mais",
+      showLess: "Mostrar menos",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} pessoa${count === 1 ? "" : "s"} notável${count === 1 ? "" : "eis"}`,
+      viewsLabel: "visualizações",
+      onDate: ({date}) => `em ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Em alta ${occupationPlural} esta semana`;
+        return hasFromPrefix
+          ? `Em alta ${occupationPlural} ${locationLabel} esta semana`
+          : `Em alta ${locationLabel} ${occupationPlural} esta semana`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Os 10 ${occupationPlural} em alta na Wikipédia`;
+        return hasFromPrefix
+          ? `Os 10 ${occupationPlural} ${locationLabel} em alta na Wikipédia`
+          : `Os 10 ${locationLabel} ${occupationPlural} em alta na Wikipédia`;
+      },
+      trendingIntroSuffix: "nos últimos 7 dias, com uma breve nota sobre o motivo do pico.",
+      trendingThisWeekShort: "Em alta esta semana",
+      trendingThisWeekDefault: "Em alta esta semana na Wikipédia",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon tem ${totalCount} pessoas classificadas como ${occupationPlural} ${demonym} nascidas entre ${oldestYear} e ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `Dessas ${totalCount}, nenhuma ainda está viva.`;
+        return `Dessas ${totalCount}, ${aliveCountFormatted} (${aliveShare}) ainda estão vivas.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `Os ${occupationPlural} ${demonym} vivos mais famosos incluem `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `Os ${occupationPlural} ${demonym} falecidos mais famosos incluem `,
+      peopleNewAsOf: "abril de 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `Em ${asOfLabel}, ${countFormatted} novos ${occupationPlural} ${demonym} foram adicionados ao Pantheon, incluindo `,
+      goToAllRankings: "Ver todos os rankings",
+      livingTitle: ({demonym, occupationPlural}) => `${occupationPlural} ${demonym} vivos`,
+      deceasedTitle: ({demonym, occupationPlural}) => `${occupationPlural} ${demonym} falecidos`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `${occupationPlural} ${demonym} recém-adicionados (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Portuguese ordinals (use º for masculine)
         const formatPortugueseOrdinal = (rankStr) => {
@@ -2444,6 +2855,7 @@ export const translations = {
       goToProfile: "Ir para o perfil",
       whoAreTheMostFamous: "Quem são os mais famosos...",
       trendingThisWeek: "Tendências Esta Semana",
+      browseByCountry: "Explorar por país",
     },
     intro: {
       rankingSentence: ({
@@ -2685,6 +3097,10 @@ export const translations = {
       theMostFamous: "A Leghíresebbek",
       from: "országából",
       greatest: "A Legnagyobbak",
+      goToAllRankings: "Az összes rangsor megtekintése",
+      livingTitle: ({demonym, occupationPlural}) => `Élő ${demonym} ${occupationPlural}`,
+      deceasedTitle: ({demonym, occupationPlural}) => `Elhunyt ${demonym} ${occupationPlural}`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `Újonnan hozzáadott ${demonym} ${occupationPlural} (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Hungarian ordinals (use period)
         const formatHungarianOrdinal = (rankStr) => {
@@ -2716,6 +3132,26 @@ export const translations = {
       isRankMostFamous: ({rank, demonym, occupation}) => `a ${rank} leghíresebb ${demonym} ${occupation}.`,
       biographyTranslated: ({possessive, count}) => `${possessive} életrajza ${count} különböző nyelvre lett lefordítva`,
       onWikipedia: "a Wikipédián",
+      readMore: "Olvass tovább",
+      showLess: "Kevesebb",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} híres személy`,
+      viewsLabel: "megtekintés",
+      onDate: ({date}) => `${date}-án`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Felkapott ${occupationPlural} ezen a héten`;
+        return hasFromPrefix
+          ? `Felkapott ${occupationPlural} ${locationLabel} ezen a héten`
+          : `Felkapott ${locationLabel} ${occupationPlural} ezen a héten`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `A Wikipédia top 10 felkapott ${occupationPlural}`;
+        return hasFromPrefix
+          ? `A top 10 ${occupationPlural} ${locationLabel} a Wikipédián`
+          : `A top 10 ${locationLabel} ${occupationPlural} a Wikipédián`;
+      },
+      trendingIntroSuffix: "az elmúlt 7 napban, rövid magyarázattal a kiugrás okáról.",
+      trendingThisWeekShort: "Felkapott ezen a héten",
+      trendingThisWeekDefault: "Felkapott ezen a héten a Wikipédián.",
     },
     selectOccupationCountry: {
       heading: "Válasszon foglalkozást és országot",
@@ -2725,6 +3161,7 @@ export const translations = {
       goToProfile: "Ugrás a profilhoz",
       whoAreTheMostFamous: "Kik a leghíresebbek...",
       trendingThisWeek: "Trendek Ezen a Héten",
+      browseByCountry: "Böngészés ország szerint",
     },
     intro: {
       rankingSentence: ({
@@ -2934,6 +3371,47 @@ export const translations = {
       theMostFamous: "De Beroemdste",
       from: "uit",
       greatest: "De Grootste",
+
+      keepExploring: "Blijf ontdekken",
+      trendingThisWeek: "Trending deze week",
+      trendScoreLabel: "Trendscore",
+      whyTrending: "Waarom is dit trending?",
+      clicksThisWeek: "Kliks deze week",
+      impressionsThisWeek: "Impressies deze week",
+      readMore: "Lees meer",
+      showLess: "Toon minder",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} opvallende persoon${count === 1 ? "" : "en"}`,
+      viewsLabel: "weergaven",
+      onDate: ({date}) => `op ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Trending ${occupationPlural} deze week`;
+        return hasFromPrefix
+          ? `Trending ${occupationPlural} ${locationLabel} deze week`
+          : `Trending ${locationLabel} ${occupationPlural} deze week`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `De top 10 ${occupationPlural} trending op Wikipedia`;
+        return hasFromPrefix
+          ? `De top 10 ${occupationPlural} ${locationLabel} trending op Wikipedia`
+          : `De top 10 ${locationLabel} ${occupationPlural} trending op Wikipedia`;
+      },
+      trendingIntroSuffix: "in de afgelopen 7 dagen, met een korte toelichting.",
+      trendingThisWeekShort: "Trending deze week",
+      trendingThisWeekDefault: "Trending deze week op Wikipedia",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon heeft ${totalCount} personen die zijn geclassificeerd als ${demonym} ${occupationPlural}, geboren tussen ${oldestYear} en ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `Van deze ${totalCount} is niemand meer in leven.`;
+        return `Van deze ${totalCount} zijn ${aliveCountFormatted} (${aliveShare}) nog in leven.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `De bekendste levende ${demonym} ${occupationPlural} zijn `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `De bekendste overleden ${demonym} ${occupationPlural} zijn `,
+      peopleNewAsOf: "april 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `Sinds ${asOfLabel} zijn ${countFormatted} nieuwe ${demonym} ${occupationPlural} toegevoegd aan Pantheon, waaronder `,
+      goToAllRankings: "Bekijk alle ranglijsten",
+      livingTitle: ({demonym, occupationPlural}) => `Levende ${demonym} ${occupationPlural}`,
+      deceasedTitle: ({demonym, occupationPlural}) => `Overleden ${demonym} ${occupationPlural}`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `Nieuw toegevoegde ${demonym} ${occupationPlural} (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Dutch ordinals (use -e or -de)
         const formatDutchOrdinal = (rankStr) => {
@@ -2974,6 +3452,7 @@ export const translations = {
       goToProfile: "Ga naar profiel",
       whoAreTheMostFamous: "Wie zijn de beroemdste...",
       trendingThisWeek: "Trending Deze Week",
+      browseByCountry: "Bladeren op land",
     },
     intro: {
       rankingSentence: ({
@@ -3198,6 +3677,47 @@ export const translations = {
       theMostFamous: "Najsławniejsi",
       from: "z",
       greatest: "Najwięksi",
+
+      keepExploring: "Odkrywaj dalej",
+      trendingThisWeek: "Trendy w tym tygodniu",
+      trendScoreLabel: "Wynik trendu",
+      whyTrending: "Dlaczego jest w trendach?",
+      clicksThisWeek: "Kliknięcia w tym tygodniu",
+      impressionsThisWeek: "Wyświetlenia w tym tygodniu",
+      readMore: "Czytaj więcej",
+      showLess: "Pokaż mniej",
+      notablePeople: ({count, countFormatted}) => `${countFormatted || count} ${count === 1 ? "znana osoba" : "znanych osób"}`,
+      viewsLabel: "wyświetleń",
+      onDate: ({date}) => `dnia ${date}`,
+      trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `W trendach ${occupationPlural} w tym tygodniu`;
+        return hasFromPrefix
+          ? `W trendach ${occupationPlural} ${locationLabel} w tym tygodniu`
+          : `W trendach ${locationLabel} ${occupationPlural} w tym tygodniu`;
+      },
+      trendingIntro: ({locationLabel, occupationPlural, hasFromPrefix}) => {
+        if (!locationLabel) return `Top 10 ${occupationPlural} w trendach na Wikipedii`;
+        return hasFromPrefix
+          ? `Top 10 ${occupationPlural} ${locationLabel} w trendach na Wikipedii`
+          : `Top 10 ${locationLabel} ${occupationPlural} w trendach na Wikipedii`;
+      },
+      trendingIntroSuffix: "z ostatnich 7 dni, z krótkim wyjaśnieniem.",
+      trendingThisWeekShort: "W trendach w tym tygodniu",
+      trendingThisWeekDefault: "W trendach w tym tygodniu na Wikipedii",
+
+      peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon zawiera ${totalCount} osób sklasyfikowanych jako ${demonym} ${occupationPlural}, urodzonych między ${oldestYear} a ${youngestYear}.`,
+      peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
+        if (!aliveCount) return `Z tych ${totalCount} osób nikt już nie żyje.`;
+        return `Z tych ${totalCount} osób ${aliveCountFormatted} (${aliveShare}) wciąż żyje.`;
+      },
+      peopleLivingIntro: ({demonym, occupationPlural}) => `Najbardziej znani żyjący ${demonym} ${occupationPlural} to `,
+      peopleDeceasedIntro: ({demonym, occupationPlural}) => `Najbardziej znani zmarli ${demonym} ${occupationPlural} to `,
+      peopleNewAsOf: "kwiecień 2024",
+      peopleNewIntro: ({asOfLabel, countFormatted, demonym, occupationPlural}) => `Od ${asOfLabel} do Pantheon dodano ${countFormatted} nowych ${demonym} ${occupationPlural}, w tym `,
+      goToAllRankings: "Zobacz wszystkie rankingi",
+      livingTitle: ({demonym, occupationPlural}) => `Żyjący ${demonym} ${occupationPlural}`,
+      deceasedTitle: ({demonym, occupationPlural}) => `Zmarli ${demonym} ${occupationPlural}`,
+      newlyAddedTitle: ({demonym, occupationPlural, yearLabel}) => `Nowo dodani ${demonym} ${occupationPlural} (${yearLabel})`,
       introText: ({demonym, occupationPlural, totalCount, countryCount, country, rank, countriesBehind}) => {
         // Helper function for Polish ordinals (use period)
         const formatPolishOrdinal = (rankStr) => {
@@ -3238,6 +3758,7 @@ export const translations = {
       goToProfile: "Przejdź do profilu",
       whoAreTheMostFamous: "Kto jest najbardziej znany...",
       trendingThisWeek: "Trendy w Tym Tygodniu",
+      browseByCountry: "Przeglądaj według kraju",
     },
     intro: {
       rankingSentence: ({

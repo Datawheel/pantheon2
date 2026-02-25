@@ -1,7 +1,18 @@
 import {micromark} from "micromark";
+import {getTranslations} from "/app/translations";
+import {DEFAULT_LOCALE} from "/app/locales";
 import "./TrendingBanner.css";
 
-export default function TrendingBanner({trendScore, reason, clicks, impressions}) {
+export default function TrendingBanner({
+  trendScore,
+  reason,
+  clicks,
+  impressions,
+  locale = DEFAULT_LOCALE,
+}) {
+  const t = getTranslations(locale);
+  const tEn = getTranslations(DEFAULT_LOCALE);
+  const tc = {...tEn.occupationCountry, ...t.occupationCountry};
   const reasonHtml = reason ? micromark(reason) : "";
 
   return (
@@ -9,17 +20,21 @@ export default function TrendingBanner({trendScore, reason, clicks, impressions}
       <div className="trending-banner-container">
         <div className="trending-banner-header">
           <span className="trending-banner-icon">🔥</span>
-          <h2 className="trending-banner-title">Trending This Week</h2>
+          <h2 className="trending-banner-title">
+            {tc.trendingThisWeek || t.selectOccupationCountry?.trendingThisWeek || "Trending This Week"}
+          </h2>
           {trendScore && (
             <span className="trending-banner-score">
-              Trend Score: {Math.round(trendScore)}
+              {tc.trendScoreLabel || "Trend Score"}: {Math.round(trendScore)}
             </span>
           )}
         </div>
 
         {reason && (
           <div className="trending-banner-reason">
-            <h3 className="trending-reason-heading">Why is this trending?</h3>
+            <h3 className="trending-reason-heading">
+              {tc.whyTrending || "Why is this trending?"}
+            </h3>
             <div
               className="trending-reason-content"
               dangerouslySetInnerHTML={{__html: reasonHtml}}
@@ -31,13 +46,17 @@ export default function TrendingBanner({trendScore, reason, clicks, impressions}
           {clicks && (
             <div className="trending-stat">
               <span className="trending-stat-value">{clicks.toLocaleString()}</span>
-              <span className="trending-stat-label">Clicks this week</span>
+              <span className="trending-stat-label">
+                {tc.clicksThisWeek || "Clicks this week"}
+              </span>
             </div>
           )}
           {impressions && (
             <div className="trending-stat">
               <span className="trending-stat-value">{impressions.toLocaleString()}</span>
-              <span className="trending-stat-label">Impressions this week</span>
+              <span className="trending-stat-label">
+                {tc.impressionsThisWeek || "Impressions this week"}
+              </span>
             </div>
           )}
         </div>

@@ -5,8 +5,28 @@ import {toTitleCase} from "../../utils/vizHelpers";
 import AnchorList from "../../utils/AnchorList";
 import PhotoCarousel from "../../utils/PhotoCarousel";
 import SectionLayout from "../../common/SectionLayout";
+import {getTranslations} from "/app/translations";
+import {DEFAULT_LOCALE} from "/app/locales";
 
-export default function People({country, occupation, people, title, slug}) {
+export default function People({
+  country,
+  occupation,
+  people,
+  title,
+  slug,
+  locale = DEFAULT_LOCALE,
+}) {
+  const t = getTranslations(locale);
+  const tEn = getTranslations(DEFAULT_LOCALE);
+  const tc = {...tEn.occupationCountry, ...t.occupationCountry};
+  const occupationPlural =
+    locale === "en"
+      ? plural(occupation.occupation.toLowerCase())
+      : occupation.occupation;
+  const occupationPluralTitle =
+    locale === "en"
+      ? toTitleCase(plural(occupation.occupation))
+      : occupation.occupation;
   const youngestBirthyear = Math.max(...people.map(r => r.birthyear));
   const oldestBirthyear = Math.min(
     ...people.filter(p => p.birthyear).map(r => r.birthyear)
@@ -22,30 +42,35 @@ export default function People({country, occupation, people, title, slug}) {
     .filter(p => !p.hpi_prev)
     .sort((personA, personB) => personB.hpi - personA.hpi);
   const shareAlive = peopleAlive.length / people.length;
+  const totalCountFormatted = FORMATTERS.commas(people.length);
+  const aliveCountFormatted = FORMATTERS.commas(peopleAlive.length);
+  const aliveShareFormatted = FORMATTERS.share(shareAlive);
+  const newCountFormatted = FORMATTERS.commas(peopleNew.length);
 
   return (
     <SectionLayout slug={slug} title={title}>
       <div>
         <p>
-          Pantheon has {FORMATTERS.commas(people.length)} people classified as{" "}
-          {country.demonym} {plural(occupation.occupation.toLowerCase())} born
-          between {FORMATTERS.year(oldestBirthyear)} and{" "}
-          {FORMATTERS.year(youngestBirthyear)}. Of these{" "}
-          {FORMATTERS.commas(people.length)},{" "}
-          {peopleAlive.length ? (
-            <span>
-              {FORMATTERS.commas(peopleAlive.length)} (
-              {FORMATTERS.share(shareAlive)})
-            </span>
-          ) : (
-            "none"
-          )}{" "}
-          of them are still alive today.
+          {tc.peopleBase({
+            totalCount: totalCountFormatted,
+            demonym: country.demonym,
+            occupationPlural,
+            oldestYear: FORMATTERS.year(oldestBirthyear),
+            youngestYear: FORMATTERS.year(youngestBirthyear),
+          })}{" "}
+          {tc.peopleAlive({
+            totalCount: totalCountFormatted,
+            aliveCount: peopleAlive.length,
+            aliveCountFormatted,
+            aliveShare: aliveShareFormatted,
+          })}
           {peopleAlive.length ? (
             <span>
               {" "}
-              The most famous living {country.demonym}{" "}
-              {plural(occupation.occupation.toLowerCase())} include{" "}
+              {tc.peopleLivingIntro({
+                demonym: country.demonym,
+                occupationPlural,
+              })}
               <AnchorList
                 items={people.filter(p => p.alive).slice(0, 3)}
                 name={d => d.name}
@@ -57,8 +82,10 @@ export default function People({country, occupation, people, title, slug}) {
           {peopleDead.length ? (
             <span>
               {" "}
-              The most famous deceased {country.demonym}{" "}
-              {plural(occupation.occupation.toLowerCase())} include{" "}
+              {tc.peopleDeceasedIntro({
+                demonym: country.demonym,
+                occupationPlural,
+              })}
               <AnchorList
                 items={people.filter(p => !p.alive).slice(0, 3)}
                 name={d => d.name}
@@ -70,9 +97,12 @@ export default function People({country, occupation, people, title, slug}) {
           {peopleNew.length ? (
             <span>
               {" "}
-              As of April 2024, {peopleNew.length} new {country.demonym}{" "}
-              {plural(occupation.occupation.toLowerCase())} have been added to
-              Pantheon including{" "}
+              {tc.peopleNewIntro({
+                asOfLabel: tc.peopleNewAsOf || "April 2024",
+                countFormatted: newCountFormatted,
+                demonym: country.demonym,
+                occupationPlural,
+              })}
               <AnchorList
                 items={peopleNew.slice(0, 3)}
                 name={d => d.name}
@@ -86,13 +116,15 @@ export default function People({country, occupation, people, title, slug}) {
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>
-                Living {country.demonym}{" "}
-                {toTitleCase(plural(occupation.occupation))}
+                {tc.livingTitle({
+                  demonym: country.demonym,
+                  occupationPlural: occupationPluralTitle,
+                })}
               </h3>
               <Link
                 href={`/explore/rankings?show=people&occupation=${occupation.id}&place=${country.country_code}`}
               >
-                Go to all Rankings
+                {tc.goToAllRankings || "Go to all Rankings"}
               </Link>
             </div>
             <PhotoCarousel
@@ -106,13 +138,15 @@ export default function People({country, occupation, people, title, slug}) {
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>
-                Deceased {country.demonym}{" "}
-                {toTitleCase(plural(occupation.occupation))}
+                {tc.deceasedTitle({
+                  demonym: country.demonym,
+                  occupationPlural: occupationPluralTitle,
+                })}
               </h3>
               <Link
                 href={`/explore/rankings?show=people&occupation=${occupation.id}&place=${country.country_code}&placeType=deathplace`}
               >
-                Go to all Rankings
+                {tc.goToAllRankings || "Go to all Rankings"}
               </Link>
             </div>
             <PhotoCarousel
@@ -126,13 +160,16 @@ export default function People({country, occupation, people, title, slug}) {
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>
-                Newly Added {country.demonym}{" "}
-                {toTitleCase(plural(occupation.occupation))} (2025)
+                {tc.newlyAddedTitle({
+                  demonym: country.demonym,
+                  occupationPlural: occupationPluralTitle,
+                  yearLabel: "2025",
+                })}
               </h3>
               <Link
                 href={`/explore/rankings?show=people&occupation=${occupation.id}&place=${country.country_code}&new=true`}
               >
-                Go to all Rankings
+                {tc.goToAllRankings || "Go to all Rankings"}
               </Link>
             </div>
             <PhotoCarousel

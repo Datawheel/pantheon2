@@ -224,8 +224,9 @@ export default async function Page({params}) {
                     className="popular-flag"
                   />
                   <span className="popular-text">
-                    {combo.demonym}{" "}
-                    {locale === "en" ? toTitleCase(plural(combo.occupation)) : combo.occupation}
+                    {locale === "en"
+                      ? `${combo.demonym} ${toTitleCase(plural(combo.occupation))}`
+                      : `${combo.occupation} ${combo.demonym}`}
                   </span>
                   <span className="popular-count">{combo.numPeople?.toLocaleString(locale)}</span>
                 </Link>
@@ -251,7 +252,9 @@ export default async function Page({params}) {
       {/* Browse by Country (Alphabetical) */}
       <section className="browse-section browse-alphabetical">
         <div className="section-container">
-          <h2 className="section-title">Browse by Country</h2>
+          <h2 className="section-title">
+            {t.selectOccupationCountry.browseByCountry || "Browse by Country"}
+          </h2>
 
           {sortedLetters.map(letter => (
             <div key={letter} id={`letter-${letter}`} className="letter-section">
@@ -275,9 +278,10 @@ export default async function Page({params}) {
                           <Link
                             href={`/${locale}/profile/occupation/${occ.occupationSlug}/country/${country.countrySlug}`}
                           >
-                            {country.demonym}{" "}
-                            {locale === "en" ? toTitleCase(plural(occ.occupation)) : occ.occupation}
-                            <span className="occ-count">({occ.numPeople?.toLocaleString(locale)})</span>
+                            {locale === "en"
+                              ? `${country.demonym} ${toTitleCase(plural(occ.occupation))}`
+                              : `${occ.occupation} ${country.demonym}`}
+                            <span className="occ-count"> ({occ.numPeople?.toLocaleString(locale)})</span>
                           </Link>
                         </li>
                       ))}
