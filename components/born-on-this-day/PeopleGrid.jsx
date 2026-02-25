@@ -11,6 +11,11 @@ dayjs.extend(advancedFormat);
 const PeopleGrid = ({bios, date, lang = "en"}) => {
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
 
+  // Parse date (MM-DD format) for rankings link
+  const [monthStr, dayStr] = date.split("-");
+  const birthMonth = parseInt(monthStr, 10);
+  const birthDay = parseInt(dayStr, 10);
+
   return (
     <>
       <div className="birthday-people-grid">
@@ -49,8 +54,8 @@ const PeopleGrid = ({bios, date, lang = "en"}) => {
         ))}
       </div>
       <div className="view-more-link">
-        <Link href={`${localePrefix}/explore/rankings?show=people`}>
-          Explore Full Rankings of Famous People &rarr;
+        <Link href={`${localePrefix}/explore/rankings?show=people&birthMonth=${birthMonth}&birthDay=${birthDay}`}>
+          View Full Rankings for This Day &rarr;
         </Link>
       </div>
     </>

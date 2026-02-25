@@ -1,3 +1,5 @@
+"use client";
+import {useState} from "react";
 import "../common/Section.css";
 import "./OccupationBreakdown.css";
 import {toTitleCase} from "../utils/vizHelpers";
@@ -7,6 +9,14 @@ import {DEFAULT_LOCALE} from "/app/locales";
 
 export default function OccupationBreakdown({date, displayDate, people, lang = "en"}) {
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+  const [expandedGroups, setExpandedGroups] = useState({});
+
+  const toggleGroup = (occupation) => {
+    setExpandedGroups(prev => ({
+      ...prev,
+      [occupation]: !prev[occupation]
+    }));
+  };
 
   // Group people by occupation (now a string)
   const occupationGroups = people.reduce((acc, person) => {
@@ -43,36 +53,45 @@ export default function OccupationBreakdown({date, displayDate, people, lang = "
       </div>
 
       <div className="occupation-groups">
-        {sortedGroups.map(({occupation, people: groupPeople}) => (
-          <div key={occupation} className="occupation-group">
-            <h3 className="occupation-group__title">
-              <span>{toTitleCase(plural(occupation))}</span>
-              <span className="occupation-group__count">({groupPeople.length})</span>
-            </h3>
-            <div className="occupation-group__people">
-              {groupPeople.slice(0, 10).map(person => (
-                <a
-                  key={person.id}
-                  href={`${localePrefix}/profile/person/${person.slug}`}
-                  className="occupation-person"
-                  title={person.name}
-                >
-                  <PersonImage
-                    src={`/profile/people/${person.id}.jpg`}
-                    alt={person.name}
-                    fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                  />
-                  <span className="occupation-person__name">{person.name}</span>
-                </a>
-              ))}
-              {groupPeople.length > 10 && (
-                <span className="occupation-group__more">
-                  +{groupPeople.length - 10} more
-                </span>
-              )}
+        {sortedGroups.map(({occupation, people: groupPeople}) => {
+          const isExpanded = expandedGroups[occupation];
+          const displayPeople = isExpanded ? groupPeople : groupPeople.slice(0, 10);
+          const remainingCount = groupPeople.length - 10;
+
+          return (
+            <div key={occupation} className="occupation-group">
+              <h3 className="occupation-group__title">
+                <span>{toTitleCase(plural(occupation))}</span>
+                <span className="occupation-group__count">({groupPeople.length})</span>
+              </h3>
+              <div className="occupation-group__people">
+                {displayPeople.map(person => (
+                  <a
+                    key={person.id}
+                    href={`${localePrefix}/profile/person/${person.slug}`}
+                    className="occupation-person"
+                    title={person.name}
+                  >
+                    <PersonImage
+                      src={`/profile/people/${person.id}.jpg`}
+                      alt={person.name}
+                      fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                    />
+                    <span className="occupation-person__name">{person.name}</span>
+                  </a>
+                ))}
+                {groupPeople.length > 10 && (
+                  <button
+                    className="occupation-group__more"
+                    onClick={() => toggleGroup(occupation)}
+                  >
+                    {isExpanded ? "Show less" : `+${remainingCount} more`}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

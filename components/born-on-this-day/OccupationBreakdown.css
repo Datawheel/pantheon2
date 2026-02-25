@@ -103,10 +103,21 @@
 
 .occupation-group__more {
   font-size: 1.1rem;
-  color: #888;
-  font-style: italic;
+  color: #666;
+  font-weight: 500;
   display: flex;
   align-items: center;
+  background: #e8e8e8;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.occupation-group__more:hover {
+  background: #d0d0d0;
+  color: #444;
 }
 
 .more-occupations {

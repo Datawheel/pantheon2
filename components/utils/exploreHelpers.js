@@ -21,6 +21,8 @@ const getQueryArgs = exploreState => {
     viz,
     years,
     yearType,
+    birthMonth,
+    birthDay,
   } = exploreState;
   let queryStr =
     page === "viz"
@@ -57,6 +59,12 @@ const getQueryArgs = exploreState => {
   if (onlyShowNew) {
     queryStr += "&new=true";
   }
+  if (birthMonth !== null) {
+    queryStr += `&birthMonth=${birthMonth}`;
+  }
+  if (birthDay !== null) {
+    queryStr += `&birthDay=${birthDay}`;
+  }
   return queryStr;
 };
 
@@ -74,10 +82,12 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
     show,
     years,
     yearType,
+    birthMonth,
+    birthDay,
   } = exploreState;
   // const apiHeaders = {Prefer: "count=estimated"};
   let selectFields =
-    "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
+    "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,birthmonth,birthday,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
   let sorting = "&order=hpi.desc.nullslast";
 
   // Set place...
@@ -115,6 +125,15 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
     metricFilter = `&${metricType}=gte.${metricCutoff}`;
   }
 
+  // Set birthday filter...
+  let birthdayFilter = "";
+  if (birthMonth !== null) {
+    birthdayFilter += `&birthmonth=eq.${birthMonth}`;
+  }
+  if (birthDay !== null) {
+    birthdayFilter += `&birthday=eq.${birthDay}`;
+  }
+
   let limitOffset = "";
   let table = "person_ranks";
   if (page === "rankings") {
@@ -147,7 +166,7 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
 
   const onlyShowNewFilter = onlyShowNew ? "&hpi_prev=is.null" : "";
 
-  const apiUrl = `${baseApi}/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
+  const apiUrl = `${baseApi}/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${birthdayFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
   return apiUrl;
 };
 

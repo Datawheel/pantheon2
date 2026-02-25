@@ -5,6 +5,7 @@ import VizControl from "./VizControl";
 import ShowControl from "./ShowControl";
 import GenderControl from "./GenderControl";
 import YearControl from "./YearControl";
+import BirthdayControl from "./BirthdayControl";
 import PlaceControl from "./PlaceControl";
 import OccupationControl from "./OccupationControl";
 import MetricCutoffControl from "./MetricCutoffControl";
@@ -48,6 +49,7 @@ export default function Controls({places, nestedOccupations}) {
         <GenderControl />
         {/* <YearControl years={years} changeYears={this.updateAndFetchData} yearType={yearType} /> */}
         <YearControl />
+        <BirthdayControl />
         {show.type !== "places" ? <PlaceControl places={places} /> : null}
         <OccupationControl nestedOccupations={nestedOccupations} />
       </section>

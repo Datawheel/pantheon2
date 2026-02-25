@@ -81,4 +81,14 @@ export const SANITIZERS = {
       ? potentialOccupation
       : null,
   new: potentialNew => potentialNew === "true" || false,
+  birthMonth: month => {
+    if (!month) return null;
+    const parsed = parseInt(month, 10);
+    return parsed >= 1 && parsed <= 12 ? parsed : null;
+  },
+  birthDay: day => {
+    if (!day) return null;
+    const parsed = parseInt(day, 10);
+    return parsed >= 1 && parsed <= 31 ? parsed : null;
+  },
 };

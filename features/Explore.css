@@ -461,6 +461,31 @@
       width: 70px;
     }
   }
+
+  & .birthday-control {
+    & h4 {
+      margin-bottom: 6px;
+    }
+  }
+
+  & .birthday-inputs {
+    display: flex;
+    gap: 6px;
+
+    & select {
+      flex: 1;
+      min-width: 0;
+      margin-top: 0;
+    }
+  }
+
+  & .clear-birthday {
+    @mixin bodyLink;
+    @mixin exploreControlTitles;
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+  }
 }
 
 .control-header {

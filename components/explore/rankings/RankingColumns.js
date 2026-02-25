@@ -7,7 +7,20 @@ import {FORMATTERS} from "../../utils/consts";
 
 const genderOrder = ["M", null, "F", "Non-binary"];
 
-const getColumns = (show, nesting, countOffset) => {
+const MONTH_NAMES = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
+const formatBirthday = (birthyear, birthmonth, birthday) => {
+  if (!birthyear) return "Unknown";
+  if (!birthmonth || !birthday) return FORMATTERS.year(birthyear);
+  const monthName = MONTH_NAMES[birthmonth - 1] || "";
+  return `${monthName} ${birthday}, ${FORMATTERS.year(birthyear)}`;
+};
+
+const getColumns = (show, nesting, countOffset, options = {}) => {
+  const {hasBirthdayFilter = false} = options;
   const COLUMNS = {
     people: {
       people: [
@@ -61,13 +74,15 @@ const getColumns = (show, nesting, countOffset) => {
             {
               Header: "Birth",
               accessor: "birthyear",
-              Cell: ({value}) =>
-                value ? (
+              Cell: ({value, row: {original}}) =>
+                hasBirthdayFilter ? (
+                  <span>{formatBirthday(value, original.birthmonth, original.birthday)}</span>
+                ) : value ? (
                   <span>{FORMATTERS.year(value)}</span>
                 ) : (
                   <span>{"Unknown"}</span>
                 ),
-              minWidth: 50,
+              minWidth: hasBirthdayFilter ? 90 : 50,
             },
             {
               Header: "Death",

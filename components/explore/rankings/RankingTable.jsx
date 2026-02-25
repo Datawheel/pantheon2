@@ -10,7 +10,7 @@ import "./Rankings.css";
 
 export default function RankingTable({baseApi, places}) {
   const exploreState = useSelector(state => state.explore);
-  const {data, dataCount, dataPageIndex, show} = exploreState;
+  const {data, dataCount, dataPageIndex, show, birthMonth, birthDay} = exploreState;
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -20,10 +20,11 @@ export default function RankingTable({baseApi, places}) {
 
   const [pageInputVal, setPageInputVal] = useState(controlledPageIndex);
 
+  const hasBirthdayFilter = birthMonth !== null || birthDay !== null;
   const columns = useMemo(
-    () => getColumns(show.type, show.depth, controlledPageIndex * 50),
+    () => getColumns(show.type, show.depth, controlledPageIndex * 50, {hasBirthdayFilter}),
     // [controlledPageIndex]
-    [controlledPageIndex, show.type]
+    [controlledPageIndex, show.type, hasBirthdayFilter]
   );
 
   const {

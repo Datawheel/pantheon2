@@ -26,6 +26,8 @@ import {
   updateShowDepth,
   updateOccupation,
   updateOnlyShowNew,
+  updateBirthMonth,
+  updateBirthDay,
 } from "./exploreSlice";
 import "./Explore.css";
 import VizShell from "../components/explore/viz/VizShell";
@@ -46,6 +48,8 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
     show,
     years,
     yearType,
+    birthMonth,
+    birthDay,
   } = useSelector(state => state.explore);
   const exploreState = useSelector(state => state.explore);
   const dispatch = useDispatch();
@@ -86,6 +90,8 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
       searchParams.get("yearType")
     );
     const queryParamNew = SANITIZERS.new(searchParams.get("new"));
+    const queryParamBirthMonth = SANITIZERS.birthMonth(searchParams.get("birthMonth"));
+    const queryParamBirthDay = SANITIZERS.birthDay(searchParams.get("birthDay"));
     dispatch(
       updateShowDepth({
         showType: queryParamShow.type,
@@ -100,6 +106,8 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
     dispatch(updateYears(queryParamYears));
     dispatch(updateYearType(queryParamYearType));
     dispatch(updateOnlyShowNew(queryParamNew));
+    dispatch(updateBirthMonth(queryParamBirthMonth));
+    dispatch(updateBirthDay(queryParamBirthDay));
     dispatch(setFirstLoad());
   }, []);
 
@@ -125,6 +133,8 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
     gender,
     years,
     yearType,
+    birthMonth,
+    birthDay,
     metricCutoff,
     metricType,
     onlyShowNew,
