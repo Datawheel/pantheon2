@@ -7,26 +7,28 @@ import "../common/Intro.css";
 import "./Intro.css";
 import {useRouter, useParams, usePathname} from "next/navigation";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
 import {useState} from "react";
 
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+const MONTH_KEYS = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
 ];
 
 const DAYS_IN_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-export default function Intro({date, displayDate, month, day, people, lang}) {
+export default function Intro({date, displayDate, month, day, people, lang = "en"}) {
+  const t = getTranslations(lang);
   const router = useRouter();
   const params = useParams();
   const pathname = usePathname();
@@ -110,6 +112,12 @@ export default function Intro({date, displayDate, month, day, people, lang}) {
     );
   };
 
+  // Get localized month names
+  const getMonthName = (idx) => {
+    const key = MONTH_KEYS[idx];
+    return t.bornOnThisDay?.months?.[key] || key.charAt(0).toUpperCase() + key.slice(1);
+  };
+
   return (
     <section className="intro-section born-on-this-day">
       <div className="intro-content">
@@ -118,14 +126,12 @@ export default function Intro({date, displayDate, month, day, people, lang}) {
             <img src="/images/ui/profile-w.svg" alt="Birthday icon" />
           </h3>
           <p>
-            <strong>{displayDate}</strong> is the birthday of{" "}
-            {FORMATTERS.commas(people.length)} celebrities and historically
-            significant {people.length === 1 ? "person" : "people"} in the
-            Pantheon database.
+            {t.bornOnThisDay?.birthdayOf?.({displayDate, count: people.length}) ||
+              `${displayDate} is the birthday of ${FORMATTERS.commas(people.length)} celebrities and historically significant ${people.length === 1 ? "person" : "people"} in the Pantheon database.`}
             {peopleSortedByHPI.length > 0 && (
               <>
                 {" "}
-                The most famous {people.length === 1 ? "is" : "include"}{" "}
+                {t.bornOnThisDay?.mostFamousInclude || "The most famous include"}{" "}
                 <AnchorList
                   items={peopleSortedByHPI.slice(0, 5)}
                   name={d => d.name}
@@ -137,7 +143,7 @@ export default function Intro({date, displayDate, month, day, people, lang}) {
             {topOccupations.length > 0 && (
               <>
                 {" "}
-                The most common occupations for people born on this day are{" "}
+                {t.bornOnThisDay?.mostCommonOccupations || "The most common occupations for people born on this day are"}{" "}
                 {topOccupations.map((d, i) => (
                   <span key={d.occupation}>
                     {i > 0 &&
@@ -153,7 +159,7 @@ export default function Intro({date, displayDate, month, day, people, lang}) {
       </div>
 
       <div className="date-picker-section">
-        <h4>Explore Another Date</h4>
+        <h4>{t.bornOnThisDay?.exploreAnotherDate || "Explore Another Date"}</h4>
         <div className="date-picker-controls">
           <select
             value={selectedMonth}
@@ -167,9 +173,9 @@ export default function Intro({date, displayDate, month, day, people, lang}) {
             }}
             className="date-select"
           >
-            {MONTH_NAMES.map((name, idx) => (
+            {MONTH_KEYS.map((key, idx) => (
               <option key={idx} value={idx + 1}>
-                {name}
+                {getMonthName(idx)}
               </option>
             ))}
           </select>
@@ -188,20 +194,20 @@ export default function Intro({date, displayDate, month, day, people, lang}) {
             ))}
           </select>
           <button onClick={handleDateChange} className="date-go-btn">
-            Go
+            {t.bornOnThisDay?.go || "Go"}
           </button>
           <button onClick={goToToday} className="date-today-btn">
-            Today
+            {t.bornOnThisDay?.today || "Today"}
           </button>
         </div>
       </div>
 
       <div className="day-navigation">
         <button onClick={() => navigateDay(-1)} className="day-nav-btn">
-          &laquo; Previous Day
+          &laquo; {t.bornOnThisDay?.previousDay || "Previous Day"}
         </button>
         <button onClick={() => navigateDay(1)} className="day-nav-btn">
-          Next Day &raquo;
+          {t.bornOnThisDay?.nextDay || "Next Day"} &raquo;
         </button>
       </div>
     </section>

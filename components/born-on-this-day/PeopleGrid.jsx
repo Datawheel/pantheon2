@@ -5,11 +5,13 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 import {toTitleCase} from "../utils/vizHelpers";
 import Link from "next/link";
 import {DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
 
 dayjs.extend(advancedFormat);
 
 const PeopleGrid = ({bios, date, lang = "en"}) => {
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+  const t = getTranslations(lang);
 
   // Parse date (MM-DD format) for rankings link
   const [monthStr, dayStr] = date.split("-");
@@ -42,7 +44,7 @@ const PeopleGrid = ({bios, date, lang = "en"}) => {
               <p className="birthday-person-card__dates">
                 {profile.birthdate && (
                   <span>
-                    Born {dayjs(profile.birthdate).format("MMMM D, YYYY")}
+                    {t.bornOnThisDay?.born || "Born"} {dayjs(profile.birthdate).format("MMMM D, YYYY")}
                   </span>
                 )}
               </p>
@@ -55,7 +57,7 @@ const PeopleGrid = ({bios, date, lang = "en"}) => {
       </div>
       <div className="view-more-link">
         <Link href={`${localePrefix}/explore/rankings?show=people&birthMonth=${birthMonth}&birthDay=${birthDay}`}>
-          View Full Rankings for This Day &rarr;
+          {t.bornOnThisDay?.viewFullRankings || "View Full Rankings for This Day"} &rarr;
         </Link>
       </div>
     </>

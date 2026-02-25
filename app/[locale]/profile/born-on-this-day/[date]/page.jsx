@@ -7,20 +7,25 @@ import OccupationBreakdown from "/components/born-on-this-day/OccupationBreakdow
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson} from "/app/utils/safeFetch";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
 
-// Month names for SEO
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
-function formatDateForDisplay(month, day) {
+function formatDateForDisplay(month, day, lang = "en") {
   const monthNum = parseInt(month, 10);
   const dayNum = parseInt(day, 10);
-  const monthName = MONTH_NAMES[monthNum - 1];
+  const t = getTranslations(lang);
 
-  // Add ordinal suffix
+  // Use localized date formatter if available
+  if (t.bornOnThisDay?.formatDate) {
+    return t.bornOnThisDay.formatDate({month: monthNum, day: dayNum});
+  }
+
+  // Fallback to English format
+  const MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const monthName = MONTH_NAMES[monthNum - 1];
   const suffix = dayNum === 1 || dayNum === 21 || dayNum === 31 ? "st"
     : dayNum === 2 || dayNum === 22 ? "nd"
     : dayNum === 3 || dayNum === 23 ? "rd"
@@ -44,12 +49,21 @@ export async function generateMetadata({params}, parent) {
     return {title: "Invalid Date | Pantheon"};
   }
 
-  const displayDate = formatDateForDisplay(month, day);
+  // Determine locale
+  const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
+
+  const displayDate = formatDateForDisplay(month, day, lang);
   const previousImages = (await parent).openGraph?.images || [];
 
-  // SEO-optimized title and description
-  const title = `Famous Birthdays on ${displayDate} | Who Was Born Today? | Pantheon`;
-  const description = `Discover the most famous people born on ${displayDate} throughout history. Explore birthday profiles of celebrities, historical figures, scientists, artists, athletes and more who share this birthday.`;
+  // Use localized title and description if available
+  const title = t.bornOnThisDay?.metaTitle?.({displayDate}) ||
+    `Famous Birthdays on ${displayDate} | Who Was Born Today? | Pantheon`;
+  const description = t.bornOnThisDay?.metaDescription?.({displayDate}) ||
+    `Discover the most famous people born on ${displayDate} throughout history. Explore birthday profiles of celebrities, historical figures, scientists, artists, athletes and more who share this birthday.`;
+
+  // Include locale in screenshot URL for localized OG image
+  const localeParam = lang !== DEFAULT_LOCALE ? `&locale=${lang}` : "";
 
   return {
     title,
@@ -60,7 +74,7 @@ export async function generateMetadata({params}, parent) {
       description,
       type: "website",
       images: [
-        `${process.env.URL || "https://pantheon.world"}/api/screenshot/born-on-this-day?date=${date}`,
+        `${process.env.URL || "https://pantheon.world"}/api/screenshot/born-on-this-day?date=${date}${localeParam}`,
         ...previousImages,
       ],
     },
@@ -70,7 +84,7 @@ export async function generateMetadata({params}, parent) {
       description,
     },
     alternates: {
-      canonical: `https://pantheon.world/profile/born-on-this-day/${date}`,
+      canonical: `https://pantheon.world/${lang}/profile/born-on-this-day/${date}`,
     },
   };
 }
@@ -113,7 +127,7 @@ export default async function Page({params: {date, locale}}) {
     id: p.person_id,
   }));
 
-  const displayDate = formatDateForDisplay(month, day);
+  const displayDate = formatDateForDisplay(month, day, lang);
 
   const sections = [
     {
@@ -131,7 +145,7 @@ export default async function Page({params: {date, locale}}) {
   return (
     <div className="person">
       <GoogleAdSenseScript />
-      <Header date={date} displayDate={displayDate} people={people} />
+      <Header date={date} displayDate={displayDate} people={people} lang={lang} />
       <div className="about-section">
         <ProfileNav sections={sections} />
         <Intro

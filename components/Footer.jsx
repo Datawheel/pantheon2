@@ -252,10 +252,8 @@ const Footer = () => {
 
   <div className="language-switcher">
     {SUPPORTED_LOCALES.map((locale, index) => {
-      // For English, don't include /en prefix if using rewrites
-      const href = locale === DEFAULT_LOCALE
-        ? pathWithoutLocale
-        : `/${locale}${pathWithoutLocale}`;
+      // Always include locale prefix for consistency with rest of site
+      const href = `/${locale}${pathWithoutLocale}`;
       return (
         <React.Fragment key={locale}>
           {index > 0 && <span className="separator">•</span>}

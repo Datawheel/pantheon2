@@ -1,7 +1,10 @@
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
+import {getTranslations} from "/app/translations";
 
-export default function Header({date, displayDate, people}) {
+export default function Header({date, displayDate, people, lang = "en"}) {
+  const t = getTranslations(lang);
+
   // Sort by HPI to get most famous people for header images
   const sortedPeople = [...people].sort((a, b) => {
     if (!a.hpi && !b.hpi) return 0;
@@ -41,11 +44,12 @@ export default function Header({date, displayDate, people}) {
         </div>
       </div>
       <div className="info">
-        <p className="top-desc">Famous Birthdays</p>
-        <h2 className="profile-type">Born on This Day</h2>
+        <p className="top-desc">{t.bornOnThisDay?.famousBirthdays || "Famous Birthdays"}</p>
+        <h2 className="profile-type">{t.bornOnThisDay?.bornOnThisDay || "Born on This Day"}</h2>
         <h1 className="profile-name">{displayDate}</h1>
         <p className="date-subtitle">
-          {people.length} famous {people.length === 1 ? "person" : "people"} born on this day
+          {t.bornOnThisDay?.famousPeopleBornOnThisDay?.({count: people.length}) ||
+            `${people.length} famous ${people.length === 1 ? "person" : "people"} born on this day`}
         </p>
       </div>
       <div className="mouse">

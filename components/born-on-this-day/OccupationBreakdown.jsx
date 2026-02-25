@@ -6,10 +6,12 @@ import {toTitleCase} from "../utils/vizHelpers";
 import {plural} from "pluralize";
 import PersonImage from "/components/utils/PersonImage";
 import {DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
 
 export default function OccupationBreakdown({date, displayDate, people, lang = "en"}) {
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const [expandedGroups, setExpandedGroups] = useState({});
+  const t = getTranslations(lang);
 
   const toggleGroup = (occupation) => {
     setExpandedGroups(prev => ({
@@ -43,12 +45,11 @@ export default function OccupationBreakdown({date, displayDate, people, lang = "
 
   return (
     <section className="profile-section occupation-breakdown">
-      <h2>Birthdays by Occupation</h2>
+      <h2>{t.bornOnThisDay?.birthdaysByOccupation || "Birthdays by Occupation"}</h2>
       <div className="section-body">
         <p>
-          See how the famous people born on {displayDate} are distributed across
-          different fields and occupations. Click on any person to learn more
-          about their life and achievements.
+          {t.bornOnThisDay?.occupationIntro?.({displayDate}) ||
+            `See how the famous people born on ${displayDate} are distributed across different fields and occupations. Click on any person to learn more about their life and achievements.`}
         </p>
       </div>
 
@@ -85,7 +86,9 @@ export default function OccupationBreakdown({date, displayDate, people, lang = "
                     className="occupation-group__more"
                     onClick={() => toggleGroup(occupation)}
                   >
-                    {isExpanded ? "Show less" : `+${remainingCount} more`}
+                    {isExpanded
+                      ? (t.bornOnThisDay?.showLess || "Show less")
+                      : (t.bornOnThisDay?.more?.({count: remainingCount}) || `+${remainingCount} more`)}
                   </button>
                 )}
               </div>
