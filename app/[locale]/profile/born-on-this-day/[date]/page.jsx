@@ -62,9 +62,6 @@ export async function generateMetadata({params}, parent) {
   const description = t.bornOnThisDay?.metaDescription?.({displayDate}) ||
     `Discover the most famous people born on ${displayDate} throughout history. Explore birthday profiles of celebrities, historical figures, scientists, artists, athletes and more who share this birthday.`;
 
-  // Include locale in screenshot URL for localized OG image
-  const localeParam = lang !== DEFAULT_LOCALE ? `&locale=${lang}` : "";
-
   return {
     title,
     description,
@@ -74,7 +71,7 @@ export async function generateMetadata({params}, parent) {
       description,
       type: "website",
       images: [
-        `${process.env.URL || "https://pantheon.world"}/api/screenshot/born-on-this-day?date=${date}${localeParam}`,
+        `${process.env.URL || "https://pantheon.world"}/api/screenshot/born-on-this-day/${lang}/${date}`,
         ...previousImages,
       ],
     },
