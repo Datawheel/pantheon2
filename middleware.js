@@ -7,6 +7,24 @@ const I18nMiddleware = createI18nMiddleware({
   locales: SUPPORTED_LOCALES,
   defaultLocale: DEFAULT_LOCALE,
   urlMappingStrategy: "rewriteDefault",
+  resolveLocaleFromRequest: (request) => {
+    const pathname = new URL(request.url).pathname;
+
+    // If the URL has an explicit locale prefix, respect it
+    // This prevents Accept-Language negotiation from overriding explicit locale URLs
+    // (Important for social media crawlers like Twitterbot, Slackbot, etc.)
+    for (const locale of SUPPORTED_LOCALES) {
+      if (locale !== DEFAULT_LOCALE) {
+        if (pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`) {
+          return locale;
+        }
+      }
+    }
+
+    // No explicit locale prefix - return undefined to fall back to default behavior
+    // (Accept-Language header negotiation, NEXT_LOCALE cookie, etc.)
+    return undefined;
+  },
 });
 
 // Extensions to skip (static assets, maps, fonts, etc.)
