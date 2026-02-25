@@ -83,7 +83,9 @@ function formatNumber(num, locale = "en") {
   return new Intl.NumberFormat(locale).format(num);
 }
 
-export async function generateMetadata({params}, parent) {
+export async function generateMetadata(props, parent) {
+  // In Next.js 14.2+, params may be a Promise
+  const params = await props.params;
   const {locale, id, countryId} = params;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
@@ -172,7 +174,10 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {locale, id, countryId}}) {
+export default async function Page(props) {
+  // In Next.js 14.2+, params may be a Promise
+  const params = await props.params;
+  const {locale, id, countryId} = params;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
 
   const [occupations, occupation, country, trendingStatus] = await Promise.all([

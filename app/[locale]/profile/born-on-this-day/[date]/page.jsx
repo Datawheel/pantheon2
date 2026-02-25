@@ -40,7 +40,9 @@ async function getPeopleBornOnDay(month, day, lang = "en") {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
 }
 
-export async function generateMetadata({params}, parent) {
+export async function generateMetadata(props, parent) {
+  // In Next.js 14.2+, params may be a Promise
+  const params = await props.params;
   const {date, locale} = params;
   const [month, day] = date.split("-");
 
@@ -79,6 +81,7 @@ export async function generateMetadata({params}, parent) {
       card: "summary_large_image",
       title,
       description,
+      images: [`${process.env.URL || "https://pantheon.world"}/api/screenshot/born-on-this-day/${lang}/${date}`],
     },
     alternates: {
       canonical: `https://pantheon.world/${lang}/profile/born-on-this-day/${date}`,
@@ -86,7 +89,11 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {date, locale}}) {
+export default async function Page(props) {
+  // In Next.js 14.2+, params may be a Promise
+  const params = await props.params;
+  const {date, locale} = params;
+
   // Validate and parse date (MM-DD format)
   const [month, day] = date.split("-");
 

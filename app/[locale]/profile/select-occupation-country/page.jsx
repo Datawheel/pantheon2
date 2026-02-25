@@ -34,7 +34,9 @@ async function getTrendingPages(lang = "en") {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
 }
 
-export async function generateMetadata({params}) {
+export async function generateMetadata(props) {
+  // In Next.js 14.2+, params may be a Promise
+  const params = await props.params;
   const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
   const t = getTranslations(locale);
   const baseUrl = process.env.URL || "https://pantheon.world";
@@ -63,7 +65,9 @@ export async function generateMetadata({params}) {
   };
 }
 
-export default async function Page({params}) {
+export default async function Page(props) {
+  // In Next.js 14.2+, params may be a Promise
+  const params = await props.params;
   const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
   const t = getTranslations(locale);
 

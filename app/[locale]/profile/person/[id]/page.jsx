@@ -148,8 +148,9 @@ async function getPageViews(personId, lang = "en") {
   return Array.isArray(pageviews) ? pageviews : [];
 }
 
-export async function generateMetadata({params}, parent) {
-  // read route params
+export async function generateMetadata(props, parent) {
+  // In Next.js 14.2+, params may be a Promise
+  const params = await props.params;
   const id = params.id;
   const locale = params.locale || DEFAULT_LOCALE;
 
@@ -179,7 +180,10 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {id, locale}}) {
+export default async function Page(props) {
+  // In Next.js 14.2+, params may be a Promise
+  const params = await props.params;
+  const {id, locale} = params;
   // Extract locale and calculate yesterday's date
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
 
