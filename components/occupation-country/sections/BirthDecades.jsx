@@ -21,8 +21,6 @@ export default function BirthDecades({
   occupation,
   locale = DEFAULT_LOCALE,
 }) {
-  if (!people.length || people.length <= 10) return null;
-
   const t = getTranslations(locale);
   const tEn = getTranslations(DEFAULT_LOCALE);
   const tc = {...tEn.occupationCountry, ...t.occupationCountry};
@@ -34,6 +32,8 @@ export default function BirthDecades({
       : occupation.occupation;
 
   const [expandedGroups, setExpandedGroups] = useState({});
+
+  if (!people.length || people.length <= 10) return null;
 
   const toggleGroup = (key) => {
     setExpandedGroups(prev => ({
