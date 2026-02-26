@@ -35,6 +35,10 @@ export const translations = {
       trendingThisWeekDefault: "Trending this week on Wikipedia",
       metaTitle: ({demonym, occupationPlural}) => `Greatest ${demonym} ${occupationPlural} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPluralLower, occupationSingularLower, country}) => `Discover the ${countFormatted} most famous ${demonym} ${occupationPluralLower} in history. Explore notable ${occupationSingularLower} profiles from ${country} ranked by historical significance.`,
+      birthDecadesTitle: "People by Birth Decade",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Browse notable ${demonym} ${occupationPlural} grouped by birth decade. Each decade shows the top 10 by HPI; expand to see everyone.`,
+      decadeLabel: ({decade}) => `${decade}s`,
+      more: ({count}) => `+${count} more`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon has ${totalCount} people classified as ${demonym} ${occupationPlural} born between ${oldestYear} and ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -334,6 +338,10 @@ export const translations = {
       trendingThisWeekDefault: "En tendencia esta semana en Wikipedia",
       metaTitle: ({demonym, occupationPlural}) => `Los mejores ${occupationPlural} ${demonym} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Descubre los ${countFormatted} ${occupationPlural} ${demonym} más famosos de la historia. Explora perfiles destacados de ${occupationSingular} de ${country} clasificados por relevancia histórica.`,
+      birthDecadesTitle: "Personas por década de nacimiento",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Explora ${occupationPlural} ${demonym} notables agrupados por década de nacimiento. Cada década muestra los 10 principales por HPI; expande para ver a todos.`,
+      decadeLabel: ({decade}) => `Años ${decade}`,
+      more: ({count}) => `+${count} más`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon tiene ${totalCount} personas clasificadas como ${occupationPlural} ${demonym} nacidas entre ${oldestYear} y ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -638,6 +646,10 @@ export const translations = {
       trendingThisWeekDefault: "En tendance cette semaine sur Wikipedia",
       metaTitle: ({demonym, occupationPlural}) => `Les plus grands ${occupationPlural} ${demonym} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Découvrez les ${countFormatted} ${occupationPlural} ${demonym} les plus célèbres de l'histoire. Explorez des profils remarquables de ${occupationSingular} de ${country}, classés par importance historique.`,
+      birthDecadesTitle: "Personnes par décennie de naissance",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Découvrez les ${occupationPlural} ${demonym} remarquables regroupés par décennie de naissance. Chaque décennie montre les 10 premiers par HPI ; développez pour tout voir.`,
+      decadeLabel: ({decade}) => `Années ${decade}`,
+      more: ({count}) => `+${count} de plus`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon compte ${totalCount} personnes classées comme ${occupationPlural} ${demonym} nées entre ${oldestYear} et ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -958,6 +970,10 @@ export const translations = {
       trendingThisWeekDefault: "Diese Woche im Trend auf Wikipedia",
       metaTitle: ({demonym, occupationPlural}) => `Die größten ${demonym} ${occupationPlural} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Entdecken Sie die ${countFormatted} berühmtesten ${demonym} ${occupationPlural} der Geschichte. Erkunden Sie bemerkenswerte ${occupationSingular}-Profile aus ${country}, geordnet nach historischer Bedeutung.`,
+      birthDecadesTitle: "Personen nach Geburtsjahrzehnt",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Durchsuchen Sie bemerkenswerte ${demonym} ${occupationPlural}, gruppiert nach Geburtsjahrzehnt. Jede Dekade zeigt die Top 10 nach HPI; zum Anzeigen aller erweitern.`,
+      decadeLabel: ({decade}) => `${decade}er`,
+      more: ({count}) => `+${count} weitere`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon hat ${totalCount} Personen, die als ${demonym} ${occupationPlural} eingestuft sind und zwischen ${oldestYear} und ${youngestYear} geboren wurden.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -1256,6 +1272,10 @@ export const translations = {
       trendingThisWeekDefault: "В тренде на этой неделе на Wikipedia",
       metaTitle: ({demonym, occupationPlural}) => `Самые известные ${demonym} ${occupationPlural} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Откройте для себя ${countFormatted} самых известных ${demonym} ${occupationPlural} в истории. Посмотрите выдающиеся профили ${occupationSingular} из ${country}, ранжированные по исторической значимости.`,
+      birthDecadesTitle: "Люди по десятилетиям рождения",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Просматривайте известных ${demonym} ${occupationPlural}, сгруппированных по десятилетиям рождения. Каждое десятилетие показывает топ-10 по HPI; раскройте, чтобы увидеть всех.`,
+      decadeLabel: ({decade}) => `${decade}-е`,
+      more: ({count}) => `+${count} ещё`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `В Pantheon ${totalCount} персон, классифицированных как ${demonym} ${occupationPlural}, родившихся между ${oldestYear} и ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -1575,6 +1595,10 @@ export const translations = {
       trendingThisWeekDefault: "本周在维基百科热门",
       metaTitle: ({demonym, occupationPlural}) => `最著名的${demonym}${occupationPlural} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `探索历史上最著名的${countFormatted}位${demonym}${occupationPlural}。查看来自${country}的著名${occupationSingular}人物档案，按历史影响力排名。`,
+      birthDecadesTitle: "按出生年代划分的人物",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `按出生年代浏览${demonym}${occupationPlural}。每个年代显示 HPI 前 10 名；展开可查看全部。`,
+      decadeLabel: ({decade}) => `${decade}年代`,
+      more: ({count}) => `+${count} 更多`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon 收录了 ${totalCount} 位被归类为${demonym}${occupationPlural}的人，出生于 ${oldestYear} 到 ${youngestYear} 之间。`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -1872,6 +1896,10 @@ export const translations = {
       trendingThisWeekDefault: "今週ウィキペディアでトレンド",
       metaTitle: ({demonym, occupationPlural}) => `最も有名な${demonym}${occupationPlural} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `歴史上最も有名な${demonym}${occupationPlural} ${countFormatted}人を紹介。${country}出身の著名な${occupationSingular}のプロフィールを歴史的重要性でランキング。`,
+      birthDecadesTitle: "出生年代別の人物",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `${demonym}${occupationPlural}を出生年代別に表示します。各年代はHPI上位10人を表示し、展開で全員を確認できます。`,
+      decadeLabel: ({decade}) => `${decade}年代`,
+      more: ({count}) => `+${count} 人`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheonには、${oldestYear}から${youngestYear}の間に生まれた${demonym}${occupationPlural}として分類される人物が${totalCount}人います。`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -2183,6 +2211,10 @@ export const translations = {
       trendingThisWeekDefault: "الرائج هذا الأسبوع على ويكيبيديا",
       metaTitle: ({demonym, occupationPlural}) => `أشهر ${occupationPlural} ${demonym} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `اكتشف ${countFormatted} من أشهر ${occupationPlural} ${demonym} في التاريخ. استكشف ملفات ${occupationSingular} البارزة من ${country} مرتبة حسب الأهمية التاريخية.`,
+      birthDecadesTitle: "الأشخاص حسب عقد الميلاد",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `تصفح ${occupationPlural} ${demonym} البارزين حسب عقد الميلاد. يعرض كل عقد أفضل 10 وفق HPI؛ وسّع لرؤية الجميع.`,
+      decadeLabel: ({decade}) => `عقد ${decade}`,
+      more: ({count}) => `+${count} المزيد`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `يضم بانثيون ${totalCount} شخصية مصنفة كـ ${occupationPlural} ${demonym} وُلدوا بين ${oldestYear} و ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -2483,6 +2515,10 @@ export const translations = {
       trendingThisWeekDefault: "Di tendenza questa settimana su Wikipedia",
       metaTitle: ({demonym, occupationPlural}) => `I più grandi ${occupationPlural} ${demonym} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Scopri i ${countFormatted} ${occupationPlural} ${demonym} più famosi della storia. Esplora i profili notevoli di ${occupationSingular} da ${country} classificati per importanza storica.`,
+      birthDecadesTitle: "Persone per decennio di nascita",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Esplora ${occupationPlural} ${demonym} notevoli raggruppati per decennio di nascita. Ogni decennio mostra i primi 10 per HPI; espandi per vedere tutti.`,
+      decadeLabel: ({decade}) => `Anni ${decade}`,
+      more: ({count}) => `+${count} altri`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon include ${totalCount} persone classificate come ${occupationPlural} ${demonym} nate tra ${oldestYear} e ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -2820,6 +2856,10 @@ export const translations = {
       trendingThisWeekDefault: "Em alta esta semana na Wikipédia",
       metaTitle: ({demonym, occupationPlural}) => `Os melhores ${occupationPlural} ${demonym} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Descubra os ${countFormatted} ${occupationPlural} ${demonym} mais famosos da história. Explore perfis notáveis de ${occupationSingular} de ${country} classificados por relevância histórica.`,
+      birthDecadesTitle: "Pessoas por década de nascimento",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Explore ${occupationPlural} ${demonym} notáveis agrupados por década de nascimento. Cada década mostra os 10 principais por HPI; expanda para ver todos.`,
+      decadeLabel: ({decade}) => `Anos ${decade}`,
+      more: ({count}) => `+${count} a mais`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon tem ${totalCount} pessoas classificadas como ${occupationPlural} ${demonym} nascidas entre ${oldestYear} e ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -3174,6 +3214,10 @@ export const translations = {
       trendingThisWeekDefault: "Felkapott ezen a héten a Wikipédián.",
       metaTitle: ({demonym, occupationPlural}) => `A legnagyobb ${demonym} ${occupationPlural} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Fedezze fel a történelem ${countFormatted} leghíresebb ${demonym} ${occupationPlural} személyét. Ismerje meg ${country} nevezetes ${occupationSingular} profiljait, történelmi jelentőség szerint rangsorolva.`,
+      birthDecadesTitle: "Születési évtizedek szerint",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Böngéssze a nevezetes ${demonym} ${occupationPlural} személyeket születési évtizedek szerint. Minden évtized a HPI szerinti top 10-et mutatja; bontsa ki az összeshez.`,
+      decadeLabel: ({decade}) => `${decade}-es évek`,
+      more: ({count}) => `+${count} további`,
     },
     selectOccupationCountry: {
       heading: "Válasszon foglalkozást és országot",
@@ -3422,6 +3466,10 @@ export const translations = {
       trendingThisWeekDefault: "Trending deze week op Wikipedia",
       metaTitle: ({demonym, occupationPlural}) => `De grootste ${demonym} ${occupationPlural} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Ontdek de ${countFormatted} beroemdste ${demonym} ${occupationPlural} uit de geschiedenis. Bekijk opmerkelijke ${occupationSingular}-profielen uit ${country}, gerangschikt op historische betekenis.`,
+      birthDecadesTitle: "Personen per geboortedecennium",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Bekijk opmerkelijke ${demonym} ${occupationPlural} gegroepeerd per geboortedecennium. Elk decennium toont de top 10 op HPI; vouw uit om iedereen te zien.`,
+      decadeLabel: ({decade}) => `Jaren ${decade}`,
+      more: ({count}) => `+${count} meer`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon heeft ${totalCount} personen die zijn geclassificeerd als ${demonym} ${occupationPlural}, geboren tussen ${oldestYear} en ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
@@ -3730,6 +3778,10 @@ export const translations = {
       trendingThisWeekDefault: "W trendach w tym tygodniu na Wikipedii",
       metaTitle: ({demonym, occupationPlural}) => `Najbardziej znani ${demonym} ${occupationPlural} | Pantheon`,
       metaDescription: ({countFormatted, demonym, occupationPlural, occupationSingular, country}) => `Odkryj ${countFormatted} najbardziej znanych ${demonym} ${occupationPlural} w historii. Poznaj wybitne profile ${occupationSingular} z ${country}, uporządkowane według znaczenia historycznego.`,
+      birthDecadesTitle: "Osoby według dekady urodzenia",
+      birthDecadesIntro: ({demonym, occupationPlural}) => `Przeglądaj znanych ${demonym} ${occupationPlural} pogrupowanych według dekady urodzenia. Każda dekada pokazuje top 10 wg HPI; rozwiń, aby zobaczyć wszystkich.`,
+      decadeLabel: ({decade}) => `Lata ${decade}`,
+      more: ({count}) => `+${count} więcej`,
 
       peopleBase: ({totalCount, demonym, occupationPlural, oldestYear, youngestYear}) => `Pantheon zawiera ${totalCount} osób sklasyfikowanych jako ${demonym} ${occupationPlural}, urodzonych między ${oldestYear} a ${youngestYear}.`,
       peopleAlive: ({totalCount, aliveCount, aliveCountFormatted, aliveShare}) => {
