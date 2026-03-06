@@ -123,7 +123,7 @@ export default async function NewsPage({params, searchParams}) {
     }
   }
 
-  // Fetch trending news for all unique people in the selected language
+  // Fetch trending news for all unique people in the selected language (all models)
   const allSlugs = Object.keys(slugToLanguages);
   let reasonsMap = {};
 
@@ -132,7 +132,7 @@ export default async function NewsPage({params, searchParams}) {
       const reasonsData = await fetch(
         `${
           process.env.BASE_API || "https://api.pantheon.world"
-        }/trend_news?date=eq.${dataFetchDate}&lang=eq.${lang}&llm_provider=eq.${currentModel}&select=slug,title,reason,llm_metadata`,
+        }/trend_news?date=eq.${dataFetchDate}&lang=eq.${lang}&select=slug,title,reason,llm_metadata,llm_provider`,
         {
           next: {revalidate: REVALIDATE_PERIODS.SHORT * 2},
         }
@@ -143,12 +143,21 @@ export default async function NewsPage({params, searchParams}) {
           console.error(`Error fetching trending reasons for ${lang}:`, error);
           return [];
         });
+      // Group by slug, with all model responses
       reasonsMap = reasonsData.reduce((acc, item) => {
-        acc[item.slug] = {
-          trending_reason: item.reason || "",
-          llm_metadata: item.llm_metadata,
-          localized_name: item.title || "",
-        };
+        if (!acc[item.slug]) {
+          acc[item.slug] = {
+            localized_name: item.title || "",
+            modelResponses: [],
+          };
+        }
+        if (item.reason) {
+          acc[item.slug].modelResponses.push({
+            provider: item.llm_provider || "unknown",
+            reason: item.reason,
+            llm_metadata: item.llm_metadata,
+          });
+        }
         return acc;
       }, {});
     } catch (error) {
@@ -160,9 +169,8 @@ export default async function NewsPage({params, searchParams}) {
   Object.values(languageSections).forEach(people => {
     people.forEach(person => {
       if (reasonsMap[person.slug]) {
-        person.trending_reason = reasonsMap[person.slug].trending_reason;
-        person.llm_metadata = reasonsMap[person.slug].llm_metadata;
         person.localized_name = reasonsMap[person.slug].localized_name;
+        person.modelResponses = reasonsMap[person.slug].modelResponses;
       }
 
       // Apply occupation translation if available

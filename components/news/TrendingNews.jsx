@@ -1,5 +1,6 @@
 "use client";
 
+import {useState} from "react";
 import {useRouter} from "next/navigation";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
@@ -12,9 +13,20 @@ import "./TrendingNews.css";
 
 dayjs.extend(advancedFormat);
 
+// Model display names
+const MODEL_NAMES = {
+  grok: "Grok",
+  gemini: "Gemini",
+  claude: "Claude",
+  openai: "OpenAI",
+  unknown: "AI",
+};
+
 export default function TrendingNews({languageSections, currentLang, currentDate, currentModel}) {
   const router = useRouter();
   const t = getTranslations(currentLang);
+  // Track per-card model overrides: { [slug]: "grok" | "gemini" | etc }
+  const [cardModelOverrides, setCardModelOverrides] = useState({});
   const localePrefix = currentLang === DEFAULT_LOCALE ? "" : `/${currentLang}`;
 
   const handleModelChange = model => {
@@ -41,9 +53,22 @@ export default function TrendingNews({languageSections, currentLang, currentDate
     router.push(`/${currentLang}/news?date=${newDate}&model=${currentModel}`);
   };
 
+  // Get the active model response for a person
+  const getActiveModelResponse = person => {
+    const responses = person.modelResponses || [];
+    if (responses.length === 0) return null;
+
+    // Check for per-card override first, then fall back to master selection
+    const activeModel = cardModelOverrides[person.slug] || currentModel;
+    const response = responses.find(r => r.provider === activeModel);
+    // Fall back to first response if selected model not found
+    return response || responses[0];
+  };
+
   // Get trending reason from API data
   const getPeopleSummary = person => {
-    return micromark(person.trending_reason || "");
+    const response = getActiveModelResponse(person);
+    return micromark(response?.reason || "");
   };
 
   // Get languages that have people assigned, sorted with current lang first
@@ -60,6 +85,18 @@ export default function TrendingNews({languageSections, currentLang, currentDate
       if (b[0] === currentLang) return 1;
       return a[1] - b[1];
     });
+
+    const responses = person.modelResponses || [];
+    const activeResponse = getActiveModelResponse(person);
+    const activeModel = cardModelOverrides[person.slug] || currentModel;
+    const hasMultipleModels = responses.length > 1;
+
+    const handleCardModelChange = provider => {
+      setCardModelOverrides(prev => ({
+        ...prev,
+        [person.slug]: provider,
+      }));
+    };
 
     return (
       <div key={person.id || person.slug} className="trending-news-card">
@@ -103,11 +140,11 @@ export default function TrendingNews({languageSections, currentLang, currentDate
           className="trending-news-summary"
           dangerouslySetInnerHTML={{__html: getPeopleSummary(person)}}
         />
-        {person.llm_metadata?.citations && person.llm_metadata.citations.length > 0 && (
+        {activeResponse?.llm_metadata?.citations && activeResponse.llm_metadata.citations.length > 0 && (
           <div className="citations-container">
             <h4>{t.news.references}</h4>
             <ol>
-              {person.llm_metadata.citations.map((citation, idx) => (
+              {activeResponse.llm_metadata.citations.map((citation, idx) => (
                 <li key={idx}>
                   <a
                     href={citation}
@@ -119,6 +156,20 @@ export default function TrendingNews({languageSections, currentLang, currentDate
                 </li>
               ))}
             </ol>
+          </div>
+        )}
+        {hasMultipleModels && (
+          <div className="card-model-switcher">
+            {responses.map(response => (
+              <button
+                key={response.provider}
+                className={`card-model-btn ${activeModel === response.provider ? "active" : ""}`}
+                onClick={() => handleCardModelChange(response.provider)}
+                title={MODEL_NAMES[response.provider] || response.provider}
+              >
+                {MODEL_NAMES[response.provider] || response.provider}
+              </button>
+            ))}
           </div>
         )}
       </div>

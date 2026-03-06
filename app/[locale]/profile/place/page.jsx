@@ -1,6 +1,24 @@
 import {redirect} from "next/navigation";
+import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "/app/locales";
+import {safeFetchFirst} from "/app/utils/safeFetch";
 
-export default async function Page() {
+async function isValidPlaceSlug(slug) {
+  if (!slug) return false;
+  const url = `${BASE_API}/place?slug=eq.${slug}&select=slug`;
+  const data = await safeFetchFirst(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
+    null
+  );
+  return Boolean(data && data.slug);
+}
+
+export default async function Page({params}) {
+  const locale =
+    params && SUPPORTED_LOCALES.includes(params.locale)
+      ? params.locale
+      : DEFAULT_LOCALE;
   const placeCandidates = [
     "new-york-city",
     "paris",
@@ -147,7 +165,24 @@ export default async function Page() {
     "basel",
     "karlsruhe",
   ];
-  const redirectSlug =
-    placeCandidates[Math.floor(Math.random() * placeCandidates.length)];
-  redirect(`/profile/place/${redirectSlug}`);
+
+  let redirectSlug = null;
+  const maxAttempts = Math.min(8, placeCandidates.length);
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const candidate =
+      placeCandidates[Math.floor(Math.random() * placeCandidates.length)];
+    // eslint-disable-next-line no-await-in-loop
+    const valid = await isValidPlaceSlug(candidate);
+    if (valid) {
+      redirectSlug = candidate;
+      break;
+    }
+  }
+
+  if (!redirectSlug) {
+    redirectSlug = "paris";
+  }
+
+  redirect(`/${locale}/profile/place/${redirectSlug}`);
 }

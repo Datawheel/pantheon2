@@ -21,7 +21,14 @@ const Intro = ({
     bplace_country_rank: bplaceCountryRank,
     bplace_country_rank_prev: bplaceCountryRankPrev,
     bplace_country_occupation_rank: bplaceCountryOccupationRank,
+    occupation_rank_unique: occupationRankUnique,
+    bplace_country_rank_unique: bplaceCountryRankUnique,
+    bplace_country_occupation_rank_unique: bplaceCountryOccupationRankUnique,
   } = personRanks;
+  const occupationRankDisplay = occupationRankUnique || occupationRank;
+  const bplaceCountryRankDisplay = bplaceCountryRankUnique || bplaceCountryRank;
+  const bplaceCountryOccupationRankDisplay =
+    bplaceCountryOccupationRankUnique || bplaceCountryOccupationRank;
   // const bplaceCountryRank = personRanks.bplaceCountryRank ? personRanks.bplaceCountryRank : null;
   const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug];
   const decoLines = 14;
@@ -179,15 +186,15 @@ const Intro = ({
                   gender: person.gender,
                   l: personRanks.l,
                   l_prev: personRanks.l_prev,
-                  occupationRank,
+                  occupationRank: occupationRankDisplay,
                   occupationRankPrev,
                   occupation: person.occupation.occupation,
                   occupationSlug: person.occupation.occupation_slug,
-                  bplaceCountryRank,
+                  bplaceCountryRank: bplaceCountryRankDisplay,
                   bplaceCountryRankPrev,
                   country: person.bplace_country?.country,
                   countrySlug: person.bplace_country?.slug,
-                  bplaceCountryOccupationRank,
+                  bplaceCountryOccupationRank: bplaceCountryOccupationRankDisplay,
                   demonym: person.bplace_country?.demonym,
                   nationalityAdj: person.bplace_country?.nationalityAdj,
                   fromCountry: person.bplace_country?.fromCountry,

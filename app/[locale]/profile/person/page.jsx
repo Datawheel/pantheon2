@@ -2,14 +2,14 @@ import {redirect} from "next/navigation";
 
 async function getTopPeopleHpi() {
   const res = await fetch(
-    "https://api.pantheon.world/person_hpi?yr=eq.2025&select=person_id,hpi&order=hpi.desc.nullslast&limit=100"
+    "https://api.pantheon.world/person_hpi?yr=eq.2025&select=person_id,hpi&order=hpi.desc.nullslast&limit=100",
   );
   return res.json();
 }
 
 async function getTopPeople(ids) {
   const res = await fetch(
-    `https://api.pantheon.world/person?id=in.(${ids.join(",")})`
+    `https://api.pantheon.world/person?id=in.(${ids.join(",")})`,
   );
   return res.json();
 }
@@ -154,7 +154,8 @@ export default async function Page() {
     "Gunnar_Gren",
     "Alec_Baldwin",
     "Saint_Veronica",
-    "Timothy_M._Dolan",
+    "Timothy_Dolan",
+    "Richard_Linklater",
     "Blaž_Kavčič",
     "Aritatsu_Ogi",
     "Lyudmila_Gurchenko",

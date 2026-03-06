@@ -119,21 +119,32 @@ async function getPersonTrending(slug, userLang, date) {
     return acc;
   }, {});
 
-  // Fetch localized reason
-  const reasonUrl = `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}&select=reason,llm_metadata,title`;
+  // Fetch localized reasons from all available models
+  const reasonUrl = `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}&select=reason,llm_metadata,title,llm_provider`;
   const reasonRecords = await safeFetchJson(
     reasonUrl,
     {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
     [],
   );
 
+  // Build array of model responses
+  const modelResponses = (reasonRecords || [])
+    .filter(r => r.reason) // Only include records that have a reason
+    .map(r => ({
+      reason: r.reason,
+      llmMetadata: r.llm_metadata,
+      provider: r.llm_provider || "unknown",
+    }));
+
   return {
     isTrending: (trendRecords || []).length > 0,
     languages: (trendRecords || []).map(r => r.lang),
     ranksByLang,
+    modelResponses,
+    localizedName: reasonRecords?.[0]?.title || null,
+    // Keep backward compatibility
     trendingReason: reasonRecords?.[0]?.reason || null,
     llmMetadata: reasonRecords?.[0]?.llm_metadata || null,
-    localizedName: reasonRecords?.[0]?.title || null,
   };
 }
 

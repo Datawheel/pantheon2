@@ -435,3 +435,37 @@
     font-size: 0.75rem;
   }
 }
+
+/* Per-card model switcher - subtle styling */
+.card-model-switcher {
+  display: flex;
+  gap: 4px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.card-model-btn {
+  background: transparent;
+  border: 1px solid #ddd;
+  color: #999;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: 500;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.card-model-btn:hover {
+  border-color: #bbb;
+  color: #666;
+}
+
+.card-model-btn.active {
+  background: #f5f5f5;
+  border-color: #aaa;
+  color: #444;
+}

@@ -1,7 +1,19 @@
+"use client";
+
+import {useState} from "react";
 import {micromark} from "micromark";
 import Link from "next/link";
 import {getTranslations} from "/app/translations";
 import "./WhyTrending.css";
+
+// Model display names
+const MODEL_NAMES = {
+  grok: "Grok",
+  gemini: "Gemini",
+  claude: "Claude",
+  openai: "OpenAI",
+  unknown: "AI",
+};
 
 export default function WhyTrending({
   person,
@@ -9,8 +21,19 @@ export default function WhyTrending({
   currentLang = "en",
 }) {
   const t = getTranslations(currentLang);
-  const reason = trendingData?.trendingReason;
-  const citations = trendingData?.llmMetadata?.citations || [];
+  const modelResponses = trendingData?.modelResponses || [];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Get the current model response
+  const currentResponse = modelResponses[currentIndex] || {
+    reason: trendingData?.trendingReason,
+    llmMetadata: trendingData?.llmMetadata,
+    provider: "unknown",
+  };
+
+  const reason = currentResponse.reason;
+  const citations = currentResponse.llmMetadata?.citations || [];
+  const hasMultipleModels = modelResponses.length > 1;
 
   // Convert markdown to HTML using micromark
   let reasonHtml = "";
@@ -31,12 +54,22 @@ export default function WhyTrending({
     "0"
   )}-${String(now.getDate()).padStart(2, "0")}`;
 
+  const handlePrev = () => {
+    setCurrentIndex(prev => (prev === 0 ? modelResponses.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex(prev => (prev === modelResponses.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <div className="why-trending-container">
       <h2>{t.trending.isTrendingToday.replace("{name}", person.name)}</h2>
       {reason ? (
         <div className="reason-container">
-          <h3>{t.trending.whyTrending.replace("{name}", person.name)}</h3>
+          <div className="reason-header">
+            <h3>{t.trending.whyTrending.replace("{name}", person.name)}</h3>
+          </div>
           <p dangerouslySetInnerHTML={{__html: reasonHtml}} />
           {citations.length > 0 && (
             <div className="citations-container">
@@ -54,6 +87,42 @@ export default function WhyTrending({
                   </li>
                 ))}
               </ol>
+            </div>
+          )}
+          {hasMultipleModels && (
+            <div className="model-nav">
+              <button
+                className="model-nav-arrow"
+                onClick={handlePrev}
+                aria-label="Previous model"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <div className="model-dots">
+                {modelResponses.map((response, index) => (
+                  <button
+                    key={index}
+                    className={`model-dot ${index === currentIndex ? "active" : ""}`}
+                    onClick={() => setCurrentIndex(index)}
+                    aria-label={`View ${MODEL_NAMES[response.provider] || response.provider} response`}
+                    title={MODEL_NAMES[response.provider] || response.provider}
+                  />
+                ))}
+              </div>
+              <button
+                className="model-nav-arrow"
+                onClick={handleNext}
+                aria-label="Next model"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+              <span className="model-name">
+                {MODEL_NAMES[currentResponse.provider] || currentResponse.provider}
+              </span>
             </div>
           )}
         </div>
