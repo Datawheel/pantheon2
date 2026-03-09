@@ -1,6 +1,7 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {COLORS_DOMAIN} from "../../../../components/utils/consts";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "../../../locales";
 
 export const runtime = "nodejs";
 
@@ -94,6 +95,11 @@ function formatYear(year) {
 
 function normalizeLocale(locale) {
   return (locale || "en").toLowerCase().split("-")[0].split("_")[0];
+}
+
+function normalizeSupportedLocale(locale) {
+  const normalized = normalizeLocale(locale);
+  return SUPPORTED_LOCALES.includes(normalized) ? normalized : DEFAULT_LOCALE;
 }
 
 function normalizeDomainSlug(slug) {
@@ -253,7 +259,9 @@ export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
-  const locale = searchParams.get("locale") || searchParams.get("lang") || "en";
+  const requestedLocale =
+    searchParams.get("locale") || searchParams.get("lang") || "en";
+  const normalizedLocale = normalizeSupportedLocale(requestedLocale);
 
   if (!id) {
     return new NextResponse("Not Found", {status: 404});
@@ -263,6 +271,7 @@ export async function GET(request) {
     fetchPublicAsset(request, "/fonts/Marcellus-Regular.ttf"),
     fetchPublicAsset(request, "/fonts/Amiko-Regular.ttf"),
   ]);
+
   const backgroundUrl = new URL(
     "/images/pantheon-person-share-img-bg.jpg",
     request.url,
@@ -273,31 +282,38 @@ export async function GET(request) {
   ).toString();
 
   const res = await fetch(
-    `${BASE_API}/person?id=eq.${id}&select=name,translations,occupation(occupation,domain,domain_slug,${locale}_occupation:translations->${locale}->>occupation),birthyear,deathyear`,
+    `${BASE_API}/person?id=eq.${id}&select=name,translations,occupation(occupation,domain,domain_slug,requested_occupation:translations->${normalizedLocale}->>occupation,en_occupation:translations->en->>occupation),birthyear,deathyear`,
     {cache: "no-store"},
   );
+
   if (!res.ok) {
     return new NextResponse("Upstream API error", {status: 502});
   }
 
   const data = await res.json();
-
-  // Return first item if array has content, otherwise empty object
   const person = Array.isArray(data) && data.length > 0 ? data[0] : {};
-
-  // Get localized name, fallback to English name
-  const localizedName = person.translations?.[locale] || person.name;
   const {occupation, birthyear, deathyear} = person;
-  const domainColor = resolveDomainColor(occupation);
-  const backgroundDomainBlend = `linear-gradient(135deg, ${hexToRgba(domainColor, 0.36)} 0%, ${hexToRgba(domainColor, 0.24)} 100%)`;
 
-  // Get localized occupation, fallback to English occupation
-  const localizedOccupation =
-    occupation?.[`${locale}_occupation`] || occupation?.occupation;
+  const getLocalizedName = locale =>
+    person.translations?.[locale] || person.translations?.en || person.name;
+  const getLocalizedOccupation = locale => {
+    if (locale === "en") {
+      return occupation?.en_occupation || occupation?.occupation;
+    }
 
-  if (!localizedName) {
+    return (
+      occupation?.requested_occupation ||
+      occupation?.en_occupation ||
+      occupation?.occupation
+    );
+  };
+
+  if (!getLocalizedName(normalizedLocale)) {
     return new NextResponse("ID mismatch", {status: 404});
   }
+
+  const domainColor = resolveDomainColor(occupation);
+  const backgroundDomainBlend = `linear-gradient(135deg, ${hexToRgba(domainColor, 0.36)} 0%, ${hexToRgba(domainColor, 0.24)} 100%)`;
 
   let hasImage = false;
   let imageD;
@@ -310,245 +326,292 @@ export async function GET(request) {
     }
   });
 
-  try {
+  const createImageResponse = renderLocale => {
+    const renderLocaleNormalized = normalizeLocale(renderLocale);
+    const useCustomFonts = renderLocaleNormalized !== "ar";
+    const sansFontFamily = useCustomFonts
+      ? "Amiko,Helvetica,Arial,sans-serif"
+      : "Arial,sans-serif";
+    const titleFontFamily = useCustomFonts
+      ? "Marcellus,Times,serif"
+      : "Arial,sans-serif";
+    const shouldUppercaseText = renderLocaleNormalized !== "ar";
+    const localizedName = getLocalizedName(renderLocale);
+    const localizedOccupation = getLocalizedOccupation(renderLocale);
+
     return new ImageResponse(
       <div
-      style={{
-        display: "flex",
-        fontFamily: "Amiko,Helvetica,Arial,sans-serif",
-        height: "100%",
-        position: "relative",
-        width: "100%",
-      }}
-    >
-      <img
-        src={backgroundUrl}
-        alt=""
-        style={{
-          position: "absolute",
-          inset: "0",
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "0",
-          right: "0",
-          bottom: "0",
-          left: "0",
-          width: "100%",
-          height: "100%",
-          background: backgroundDomainBlend,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "0",
-          right: "0",
-          bottom: "0",
-          left: "0",
-          width: "100%",
-          height: "100%",
-          background: "rgba(250, 248, 241, 0.08)",
-        }}
-      />
-
-      <div
-        style={{
-          position: "absolute",
-          top: "40px",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <img src={pantheonLogoUrl} alt="Pantheon" width={355} height={50} />
-      </div>
-
-      <div
         style={{
           display: "flex",
-          width: "100%",
+          fontFamily: sansFontFamily,
           height: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-          paddingTop: "58px",
-          paddingBottom: "58px",
-          paddingLeft: "54px",
-          paddingRight: "54px",
+          position: "relative",
+          width: "100%",
         }}
       >
+        <img
+          src={backgroundUrl}
+          alt=""
+          style={{
+            position: "absolute",
+            inset: "0",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
         <div
           style={{
+            position: "absolute",
+            top: "0",
+            right: "0",
+            bottom: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            background: backgroundDomainBlend,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "0",
+            right: "0",
+            bottom: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            background: "rgba(250, 248, 241, 0.08)",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            top: "40px",
+            width: "100%",
             display: "flex",
-            width: "390px",
-            minWidth: "390px",
-            height: "390px",
-            borderRadius: "50%",
-            border: `10px solid ${domainColor}`,
-            overflow: "hidden",
-            background: "#d4d0c4",
-            alignItems: "center",
             justifyContent: "center",
           }}
         >
-          {hasImage ? (
-            <img
-              src={imageD}
-              alt={localizedName}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                height: "100%",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#5d5a52",
-                fontFamily: "Marcellus,Times,serif",
-                fontSize: "4.4rem",
-                textTransform: "uppercase",
-              }}
-            >
-              {getInitials(localizedName)}
-            </div>
-          )}
+          <img src={pantheonLogoUrl} alt="Pantheon" width={355} height={50} />
         </div>
 
         <div
           style={{
             display: "flex",
-            marginLeft: "-22px",
-            width: "660px",
-            minWidth: "660px",
-            height: "300px",
-            border: `4px solid ${domainColor}`,
-            background: "rgba(252, 252, 250, 0.72)",
+            width: "100%",
+            height: "100%",
             alignItems: "center",
             justifyContent: "center",
-            padding: "36px 42px 28px",
+            paddingTop: "58px",
+            paddingBottom: "58px",
+            paddingLeft: "54px",
+            paddingRight: "54px",
           }}
         >
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
+              width: "390px",
+              minWidth: "390px",
+              height: "390px",
+              borderRadius: "50%",
+              border: `10px solid ${domainColor}`,
+              overflow: "hidden",
+              background: "#d4d0c4",
               alignItems: "center",
               justifyContent: "center",
-              width: "100%",
-              color: "#262625",
             }}
           >
-            <h2
+            {hasImage ? (
+              <img
+                src={imageD}
+                alt={localizedName}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  height: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#5d5a52",
+                  fontFamily: titleFontFamily,
+                  fontSize: "4.4rem",
+                  textTransform: "uppercase",
+                }}
+              >
+                {getInitials(localizedName)}
+              </div>
+            )}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              marginLeft: "-22px",
+              width: "660px",
+              minWidth: "660px",
+              height: "300px",
+              border: `4px solid ${domainColor}`,
+              background: "rgba(252, 252, 250, 0.72)",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "36px 42px 28px",
+            }}
+          >
+            <div
               style={{
-                margin: "0",
-                color: "#222220",
-                fontSize: "28px",
-                fontWeight: "400",
-                letterSpacing: "1px",
-                textTransform: "uppercase",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                color: "#262625",
               }}
             >
-              {localizedOccupation}
-            </h2>
-            <h1
-              style={{
-                margin: "14px 0 0",
-                color: "#151515",
-                fontFamily: "Marcellus,Times,serif",
-                fontSize: `${getNameFontSize(localizedName)}px`,
-                fontWeight: "400",
-                lineHeight: getNameLineHeight(localizedName),
-                letterSpacing: getNameLetterSpacing(localizedName),
-                textTransform: "uppercase",
-                textAlign: "center",
-                maxWidth: "100%",
-                wordBreak: "break-word",
-              }}
-            >
-              {localizedName}
-            </h1>
-            <p
-              style={{
-                margin: "16px 0 0",
-                color: "#2f2f2d",
-                fontFamily: "Amiko,Helvetica,Arial,sans-serif",
-                fontSize: "36px",
-                fontWeight: "400",
-                letterSpacing: ".5px",
-              }}
-            >
-              {formatLifespan(birthyear, deathyear, locale)}
-            </p>
+              <h2
+                style={{
+                  margin: "0",
+                  color: "#222220",
+                  fontSize: "28px",
+                  fontWeight: "400",
+                  letterSpacing: "1px",
+                  textTransform: shouldUppercaseText ? "uppercase" : "none",
+                }}
+              >
+                {localizedOccupation}
+              </h2>
+              <h1
+                style={{
+                  margin: "14px 0 0",
+                  color: "#151515",
+                  fontFamily: titleFontFamily,
+                  fontSize: `${getNameFontSize(localizedName)}px`,
+                  fontWeight: "400",
+                  lineHeight: getNameLineHeight(localizedName),
+                  letterSpacing: getNameLetterSpacing(localizedName),
+                  textTransform: shouldUppercaseText ? "uppercase" : "none",
+                  textAlign: "center",
+                  maxWidth: "100%",
+                  wordBreak: "break-word",
+                }}
+              >
+                {localizedName}
+              </h1>
+              <p
+                style={{
+                  margin: "16px 0 0",
+                  color: "#2f2f2d",
+                  fontFamily: sansFontFamily,
+                  fontSize: "36px",
+                  fontWeight: "400",
+                  letterSpacing: ".5px",
+                }}
+              >
+                {formatLifespan(birthyear, deathyear, renderLocale)}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div
-        style={{
-          position: "absolute",
-          left: "0",
-          right: "0",
-          bottom: "57px",
-          borderTop: "1px solid rgba(84, 80, 70, 0.33)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "14px",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          color: "#545048",
-          fontSize: "13px",
-          letterSpacing: ".2px",
-          textAlign: "center",
-          paddingLeft: "20px",
-          paddingRight: "20px",
-        }}
-      >
-        {`${getFooterText(locale)} | ${getSiteLabel(locale)}`}
-      </div>
-    </div>,
-    {
-      width: 1200,
-      height: 630,
-      debug: false,
-      fonts: [
-        {
-          name: "Marcellus",
-          data: MarcellusfontData,
-          style: "normal",
-        },
-        {
-          name: "Amiko",
-          data: AmikofontData,
-          style: "normal",
-        },
-      ],
+        <div
+          style={{
+            position: "absolute",
+            left: "0",
+            right: "0",
+            bottom: "57px",
+            borderTop: "1px solid rgba(84, 80, 70, 0.33)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "14px",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            color: "#545048",
+            fontSize: "13px",
+            letterSpacing: ".2px",
+            textAlign: "center",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+          }}
+        >
+          {`${getFooterText(renderLocale)} | ${getSiteLabel(normalizedLocale)}`}
+        </div>
+      </div>,
+      {
+        width: 1200,
+        height: 630,
+        debug: false,
+        fonts: useCustomFonts
+          ? [
+              {
+                name: "Marcellus",
+                data: MarcellusfontData,
+                style: "normal",
+              },
+              {
+                name: "Amiko",
+                data: AmikofontData,
+                style: "normal",
+              },
+            ]
+          : undefined,
       },
     );
+  };
+
+  const toPngResponse = async renderLocale => {
+    const imageResponse = createImageResponse(renderLocale);
+    const pngBuffer = await imageResponse.arrayBuffer();
+    return new NextResponse(pngBuffer, {
+      status: 200,
+      headers: {"content-type": "image/png"},
+    });
+  };
+
+  try {
+    return await toPngResponse(normalizedLocale);
   } catch (error) {
+    if (normalizedLocale === "ar") {
+      try {
+        return await toPngResponse("en");
+      } catch (fallbackError) {
+        console.error(
+          "[screenshot-fail]",
+          {
+            route: "person",
+            stage: "fallback-english-render",
+            url: request.url,
+            id,
+            locale: requestedLocale,
+          },
+          fallbackError,
+        );
+        return new NextResponse("OG render failed", {status: 500});
+      }
+    }
+
     console.error(
       "[screenshot-fail]",
       {
         route: "person",
+        stage: "primary-render",
         url: request.url,
         id,
-        locale,
+        locale: requestedLocale,
       },
-      error
+      error,
     );
     return new NextResponse("OG render failed", {status: 500});
   }
