@@ -35,6 +35,17 @@ export function middleware(request) {
   const url = new URL(request.url);
   const {pathname} = url;
 
+  // Always log screenshot hits so failed OG streams can be traced by URL.
+  // This runs before the route handler and still logs even if response piping fails later.
+  if (pathname.startsWith("/api/screenshot/")) {
+    console.log(
+      "[screenshot-hit]",
+      `${pathname}${url.search}`,
+      request.headers.get("user-agent") || "unknown-ua"
+    );
+    return NextResponse.next();
+  }
+
   // Skip middleware for actual assets (only when the URL truly ends in an extension)
   if (ASSET_EXT_RE.test(pathname)) {
     return NextResponse.next();
@@ -49,5 +60,7 @@ export const config = {
   matcher: [
     // Everything except Next internals and your API route
     "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|ads.txt).*)",
+    // Explicitly include screenshot API routes for request tracing.
+    "/api/screenshot/:path*",
   ],
 };
