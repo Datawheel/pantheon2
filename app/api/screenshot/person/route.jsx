@@ -2,7 +2,7 @@ import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {COLORS_DOMAIN} from "../../../../components/utils/consts";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const PRESENT_BY_LOCALE = {
   ar: "حتى اليوم",
@@ -73,6 +73,17 @@ async function fetchPersonImage(id) {
   }
 }
 
+async function fetchPublicAsset(request, assetPath, asText = false) {
+  const assetUrl = new URL(assetPath, request.url);
+  const response = await fetch(assetUrl);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch asset ${assetPath}: ${response.status}`);
+  }
+
+  return asText ? response.text() : response.arrayBuffer();
+}
+
 function formatYear(year) {
   if (year === null || year === undefined) {
     return "";
@@ -90,7 +101,10 @@ function normalizeDomainSlug(slug) {
     return "";
   }
 
-  return slug.trim().toLowerCase().replace(/[_\s]+/g, "-");
+  return slug
+    .trim()
+    .toLowerCase()
+    .replace(/[_\s]+/g, "-");
 }
 
 function hexToRgba(hex, alpha = 1) {
@@ -122,7 +136,8 @@ function resolveDomainColor(occupation) {
   }
 
   const domainTextSlug = normalizeDomainSlug(occupation?.domain);
-  const aliasedDomainTextSlug = DOMAIN_COLOR_ALIASES[domainTextSlug] || domainTextSlug;
+  const aliasedDomainTextSlug =
+    DOMAIN_COLOR_ALIASES[domainTextSlug] || domainTextSlug;
   if (aliasedDomainTextSlug && COLORS_DOMAIN[aliasedDomainTextSlug]) {
     return COLORS_DOMAIN[aliasedDomainTextSlug];
   }
@@ -244,29 +259,27 @@ export async function GET(request) {
     return new NextResponse("Not Found", {status: 404});
   }
 
-  const MarcellusfontData = await fetch(
-    new URL("../../../../public/fonts/Marcellus-Regular.ttf", import.meta.url),
-  ).then(res => res.arrayBuffer());
-  const AmikofontData = await fetch(
-    new URL("../../../../public/fonts/Amiko-Regular.ttf", import.meta.url),
-  ).then(res => res.arrayBuffer());
-  const backgroundData = await fetch(
-    new URL(
-      "../../../../public/images/pantheon-person-share-img-bg.jpg",
-      import.meta.url,
-    ),
-  ).then(res => res.arrayBuffer());
-  const pantheonLogoText = await fetch(
-    new URL(
-      "../../../../public/images/logos/logo_pantheon.svg",
-      import.meta.url,
-    ),
-  ).then(res => res.text());
-  const pantheonLogoData = `data:image/svg+xml;utf8,${encodeURIComponent(pantheonLogoText)}`;
+  const [MarcellusfontData, AmikofontData] = await Promise.all([
+    fetchPublicAsset(request, "/fonts/Marcellus-Regular.ttf"),
+    fetchPublicAsset(request, "/fonts/Amiko-Regular.ttf"),
+  ]);
+  const backgroundUrl = new URL(
+    "/images/pantheon-person-share-img-bg.jpg",
+    request.url,
+  ).toString();
+  const pantheonLogoUrl = new URL(
+    "/images/logos/logo_pantheon.svg",
+    request.url,
+  ).toString();
 
   const res = await fetch(
     `${BASE_API}/person?id=eq.${id}&select=name,translations,occupation(occupation,domain,domain_slug,${locale}_occupation:translations->${locale}->>occupation),birthyear,deathyear`,
+    {cache: "no-store"},
   );
+  if (!res.ok) {
+    return new NextResponse("Upstream API error", {status: 502});
+  }
+
   const data = await res.json();
 
   // Return first item if array has content, otherwise empty object
@@ -308,7 +321,7 @@ export async function GET(request) {
       }}
     >
       <img
-        src={backgroundData}
+        src={backgroundUrl}
         alt=""
         style={{
           position: "absolute",
@@ -352,7 +365,7 @@ export async function GET(request) {
           justifyContent: "center",
         }}
       >
-        <img src={pantheonLogoData} alt="Pantheon" width={355} height={50} />
+        <img src={pantheonLogoUrl} alt="Pantheon" width={355} height={50} />
       </div>
 
       <div
