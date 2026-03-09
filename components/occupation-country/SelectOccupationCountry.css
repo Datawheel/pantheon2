@@ -25,7 +25,7 @@
 }
 
 .hero-title {
-  font-family: var(--fontMarcellus);
+  font-family: var(--fontTitle);
   font-size: 3.5rem;
   font-weight: 400;
   color: var(--colorStone);
@@ -35,7 +35,7 @@
 
 .hero-subtitle {
   font-size: 1.5rem;
-  color: var(--colorMidGray);
+  color: var(--colorTan);
   margin: 0 0 2.5rem 0;
   line-height: 1.6;
 }
@@ -84,7 +84,7 @@
 .selector-plus {
   display: none;
   font-size: 1.5rem;
-  color: var(--colorMidGray);
+  color: var(--colorTan);
   font-weight: 300;
 }
 
@@ -130,7 +130,7 @@
 }
 
 .section-title {
-  font-family: var(--fontMarcellus);
+  font-family: var(--fontTitle);
   font-size: 2.5rem;
   font-weight: 400;
   color: var(--colorStone);
@@ -174,7 +174,7 @@
 }
 
 .trending-card:hover {
-  border-color: var(--colorMidGray);
+  border-color: var(--colorTan);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
@@ -288,7 +288,7 @@
   gap: 0.35rem;
   background: none;
   border: none;
-  color: var(--colorLink);
+  color: var(--colorCtrl);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -368,7 +368,7 @@
 }
 
 .popular-card:hover {
-  border-color: var(--colorMidGray);
+  border-color: var(--colorTan);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transform: translateY(-1px);
 }
@@ -385,7 +385,7 @@
 
 .popular-count {
   font-size: 1rem;
-  color: var(--colorMidGray);
+  color: var(--colorTan);
   background: var(--colorLint);
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
@@ -476,7 +476,7 @@
 }
 
 .letter-heading {
-  font-family: var(--fontMarcellus);
+  font-family: var(--fontTitle);
   font-size: 3.5rem;
   font-weight: 400;
   color: var(--colorStone);
@@ -567,12 +567,12 @@
 }
 
 .country-occupations li a:hover {
-  color: var(--colorLink);
+  color: var(--colorCtrl);
 }
 
 .occ-count {
   font-size: 0.95rem;
-  color: var(--colorMidGray);
+  color: var(--colorTan);
   margin-left: 0.3rem;
 }
 

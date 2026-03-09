@@ -26,7 +26,7 @@
 }
 
 .trending-banner-title {
-  font-family: var(--fontMarcellus);
+  font-family: var(--fontTitle);
   font-size: 1.75rem;
   font-weight: 400;
   color: var(--colorStone);
@@ -110,7 +110,7 @@
 
 .trending-stat-label {
   font-size: 0.85rem;
-  color: var(--colorMidGray);
+  color: var(--colorTan);
 }
 
 /* Mobile Optimizations */
