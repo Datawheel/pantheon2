@@ -310,8 +310,9 @@ export async function GET(request) {
     }
   });
 
-  return new ImageResponse(
-    <div
+  try {
+    return new ImageResponse(
+      <div
       style={{
         display: "flex",
         fontFamily: "Amiko,Helvetica,Arial,sans-serif",
@@ -536,6 +537,19 @@ export async function GET(request) {
           style: "normal",
         },
       ],
-    },
-  );
+      },
+    );
+  } catch (error) {
+    console.error(
+      "[screenshot-fail]",
+      {
+        route: "person",
+        url: request.url,
+        id,
+        locale,
+      },
+      error
+    );
+    return new NextResponse("OG render failed", {status: 500});
+  }
 }

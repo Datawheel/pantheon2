@@ -174,8 +174,9 @@ export async function getBornOnThisDayImageResponse({date, locale = "en"}) {
   const famousPeopleText = (FAMOUS_PEOPLE[locale] || FAMOUS_PEOPLE.en)(peopleBornOnDay.length);
   const backgroundColor = "#f4f4f1";
 
-  return new ImageResponse(
-    (
+  try {
+    return new ImageResponse(
+      (
       <div
         style={{
           background: backgroundColor,
@@ -324,6 +325,18 @@ export async function getBornOnThisDayImageResponse({date, locale = "en"}) {
           style: "normal",
         },
       ],
-    }
-  );
+      }
+    );
+  } catch (error) {
+    console.error(
+      "[screenshot-fail]",
+      {
+        route: "born-on-this-day-utils",
+        date,
+        locale,
+      },
+      error
+    );
+    return new NextResponse("OG render failed", {status: 500});
+  }
 }

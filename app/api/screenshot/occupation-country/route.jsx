@@ -124,8 +124,9 @@ export async function GET(request) {
 
   const backgroundColor = "#f4f4f1";
 
-  return new ImageResponse(
-    <div
+  try {
+    return new ImageResponse(
+      <div
       style={{
         background: backgroundColor,
         display: "flex",
@@ -307,6 +308,20 @@ export async function GET(request) {
           style: "normal",
         },
       ],
-    },
-  );
+      },
+    );
+  } catch (error) {
+    console.error(
+      "[screenshot-fail]",
+      {
+        route: "occupation-country",
+        url: request.url,
+        occupation: occupationQueryId,
+        country: countryQueryId,
+        lang,
+      },
+      error
+    );
+    return new NextResponse("OG render failed", {status: 500});
+  }
 }

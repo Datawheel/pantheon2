@@ -39,8 +39,9 @@ export async function GET(request) {
     new URL(countryImgPath, import.meta.url)
   ).then(res => res.arrayBuffer());
 
-  return new ImageResponse(
-    (
+  try {
+    return new ImageResponse(
+      (
       <div
         style={{
           alignItems: "center",
@@ -185,6 +186,18 @@ export async function GET(request) {
           style: "normal",
         },
       ],
-    }
-  );
+      }
+    );
+  } catch (error) {
+    console.error(
+      "[screenshot-fail]",
+      {
+        route: "era",
+        url: request.url,
+        id,
+      },
+      error
+    );
+    return new NextResponse("OG render failed", {status: 500});
+  }
 }

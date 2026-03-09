@@ -90,8 +90,9 @@ export async function GET(request) {
 
   const backgroundColor = "#f4f4f1";
 
-  return new ImageResponse(
-    (
+  try {
+    return new ImageResponse(
+      (
       <div
         style={{
           background: backgroundColor,
@@ -249,6 +250,18 @@ export async function GET(request) {
           style: "normal",
         },
       ],
-    }
-  );
+      }
+    );
+  } catch (error) {
+    console.error(
+      "[screenshot-fail]",
+      {
+        route: "occupation",
+        url: request.url,
+        id,
+      },
+      error
+    );
+    return new NextResponse("OG render failed", {status: 500});
+  }
 }

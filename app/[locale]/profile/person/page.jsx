@@ -148,7 +148,7 @@ export default async function Page() {
     "Michael_Apted",
     "Gwangjong_of_Goryeo",
     "Francis_Jammes",
-    "Igor_Smirnov",
+    "Lars_Eidinger",
     "Li_Xiaopeng_(gymnast)",
     "Ana_Belén",
     "Gunnar_Gren",
