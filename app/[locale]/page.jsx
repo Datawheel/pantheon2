@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import Image from "next/image";
 import TrendingGrid from "/components/home/TrendingGrid";
+import BornTodayGrid from "/components/home/BornTodayGrid";
 import {REVALIDATE_PERIODS} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
@@ -52,35 +53,30 @@ export default async function Home({params}) {
   )
     .then(res => res.json())
     .then(data => (Array.isArray(data) ? data : []))
-    .then(data => data.map(d => ({...d.person, created_at: d.created_at})).filter(d => d.slug))
+    .then(data =>
+      data
+        .map(d => ({...d.person, created_at: d.created_at}))
+        .filter(d => d.slug),
+    )
     .catch(error => {
       console.error("Error fetching recently added data:", error);
       return [];
     });
 
-  const trendingSingers = await fetch(
-    `${baseUrl}/api/wikiTrends?lang=${lang}&limit=16&occupation=SINGER`,
+  // Fetch born on this day data
+  const today = new Date();
+  const todayMonth = today.getMonth() + 1;
+  const todayDay = today.getDate();
+  const bornToday = await fetch(
+    `${apiBaseUrl}/rpc/born_on_day?m=${todayMonth}&d=${todayDay}&lang=${lang}`,
     {
-      next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
+      next: {revalidate: 3600 * 6}, // Cache for 6 hours
     },
   )
     .then(res => res.json())
     .then(data => (Array.isArray(data) ? data : []))
     .catch(error => {
-      console.error("Error fetching trending singers data:", error);
-      return [];
-    });
-
-  const trendingActors = await fetch(
-    `${baseUrl}/api/wikiTrends?lang=${lang}&limit=16&occupation=ACTOR`,
-    {
-      next: {revalidate: REVALIDATE_PERIODS.SHORT * 4}, // Cache for revalidation period
-    },
-  )
-    .then(res => res.json())
-    .then(data => (Array.isArray(data) ? data : []))
-    .catch(error => {
-      console.error("Error fetching trending actors data:", error);
+      console.error("Error fetching born today data:", error);
       return [];
     });
 
@@ -198,13 +194,29 @@ export default async function Home({params}) {
         trendingWithReasons={trendingWithReasons}
       />
 
-      <div className="announcement-block birthday-announcement">
-        <h2>{t.home.bornOnThisDay || "Born on This Day"} <span className="new-badge">{t.nav?.newBadge || "new!"}</span></h2>
+      <BornTodayGrid
+        title={t.home?.bornTodayTitle || "Born Today"}
+        bios={bornToday}
+        currentLang={lang}
+      />
+
+      <TrendingGrid
+        title={t.home.recentPassings}
+        allowLangChange={false}
+        initialTrendingAll={recentPassings}
+        defaultLang={lang}
+        showTrendIndicator={false}
+        showDates={true}
+      />
+
+      <div className="announcement-block">
+        <h2>{t.home.notableDeaths}</h2>
         <p>
-          {t.home.bornOnThisDayText || "Discover which famous people share your birthday! Explore our new birthday pages to find celebrities, historical figures, and notable personalities born on any day of the year."}{" "}
-          <Link href={`/${lang}/profile/born-on-this-day`}>
-            {t.home.bornOnThisDayLink || "See who was born today"} &rarr;
-          </Link>
+          {t.home.notableDeathsText}{" "}
+          <Link href={`/${lang}/profile/deaths/2025`}>
+            {t.home.notableDeathsLink}
+          </Link>{" "}
+          {t.home.notableDeathsContinued}
         </p>
       </div>
 
@@ -232,42 +244,6 @@ export default async function Home({params}) {
           {t.home.aboutDatawheel}
         </p>
       </div>
-
-      <TrendingGrid
-        title={t.home.recentPassings}
-        allowLangChange={false}
-        initialTrendingAll={recentPassings}
-        defaultLang={lang}
-        showTrendIndicator={false}
-        showDates={true}
-      />
-
-      <div className="announcement-block">
-        <h2>{t.home.notableDeaths}</h2>
-        <p>
-          {t.home.notableDeathsText}{" "}
-          <Link href={`/${lang}/profile/deaths/2025`}>
-            {t.home.notableDeathsLink}
-          </Link>{" "}
-          {t.home.notableDeathsContinued}
-        </p>
-      </div>
-
-      <TrendingGrid
-        title={t.home.trendingSingers}
-        allowLangChange={true}
-        initialTrendingAll={trendingSingers}
-        defaultLang={lang}
-        occupation="SINGER"
-      />
-
-      <TrendingGrid
-        title={t.home.trendingActors}
-        allowLangChange={true}
-        initialTrendingAll={trendingActors}
-        defaultLang={lang}
-        occupation="ACTOR"
-      />
 
       <div className="floating-content l-1">
         <div className="box"></div>

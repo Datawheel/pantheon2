@@ -29,6 +29,10 @@
     @media (max-width: 750px) {
       font-size: 18px;
     }
+
+    & .icon-birthday {
+      margin-right: 6px;
+    }
   } /* end .grid-title */
 
   & .grid-subtitle {
@@ -48,8 +52,21 @@
       }
     }
 
+    & a {
+      color: inherit;
+      opacity: 0.75;
+      text-decoration: none;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+    }
+
     & a.shuffle {
       margin: 0 0 0 10px;
+      opacity: 1;
       & img {
         width: 20px;
         vertical-align: middle;
@@ -244,6 +261,17 @@
       & .grid-box-title-dates {
         font-size: 10px;
         opacity: 0.85;
+
+        @media (max-width: 750px) {
+          font-size: 9px;
+        }
+      }
+
+      & .grid-box-title-subtext {
+        font-size: 10px;
+        opacity: 0.85;
+        font-weight: normal;
+        margin-top: 2px;
 
         @media (max-width: 750px) {
           font-size: 9px;
