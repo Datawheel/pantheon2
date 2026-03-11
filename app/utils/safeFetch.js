@@ -2,7 +2,23 @@
  * Safe JSON fetch with logging for debugging HTML responses.
  * Use this for server-side API calls to gracefully handle errors.
  */
+const loggedInvalidQueryUrls = new Set();
+
+function logInvalidQueryOnce(url) {
+  if (loggedInvalidQueryUrls.has(url)) {
+    return;
+  }
+  loggedInvalidQueryUrls.add(url);
+  console.warn(`[safeFetchJson] Skipping invalid query URL: ${url}`);
+}
+
 export async function safeFetchJson(url, options = {}, fallback = null) {
+  // Guard against accidentally constructed filters like gte.NaN / lte.NaN.
+  if (/(?:eq|gte|lte|gt|lt)\.NaN\b/.test(url)) {
+    logInvalidQueryOnce(url);
+    return fallback;
+  }
+
   try {
     const res = await fetch(url, options);
     if (!res.ok) {

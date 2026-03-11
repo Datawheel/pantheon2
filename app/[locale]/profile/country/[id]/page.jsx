@@ -121,6 +121,18 @@ function formatNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function getRankWindow(rankValue) {
+  const rank = parseInt(rankValue, 10);
+  if (!Number.isFinite(rank)) {
+    return null;
+  }
+
+  return {
+    low: Math.max(1, rank - NUM_RANKINGS_PRE),
+    high: Math.max(NUM_RANKINGS, rank + NUM_RANKINGS_POST),
+  };
+}
+
 export async function generateMetadata({params}, parent) {
   const {id, locale} = params;
   const baseUrl = process.env.URL || "https://pantheon.world";
@@ -190,15 +202,10 @@ export default async function Page({params: {id}}) {
     getWikiPageViews(country.country),
   ]);
 
-  const countryRankLow = Math.max(
-    1,
-    parseInt(country.born_rank_unique, 10) - NUM_RANKINGS_PRE
-  );
-  const countryRankHigh = Math.max(
-    NUM_RANKINGS,
-    parseInt(country.born_rank_unique, 10) + NUM_RANKINGS_POST
-  );
-  const countryRanks = await getCountryRanks(countryRankLow, countryRankHigh);
+  const countryRankWindow = getRankWindow(country?.born_rank_unique);
+  const countryRanks = countryRankWindow
+    ? await getCountryRanks(countryRankWindow.low, countryRankWindow.high)
+    : null;
 
   let [peopleBornHere, peopleDiedHere, peopleBornHereHpi, peopleDiedHereHpi] =
     await Promise.all([
