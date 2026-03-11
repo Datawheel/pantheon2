@@ -1,5 +1,6 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
+import {getSupportedLocale, isArabicLocale} from "../helpers/locale";
 
 // Localized date formatters
 const DATE_FORMATTERS = {
@@ -132,6 +133,7 @@ export async function getBornOnThisDayImageResponse({
   locale = "en",
   requestUrl,
 }) {
+  const normalizedLocale = getSupportedLocale(locale);
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
 
   if (!date) {
@@ -163,7 +165,7 @@ export async function getBornOnThisDayImageResponse({
 
   // Fetch people born on this day
   const peopleBornOnDay = await fetch(
-    `${BASE_API}/rpc/born_on_day?m=${month}&d=${day}&lang=${locale}`
+    `${BASE_API}/rpc/born_on_day?m=${month}&d=${day}&lang=${normalizedLocale}`
   )
     .then(res => res.json())
     .then(data => Array.isArray(data) ? data : [])
@@ -189,19 +191,26 @@ export async function getBornOnThisDayImageResponse({
     })
   );
 
-  const displayDate = formatDateForDisplay(month, day, locale);
-  const bornOnThisDayText = BORN_ON_THIS_DAY[locale] || BORN_ON_THIS_DAY.en;
-  const famousPeopleText = (FAMOUS_PEOPLE[locale] || FAMOUS_PEOPLE.en)(peopleBornOnDay.length);
   const backgroundColor = "#f4f4f1";
 
-  try {
+  const createImageResponse = renderLocale => {
+    const renderLocaleNormalized = getSupportedLocale(renderLocale);
+    const useCustomFont = !isArabicLocale(renderLocaleNormalized);
+    const fontFamily = useCustomFont ? "Marcellus,Times,serif" : "Arial,sans-serif";
+    const displayDate = formatDateForDisplay(month, day, renderLocaleNormalized);
+    const bornOnThisDayText =
+      BORN_ON_THIS_DAY[renderLocaleNormalized] || BORN_ON_THIS_DAY.en;
+    const famousPeopleText = (
+      FAMOUS_PEOPLE[renderLocaleNormalized] || FAMOUS_PEOPLE.en
+    )(peopleBornOnDay.length);
+
     return new ImageResponse(
       (
       <div
         style={{
           background: backgroundColor,
           display: "flex",
-          fontFamily: "Marcellus,Times,serif",
+          fontFamily,
           height: "100%",
           width: "100%",
           position: "relative",
@@ -235,7 +244,7 @@ export async function getBornOnThisDayImageResponse({
               fontSize: "40px",
               fontWeight: "bold",
               color: "#3c2f2f",
-              textTransform: "uppercase",
+              textTransform: isArabicLocale(renderLocaleNormalized) ? "none" : "uppercase",
               letterSpacing: "2px",
               marginBottom: "20px",
             }}
@@ -338,22 +347,56 @@ export async function getBornOnThisDayImageResponse({
     {
       width: 1200,
       height: 630,
-      fonts: [
-        {
-          name: "Marcellus",
-          data: MarcellusfontData,
-          style: "normal",
-        },
-      ],
+      fonts: useCustomFont
+        ? [
+            {
+              name: "Marcellus",
+              data: MarcellusfontData,
+              style: "normal",
+            },
+          ]
+        : undefined,
       }
     );
+  };
+
+  const toPngResponse = async renderLocale => {
+    const imageResponse = createImageResponse(renderLocale);
+    const pngBuffer = await imageResponse.arrayBuffer();
+    return new NextResponse(pngBuffer, {
+      status: 200,
+      headers: {"content-type": "image/png"},
+    });
+  };
+
+  try {
+    return await toPngResponse(normalizedLocale);
   } catch (error) {
+    if (isArabicLocale(normalizedLocale)) {
+      try {
+        return await toPngResponse("en");
+      } catch (fallbackError) {
+        console.error(
+          "[screenshot-fail]",
+          {
+            route: "born-on-this-day-utils",
+            stage: "fallback-english-render",
+            date,
+            locale: normalizedLocale,
+          },
+          fallbackError
+        );
+        return new NextResponse("OG render failed", {status: 500});
+      }
+    }
+
     console.error(
       "[screenshot-fail]",
       {
         route: "born-on-this-day-utils",
+        stage: "primary-render",
         date,
-        locale,
+        locale: normalizedLocale,
       },
       error
     );

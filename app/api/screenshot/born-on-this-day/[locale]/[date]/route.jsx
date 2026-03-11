@@ -1,12 +1,14 @@
 import {getBornOnThisDayImageResponse} from "../../utils";
 import {NextResponse} from "next/server";
+import {getSupportedLocale} from "../../../helpers/locale";
 
 export const runtime = "edge";
 
 export async function GET(request, context) {
   // In Next.js 14.2+, params may need to be awaited
   const params = await context.params;
-  const {locale, date} = params || {};
+  const {date} = params || {};
+  const locale = getSupportedLocale(params?.locale);
   try {
     return await getBornOnThisDayImageResponse({
       date,

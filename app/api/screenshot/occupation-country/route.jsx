@@ -2,7 +2,11 @@ import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {plural} from "pluralize";
 import {getTranslations} from "/app/translations";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {
+  DEFAULT_LOCALE,
+  getSupportedLocale,
+  isArabicLocale,
+} from "../helpers/locale";
 
 export const runtime = "nodejs";
 
@@ -53,15 +57,15 @@ export async function GET(request) {
   const {searchParams} = new URL(request.url);
   const occupationQueryId = searchParams.get("occupation");
   const countryQueryId = searchParams.get("country");
-  const lang = searchParams.get("lang") || DEFAULT_LOCALE;
+  const lang = getSupportedLocale(
+    searchParams.get("lang") || searchParams.get("locale") || DEFAULT_LOCALE,
+  );
 
   if (!occupationQueryId || !countryQueryId) {
     return new NextResponse("Not Found", {status: 404});
   }
 
-  const t = getTranslations(lang);
   const tEn = getTranslations(DEFAULT_LOCALE);
-  const tc = {...tEn.occupationCountry, ...t.occupationCountry};
 
   // Load font
   const MarcellusfontData = await fetchPublicAsset(
@@ -136,13 +140,26 @@ export async function GET(request) {
 
   const backgroundColor = "#f4f4f1";
 
-  try {
+  const createImageResponse = renderLang => {
+    const renderTranslations = getTranslations(renderLang);
+    const tc = {
+      ...tEn.occupationCountry,
+      ...(renderTranslations?.occupationCountry || {}),
+    };
+    const useCustomFont = !isArabicLocale(renderLang);
+    const fontFamily = useCustomFont ? "Marcellus,Times,serif" : "Arial,sans-serif";
+    const renderOccupation =
+      renderLang === lang ? localizedOccupation : occupationName;
+    const renderCountry = renderLang === lang ? localizedCountry : countryName;
+    const renderFromCountry =
+      renderLang === lang ? localizedFromCountry : undefined;
+
     return new ImageResponse(
       <div
       style={{
         background: backgroundColor,
         display: "flex",
-        fontFamily: "Marcellus,Times,serif",
+        fontFamily,
         height: "100%",
         width: "100%",
         position: "relative",
@@ -165,7 +182,7 @@ export async function GET(request) {
         <h2
           style={{
             color: "#9e978d",
-            fontFamily: "Marcellus,Times,serif",
+            fontFamily,
             textTransform: "uppercase",
             fontWeight: "400",
             letterSpacing: ".25rem",
@@ -179,8 +196,8 @@ export async function GET(request) {
         <h1
           style={{
             color: "#363636",
-            fontFamily: "Marcellus,Times,serif",
-            textTransform: "uppercase",
+            fontFamily,
+            textTransform: isArabicLocale(renderLang) ? "none" : "uppercase",
             fontWeight: "400",
             letterSpacing: ".2rem",
             fontSize: "2.4rem",
@@ -189,13 +206,13 @@ export async function GET(request) {
             lineHeight: 1.2,
           }}
         >
-          {lang === "en" ? plural(localizedOccupation) : localizedOccupation}
+          {renderLang === "en" ? plural(renderOccupation) : renderOccupation}
         </h1>
         <h3
           style={{
             color: "#9e978d",
-            fontFamily: "Marcellus,Times,serif",
-            textTransform: "uppercase",
+            fontFamily,
+            textTransform: isArabicLocale(renderLang) ? "none" : "uppercase",
             fontWeight: "400",
             letterSpacing: ".15rem",
             fontSize: "1.4rem",
@@ -203,13 +220,13 @@ export async function GET(request) {
             textAlign: "center",
           }}
         >
-          {localizedFromCountry ? localizedFromCountry : tc.from}
+          {renderFromCountry ? renderFromCountry : tc.from}
         </h3>
         <h1
           style={{
             color: "#363636",
-            fontFamily: "Marcellus,Times,serif",
-            textTransform: "uppercase",
+            fontFamily,
+            textTransform: isArabicLocale(renderLang) ? "none" : "uppercase",
             fontWeight: "400",
             letterSpacing: ".2rem",
             fontSize: "2.4rem",
@@ -218,7 +235,7 @@ export async function GET(request) {
             lineHeight: 1.2,
           }}
         >
-          {localizedCountry}
+          {renderCountry}
         </h1>
         {totalCount > 0 && (
           <p
@@ -232,7 +249,7 @@ export async function GET(request) {
             {tc.notablePeople
               ? tc.notablePeople({
                   count: totalCount,
-                  countFormatted: formatNumber(totalCount, lang),
+                  countFormatted: formatNumber(totalCount, renderLang),
                 })
               : `${formatNumber(totalCount)} notable ${totalCount === 1 ? "person" : "people"}`}
           </p>
@@ -313,20 +330,56 @@ export async function GET(request) {
       width: 1200,
       height: 630,
       debug: false,
-      fonts: [
-        {
-          name: "Marcellus",
-          data: MarcellusfontData,
-          style: "normal",
-        },
-      ],
+      fonts: useCustomFont
+        ? [
+            {
+              name: "Marcellus",
+              data: MarcellusfontData,
+              style: "normal",
+            },
+          ]
+        : undefined,
       },
     );
+  };
+
+  const toPngResponse = async renderLang => {
+    const imageResponse = createImageResponse(renderLang);
+    const pngBuffer = await imageResponse.arrayBuffer();
+    return new NextResponse(pngBuffer, {
+      status: 200,
+      headers: {"content-type": "image/png"},
+    });
+  };
+
+  try {
+    return await toPngResponse(lang);
   } catch (error) {
+    if (isArabicLocale(lang)) {
+      try {
+        return await toPngResponse("en");
+      } catch (fallbackError) {
+        console.error(
+          "[screenshot-fail]",
+          {
+            route: "occupation-country",
+            stage: "fallback-english-render",
+            url: request.url,
+            occupation: occupationQueryId,
+            country: countryQueryId,
+            lang,
+          },
+          fallbackError
+        );
+        return new NextResponse("OG render failed", {status: 500});
+      }
+    }
+
     console.error(
       "[screenshot-fail]",
       {
         route: "occupation-country",
+        stage: "primary-render",
         url: request.url,
         occupation: occupationQueryId,
         country: countryQueryId,

@@ -1,12 +1,13 @@
 import {getBornOnThisDayImageResponse} from "./utils";
 import {NextResponse} from "next/server";
+import {getSupportedLocale} from "../helpers/locale";
 
 export const runtime = "edge";
 
 export async function GET(request) {
   const {searchParams} = new URL(request.url);
   const date = searchParams.get("date");
-  const locale = searchParams.get("locale") || "en";
+  const locale = getSupportedLocale(searchParams.get("locale"));
   try {
     return await getBornOnThisDayImageResponse({
       date,

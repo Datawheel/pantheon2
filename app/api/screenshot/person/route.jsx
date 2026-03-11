@@ -1,7 +1,7 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {COLORS_DOMAIN} from "../../../../components/utils/consts";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "../../../locales";
+import {getSupportedLocale} from "../helpers/locale";
 
 export const runtime = "nodejs";
 
@@ -103,15 +103,6 @@ function formatYear(year) {
   return year < 0 ? `${Math.abs(year)} BC` : `${year}`;
 }
 
-function normalizeLocale(locale) {
-  return (locale || "en").toLowerCase().split("-")[0].split("_")[0];
-}
-
-function normalizeSupportedLocale(locale) {
-  const normalized = normalizeLocale(locale);
-  return SUPPORTED_LOCALES.includes(normalized) ? normalized : DEFAULT_LOCALE;
-}
-
 function normalizeDomainSlug(slug) {
   if (!slug || typeof slug !== "string") {
     return "";
@@ -162,7 +153,7 @@ function resolveDomainColor(occupation) {
 }
 
 function getPresentLabel(locale) {
-  const normalizedLocale = normalizeLocale(locale);
+  const normalizedLocale = getSupportedLocale(locale);
   return PRESENT_BY_LOCALE[normalizedLocale] || PRESENT_BY_LOCALE.en;
 }
 
@@ -176,14 +167,14 @@ function formatLifespan(birthyear, deathyear, locale) {
 }
 
 function getSiteLabel(locale) {
-  const normalizedLocale = normalizeLocale(locale);
+  const normalizedLocale = getSupportedLocale(locale);
   return normalizedLocale === "en"
     ? "PANTHEON.WORLD"
     : `PANTHEON.WORLD/${normalizedLocale.toUpperCase()}`;
 }
 
 function getFooterText(locale) {
-  const normalizedLocale = normalizeLocale(locale);
+  const normalizedLocale = getSupportedLocale(locale);
   return FOOTER_TEXT_BY_LOCALE[normalizedLocale] || FOOTER_TEXT_BY_LOCALE.en;
 }
 
@@ -271,7 +262,7 @@ export async function GET(request) {
   const id = searchParams.get("id");
   const requestedLocale =
     searchParams.get("locale") || searchParams.get("lang") || "en";
-  const normalizedLocale = normalizeSupportedLocale(requestedLocale);
+  const normalizedLocale = getSupportedLocale(requestedLocale);
 
   if (!id) {
     return new NextResponse("Not Found", {status: 404});
@@ -337,7 +328,7 @@ export async function GET(request) {
   });
 
   const createImageResponse = renderLocale => {
-    const renderLocaleNormalized = normalizeLocale(renderLocale);
+    const renderLocaleNormalized = getSupportedLocale(renderLocale);
     const useCustomFonts = renderLocaleNormalized !== "ar";
     const sansFontFamily = useCustomFonts
       ? "Amiko,Helvetica,Arial,sans-serif"
