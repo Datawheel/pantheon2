@@ -1,5 +1,6 @@
 // import ProfileNav from "../../../../components/common/Nav";
 import {cloneElement} from "react";
+import {notFound} from "next/navigation";
 import Intro from "/components/country/Intro";
 import Header from "/components/country/Header";
 import PeopleRanking from "/components/country/sections/PeopleRanking";
@@ -88,31 +89,49 @@ async function getOccupations() {
 }
 
 async function getCountry(countryId) {
+  if (!countryId) {
+    return {};
+  }
   const url = `${BASE_API}/country?slug=eq.${countryId}`;
   return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
 }
 
 async function getCountryRanks(countryRankLow, countryRankHigh) {
+  if (!Number.isFinite(Number(countryRankLow)) || !Number.isFinite(Number(countryRankHigh))) {
+    return [];
+  }
   const url = `${BASE_API}/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleBornHere(countryId) {
+  if (!countryId) {
+    return [];
+  }
   const url = `${BASE_API}/person?bplace_country=eq.${countryId}&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleBornHereHpi(countryId) {
+  if (!countryId) {
+    return [];
+  }
   const url = `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedHere(countryId) {
+  if (!countryId) {
+    return [];
+  }
   const url = `${BASE_API}/person?dplace_country=eq.${countryId}&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleDiedHereHpi(countryId) {
+  if (!countryId) {
+    return [];
+  }
   const url = `${BASE_API}/person_ranks?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
@@ -196,6 +215,10 @@ export default async function Page({params: {id}}) {
     getCountry(id),
     getOccupations(),
   ]);
+
+  if (!country?.id || !country?.country) {
+    notFound();
+  }
 
   const [wikiSummary, wikiPageViewsData] = await Promise.all([
     getWikiSummary(country.country),

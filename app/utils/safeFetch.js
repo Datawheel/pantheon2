@@ -13,8 +13,8 @@ function logInvalidQueryOnce(url) {
 }
 
 export async function safeFetchJson(url, options = {}, fallback = null) {
-  // Guard against accidentally constructed filters like gte.NaN / lte.NaN.
-  if (/(?:eq|gte|lte|gt|lt)\.NaN\b/.test(url)) {
+  // Guard against accidentally constructed filters like gte.NaN / eq.undefined.
+  if (/(?:eq|gte|lte|gt|lt)\.(?:NaN|undefined)\b/.test(url)) {
     logInvalidQueryOnce(url);
     return fallback;
   }
