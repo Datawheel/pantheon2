@@ -13,25 +13,33 @@ import PersonImage from "../utils/PersonImage";
 import "../../components/common/Footer.css";
 import "tippy.js/dist/tippy.css"; // optional
 
+const baseUrl = process.env.URL || "https://pantheon.world";
+
 const PERSON_FALLBACK = "https://static.pantheon.world/icons/icon-person.svg";
 
 async function getWikiRelatedPeople(personSlug) {
   try {
     const res = await fetch(
-      `https://pantheon.world/api/wikiRelated?slug=${personSlug}`
+      `${baseUrl}/api/wikiRelated?slug=${personSlug}&mode=morelike&limit=20`,
     );
     if (!res.ok) {
-      console.error(`[getWikiRelatedPeople] HTTP ${res.status} for: ${personSlug}`);
+      console.error(
+        `[getWikiRelatedPeople] HTTP ${res.status} for: ${personSlug}`,
+      );
       return [];
     }
     const text = await res.text();
     if (text.startsWith("<")) {
-      console.error(`[getWikiRelatedPeople] Got HTML instead of JSON for: ${personSlug}`);
+      console.error(
+        `[getWikiRelatedPeople] Got HTML instead of JSON for: ${personSlug}`,
+      );
       return [];
     }
     return JSON.parse(text);
   } catch (e) {
-    console.error(`[getWikiRelatedPeople] Error for ${personSlug}: ${e.message}`);
+    console.error(
+      `[getWikiRelatedPeople] Error for ${personSlug}: ${e.message}`,
+    );
     return [];
   }
 }
@@ -39,11 +47,11 @@ async function getWikiRelatedPeople(personSlug) {
 async function getOccupationRankings(
   occupationId,
   occupationRankLow,
-  occupationRankHigh
+  occupationRankHigh,
 ) {
   try {
     const res = await fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`
+      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`,
     );
     if (!res.ok) {
       console.error(`[getOccupationRankings] HTTP ${res.status}`);
@@ -72,16 +80,16 @@ export default async function Footer({person, personRanks}) {
   const wikiRelatedPeople = await getWikiRelatedPeople(person.slug);
   const occupationRankLow = Math.max(
     1,
-    parseInt(personRanks.occupation_rank_unique, 10) - NUM_RANKINGS_PRE
+    parseInt(personRanks.occupation_rank_unique, 10) - NUM_RANKINGS_PRE,
   );
   const occupationRankHigh = Math.max(
     NUM_RANKINGS,
-    parseInt(personRanks.occupation_rank_unique, 10) + NUM_RANKINGS_POST
+    parseInt(personRanks.occupation_rank_unique, 10) + NUM_RANKINGS_POST,
   );
   const occupationRankings = await getOccupationRankings(
     person.occupation.id,
     occupationRankLow,
-    occupationRankHigh
+    occupationRankHigh,
   );
 
   const me = occupationRankings.findIndex(rank => rank.slug === person.slug);

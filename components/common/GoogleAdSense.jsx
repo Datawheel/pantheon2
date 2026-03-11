@@ -12,11 +12,15 @@ const GoogleAdSense = ({
 }) => {
   const adRef = useRef(null);
 
+  const pushed = useRef(false);
+
   useEffect(() => {
     if (
       adRef.current &&
+      !pushed.current &&
       !adRef.current.hasAttribute("data-adsbygoogle-status")
     ) {
+      pushed.current = true;
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       } catch (err) {

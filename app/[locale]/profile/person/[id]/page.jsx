@@ -264,12 +264,12 @@ export default async function Page(props) {
   // const tweetsData = getTweets(person.id);
 
   let movies = [];
-  if (["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)) {
+  if (person.occupation && ["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)) {
     movies = await getMovies(person.id);
   }
 
   let books = [];
-  if (["WRITER"].includes(person.occupation.id)) {
+  if (person.occupation && ["WRITER"].includes(person.occupation.id)) {
     books = await getBooks(person.id);
   }
 
@@ -297,7 +297,7 @@ export default async function Page(props) {
       content: <PageViewsByLang person={localizedPerson} />,
     },
     {
-      title: `Among ${plural(localizedOccupation)}`,
+      title: `Among ${plural(localizedOccupation || "People")}`,
       slug: "occupation_peers",
       content: (
         <OccupationRanking person={localizedPerson} personRanks={personRanks} />
@@ -318,7 +318,7 @@ export default async function Page(props) {
       ),
     },
     {
-      title: `Among ${plural(localizedOccupation)} In ${localizedCountry}`,
+      title: `Among ${plural(localizedOccupation || "People")} In ${localizedCountry}`,
       slug: "country_occupation_peers",
       content: (
         <CountryOccupationRanking
@@ -334,7 +334,7 @@ export default async function Page(props) {
     // },
     {
       title:
-        person.occupation.id === "FILM DIRECTOR"
+        person.occupation?.id === "FILM DIRECTOR"
           ? "Filmography"
           : "Television and Movie Roles",
       slug: "movies",

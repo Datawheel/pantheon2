@@ -114,7 +114,7 @@ export const translations = {
         }
         sentence += ". ";
 
-        sentence += `${name} is the ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} most popular <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        sentence += `${name} is the ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} most popular <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a>`;
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           sentence += ` (${occupationRank < occupationRankPrev ? "up" : "down"} from ${formatOrdinal(occupationRankPrev)} in 2024)`;
         }
@@ -433,7 +433,7 @@ export const translations = {
 
         // Use "ocupa el puesto X" or "se sitúa en el puesto X" - no ordinals
         const firstPhrase = occupationRank === 1 ? "ocupa el primer puesto" : `ocupa el puesto ${occupationRank.toLocaleString('es')}`;
-        sentence += `${name} ${firstPhrase} entre los <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> más populares`;
+        sentence += `${name} ${firstPhrase} entre los <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a> más populares`;
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           const change = occupationRank < occupationRankPrev ? "subió del puesto" : "bajó del puesto";
           sentence += ` (${change} ${occupationRankPrev.toLocaleString('es')} en 2024)`;
@@ -451,7 +451,7 @@ export const translations = {
             const finalPhrase = bplaceCountryOccupationRank === 1 ? "el primer puesto" : `el puesto ${bplaceCountryOccupationRank.toLocaleString('es')}`;
             // Use nationality adjective for cleaner Spanish
             const nationalitySuffix = nationalityAdj || demonym;
-            sentence += ` y ${finalPhrase} entre los <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${nationalitySuffix.toLowerCase()}</a> más populares`;
+            sentence += ` y ${finalPhrase} entre los <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} ${nationalitySuffix.toLowerCase()}</a> más populares`;
           }
         }
 
@@ -752,9 +752,9 @@ export const translations = {
 
         // First clause: occupation ranking
         if (occupationRank === 1) {
-          sentence += `${name} est ${article} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> ${plusPopulaire}`;
+          sentence += `${name} est ${article} <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a> ${plusPopulaire}`;
         } else {
-          sentence += `${name} est ${article} ${formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> ${plusPopulaire}`;
+          sentence += `${name} est ${article} ${formatOrdinal(occupationRank)} <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a> ${plusPopulaire}`;
         }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           sentence += ` (${occupationRank < occupationRankPrev ? "en hausse" : "en baisse"} du ${formatOrdinal(occupationRankPrev)} en 2024)`;
@@ -777,9 +777,9 @@ export const translations = {
           // Third clause: occupation + country ranking
           if (bplaceCountryOccupationRank) {
             if (bplaceCountryOccupationRank === 1) {
-              sentence += `, ainsi que ${article} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${countryPrep}</a> ${plusPopulaire}`;
+              sentence += `, ainsi que ${article} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} ${countryPrep}</a> ${plusPopulaire}`;
             } else {
-              sentence += `, ainsi que ${article} ${formatOrdinal(bplaceCountryOccupationRank)} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${countryPrep}</a> ${plusPopulaire}`;
+              sentence += `, ainsi que ${article} ${formatOrdinal(bplaceCountryOccupationRank)} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} ${countryPrep}</a> ${plusPopulaire}`;
             }
           }
         }
@@ -1396,9 +1396,9 @@ export const translations = {
 
         // First clause: occupation ranking - use "занимает X-е место среди..." structure
         if (occupationRank === 1) {
-          sentence += `${name} занимает 1-е место среди самых популярных <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+          sentence += `${name} занимает 1-е место среди самых популярных <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a>`;
         } else {
-          sentence += `${name} занимает ${russianOrdinal(occupationRank)} место среди самых популярных <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+          sentence += `${name} занимает ${russianOrdinal(occupationRank)} место среди самых популярных <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a>`;
         }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           sentence += ` (${occupationRank < occupationRankPrev ? "рост" : "снижение"} с ${russianOrdinal(occupationRankPrev)} места в 2024 году)`;
@@ -1421,9 +1421,9 @@ export const translations = {
           // Third clause: occupation + country ranking - proper Russian word order
           if (bplaceCountryOccupationRank) {
             if (bplaceCountryOccupationRank === 1) {
-              sentence += ` и занимает 1-е место среди <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${country}</a>`;
+              sentence += ` и занимает 1-е место среди <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} ${country}</a>`;
             } else {
-              sentence += ` и занимает ${russianOrdinal(bplaceCountryOccupationRank)} место среди <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${country}</a>`;
+              sentence += ` и занимает ${russianOrdinal(bplaceCountryOccupationRank)} место среди <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} ${country}</a>`;
             }
           }
         }
@@ -2681,10 +2681,10 @@ export const translations = {
 
         // First clause: occupation ranking
         if (occupationRank === 1) {
-          sentence += `${name} è ${article} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> più ${gender === "F" ? "popolare" : "popolare"}`;
+          sentence += `${name} è ${article} <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a> più ${gender === "F" ? "popolare" : "popolare"}`;
         } else {
           const rankStr = italianOrdinal(occupationRank, gender === "F");
-          sentence += `${name} è ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> più ${gender === "F" ? "popolare" : "popolare"}`;
+          sentence += `${name} è ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a> più ${gender === "F" ? "popolare" : "popolare"}`;
         }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           const prevRankStr = italianOrdinal(occupationRankPrev, gender === "F");
@@ -2709,10 +2709,10 @@ export const translations = {
           // Third clause: occupation + country ranking - correct word order
           if (bplaceCountryOccupationRank) {
             if (bplaceCountryOccupationRank === 1) {
-              sentence += ` e ${article} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} più ${gender === "F" ? "popolare" : "popolare"} ${countryPrep}${country}</a>`;
+              sentence += ` e ${article} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} più ${gender === "F" ? "popolare" : "popolare"} ${countryPrep}${country}</a>`;
             } else {
               const rankStr = italianOrdinal(bplaceCountryOccupationRank, gender === "F");
-              sentence += ` e ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} più ${gender === "F" ? "popolare" : "popolare"} ${countryPrep}${country}</a>`;
+              sentence += ` e ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} più ${gender === "F" ? "popolare" : "popolare"} ${countryPrep}${country}</a>`;
             }
           }
         }
@@ -3019,10 +3019,10 @@ export const translations = {
 
         // First clause: occupation ranking
         if (occupationRank === 1) {
-          sentence += `${name} é ${article} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> mais ${gender === "F" ? "popular" : "popular"}`;
+          sentence += `${name} é ${article} <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a> mais ${gender === "F" ? "popular" : "popular"}`;
         } else {
           const rankStr = portugueseOrdinal(occupationRank, gender === "F");
-          sentence += `${name} é ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a> mais ${gender === "F" ? "popular" : "popular"}`;
+          sentence += `${name} é ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a> mais ${gender === "F" ? "popular" : "popular"}`;
         }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           const prevRankStr = portugueseOrdinal(occupationRankPrev, gender === "F");
@@ -3048,10 +3048,10 @@ export const translations = {
           // Third clause: occupation + country ranking - correct word order
           if (bplaceCountryOccupationRank) {
             if (bplaceCountryOccupationRank === 1) {
-              sentence += ` e ${article} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} mais ${gender === "F" ? "popular" : "popular"} ${countryPrep}</a>`;
+              sentence += ` e ${article} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} mais ${gender === "F" ? "popular" : "popular"} ${countryPrep}</a>`;
             } else {
               const rankStr = portugueseOrdinal(bplaceCountryOccupationRank, gender === "F");
-              sentence += ` e ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} mais ${gender === "F" ? "popular" : "popular"} ${countryPrep}</a>`;
+              sentence += ` e ${article} ${rankStr} <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} mais ${gender === "F" ? "popular" : "popular"} ${countryPrep}</a>`;
             }
           }
         }
@@ -3328,7 +3328,7 @@ export const translations = {
         }
         sentence += ". ";
 
-        sentence += `${name} a ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} legnépszerűbb <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        sentence += `${name} a ${occupationRank === 1 ? "" : formatOrdinal(occupationRank)} legnépszerűbb <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a>`;
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           sentence += ` (${occupationRank < occupationRankPrev ? "növekedés" : "csökkenés"} a ${formatOrdinal(occupationRankPrev)}-ről 2024-ben)`;
         }
@@ -3340,7 +3340,7 @@ export const translations = {
           }
 
           if (bplaceCountryOccupationRank) {
-            sentence += ` és a ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} legnépszerűbb <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation.toLowerCase()}</a>`;
+            sentence += ` és a ${bplaceCountryOccupationRank !== 1 ? formatOrdinal(bplaceCountryOccupationRank) : ""} legnépszerűbb <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${demonym} ${occupation?.toLowerCase() ?? ""}</a>`;
           }
         }
 
@@ -3639,7 +3639,7 @@ export const translations = {
         // NOTE: occupation should be in PLURAL form in the database for Dutch
         const rankStr = occupationRank === 1 ? "eerste" : occupationRank.toLocaleString('nl');
         const placePhrase = occupationRank === 1 ? "de eerste plaats" : `plaats ${rankStr}`;
-        sentence += `${name} staat op ${placePhrase} onder de meest populaire <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+        sentence += `${name} staat op ${placePhrase} onder de meest populaire <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a>`;
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           const prevStr = occupationRankPrev.toLocaleString('nl');
           sentence += ` (${occupationRank < occupationRankPrev ? "gestegen" : "gedaald"} van plaats ${prevStr} in 2024)`;
@@ -3658,7 +3658,7 @@ export const translations = {
             const finalRankStr = bplaceCountryOccupationRank === 1 ? "eerste" : bplaceCountryOccupationRank.toLocaleString('nl');
             const finalPlacePhrase = bplaceCountryOccupationRank === 1 ? "de eerste plaats" : `plaats ${finalRankStr}`;
             // Dutch word order: "op [plaats] onder de populairste [occupation] uit [country]"
-            sentence += ` en op ${finalPlacePhrase} onder de populairste <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} uit ${country}</a>`;
+            sentence += ` en op ${finalPlacePhrase} onder de populairste <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} uit ${country}</a>`;
           }
         }
 
@@ -3963,9 +3963,9 @@ export const translations = {
         // First clause: occupation ranking
         // NOTE: occupation should be in INSTRUMENTAL case in database for Polish (e.g., "filozofem" not "filozof")
         if (occupationRank === 1) {
-          sentence += `${name} jest najpopularniejszym <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+          sentence += `${name} jest najpopularniejszym <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a>`;
         } else {
-          sentence += `${name} jest ${polishOrdinal(occupationRank)} najpopularniejszym <a href="/profile/occupation/${occupationSlug}">${occupation.toLowerCase()}</a>`;
+          sentence += `${name} jest ${polishOrdinal(occupationRank)} najpopularniejszym <a href="/profile/occupation/${occupationSlug}">${occupation?.toLowerCase() ?? ""}</a>`;
         }
         if (occupationRankPrev && occupationRankPrev !== occupationRank) {
           sentence += ` (${occupationRank < occupationRankPrev ? "wzrost" : "spadek"} z ${polishOrdinal(occupationRankPrev)} w 2024 roku)`;
@@ -3987,9 +3987,9 @@ export const translations = {
           // Correct Polish word order: "X. najpopularniejszym filozofem Grecji"
           if (bplaceCountryOccupationRank) {
             if (bplaceCountryOccupationRank === 1) {
-              sentence += ` oraz najpopularniejszym <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${country}</a>`;
+              sentence += ` oraz najpopularniejszym <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} ${country}</a>`;
             } else {
-              sentence += ` oraz ${polishOrdinal(bplaceCountryOccupationRank)} najpopularniejszym <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation.toLowerCase()} ${country}</a>`;
+              sentence += ` oraz ${polishOrdinal(bplaceCountryOccupationRank)} najpopularniejszym <a href="/profile/occupation/${occupationSlug}/country/${countrySlug}">${occupation?.toLowerCase() ?? ""} ${country}</a>`;
             }
           }
         }
