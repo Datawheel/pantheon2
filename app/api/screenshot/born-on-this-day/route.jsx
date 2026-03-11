@@ -8,7 +8,11 @@ export async function GET(request) {
   const date = searchParams.get("date");
   const locale = searchParams.get("locale") || "en";
   try {
-    return await getBornOnThisDayImageResponse({date, locale});
+    return await getBornOnThisDayImageResponse({
+      date,
+      locale,
+      requestUrl: request.url,
+    });
   } catch (error) {
     console.error(
       "[screenshot-fail]",

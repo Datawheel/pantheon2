@@ -30,6 +30,17 @@ async function fetchPersonImage(id) {
   }
 }
 
+async function fetchPublicAsset(request, assetPath) {
+  const assetUrl = new URL(assetPath, request.url);
+  const response = await fetch(assetUrl);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch asset ${assetPath}: ${response.status}`);
+  }
+
+  return response.arrayBuffer();
+}
+
 export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
@@ -40,9 +51,10 @@ export async function GET(request) {
   }
 
   // Load font
-  const MarcellusfontData = await fetch(
-    new URL("../../../../public/fonts/Marcellus-Regular.ttf", import.meta.url)
-  ).then(res => res.arrayBuffer());
+  const MarcellusfontData = await fetchPublicAsset(
+    request,
+    "/fonts/Marcellus-Regular.ttf"
+  );
 
   // Fetch place data
   const placeRes = await fetch(`${BASE_API}/place?slug=eq.${id}`);

@@ -116,7 +116,22 @@ async function fetchPersonImage(id) {
   }
 }
 
-export async function getBornOnThisDayImageResponse({date, locale = "en"}) {
+async function fetchPublicAsset(requestUrl, assetPath) {
+  const assetUrl = new URL(assetPath, requestUrl);
+  const response = await fetch(assetUrl);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch asset ${assetPath}: ${response.status}`);
+  }
+
+  return response.arrayBuffer();
+}
+
+export async function getBornOnThisDayImageResponse({
+  date,
+  locale = "en",
+  requestUrl,
+}) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
 
   if (!date) {
@@ -137,9 +152,14 @@ export async function getBornOnThisDayImageResponse({date, locale = "en"}) {
   }
 
   // Load font
-  const MarcellusfontData = await fetch(
-    new URL("../../../../public/fonts/Marcellus-Regular.ttf", import.meta.url)
-  ).then(res => res.arrayBuffer());
+  if (!requestUrl) {
+    return new NextResponse("Request URL required", {status: 500});
+  }
+
+  const MarcellusfontData = await fetchPublicAsset(
+    requestUrl,
+    "/fonts/Marcellus-Regular.ttf"
+  );
 
   // Fetch people born on this day
   const peopleBornOnDay = await fetch(

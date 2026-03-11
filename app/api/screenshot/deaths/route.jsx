@@ -3,6 +3,17 @@ import {NextResponse} from "next/server";
 
 export const runtime = "edge";
 
+async function fetchPublicAsset(request, assetPath) {
+  const assetUrl = new URL(assetPath, request.url);
+  const response = await fetch(assetUrl);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch asset ${assetPath}: ${response.status}`);
+  }
+
+  return response.arrayBuffer();
+}
+
 async function fetchPersonImage(id) {
   try {
     const response = await fetch(
@@ -41,13 +52,10 @@ export async function GET(request) {
   }
 
   // Load fonts and images
-  const MarcellusfontData = await fetch(
-    new URL("../../../../public/fonts/Marcellus-Regular.ttf", import.meta.url)
-  ).then(res => res.arrayBuffer());
-
-  const wreathImageBuffer = await fetch(
-    new URL("../../../../public/images/misc/wreath.png", import.meta.url)
-  ).then(res => res.arrayBuffer());
+  const [MarcellusfontData, wreathImageBuffer] = await Promise.all([
+    fetchPublicAsset(request, "/fonts/Marcellus-Regular.ttf"),
+    fetchPublicAsset(request, "/images/misc/wreath.png"),
+  ]);
 
   // Convert wreath image to base64 data URL
   const wreathBase64 = Buffer.from(wreathImageBuffer).toString("base64");
