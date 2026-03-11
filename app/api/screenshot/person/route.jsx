@@ -49,28 +49,38 @@ const DOMAIN_COLOR_ALIASES = {
 };
 
 async function fetchPersonImage(id) {
+  const imageUrl = `https://static.pantheon.world/profile/people/${id}.jpg`;
+
   try {
-    const response = await fetch(
-      `https://static.pantheon.world/profile/people/${id}.jpg`,
-    );
+    const response = await fetch(imageUrl);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      // Missing portraits are common; silently fall back to initials/avatar rendering.
+      if (response.status === 404) {
+        return null;
+      }
+
+      console.error(
+        "[screenshot-image-fetch]",
+        {route: "person", id, status: response.status, imageUrl},
+      );
+      return null;
     }
 
     const imageData = await response.arrayBuffer();
 
     if (imageData.byteLength === 0) {
-      // The image data is empty
-      console.log("The image file is empty.");
-      return null; // or handle as appropriate
-    } else {
-      // The image data is not empty, proceed with your logic
-      return imageData;
+      return null;
     }
+
+    return imageData;
   } catch (error) {
-    console.error("Fetching image failed:", error);
-    return null; // or handle the error as appropriate
+    console.error(
+      "[screenshot-image-fetch]",
+      {route: "person", id, imageUrl},
+      error,
+    );
+    return null;
   }
 }
 
