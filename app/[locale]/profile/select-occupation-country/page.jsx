@@ -26,6 +26,12 @@ async function getAllCombinations(lang) {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
+async function getTopOccupationsByRca(lang) {
+  // Fetch top 5 occupations per country ranked by RCA (revealed comparative advantage)
+  const url = `${BASE_API}/rpc/top_occupations_by_rca_per_country?p_limit=5`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+}
+
 async function getTrendingPages(lang = "en") {
   // Fetch top 16 trending occupation-country pages from trend_gsc table
   // Only include entries from the last 7 days
@@ -71,11 +77,12 @@ export default async function Page(props) {
   const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
   const t = getTranslations(locale);
 
-  const [occupationsRaw, countriesRaw, allCombinations, trendingPagesRaw] = await Promise.all([
+  const [occupationsRaw, countriesRaw, allCombinations, trendingPagesRaw, rcaOccupations] = await Promise.all([
     getOccupations(locale),
     getCountries(locale),
     getAllCombinations(locale),
     getTrendingPages(locale),
+    getTopOccupationsByRca(locale),
   ]);
 
   // Localize occupations
@@ -91,32 +98,39 @@ export default async function Page(props) {
     demonym: country[`${locale}_demonym`] || country.demonym,
   })).filter(c => c.continent);
 
-  // Process all combinations and group by country
+  // Build a lookup for localized country/demonym names from the countries list
+  const countryLookup = {};
+  countries.forEach(c => {
+    countryLookup[c.slug] = {country: c.country, demonym: c.demonym};
+  });
+
+  // Build a lookup for localized occupation names from the occupations list
+  const occupationLookup = {};
+  occupations.forEach(o => {
+    occupationLookup[o.occupation_slug] = o.occupation;
+  });
+
+  // Group RCA-ranked occupations by country (already limited to top 5 and ordered by RCA)
   const combinationsByCountry = {};
-  allCombinations.forEach(combo => {
-    const countrySlug = combo.country_data?.slug;
+  rcaOccupations.forEach(row => {
+    const countrySlug = row.country_slug;
     if (!countrySlug) return;
 
     if (!combinationsByCountry[countrySlug]) {
+      const localized = countryLookup[countrySlug];
       combinationsByCountry[countrySlug] = {
-        country: combo.country_data?.[`${locale}_country`] || combo.country_data?.country,
+        country: localized?.country || row.country,
         countrySlug,
-        demonym: combo.country_data?.[`${locale}_demonym`] || combo.country_data?.demonym,
+        demonym: localized?.demonym || "",
         occupations: [],
       };
     }
 
     combinationsByCountry[countrySlug].occupations.push({
-      occupation: combo.occupation_data?.[`${locale}_occupation`] || combo.occupation_data?.occupation,
-      occupationSlug: combo.occupation_data?.occupation_slug,
-      numPeople: combo.num_people,
+      occupation: occupationLookup[row.occupation_slug] || row.occupation,
+      occupationSlug: row.occupation_slug,
+      numPeople: row.num_people,
     });
-  });
-
-  // Sort occupations within each country by num_people and take top 5
-  Object.values(combinationsByCountry).forEach(country => {
-    country.occupations.sort((a, b) => b.numPeople - a.numPeople);
-    country.occupations = country.occupations.slice(0, 5);
   });
 
   // Group countries by first letter (alphabetically)
