@@ -220,6 +220,8 @@ export const translations = {
       selectDate: "Select a different date",
       references: "References:",
       noData: "No trending data available for this date.",
+      previousDay: "Previous Day",
+      nextDay: "Next Day",
       unknown: "Unknown",
     },
     trending: {
@@ -534,6 +536,8 @@ export const translations = {
       selectDate: "Seleccione una fecha diferente",
       references: "Referencias:",
       noData: "No hay datos de tendencias disponibles para esta fecha.",
+      previousDay: "Día Anterior",
+      nextDay: "Día Siguiente",
       unknown: "Desconocido",
     },
     trending: {
@@ -862,6 +866,8 @@ export const translations = {
       selectDate: "Sélectionner une date différente",
       references: "Références:",
       noData: "Aucune donnée de tendance disponible pour cette date.",
+      previousDay: "Jour Précédent",
+      nextDay: "Jour Suivant",
       unknown: "Inconnu",
     },
     trending: {
@@ -1169,6 +1175,8 @@ export const translations = {
       selectDate: "Wählen Sie ein anderes Datum",
       references: "Referenzen:",
       noData: "Keine Trenddaten für dieses Datum verfügbar.",
+      previousDay: "Vorheriger Tag",
+      nextDay: "Nächster Tag",
       unknown: "Unbekannt",
     },
     trending: {
@@ -1502,6 +1510,8 @@ export const translations = {
       selectDate: "Выберите другую дату",
       references: "Ссылки:",
       noData: "Нет данных о трендах для этой даты.",
+      previousDay: "Предыдущий День",
+      nextDay: "Следующий День",
       unknown: "Неизвестно",
     },
     trending: {
@@ -1812,6 +1822,8 @@ export const translations = {
       selectDate: "选择其他日期",
       references: "参考资料：",
       noData: "此日期无趋势数据。",
+      previousDay: "前一天",
+      nextDay: "后一天",
       unknown: "未知",
     },
     trending: {
@@ -2129,6 +2141,8 @@ export const translations = {
       selectDate: "別の日付を選択",
       references: "参考文献：",
       noData: "この日付の トレンドデータはありません。",
+      previousDay: "前日",
+      nextDay: "翌日",
       unknown: "不明",
     },
     trending: {
@@ -2436,6 +2450,8 @@ export const translations = {
       selectDate: "اختر تاريخًا مختلفًا",
       references: "المراجع:",
       noData: "لا تتوفر بيانات الاتجاهات لهذا التاريخ.",
+      previousDay: "اليوم السابق",
+      nextDay: "اليوم التالي",
       unknown: "غير معروف",
     },
     trending: {
@@ -2783,6 +2799,8 @@ export const translations = {
       selectDate: "Seleziona una data diversa",
       references: "Riferimenti:",
       noData: "Nessun dato di tendenza disponibile per questa data.",
+      previousDay: "Giorno Precedente",
+      nextDay: "Giorno Successivo",
       unknown: "Sconosciuto",
     },
     trending: {
@@ -3119,6 +3137,8 @@ export const translations = {
       selectDate: "Selecione uma data diferente",
       references: "Referências:",
       noData: "Nenhum dado de tendência disponível para esta data.",
+      previousDay: "Dia Anterior",
+      nextDay: "Dia Seguinte",
       unknown: "Desconhecido",
     },
     trending: {
@@ -3405,6 +3425,8 @@ export const translations = {
       selectDate: "Válasszon más dátumot",
       references: "Hivatkozások:",
       noData: "Nincs elérhető trendinformáció ehhez a dátumhoz.",
+      previousDay: "Előző Nap",
+      nextDay: "Következő Nap",
       unknown: "Ismeretlen",
     },
     trending: {
@@ -3722,6 +3744,8 @@ export const translations = {
       selectDate: "Selecteer een andere datum",
       references: "Referenties:",
       noData: "Geen trendgegevens beschikbaar voor deze datum.",
+      previousDay: "Vorige Dag",
+      nextDay: "Volgende Dag",
       unknown: "Onbekend",
     },
     trending: {
@@ -4052,6 +4076,8 @@ export const translations = {
       selectDate: "Wybierz inną datę",
       references: "Odniesienia:",
       noData: "Brak danych o trendach dla tej daty.",
+      previousDay: "Poprzedni Dzień",
+      nextDay: "Następny Dzień",
       unknown: "Nieznany",
     },
     trending: {
