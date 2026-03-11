@@ -40,12 +40,27 @@ async function getDeathYearRankings(
   deathYearRankLow,
   deathYearRankHigh
 ) {
+  // Living people (or incomplete data) have no death-year cohort to rank against.
+  if (
+    deathyear === null ||
+    deathyear === undefined ||
+    deathyear === "" ||
+    !Number.isFinite(Number(deathyear)) ||
+    !Number.isFinite(Number(deathYearRankLow)) ||
+    !Number.isFinite(Number(deathYearRankHigh))
+  ) {
+    return [];
+  }
+
   try {
     const res = await fetch(
       `${BASE_API}/person_ranks?deathyear=eq.${deathyear}&deathyear_rank_unique=gte.${deathYearRankLow}&deathyear_rank_unique=lte.${deathYearRankHigh}&order=deathyear_rank_unique&select=occupation,dplace_country,hpi,deathyear_rank,deathyear_rank_unique,slug,gender,name,id,deathyear,birthyear`
     );
     if (!res.ok) {
-      console.error(`[getDeathYearRankings] HTTP ${res.status}`);
+      // 400 is expected for some edge cases (e.g. stale/partial rankings), treat as no data.
+      if (res.status !== 400) {
+        console.error(`[getDeathYearRankings] HTTP ${res.status}`);
+      }
       return [];
     }
     const text = await res.text();
@@ -79,23 +94,27 @@ export default async function YearRanking({person, personRanks, title, slug}) {
     birthYearRankHigh
   );
   // Calculate min/max for deathyear peers
-  const deathYearRankLow = personRanks.deathyear_rank_unique
+  const hasDeathYearRanking =
+    person.deathyear !== null &&
+    person.deathyear !== undefined &&
+    person.deathyear !== "" &&
+    personRanks.deathyear_rank_unique;
+
+  const deathYearRankLow = hasDeathYearRanking
     ? Math.max(
         1,
         parseInt(personRanks.deathyear_rank_unique, 10) - NUM_RANKINGS_PRE
       )
-    : "9999";
-  const deathYearRankHigh = personRanks.deathyear_rank_unique
+    : null;
+  const deathYearRankHigh = hasDeathYearRanking
     ? Math.max(
         NUM_RANKINGS,
         parseInt(personRanks.deathyear_rank_unique, 10) + NUM_RANKINGS_POST
       )
-    : "9999";
-  const deathYearRankingsData = getDeathYearRankings(
-    person.deathyear,
-    deathYearRankLow,
-    deathYearRankHigh
-  );
+    : null;
+  const deathYearRankingsData = hasDeathYearRanking
+    ? getDeathYearRankings(person.deathyear, deathYearRankLow, deathYearRankHigh)
+    : Promise.resolve([]);
 
   const [birthYearRanking, deathYearRanking] = await Promise.all([
     birthYearRankingsData,
@@ -231,7 +250,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
           <strong>{FORMATTERS.commas(meBy.birthyear_rank)}</strong>.&nbsp;
           {betterBirthPeers}
           {worseBirthPeers}
-          {deathYearRanking.length ? (
+          {deathYearRanking.length && meDy ? (
             <span>
               &nbsp;Among people deceased in {FORMATTERS.year(person.deathyear)}
               , {person.name} ranks <strong>{meDy.deathyear_rank}</strong>
@@ -255,7 +274,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
           rankAccessor="birthyear_rank_unique"
           showOccupation={true}
         />
-        {deathYearRanking.length ? (
+        {deathYearRanking.length && meDy ? (
           <div className="rank-sec-body">
             <div className="rank-title">
               <h3>Others Deceased in {FORMATTERS.year(person.deathyear)}</h3>
