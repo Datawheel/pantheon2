@@ -220,10 +220,13 @@ export default async function Page({params: {id}}) {
     notFound();
   }
 
-  const [wikiSummary, wikiPageViewsData] = await Promise.all([
-    getWikiSummary(country.country),
-    getWikiPageViews(country.country),
-  ]);
+  // TODO: re-enable once Wikipedia stops 429ing us
+  // const [wikiSummary, wikiPageViewsData] = await Promise.all([
+  //   getWikiSummary(country.country),
+  //   getWikiPageViews(country.country),
+  // ]);
+  const wikiSummary = null;
+  const wikiPageViewsData = [];
 
   const countryRankWindow = getRankWindow(country?.born_rank_unique);
   const countryRanks = countryRankWindow
