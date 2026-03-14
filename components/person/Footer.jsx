@@ -17,29 +17,34 @@ const baseUrl = process.env.URL || "https://pantheon.world";
 
 const PERSON_FALLBACK = "https://static.pantheon.world/icons/icon-person.svg";
 
-async function getWikiRelatedPeople(personSlug) {
+async function getWikiRelatedPeople(personId) {
   try {
-    const res = await fetch(
-      `${baseUrl}/api/wikiRelated?slug=${personSlug}&mode=morelike&limit=20`,
+    const relRes = await fetch(
+      `${BASE_API}/person_related?person_id=eq.${personId}&order=score.asc&limit=20`,
     );
-    if (!res.ok) {
-      console.error(
-        `[getWikiRelatedPeople] HTTP ${res.status} for: ${personSlug}`,
-      );
+    if (!relRes.ok) {
+      console.error(`[getWikiRelatedPeople] HTTP ${relRes.status} for id: ${personId}`);
       return [];
     }
-    const text = await res.text();
-    if (text.startsWith("<")) {
-      console.error(
-        `[getWikiRelatedPeople] Got HTML instead of JSON for: ${personSlug}`,
-      );
+    const related = await relRes.json();
+    if (!related.length) return [];
+
+    const idQuery = related.map(r => `id.eq.${r.related_id}`).join(",");
+    const peopleRes = await fetch(
+      `${BASE_API}/person?or=(${idQuery})&select=id,birthyear,name,slug,occupation`,
+    );
+    if (!peopleRes.ok) {
+      console.error(`[getWikiRelatedPeople] Pantheon people HTTP ${peopleRes.status} for id: ${personId}`);
       return [];
     }
-    return JSON.parse(text);
+    const people = await peopleRes.json();
+
+    const scoreOrder = new Map(related.map(r => [`${r.related_id}`, r.score]));
+    return people
+      .map(p => ({...p, description: p.occupation?.occupation_name || ""}))
+      .sort((a, b) => (scoreOrder.get(`${a.id}`) ?? 999) - (scoreOrder.get(`${b.id}`) ?? 999));
   } catch (e) {
-    console.error(
-      `[getWikiRelatedPeople] Error for ${personSlug}: ${e.message}`,
-    );
+    console.error(`[getWikiRelatedPeople] Error for id ${personId}: ${e.message}`);
     return [];
   }
 }
@@ -77,7 +82,7 @@ export default async function Footer({person, personRanks}) {
   ) {
     return null;
   }
-  const wikiRelatedPeople = await getWikiRelatedPeople(person.slug);
+  const wikiRelatedPeople = await getWikiRelatedPeople(person.id);
   const occupationRankLow = Math.max(
     1,
     parseInt(personRanks.occupation_rank_unique, 10) - NUM_RANKINGS_PRE,
