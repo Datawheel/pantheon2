@@ -1,279 +1,248 @@
-import {redirect} from "next/navigation";
+import Link from "next/link";
+import {REVALIDATE_PERIODS, BASE_API} from "/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
+import {safeFetchJson} from "/app/utils/safeFetch";
+import PersonImage from "/components/utils/PersonImage";
+import HomeSearch from "/components/home/HomeSearch";
+import RandomPersonButton from "/components/person/RandomPersonButton";
+import "/components/person/SelectPerson.css";
 
-async function getTopPeopleHpi() {
-  const res = await fetch(
-    "https://api.pantheon.world/person_hpi?yr=eq.2025&select=person_id,hpi&order=hpi.desc.nullslast&limit=100",
-  );
-  return res.json();
+const PUBLIC_API = process.env.NEXT_PUBLIC_BASE_API || "https://api.pantheon.world";
+const PERSON_FALLBACK = "https://static.pantheon.world/icons/icon-person.svg";
+
+async function getFeaturedPeople() {
+  // Top 24 people by HPI for the hero grid
+  const url = `${PUBLIC_API}/person_ranks?select=id,name,slug,birthyear,deathyear,occupation,gender&order=hpi.desc.nullslast&limit=24`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
-async function getTopPeople(ids) {
-  const res = await fetch(
-    `https://api.pantheon.world/person?id=in.(${ids.join(",")})`,
-  );
-  return res.json();
-}
-
-export default async function Page() {
-  const topPeopleHpi = await getTopPeopleHpi();
-  const topPeople = await getTopPeople(topPeopleHpi.map(p => p.person_id));
-  // random 250 candidates
-  const randomPeople = [
-    "Ernst_von_Weizsäcker",
-    "Ken_Follett",
-    "Mihail_Kogălniceanu",
-    "Isaiah_Thomas_(basketball)",
-    "Oxana_Fedorova",
-    "Joe_Budden",
-    "Ivan_Pyryev",
-    "Hanna_Suchocka",
-    "Olly_Murs",
-    "Maria_von_Trapp",
-    "Jamie_Carragher",
-    "Hans_Krebs_(Wehrmacht_general)",
-    "Sergey_Makarov_(javelin_thrower)",
-    "Henry_Mintzberg",
-    "Aden_Adde",
-    "Minette_Walters",
-    "Anna_Lindh",
-    "Shepseskaf",
-    "Pope_Romanus",
-    "Julius_Fučík_(journalist)",
-    "Eldar_Ryazanov",
-    "Suzanne_Valadon",
-    "Costinha",
-    "Ambrosius_Holbein",
-    "Charlotte_Corday",
-    "Andreja_Klepač",
-    "Yasmina_Reza",
-    "Ruth_Rendell",
-    "Taylor_Momsen",
-    "Alice_of_Antioch",
-    "Peter_Shor",
-    "Stefan_Uroš_V",
-    "Justine_Henin",
-    "Carl_Gustav_Rehnskiöld",
-    "Rhyno",
-    "Robert_Mulligan",
-    "Ferdinand_Ries",
-    "Max_Born",
-    "Eugène_Simon",
-    "Atia_(mother_of_Augustus)",
-    "Marcus_Vipsanius_Agrippa",
-    "Greyson_Chance",
-    "Franz_Meyen",
-    "Kim_Stanley_Robinson",
-    "Marc_Stendera",
-    "Liu_Wen",
-    "John_Abbott",
-    "Jesus",
-    "Edward_G._Robinson",
-    "Richard_Leakey",
-    "William_Morris",
-    "Domenico_Cimarosa",
-    "Moshe_Safdie",
-    "Henri_Mouhot",
-    "Stephen_Wiltshire",
-    "Emile_Griffith",
-    "Vladimir_Kokovtsov",
-    "Jacobus_Kapteyn",
-    "Otto_Neurath",
-    "Tamara_Taylor",
-    "Jean_Girault",
-    "Baasha_of_Israel",
-    "Mauno_Pekkala",
-    "Neferirkare_Kakai",
-    "Louis_Moreau_Gottschalk",
-    "François_Tombalbaye",
-    "Ágnes_Keleti",
-    "Teymuraz_Gabashvili",
-    "Vladislaus_II_of_Hungary",
-    "Theodosius_III",
-    "Sweyn_II_of_Denmark",
-    "Sara_Bareilles",
-    "Patriarch_Alexy_II_of_Moscow",
-    "Edward_Calvin_Kendall",
-    "Bartholomeus_Spranger",
-    "Sam_Snead",
-    "Zakir_Hussain_(musician)",
-    "Nina_Ricci_(designer)",
-    "James_Kottak",
-    "Julie_Andrews",
-    "Shawn_Michaels",
-    "Andrew_Lang",
-    "Thutmose_(sculptor)",
-    "Benedetto_Marcello",
-    "Bobby_Fischer",
-    "Semyon_Chelyuskin",
-    "Ewald_Georg_von_Kleist",
-    "Margo_Martindale",
-    "Michael_III",
-    "Stein_Eriksen",
-    "Alessandro_Marcello",
-    "Winslow_Homer",
-    "Alan_Lloyd_Hodgkin",
-    "Emily_Davison",
-    "Vijender_Singh",
-    "Peter_Lely",
-    "A._E._Waite",
-    "Fritz_Strassmann",
-    "Ana_Blandiana",
-    "Ryōkan",
-    "Jaan_Kross",
-    "Imi_Lichtenfeld",
-    "Martha_Stewart",
-    "Perdiccas_III_of_Macedon",
-    "Leopold_III,_Margrave_of_Austria",
-    "Stephen_Jay_Gould",
-    "Heath_Slater",
-    "Charles_I,_Count_of_Flanders",
-    "Alessio_Cerci",
-    "Friedrich_Mohs",
-    "Vladimir_Arsenyev",
-    "Jóhanna_Guðrún_Jónsdóttir",
-    "William_Golding",
-    "Salah_al-Din_al-Bitar",
-    "Bill_Murray",
-    "Robert_Stack",
-    "Raymond_Burr",
-    "John_of_Rila",
-    "Alain_Mimoun",
-    "Xi_Jinping",
-    "Elsa_Hosk",
-    "Richard_Teichmann",
-    "Ron_Gilbert",
-    "Pasquale_Paoli",
-    "Siw_Malmkvist",
-    "Georg_Trakl",
-    "Michael_Apted",
-    "Gwangjong_of_Goryeo",
-    "Francis_Jammes",
-    "Lars_Eidinger",
-    "Li_Xiaopeng_(gymnast)",
-    "Ana_Belén",
-    "Gunnar_Gren",
-    "Alec_Baldwin",
-    "Neemias_Queta",
-    "Teyana_Taylor",
-    "Richard_Linklater",
-    "Blaž_Kavčič",
-    "Aritatsu_Ogi",
-    "Lyudmila_Gurchenko",
-    "Anky_van_Grunsven",
-    "Max_Euwe",
-    "Alberigo_Evani",
-    "Nigel_Marven",
-    "Philip_IV_of_Macedon",
-    "Pope_Innocent_I",
-    "Emperor_Richū",
-    "Heinrich_Zille",
-    "William_Baffin",
-    "John_II_of_Aragon",
-    "W._Eugene_Smith",
-    "Javier_Echevarría_Rodríguez",
-    "Yogi_Berra",
-    "Thomas_Pynchon",
-    "Abbey_Lee_Kershaw",
-    "Adelaide_of_Löwenstein-Wertheim-Rosenberg",
-    "Tukulti-Ninurta_II",
-    "Félix_Vallotton",
-    "Marcel_Iureș",
-    "Edward_William_Lane",
-    "Jetty_Paerl",
-    "Pehr_Evind_Svinhufvud",
-    "Gianni_Amelio",
-    "Georges_Rouault",
-    "Dorothea_Tanning",
-    "Zhou_Dunyi",
-    "Marcell_Jansen",
-    "Fred_Armisen",
-    "Jon_Montgomery",
-    "Vilfredo_Pareto",
-    "Aldo_van_Eyck",
-    "Thandie_Newton",
-    "Michael_Andreas_Barclay_de_Tolly",
-    "John_Mahoney",
-    "Chris_Gardner",
-    "Alfredo_Casella",
-    "Boris_Vian",
-    "Mitchel_Musso",
-    "Louis_III_of_Anjou",
-    "Maria_Kanellis",
-    "Kostis_Palamas",
-    "Zalman_Shazar",
-    "Gian_Maria_Visconti",
-    "Aung_San_Suu_Kyi",
-    "David_Blaine",
-    "Sviatopolk_II_of_Kiev",
-    "B.J._Penn",
-    "Jean-Luc_Ponty",
-    "David_Chipperfield",
-    "Scott_Brown_(footballer,_born_June_1985)",
-    "Evgeny_Tarelkin",
-    "Paul_Verhoeven",
-    "Franz-Joseph_Müller_von_Reichenstein",
-    "Włodzimierz_Smolarek",
-    "Nicolás_Terol",
-    "Joachim_Trier",
-    "Stanley_Clarke",
-    "Naoko_Mori",
-    "David_Ferrer",
-    "Neferkamin",
-    "M._C._Gainey",
-    "Arthur_Rubinstein",
-    "Khendjer",
-    "Welf_II,_Duke_of_Bavaria",
-    "Nicolas_Poussin",
-    "Lady_Gaga",
-    "Musa_Cälil",
-    "Andrew_Bird",
-    "Agnes_of_Antioch",
-    "Masatoshi_Koshiba",
-    "Fernando_De_Napoli",
-    "Alaina_Huffman",
-    "Ante_Covic",
-    "Ivar_Jacobson",
-    "Nasrallah_Boutros_Sfeir",
-    "Geraldine_Farrar",
-    "Paul_Lafargue",
-    "Owen_Arthur",
-    "Oleg_Bryjak",
-    "Herodias",
-    "Zoran_Janković_(politician)",
-    "J._P._Guilford",
-    "Michael_Foale",
-    "Frederick_Chiluba",
-    "Gaston_Eyskens",
-    "Princess_Augusta_of_Bavaria",
-    "Victor_Amadeus_I,_Duke_of_Savoy",
-    "Margaret_Mahler",
-    "Lee_Chung-yong",
-    "Howard_Jacobson",
-    "Teruyoshi_Ito",
-    "Dick_Francis",
-    "Caro_Emerald",
-    "Marianne_Cope",
-    "Miley_Cyrus",
-    "Sébastien_Loeb",
-    "Howard_Dean",
-    "Margaret_Chan",
-    "Solange_Knowles",
-    "Billie_Eilish",
-    "Godfrey_Gao",
-    "Fred_Rogers",
-    "Princess_Alice_of_Battenberg",
-    "Prince_Philip,_Duke_of_Edinburgh",
-    "Anne,_Princess_Royal",
-    "Rian_Johnson",
-    "Pete_Buttigieg",
-    "Goo_Hara",
-    "Michael_Bloomberg",
-    "Jimmy_Hoffa",
-    "Princess_Margaret,_Countess_of_Snowdon",
-    "Dennis_Rodman",
-    "Mike_Trout",
+async function getPeopleByDomain() {
+  // Get a sample from each major occupation domain for the browse section
+  const domains = [
+    {domain: "SPORTS", occupations: "SOCCER PLAYER,BASKETBALL PLAYER,TENNIS PLAYER,CRICKET PLAYER"},
+    {domain: "ARTS", occupations: "ACTOR,SINGER,FILM DIRECTOR,PAINTER"},
+    {domain: "SCIENCE", occupations: "PHYSICIST,CHEMIST,BIOLOGIST,MATHEMATICIAN"},
+    {domain: "POLITICS", occupations: "POLITICIAN,MILITARY PERSONNEL,NOBLEMAN,RELIGIOUS FIGURE"},
   ];
-  const allPeople = topPeople.map(p => p.slug).concat(randomPeople);
-  const redirectSlug = allPeople[Math.floor(Math.random() * allPeople.length)];
-  redirect(`/profile/person/${redirectSlug}`);
+  const results = {};
+  for (const {domain, occupations} of domains) {
+    const occList = occupations.split(",").map(o => `occupation.eq.${o.trim()}`).join(",");
+    const url = `${PUBLIC_API}/person_ranks?or=(${occList})&select=id,name,slug,birthyear,occupation&order=hpi.desc.nullslast&limit=8`;
+    results[domain] = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  }
+  return results;
+}
+
+async function getRecentlyTrending(lang) {
+  const baseUrl = process.env.URL || "https://pantheon.world";
+  const url = `${baseUrl}/api/wikiTrends?lang=${lang}&limit=8`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
+}
+
+async function getTotalCount() {
+  const url = `${PUBLIC_API}/person?select=id&limit=1`;
+  const res = await fetch(url, {
+    headers: {Prefer: "count=estimated", Range: "0-0"},
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
+  const count = res.headers.get("content-range");
+  return count ? parseInt(count.split("/")[1]) : 85000;
+}
+
+export async function generateMetadata(props) {
+  const params = await props.params;
+  const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
+  const t = getTranslations(locale);
+  const sp = t.selectPerson;
+
+  const title = `${sp.heading} | Pantheon`;
+  const description = sp.metaDescription;
+
+  return {
+    title,
+    description,
+    keywords: "famous people, historical figures, biographies, notable people, wikipedia biographies, pantheon",
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: ["https://pantheon.world/images/logos/logo_pantheon.svg"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://pantheon.world/${locale}/profile/person`,
+    },
+  };
+}
+
+export default async function Page(props) {
+  const params = await props.params;
+  const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
+  const t = getTranslations(locale);
+  const sp = t.selectPerson;
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+
+  const [featuredPeople, domainPeople, trendingPeople, totalCount] = await Promise.all([
+    getFeaturedPeople(),
+    getPeopleByDomain(),
+    getRecentlyTrending(locale),
+    getTotalCount(),
+  ]);
+
+  const domainLabels = {
+    SPORTS: sp.domainSports,
+    ARTS: sp.domainArts,
+    SCIENCE: sp.domainScience,
+    POLITICS: sp.domainPolitics,
+  };
+
+  const domainIcons = {
+    SPORTS: "/images/icons/icon-sports.svg",
+    ARTS: "/images/icons/icon-arts.svg",
+    SCIENCE: "/images/icons/icon-scitech.svg",
+    POLITICS: "/images/icons/icon-pubfig.svg",
+  };
+
+  return (
+    <div className="select-person-page">
+      {/* Hero Section */}
+      <section className="sp-hero">
+        <div className="sp-hero-content">
+          <div className="sp-stats">
+            <span className="sp-stat">
+              <strong>{totalCount.toLocaleString(locale)}</strong> {sp.statPeople}
+            </span>
+            <span className="sp-stat-divider" aria-hidden="true" />
+            <span className="sp-stat">
+              <strong>15+</strong> {sp.statLanguages}
+            </span>
+          </div>
+
+          <h1 className="sp-title">{sp.heading}</h1>
+          <p className="sp-subtitle">{sp.subtitle}</p>
+
+          <div className="sp-search-row">
+            <HomeSearch lang={locale} />
+            <RandomPersonButton label={sp.randomPerson} locale={locale} totalCount={totalCount} />
+          </div>
+
+          <p className="sp-description">{sp.description}</p>
+        </div>
+      </section>
+
+      {/* Featured People Grid */}
+      <section className="sp-section">
+        <div className="sp-container">
+          <h2 className="sp-section-title">{sp.featuredPeople}</h2>
+          <div className="sp-grid">
+            {featuredPeople.map(person => (
+              <Link
+                key={person.id}
+                href={`${localePrefix}/profile/person/${person.slug}`}
+                className="sp-card"
+              >
+                <div className="sp-card-image">
+                  <PersonImage
+                    src={`/profile/people/${person.id}.jpg`}
+                    alt={person.name}
+                    fallbackSrc={PERSON_FALLBACK}
+                  />
+                </div>
+                <div className="sp-card-info">
+                  <span className="sp-card-name">{person.name}</span>
+                  <span className="sp-card-dates">
+                    {person.birthyear}{person.deathyear ? ` - ${person.deathyear}` : ""}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trending Now */}
+      {trendingPeople.length > 0 && (
+        <section className="sp-section sp-section-alt">
+          <div className="sp-container">
+            <h2 className="sp-section-title">{sp.trendingNow}</h2>
+            <div className="sp-grid sp-grid-lg">
+              {trendingPeople.map(person => (
+                <Link
+                  key={person.pid || person.id}
+                  href={`${localePrefix}/profile/person/${person.slug}`}
+                  className="sp-card sp-card-trending"
+                >
+                  <div className="sp-card-image">
+                    <PersonImage
+                      src={`/profile/people/${person.pid || person.id}.jpg`}
+                      alt={person.title || person.name}
+                      fallbackSrc={PERSON_FALLBACK}
+                    />
+                  </div>
+                  <div className="sp-card-info">
+                    <span className="sp-card-name">{person.title || person.name}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Browse by Domain */}
+      <section className="sp-section">
+        <div className="sp-container">
+          <h2 className="sp-section-title">{sp.browseByField}</h2>
+          <div className="sp-domains">
+            {Object.entries(domainPeople).map(([domain, people]) => (
+              <div key={domain} className="sp-domain-group">
+                <h3 className="sp-domain-title">{domainLabels[domain]}</h3>
+                <div className="sp-domain-list">
+                  {people.map(person => (
+                    <Link
+                      key={person.id}
+                      href={`${localePrefix}/profile/person/${person.slug}`}
+                      className="sp-domain-item"
+                    >
+                      <div className="sp-domain-thumb">
+                        <PersonImage
+                          src={`/profile/people/${person.id}.jpg`}
+                          alt={person.name}
+                          fallbackSrc={PERSON_FALLBACK}
+                        />
+                      </div>
+                      <span className="sp-domain-name">{person.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Explore More Links */}
+      <section className="sp-section sp-section-explore">
+        <div className="sp-container">
+          <h2 className="sp-section-title">{sp.exploreMore}</h2>
+          <div className="sp-explore-links">
+            <Link href={`${localePrefix}/profile/select-occupation-country`} className="sp-explore-card">
+              <span className="sp-explore-label">{sp.byOccupationCountry}</span>
+            </Link>
+            <Link href={`${localePrefix}/rankings`} className="sp-explore-card">
+              <span className="sp-explore-label">{sp.rankings}</span>
+            </Link>
+            <Link href={`${localePrefix}/profile/era`} className="sp-explore-card">
+              <span className="sp-explore-label">{sp.byEra}</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 }

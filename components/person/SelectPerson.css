@@ -1,0 +1,441 @@
+@import "../../styles/mixins.css";
+
+/* ============================================
+   Select Person Landing Page
+   ============================================ */
+
+.select-person-page {
+  min-height: 100vh;
+  background: #fff;
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+
+.sp-hero {
+  background: linear-gradient(0deg, rgba(244,244,241,1) 0%, rgba(208,201,191,1) 100%);
+  padding: 120px 1.5rem 3rem;
+  text-align: center;
+
+  @media (max-width: 750px) {
+    padding: 80px 1rem 2rem;
+  }
+}
+
+.sp-hero-content {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.sp-title {
+  font-family: var(--fontTitle);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--colorSlate);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
+  @media (max-width: 750px) {
+    font-size: 2.25rem;
+  }
+}
+
+.sp-subtitle {
+  font-size: 1.35rem;
+  color: var(--colorTan);
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+
+  @media (max-width: 750px) {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Search + Random row */
+.sp-search-row {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+
+  & .home-search {
+    margin: 0;
+    width: 500px;
+
+    & img {
+      width: 20px;
+      margin: 14px 5px 6px 14px;
+    }
+
+    & a {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      font-size: 1.2rem;
+      padding: 12px 16px 12px 48px;
+    }
+  }
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+
+    & .home-search {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+.sp-random-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--colorStone);
+  color: #fff;
+  border: none;
+  padding: 0 24px;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--colorSlate);
+  }
+
+  @media (max-width: 750px) {
+    padding: 10px 24px;
+  }
+}
+
+.sp-random-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Stats row */
+.sp-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sp-stat {
+  font-size: 0.9rem;
+  color: var(--colorStone);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+
+  & strong {
+    font-weight: 700;
+  }
+}
+
+.sp-stat-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--colorStone);
+  opacity: 0.3;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
+}
+
+.sp-description {
+  font-size: 1.1rem;
+  color: var(--colorTan);
+  line-height: 1.6;
+  max-width: 780px;
+  margin: 0 auto;
+
+  @media (max-width: 750px) {
+    font-size: 0.95rem;
+  }
+}
+
+/* ============================================
+   Sections
+   ============================================ */
+
+.sp-section {
+  padding: 2.5rem 1.5rem;
+
+  @media (max-width: 750px) {
+    padding: 1.5rem 1rem;
+  }
+}
+
+.sp-section-alt {
+  background: #fafaf8;
+}
+
+.sp-container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.sp-section-title {
+  @mixin sectionTitle;
+  font-size: 22px;
+  margin: 0 0 1.5rem 0;
+
+  @media (max-width: 750px) {
+    font-size: 18px;
+    margin-bottom: 1rem;
+  }
+}
+
+/* ============================================
+   Person Grid (featured + trending)
+   ============================================ */
+
+.sp-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+}
+
+.sp-grid-lg {
+  grid-template-columns: repeat(4, 1fr);
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.sp-card {
+  display: block;
+  position: relative;
+  border: 1px solid var(--colorMatza);
+  overflow: hidden;
+  text-decoration: none;
+  aspect-ratio: 3 / 4;
+  transition: transform 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.sp-card-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  & img.is-fallback {
+    object-fit: contain;
+    padding: 20%;
+    box-sizing: border-box;
+    background: var(--colorSlate, #4a4a4a);
+  }
+}
+
+.sp-card-info {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 5px 6px;
+  background: var(--colorEggshellOverlay) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC) repeat;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.sp-card-name {
+  @mixin priTitle;
+  font-size: 11px;
+  color: var(--colorSlate);
+  display: block;
+  line-height: 1.2;
+
+  @media (max-width: 600px) {
+    font-size: 9px;
+  }
+}
+
+.sp-card-dates {
+  font-size: 9px;
+  color: var(--colorTan);
+  display: block;
+  margin-top: 1px;
+
+  @media (max-width: 600px) {
+    font-size: 8px;
+  }
+}
+
+/* ============================================
+   Browse by Domain
+   ============================================ */
+
+.sp-domains {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.sp-domain-group {
+  /* Each domain column */
+}
+
+.sp-domain-title {
+  font-family: var(--fontTitle);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--colorStone);
+  margin: 0 0 0.75rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--colorMatza);
+}
+
+.sp-domain-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sp-domain-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #fafaf8;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.sp-domain-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f0f0f0;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  & img.is-fallback {
+    object-fit: contain;
+    padding: 15%;
+    box-sizing: border-box;
+    background: var(--colorSlate, #4a4a4a);
+  }
+}
+
+.sp-domain-name {
+  font-size: 0.9rem;
+  color: var(--colorSlate);
+  font-weight: 500;
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem;
+  }
+}
+
+/* ============================================
+   Explore More Links
+   ============================================ */
+
+.sp-section-explore {
+  background: linear-gradient(0deg, rgba(244,244,241,1) 0%, #fff 100%);
+  padding-bottom: 3rem;
+}
+
+.sp-explore-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.sp-explore-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--colorMatza);
+  border-radius: 6px;
+  text-decoration: none;
+  background: #fff;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--colorStone);
+    border-color: var(--colorStone);
+
+    & .sp-explore-label {
+      color: #fff;
+    }
+  }
+}
+
+.sp-explore-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--colorStone);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem;
+  }
+}
