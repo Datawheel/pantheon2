@@ -1,10 +1,10 @@
 @import "../../styles/mixins.css";
 
 /* ============================================
-   Select Country Landing Page
+   Select Place Landing Page
    ============================================ */
 
-.select-country-page {
+.select-place-page {
   min-height: 100vh;
   background: #fff;
 }
@@ -13,7 +13,7 @@
    Hero Section
    ============================================ */
 
-.sc-hero {
+.sp-place-hero {
   background: linear-gradient(0deg, rgba(244,244,241,1) 0%, rgba(208,201,191,1) 100%);
   padding: 120px 1.5rem 3rem;
   text-align: center;
@@ -23,12 +23,12 @@
   }
 }
 
-.sc-hero-content {
+.sp-place-hero-content {
   max-width: 860px;
   margin: 0 auto;
 }
 
-.sc-stats {
+.sp-place-stats {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +37,7 @@
   flex-wrap: wrap;
 }
 
-.sc-stat {
+.sp-place-stat {
   font-size: 0.9rem;
   color: var(--colorStone);
   letter-spacing: 0.5px;
@@ -48,14 +48,14 @@
   }
 }
 
-.sc-stat-divider {
+.sp-place-stat-divider {
   width: 1px;
   height: 16px;
   background: var(--colorStone);
   opacity: 0.3;
 }
 
-.sc-title {
+.sp-place-title {
   font-family: var(--fontTitle);
   font-size: 4rem;
   font-weight: 700;
@@ -69,7 +69,7 @@
   }
 }
 
-.sc-subtitle {
+.sp-place-subtitle {
   font-size: 1.35rem;
   color: var(--colorTan);
   margin: 0;
@@ -81,10 +81,10 @@
 }
 
 /* ============================================
-   Map Section
+   Sections
    ============================================ */
 
-.sc-section {
+.sp-place-section {
   padding: 2.5rem 1.5rem;
 
   @media (max-width: 750px) {
@@ -92,16 +92,16 @@
   }
 }
 
-.sc-section-alt {
+.sp-place-section-alt {
   background: #fafaf8;
 }
 
-.sc-container {
+.sp-place-container {
   max-width: 1100px;
   margin: 0 auto;
 }
 
-.sc-section-title {
+.sp-section-title {
   @mixin sectionTitle;
   font-size: 22px;
   margin: 0 0 1.5rem 0;
@@ -112,35 +112,44 @@
   }
 }
 
-/* Map */
-.sc-map-wrapper {
+/* ============================================
+   Map
+   ============================================ */
+
+.sp-map-wrapper {
   position: relative;
   width: 100%;
 }
 
-.sc-map-svg {
+.sp-map-svg {
   width: 100%;
   height: auto;
   display: block;
+  background: #fafaf8;
+  border-radius: 4px;
 }
 
-.sc-map-country {
+.sp-map-land {
+  fill: #e0ddd8;
   stroke: #fff;
   stroke-width: 0.5;
-  transition: opacity 0.15s;
 }
 
-.sc-map-clickable {
+.sp-map-bubble {
+  fill: rgba(76, 94, 180, 0.5);
+  stroke: rgba(76, 94, 180, 0.8);
+  stroke-width: 0.5;
   cursor: pointer;
+  transition: fill 0.15s;
+
+  &:hover {
+    fill: rgba(76, 94, 180, 0.8);
+    stroke: rgba(50, 60, 140, 1);
+    stroke-width: 1.5;
+  }
 }
 
-.sc-map-highlight {
-  stroke: var(--colorSlate);
-  stroke-width: 1.5;
-  opacity: 0.85;
-}
-
-.sc-map-tooltip {
+.sp-map-tooltip {
   position: fixed;
   pointer-events: none;
   background: var(--colorSlate);
@@ -153,73 +162,73 @@
   transition: opacity 0.1s;
 }
 
-.sc-map-loading {
+.sp-map-loading {
   width: 100%;
   aspect-ratio: 2 / 1;
   background: #f0f0f0;
   border-radius: 4px;
 }
 
-.sc-map-legend {
+.sp-map-controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
 
-  @media (max-width: 600px) {
-    gap: 0.5rem 0.75rem;
+.sp-map-zoom-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--colorMatza);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--colorSlate);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  line-height: 1;
+  padding: 0;
+
+  &:hover {
+    background: #f0f0f0;
   }
 }
 
-.sc-map-legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
+.sp-map-svg-zoomable {
+  cursor: grab;
 
-.sc-map-legend-swatch {
-  width: 16px;
-  height: 12px;
-  border-radius: 2px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
-}
-
-.sc-map-legend-label {
-  font-size: 0.7rem;
-  color: var(--colorTan);
-  white-space: nowrap;
+  &:active {
+    cursor: grabbing;
+  }
 }
 
 /* ============================================
-   Country List
+   Place List
    ============================================ */
 
-.sc-country-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* List header with sort controls */
-.sc-list-header {
+.sp-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.sc-sort-controls {
+.sp-list-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sp-sort-controls {
   display: flex;
   gap: 0;
   border: 1px solid var(--colorMatza);
@@ -227,7 +236,7 @@
   overflow: hidden;
 }
 
-.sc-sort-btn {
+.sp-sort-btn {
   background: #fff;
   border: none;
   padding: 6px 16px;
@@ -248,7 +257,7 @@
   }
 }
 
-.sc-sort-btn-active {
+.sp-sort-btn-active {
   background: var(--colorStone);
   color: #fff;
 
@@ -257,10 +266,76 @@
   }
 }
 
-.sc-country-item {
+.sp-place-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sp-place-flag {
+  width: 28px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.sp-place-flag-lg {
+  width: 32px;
+  height: 22px;
+}
+
+/* Country groups */
+.sp-country-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sp-country-group-header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 2px solid var(--colorMatza);
+}
+
+.sp-country-group-name {
+  font-family: var(--fontTitle);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--colorStone);
+  text-decoration: none;
+  transition: color 0.15s;
+
+  &:hover, &:active, &:focus {
+    color: var(--colorSlate);
+    text-decoration: none;
+  }
+}
+
+.sp-country-group-count {
+  font-size: 0.8rem;
+  color: var(--colorTan);
+  margin-left: auto;
+}
+
+.sp-place-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   padding: 12px 14px;
   text-decoration: none;
   border-bottom: 1px solid #f0f0f0;
@@ -274,27 +349,19 @@
     text-decoration: none;
     color: inherit;
 
-    & .sc-country-name {
+    & .sp-place-name {
       color: var(--colorStone);
     }
   }
 }
 
-.sc-country-flag {
-  width: 32px;
-  height: 22px;
-  object-fit: contain;
-  flex-shrink: 0;
-  border-radius: 2px;
-}
-
-.sc-country-info {
+.sp-place-info {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.sc-country-name {
+.sp-place-name {
   font-size: 1.05rem;
   color: var(--colorSlate);
   font-weight: 500;
@@ -308,22 +375,29 @@
   }
 }
 
-.sc-country-count {
+.sp-place-country {
   font-size: 0.8rem;
   color: var(--colorTan);
   margin-top: 1px;
+}
+
+.sp-place-count {
+  font-size: 0.8rem;
+  color: var(--colorTan);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ============================================
    Explore More Links
    ============================================ */
 
-.sc-section-explore {
+.sp-place-section-explore {
   background: linear-gradient(0deg, rgba(244,244,241,1) 0%, #fff 100%);
   padding-bottom: 3rem;
 }
 
-.sc-explore-links {
+.sp-explore-links {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
@@ -334,7 +408,7 @@
   }
 }
 
-.sc-explore-card {
+.sp-explore-card {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -349,13 +423,13 @@
     background: var(--colorStone);
     border-color: var(--colorStone);
 
-    & .sc-explore-label {
+    & .sp-explore-label {
       color: #fff;
     }
   }
 }
 
-.sc-explore-label {
+.sp-explore-label {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--colorStone);
