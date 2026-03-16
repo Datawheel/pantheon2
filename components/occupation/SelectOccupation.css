@@ -1,0 +1,285 @@
+@import "../../styles/mixins.css";
+
+/* ============================================
+   Select Occupation Landing Page
+   ============================================ */
+
+.select-occupation-page {
+  min-height: 100vh;
+  background: #fff;
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+
+.so-hero {
+  background: linear-gradient(0deg, rgba(244,244,241,1) 0%, rgba(208,201,191,1) 100%);
+  padding: 120px 1.5rem 3rem;
+  text-align: center;
+
+  @media (max-width: 750px) {
+    padding: 80px 1rem 2rem;
+  }
+}
+
+.so-hero-content {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.so-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.so-stat {
+  font-size: 0.9rem;
+  color: var(--colorStone);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+
+  & strong {
+    font-weight: 700;
+  }
+}
+
+.so-stat-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--colorStone);
+  opacity: 0.3;
+}
+
+.so-title {
+  font-family: var(--fontTitle);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--colorSlate);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
+  @media (max-width: 750px) {
+    font-size: 2.25rem;
+  }
+}
+
+.so-subtitle {
+  font-size: 1.35rem;
+  color: var(--colorTan);
+  margin: 0;
+  line-height: 1.5;
+
+  @media (max-width: 750px) {
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   Sections
+   ============================================ */
+
+.so-section {
+  padding: 2.5rem 1.5rem;
+
+  @media (max-width: 750px) {
+    padding: 1.5rem 1rem;
+  }
+}
+
+.so-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.so-section-title {
+  @mixin sectionTitle;
+  font-size: 22px;
+  margin: 0 0 1.5rem 0;
+
+  @media (max-width: 750px) {
+    font-size: 18px;
+    margin-bottom: 1rem;
+  }
+}
+
+/* ============================================
+   List Header & Sort
+   ============================================ */
+
+.so-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.so-sort-controls {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--colorMatza);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.so-sort-btn {
+  background: #fff;
+  border: none;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--colorTan);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+
+  &:not(:last-child) {
+    border-right: 1px solid var(--colorMatza);
+  }
+
+  &:hover {
+    background: #fafaf8;
+  }
+}
+
+.so-sort-btn-active {
+  background: var(--colorStone);
+  color: #fff;
+
+  &:hover {
+    background: var(--colorSlate);
+  }
+}
+
+/* ============================================
+   Occupation Grid
+   ============================================ */
+
+.so-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+.so-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--colorMatza);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:hover, &:active, &:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.so-card-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: top center;
+  background-color: #e8e5e0;
+}
+
+.so-card-body {
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.so-card-name {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--colorSlate);
+  line-height: 1.3;
+  margin-bottom: 2px;
+
+  @media (max-width: 600px) {
+    font-size: 0.9rem;
+  }
+}
+
+.so-card-count {
+  font-size: 0.8rem;
+  color: var(--colorTan);
+}
+
+/* ============================================
+   Explore More Links
+   ============================================ */
+
+.so-section-explore {
+  background: linear-gradient(0deg, rgba(244,244,241,1) 0%, #fff 100%);
+  padding-bottom: 3rem;
+}
+
+.so-explore-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.so-explore-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--colorMatza);
+  border-radius: 6px;
+  text-decoration: none;
+  background: #fff;
+  transition: all 0.2s ease;
+  color: inherit;
+
+  &:hover, &:active, &:focus {
+    background: var(--colorStone);
+    border-color: var(--colorStone);
+    text-decoration: none;
+    color: inherit;
+
+    & .so-explore-label {
+      color: #fff;
+    }
+  }
+}
+
+.so-explore-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--colorStone);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem;
+  }
+}
