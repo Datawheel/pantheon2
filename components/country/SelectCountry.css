@@ -1,0 +1,366 @@
+@import "../../styles/mixins.css";
+
+/* ============================================
+   Select Country Landing Page
+   ============================================ */
+
+.select-country-page {
+  min-height: 100vh;
+  background: #fff;
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+
+.sc-hero {
+  background: linear-gradient(0deg, rgba(244,244,241,1) 0%, rgba(208,201,191,1) 100%);
+  padding: 120px 1.5rem 3rem;
+  text-align: center;
+
+  @media (max-width: 750px) {
+    padding: 80px 1rem 2rem;
+  }
+}
+
+.sc-hero-content {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.sc-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sc-stat {
+  font-size: 0.9rem;
+  color: var(--colorStone);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+
+  & strong {
+    font-weight: 700;
+  }
+}
+
+.sc-stat-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--colorStone);
+  opacity: 0.3;
+}
+
+.sc-title {
+  font-family: var(--fontTitle);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--colorSlate);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
+  @media (max-width: 750px) {
+    font-size: 2.25rem;
+  }
+}
+
+.sc-subtitle {
+  font-size: 1.35rem;
+  color: var(--colorTan);
+  margin: 0;
+  line-height: 1.5;
+
+  @media (max-width: 750px) {
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   Map Section
+   ============================================ */
+
+.sc-section {
+  padding: 2.5rem 1.5rem;
+
+  @media (max-width: 750px) {
+    padding: 1.5rem 1rem;
+  }
+}
+
+.sc-section-alt {
+  background: #fafaf8;
+}
+
+.sc-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.sc-section-title {
+  @mixin sectionTitle;
+  font-size: 22px;
+  margin: 0 0 1.5rem 0;
+
+  @media (max-width: 750px) {
+    font-size: 18px;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Map */
+.sc-map-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.sc-map-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.sc-map-country {
+  stroke: #fff;
+  stroke-width: 0.5;
+  transition: opacity 0.15s;
+}
+
+.sc-map-clickable {
+  cursor: pointer;
+}
+
+.sc-map-highlight {
+  stroke: var(--colorSlate);
+  stroke-width: 1.5;
+  opacity: 0.85;
+}
+
+.sc-map-tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: var(--colorSlate);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  z-index: 100;
+  transition: opacity 0.1s;
+}
+
+.sc-map-loading {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.sc-map-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    gap: 0.5rem 0.75rem;
+  }
+}
+
+.sc-map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sc-map-legend-swatch {
+  width: 16px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.sc-map-legend-label {
+  font-size: 0.7rem;
+  color: var(--colorTan);
+  white-space: nowrap;
+}
+
+/* ============================================
+   Country List
+   ============================================ */
+
+.sc-country-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* List header with sort controls */
+.sc-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sc-sort-controls {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--colorMatza);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sc-sort-btn {
+  background: #fff;
+  border: none;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--colorTan);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+
+  &:not(:last-child) {
+    border-right: 1px solid var(--colorMatza);
+  }
+
+  &:hover {
+    background: #fafaf8;
+  }
+}
+
+.sc-sort-btn-active {
+  background: var(--colorStone);
+  color: #fff;
+
+  &:hover {
+    background: var(--colorSlate);
+  }
+}
+
+.sc-country-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 4px;
+  transition: all 0.15s;
+
+  &:hover {
+    background: rgba(122, 109, 95, 0.08);
+    transform: translateX(4px);
+
+    & .sc-country-name {
+      color: var(--colorStone);
+    }
+  }
+}
+
+.sc-country-flag {
+  width: 32px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.sc-country-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sc-country-name {
+  font-size: 1.05rem;
+  color: var(--colorSlate);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s;
+
+  @media (max-width: 600px) {
+    font-size: 0.95rem;
+  }
+}
+
+.sc-country-count {
+  font-size: 0.8rem;
+  color: var(--colorTan);
+  margin-top: 1px;
+}
+
+/* ============================================
+   Explore More Links
+   ============================================ */
+
+.sc-section-explore {
+  background: linear-gradient(0deg, rgba(244,244,241,1) 0%, #fff 100%);
+  padding-bottom: 3rem;
+}
+
+.sc-explore-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.sc-explore-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--colorMatza);
+  border-radius: 6px;
+  text-decoration: none;
+  background: #fff;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--colorStone);
+    border-color: var(--colorStone);
+
+    & .sc-explore-label {
+      color: #fff;
+    }
+  }
+}
+
+.sc-explore-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--colorStone);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem;
+  }
+}
