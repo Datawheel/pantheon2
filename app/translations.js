@@ -2,6 +2,7 @@
 export const translations = {
   en: {
     stillAlive: "today",
+    birthdayToast: ({name, possessiveName}) => `Today is ${possessiveName || `${name}'s`} birthday`,
     occupationCountry: {
       theMostFamous: "The Most Famous",
       from: "from",
@@ -347,6 +348,7 @@ export const translations = {
   },
   es: {
     stillAlive: "presente",
+    birthdayToast: ({name}) => `Hoy es el cumpleaños de ${name}`,
     learnMoreRankless: "Más información sobre el impacto académico de {name} en Rankless",
     nav: {
       visualizations: "Visualizaciones",
@@ -732,6 +734,7 @@ export const translations = {
   },
   fr: {
     stillAlive: "aujourd'hui",
+    birthdayToast: ({name}) => `Aujourd'hui, c'est l'anniversaire de ${name}`,
     learnMoreRankless: "En savoir plus sur l'impact académique de {name} sur Rankless",
     nav: {
       visualizations: "Visualisations",
@@ -1132,6 +1135,7 @@ export const translations = {
   },
   de: {
     stillAlive: "heute",
+    birthdayToast: ({name}) => `Heute ist der Geburtstag von ${name}`,
     learnMoreRankless: "Erfahren Sie mehr über {name}s akademischen Einfluss bei Rankless",
     nav: {
       visualizations: "Visualisierungen",
@@ -1511,6 +1515,7 @@ export const translations = {
   },
   ru: {
     stillAlive: "настоящее время",
+    birthdayToast: ({name}) => `Сегодня день рождения ${name}`,
     learnMoreRankless: "Узнайте больше о академическом влиянии {name} на Rankless",
     nav: {
       visualizations: "Визуализации",
@@ -1916,6 +1921,7 @@ export const translations = {
   },
   zh: {
     stillAlive: "至今",
+    birthdayToast: ({name}) => `今天是${name}的生日`,
     learnMoreRankless: "在Rankless上了解更多关于{name}的学术影响",
     nav: {
       visualizations: "可视化",
@@ -2295,6 +2301,7 @@ export const translations = {
   },
   ja: {
     stillAlive: "現在",
+    birthdayToast: ({name}) => `今日は${name}の誕生日です`,
     learnMoreRankless: "Ranklessで{name}の学術的影響について詳しく知る",
     nav: {
       visualizations: "視覚化",
@@ -2684,6 +2691,7 @@ export const translations = {
   },
   ar: {
     stillAlive: "حتى اليوم",
+    birthdayToast: ({name}) => `اليوم عيد ميلاد ${name}`,
     learnMoreRankless: "تعرف على المزيد حول التأثير الأكاديمي لـ {name} في Rankless",
     nav: {
       visualizations: "التصورات",
@@ -3066,6 +3074,7 @@ export const translations = {
   },
   it: {
     stillAlive: "presente",
+    birthdayToast: ({name}) => `Oggi è il compleanno di ${name}`,
     learnMoreRankless: "Scopri di più sull'impatto accademico di {name} su Rankless",
     nav: {
       visualizations: "Visualizzazioni",
@@ -3485,6 +3494,7 @@ export const translations = {
   },
   pt: {
     stillAlive: "presente",
+    birthdayToast: ({name}) => `Hoje é o aniversário de ${name}`,
     learnMoreRankless: "Saiba mais sobre o impacto acadêmico de {name} no Rankless",
     nav: {
       visualizations: "Visualizações",
@@ -3893,6 +3903,7 @@ export const translations = {
   },
   hu: {
     stillAlive: "napjainkig",
+    birthdayToast: ({name}) => `Ma van ${name} születésnapja`,
     learnMoreRankless: "Tudjon meg többet {name} akadémiai hatásáról a Rankless-en",
     nav: {
       visualizations: "Vizualizációk",
@@ -4250,6 +4261,7 @@ export const translations = {
   },
   nl: {
     stillAlive: "heden",
+    birthdayToast: ({name}) => `Vandaag is ${name} jarig`,
     learnMoreRankless: "Meer informatie over de academische impact van {name} op Rankless",
     nav: {
       visualizations: "Visualisaties",
@@ -4638,6 +4650,7 @@ export const translations = {
   },
   pl: {
     stillAlive: "obecnie",
+    birthdayToast: ({name}) => `Dziś są urodziny ${name}`,
     learnMoreRankless: "Dowiedz się więcej o akademickim wpływie {name} na Rankless",
     nav: {
       visualizations: "Wizualizacje",

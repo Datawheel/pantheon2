@@ -1,8 +1,9 @@
 "use client";
 
 // import {Suspense} from "react";
-import {max as D3Max, min as D3Min} from "d3-array";
+import {max as d3Max, min as d3Min} from "d3-array";
 import dayjs from "dayjs";
+import {useEffect, useMemo, useState} from "react";
 import {Tooltip} from "@blueprintjs/core";
 // import HeaderLine from "./HeaderLine";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
@@ -47,8 +48,82 @@ import "../../styles/mouse.css";
 //   return res.json();
 // }
 
+function getBirthdayParts(person = {}) {
+  const birthMonth = Number(person.birthmonth);
+  const birthDay = Number(person.birthday);
+
+  if (
+    Number.isInteger(birthMonth) &&
+    Number.isInteger(birthDay) &&
+    birthMonth >= 1 &&
+    birthMonth <= 12 &&
+    birthDay >= 1 &&
+    birthDay <= 31
+  ) {
+    return {month: birthMonth, day: birthDay};
+  }
+
+  if (person.birthdate) {
+    const parsed = dayjs(person.birthdate);
+    if (parsed.isValid()) {
+      return {month: parsed.month() + 1, day: parsed.date()};
+    }
+  }
+
+  return null;
+}
+
+function isBirthdayToday(person = {}) {
+  const birthdayParts = getBirthdayParts(person);
+  if (!birthdayParts) {
+    return false;
+  }
+
+  const today = new Date();
+  return (
+    birthdayParts.month === today.getMonth() + 1 &&
+    birthdayParts.day === today.getDate()
+  );
+}
+
+function getPossessiveName(name = "") {
+  if (!name) {
+    return "";
+  }
+  return name.endsWith("s") ? `${name}'` : `${name}'s`;
+}
+
 export default function Header({person, trendingData = {}, currentLang = "en", pageViews = []}) {
   const t = getTranslations(currentLang);
+  const [showBirthdayCelebration, setShowBirthdayCelebration] = useState(false);
+  const [isBirthdayPerson, setIsBirthdayPerson] = useState(false);
+  const confettiPieces = useMemo(() => {
+    const palette = ["#f06c6c", "#f4b942", "#4caf50", "#3b82f6", "#9b5de5", "#ff5fa2"];
+    return Array.from({length: 80}, (_, index) => ({
+      id: `confetti-${index}`,
+      left: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 0.8}s`,
+      duration: `${3.2 + Math.random() * 2.8}s`,
+      drift: `${Math.round(Math.random() * 140 - 70)}px`,
+      rotate: `${Math.round(Math.random() * 360)}deg`,
+      color: palette[Math.floor(Math.random() * palette.length)],
+    }));
+  }, []);
+
+  useEffect(() => {
+    setIsBirthdayPerson(isBirthdayToday(person));
+  }, [person]);
+
+  useEffect(() => {
+    if (!isBirthdayPerson) {
+      setShowBirthdayCelebration(false);
+      return undefined;
+    }
+
+    setShowBirthdayCelebration(true);
+    const hideTimer = setTimeout(() => setShowBirthdayCelebration(false), 9000);
+    return () => clearTimeout(hideTimer);
+  }, [isBirthdayPerson, person.id]);
 
   // const {items: wikiPageViews} = await getWikiPageViews(person.name);
   const wikiPageViews = null;
@@ -65,10 +140,10 @@ export default function Header({person, trendingData = {}, currentLang = "en", p
         6
       )}/${pv.timestamp.substring(6, 8)}`,
     }));
-    const mostRecentDate = D3Max(pageViewData, d =>
+    const mostRecentDate = d3Max(pageViewData, d =>
       dayjs(d.date, "YYYY/MM/DD")
     );
-    const oldestDate = D3Min(pageViewData, d => dayjs(d.date, "YYYY/MM/DD"));
+    const oldestDate = d3Min(pageViewData, d => dayjs(d.date, "YYYY/MM/DD"));
     pageViewData.push({
       ...pageViewData.find(d => d.date === oldestDate.format("YYYY/MM/DD")),
       shape: "Circle",
@@ -88,6 +163,32 @@ export default function Header({person, trendingData = {}, currentLang = "en", p
 
   return (
     <header className="hero">
+      {showBirthdayCelebration ? (
+        <>
+          <div className="birthday-toast" role="status" aria-live="polite">
+            {t.birthdayToast?.({
+              name: person.name,
+              possessiveName: getPossessiveName(person.name),
+            }) || `Today is ${getPossessiveName(person.name)} birthday`}
+          </div>
+          <div className="birthday-confetti" aria-hidden>
+            {confettiPieces.map(piece => (
+              <span
+                className="birthday-confetti-piece"
+                key={piece.id}
+                style={{
+                  left: piece.left,
+                  animationDelay: piece.delay,
+                  animationDuration: piece.duration,
+                  backgroundColor: piece.color,
+                  "--confetti-drift": piece.drift,
+                  "--confetti-rotate": piece.rotate,
+                }}
+              />
+            ))}
+          </div>
+        </>
+      ) : null}
       <div className="bg-container">
         <div className="bg-img-mask person" style={{backgroundColor}}>
           <div
@@ -128,6 +229,11 @@ export default function Header({person, trendingData = {}, currentLang = "en", p
         )}
 
         {/* {isTrending ? <div className="trending-cont">Trending</div> : null} */}
+        {isBirthdayPerson ? (
+          <span className="birthday-cake-badge" role="img" aria-label="Birthday">
+            🎂
+          </span>
+        ) : null}
         <h2 className="profile-type">
           {person.occupation ? person.occupation.occupation : ""}
         </h2>
