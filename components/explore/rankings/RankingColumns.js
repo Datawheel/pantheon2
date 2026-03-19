@@ -31,8 +31,9 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               disableSortBy: true,
               Header: "#",
               id: "row",
-              accessor: (_d, i) => i + 1 + countOffset,
-              // accessor: (_d, i) => i + 1,
+              accessor: options.nameSearch
+                ? (d) => d.rank
+                : (_d, i) => i + 1 + countOffset,
               maxWidth: 45,
             },
             {

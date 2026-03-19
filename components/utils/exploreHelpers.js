@@ -84,6 +84,7 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
     yearType,
     birthMonth,
     birthDay,
+    nameSearch,
   } = exploreState;
   // const apiHeaders = {Prefer: "count=estimated"};
   let selectFields =
@@ -166,7 +167,12 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
 
   const onlyShowNewFilter = onlyShowNew ? "&hpi_prev=is.null" : "";
 
-  const apiUrl = `${baseApi}/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${birthdayFilter}${onlyShowNewFilter}${sorting}${limitOffset}`;
+  let nameFilter = "";
+  if (nameSearch && nameSearch.trim().length >= 2) {
+    nameFilter = `&name=ilike.*${encodeURIComponent(nameSearch.trim())}*`;
+  }
+
+  const apiUrl = `${baseApi}/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${birthdayFilter}${onlyShowNewFilter}${nameFilter}${sorting}${limitOffset}`;
   return apiUrl;
 };
 

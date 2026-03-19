@@ -9,7 +9,9 @@ export const SearchProvider = ({children}) => {
 
   // Function to toggle the search based on key presses
   const toggleSearchVisibility = event => {
-    if (event.key === "s" && !isSearchVisible) {
+    const tag = event.target.tagName;
+    const isTyping = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || event.target.isContentEditable;
+    if (event.key === "s" && !isSearchVisible && !isTyping) {
       setSearchVisible(true);
     } else if (event.key === "Escape" && isSearchVisible) {
       setSearchVisible(false);

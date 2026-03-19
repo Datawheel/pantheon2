@@ -18,6 +18,7 @@ const initialState = {
   yearType: "birthyear",
   birthMonth: null,
   birthDay: null,
+  nameSearch: "",
   viz: "treemap",
   value: 0,
   data: null,
@@ -118,6 +119,10 @@ export const exploreSlice = createSlice({
       state.birthMonth = null;
       state.birthDay = null;
     },
+    updateNameSearch: (state, action) => {
+      state.nameSearch = action.payload;
+      state.dataPageIndex = 0;
+    },
   },
 });
 
@@ -143,6 +148,7 @@ export const {
   updateBirthMonth,
   updateBirthDay,
   clearBirthDate,
+  updateNameSearch,
 } = exploreSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

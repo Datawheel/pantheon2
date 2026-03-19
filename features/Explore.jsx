@@ -50,6 +50,7 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
     yearType,
     birthMonth,
     birthDay,
+    nameSearch,
   } = useSelector(state => state.explore);
   const exploreState = useSelector(state => state.explore);
   const dispatch = useDispatch();
@@ -135,6 +136,7 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
     yearType,
     birthMonth,
     birthDay,
+    nameSearch,
     metricCutoff,
     metricType,
     onlyShowNew,

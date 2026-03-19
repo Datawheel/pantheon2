@@ -210,21 +210,26 @@
 }
 
 .so-card-name {
-  display: block;
-  font-size: 1.05rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 1.35rem;
   font-weight: 600;
   color: var(--colorSlate);
   line-height: 1.3;
-  margin-bottom: 2px;
 
   @media (max-width: 600px) {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
   }
 }
 
 .so-card-count {
-  font-size: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: 500;
   color: var(--colorTan);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ============================================

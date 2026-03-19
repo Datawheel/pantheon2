@@ -1,16 +1,16 @@
 "use client";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useState, useRef, useCallback} from "react";
 import {useRouter, usePathname} from "next/navigation";
 import {useSelector, useDispatch} from "react-redux";
 import {useTable, usePagination, useSortBy} from "react-table";
 import getColumns from "./RankingColumns";
 import {fetchDataAndDispatch} from "../../../components/utils/exploreHelpers";
-import {updateDataPageIndex} from "../../../features/exploreSlice";
+import {updateDataPageIndex, updateNameSearch} from "../../../features/exploreSlice";
 import "./Rankings.css";
 
 export default function RankingTable({baseApi, places}) {
   const exploreState = useSelector(state => state.explore);
-  const {data, dataCount, dataPageIndex, show, birthMonth, birthDay} = exploreState;
+  const {data, dataCount, dataPageIndex, show, birthMonth, birthDay, nameSearch} = exploreState;
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -19,12 +19,29 @@ export default function RankingTable({baseApi, places}) {
   const controlledPageIndex = data && data.length ? dataPageIndex : 0;
 
   const [pageInputVal, setPageInputVal] = useState(controlledPageIndex);
+  const [searchInputVal, setSearchInputVal] = useState(nameSearch || "");
+  const debounceRef = useRef(null);
+
+  const handleSearchChange = useCallback((e) => {
+    const val = e.target.value;
+    setSearchInputVal(val);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      dispatch(updateNameSearch(val));
+    }, 400);
+  }, [dispatch]);
+
+  const handleSearchClear = useCallback(() => {
+    setSearchInputVal("");
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    dispatch(updateNameSearch(""));
+  }, [dispatch]);
 
   const hasBirthdayFilter = birthMonth !== null || birthDay !== null;
+  const hasNameSearch = nameSearch && nameSearch.trim().length >= 2;
   const columns = useMemo(
-    () => getColumns(show.type, show.depth, controlledPageIndex * 50, {hasBirthdayFilter}),
-    // [controlledPageIndex]
-    [controlledPageIndex, show.type, hasBirthdayFilter]
+    () => getColumns(show.type, show.depth, controlledPageIndex * 50, {hasBirthdayFilter, nameSearch: hasNameSearch}),
+    [controlledPageIndex, show.type, hasBirthdayFilter, hasNameSearch]
   );
 
   const {
@@ -110,6 +127,24 @@ export default function RankingTable({baseApi, places}) {
   return (
     <div className="ranking-table-container">
       <div className="ranking-table">
+        <div className="ranking-search-bar">
+          <input
+            type="text"
+            className="ranking-search-input"
+            placeholder="Search by name..."
+            value={searchInputVal}
+            onChange={handleSearchChange}
+          />
+          {searchInputVal && (
+            <button
+              className="ranking-search-clear"
+              onClick={handleSearchClear}
+              aria-label="Clear search"
+            >
+              &times;
+            </button>
+          )}
+        </div>
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map(headerGroup => (

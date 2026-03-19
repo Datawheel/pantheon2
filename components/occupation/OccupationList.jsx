@@ -3,7 +3,124 @@
 import {useState, useMemo} from "react";
 import Link from "next/link";
 
-export default function OccupationList({occupations, localePrefix, locale, labels}) {
+const LOCAL_IMAGES = new Set([
+  "actor",
+  "politician",
+  "religious-figure",
+  "soccer-player",
+  "writer",
+  "athlete",
+  "musician",
+  "singer",
+  "military-personnel",
+  "film-director",
+  "painter",
+  "basketball-player",
+  "tennis-player",
+  "composer",
+  "cyclist",
+  "nobleman",
+  "biologist",
+  "racing-driver",
+  "wrestler",
+  "philosopher",
+  "mathematician",
+  "physicist",
+  "social-activist",
+  "businessperson",
+  "skier",
+  "swimmer",
+  "physician",
+  "companion",
+  "hockey-player",
+  "astronomer",
+  "historian",
+  "chemist",
+  "boxer",
+  "explorer",
+  "astronaut",
+  "architect",
+  "chess-player",
+  "inventor",
+  "skater",
+  "coach",
+  "economist",
+  "engineer",
+  "handball-player",
+  "gymnast",
+  "fencer",
+  "model",
+  "extremist",
+  "celebrity",
+  "sculptor",
+  "computer-scientist",
+  "psychologist",
+  "comic-artist",
+  "pornographic-actor",
+  "linguist",
+  "volleyball-player",
+  "journalist",
+  "martial-arts",
+  "archaeologist",
+  "photographer",
+  "referee",
+  "presenter",
+  "producer",
+  "cricketer",
+  "lawyer",
+  "conductor",
+  "artist",
+  "badminton-player",
+  "dancer",
+  "table-tennis-player",
+  "designer",
+  "comedian",
+  "anthropologist",
+  "baseball-player",
+  "diplomat",
+  "geologist",
+  "geographer",
+
+  "sociologist",
+  "game-designer",
+  "golfer",
+  "pilot",
+  "mafioso",
+  "snooker",
+  "american-football-player",
+  "youtuber",
+  "mountaineer",
+  "judge",
+  "fashion-designer",
+  "political-scientist",
+  "occultist",
+  "rugby-player",
+  "pirate",
+  "public-worker",
+  "poker-player",
+  "chef",
+  "magician",
+  "inspiration",
+  "critic",
+  "statistician",
+  "gamer",
+  "bullfighter",
+  "go-player",
+]);
+
+function getOccupationImage(slug) {
+  if (LOCAL_IMAGES.has(slug)) {
+    return `/images/occupations/pantheon-${slug}.webp`;
+  }
+  return `https://static.pantheon.world/profile/occupation/${slug}.jpg`;
+}
+
+export default function OccupationList({
+  occupations,
+  localePrefix,
+  locale,
+  labels,
+}) {
   const [sortBy, setSortBy] = useState("people");
 
   const sorted = useMemo(() => {
@@ -12,7 +129,9 @@ export default function OccupationList({occupations, localePrefix, locale, label
         a.localName.localeCompare(b.localName, locale),
       );
     }
-    return [...occupations].sort((a, b) => (b.num_born || 0) - (a.num_born || 0));
+    return [...occupations].sort(
+      (a, b) => (b.num_born || 0) - (a.num_born || 0),
+    );
   }, [occupations, sortBy, locale]);
 
   return (
@@ -44,13 +163,15 @@ export default function OccupationList({occupations, localePrefix, locale, label
             <div
               className="so-card-image"
               style={{
-                backgroundImage: `url(https://static.pantheon.world/profile/occupation/${occ.occupation_slug}.jpg)`,
+                backgroundImage: `url(${getOccupationImage(occ.occupation_slug)})`,
               }}
             />
             <div className="so-card-body">
-              <span className="so-card-name">{occ.localName}</span>
-              <span className="so-card-count">
-                {(occ.num_born || 0).toLocaleString(locale)} {labels.people}
+              <span className="so-card-name">
+                {occ.localName}
+                <span className="so-card-count">
+                  {(occ.num_born || 0).toLocaleString(locale)}
+                </span>
               </span>
             </div>
           </Link>

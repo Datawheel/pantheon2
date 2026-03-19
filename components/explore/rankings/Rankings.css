@@ -1,5 +1,59 @@
 @import "../../../styles/mixins.css";
 
+/* ============================================
+   Ranking Name Search
+   ============================================ */
+
+.ranking-search-bar {
+  position: sticky;
+  float: right;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  margin-bottom: -32px;
+}
+
+.ranking-search-input {
+  width: 200px;
+  padding: 5px 28px 5px 10px;
+  font-size: 0.8rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--colorSlate);
+  outline: none;
+  transition: border-color 0.15s, width 0.2s;
+
+  &::placeholder {
+    color: var(--colorTan);
+  }
+
+  &:focus {
+    border-color: var(--colorStone);
+    width: 260px;
+  }
+}
+
+.ranking-search-clear {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--colorTan);
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+
+  &:hover {
+    color: var(--colorSlate);
+  }
+}
+
+/* ============================================ */
+
 .ranking-table-container {
 
   /* error message */
@@ -31,7 +85,6 @@
 }
 
 .ranking-table {
-  overflow: hidden;
   position: relative;
   max-width: 100%;
   overflow-x: auto;

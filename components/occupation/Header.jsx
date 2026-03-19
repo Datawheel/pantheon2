@@ -8,21 +8,24 @@ import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
 export default function Header({occupation, people}) {
-  // determine number of buckets based on count of people
+  const filteredBirthyears = people.filter(d => d.birthyear && d.birthyear >= 1500).map(d => d.birthyear);
+  const uniqueValues = new Set(filteredBirthyears).size;
+
+  // determine number of buckets based on count of filtered data
   let numBuckets = 20;
-  if (people.length < 40) {
+  if (uniqueValues < 40) {
     numBuckets = 10;
   }
-  if (people.length < 10) {
-    numBuckets = people.length;
+  if (uniqueValues < 10) {
+    numBuckets = Math.max(1, uniqueValues);
   }
 
   // create histogram using ckmeans
-  const b2 = histogram().thresholds(data =>
-    ckmeans(data, numBuckets).map(l => min(l))
-  )(
-    people.filter(d => d.birthyear && d.birthyear >= 1500).map(d => d.birthyear)
-  );
+  const b2 = filteredBirthyears.length > 0 && numBuckets > 0
+    ? histogram().thresholds(data =>
+        ckmeans(data, numBuckets).map(l => min(l))
+      )(filteredBirthyears)
+    : [];
 
   // get max top 3 people to show in tooltip
   const lineChartDataFormat = b2.map(bin => {
