@@ -30,9 +30,15 @@ async function getWikiRelatedPeople(personId) {
     if (!related.length) return [];
 
     const idQuery = related.map(r => `id.eq.${r.related_id}`).join(",");
-    const peopleRes = await fetch(
-      `${BASE_API}/person?or=(${idQuery})&select=id,birthyear,name,slug,occupation`,
+    let peopleRes = await fetch(
+      `${BASE_API}/person?or=(${idQuery})&select=id,birthyear,name,slug,description,occupation`,
     );
+    if (!peopleRes.ok) {
+      // Fall back for environments where the person view does not expose description.
+      peopleRes = await fetch(
+        `${BASE_API}/person?or=(${idQuery})&select=id,birthyear,name,slug,occupation`,
+      );
+    }
     if (!peopleRes.ok) {
       console.error(`[getWikiRelatedPeople] Pantheon people HTTP ${peopleRes.status} for id: ${personId}`);
       return [];
@@ -41,7 +47,10 @@ async function getWikiRelatedPeople(personId) {
 
     const scoreOrder = new Map(related.map(r => [`${r.related_id}`, r.score]));
     return people
-      .map(p => ({...p, description: p.occupation?.occupation_name || ""}))
+      .map(p => ({
+        ...p,
+        description: p.description || p.occupation?.occupation_name || "",
+      }))
       .sort((a, b) => (scoreOrder.get(`${a.id}`) ?? 999) - (scoreOrder.get(`${b.id}`) ?? 999));
   } catch (e) {
     console.error(`[getWikiRelatedPeople] Error for id ${personId}: ${e.message}`);
@@ -230,7 +239,9 @@ export default async function Footer({person, personRanks}) {
                       {relatedBio.name}
                     </a>
                   </h4>
-                  <p>{toTitleCase(relatedBio.description)}</p>
+                  <p className="footer-carousel-item-subtitle">
+                    {relatedBio.description || toTitleCase(relatedBio.occupation?.occupation_name || "")}
+                  </p>
                 </li>
               ))
             : null}

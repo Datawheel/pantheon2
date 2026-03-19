@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import GridCta from "/components/home/GridCta";
 import PersonImage from "/components/utils/PersonImage";
 import {DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
@@ -54,6 +54,7 @@ const BornTodayGrid = ({
   bios = [],
   currentLang = DEFAULT_LOCALE,
 }) => {
+  const maxItems = 12;
   const t = getTranslations(currentLang);
   const localePrefix = currentLang === DEFAULT_LOCALE ? "" : `/${currentLang}`;
 
@@ -73,14 +74,9 @@ const BornTodayGrid = ({
         <h3 className="grid-title">
           <span className="icon-birthday">&#127874;</span> {title}
         </h3>
-        <p className="grid-subtitle">
-          <Link href={`${localePrefix}/profile/born-on-this-day/${todayDate}`}>
-            {t.home?.seeAllBirthdays || "See all birthdays"} &rarr;
-          </Link>
-        </p>
       </div>
       <ul className="grid-row">
-        {bios.slice(0, 8).map(person => (
+        {bios.slice(0, maxItems).map(person => (
           <li key={person.id || person.person_id} className="grid-box">
             <a href={`${localePrefix}/profile/person/${person.slug}`}>
               <div className="grid-box-bg-container">
@@ -100,6 +96,10 @@ const BornTodayGrid = ({
           </li>
         ))}
       </ul>
+      <GridCta
+        href={`${localePrefix}/profile/born-on-this-day/${todayDate}`}
+        label={t.home?.seeAllBirthdays || "See all birthdays"}
+      />
     </div>
   );
 };

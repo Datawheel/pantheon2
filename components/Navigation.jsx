@@ -17,6 +17,7 @@ export default function Navigation() {
   const locale = params?.locale || DEFAULT_LOCALE;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
+  const currentYear = new Date().getFullYear();
 
   const toggleSubNav = subnavType => {
     subnavType === mobileSubnav
@@ -115,7 +116,7 @@ export default function Navigation() {
                 </a>
               </li>
               <li>
-                <a href={`/${lang}/profile/deaths/2025`} className="item-link">
+                <a href={`/${lang}/profile/deaths/${currentYear}`} className="item-link">
                   {t.nav.deaths}
                 </a>
               </li>
@@ -318,7 +319,7 @@ export default function Navigation() {
                     <a href={`/${lang}/profile/era`}>{t.nav.eras}</a>
                   </li>
                   <li>
-                    <a href={`/${lang}/profile/deaths/2025`}>{t.nav.deaths}</a>
+                    <a href={`/${lang}/profile/deaths/${currentYear}`}>{t.nav.deaths}</a>
                   </li>
                 </ul>
               ) : null}

@@ -2,8 +2,8 @@
 
 import {useState} from "react";
 import {useRouter} from "next/navigation";
-import Link from "next/link";
 import Grid from "/components/home/Grid";
+import GridCta from "/components/home/GridCta";
 import Spinner from "/components/Spinner";
 import Select from "/components/common/Select";
 import {SUPPORTED_LOCALES, getLocalizedLanguageName, DEFAULT_LOCALE} from "/app/locales";
@@ -33,8 +33,10 @@ export default function TrendingGrid({
   occupation,
   showTrendIndicator = true,
   showDates = false,
-  showNewsButton = false,
+  showTrendingExcerpt = false,
   trendingWithReasons = [],
+  ctaHref,
+  ctaLabel,
 }) {
   const router = useRouter();
   const [trendingAll, setTrendingAll] = useState(initialTrendingAll);
@@ -79,10 +81,6 @@ export default function TrendingGrid({
     router.push(`/${selectedLang}`);
   };
 
-  // Get today's date for the news link
-  const now = new Date();
-  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-
   const t = getTranslations(trendingLangEdition);
   const localePrefix = trendingLangEdition === DEFAULT_LOCALE ? "" : `/${trendingLangEdition}`;
 
@@ -115,7 +113,7 @@ export default function TrendingGrid({
           showDates={showDates}
           localePrefix={localePrefix}
           trendingExcerpt={
-            trendingWithReasons.length > 0 && showNewsButton
+            trendingWithReasons.length > 0 && showTrendingExcerpt
               ? {
                   trendingPeople: trendingWithReasons,
                   currentLang: trendingLangEdition,
@@ -128,13 +126,7 @@ export default function TrendingGrid({
           <Spinner />
         </div>
       )}
-      {showNewsButton && (
-        <div className="trending-news-button-container">
-          <Link href={`/${trendingLangEdition}/news?date=${today}`} className="trending-news-link">
-            Find out why these people are trending
-          </Link>
-        </div>
-      )}
+      <GridCta href={ctaHref} label={ctaLabel} />
     </div>
   );
 }

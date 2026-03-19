@@ -15,6 +15,9 @@ export default async function Home({params}) {
   // Validate locale, fallback to default if invalid
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
+  const currentYear = new Date().getFullYear();
+  const deathsPageLabel = (t.home.notableDeathsLink || `Notable Deaths of ${currentYear}`)
+    .replace("2025", `${currentYear}`);
 
   const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
@@ -88,6 +91,7 @@ export default async function Home({params}) {
   );
   easternNow.setDate(easternNow.getDate() - 1);
   const yesterday = `${easternNow.getFullYear()}-${String(easternNow.getMonth() + 1).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
+  const todayString = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
   // Get slugs from top trending people (first 5 to check for reasons)
   const topTrendingSlugs = trendingAll
@@ -190,8 +194,10 @@ export default async function Home({params}) {
         allowLangChange={true}
         initialTrendingAll={trendingAll}
         defaultLang={lang}
-        showNewsButton={true}
+        showTrendingExcerpt={true}
         trendingWithReasons={trendingWithReasons}
+        ctaHref={`/${lang}/news?date=${todayString}`}
+        ctaLabel={t.trending.viewMoreTrending}
       />
 
       <BornTodayGrid
@@ -207,18 +213,9 @@ export default async function Home({params}) {
         defaultLang={lang}
         showTrendIndicator={false}
         showDates={true}
+        ctaHref={`/${lang}/profile/deaths/${currentYear}`}
+        ctaLabel={deathsPageLabel}
       />
-
-      <div className="announcement-block">
-        <h2>{t.home.notableDeaths}</h2>
-        <p>
-          {t.home.notableDeathsText}{" "}
-          <Link href={`/${lang}/profile/deaths/2025`}>
-            {t.home.notableDeathsLink}
-          </Link>{" "}
-          {t.home.notableDeathsContinued}
-        </p>
-      </div>
 
       <TrendingGrid
         title={t.home.recentlyAdded}

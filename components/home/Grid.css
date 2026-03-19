@@ -327,11 +327,46 @@
     width: 100%;
   }
 
-  & .view-more {
-    font-size: 18px;
-    margin: 30px auto;
-    max-width: 1024px;
-    text-align: right;
+  & .grid-cta-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 22px;
+  }
+
+  & .grid-cta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 42px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--colorAqua);
+    background: var(--colorAqua);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    text-align: center;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover,
+    &:focus {
+      background: var(--colorSpring);
+      border-color: var(--colorSpring);
+      color: white;
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+  }
+
+  & .grid-cta-arrow {
+    font-size: 15px;
+    line-height: 1;
   }
 }
 

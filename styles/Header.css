@@ -1,5 +1,5 @@
-@import './mixins.css';
-@import url('https://fonts.googleapis.com/css?family=Marcellus');
+@import "./mixins.css";
+@import url("https://fonts.googleapis.com/css?family=Marcellus");
 
 header {
   position: relative;
@@ -31,7 +31,7 @@ header {
   overflow: hidden;
 
   &::after {
-    content: '';
+    content: "";
     width: 100%;
     height: 100%;
     position: absolute;
@@ -39,7 +39,9 @@ header {
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--colorEggshellOverlay) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC) repeat;
+    background: var(--colorEggshellOverlay)
+      url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC)
+      repeat;
   }
 }
 
@@ -177,7 +179,13 @@ header {
     width: 100px;
     top: 0;
     right: 0;
-    background: linear-gradient(to top right, transparent 0%, transparent 50%, var(--colorStone) 50%, var(--colorStone) 100%);
+    background: linear-gradient(
+      to top right,
+      transparent 0%,
+      transparent 50%,
+      var(--colorStone) 50%,
+      var(--colorStone) 100%
+    );
     border-radius: 0;
     position: absolute;
     text-transform: uppercase;
@@ -349,7 +357,7 @@ header {
     transform: translate3d(0, -10vh, 0) rotate(0deg);
   }
   100% {
-    transform: translate3d(var(--confetti-drift), 110vh, 0)
+    transform: translate3d(var(--confetti-drift, 0px), 110vh, 0)
       rotate(var(--confetti-rotate));
   }
 }
