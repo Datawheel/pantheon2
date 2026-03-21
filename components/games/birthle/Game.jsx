@@ -1,11 +1,8 @@
 "use client";
-import {v4 as uuidv4} from "uuid";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import React from "react";
 import Person from "./Person";
 import "./Game.css";
-// import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
-import {useGoogleReCaptcha, GoogleReCaptcha} from "react-google-recaptcha-v3";
 
 export default function Game({
   MAX_ATTEMPTS,
@@ -28,40 +25,8 @@ export default function Game({
   gameDate,
   gameNumber,
   setCorrectPersons,
-  scoreDB,
-  setScoreDB,
-  setIsOpenDemographicForm,
-  setIsOpenConsentForm,
-  setSaveConsent,
 }) {
-  const [recap] = useState(undefined);
   const [rKey, setRKey] = useState(Math.random() * (15000 - 150) + 150);
-
-  // const verifyCallback = (recaptchaToken) => {
-  //   setRecap(recaptchaToken);
-  // };
-
-  // useEffect(() => {
-  //   loadReCaptcha("6LfSffshAAAAAEUHlJ08Lk0YtnfJtXlBWsA2yq1D");
-  // }, []);
-
-  const {executeRecaptcha} = useGoogleReCaptcha();
-
-  // Create an event handler so you can call the verification on button click event or form submit
-  const handleReCaptchaVerify = useCallback(async () => {
-    if (!executeRecaptcha) {
-      console.log("Execute recaptcha not yet available");
-      return;
-    }
-
-    // const token = await executeRecaptcha("yourAction");
-    // Do whatever you want with the token
-  }, [executeRecaptcha]);
-
-  // You can use useEffect to trigger the verification as soon as the component being loaded
-  useEffect(() => {
-    handleReCaptchaVerify();
-  }, [handleReCaptchaVerify]);
 
   const onPersonClick = person => {
     if (personPos.get() < N_PERSONS) {
@@ -99,8 +64,6 @@ export default function Game({
       sorted_person_3: savePersons[2].slug,
       sorted_person_4: savePersons[3].slug,
       sorted_person_5: savePersons[4].slug,
-      token: recap,
-      scoreDB,
     };
 
     const requestOptions = {
@@ -127,7 +90,6 @@ export default function Game({
         solved: isWin.get() ? 1 : 0,
         user_id: localStorage.getItem("mptoken"),
         level: attempt.get(),
-        token: recap,
       };
 
       const requestOptions2 = {
@@ -139,51 +101,7 @@ export default function Game({
     }
   };
 
-  const fetchDB = async () => {
-    const token = localStorage.getItem("mptoken");
-    if (!token) {
-      localStorage.setItem("mptoken", uuidv4());
-    }
-
-    const gameDataSave = {
-      user_id: localStorage.getItem("mptoken"),
-    };
-    const requestOptions = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(gameDataSave),
-    };
-
-    await fetch("/api/getParticipant", requestOptions)
-      .then(resp => resp.json())
-      .then(socioConsent => {
-        if (socioConsent.length > 0) {
-          setScoreDB(parseFloat(socioConsent[0].score_bot));
-          setIsOpenDemographicForm(false);
-        } else {
-          setIsOpenDemographicForm(true);
-        }
-      });
-
-    await fetch("/api/getConsent", requestOptions)
-      .then(resp => resp.json())
-      .then(consent => {
-        if (consent.length > 0) {
-          setScoreDB(parseFloat(consent[0].score_bot));
-          setSaveConsent(false);
-          setIsOpenConsentForm(false);
-        } else {
-          setSaveConsent(true);
-          setIsOpenConsentForm(true);
-        }
-      });
-  };
-
   const onCheckClick = () => {
-    if (personPos.get() === 5 && attempt.get() === 2) {
-      fetchDB();
-    }
-
     if (personPos.get() === 5) {
       const newPersons = [...persons];
 
@@ -200,12 +118,12 @@ export default function Game({
           correctPersonsAux.push(true);
           cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
             "card correct";
-          resultToShare.set(resultToShare.get() + "🟩");
+          resultToShare.set(resultToShare.get() + "\u{1F7E9}");
         } else {
           correctPersonsAux.push(false);
           cells[N_PERSONS * attempt.get() + i + N_PERSONS].className =
             "card wrong";
-          resultToShare.set(resultToShare.get() + "🟥");
+          resultToShare.set(resultToShare.get() + "\u{1F7E5}");
         }
       });
 
@@ -275,7 +193,6 @@ export default function Game({
   return (
     <div className="game-container">
       <main key="bGameDiv" className="game" ref={gameBlockRef}>
-        <GoogleReCaptcha onVerify={handleReCaptchaVerify} />
         <div key="bGameDivHeader" className="game-header">
           <div key="bGameDivName" className="game-name">
             Who was born first?

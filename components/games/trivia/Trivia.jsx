@@ -1,351 +1,496 @@
 "use client";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useReducer, useRef, useState} from "react";
 import {useParams, usePathname} from "next/navigation";
-// import useTrait from "./useTrait";
-// import Game from "./Game";
-import ConsentForm from "../ConsentForm";
-import DemographicForm from "../DemographicForm";
-import Question from "./Question";
-import Progress from "./Progress";
-import Answers from "./Answers";
-import Score from "./Score";
-import Results from "./Results";
-// import fetchSlugs from "./fetchSlugs";
-// import fetchPersons from "./fetchPersons";
 import {v4 as uuidv4} from "uuid";
-import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import ModeSelector from "./ModeSelector";
+import DifficultySelector from "./DifficultySelector";
+import QuestionCard from "./QuestionCard";
+import ProgressBar from "./ProgressBar";
+import AnswerGrid from "./AnswerGrid";
+import TimerBar from "./TimerBar";
+import PersonReveal from "./PersonReveal";
+import ScoreSummary from "./ScoreSummary";
+import ResultsReview from "./ResultsReview";
+import {gameNumber as calcGameNumber, todayDateStr} from "/lib/trivia/seedRandom";
 import "./Trivia.css";
 
-const TIME_PER_QUESTION = 15;
+const TIME_PER_QUESTION = 20;
 
-function convertTZ(date, tzString) {
-  return new Date(
-    (typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
-      timeZone: tzString,
-    })
-  );
+// State machine phases
+const PHASE = {
+  MODE_SELECT: "MODE_SELECT",
+  DIFFICULTY_SELECT: "DIFFICULTY_SELECT",
+  LOADING: "LOADING",
+  PLAYING: "PLAYING",
+  ANSWER_REVEAL: "ANSWER_REVEAL",
+  RESULTS: "RESULTS",
+};
+
+const initialState = {
+  phase: PHASE.MODE_SELECT,
+  mode: null, // "daily" | "practice"
+  difficulty: "mixed",
+  questions: [],
+  currentIndex: 0,
+  selectedIndex: null,
+  answers: [], // {selectedIndex, correct, score, timeLeft}
+  timeLeft: TIME_PER_QUESTION,
+  totalScore: 0,
+  streak: 0,
+  dailyPlayed: false,
+  error: null,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "SELECT_MODE":
+      if (action.mode === "daily") {
+        return {...state, phase: PHASE.LOADING, mode: "daily", difficulty: "mixed"};
+      }
+      return {...state, phase: PHASE.DIFFICULTY_SELECT, mode: "practice"};
+
+    case "SELECT_DIFFICULTY":
+      return {...state, phase: PHASE.LOADING, difficulty: action.difficulty};
+
+    case "BACK_TO_MODE":
+      return {...state, phase: PHASE.MODE_SELECT, mode: null};
+
+    case "QUESTIONS_LOADED":
+      return {
+        ...state,
+        phase: PHASE.PLAYING,
+        questions: action.questions,
+        currentIndex: 0,
+        selectedIndex: null,
+        answers: [],
+        timeLeft: TIME_PER_QUESTION,
+        totalScore: 0,
+        error: null,
+      };
+
+    case "LOAD_ERROR":
+      return {...state, phase: PHASE.MODE_SELECT, error: action.error};
+
+    case "SELECT_ANSWER":
+      if (state.phase !== PHASE.PLAYING) return state;
+      return {...state, selectedIndex: action.index};
+
+    case "CONFIRM_ANSWER": {
+      const q = state.questions[state.currentIndex];
+      const correct = state.selectedIndex === q.correctIndex;
+      const timeLeft = state.timeLeft;
+      let pts = 0;
+      if (correct) {
+        if (timeLeft > 10) pts = 100;
+        else if (timeLeft > 5) pts = 75;
+        else if (timeLeft > 0) pts = 50;
+        else pts = 25;
+      }
+      const answer = {
+        selectedIndex: state.selectedIndex,
+        correct,
+        score: pts,
+        timeLeft,
+      };
+      return {
+        ...state,
+        phase: PHASE.ANSWER_REVEAL,
+        answers: [...state.answers, answer],
+        totalScore: state.totalScore + pts,
+      };
+    }
+
+    case "TIMEOUT": {
+      // Auto-submit with no selection
+      const q = state.questions[state.currentIndex];
+      const hasSelection = state.selectedIndex != null;
+      const correct = hasSelection && state.selectedIndex === q.correctIndex;
+      const pts = correct ? 25 : 0;
+      const answer = {
+        selectedIndex: state.selectedIndex,
+        correct,
+        score: pts,
+        timeLeft: 0,
+      };
+      return {
+        ...state,
+        phase: PHASE.ANSWER_REVEAL,
+        answers: [...state.answers, answer],
+        totalScore: state.totalScore + pts,
+      };
+    }
+
+    case "NEXT_QUESTION":
+      if (state.currentIndex + 1 >= state.questions.length) {
+        return {...state, phase: PHASE.RESULTS};
+      }
+      return {
+        ...state,
+        phase: PHASE.PLAYING,
+        currentIndex: state.currentIndex + 1,
+        selectedIndex: null,
+        timeLeft: TIME_PER_QUESTION,
+      };
+
+    case "TICK":
+      if (state.phase !== PHASE.PLAYING) return state;
+      return {...state, timeLeft: Math.max(0, state.timeLeft - 1)};
+
+    case "SET_STREAK":
+      return {...state, streak: action.streak};
+
+    case "SET_DAILY_PLAYED":
+      return {...state, dailyPlayed: action.played};
+
+    case "RESTART":
+      return {
+        ...initialState,
+        streak: state.streak,
+        dailyPlayed: state.dailyPlayed,
+      };
+
+    default:
+      return state;
+  }
 }
 
-function Trivia({questions}) {
+function getLocaleFromParams(params, pathname) {
+  if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
+    return params.locale;
+  }
+  const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join("|")})(/|$)`));
+  return pathMatch ? pathMatch[1] : DEFAULT_LOCALE;
+}
+
+export default function Trivia() {
   const params = useParams();
   const pathname = usePathname();
+  const locale = getLocaleFromParams(params, pathname);
 
-  // Determine locale from params or pathname
-  const getLocale = () => {
-    if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
-      return params.locale;
-    }
-    const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(/|$)`));
-    if (pathMatch) {
-      return pathMatch[1];
-    }
-    return DEFAULT_LOCALE;
-  };
-  const locale = getLocale();
-  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const timerRef = useRef(null);
+  const revealTimerRef = useRef(null);
 
-  const timer = useRef(null);
-  const difference =
-    +convertTZ(new Date(), "Europe/Paris") -
-    +convertTZ(new Date("10/06/2022 00:00:00"), "Europe/Paris");
-  const gameIdShare = Math.ceil(difference / (1000 * 60 * 60 * 24));
+  const dateStr = todayDateStr();
+  const gNumber = calcGameNumber(dateStr);
 
-  const {executeRecaptcha} = useGoogleReCaptcha();
-
-  const [firstOpen, setFirstOpen] = useState(true);
-  const [isOpenConsentForm, setIsOpenConsentForm] = useState(false);
-  const [saveConsent, setSaveConsent] = useState(false);
-  const [isOpenDemographicForm, setIsOpenDemographicForm] = useState(false);
-  const [scoreDB, setScoreDB] = useState(-1.0);
-
-  const [showResults, setShowResults] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [error] = useState(false);
-  const [currentAnswer, setCurrentAnswer] = useState("");
-  const [answers, setAnswers] = useState([]);
-
-  const [time, setTime] = useState(TIME_PER_QUESTION);
-  const [rKey, setRKey] = useState(10);
-
-  const question = questions[currentQuestion];
-
-  const fetchDB = async () => {
+  // Init on mount
+  useEffect(() => {
     const token = localStorage.getItem("mptoken");
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
 
-    const gameDataSave = {
-      user_id: localStorage.getItem("mptoken"),
-    };
-    const requestOptions = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(gameDataSave),
-    };
-
-    await fetch("/api/getConsent", requestOptions)
-      .then(resp => resp.json())
-      .then(consent => {
-        if (consent.length > 0) {
-          setScoreDB(parseFloat(consent[0].score_bot));
-          setSaveConsent(false);
-          setIsOpenConsentForm(false);
-        } else {
-          window.location.href = `${localePrefix}/game/birthle`;
-        }
-      });
-  };
-
-  const saveGameDB = async () => {
-    const now = convertTZ(new Date(), "Europe/Paris");
-    const dateDB = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-
-    const getGame = {
-      game_share_id: gameIdShare,
-      date: dateDB,
-      game_number: 1,
-      questions,
-    };
-
-    const requestOptions = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(getGame),
-    };
-
-    const triviaGame = await fetch("/api/getTriviaGame", requestOptions).then(
-      resp => resp.json()
-    );
-
-    if (triviaGame.length === 0) {
-      await fetch("/api/createTriviaGame", requestOptions);
+    // Load streak
+    const storedStreak = JSON.parse(localStorage.getItem("triviaStreak") || "{}");
+    if (storedStreak.count) {
+      dispatch({type: "SET_STREAK", streak: storedStreak.count});
     }
-  };
 
-  const next = useCallback(async () => {
-    if (executeRecaptcha) {
-      const token = await executeRecaptcha("trivia");
-      if (firstOpen) {
-        fetchDB();
-        setFirstOpen(false);
-      } else {
-        if (answers.length >= 0 && answers.length <= 10) {
-          // if (time > 0) {
-          //   if (!currentAnswer) {
-          //     setError("Please select an option");
-          //     return;
-          //   }
-          // }
+    // Check if daily already played
+    const lastDaily = localStorage.getItem("triviaLastDaily");
+    if (lastDaily === dateStr) {
+      dispatch({type: "SET_DAILY_PLAYED", played: true});
+    }
+  }, [dateStr]);
 
-          setRKey(rKey + 1);
+  // Timer tick
+  useEffect(() => {
+    if (state.phase !== PHASE.PLAYING) {
+      clearInterval(timerRef.current);
+      return;
+    }
 
-          const answer = {
-            qid: question.id,
-            quid: question.questionUid,
-            ao: currentAnswer,
-            at: currentAnswer !== "" ? question[`answer_${currentAnswer}`] : "",
-            cao: question.correct_answer,
-            cat: question[`answer_${question.correct_answer}`],
-          };
+    timerRef.current = setInterval(() => {
+      dispatch({type: "TICK"});
+    }, 1000);
 
-          callDB(answer, token);
-          setAnswers(prevAnswers => [...prevAnswers, answer]);
-          setTime(TIME_PER_QUESTION);
-          setCurrentAnswer(null);
+    return () => clearInterval(timerRef.current);
+  }, [state.phase, state.currentIndex]);
 
-          if (currentQuestion + 1 < questions.length) {
-            setCurrentQuestion(prevCurrentQuestion => prevCurrentQuestion + 1);
-            return;
+  // Handle timeout
+  useEffect(() => {
+    if (state.phase === PHASE.PLAYING && state.timeLeft === 0) {
+      dispatch({type: "TIMEOUT"});
+    }
+  }, [state.timeLeft, state.phase]);
+
+  // Keyboard shortcuts: 1-4 select answer, Enter confirms/advances
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (state.phase === PHASE.PLAYING) {
+        const num = parseInt(e.key, 10);
+        if (num >= 1 && num <= 4) {
+          const idx = num - 1;
+          const q = state.questions[state.currentIndex];
+          if (q && idx < q.options.length) {
+            dispatch({type: "SELECT_ANSWER", index: idx});
           }
-
-          setShowResults(true);
-
-          if (currentQuestion + 1 === questions.length) {
-            clearTimeout(timer.current);
-            await saveGameDB();
-            await checkDemographics();
-          }
+        } else if (e.key === "Enter" && state.selectedIndex != null) {
+          e.preventDefault();
+          dispatch({type: "CONFIRM_ANSWER"});
+        }
+      } else if (state.phase === PHASE.ANSWER_REVEAL) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          clearTimeout(revealTimerRef.current);
+          dispatch({type: "NEXT_QUESTION"});
         }
       }
-    }
-  }, [executeRecaptcha, firstOpen, answers, time, timer, currentAnswer]);
-
-  const checkDemographics = async () => {
-    const token = localStorage.getItem("mptoken");
-    if (!token) {
-      localStorage.setItem("mptoken", uuidv4());
-    }
-
-    const gameDataSave = {
-      user_id: localStorage.getItem("mptoken"),
-    };
-    const requestOptions = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(gameDataSave),
     };
 
-    await fetch("/api/getParticipant", requestOptions)
-      .then(resp => resp.json())
-      .then(socioConsent => {
-        if (socioConsent.length > 0) {
-          setScoreDB(parseFloat(socioConsent[0].score_bot));
-          setIsOpenDemographicForm(false);
-        } else {
-          setIsOpenDemographicForm(true);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [state.phase, state.currentIndex, state.selectedIndex, state.questions]);
+
+  // Auto-advance after reveal
+  useEffect(() => {
+    if (state.phase === PHASE.ANSWER_REVEAL) {
+      revealTimerRef.current = setTimeout(() => {
+        dispatch({type: "NEXT_QUESTION"});
+      }, 5000);
+      return () => clearTimeout(revealTimerRef.current);
+    }
+  }, [state.phase, state.currentIndex]);
+
+  // Load questions when entering LOADING phase
+  useEffect(() => {
+    if (state.phase !== PHASE.LOADING) return;
+
+    const params = new URLSearchParams({
+      mode: state.mode,
+      count: "10",
+      difficulty: state.difficulty,
+    });
+
+    fetch(`/api/triviaQuestions?${params}`)
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load questions");
+        return r.json();
+      })
+      .then((questions) => {
+        if (!questions || questions.length === 0) {
+          throw new Error("No questions returned");
         }
+        dispatch({type: "QUESTIONS_LOADED", questions});
+      })
+      .catch((err) => {
+        dispatch({type: "LOAD_ERROR", error: err.message});
       });
-  };
+  }, [state.phase, state.mode, state.difficulty]);
 
-  const callDB = async (answer, token) => {
-    if (scoreDB === -1) {
-      const questionScore = {
-        user_id: localStorage.getItem("mptoken"),
-      };
-      const requestOptions = {
+  // Save score when results phase is reached
+  useEffect(() => {
+    if (state.phase !== PHASE.RESULTS) return;
+
+    // Update streak for daily mode
+    if (state.mode === "daily") {
+      localStorage.setItem("triviaLastDaily", dateStr);
+      dispatch({type: "SET_DAILY_PLAYED", played: true});
+
+      const storedStreak = JSON.parse(localStorage.getItem("triviaStreak") || "{}");
+      const yesterday = new Date();
+      yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+      const yesterdayStr = `${yesterday.getUTCFullYear()}-${String(yesterday.getUTCMonth() + 1).padStart(2, "0")}-${String(yesterday.getUTCDate()).padStart(2, "0")}`;
+
+      let newStreak = 1;
+      if (storedStreak.lastDate === yesterdayStr) {
+        newStreak = (storedStreak.count || 0) + 1;
+      } else if (storedStreak.lastDate === dateStr) {
+        newStreak = storedStreak.count || 1;
+      }
+
+      localStorage.setItem(
+        "triviaStreak",
+        JSON.stringify({count: newStreak, lastDate: dateStr})
+      );
+      dispatch({type: "SET_STREAK", streak: newStreak});
+    }
+
+    // Save game and scores to DB
+    saveGameToDB();
+    saveScoresToDB();
+  }, [state.phase]);
+
+  const saveGameToDB = async () => {
+    try {
+      await fetch("/api/createTriviaGame", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(questionScore),
-      };
-      const consent = await fetch("/api/getConsent", requestOptions).then(
-        resp => resp.json()
-      );
-
-      if (consent.length > 0) {
-        const tempScore = parseFloat(consent[0].score_bot);
-        setScoreDB(tempScore);
-        saveQuestion(answer, tempScore);
-      }
-    } else {
-      await saveQuestion(answer, scoreDB, token);
+        body: JSON.stringify({
+          date: dateStr,
+          game_number: 1,
+          game_share_id: gNumber,
+          questions: state.questions,
+        }),
+      });
+    } catch (e) {
+      console.error("[trivia] Failed to save game:", e);
     }
   };
 
-  const saveQuestion = async (answer, tempScore, token) => {
-    const questionScore = {
-      user_id: localStorage.getItem("mptoken"),
-      game_share_id: gameIdShare,
-      token,
-      answer,
-      scoreDB: tempScore,
-    };
+  const saveScoresToDB = useCallback(async () => {
+    const userId = localStorage.getItem("mptoken");
 
-    const requestOptionsS = {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(questionScore),
-    };
-    await fetch("/api/createTriviaScore", requestOptionsS);
+    for (let i = 0; i < state.answers.length; i++) {
+      const answer = state.answers[i];
+      const question = state.questions[i];
+      if (!question) continue;
+
+      const answerData = {
+        qid: question.id,
+        quid: question.id,
+        ao: answer.selectedIndex != null ? String(answer.selectedIndex) : "",
+        at: answer.selectedIndex != null ? question.options[answer.selectedIndex] : "",
+        cao: String(question.correctIndex),
+        cat: question.options[question.correctIndex],
+      };
+
+      try {
+        await fetch("/api/createTriviaScore", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            user_id: userId,
+            game_share_id: gNumber,
+            answer: answerData,
+          }),
+        });
+      } catch (e) {
+        console.error("[trivia] Failed to save score:", e);
+      }
+    }
+  }, [state.answers, state.questions, gNumber]);
+
+  const handleConfirm = () => {
+    if (state.selectedIndex == null) return;
+    dispatch({type: "CONFIRM_ANSWER"});
   };
 
-  useEffect(() => {
-    timer.current = setTimeout(() => {
-      setTime(time - 1);
-      if ((time === 0 || firstOpen) && answers.length < 10) {
-        next();
-      }
-    }, 1 * 1000);
+  const handleRevealTap = () => {
+    clearTimeout(revealTimerRef.current);
+    dispatch({type: "NEXT_QUESTION"});
+  };
 
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, [time]);
-
-  // console.log("⏰ time: ", time);
+  const question = state.questions[state.currentIndex];
 
   return (
-    <div key={"triviaDiv1"}>
-      <ConsentForm
-        isOpenConsentForm={isOpenConsentForm}
-        setIsOpenConsentForm={setIsOpenConsentForm}
-        universe={"trivia"}
-        saveConsent={saveConsent}
-        setSaveConsent={setSaveConsent}
-        scoreDB={scoreDB}
-        setScoreDB={setScoreDB}
-      />
-      <DemographicForm
-        isOpenDemographicForm={isOpenDemographicForm}
-        setIsOpenDemographicForm={setIsOpenDemographicForm}
-        universe={"trivia"}
-        scoreDB={scoreDB}
-        setScoreDB={setScoreDB}
-      />
-      <h1 key={"triviaTitleH1"} className="trivia-title">
-        Trivia
-      </h1>
-      {showResults ? (
-        <div key={"triviaResultsDiv"} className="results">
-          <Score
-            answers={answers}
-            questions={questions}
-            gameIdShare={gameIdShare}
-          />
-          <Results answers={answers} questions={questions} timer={timer} />
+    <div className="trivia-container">
+      {state.phase === PHASE.MODE_SELECT && (
+        <ModeSelector
+          streak={state.streak}
+          dailyPlayed={state.dailyPlayed}
+          onSelectMode={(mode) => dispatch({type: "SELECT_MODE", mode})}
+        />
+      )}
+
+      {state.phase === PHASE.DIFFICULTY_SELECT && (
+        <DifficultySelector
+          onSelect={(d) => dispatch({type: "SELECT_DIFFICULTY", difficulty: d})}
+          onBack={() => dispatch({type: "BACK_TO_MODE"})}
+        />
+      )}
+
+      {state.phase === PHASE.LOADING && (
+        <div className="trivia-loading">
+          <div className="loading-spinner" />
+          <p>Generating questions...</p>
         </div>
-      ) : (
-        <div key={"triviaQuizDiv"} className="quiz">
-          <div key={"triviaCountDownDiv"} className="countdown">
-            <div className="countdown.label">
-              <img src="../images/icons/oec-trivia-timer.svg" />
-              {time > 0 ? time : 0}
-            </div>
-            <Question questions={questions} currentQuestion={currentQuestion} />
-            <Progress total={questions.length} current={currentQuestion + 1} />
-            {error ? <div className="error">{error}</div> : null}
-            <Answers
-              currentAnswer={currentAnswer}
-              setCurrentAnswer={setCurrentAnswer}
-              currentQuestion={currentQuestion}
-              questions={questions}
+      )}
+
+      {state.phase === PHASE.PLAYING && question && (
+        <div className="quiz-container">
+          <ProgressBar
+            current={state.currentIndex}
+            total={state.questions.length}
+            answers={state.answers}
+          />
+
+          <TimerBar timeLeft={state.timeLeft} maxTime={TIME_PER_QUESTION} />
+
+          <QuestionCard question={question}>
+            <AnswerGrid
+              options={question.options}
+              selectedIndex={state.selectedIndex}
+              revealed={false}
+              correctIndex={question.correctIndex}
+              onSelect={(idx) => dispatch({type: "SELECT_ANSWER", index: idx})}
+              disabled={false}
             />
-            <div className="continue">
-              <button
-                className={
-                  currentAnswer ? "btn-continue" : "btn-continue btn-disabled"
-                }
-                onClick={next}
-                disabled={!currentAnswer}
-              >
-                Confirm and Continue
-              </button>
-            </div>
+          </QuestionCard>
+
+          <div className="confirm-container">
+            <button
+              className={`btn-confirm ${state.selectedIndex == null ? "btn-disabled" : ""}`}
+              onClick={handleConfirm}
+              disabled={state.selectedIndex == null}
+              type="button"
+            >
+              Confirm &amp; Continue
+            </button>
           </div>
         </div>
       )}
-      {/* <Game
-        MAX_ATTEMPTS={MAX_ATTEMPTS}
-        N_PERSONS={N_PERSONS}
-        fetchError={fetchError}
-        persons={persons}
-        setPersons={setPersons}
-        selectedPersons={selectedPersons}
-        sortedPersons={sortedPersons}
-        board={board}
-        boardCellDefault={boardCellDefault}
-        personPos={personPos}
-        attempt={attempt}
-        isWin={isWin}
-        resultToShare={resultToShare}
-        checkBtnRef={checkBtnRef}
-        cancelBtnRef={cancelBtnRef}
-        resultBlockRef={resultBlockRef}
-        gameBlockRef={gameBlockRef}
-        gameDate={gameDate}
-        gameNumber={gameNumber}
-        userId={userId}
-        correctPersons={correctPersons}
-        setCorrectPersons={setCorrectPersons}
-        scoreDB={scoreDB}
-        setScoreDB={setScoreDB}
-        setIsOpenDemographicForm={setIsOpenDemographicForm}
-        setIsOpenConsentForm={setIsOpenConsentForm}
-        setSaveConsent={setSaveConsent}
-      /> */}
+
+      {state.phase === PHASE.ANSWER_REVEAL && question && (
+        <div className="quiz-container">
+          <ProgressBar
+            current={state.currentIndex}
+            total={state.questions.length}
+            answers={state.answers}
+          />
+
+          <div className="reveal-container">
+            <PersonReveal
+              question={question}
+              correct={state.answers[state.answers.length - 1]?.correct}
+              onNext={handleRevealTap}
+            />
+          </div>
+        </div>
+      )}
+
+      {state.phase === PHASE.RESULTS && (
+        <div className="results-container">
+          <ScoreSummary
+            answers={state.answers}
+            totalQuestions={state.questions.length}
+            gameNumber={gNumber}
+            streak={state.streak}
+            mode={state.mode}
+            score={state.totalScore}
+          />
+          <ResultsReview questions={state.questions} answers={state.answers} />
+
+          {state.mode === "practice" && (
+            <button
+              className="btn-play-again"
+              onClick={() => dispatch({type: "RESTART"})}
+              type="button"
+            >
+              Play Again
+            </button>
+          )}
+
+          <button
+            className="btn-back-home"
+            onClick={() => dispatch({type: "RESTART"})}
+            type="button"
+          >
+            Back to Menu
+          </button>
+        </div>
+      )}
+
+      {state.error && (
+        <div className="trivia-error">
+          <p>Something went wrong: {state.error}</p>
+          <button onClick={() => dispatch({type: "RESTART"})} type="button">
+            Try Again
+          </button>
+        </div>
+      )}
     </div>
   );
 }
-
-export default Trivia;

@@ -3,7 +3,6 @@ import {useEffect, useRef, useState} from "react";
 import useTrait from "./useTrait";
 import Game from "./Game";
 import Result from "./Result";
-import ConsentForm from "../ConsentForm";
 import fetchSlugs from "./fetchSlugs";
 import fetchPersons from "./fetchPersons";
 import {v4 as uuidv4} from "uuid";
@@ -38,12 +37,7 @@ function Birthle() {
   const attempt = useTrait(0);
   const isWin = useTrait(false);
   const resultToShare = useTrait("");
-  const [userId, setUserId] = useState(undefined);
   const [correctPersons, setCorrectPersons] = useState(undefined);
-  const [scoreDB, setScoreDB] = useState(-1);
-  const [isOpenConsentForm, setIsOpenConsentForm] = useState(undefined);
-  const [, setIsOpenDemographicForm] = useState(undefined);
-  const [saveConsent, setSaveConsent] = useState(undefined);
 
   const checkBtnRef = useRef(0);
   const cancelBtnRef = useRef(0);
@@ -53,10 +47,9 @@ function Birthle() {
   const date = convertTZ(new Date(), "Europe/Paris");
   const year = date.getFullYear();
   const day = date.getDate();
-  // const hour = date.getHours();
   const month = date.getMonth() + 1;
-  const gameNumber = 1; // (hour >= 2 && hour < 14) ? 1 : 2;
-  const gameDate = `${year}-${month}-${day}`; // 2022-5-25
+  const gameNumber = 1;
+  const gameDate = `${year}-${month}-${day}`;
 
   const fetchData = async () => {
     const slugs = await fetchSlugs();
@@ -76,17 +69,6 @@ function Birthle() {
         return a.birthyear - b.birthyear;
       })
     );
-
-    // const savePersons = [...persons].sort((a, b) => {
-    //   if (a.birthyear === b.birthyear) {
-    //     const dateA = new Date(a.birthdate);
-    //     const dateB = new Date();
-
-    //     return dateA - dateB;
-    //   }
-
-    //   return a.birthyear - b.birthyear;
-    // });
   };
 
   useEffect(() => {
@@ -94,13 +76,10 @@ function Birthle() {
     if (!token) {
       localStorage.setItem("mptoken", uuidv4());
     }
-    setUserId(localStorage.getItem("mptoken"));
 
     board.set(boardDefault);
     selectedPersons.set([]);
     setSortedPersons([]);
-    // checkBtnRef.current.disabled = true;
-    // cancelBtnRef.current.disabled = true;
     fetchData().catch(() => {
       fetchError.set(true);
     });
@@ -108,16 +87,6 @@ function Birthle() {
 
   return (
     <div key={"birthleComponents"} className="birthle">
-      <ConsentForm
-        isOpenConsentForm={isOpenConsentForm}
-        setIsOpenConsentForm={setIsOpenConsentForm}
-        userId={userId}
-        universe={"birthle"}
-        saveConsent={saveConsent}
-        setSaveConsent={setSaveConsent}
-        scoreDB={scoreDB}
-        setScoreDB={setScoreDB}
-      />
       <Game
         MAX_ATTEMPTS={MAX_ATTEMPTS}
         N_PERSONS={N_PERSONS}
@@ -138,14 +107,8 @@ function Birthle() {
         gameBlockRef={gameBlockRef}
         gameDate={gameDate}
         gameNumber={gameNumber}
-        userId={userId}
         correctPersons={correctPersons}
         setCorrectPersons={setCorrectPersons}
-        scoreDB={scoreDB}
-        setScoreDB={setScoreDB}
-        setIsOpenDemographicForm={setIsOpenDemographicForm}
-        setIsOpenConsentForm={setIsOpenConsentForm}
-        setSaveConsent={setSaveConsent}
       />
       <Result
         MAX_ATTEMPTS={MAX_ATTEMPTS}
