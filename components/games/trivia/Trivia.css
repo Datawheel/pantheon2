@@ -1073,12 +1073,11 @@
 /* ===== Score Summary ===== */
 .results-container {
   margin-top: 16px;
-  padding-top: 24px;
 }
 
 .score-summary {
   text-align: center;
-  padding: 12px 16px 24px;
+  padding: 8px 16px 24px;
   border-bottom: 2px solid rgba(139, 105, 20, 0.2);
   margin-bottom: 28px;
 }

@@ -62,7 +62,7 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
 
         <ol className="top-10-grid">
           {top10.map((person, index) => {
-            const famousFor = locale === "en" ? person.famous_for : null;
+            const famousFor = locale === "en" ? (person.famous_for || person.description) : null;
             const excerpt = famousFor ? truncateText(famousFor) : null;
             const isExpandable = famousFor && excerpt && excerpt !== famousFor;
 

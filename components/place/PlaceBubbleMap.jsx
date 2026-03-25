@@ -134,7 +134,6 @@ export default function PlaceBubbleMap({places, locale, hoverLabel}) {
     didPan.current = false;
     panStartClient.current = {x: e.clientX, y: e.clientY};
     viewBoxOnPanStart.current = {...vb};
-    e.currentTarget.setPointerCapture(e.pointerId);
   }, [vb]);
 
   const handlePointerMove = useCallback((e) => {
@@ -160,8 +159,24 @@ export default function PlaceBubbleMap({places, locale, hoverLabel}) {
   }, [clampVb]);
 
   const handlePointerUp = useCallback(() => {
+    const wasPanning = didPan.current;
     isPanning.current = false;
+    if (wasPanning) {
+      setTimeout(() => { didPan.current = false; }, 0);
+    }
   }, []);
+
+  // Listen on document for pointer move/up so panning works even if pointer leaves SVG
+  useEffect(() => {
+    const onMove = (e) => handlePointerMove(e);
+    const onUp = () => handlePointerUp();
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    return () => {
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+    };
+  }, [handlePointerMove, handlePointerUp]);
 
   if (!geojson) {
     return <div className="sp-map-loading" />;
@@ -211,9 +226,6 @@ export default function PlaceBubbleMap({places, locale, hoverLabel}) {
         className={`sp-map-svg ${isZoomed ? "sp-map-svg-zoomable" : ""}`}
         preserveAspectRatio="xMidYMid meet"
         onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
       >
         {/* Country outlines */}
         {geojson.features
