@@ -16,6 +16,7 @@ import News from "/components/person/News";
 import Movies from "/components/person/Movies";
 import WhyTrending from "/components/person/WhyTrending";
 import Footer from "/components/person/Footer";
+import TrendingHeatmap from "/components/person/TrendingHeatmap";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import GoogleAdSense from "/components/common/GoogleAdSense";
@@ -279,6 +280,13 @@ export default async function Page(props) {
       slug: "metrics",
       content: (
         <MemMetrics person={localizedPerson} personRanks={personRanks} />
+      ),
+    },
+    {
+      title: "Trending Activity",
+      slug: "trending_heatmap",
+      content: (
+        <TrendingHeatmap personSlug={id} lang={lang} />
       ),
     },
     // {
