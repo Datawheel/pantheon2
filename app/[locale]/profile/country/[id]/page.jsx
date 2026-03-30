@@ -210,7 +210,13 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {id}}) {
+async function getTopCities(countryId) {
+  if (!countryId) return [];
+  const url = `${BASE_API}/place?country=eq.${countryId}&select=id,place,slug,num_born&order=num_born.desc.nullslast&limit=5&num_born=gt.0`;
+  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+}
+
+export default async function Page({params: {id, locale}}) {
   const [country, occupations] = await Promise.all([
     getCountry(id),
     getOccupations(),
@@ -233,12 +239,13 @@ export default async function Page({params: {id}}) {
     ? await getCountryRanks(countryRankWindow.low, countryRankWindow.high)
     : null;
 
-  let [peopleBornHere, peopleDiedHere, peopleBornHereHpi, peopleDiedHereHpi] =
+  let [peopleBornHere, peopleDiedHere, peopleBornHereHpi, peopleDiedHereHpi, topCities] =
     await Promise.all([
       getPeopleBornHere(country.id),
       getPeopleDiedHere(country.id),
       getPeopleBornHereHpi(country.id),
       getPeopleDiedHereHpi(country.id),
+      getTopCities(country.id),
     ]);
   // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
   // we calculate and add them...
@@ -346,7 +353,9 @@ export default async function Page({params: {id}}) {
           countryRanks={countryRanks}
           peopleBornHere={peopleBornHere}
           peopleDiedHere={peopleDiedHere}
+          topCities={topCities}
           wikiSummary={wikiSummary}
+          lang={locale}
         />
       </div>
       {sections.map((section, key) =>

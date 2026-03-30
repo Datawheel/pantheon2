@@ -2,6 +2,7 @@ import AnchorList from "../utils/AnchorList";
 import {FORMATTERS} from "../utils/consts";
 import {nest} from "d3-collection";
 import {plural} from "pluralize";
+import {DEFAULT_LOCALE} from "/app/locales";
 import "../common/Intro.css";
 
 export default function Intro({
@@ -9,8 +10,11 @@ export default function Intro({
   countryRanks,
   peopleBornHere,
   peopleDiedHere,
+  topCities,
   wikiSummary,
+  lang = "en",
 }) {
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const occupationsBorn = nest()
     .key(d => d.occupation.id)
     .rollup(leaves => ({
@@ -70,7 +74,7 @@ export default function Intro({
                         myIndex
                       )}
                       name={d => d.country}
-                      url={d => `/profile/country/${d.slug}/`}
+                      url={d => `${localePrefix}/profile/country/${d.slug}/`}
                     />
                   </>
                 )}
@@ -83,7 +87,7 @@ export default function Intro({
                 <AnchorList
                   items={peopleBornHere.slice(0, 3).filter(d => d.slug)}
                   name={d => d.name}
-                  url={d => `/profile/person/${d.slug}/`}
+                  url={d => `${localePrefix}/profile/person/${d.slug}/`}
                 />
                 .
               </span>
@@ -95,7 +99,7 @@ export default function Intro({
                 <AnchorList
                   items={peopleDiedHere.slice(0, 3).filter(d => d.slug)}
                   name={d => d.name}
-                  url={d => `/profile/person/${d.slug}/`}
+                  url={d => `${localePrefix}/profile/person/${d.slug}/`}
                 />
                 .
               </span>
@@ -108,7 +112,7 @@ export default function Intro({
                   items={occupationsBorn.filter(d => d.occupation)}
                   name={d => plural(d.occupation.occupation.toLowerCase())}
                   url={d =>
-                    `/profile/occupation/${d.occupation.occupation_slug}/`
+                    `${localePrefix}/profile/occupation/${d.occupation.occupation_slug}/`
                   }
                 />
               </span>
@@ -121,7 +125,7 @@ export default function Intro({
                   items={occupationsDied.filter(d => d.occupation)}
                   name={d => plural(d.occupation.occupation.toLowerCase())}
                   url={d =>
-                    `/profile/occupation/${d.occupation.occupation_slug}/`
+                    `${localePrefix}/profile/occupation/${d.occupation.occupation_slug}/`
                   }
                 />
                 .
@@ -129,6 +133,18 @@ export default function Intro({
             ) : (
               <span>.</span>
             )}
+            {topCities && topCities.length ? (
+              <span>
+                {" "}
+                The top cities in {country.country} by number of biographies are{" "}
+                <AnchorList
+                  items={topCities}
+                  name={d => d.place}
+                  url={d => `${localePrefix}/profile/place/${d.slug}/`}
+                />
+                .
+              </span>
+            ) : null}
           </p>
           {wikiSentence ? (
             <p>

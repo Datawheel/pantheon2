@@ -54,7 +54,7 @@ async function getOccupation(occupationId, lang = "en") {
 }
 
 async function getCountry(countryId, lang = "en") {
-  const url = `${BASE_API}/country?slug=eq.${countryId}&select=*,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym_m_plural,${lang}_from_country:translations->${lang}->>from_country`;
+  const url = `${BASE_API}/country?slug=eq.${countryId}&select=*,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym_m_plural,${lang}_nationality_adj:translations->${lang}->>nationality_adj_m,${lang}_from_country:translations->${lang}->>from_country`;
   const data = await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -141,6 +141,7 @@ export async function generateMetadata(props, parent) {
     occupation[`${lang}_occupation`] || occupation.occupation;
   const localizedCountry = country[`${lang}_country`] || country.country;
   const localizedDemonym = country[`${lang}_demonym`] || country.demonym;
+  const localizedNationalityAdj = country[`${lang}_nationality_adj`] || country.demonym;
 
   // Get count of people for this occupation + country
   const countRes = await fetch(
@@ -171,10 +172,10 @@ export async function generateMetadata(props, parent) {
 
   const title = tc.metaTitle
     ? tc.metaTitle({
-        demonym: localizedDemonym,
+        demonym: localizedNationalityAdj,
         occupationPlural: occupationDisplay,
       })
-    : `${tc.greatest || "Greatest"} ${localizedDemonym} ${occupationDisplay} | Pantheon`;
+    : `${tc.greatest || "Greatest"} ${localizedNationalityAdj} ${occupationDisplay} | Pantheon`;
   const description = tc.metaDescription
     ? tc.metaDescription({
         countFormatted: formatNumber(totalCount, lang),
@@ -257,6 +258,7 @@ export default async function Page(props) {
     occupation[`${lang}_occupation`] || occupation.occupation;
   const localizedCountry = country[`${lang}_country`] || country.country;
   const localizedDemonym = country[`${lang}_demonym`] || country.demonym;
+  const localizedNationalityAdj = country[`${lang}_nationality_adj`] || country.demonym;
   const localizedFromCountry = country[`${lang}_from_country`];
 
   // Create localized versions of occupation and country to pass to components
@@ -269,6 +271,7 @@ export default async function Page(props) {
     ...country,
     country: localizedCountry,
     demonym: localizedDemonym,
+    nationalityAdj: localizedNationalityAdj,
     fromCountry: localizedFromCountry,
   };
 

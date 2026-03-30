@@ -520,15 +520,26 @@
 }
 
 .progress-dot.dot-correct {
-  background: linear-gradient(180deg, var(--mythic-amber-800), var(--mythic-amber-950));
-  border-color: var(--mythic-amber-600);
-  opacity: 1;
+  background: linear-gradient(180deg, #3a9e48, #2d6e36);
+  border-color: #4db85a;
 }
 
 .progress-dot.dot-incorrect {
-  background: linear-gradient(180deg, var(--mythic-amber-800), var(--mythic-amber-950));
-  border-color: var(--mythic-amber-600);
-  opacity: 0.5;
+  background: linear-gradient(180deg, #c0453a, #8b2920);
+  border-color: #d4513f;
+}
+
+.progress-result-icon {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .progress-result-icon {
+    font-size: 20px;
+  }
 }
 
 .progress-icon {

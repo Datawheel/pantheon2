@@ -38,7 +38,7 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
       <div className="top-10-container">
         <div className="top-10-header">
           <h2 className="top-10-title">
-            {t.occupationCountry.top} {count} {occupationPlural}
+            {t.occupationCountry.top} {count} {country.nationalityAdj || country.demonym} {occupationPlural}
           </h2>
         </div>
         <p className="top-10-intro">
