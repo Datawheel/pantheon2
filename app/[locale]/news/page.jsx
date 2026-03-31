@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {REVALIDATE_PERIODS} from "/app/constants";
 import {getTranslations} from "/app/translations";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 import TrendingNews from "/components/news/TrendingNews";
 
 const baseUrl = process.env.URL || "https://pantheon.world";
@@ -16,7 +16,7 @@ export async function generateMetadata({params}) {
     title: `${t.news.pageTitle} - Pantheon`,
     description: t.news.pageSubtitle,
     alternates: {
-      canonical: `https://pantheon.world/news`,
+      canonical: buildCanonical(lang, "/news"),
       languages: buildLanguageAlternates("/news"),
     },
   };

@@ -16,7 +16,7 @@ import Lifespans from "/components/occupation/sections/Lifespans";
 import {toTitleCase} from "../../../../../components/utils/vizHelpers";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`;
@@ -71,7 +71,7 @@ export async function generateMetadata({params}, parent) {
       ],
     },
     alternates: {
-      canonical: `https://pantheon.world/profile/occupation/${id}`,
+      canonical: buildCanonical(params.locale, `/profile/occupation/${id}`),
       languages: buildLanguageAlternates(`/profile/occupation/${id}`),
     },
   };

@@ -15,7 +15,7 @@ import OccupationTrends from "../../../../../components/place/sections/Occupatio
 import Lifespans from "../../../../../components/place/sections/Lifespans";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 
 async function getWikiSummary(placeName) {
   try {
@@ -215,7 +215,7 @@ export async function generateMetadata({params}, parent) {
       description,
     },
     alternates: {
-      canonical: `https://pantheon.world/${lang}/profile/place/${id}`,
+      canonical: buildCanonical(lang, `/profile/place/${id}`),
       languages: buildLanguageAlternates(`/profile/place/${id}`),
     },
   };

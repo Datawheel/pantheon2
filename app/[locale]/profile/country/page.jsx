@@ -3,7 +3,7 @@ import {REVALIDATE_PERIODS, BASE_API} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
 import {safeFetchJson} from "/app/utils/safeFetch";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 import CountryMap from "/components/country/CountryMap";
 import CountryList from "/components/country/CountryList";
 import "/components/country/SelectCountry.css";
@@ -41,7 +41,7 @@ export async function generateMetadata(props) {
       description,
     },
     alternates: {
-      canonical: `https://pantheon.world/${locale}/profile/country`,
+      canonical: buildCanonical(locale, "/profile/country"),
       languages: buildLanguageAlternates("/profile/country"),
     },
   };

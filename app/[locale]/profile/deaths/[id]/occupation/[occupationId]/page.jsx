@@ -6,7 +6,7 @@ import TopPeople from "/components/deaths/TopPeople";
 import DeathsByMonth from "/components/deaths/DeathsByMonth";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 
 async function getOccupation(occupationId) {
   const url = `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`;
@@ -39,7 +39,7 @@ export async function generateMetadata({params}, parent) {
       ],
     },
     alternates: {
-      canonical: `https://pantheon.world/profile/deaths/${year}/occupation/${params.occupationId}`,
+      canonical: buildCanonical(params.locale, `/profile/deaths/${year}/occupation/${params.occupationId}`),
       languages: buildLanguageAlternates(`/profile/deaths/${year}/occupation/${params.occupationId}`),
     },
   };

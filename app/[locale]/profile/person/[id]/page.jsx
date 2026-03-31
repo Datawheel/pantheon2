@@ -19,7 +19,7 @@ import Footer from "/components/person/Footer";
 import TrendingHeatmap from "/components/person/TrendingHeatmap";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 import GoogleAdSense from "/components/common/GoogleAdSense";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
 import rankless from "/data/rankless.json";
@@ -191,7 +191,7 @@ export async function generateMetadata(props, parent) {
       ],
     },
     alternates: {
-      canonical: `https://pantheon.world/${locale}/profile/person/${id}`,
+      canonical: buildCanonical(locale, `/profile/person/${id}`),
       languages: buildLanguageAlternates(`/profile/person/${id}`),
     },
   };

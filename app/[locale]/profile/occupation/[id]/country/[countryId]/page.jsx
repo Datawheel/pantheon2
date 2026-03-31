@@ -12,7 +12,7 @@ import {toTitleCase} from "/components/utils/vizHelpers";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 
 // Safe JSON fetch with logging for debugging HTML responses
 async function safeFetchJson(url, options = {}, fallback = null) {
@@ -208,7 +208,7 @@ export async function generateMetadata(props, parent) {
       description,
     },
     alternates: {
-      canonical: `https://pantheon.world/${lang}/profile/occupation/${id}/country/${countryId}`,
+      canonical: buildCanonical(lang, `/profile/occupation/${id}/country/${countryId}`),
       languages: buildLanguageAlternates(`/profile/occupation/${id}/country/${countryId}`),
     },
   };

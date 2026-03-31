@@ -14,7 +14,7 @@ import Occupations from "/components/era/sections/Occupations";
 // } from "/components/utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
@@ -70,7 +70,7 @@ export async function generateMetadata({params}, parent) {
       ],
     },
     alternates: {
-      canonical: `https://pantheon.world/profile/era/${id}`,
+      canonical: buildCanonical(params.locale, `/profile/era/${id}`),
       languages: buildLanguageAlternates(`/profile/era/${id}`),
     },
   };

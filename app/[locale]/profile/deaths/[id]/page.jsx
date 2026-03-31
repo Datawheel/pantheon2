@@ -6,7 +6,7 @@ import TopPeople from "/components/deaths/TopPeople";
 import DeathsByMonth from "/components/deaths/DeathsByMonth";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson} from "/app/utils/safeFetch";
-import {buildLanguageAlternates} from "/app/utils/hreflang";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 
 async function getPeopleDiedThisYear(yearNum) {
   const url = `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(id,country,slug,demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`;
@@ -36,7 +36,7 @@ export async function generateMetadata({params}, parent) {
       ],
     },
     alternates: {
-      canonical: `https://pantheon.world/profile/deaths/${year}`,
+      canonical: buildCanonical(params.locale, `/profile/deaths/${year}`),
       languages: buildLanguageAlternates(`/profile/deaths/${year}`),
     },
   };
