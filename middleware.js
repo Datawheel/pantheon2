@@ -59,7 +59,7 @@ export const config = {
   // Keep the matcher simple; don’t try to filter "dots" here.
   matcher: [
     // Everything except Next internals and your API route
-    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|ads.txt).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|ads.txt|sitemap).*)",
     // Explicitly include screenshot API routes for request tracing.
     "/api/screenshot/:path*",
   ],
