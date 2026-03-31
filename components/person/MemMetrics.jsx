@@ -3,9 +3,37 @@
 import {FORMATTERS} from "../utils/consts";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import {PUBLIC_API} from "@/app/constants";
 import MemMetricsBullet from "./MemMetricsBullet";
+
+function YouTubeFacade({videoId}) {
+  const [play, setPlay] = useState(false);
+  const handlePlay = useCallback(() => setPlay(true), []);
+
+  if (play) {
+    return (
+      <iframe
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+        width="100%"
+        height="100%"
+        allowFullScreen
+        allow="autoplay"
+      />
+    );
+  }
+
+  return (
+    <button className="yt-facade" onClick={handlePlay} aria-label="Play video">
+      <img
+        src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
+        alt="Video thumbnail"
+        loading="lazy"
+      />
+      <span className="yt-play-btn" />
+    </button>
+  );
+}
 
 export default function MemMetrics({person, personRanks, slug, title}) {
   const [loading, setLoading] = useState(true);
@@ -57,13 +85,7 @@ export default function MemMetrics({person, personRanks, slug, title}) {
       <div className="metrics-container">
         <div className="metric-vid">
           {person?.youtube ? (
-            <iframe
-              src={`https://www.youtube.com/embed/${person?.youtube}`}
-              max-width="560"
-              width="100%"
-              height="100%"
-              allowFullScreen
-            />
+            <YouTubeFacade videoId={person.youtube} />
           ) : (
             <button
               className="press-play"
