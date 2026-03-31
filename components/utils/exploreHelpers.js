@@ -243,7 +243,7 @@ export async function fetchDataAndDispatch(
   places,
   exploreState,
   dispatch,
-  router,
+  _router,
   pathname,
   pageOverride,
   sortBy,
@@ -261,7 +261,13 @@ export async function fetchDataAndDispatch(
     dispatch(dataReceived(responseData));
     if (shouldUpdateRoute) {
       const queryStr = getQueryArgs(exploreState);
-      router.push(pathname + queryStr);
+      const nextUrl = `${pathname}${queryStr}`;
+      if (
+        typeof window !== "undefined" &&
+        `${window.location.pathname}${window.location.search}` !== nextUrl
+      ) {
+        window.history.replaceState(window.history.state, "", nextUrl);
+      }
     }
   } catch (error) {
     dispatch(dataRequestFailed(error.message));

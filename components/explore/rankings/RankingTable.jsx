@@ -10,7 +10,16 @@ import "./Rankings.css";
 
 export default function RankingTable({baseApi, places}) {
   const exploreState = useSelector(state => state.explore);
-  const {data, dataCount, dataPageIndex, show, birthMonth, birthDay, nameSearch} = exploreState;
+  const {
+    data,
+    dataCount,
+    dataLoading,
+    dataPageIndex,
+    show,
+    birthMonth,
+    birthDay,
+    nameSearch,
+  } = exploreState;
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
@@ -21,6 +30,7 @@ export default function RankingTable({baseApi, places}) {
   const [pageInputVal, setPageInputVal] = useState(controlledPageIndex);
   const [searchInputVal, setSearchInputVal] = useState(nameSearch || "");
   const debounceRef = useRef(null);
+  const hasMountedSortEffect = useRef(false);
 
   const handleSearchChange = useCallback((e) => {
     const val = e.target.value;
@@ -41,7 +51,7 @@ export default function RankingTable({baseApi, places}) {
   const hasNameSearch = nameSearch && nameSearch.trim().length >= 2;
   const columns = useMemo(
     () => getColumns(show.type, show.depth, controlledPageIndex * 50, {hasBirthdayFilter, nameSearch: hasNameSearch}),
-    [controlledPageIndex, show.type, hasBirthdayFilter, hasNameSearch]
+    [controlledPageIndex, show.type, show.depth, hasBirthdayFilter, hasNameSearch]
   );
 
   const {
@@ -83,14 +93,20 @@ export default function RankingTable({baseApi, places}) {
             ...state,
             pageIndex: controlledPageIndex,
           }),
-          [state, controlledPageIndex]
+          [state]
         ),
     },
     useSortBy,
     usePagination
   );
 
+  const sortSignature = JSON.stringify(sortBy);
+
   useEffect(() => {
+    if (!hasMountedSortEffect.current) {
+      hasMountedSortEffect.current = true;
+      return;
+    }
     fetchDataAndDispatch(
       baseApi,
       places,
@@ -101,7 +117,16 @@ export default function RankingTable({baseApi, places}) {
       controlledPageIndex,
       sortBy
     );
-  }, [sortBy]);
+    // Sorting changes should refetch once with the current filters.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    baseApi,
+    places,
+    dispatch,
+    router,
+    pathname,
+    sortSignature,
+  ]);
 
   useEffect(() => {
     setPageInputVal(controlledPageIndex);
@@ -147,87 +172,100 @@ export default function RankingTable({baseApi, places}) {
         </div>
         <table {...getTableProps()}>
           <thead>
-            {headerGroups.map(headerGroup => (
-              <tr key={null} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => {
-                  const headerClassName = column.isSorted
-                    ? column.isSortedDesc
-                      ? `${column.headerClassName} col-sort-desc`
-                      : `${column.headerClassName} col-sort-asc`
-                    : column.headerClassName
-                    ? `${column.headerClassName}`
-                    : "";
+            {headerGroups.map(headerGroup => {
+              const {key: headerGroupKey, ...headerGroupProps} =
+                headerGroup.getHeaderGroupProps();
 
-                  return (
-                    <th
-                      {...column.getHeaderProps(
-                        column.getSortByToggleProps({
-                          className: headerClassName,
-                        })
-                      )}
-                    >
-                      {column.render("Header")}
-                    </th>
-                  );
-                })}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map(row => {
-              prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => (
-                    <td
-                      {...cell.getCellProps([
-                        {
-                          className: cell.column.className,
-                          style: cell.column.style,
-                        },
-                      ])}
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  ))}
+                <tr key={headerGroupKey} {...headerGroupProps}>
+                  {headerGroup.headers.map(column => {
+                    const headerClassName = column.isSorted
+                      ? column.isSortedDesc
+                        ? `${column.headerClassName} col-sort-desc`
+                        : `${column.headerClassName} col-sort-asc`
+                      : column.headerClassName
+                      ? `${column.headerClassName}`
+                      : "";
+                    const {key: headerKey, ...headerProps} = column.getHeaderProps(
+                      column.getSortByToggleProps({
+                        className: headerClassName,
+                      })
+                    );
+
+                    return (
+                      <th key={headerKey} {...headerProps}>
+                        {column.render("Header")}
+                      </th>
+                    );
+                  })}
                 </tr>
               );
             })}
-            <tr>
-              {data.loading ? (
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{" "}
-                  results
-                </td>
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {dataLoading
+              ? (
+                <tr>
+                  <td colSpan="10000">Loading...</td>
+                </tr>
+              )
+              : (
+                <>
+                  {page.map(row => {
+                    prepareRow(row);
+                    const {key: rowKey, ...rowProps} = row.getRowProps();
+                    return (
+                      <tr key={rowKey} {...rowProps}>
+                        {row.cells.map(cell => {
+                          const {key: cellKey, ...cellProps} = cell.getCellProps([
+                            {
+                              className: cell.column.className,
+                              style: cell.column.style,
+                            },
+                          ]);
+
+                          return (
+                            <td key={cellKey} {...cellProps}>
+                              {cell.render("Cell")}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
+                  <tr>
+                    <td colSpan="10000">
+                      Showing {page.length} of ~{controlledPageCount * pageSize}{" "}
+                      results
+                    </td>
+                  </tr>
+                </>
               )}
-            </tr>
           </tbody>
         </table>
       </div>
       <div className="pagination">
         <button
           onClick={() => setPageAndFetchData(0)}
-          disabled={!canPreviousPage || data.loading}
+          disabled={!canPreviousPage || dataLoading}
         >
           {"<<"}
         </button>{" "}
         <button
           onClick={() => setPageAndFetchData(controlledPageIndex - 1)}
-          disabled={!canPreviousPage || data.loading}
+          disabled={!canPreviousPage || dataLoading}
         >
           {"<"}
         </button>{" "}
         <button
           onClick={() => setPageAndFetchData(controlledPageIndex + 1)}
-          disabled={!canNextPage || data.loading}
+          disabled={!canNextPage || dataLoading}
         >
           {">"}
         </button>{" "}
         <button
           onClick={() => setPageAndFetchData(pageCount - 1)}
-          disabled={!canNextPage || data.loading}
+          disabled={!canNextPage || dataLoading}
         >
           {">>"}
         </button>{" "}

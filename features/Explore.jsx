@@ -1,7 +1,6 @@
 /*eslint no-undefined: "error"*/
 "use client";
-import {useEffect} from "react";
-import {nest} from "d3-collection";
+import {useEffect, useMemo} from "react";
 import {useSearchParams, useRouter, usePathname} from "next/navigation";
 import {useSelector, useDispatch} from "react-redux";
 import VizTitle from "../components/explore/VizTitle";
@@ -9,18 +8,22 @@ import Controls from "../components/explore/Controls";
 import Spinner from "../components/Spinner";
 import RankingTable from "../components/explore/rankings/RankingTable";
 import {
+  buildNestedOccupations,
+  buildRankingsMetricSentence,
+  parseRankingsSearchParams,
+} from "/lib/rankings";
+import {
   FORMATTERS,
-  HPI_RANGE,
-  LANGS_RANGE,
-  COUNTRY_LIST,
 } from "../components/utils/consts";
 import {fetchDataAndDispatch} from "../components/utils/exploreHelpers";
-import {SANITIZERS} from "../components/utils/sanitizers";
 import {
   setFirstLoad,
   updateCountry,
   updateCity,
   updateGender,
+  updateMetricCutoff,
+  updateMetricType,
+  updatePlaceType,
   updateYears,
   updateYearType,
   updateShowDepth,
@@ -32,25 +35,17 @@ import {
 import "./Explore.css";
 import VizShell from "../components/explore/viz/VizShell";
 
-function Explore({baseApi, places, occupations, pageType, embed = false}) {
+function Explore({
+  baseApi,
+  places,
+  occupations,
+  pageType,
+  embed = false,
+  initialExploreState = null,
+}) {
   const {
     firstLoad,
     data,
-    city,
-    country,
-    gender,
-    metricCutoff,
-    metricType,
-    occupation,
-    onlyShowNew,
-    page,
-    placeType,
-    show,
-    years,
-    yearType,
-    birthMonth,
-    birthDay,
-    nameSearch,
   } = useSelector(state => state.explore);
   const exploreState = useSelector(state => state.explore);
   const dispatch = useDispatch();
@@ -58,58 +53,79 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const nestedOccupations = nest()
-    .key(d => d.domain_slug)
-    .entries(occupations)
-    .map(occData => ({
-      domain: {
-        id: `${occData.values.map(o => o.id)}`,
-        slug: occData.values[0].domain_slug,
-        name: occData.values[0].domain,
-      },
-      occupations: occData.values,
-    }));
+  const nestedOccupations = buildNestedOccupations(occupations);
+  const effectiveExploreState =
+    firstLoad && initialExploreState
+      ? {...exploreState, ...initialExploreState}
+      : exploreState;
+  const filterFetchState = useMemo(() => ({
+    city: exploreState.city,
+    country: exploreState.country,
+    gender: exploreState.gender,
+    metricCutoff: exploreState.metricCutoff,
+    metricType: exploreState.metricType,
+    occupation: exploreState.occupation,
+    onlyShowNew: exploreState.onlyShowNew,
+    page: exploreState.page,
+    placeType: exploreState.placeType,
+    show: {
+      type: exploreState.show.type,
+      depth: exploreState.show.depth,
+    },
+    viz: exploreState.viz,
+    years: exploreState.years,
+    yearType: exploreState.yearType,
+    birthMonth: exploreState.birthMonth,
+    birthDay: exploreState.birthDay,
+    nameSearch: exploreState.nameSearch,
+    dataPageIndex: exploreState.dataPageIndex,
+  }), [
+    exploreState.birthDay,
+    exploreState.birthMonth,
+    exploreState.city,
+    exploreState.country,
+    exploreState.dataPageIndex,
+    exploreState.gender,
+    exploreState.metricCutoff,
+    exploreState.metricType,
+    exploreState.nameSearch,
+    exploreState.occupation,
+    exploreState.onlyShowNew,
+    exploreState.page,
+    exploreState.placeType,
+    exploreState.show.depth,
+    exploreState.show.type,
+    exploreState.viz,
+    exploreState.years,
+    exploreState.yearType,
+  ]);
 
   useEffect(() => {
-    const queryParamShow = searchParams.get("show")
-      ? SANITIZERS.show(searchParams.get("show"), "rankings")
-      : pageType === "rankings"
-      ? {type: "people", depth: "people"}
-      : {type: "occupations", depth: "occupations"};
-    const queryParamCountry =
-      pageType !== "rankings" && !SANITIZERS.country(searchParams.get("place"))
-        ? COUNTRY_LIST[Math.floor(Math.random() * COUNTRY_LIST.length)]
-        : SANITIZERS.country(searchParams.get("place")) || "all";
-    const queryParamOccupation =
-      SANITIZERS.occupation(searchParams.get("occupation"), occupations) ||
-      "all";
+    const initialState =
+      initialExploreState || parseRankingsSearchParams(searchParams, occupations, pageType);
 
-    const queryParamCity = SANITIZERS.city(searchParams.get("place")) || "all";
-    const queryParamGender = SANITIZERS.gender(searchParams.get("gender"));
-    const queryParamYears = SANITIZERS.years(searchParams.get("years"));
-    const queryParamYearType = SANITIZERS.yearType(
-      searchParams.get("yearType")
-    );
-    const queryParamNew = SANITIZERS.new(searchParams.get("new"));
-    const queryParamBirthMonth = SANITIZERS.birthMonth(searchParams.get("birthMonth"));
-    const queryParamBirthDay = SANITIZERS.birthDay(searchParams.get("birthDay"));
     dispatch(
       updateShowDepth({
-        showType: queryParamShow.type,
-        showDepth: queryParamShow.depth,
+        showType: initialState.show.type,
+        showDepth: initialState.show.depth,
         page: pageType,
       })
     );
-    dispatch(updateOccupation(queryParamOccupation));
-    dispatch(updateCountry(queryParamCountry));
-    dispatch(updateCity(queryParamCity));
-    dispatch(updateGender(queryParamGender));
-    dispatch(updateYears(queryParamYears));
-    dispatch(updateYearType(queryParamYearType));
-    dispatch(updateOnlyShowNew(queryParamNew));
-    dispatch(updateBirthMonth(queryParamBirthMonth));
-    dispatch(updateBirthDay(queryParamBirthDay));
+    dispatch(updateOccupation(initialState.occupation));
+    dispatch(updateCountry(initialState.country));
+    dispatch(updateCity(initialState.city));
+    dispatch(updatePlaceType(initialState.placeType));
+    dispatch(updateGender(initialState.gender));
+    dispatch(updateYears(initialState.years));
+    dispatch(updateYearType(initialState.yearType));
+    dispatch(updateMetricType(initialState.metricType));
+    dispatch(updateMetricCutoff(initialState.metricCutoff));
+    dispatch(updateOnlyShowNew(initialState.onlyShowNew));
+    dispatch(updateBirthMonth(initialState.birthMonth));
+    dispatch(updateBirthDay(initialState.birthDay));
     dispatch(setFirstLoad());
+    // This effect should only hydrate the initial store state from the URL once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -117,48 +133,42 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
       fetchDataAndDispatch(
         baseApi,
         places,
-        exploreState,
+        filterFetchState,
         dispatch,
         router,
         pathname,
-        undefined,
-        undefined,
+        null,
+        null,
         !embed
       );
     }
   }, [
     firstLoad,
-    country,
-    city,
-    occupation,
-    gender,
-    years,
-    yearType,
-    birthMonth,
-    birthDay,
-    nameSearch,
-    metricCutoff,
-    metricType,
-    onlyShowNew,
-    show,
+    exploreState.city,
+    exploreState.country,
+    exploreState.gender,
+    exploreState.metricCutoff,
+    exploreState.metricType,
+    exploreState.occupation,
+    exploreState.onlyShowNew,
+    exploreState.placeType,
+    exploreState.show.depth,
+    exploreState.show.type,
+    exploreState.years,
+    exploreState.yearType,
+    exploreState.birthMonth,
+    exploreState.birthDay,
+    exploreState.nameSearch,
+    filterFetchState,
+    baseApi,
+    places,
     dispatch,
+    router,
+    pathname,
+    embed,
   ]);
 
-  const metricRange = metricType === "hpi" ? HPI_RANGE : LANGS_RANGE;
-  let metricSentence;
-
-  if (metricCutoff > metricRange[0]) {
-    metricSentence = onlyShowNew
-      ? "Only showing newly added biographies (as of 2024)"
-      : "Only showing biographies";
-    if (metricType === "hpi") {
-      metricSentence = `${metricSentence} with a Historical Popularity Index (HPI) greater than ${metricCutoff}.`;
-    } else {
-      metricSentence = `${metricSentence} with more than ${metricCutoff} Wikipedia language editions.`;
-    }
-  } else if (onlyShowNew) {
-    metricSentence = "Only showing newly added biographies (as of 2024)";
-  }
+  const metricSentence = buildRankingsMetricSentence(effectiveExploreState);
 
   const vizContent = data ? (
     pageType === "rankings" ? (
@@ -176,7 +186,11 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
     return (
       <div className="explore-embed">
         <div className="explore-head">
-          <VizTitle places={places} nestedOccupations={nestedOccupations} />
+          <VizTitle
+            places={places}
+            nestedOccupations={nestedOccupations}
+            exploreState={effectiveExploreState}
+          />
         </div>
         <div className="explore-body">{vizContent}</div>
       </div>
@@ -186,10 +200,14 @@ function Explore({baseApi, places, occupations, pageType, embed = false}) {
   return (
     <div>
       <div className="explore-head">
-        <VizTitle places={places} nestedOccupations={nestedOccupations} />
-        {years.length ? (
+        <VizTitle
+          places={places}
+          nestedOccupations={nestedOccupations}
+          exploreState={effectiveExploreState}
+        />
+        {effectiveExploreState.years.length ? (
           <h3 className="explore-date">
-            {FORMATTERS.year(years[0])} - {FORMATTERS.year(years[1])}
+            {FORMATTERS.year(effectiveExploreState.years[0])} - {FORMATTERS.year(effectiveExploreState.years[1])}
           </h3>
         ) : null}
         {metricSentence ? <p>{metricSentence}</p> : null}
