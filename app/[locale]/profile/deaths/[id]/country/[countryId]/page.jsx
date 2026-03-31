@@ -6,6 +6,7 @@ import TopPeople from "/components/deaths/TopPeople";
 import DeathsByMonth from "/components/deaths/DeathsByMonth";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
+import {buildLanguageAlternates} from "/app/utils/hreflang";
 
 async function getCountry(countryId) {
   const url = `${BASE_API}/country?slug=eq.${countryId}`;
@@ -38,6 +39,10 @@ export async function generateMetadata({params}, parent) {
         `https://static.pantheon.world/profile/deaths/deaths-${year}.jpg`,
         ...previousImages,
       ],
+    },
+    alternates: {
+      canonical: `https://pantheon.world/profile/deaths/${year}/country/${countryId}`,
+      languages: buildLanguageAlternates(`/profile/deaths/${year}/country/${countryId}`),
     },
   };
 }

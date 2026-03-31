@@ -3,6 +3,7 @@ import {REVALIDATE_PERIODS, BASE_API} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
 import {safeFetchJson} from "/app/utils/safeFetch";
+import {buildLanguageAlternates} from "/app/utils/hreflang";
 import PlaceBubbleMap from "/components/place/PlaceBubbleMap";
 import PlaceList from "/components/place/PlaceList";
 import "/components/place/SelectPlace.css";
@@ -48,6 +49,7 @@ export async function generateMetadata(props) {
     },
     alternates: {
       canonical: `https://pantheon.world/${locale}/profile/place`,
+      languages: buildLanguageAlternates("/profile/place"),
     },
   };
 }

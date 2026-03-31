@@ -6,6 +6,7 @@ import PeopleSection from "/components/born-on-this-day/PeopleSection";
 import OccupationBreakdown from "/components/born-on-this-day/OccupationBreakdown";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson} from "/app/utils/safeFetch";
+import {buildLanguageAlternates} from "/app/utils/hreflang";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import {getTranslations} from "/app/translations";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
@@ -85,6 +86,7 @@ export async function generateMetadata(props, parent) {
     },
     alternates: {
       canonical: `https://pantheon.world/${lang}/profile/born-on-this-day/${date}`,
+      languages: buildLanguageAlternates(`/profile/born-on-this-day/${date}`),
     },
   };
 }

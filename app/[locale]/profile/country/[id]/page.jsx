@@ -15,6 +15,7 @@ import {
 } from "/components/utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
+import {buildLanguageAlternates} from "/app/utils/hreflang";
 
 async function getWikiSummary(countryName) {
   try {
@@ -206,6 +207,7 @@ export async function generateMetadata({params}, parent) {
     },
     alternates: {
       canonical: `https://pantheon.world/${lang}/profile/country/${id}`,
+      languages: buildLanguageAlternates(`/profile/country/${id}`),
     },
   };
 }

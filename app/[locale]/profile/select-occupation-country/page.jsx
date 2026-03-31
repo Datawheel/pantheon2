@@ -6,6 +6,7 @@ import TrendingSection from "/components/occupation-country/TrendingSection";
 import {toTitleCase} from "/components/utils/vizHelpers";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {safeFetchJson} from "/app/utils/safeFetch";
+import {buildLanguageAlternates} from "/app/utils/hreflang";
 import {getTranslations} from "/app/translations";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 import "/components/occupation-country/SelectOccupationCountry.css";
@@ -67,6 +68,7 @@ export async function generateMetadata(props) {
     },
     alternates: {
       canonical: `https://pantheon.world/${locale}/profile/select-occupation-country`,
+      languages: buildLanguageAlternates("/profile/select-occupation-country"),
     },
   };
 }
