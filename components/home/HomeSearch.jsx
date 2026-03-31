@@ -10,13 +10,13 @@ export default function HomeSearch({lang = "en"}) {
 
   return (
     <div className="home-search">
-      <Image
-        src="/images/icons/icon-search.svg"
-        alt="search icon"
-        width={22}
-        height={22}
-      />
       <a onClick={() => setSearchVisible(true)}>
+        <Image
+          src="/images/icons/icon-search.svg"
+          alt="search icon"
+          width={16}
+          height={16}
+        />
         {t.home.searchPlaceholder}
       </a>
     </div>

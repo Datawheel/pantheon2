@@ -142,7 +142,7 @@ export default async function Home({params}) {
 
   return (
     <div className="container">
-      <title>Pantheon</title>
+      <title>Pantheon — Explore the Most Memorable People in History | 85,000+ Biographies</title>
       <img
         className="bg-design"
         src="/images/home/printing.png"
@@ -161,19 +161,19 @@ export default async function Home({params}) {
       <div className="home-head-container">
         <div className="home-head">
           <div className="home-head-title">
-            <h1>
+            <div>
               <Image
                 src="/images/logos/logo_pantheon.svg"
                 alt="Pantheon logo"
                 width={348}
                 height={49}
               />
-            </h1>
+            </div>
             <HomeSearch lang={lang} />
           </div>
 
           <div className="home-head-content">
-            <h2>{t.home.tagline}</h2>
+            <h1>{t.home.tagline}</h1>
             <p>{t.home.subtitle}</p>
             <h3 className="home-explore-links">
               {t.home.explore}{" "}

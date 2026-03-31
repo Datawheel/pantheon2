@@ -42,7 +42,7 @@
     flex-direction: column;
   }
 
-  & h1 {
+  & .home-head-title > div {
     /* margin: 0 auto; */
     text-align: left;
     @media (max-width: 750px) {
@@ -55,7 +55,7 @@
     }
   }
 
-  & h2 {
+  & h1 {
     /* @mixin priLabel; */
     font-size: 18px;
     margin: 10px 0 10px 20px;
@@ -104,7 +104,6 @@
 }
 
 .home-search {
-  position: relative;
   width: 380px;
   max-width: calc(100% - 30px);
   margin: 25px 0;
@@ -115,23 +114,12 @@
     margin: 25px auto;
   }
 
-  & img {
-    position: absolute;
-    width: 16px;
-
-    @media (max-width: 750px) {
-      margin: 11px 5px 6px 11px;
-    }
-
-    @media (min-width: 751px) {
-      margin: 11px 5px 6px 11px;
-    }
-  }
-
   & a {
     @mixin overflow-ellipsis;
     width: 100%;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     border: 0;
     box-sizing: border-box;
     background: none;
@@ -143,7 +131,7 @@
 
     border: 1px solid var(--colorStone);
     border-radius: 20px;
-    padding: 5px 14px 7px 42px;
+    padding: 7px 14px 7px 14px;
     background-color: var(--colorEggshellOverlay);
 
     @media (max-width: 750px) {}

@@ -46,7 +46,7 @@ async function safeFetchJson(url, options = {}, fallback = null) {
 }
 
 async function getPerson(id, lang = "en") {
-  const url = `${BASE_API}/person?slug=eq.${id}&select=*,occupation(id,occupation,occupation_slug,domain_slug,num_born,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place),dplace_geonameid(slug,place)`;
+  const url = `${BASE_API}/person?slug=eq.${id}&select=*,occupation(id,occupation,occupation_slug,domain_slug,num_born,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,country_code,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place),dplace_geonameid(slug,place)`;
   const data = await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
