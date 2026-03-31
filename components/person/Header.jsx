@@ -248,9 +248,6 @@ export default function Header({person, trendingData = {}, currentLang = "en", p
         ) : null}
         <PageViewsChart pageviewsData={pageViews} lang={currentLang} />
       </div>
-      <div className="mouse">
-        <span className="mouse-scroll"></span>
-      </div>
     </header>
   );
 }
