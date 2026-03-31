@@ -19,6 +19,7 @@ import Footer from "/components/person/Footer";
 import TrendingHeatmap from "/components/person/TrendingHeatmap";
 import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
 import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 import GoogleAdSense from "/components/common/GoogleAdSense";
 import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
@@ -166,9 +167,14 @@ export async function generateMetadata(props, parent) {
   const params = await props.params;
   const id = params.id;
   const locale = params.locale || DEFAULT_LOCALE;
+  const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
 
   // fetch data
-  const person = await getPerson(id, locale);
+  const [person, personRanks] = await Promise.all([
+    getPerson(id, lang),
+    getPersonRanks(id),
+  ]);
 
   if (!person) {
     return {
@@ -180,15 +186,47 @@ export async function generateMetadata(props, parent) {
   const previousImages = (await parent).openGraph?.images || [];
 
   // Get localized name for metadata
-  const localizedName = person.translations?.[params.locale] || person.name;
+  const localizedName = person.translations?.[lang] || person.name;
+
+  // Build localized meta description
+  const demonym = person.bplace_country?.[`${lang}_demonym`]
+    || person.bplace_country?.[`${lang}_nationality_adj`]
+    || person.bplace_country?.demonym
+    || "";
+  const occupation = person.occupation?.[`${lang}_occupation`]
+    || person.occupation?.occupation
+    || "";
+  const birthYear = person.birthyear || "";
+  const deathYear = person.alive ? t.stillAlive : (person.deathyear || "");
+  const rank = personRanks?.l || "";
+  const possessiveName = lang === "en"
+    ? (localizedName.endsWith("s") ? `${localizedName}'` : `${localizedName}'s`)
+    : localizedName;
+
+  const description = t.personMetaDescription
+    ? t.personMetaDescription({
+        name: localizedName,
+        birthYear,
+        deathYear,
+        demonym,
+        occupation: occupation.toLowerCase(),
+        rank,
+        possessiveName,
+      })
+    : `${localizedName} Biography | Pantheon`;
 
   return {
     title: `${localizedName} Biography | Pantheon`,
+    description,
     openGraph: {
       images: [
-        `https://pantheon.world/api/screenshot/person?id=${person.id}&locale=${params.locale}`,
+        `https://pantheon.world/api/screenshot/person?id=${person.id}&locale=${lang}`,
         ...previousImages,
       ],
+      description,
+    },
+    twitter: {
+      description,
     },
     alternates: {
       canonical: buildCanonical(locale, `/profile/person/${id}`),
