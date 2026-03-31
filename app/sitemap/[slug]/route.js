@@ -8,9 +8,22 @@ function localePrefix(locale) {
   return locale === DEFAULT_LOCALE ? "" : `/${locale}`;
 }
 
+function escapeXml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
+function buildUrlEntry(url) {
+  return `  <url><loc>${escapeXml(url)}</loc></url>`;
+}
+
 function buildUrlEntries(slugs, locale, pathPrefix) {
   const prefix = `${SITE_URL}${localePrefix(locale)}${pathPrefix}`;
-  return slugs.map(slug => `  <url><loc>${prefix}/${slug}</loc></url>`);
+  return slugs.map(slug => buildUrlEntry(`${prefix}/${encodeURIComponent(slug)}`));
 }
 
 async function fetchSlugs(endpoint, slugField = "slug", filter = "", limit, offset) {
@@ -57,7 +70,7 @@ function generateStaticSitemap() {
   for (const locale of SUPPORTED_LOCALES) {
     const prefix = `${SITE_URL}${localePrefix(locale)}`;
     for (const path of STATIC_PATHS) {
-      entries.push(`  <url><loc>${prefix}${path}</loc></url>`);
+      entries.push(buildUrlEntry(`${prefix}${path}`));
     }
   }
   return entries;

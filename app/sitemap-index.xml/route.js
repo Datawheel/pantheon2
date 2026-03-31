@@ -4,6 +4,15 @@ import {SUPPORTED_LOCALES} from "/app/locales";
 const SITE_URL = "https://pantheon.world";
 const ITEMS_PER_SITEMAP = 25000;
 
+function escapeXml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
 async function getCount(endpoint, filter = "") {
   try {
     const url = `${BASE_API}/${endpoint}?select=id${filter}`;
@@ -52,7 +61,7 @@ export async function GET() {
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...sitemaps.map(url => `  <sitemap><loc>${url}</loc></sitemap>`),
+    ...sitemaps.map(url => `  <sitemap><loc>${escapeXml(url)}</loc></sitemap>`),
     "</sitemapindex>",
   ].join("\n");
 
