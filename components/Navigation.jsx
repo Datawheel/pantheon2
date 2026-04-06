@@ -220,17 +220,29 @@ export default function Navigation() {
               </li>
             </ul>
           </li>
-          <li className="item">
+          <li className="item has-sub-items">
             <Link
               href={`/${lang}/news`}
               className={
-                pathname?.startsWith(`/${lang}/news`) || pathname?.includes("/news")
-                  ? "active item-link news-link"
-                  : "item-link news-link"
+                pathname?.startsWith(`/${lang}/news`) || pathname?.includes("/news") || pathname?.includes("/monthly")
+                  ? "active item-link news-link dd"
+                  : "item-link news-link dd"
               }
             >
               {t.nav.news}
             </Link>
+            <ul className="sub-items">
+              <li>
+                <Link href={`/${lang}/news`} className="item-link">
+                  Daily
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${lang}/monthly`} className="item-link">
+                  Monthly
+                </Link>
+              </li>
+            </ul>
           </li>
           <li className="search-btn">
             <button onClick={() => setSearchVisible(true)}>
@@ -394,10 +406,22 @@ export default function Navigation() {
                 </ul>
               ) : null}
             </li>
-            <li className="item">
+            <li className="item has-sub-items">
               <a href={`/${lang}/news`} className="item-link news-link">
                 {t.nav.news}
               </a>
+              <ul className="sub-items">
+                <li>
+                  <a href={`/${lang}/news`} className="item-link">
+                    Daily
+                  </a>
+                </li>
+                <li>
+                  <a href={`/${lang}/monthly`} className="item-link">
+                    Monthly
+                  </a>
+                </li>
+              </ul>
             </li>
             <li className="item">
               <a href={`/${lang}/data/api`} className="item-link api-link">

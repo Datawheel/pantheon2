@@ -189,6 +189,23 @@ export default async function Home({params}) {
         </div>
       </div>
 
+      <Link href={`/${lang}/monthly/2026/march`} className="monthly-callout">
+        <div className="monthly-callout-image">
+          <img
+            src="/images/monthly/2026-03-hero.png"
+            alt="March 2026 Pantheon Monthly"
+          />
+        </div>
+        <div className="monthly-callout-body">
+          <span className="monthly-callout-badge">New Edition</span>
+          <h2 className="monthly-callout-title">Pantheon Monthly: March 2026</h2>
+          <p className="monthly-callout-description">
+            March&rsquo;s Attention Earthquake &mdash; war abroad, upheaval at home, and the long fade after February&rsquo;s olympics.
+          </p>
+          <span className="monthly-callout-link">Read the March Edition &rarr;</span>
+        </div>
+      </Link>
+
       <TrendingGrid
         title={t.home.trendingProfiles}
         allowLangChange={true}

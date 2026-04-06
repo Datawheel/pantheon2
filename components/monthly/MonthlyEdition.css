@@ -1,0 +1,760 @@
+/* ============================================
+   PANTHEON MONTHLY — Editorial Layout
+   ============================================ */
+
+.monthly-edition {
+  background-color: var(--colorEggshell);
+  color: var(--colorDark);
+  min-height: 100vh;
+  padding-top: 40px;
+
+  @media (min-width: 751px) {
+    padding-top: 60px;
+  }
+}
+
+/* ---- MAIN LAYOUT (sidebar + content) ---- */
+.monthly-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+@media (max-width: 991px) {
+  .monthly-layout {
+    grid-template-columns: 1fr;
+    padding: 0 1.25rem;
+  }
+}
+
+/* ---- SIDEBAR ---- */
+.monthly-sidebar {
+  padding: 3rem 0 2rem;
+  position: sticky;
+  top: 60px;
+  align-self: start;
+  height: fit-content;
+}
+
+.monthly-sidebar-title {
+  font-family: var(--fontTitle);
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 0.15rem;
+  color: var(--colorDark);
+  margin: 0 0 0.25rem;
+}
+
+.monthly-sidebar-subtitle {
+  font-family: var(--fontBody);
+  font-size: 0.92rem;
+  color: var(--colorTan);
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  margin: 0 0 2rem;
+}
+
+.monthly-sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 2px solid var(--colorCardboard);
+}
+
+.monthly-sidebar-nav li {
+  padding: 0.6rem 0 0.6rem 1.25rem;
+}
+
+.monthly-sidebar-nav li a {
+  font-family: var(--fontBody);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  font-weight: 400;
+  color: var(--colorStone);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s;
+}
+
+.monthly-sidebar-nav li a:hover,
+.monthly-sidebar-nav li a.active {
+  color: var(--colorDark);
+  font-weight: 600;
+}
+
+.monthly-sidebar-nav li a .nav-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  .monthly-sidebar {
+    display: none;
+  }
+}
+
+/* ---- MAIN CONTENT ---- */
+.monthly-content {
+  padding: 3rem 0 4rem 3rem;
+  min-width: 0;
+}
+
+@media (max-width: 991px) {
+  .monthly-content {
+    padding: 2rem 0 3rem;
+  }
+}
+
+/* ---- HERO SECTION ---- */
+.monthly-hero {
+  margin-bottom: 3rem;
+}
+
+.monthly-hero-label {
+  font-family: var(--fontBody);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12rem;
+  color: var(--colorInstitutions);
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.monthly-hero-headline {
+  font-family: var(--fontTitle);
+  font-size: 8.5rem;
+  font-weight: 400;
+  line-height: 0.95;
+  color: var(--colorInstitutions);
+  margin: 0 0 1.2rem;
+  letter-spacing: -0.04rem;
+}
+
+@media (max-width: 767px) {
+  .monthly-hero-headline {
+    font-size: 5.2rem;
+  }
+}
+
+.monthly-hero-image-wrap {
+  position: relative;
+  max-width: 100%;
+  margin-bottom: 2rem;
+}
+
+.monthly-hero-image-wrap .image {
+  width: 100%;
+  height: clamp(260px, 34vw, 390px);
+  overflow: hidden;
+}
+
+.monthly-hero-image-wrap .image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  filter: grayscale(100%) contrast(1.15);
+}
+
+.monthly-hero-quote {
+  background: var(--colorKashi);
+  padding: 1rem 1.25rem;
+  margin-top: -2rem;
+  position: relative;
+  z-index: 1;
+  max-width: 380px;
+  font-family: var(--fontTitle);
+  font-size: 1.4rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--colorSlate);
+}
+
+
+/* ---- EDITORIAL BODY ---- */
+.monthly-editorial {
+  max-width: 720px;
+  margin-bottom: 3rem;
+}
+
+.monthly-editorial-intro {
+  font-family: var(--fontTitle);
+  font-size: clamp(2.35rem, 3.4vw, 2.95rem);
+  line-height: 1.62;
+  font-style: italic;
+  color: var(--colorDark);
+  letter-spacing: -0.015em;
+  max-width: 40rem;
+  margin: 0 0 2rem;
+}
+
+.monthly-editorial-intro::first-letter {
+  font-family: var(--fontTitle);
+  font-size: clamp(6.4rem, 7vw, 7.2rem);
+  float: left;
+  line-height: 0.72;
+  margin: 0.1rem 0.6rem 0 0;
+  color: var(--colorInstitutions);
+  font-style: normal;
+}
+
+.monthly-editorial p {
+  font-family: var(--fontBody);
+  font-size: 1.25rem;
+  line-height: 1.95;
+  color: var(--colorSlate);
+  margin: 0 0 1.25rem;
+}
+
+@media (max-width: 767px) {
+  .monthly-editorial-intro {
+    font-size: 2rem;
+    line-height: 1.65;
+    max-width: none;
+  }
+
+  .monthly-editorial-intro::first-letter {
+    font-size: 5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.monthly-editorial a {
+  color: var(--colorInstitutions);
+  text-decoration: underline;
+  text-decoration-color: rgba(125, 95, 52, 0.35);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.12em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.monthly-editorial a:hover {
+  color: var(--colorDark);
+  text-decoration-color: currentColor;
+}
+
+/* ---- STATS BAR ---- */
+.monthly-stats {
+  display: flex;
+  gap: 3rem;
+  padding: 1.5rem 0;
+  margin-bottom: 3.5rem;
+  border-top: 1px solid var(--colorCardboard);
+}
+
+.monthly-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  flex-direction: column;
+  padding-left: 1rem;
+  border-left: 3px solid var(--colorInstitutions);
+}
+
+.monthly-stat-label {
+  font-family: var(--fontBody);
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--colorTan);
+  margin-bottom: 0.25rem;
+}
+
+.monthly-stat-value {
+  font-family: var(--fontTitle);
+  font-size: 3.1rem;
+  font-weight: 400;
+  color: var(--colorDark);
+  letter-spacing: 0.02rem;
+}
+
+@media (max-width: 479px) {
+  .monthly-stats {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* ---- MOVERS SECTION ---- */
+.monthly-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.monthly-section-title {
+  font-family: var(--fontTitle);
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: var(--colorDark);
+  margin: 0;
+}
+
+.monthly-section-link {
+  font-family: var(--fontBody);
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--colorStone);
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.monthly-section-link:hover {
+  color: var(--colorDark);
+}
+
+.monthly-movers-row-label {
+  font-family: var(--fontBody);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  margin: 0 0 1.25rem;
+  padding-left: 0.75rem;
+  border-left: 3px solid currentColor;
+}
+
+.monthly-movers-row-label.rising {
+  color: var(--colorScienceTech);
+}
+
+.monthly-movers-row-label.falling {
+  color: var(--colorSports);
+}
+
+.monthly-movers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 767px) {
+  .monthly-movers-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.monthly-mover-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.monthly-mover-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--colorCardboard);
+  margin-bottom: 1rem;
+}
+
+.monthly-mover-image .image {
+  width: 100%;
+  height: 100%;
+}
+
+.monthly-mover-image .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%) contrast(1.1);
+  transition: filter 0.22s ease;
+}
+
+.monthly-mover-card:hover .monthly-mover-image .image img {
+  filter: grayscale(0%) contrast(1.05);
+}
+
+.monthly-mover-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.3rem 0.7rem;
+  font-family: var(--fontBody);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.monthly-mover-badge.rising {
+  background: rgba(14, 94, 91, 0.9);
+  color: #fff;
+}
+
+.monthly-mover-badge.falling {
+  background: rgba(187, 59, 87, 0.9);
+  color: #fff;
+}
+
+.monthly-mover-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.monthly-mover-name {
+  font-family: var(--fontTitle);
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--colorDark);
+  letter-spacing: 0.02rem;
+}
+
+.monthly-mover-diff {
+  font-family: var(--fontBody);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+}
+
+.monthly-mover-diff.rising {
+  color: var(--colorScienceTech);
+}
+
+.monthly-mover-diff.falling {
+  color: var(--colorSports);
+}
+
+.monthly-mover-summary {
+  font-family: var(--fontBody);
+  font-size: 1.12rem;
+  line-height: 1.85;
+  color: var(--colorStone);
+  margin: 0 0 0.5rem;
+}
+
+.monthly-mover-meta {
+  font-family: var(--fontBody);
+  font-size: 0.9rem;
+  color: var(--colorTan);
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+/* ---- DEEP DIVE TABLE ---- */
+.monthly-deepdive {
+  margin-bottom: 4rem;
+}
+
+.monthly-deepdive-description {
+  font-family: var(--fontBody);
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--colorStone);
+  max-width: 720px;
+  margin: 0 0 1.5rem;
+}
+
+.monthly-deepdive-controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.monthly-deepdive-search {
+  flex: 1;
+  max-width: 280px;
+  padding: 0.85rem 1rem 0.85rem 2.45rem;
+  border: 1px solid var(--colorCardboard);
+  background: var(--colorSnow);
+  font-family: var(--fontBody);
+  font-size: 1.05rem;
+  letter-spacing: 0.04rem;
+  color: var(--colorDark);
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2382817F' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.7rem center;
+}
+
+.monthly-deepdive-search::placeholder {
+  color: var(--colorSand);
+}
+
+.monthly-deepdive-filter-btn {
+  padding: 0.85rem 1.4rem;
+  border: 1px solid var(--colorCardboard);
+  background: var(--colorSnow);
+  font-family: var(--fontBody);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--colorDark);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.monthly-deepdive-filter-btn:hover {
+  background: var(--colorKashi);
+}
+
+.monthly-deepdive-filter-btn.active {
+  background: var(--colorDark);
+  color: var(--colorEggshell);
+  border-color: var(--colorDark);
+}
+
+.monthly-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.monthly-table th {
+  font-family: var(--fontBody);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--colorTan);
+  text-align: left;
+  padding: 0.75rem 0.75rem 0.75rem 0;
+  border-bottom: 1px solid var(--colorCardboard);
+}
+
+.monthly-table th.align-right {
+  text-align: right;
+}
+
+.monthly-table td {
+  font-family: var(--fontBody);
+  font-size: 1.15rem;
+  color: var(--colorDark);
+  padding: 1rem 0.75rem 1rem 0;
+  border-bottom: 1px solid var(--colorLint);
+  vertical-align: middle;
+}
+
+.monthly-table td.align-right {
+  text-align: right;
+}
+
+.monthly-table-rank {
+  font-family: var(--fontTitle);
+  font-size: 1.7rem;
+  color: var(--colorDark);
+  font-weight: 400;
+}
+
+.monthly-table-person {
+  font-weight: 700;
+  font-size: 1.22rem;
+  letter-spacing: 0.02rem;
+}
+
+.monthly-table-person a {
+  color: var(--colorDark);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.monthly-table-person a:hover {
+  border-bottom-color: var(--colorDark);
+}
+
+.monthly-table-person-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.monthly-table-person-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  justify-content: center;
+  min-width: 0;
+}
+
+.monthly-table-person-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.monthly-table-person-description {
+  font-family: var(--fontBody);
+  font-size: 0.93rem;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.01rem;
+  color: var(--colorStone);
+  text-transform: none;
+}
+
+.monthly-table-person-cell .image {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.monthly-table-person-cell .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(80%);
+  transition: filter 0.22s ease;
+}
+
+.monthly-table tbody tr:hover .monthly-table-person-cell .image img {
+  filter: grayscale(0%) contrast(1.05);
+}
+
+.monthly-table-wreath {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  margin-left: 0.25rem;
+  opacity: 0.7;
+  flex-shrink: 0;
+  cursor: help;
+}
+
+.monthly-tooltip-trigger {
+  border-bottom: 1px dashed var(--colorTan);
+  cursor: help;
+}
+
+.monthly-table-views {
+  color: var(--colorStone);
+}
+
+.monthly-anomaly-pill {
+  display: inline-block;
+  padding: 0.32rem 0.68rem;
+  border-radius: 3px;
+  font-family: var(--fontBody);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  min-width: 3rem;
+  text-align: center;
+}
+
+.monthly-anomaly-pill.hot {
+  background: var(--colorSports);
+}
+
+.monthly-anomaly-pill.warm {
+  background: var(--colorArts);
+}
+
+.monthly-anomaly-pill.cool {
+  background: var(--colorScienceTech);
+}
+
+/* Responsive table */
+@media (max-width: 767px) {
+  .monthly-table th:nth-child(3),
+  .monthly-table td:nth-child(3) {
+    display: none;
+  }
+  .monthly-table th:nth-child(5),
+  .monthly-table td:nth-child(5) {
+    display: none;
+  }
+}
+
+/* ---- BOTTOM BAR ---- */
+.monthly-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: var(--colorEggshell);
+  border-top: 1px solid var(--colorCardboard);
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}
+
+.monthly-subscribe-btn {
+  padding: 0.85rem 1.6rem;
+  background: var(--colorInstitutions);
+  color: #fff;
+  font-family: var(--fontBody);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.monthly-subscribe-btn:hover {
+  background: var(--colorDark);
+}
+
+.monthly-archive-indicator {
+  font-family: var(--fontBody);
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--colorStone);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 767px) {
+  .monthly-bottom-bar {
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+/* ---- PAGINATION / SHOW MORE ---- */
+.monthly-show-more {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.monthly-show-more button {
+  padding: 0.9rem 2.1rem;
+  border: 1px solid var(--colorCardboard);
+  background: transparent;
+  font-family: var(--fontBody);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--colorDark);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.monthly-show-more button:hover {
+  background: var(--colorKashi);
+  border-color: var(--colorTan);
+}
+
+/* ---- SECTION DIVIDER ---- */
+.monthly-divider {
+  border: none;
+  border-top: 1px solid var(--colorCardboard);
+  margin: 0 0 3.5rem;
+}

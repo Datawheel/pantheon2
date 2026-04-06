@@ -809,6 +809,118 @@
   }
 }
 
+/* ---- Monthly Callout Banner ---- */
+.monthly-callout {
+  display: flex;
+  align-items: stretch;
+  max-width: 1024px;
+  margin: 2.5rem auto 0;
+  background: var(--colorKashi);
+  border: 1px solid var(--colorCardboard);
+  text-decoration: none;
+  color: var(--colorDark);
+  overflow: hidden;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  position: relative;
+  z-index: 1;
+
+  &:hover {
+    border-color: var(--colorTan);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+  }
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    margin: 1.5rem 15px 0;
+  }
+}
+
+.monthly-callout-image {
+  flex: 0 0 320px;
+  overflow: hidden;
+
+  & img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1);
+    transition: filter 0.3s;
+  }
+
+  .monthly-callout:hover & img {
+    filter: grayscale(60%) contrast(1.1);
+  }
+
+  @media (max-width: 750px) {
+    flex: none;
+    height: 180px;
+  }
+}
+
+.monthly-callout-body {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @media (max-width: 750px) {
+    padding: 1.25rem 1.5rem;
+  }
+}
+
+.monthly-callout-badge {
+  display: inline-block;
+  width: fit-content;
+  font-family: var(--fontBody);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  color: #fff;
+  background: var(--colorInstitutions);
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  margin-bottom: 0.75rem;
+}
+
+.monthly-callout-title {
+  font-family: var(--fontTitle);
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.15;
+  margin: 0 0 0.6rem;
+  color: var(--colorDark);
+
+  @media (max-width: 750px) {
+    font-size: 1.6rem;
+  }
+}
+
+.monthly-callout-description {
+  font-family: var(--fontBody);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--colorStone);
+  margin: 0 0 1rem;
+}
+
+.monthly-callout-link {
+  font-family: var(--fontBody);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--colorInstitutions);
+  transition: color 0.2s;
+
+  .monthly-callout:hover & {
+    color: var(--colorDark);
+  }
+}
+
 .grid-excerpt-item {
   grid-column: 1 / -1 !important;
   width: 100% !important;
