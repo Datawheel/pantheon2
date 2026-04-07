@@ -41,6 +41,65 @@ async function getPeopleBornOnDay(month, day, lang = "en") {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
 }
 
+function chunkArray(items, size) {
+  const chunks = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+
+  return chunks;
+}
+
+async function localizePeopleNames(people, lang = "en") {
+  if (lang === DEFAULT_LOCALE || !Array.isArray(people) || !people.length) {
+    return people;
+  }
+
+  const personIds = [...new Set(
+    people
+      .map(person => Number(person.person_id || person.id))
+      .filter(id => Number.isInteger(id) && id > 0),
+  )];
+
+  if (!personIds.length) {
+    return people;
+  }
+
+  const batches = chunkArray(personIds, 100);
+  const localizedRecords = [];
+
+  for (const batch of batches) {
+    const url = `${BASE_API}/person?id=in.(${batch.join(",")})&select=id,name,translations`;
+    const data = await safeFetchJson(
+      url,
+      {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+      [],
+    );
+
+    if (Array.isArray(data)) {
+      localizedRecords.push(...data);
+    }
+  }
+
+  const localizedNameById = new Map(
+    localizedRecords.map(person => [
+      person.id,
+      person.translations?.[lang] || person.name,
+    ]),
+  );
+
+  return people.map(person => {
+    const localizedName = localizedNameById.get(person.person_id || person.id);
+    return localizedName
+      ? {
+          ...person,
+          name: localizedName,
+        }
+      : person;
+  });
+}
+
 export async function generateMetadata(props, parent) {
   // In Next.js 14.2+, params may be a Promise
   const params = await props.params;
@@ -128,10 +187,11 @@ export default async function Page(props) {
   const peopleBornOnDay = await getPeopleBornOnDay(month, day, lang);
 
   // Map person_id to id for consistency
-  const people = peopleBornOnDay.map(p => ({
+  const peopleWithIds = peopleBornOnDay.map(p => ({
     ...p,
     id: p.person_id,
   }));
+  const people = await localizePeopleNames(peopleWithIds, lang);
 
   const displayDate = formatDateForDisplay(month, day, lang);
 

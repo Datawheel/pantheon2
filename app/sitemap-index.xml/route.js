@@ -44,6 +44,7 @@ export async function GET() {
 
   // Static pages (all locales in one file)
   sitemaps.push(`${SITE_URL}/sitemap/static`);
+  sitemaps.push(`${SITE_URL}/sitemap/birthdays`);
 
   for (const locale of SUPPORTED_LOCALES) {
     sitemaps.push(`${SITE_URL}/sitemap/countries-${locale}`);

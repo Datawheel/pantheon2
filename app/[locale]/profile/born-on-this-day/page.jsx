@@ -1,9 +1,23 @@
 import {redirect} from "next/navigation";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "/app/translations";
+import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
 
-export const metadata = {
-  title: "Famous Birthdays Today | Pantheon",
-  description: "Discover which famous people were born on this day in history. Explore birthdays of celebrities, historical figures, scientists, artists, and more.",
-};
+export async function generateMetadata({params: {locale}}) {
+  const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
+
+  return {
+    title: t.bornOnThisDay?.famousBirthdaysTodayTitle || "Famous Birthdays Today | Pantheon",
+    description:
+      t.bornOnThisDay?.famousBirthdaysTodayDescription ||
+      "Discover which famous people were born on this day in history. Explore birthdays of celebrities, historical figures, scientists, artists, and more.",
+    alternates: {
+      canonical: buildCanonical(lang, "/profile/born-on-this-day"),
+      languages: buildLanguageAlternates("/profile/born-on-this-day"),
+    },
+  };
+}
 
 export default async function Page({params: {locale}}) {
   // Get today's date in MM-DD format

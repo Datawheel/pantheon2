@@ -26,6 +26,21 @@ function buildUrlEntries(slugs, locale, pathPrefix) {
   return slugs.map(slug => buildUrlEntry(`${prefix}/${encodeURIComponent(slug)}`));
 }
 
+function getBirthdayDates() {
+  const monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const dates = [];
+
+  monthLengths.forEach((daysInMonth, monthIndex) => {
+    const month = String(monthIndex + 1).padStart(2, "0");
+
+    for (let day = 1; day <= daysInMonth; day += 1) {
+      dates.push(`${month}-${String(day).padStart(2, "0")}`);
+    }
+  });
+
+  return dates;
+}
+
 async function fetchSlugs(endpoint, slugField = "slug", filter = "", limit, offset) {
   const url = `${BASE_API}/${endpoint}?select=${slugField}${filter}&${slugField}=not.is.null&order=${slugField}&limit=${limit}&offset=${offset}`;
   try {
@@ -76,6 +91,17 @@ function generateStaticSitemap() {
   return entries;
 }
 
+function generateBirthdaySitemap() {
+  const entries = [];
+  const dates = getBirthdayDates();
+
+  for (const locale of SUPPORTED_LOCALES) {
+    entries.push(...buildUrlEntries(dates, locale, "/profile/born-on-this-day"));
+  }
+
+  return entries;
+}
+
 async function generateEntitySitemap(locale, entity, page) {
   const config = {
     persons: {endpoint: "person", slugField: "slug", filter: "", pathPrefix: "/profile/person"},
@@ -96,6 +122,10 @@ async function generateEntitySitemap(locale, entity, page) {
 function parseSlug(slug) {
   if (slug === "static") {
     return {type: "static"};
+  }
+
+  if (slug === "birthdays") {
+    return {type: "birthdays"};
   }
 
   // Pattern: {entity}-{locale}-{page} or {entity}-{locale}
@@ -130,6 +160,8 @@ export async function GET(request, {params}) {
   let entries;
   if (parsed.type === "static") {
     entries = generateStaticSitemap();
+  } else if (parsed.type === "birthdays") {
+    entries = generateBirthdaySitemap();
   } else {
     entries = await generateEntitySitemap(parsed.locale, parsed.entity, parsed.page);
   }
