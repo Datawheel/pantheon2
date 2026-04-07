@@ -186,15 +186,17 @@ export default function MonthlyEdition({edition, locale}) {
                 .map(mover => (
                   <div key={mover.slug} className="monthly-mover-card">
                     <div className="monthly-mover-image">
-                      <PersonImage
-                        src={
-                          mover.wpId
-                            ? `/profile/people/${mover.wpId}.jpg`
-                            : undefined
-                        }
-                        fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                        alt={mover.name}
-                      />
+                      <Link href={`${localePrefix}/profile/person/${mover.slug}`}>
+                        <PersonImage
+                          src={
+                            mover.wpId
+                              ? `/profile/people/${mover.wpId}.jpg`
+                              : undefined
+                          }
+                          fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                          alt={mover.name}
+                        />
+                      </Link>
                       <span className="monthly-mover-badge rising">
                         &#8599; Rising
                       </span>
@@ -221,15 +223,17 @@ export default function MonthlyEdition({edition, locale}) {
                 .map(mover => (
                   <div key={mover.slug} className="monthly-mover-card">
                     <div className="monthly-mover-image">
-                      <PersonImage
-                        src={
-                          mover.wpId
-                            ? `/profile/people/${mover.wpId}.jpg`
-                            : undefined
-                        }
-                        fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                        alt={mover.name}
-                      />
+                      <Link href={`${localePrefix}/profile/person/${mover.slug}`}>
+                        <PersonImage
+                          src={
+                            mover.wpId
+                              ? `/profile/people/${mover.wpId}.jpg`
+                              : undefined
+                          }
+                          fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                          alt={mover.name}
+                        />
+                      </Link>
                       <span className="monthly-mover-badge falling">
                         &#8600; Falling
                       </span>

@@ -207,8 +207,8 @@
 
 .monthly-editorial p {
   font-family: var(--fontBody);
-  font-size: 1.25rem;
-  line-height: 1.95;
+  font-size: 1.38rem;
+  line-height: 2;
   color: var(--colorSlate);
   margin: 0 0 1.25rem;
 }
