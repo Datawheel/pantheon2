@@ -358,7 +358,7 @@ header {
   }
   100% {
     transform: translate3d(var(--confetti-drift, 0px), 110vh, 0)
-      rotate(var(--confetti-rotate));
+      rotate(var(--confetti-rotate, 0deg));
   }
 }
 
@@ -417,6 +417,15 @@ pre {
 .profile-type {
   @mixin priLabel;
   margin: 0 auto 10px;
+}
+
+.profile-description {
+  @mixin secLabel;
+  margin: 8px auto 0;
+  font-weight: 300;
+  max-width: 600px;
+  line-height: 1.4;
+  font-size: var(--sizeSmall) !important;
 }
 
 .date-subtitle {

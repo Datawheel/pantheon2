@@ -93,12 +93,24 @@ function getPossessiveName(name = "") {
   return name.endsWith("s") ? `${name}'` : `${name}'s`;
 }
 
-export default function Header({person, trendingData = {}, currentLang = "en", pageViews = []}) {
+export default function Header({
+  person,
+  trendingData = {},
+  currentLang = "en",
+  pageViews = [],
+}) {
   const t = getTranslations(currentLang);
   const [showBirthdayCelebration, setShowBirthdayCelebration] = useState(false);
   const [isBirthdayPerson, setIsBirthdayPerson] = useState(false);
   const confettiPieces = useMemo(() => {
-    const palette = ["#f06c6c", "#f4b942", "#4caf50", "#3b82f6", "#9b5de5", "#ff5fa2"];
+    const palette = [
+      "#f06c6c",
+      "#f4b942",
+      "#4caf50",
+      "#3b82f6",
+      "#9b5de5",
+      "#ff5fa2",
+    ];
     return Array.from({length: 80}, (_, index) => ({
       id: `confetti-${index}`,
       left: `${Math.random() * 100}%`,
@@ -137,11 +149,11 @@ export default function Header({person, trendingData = {}, currentLang = "en", p
       ...pv,
       date: `${pv.timestamp.substring(0, 4)}/${pv.timestamp.substring(
         4,
-        6
+        6,
       )}/${pv.timestamp.substring(6, 8)}`,
     }));
     const mostRecentDate = d3Max(pageViewData, d =>
-      dayjs(d.date, "YYYY/MM/DD")
+      dayjs(d.date, "YYYY/MM/DD"),
     );
     const oldestDate = d3Min(pageViewData, d => dayjs(d.date, "YYYY/MM/DD"));
     pageViewData.push({
@@ -218,7 +230,7 @@ export default function Header({person, trendingData = {}, currentLang = "en", p
                   content={`Rank #${rank} in ${getLocalizedLanguageName(langCode, currentLang)}`}
                 >
                   <div
-                    className={`lang-rank-badge ${langCode === currentLang ? 'current-lang' : ''}`}
+                    className={`lang-rank-badge ${langCode === currentLang ? "current-lang" : ""}`}
                   >
                     <span className="lang-code">{langCode.toUpperCase()}</span>
                     <span className="lang-rank">{rank}</span>
@@ -230,7 +242,11 @@ export default function Header({person, trendingData = {}, currentLang = "en", p
 
         {/* {isTrending ? <div className="trending-cont">Trending</div> : null} */}
         {isBirthdayPerson ? (
-          <span className="birthday-cake-badge" role="img" aria-label="Birthday">
+          <span
+            className="birthday-cake-badge"
+            role="img"
+            aria-label="Birthday"
+          >
             🎂
           </span>
         ) : null}
@@ -238,6 +254,11 @@ export default function Header({person, trendingData = {}, currentLang = "en", p
           {person.occupation ? person.occupation.occupation : ""}
         </h2>
         <h1 className="profile-name">{person.name}</h1>
+        {currentLang === "en" && person.description ? (
+          <p className="profile-description">
+            {person.description.replace(/\s*\([\d\s–—\-/,;.bcadBCAD]*\d{3,4}[\d\s–—\-/,;.bcadBCAD]*\)\s*/g, " ").trim()}
+          </p>
+        ) : null}
         {person.birthyear ? (
           <p className="date-subtitle">
             {FORMATTERS.year(person.birthyear)} -{" "}
