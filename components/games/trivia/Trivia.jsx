@@ -1,5 +1,5 @@
 "use client";
-import {useCallback, useEffect, useReducer, useRef, useState} from "react";
+import {useEffect, useMemo, useReducer, useRef, useState} from "react";
 import {useParams, usePathname} from "next/navigation";
 import {v4 as uuidv4} from "uuid";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
@@ -308,60 +308,7 @@ export default function Trivia() {
       dispatch({type: "SET_STREAK", streak: newStreak});
     }
 
-    // Save game and scores to DB
-    saveGameToDB();
-    saveScoresToDB();
   }, [state.phase]);
-
-  const saveGameToDB = async () => {
-    try {
-      await fetch("/api/createTriviaGame", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          date: dateStr,
-          game_number: 1,
-          game_share_id: gNumber,
-          questions: state.questions,
-        }),
-      });
-    } catch (e) {
-      console.error("[trivia] Failed to save game:", e);
-    }
-  };
-
-  const saveScoresToDB = useCallback(async () => {
-    const userId = localStorage.getItem("mptoken");
-
-    for (let i = 0; i < state.answers.length; i++) {
-      const answer = state.answers[i];
-      const question = state.questions[i];
-      if (!question) continue;
-
-      const answerData = {
-        qid: question.id,
-        quid: question.id,
-        ao: answer.selectedIndex != null ? String(answer.selectedIndex) : "",
-        at: answer.selectedIndex != null ? question.options[answer.selectedIndex] : "",
-        cao: String(question.correctIndex),
-        cat: question.options[question.correctIndex],
-      };
-
-      try {
-        await fetch("/api/createTriviaScore", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({
-            user_id: userId,
-            game_share_id: gNumber,
-            answer: answerData,
-          }),
-        });
-      } catch (e) {
-        console.error("[trivia] Failed to save score:", e);
-      }
-    }
-  }, [state.answers, state.questions, gNumber]);
 
   const handleConfirm = () => {
     if (state.selectedIndex == null) return;
@@ -374,6 +321,22 @@ export default function Trivia() {
   };
 
   const question = state.questions[state.currentIndex];
+
+  const correctCount = state.answers.filter((a) => a.correct).length;
+  const showConfetti = state.phase === PHASE.RESULTS && correctCount >= 9;
+
+  const confettiPieces = useMemo(() => {
+    const palette = ["#C8943E", "#D4A853", "#3A7D44", "#3B82F6", "#9B5DE5", "#D4513F"];
+    return Array.from({length: 60}, (_, i) => ({
+      id: `trivia-confetti-${i}`,
+      left: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 1}s`,
+      duration: `${2.5 + Math.random() * 2.5}s`,
+      drift: `${Math.round(Math.random() * 120 - 60)}px`,
+      rotate: `${Math.round(Math.random() * 360)}deg`,
+      color: palette[Math.floor(Math.random() * palette.length)],
+    }));
+  }, [state.phase]);
 
   return (
     <div className="trivia-container">
@@ -453,6 +416,24 @@ export default function Trivia() {
 
       {state.phase === PHASE.RESULTS && (
         <div className="results-container">
+          {showConfetti && (
+            <div className="trivia-confetti" aria-hidden>
+              {confettiPieces.map((piece) => (
+                <span
+                  className="trivia-confetti-piece"
+                  key={piece.id}
+                  style={{
+                    left: piece.left,
+                    animationDelay: piece.delay,
+                    animationDuration: piece.duration,
+                    backgroundColor: piece.color,
+                    "--confetti-drift": piece.drift,
+                    "--confetti-rotate": piece.rotate,
+                  }}
+                />
+              ))}
+            </div>
+          )}
           <ScoreSummary
             answers={state.answers}
             totalQuestions={state.questions.length}

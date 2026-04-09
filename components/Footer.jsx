@@ -93,6 +93,11 @@ const Footer = () => {
               {t.nav.eras}
             </a>
           </li>
+          <li>
+            <a href={`/${lang}/profile/deaths/${new Date().getFullYear()}`} className="item-link">
+              {t.nav.deaths}
+            </a>
+          </li>
         </ul>
       </li>
 
@@ -161,12 +166,45 @@ const Footer = () => {
 
       <li className="item">
         <Link href={`/${lang}/game/yearbook`} className="item-link data-link">
-          {t.nav.apps}
+          {t.nav.games}
         </Link>
         <ul className="sub-items">
           <li>
             <a href={`/${lang}/game/yearbook`} className="item-link">
               {t.nav.yearbook}
+            </a>
+          </li>
+          <li>
+            <a href={`/${lang}/game/birthle`} className="item-link">
+              {t.nav.birthle}
+            </a>
+          </li>
+          <li>
+            <a href={`/${lang}/game/trivia`} className="item-link">
+              {t.nav.trivia}
+            </a>
+          </li>
+          <li>
+            <a href="https://trivia.rocks/" target="_blank" rel="noopener noreferrer" className="item-link">
+              TuneTrivia
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li className="item">
+        <Link href={`/${lang}/news`} className="item-link news-link">
+          {t.nav.news}
+        </Link>
+        <ul className="sub-items">
+          <li>
+            <a href={`/${lang}/news`} className="item-link">
+              Daily
+            </a>
+          </li>
+          <li>
+            <a href={`/${lang}/monthly`} className="item-link">
+              Monthly
             </a>
           </li>
         </ul>
