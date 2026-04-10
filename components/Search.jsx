@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import {strip, trim} from "d3plus-text";
 import axios from "axios";
-import {Icon, NonIdealState} from "@blueprintjs/core";
+import {TrendingUp, Search as SearchIcon} from "lucide-react";
 import {useParams, usePathname} from "next/navigation";
 import {useSearchVisibility} from "/contexts/SearchContext";
 import {PUBLIC_API} from "@/app/constants";
@@ -145,7 +145,7 @@ const SearchComponent = () => {
         </label>
         {showTrending ? (
           <div className="trending-text">
-            <Icon icon="trending-up" size={20} /> Trending Searches...
+            <TrendingUp size={20} /> Trending Searches...
           </div>
         ) : null}
         {results ? (
@@ -172,18 +172,15 @@ const SearchComponent = () => {
               ))}
             </ul>
           ) : (
-            <NonIdealState
-              icon="search"
-              title="No results found"
-              description={
-                <div>
-                  Unable to find results for &ldquo;
-                  <code>{debouncedValue}</code>
-                  &rdquo;.
-                </div>
-              }
-              action={undefined}
-            />
+            <div className="search-no-results">
+              <SearchIcon size={48} strokeWidth={1} />
+              <h3>No results found</h3>
+              <p>
+                Unable to find results for &ldquo;
+                <code>{debouncedValue}</code>
+                &rdquo;.
+              </p>
+            </div>
           )
         ) : null}
       </div>

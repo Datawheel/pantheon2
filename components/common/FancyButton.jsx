@@ -1,4 +1,3 @@
-import {Icon} from "@blueprintjs/core";
 import "./FancyButton.css";
 
 /** renders as either a button or a link, but always looks like a fancy button */
@@ -6,7 +5,7 @@ import "./FancyButton.css";
 export default function FancyButton({
   disabled,
   children, // the text
-  icon, // blueprint icon name
+  icon: IconComponent, // lucide-react icon component
   onClick, // won't render as a link
   link, // won't render as a button
   href,
@@ -26,7 +25,7 @@ export default function FancyButton({
       <span className="fancy-button-text">
         {children || "missing `children` prop in FancyButton.jsx"}
       </span>
-      <Icon icon={icon} className="fancy-button-icon" />
+      {IconComponent && <IconComponent className="fancy-button-icon" size={16} />}
     </El>
   );
 }

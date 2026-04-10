@@ -329,6 +329,23 @@
 }
 
 
+.search-no-results {
+  text-align: center;
+  padding: 30px 0;
+  color: var(--colorSand);
+
+  & h3 {
+    margin: 12px 0 4px;
+    font-size: 16px;
+    color: var(--colorSlate);
+  }
+
+  & p {
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
 /* small screen adjustments (super fudged) */
 @media (max-width: 800px) {
   .search {

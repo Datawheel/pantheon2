@@ -1,6 +1,6 @@
 /* eslint react/display-name: 0 */
 import React from "react";
-import {Icon} from "@blueprintjs/core";
+import {Info} from "lucide-react";
 import SimpleTooltip from "../../common/SimpleTooltip";
 import AnchorList from "../../utils/AnchorList";
 import PersonImage from "../../utils/PersonImage";
@@ -198,7 +198,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
                   content={"Wikipedia language editions"}
                 >
                   <div>
-                    L <Icon icon="info-sign" iconSize={10} />
+                    L <Info size={10} />
                   </div>
                 </SimpleTooltip>
               ),
@@ -215,7 +215,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
                   content={"Effective Wikipedia language editions"}
                 >
                   <div>
-                    L* <Icon icon="info-sign" iconSize={10} />
+                    L* <Info size={10} />
                   </div>
                 </SimpleTooltip>
               ),
@@ -235,7 +235,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
                   }
                 >
                   <div>
-                    PVne <Icon icon="info-sign" iconSize={10} />
+                    PVne <Info size={10} />
                   </div>
                 </SimpleTooltip>
               ),
@@ -254,7 +254,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
                   }
                 >
                   <div>
-                    CV <Icon icon="info-sign" iconSize={10} />
+                    CV <Info size={10} />
                   </div>
                 </SimpleTooltip>
               ),
@@ -272,7 +272,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
                   content={"Historical Popularity Index"}
                 >
                   <div>
-                    HPI 2025 <Icon icon="info-sign" iconSize={10} />
+                    HPI 2025 <Info size={10} />
                   </div>
                 </SimpleTooltip>
               ),
@@ -290,7 +290,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
                   content={"Historical Popularity Index"}
                 >
                   <div>
-                    HPI 2024 <Icon icon="info-sign" iconSize={10} />
+                    HPI 2024 <Info size={10} />
                   </div>
                 </SimpleTooltip>
               ),
@@ -421,7 +421,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Historical Popularity Index"}
             >
               <div>
-                HPI 2022 <Icon icon="info-sign" iconSize={10} />
+                HPI 2022 <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -439,7 +439,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Historical Popularity Index"}
             >
               <div>
-                Avg HPI <Icon icon="info-sign" iconSize={10} />
+                Avg HPI <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -456,7 +456,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
-                L <Icon icon="info-sign" iconSize={10} />
+                L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -473,7 +473,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
-                Avg L <Icon icon="info-sign" iconSize={10} />
+                Avg L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -525,7 +525,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Historical Popularity Index"}
             >
               <div>
-                HPI 2022 <Icon icon="info-sign" iconSize={10} />
+                HPI 2022 <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -543,7 +543,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Historical Popularity Index"}
             >
               <div>
-                Avg HPI <Icon icon="info-sign" iconSize={10} />
+                Avg HPI <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -560,7 +560,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
-                L <Icon icon="info-sign" iconSize={10} />
+                L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -577,7 +577,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
-                Avg L <Icon icon="info-sign" iconSize={10} />
+                Avg L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -625,7 +625,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Historical Popularity Index"}
             >
               <div>
-                HPI 2022 <Icon icon="info-sign" iconSize={10} />
+                HPI 2022 <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -643,7 +643,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Historical Popularity Index"}
             >
               <div>
-                Avg HPI <Icon icon="info-sign" iconSize={10} />
+                Avg HPI <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -660,7 +660,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
-                L <Icon icon="info-sign" iconSize={10} />
+                L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -677,7 +677,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
-                Avg L <Icon icon="info-sign" iconSize={10} />
+                Avg L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -863,7 +863,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Historical Popularity Index"}
             >
               <div>
-                HPI 2022 <Icon icon="info-sign" iconSize={10} />
+                HPI 2022 <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -881,7 +881,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Historical Popularity Index"}
             >
               <div>
-                Avg HPI <Icon icon="info-sign" iconSize={10} />
+                Avg HPI <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -898,7 +898,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
-                L <Icon icon="info-sign" iconSize={10} />
+                L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -915,7 +915,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
-                Avg L <Icon icon="info-sign" iconSize={10} />
+                Avg L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -998,7 +998,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Historical Popularity Index"}
             >
               <div>
-                HPI 2022 <Icon icon="info-sign" iconSize={10} />
+                HPI 2022 <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -1016,7 +1016,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Historical Popularity Index"}
             >
               <div>
-                Avg HPI <Icon icon="info-sign" iconSize={10} />
+                Avg HPI <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -1033,7 +1033,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
-                L <Icon icon="info-sign" iconSize={10} />
+                L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
@@ -1050,7 +1050,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
-                Avg L <Icon icon="info-sign" iconSize={10} />
+                Avg L <Info size={10} />
               </div>
             </SimpleTooltip>
           ),
