@@ -7,7 +7,6 @@ export default function VizWrapper({children}) {
 }
 
 // import React, {Component} from "react";
-// import {Dialog} from "@blueprintjs/core";
 // import {select} from "d3-selection";
 // import {saveElement} from "d3plus-export";
 // import {FORMATTERS} from "types/index";

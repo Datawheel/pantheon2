@@ -148,7 +148,6 @@ export default async function Twitter({person, twitterData, slug, title}) {
 //  import React, { Component } from "react";
 // import axios from "axios";
 // import moment from "moment";
-// import { Icon } from "@blueprintjs/core";
 // import { formatAbbreviate } from "d3plus-format";
 
 // class Twitter extends Component {

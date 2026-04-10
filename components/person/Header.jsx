@@ -4,7 +4,7 @@
 import {max as d3Max, min as d3Min} from "d3-array";
 import dayjs from "dayjs";
 import {useEffect, useMemo, useState} from "react";
-import {Tooltip} from "@blueprintjs/core";
+import SimpleTooltip from "../common/SimpleTooltip";
 // import HeaderLine from "./HeaderLine";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import {getLocalizedLanguageName} from "/app/locales";
@@ -225,7 +225,7 @@ export default function Header({
               })
               .slice(0, 5)
               .map(([langCode, rank]) => (
-                <Tooltip
+                <SimpleTooltip
                   key={langCode}
                   content={`Rank #${rank} in ${getLocalizedLanguageName(langCode, currentLang)}`}
                 >
@@ -235,7 +235,7 @@ export default function Header({
                     <span className="lang-code">{langCode.toUpperCase()}</span>
                     <span className="lang-rank">{rank}</span>
                   </div>
-                </Tooltip>
+                </SimpleTooltip>
               ))}
           </div>
         )}

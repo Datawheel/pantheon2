@@ -1,6 +1,7 @@
 /* eslint react/display-name: 0 */
 import React from "react";
-import {Icon, Tooltip} from "@blueprintjs/core";
+import {Icon} from "@blueprintjs/core";
+import SimpleTooltip from "../../common/SimpleTooltip";
 import AnchorList from "../../utils/AnchorList";
 import PersonImage from "../../utils/PersonImage";
 import {FORMATTERS} from "../../utils/consts";
@@ -192,14 +193,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
           columns: [
             {
               Header: () => (
-                <Tooltip
+                <SimpleTooltip
                   className="table-tooltip-trigger"
                   content={"Wikipedia language editions"}
                 >
                   <div>
                     L <Icon icon="info-sign" iconSize={10} />
                   </div>
-                </Tooltip>
+                </SimpleTooltip>
               ),
               accessor: "l",
               minWidth: 105,
@@ -209,14 +210,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
             },
             {
               Header: () => (
-                <Tooltip
+                <SimpleTooltip
                   className="table-tooltip-trigger"
                   content={"Effective Wikipedia language editions"}
                 >
                   <div>
                     L* <Icon icon="info-sign" iconSize={10} />
                   </div>
-                </Tooltip>
+                </SimpleTooltip>
               ),
               accessor: "l_",
               Cell: ({value}) => FORMATTERS.decimal(value),
@@ -227,7 +228,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
             },
             {
               Header: () => (
-                <Tooltip
+                <SimpleTooltip
                   className="table-tooltip-trigger"
                   content={
                     "Non-english Wikipedia pageviews in the past 6 months"
@@ -236,7 +237,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
                   <div>
                     PVne <Icon icon="info-sign" iconSize={10} />
                   </div>
-                </Tooltip>
+                </SimpleTooltip>
               ),
               accessor: "non_en_page_views",
               Cell: ({value}) => FORMATTERS.bigNum(value),
@@ -246,7 +247,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
             },
             {
               Header: () => (
-                <Tooltip
+                <SimpleTooltip
                   className="table-tooltip-trigger"
                   content={
                     "Coefficient of variation in Wikipedia Pageviews: to discount characters that have short periods of popularity"
@@ -255,7 +256,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
                   <div>
                     CV <Icon icon="info-sign" iconSize={10} />
                   </div>
-                </Tooltip>
+                </SimpleTooltip>
               ),
               accessor: "coefficient_of_variation",
               Cell: ({value}) => FORMATTERS.decimal(value),
@@ -266,14 +267,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
             },
             {
               Header: () => (
-                <Tooltip
+                <SimpleTooltip
                   className="table-tooltip-trigger"
                   content={"Historical Popularity Index"}
                 >
                   <div>
                     HPI 2025 <Icon icon="info-sign" iconSize={10} />
                   </div>
-                </Tooltip>
+                </SimpleTooltip>
               ),
               accessor: "hpi",
               Cell: ({value}) => FORMATTERS.decimal(value),
@@ -284,14 +285,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
             },
             {
               Header: () => (
-                <Tooltip
+                <SimpleTooltip
                   className="table-tooltip-trigger"
                   content={"Historical Popularity Index"}
                 >
                   <div>
                     HPI 2024 <Icon icon="info-sign" iconSize={10} />
                   </div>
-                </Tooltip>
+                </SimpleTooltip>
               ),
               accessor: "hpi_prev",
               Cell: ({value}) => (value ? FORMATTERS.decimal(value) : "-"),
@@ -415,14 +416,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Historical Popularity Index"}
             >
               <div>
                 HPI 2022 <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "hpi",
           Cell: ({value}) => FORMATTERS.bigNum(value),
@@ -433,14 +434,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Historical Popularity Index"}
             >
               <div>
                 Avg HPI <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_hpi",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -450,14 +451,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
                 L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "langs",
           Cell: ({value}) => FORMATTERS.commas(value),
@@ -467,14 +468,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
                 Avg L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_langs",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -519,14 +520,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Historical Popularity Index"}
             >
               <div>
                 HPI 2022 <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "hpi",
           Cell: ({value}) => FORMATTERS.bigNum(value),
@@ -537,14 +538,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Historical Popularity Index"}
             >
               <div>
                 Avg HPI <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_hpi",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -554,14 +555,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
                 L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "langs",
           Cell: ({value}) => FORMATTERS.commas(value),
@@ -571,14 +572,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
                 Avg L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_langs",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -619,14 +620,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Historical Popularity Index"}
             >
               <div>
                 HPI 2022 <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "hpi",
           Cell: ({value}) => FORMATTERS.bigNum(value),
@@ -637,14 +638,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Historical Popularity Index"}
             >
               <div>
                 Avg HPI <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_hpi",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -654,14 +655,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
                 L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "langs",
           Cell: ({value}) => FORMATTERS.commas(value),
@@ -671,14 +672,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
                 Avg L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_langs",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -857,14 +858,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Historical Popularity Index"}
             >
               <div>
                 HPI 2022 <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "hpi",
           Cell: ({value}) => FORMATTERS.bigNum(value),
@@ -875,14 +876,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Historical Popularity Index"}
             >
               <div>
                 Avg HPI <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_hpi",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -892,14 +893,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
                 L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "langs",
           Cell: ({value}) => FORMATTERS.commas(value),
@@ -909,14 +910,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
                 Avg L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_langs",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -992,14 +993,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Historical Popularity Index"}
             >
               <div>
                 HPI 2022 <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "hpi",
           Cell: ({value}) => FORMATTERS.bigNum(value),
@@ -1010,14 +1011,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Historical Popularity Index"}
             >
               <div>
                 Avg HPI <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_hpi",
           Cell: ({value}) => FORMATTERS.decimal(value),
@@ -1027,14 +1028,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Count of Wikipedia Language Editions"}
             >
               <div>
                 L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "langs",
           Cell: ({value}) => FORMATTERS.commas(value),
@@ -1044,14 +1045,14 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
         },
         {
           Header: () => (
-            <Tooltip
+            <SimpleTooltip
               className="table-tooltip-trigger"
               content={"Average Count of Wikipedia Language Editions"}
             >
               <div>
                 Avg L <Icon icon="info-sign" iconSize={10} />
               </div>
-            </Tooltip>
+            </SimpleTooltip>
           ),
           accessor: "avg_langs",
           Cell: ({value}) => FORMATTERS.decimal(value),

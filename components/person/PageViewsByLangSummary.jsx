@@ -2,7 +2,7 @@
 import {max as D3Max, mean as D3Mean, sum as D3Sum} from "d3-array";
 import {nest} from "d3-collection";
 import dayjs from "dayjs";
-import {Tooltip} from "@blueprintjs/core";
+import SimpleTooltip from "../common/SimpleTooltip";
 import {FORMATTERS} from "../utils/consts";
 import AnchorList from "../utils/AnchorList";
 import {SUPPORTED_LOCALES} from "/app/locales";
@@ -89,7 +89,7 @@ export default function PageViewsByLangSummary({timeSeriesData, person}) {
   return (
     <p>
       Over the past year {person.name} has had the most page views in the{" "}
-      <Tooltip
+      <SimpleTooltip
         content={`${dataPastYearAgg[0].language} (${dataPastYearAgg[0].language_local}) is a ${dataPastYearAgg[0].family_name} language in the ${dataPastYearAgg[0].primary_family_name} family of languages.`}
       >
         <a
@@ -98,7 +98,7 @@ export default function PageViewsByLangSummary({timeSeriesData, person}) {
         >
           {dataPastYearAgg[0].language} wikipedia edition
         </a>
-      </Tooltip>{" "}
+      </SimpleTooltip>{" "}
       with {FORMATTERS.commas(dataPastYearAgg[0].views)} views, followed by{" "}
       <AnchorList
         items={dataPastYearAgg.slice(1, 3)}

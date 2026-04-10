@@ -2,7 +2,7 @@
 
 import {useState} from "react";
 import Link from "next/link";
-import {Tooltip} from "@blueprintjs/core";
+import SimpleTooltip from "/components/common/SimpleTooltip";
 import PersonImage from "/components/utils/PersonImage";
 import "./MonthlyEdition.css";
 
@@ -302,14 +302,14 @@ export default function MonthlyEdition({edition, locale}) {
                   <th>{viewLabels.current} Views</th>
                   <th className="align-right">Ratio</th>
                   <th className="align-right">
-                    <Tooltip
+                    <SimpleTooltip
                       content="Anomaly score measures how unusual a page's traffic change is this month. It combines both the percentage change and the absolute difference in views—so big spikes and big drop-offs rank highest."
                       placement="top"
                     >
                       <span className="monthly-tooltip-trigger">
                         Anomaly Score
                       </span>
-                    </Tooltip>
+                    </SimpleTooltip>
                   </th>
                 </tr>
               </thead>
@@ -338,7 +338,7 @@ export default function MonthlyEdition({edition, locale}) {
                             <span className="monthly-table-person-name">
                               {row.title}
                               {deceasedSlugs.has(row.slug) && (
-                                <Tooltip
+                                <SimpleTooltip
                                   content={`${row.title} passed away in ${monthLabel} ${edition.year}`}
                                   placement="top"
                                 >
@@ -347,7 +347,7 @@ export default function MonthlyEdition({edition, locale}) {
                                     alt="Deceased"
                                     className="monthly-table-wreath"
                                   />
-                                </Tooltip>
+                                </SimpleTooltip>
                               )}
                             </span>
                             {row.description && (

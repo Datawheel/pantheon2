@@ -1,4 +1,3 @@
-// import { Tooltip } from "@blueprintjs/core";
 import Link from "next/link";
 
 export default function AnchorList({items, name, url, noAnd, newWindow}) {
