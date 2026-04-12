@@ -98,7 +98,7 @@
 .heatmap-cell {
   height: 14px;
   border-radius: 2px;
-  background-color: var(--heatmap-empty);
+  background-color: var(--heatmap-empty, #ebedf0);
 }
 
 .heatmap-outside {
@@ -175,7 +175,7 @@
   padding: 16px 20px;
   background: #f8f6f2;
   border: 1px solid #e0dace;
-  border-left: 4px solid var(--heatmap-4);
+  border-left: 4px solid var(--heatmap-4, #86640e);
   border-radius: 6px;
 }
 
@@ -202,7 +202,7 @@
 .heatmap-detail-rank {
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--heatmap-4);
+  color: var(--heatmap-4, #86640e);
 }
 
 .heatmap-detail-close {
@@ -231,17 +231,17 @@
   margin-top: 14px;
   padding: 10px 24px;
   background: none;
-  color: var(--heatmap-4);
+  color: var(--heatmap-4, #86640e);
   font-size: 1.05rem;
   font-weight: 500;
   text-decoration: none;
-  border: 1.5px solid var(--heatmap-3);
+  border: 1.5px solid var(--heatmap-3, #a07920);
   border-radius: 6px;
   transition: background 0.15s, color 0.15s;
 }
 
 .heatmap-detail-link:hover {
-  background: var(--heatmap-4);
+  background: var(--heatmap-4, #86640e);
   color: #fff;
   text-decoration: none;
 }

@@ -59,11 +59,11 @@ function getMonthLabels(weeks, year) {
 
 function getCellColor(rank) {
   if (!rank) return null;
-  if (rank <= 1) return "var(--heatmap-5)";
-  if (rank <= 3) return "var(--heatmap-4)";
-  if (rank <= 5) return "var(--heatmap-3)";
-  if (rank <= 8) return "var(--heatmap-2)";
-  return "var(--heatmap-1)";
+  if (rank <= 1) return "var(--heatmap-5, #6b4e00)";
+  if (rank <= 3) return "var(--heatmap-4, #86640e)";
+  if (rank <= 5) return "var(--heatmap-3, #a07920)";
+  if (rank <= 8) return "var(--heatmap-2, #b8923a)";
+  return "var(--heatmap-1, #c8a96e)";
 }
 
 function formatDateLabel(dateStr) {
@@ -224,12 +224,12 @@ export default function TrendingHeatmap({personSlug, lang = "en", title, slug: s
         <YearGrid year={prevYear} weeks={prevWeeks} trendMap={trendMap} onHover={handleHover} onLeave={handleLeave} onClick={handleClick} />
         <div className="heatmap-legend">
           <span className="heatmap-legend-label">Less</span>
-          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-0)"}} />
-          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-1)"}} />
-          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-2)"}} />
-          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-3)"}} />
-          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-4)"}} />
-          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-5)"}} />
+          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-0, #ebedf0)"}} />
+          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-1, #c8a96e)"}} />
+          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-2, #b8923a)"}} />
+          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-3, #a07920)"}} />
+          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-4, #86640e)"}} />
+          <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-5, #6b4e00)"}} />
           <span className="heatmap-legend-label">More</span>
         </div>
 
