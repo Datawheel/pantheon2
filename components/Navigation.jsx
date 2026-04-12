@@ -3,9 +3,9 @@ import {useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {usePathname, useParams} from "next/navigation";
-import {useSearchVisibility} from "/contexts/SearchContext";
-import {getTranslations} from "/app/translations";
-import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "/app/locales";
+import {useSearchVisibility} from "@/contexts/SearchContext";
+import {getTranslations} from "@/app/translations";
+import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "@/app/locales";
 
 export default function Navigation() {
   const {setSearchVisible} = useSearchVisibility();

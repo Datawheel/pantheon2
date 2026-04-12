@@ -8,7 +8,7 @@ import {
 import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
 import SectionLayout from "../common/SectionLayout";
-import {BASE_API} from "/app/constants";
+import {BASE_API} from "@/app/constants";
 
 async function getBirthYearRankings(
   birthYear,

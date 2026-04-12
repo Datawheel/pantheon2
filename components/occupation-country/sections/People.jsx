@@ -5,8 +5,8 @@ import {toTitleCase} from "../../utils/vizHelpers";
 import AnchorList from "../../utils/AnchorList";
 import PhotoCarousel from "../../utils/PhotoCarousel";
 import SectionLayout from "../../common/SectionLayout";
-import {getTranslations} from "/app/translations";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "@/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
 
 export default function People({
   country,

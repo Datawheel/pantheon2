@@ -1,7 +1,8 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {plural} from "pluralize";
-import {getTranslations} from "/app/translations";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
+import {getTranslations} from "@/app/translations";
 import {
   DEFAULT_LOCALE,
   getSupportedLocale,
@@ -107,10 +108,10 @@ export async function GET(request) {
   // Fetch top people and total count in parallel
   const [topPeopleRes, countRes] = await Promise.all([
     fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,name&limit=16`,
+      `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,name&limit=16`,
     ),
     fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&select=id`,
+      `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&bplace_country=eq.${countryId}&select=id`,
       {headers: {"Prefer": "count=exact"}},
     ),
   ]);

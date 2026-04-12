@@ -1,5 +1,5 @@
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {SUPPORTED_LOCALES} from "/app/locales";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {SUPPORTED_LOCALES} from "@/app/locales";
 
 const SITE_URL = "https://pantheon.world";
 const ITEMS_PER_SITEMAP = 25000;

@@ -2,7 +2,7 @@ import AnchorList from "../utils/AnchorList";
 import {FORMATTERS} from "../utils/consts";
 import {nest} from "d3-collection";
 import {plural} from "pluralize";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "../common/Intro.css";
 
 export default function Intro({

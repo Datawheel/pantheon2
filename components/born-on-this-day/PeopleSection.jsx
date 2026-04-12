@@ -1,8 +1,8 @@
 import PeopleGrid from "./PeopleGrid";
 import "../common/Section.css";
 import AnchorList from "../utils/AnchorList";
-import {DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 
 export default function PeopleSection({date, displayDate, people, lang = "en"}) {
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;

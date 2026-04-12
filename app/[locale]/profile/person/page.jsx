@@ -1,13 +1,14 @@
 import Link from "next/link";
-import {REVALIDATE_PERIODS, BASE_API} from "/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import {safeFetchJson} from "/app/utils/safeFetch";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
-import PersonImage from "/components/utils/PersonImage";
-import HomeSearch from "/components/home/HomeSearch";
-import RandomPersonButton from "/components/person/RandomPersonButton";
-import "/components/person/SelectPerson.css";
+import {REVALIDATE_PERIODS, BASE_API} from "@/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import {safeFetchJson} from "@/app/utils/safeFetch";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
+import PersonImage from "@/components/utils/PersonImage";
+import HomeSearch from "@/components/home/HomeSearch";
+import RandomPersonButton from "@/components/person/RandomPersonButton";
+import "../../../../components/person/SelectPerson.css";
 
 const PUBLIC_API = process.env.NEXT_PUBLIC_BASE_API || "https://api.pantheon.world";
 const PERSON_FALLBACK = "https://static.pantheon.world/icons/icon-person.svg";
@@ -28,7 +29,10 @@ async function getPeopleByDomain() {
   ];
   const results = {};
   for (const {domain, occupations} of domains) {
-    const occList = occupations.split(",").map(o => `occupation.eq.${o.trim()}`).join(",");
+    const occList = occupations
+      .split(",")
+      .map(o => `occupation.eq.${encodePostgrestValue(o.trim())}`)
+      .join(",");
     const url = `${PUBLIC_API}/person_ranks?or=(${occList})&select=id,name,slug,birthyear,occupation&order=hpi.desc.nullslast&limit=8`;
     results[domain] = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
   }

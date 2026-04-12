@@ -3,8 +3,7 @@
 import {FORMATTERS} from "../utils/consts";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
-import {useEffect, useState, useCallback} from "react";
-import {PUBLIC_API} from "@/app/constants";
+import {useCallback, useState} from "react";
 import MemMetricsBullet from "./MemMetricsBullet";
 
 function YouTubeFacade({videoId}) {
@@ -35,51 +34,7 @@ function YouTubeFacade({videoId}) {
   );
 }
 
-export default function MemMetrics({person, personRanks, slug, title}) {
-  const [loading, setLoading] = useState(true);
-  const [occupationData, setOccupationData] = useState(null);
-  const [totalViews, setTotalViews] = useState(0);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Calculate date one year ago
-        const oneYearAgo = new Date();
-        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
-        // Make API calls concurrently
-        const [occupationResponse, totalViewsResponse] = await Promise.all([
-          fetch(
-            `${PUBLIC_API}/pageviews_occupation?occupation=eq.${person.occupation?.id}`,
-          ),
-          fetch(`${PUBLIC_API}/pageviews_rolling_12mo?wp_id=eq.${person.id}`),
-        ]);
-
-        const [occupationData, totalViewsData] = await Promise.all([
-          occupationResponse.json(),
-          totalViewsResponse.json(),
-        ]);
-
-        setOccupationData(occupationData[0] || null);
-        setTotalViews(totalViewsData[0]?.total_views || 0);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [person.id, person.occupation?.id]);
-
-  if (loading) {
-    return (
-      <SectionLayout slug={slug} title={title}>
-        <div>Loading...</div>
-      </SectionLayout>
-    );
-  }
-
+export default function MemMetrics({person, personRanks, occupationData, totalViews = 0, slug, title}) {
   return (
     <SectionLayout slug={slug} title={title}>
       <div className="metrics-container">

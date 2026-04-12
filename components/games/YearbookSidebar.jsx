@@ -2,7 +2,7 @@
 import {Fragment, useState} from "react";
 import {useRouter, useParams, usePathname} from "next/navigation";
 import Link from "next/link";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 
 import "../../styles/Misc.css";
 import "../../styles/About.css";

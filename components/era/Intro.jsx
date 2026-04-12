@@ -1,7 +1,7 @@
 import AnchorList from "../utils/AnchorList";
 import {FORMATTERS} from "../utils/consts";
 import {nest} from "d3-collection";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "../common/Intro.css";
 
 export default function Intro({era, eras, peopleBorn, peopleDied, lang = "en"}) {

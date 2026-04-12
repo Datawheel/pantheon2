@@ -4,9 +4,9 @@ import "../common/Section.css";
 import "./OccupationBreakdown.css";
 import {toTitleCase} from "../utils/vizHelpers";
 import {plural} from "pluralize";
-import PersonImage from "/components/utils/PersonImage";
-import {DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
+import PersonImage from "@/components/utils/PersonImage";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 
 export default function OccupationBreakdown({date, displayDate, people, lang = "en"}) {
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;

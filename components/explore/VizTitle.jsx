@@ -1,6 +1,6 @@
 "use client";
 import {useSelector} from "react-redux";
-import {buildRankingsHeading} from "/lib/rankings";
+import {buildRankingsHeading} from "@/lib/rankings";
 
 export default function VizTitle({places, nestedOccupations, exploreState}) {
   const storeExploreState = useSelector(state => state.explore);

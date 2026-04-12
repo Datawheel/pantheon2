@@ -1,14 +1,22 @@
 "use client";
 import {useRef} from "react";
 import React from "react";
-import {CopyToClipboard} from "react-copy-to-clipboard";
 import "./Result.css";
+
+{
+  /* <CopyToClipboard
+  // ${attempt.get() + 1}/${MAX_ATTEMPTS}\n${resultToShare.get()}
+  text={`Pantheon Birthle ${gameIdShare} \n${resultToShare.get()}\nhttps://pantheon.world/game/birthle \n#pantheon #birthle \nWhat about you?`}
+  key="CopyToClipboardBirthle"
+  onCopy={onShareBtnCLick}
+></CopyToClipboard> */
+}
 
 function convertTZ(date, tzString) {
   return new Date(
     (typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
       timeZone: tzString,
-    })
+    }),
   );
 }
 
@@ -60,22 +68,15 @@ export default function Result({
           </div>
           <div key={"resultBtnList"} className="btn-list">
             <div>
-              <CopyToClipboard
-                // ${attempt.get() + 1}/${MAX_ATTEMPTS}\n${resultToShare.get()}
-                text={`Pantheon Birthle ${gameIdShare} \n${resultToShare.get()}\nhttps://pantheon.world/game/birthle \n#pantheon #birthle \nWhat about you?`}
-                key="CopyToClipboardBirthle"
-                onCopy={onShareBtnCLick}
-              >
-                <button key={"resultBtnShare"} className="btn">
-                  <span
-                    key={"resultBtnShareLabel"}
-                    className="btn-share"
-                    ref={shareBtn}
-                  >
-                    Share
-                  </span>
-                </button>
-              </CopyToClipboard>
+              <button key={"resultBtnShare"} className="btn">
+                <span
+                  key={"resultBtnShareLabel"}
+                  className="btn-share"
+                  ref={shareBtn}
+                >
+                  Share
+                </span>
+              </button>
             </div>
           </div>
         </div>

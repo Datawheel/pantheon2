@@ -13,9 +13,9 @@ import {
 } from "../../../../../components/utils/consts";
 import OccupationTrends from "../../../../../components/place/sections/OccupationTrends";
 import Lifespans from "../../../../../components/place/sections/Lifespans";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 
 async function getWikiSummary(placeName) {
   try {
@@ -158,7 +158,8 @@ function getRankWindow(rankValue) {
   };
 }
 
-export async function generateMetadata({params}, parent) {
+export async function generateMetadata(props, parent) {
+  const params = await props.params;
   const {id, locale} = params;
   const baseUrl = process.env.URL || "https://pantheon.world";
   const lang = locale || "en";
@@ -221,7 +222,9 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {id}}) {
+export default async function Page(props) {
+  const params = await props.params;
+  const {id} = params;
   const [place, occupations] = await Promise.all([
     getPlace(id),
     getOccupations(),

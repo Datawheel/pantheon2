@@ -1,29 +1,30 @@
 import {cloneElement} from "react";
 import {notFound} from "next/navigation";
 import {plural} from "pluralize";
-import ProfileNav from "/components/common/Nav";
-import Intro from "/components/person/Intro";
-import Header from "/components/person/Header";
-import MemMetrics from "/components/person/MemMetrics";
-import PageViewsByLang from "/components/person/PageViewsByLang";
-import OccupationRanking from "/components/person/OccupationRanking";
-import YearRanking from "/components/person/YearRanking";
-import CountryRanking from "/components/person/CountryRanking";
-import CountryOccupationRanking from "/components/person/CountryOccupationRanking";
-import Books from "/components/person/Books";
-import News from "/components/person/News";
-//  Twitter from "/components/person/tter";
-import Movies from "/components/person/Movies";
-import WhyTrending from "/components/person/WhyTrending";
-import Footer from "/components/person/Footer";
-import TrendingHeatmap from "/components/person/TrendingHeatmap";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
-import GoogleAdSense from "/components/common/GoogleAdSense";
-import GoogleAdSenseScript from "/components/common/GoogleAdSenseScript";
-import rankless from "/data/rankless.json";
+import ProfileNav from "@/components/common/Nav";
+import Intro from "@/components/person/Intro";
+import Header from "@/components/person/Header";
+import MemMetrics from "@/components/person/MemMetrics";
+import PageViewsByLang from "@/components/person/PageViewsByLang";
+import OccupationRanking from "@/components/person/OccupationRanking";
+import YearRanking from "@/components/person/YearRanking";
+import CountryRanking from "@/components/person/CountryRanking";
+import CountryOccupationRanking from "@/components/person/CountryOccupationRanking";
+import Books from "@/components/person/Books";
+import News from "@/components/person/News";
+//  Twitter from "@/components/person/tter";
+import Movies from "@/components/person/Movies";
+import WhyTrending from "@/components/person/WhyTrending";
+import Footer from "@/components/person/Footer";
+import TrendingHeatmap from "@/components/person/TrendingHeatmap";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
+import GoogleAdSense from "@/components/common/GoogleAdSense";
+import GoogleAdSenseScript from "@/components/common/GoogleAdSenseScript";
+import rankless from "@/data/rankless.json";
 
 // Safe JSON fetch with logging for debugging HTML responses
 async function safeFetchJson(url, options = {}, fallback = null) {
@@ -162,6 +163,39 @@ async function getPageViews(personId, lang = "en") {
   return Array.isArray(pageviews) ? pageviews : [];
 }
 
+async function getOccupationPageviews(occupationId) {
+  if (!occupationId) {
+    return null;
+  }
+
+  const encodedOccupationId = encodePostgrestValue(occupationId);
+  const url = `${BASE_API}/pageviews_occupation?occupation=eq.${encodedOccupationId}`;
+  const data = await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
+
+  return Array.isArray(data) && data.length > 0 ? data[0] : null;
+}
+
+async function getRolling12MonthViews(personId) {
+  if (!personId) {
+    return 0;
+  }
+
+  const url = `${BASE_API}/pageviews_rolling_12mo?wp_id=eq.${personId}`;
+  const data = await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
+
+  return Array.isArray(data) && data.length > 0
+    ? data[0]?.total_views || 0
+    : 0;
+}
+
 export async function generateMetadata(props, parent) {
   // In Next.js 14.2+, params may be a Promise
   const params = await props.params;
@@ -266,8 +300,16 @@ export default async function Page(props) {
     return notFound();
   }
 
-  // Fetch pageviews using person.id (needs numeric ID, not slug)
-  const pageViews = await getPageViews(person.id, lang);
+  const [pageViews, memMetricsData] = await Promise.all([
+    getPageViews(person.id, lang),
+    Promise.all([
+      getOccupationPageviews(person.occupation?.id),
+      getRolling12MonthViews(person.id),
+    ]).then(([occupationData, totalViews]) => ({
+      occupationData,
+      totalViews,
+    })),
+  ]);
 
   // Get localized name from translations column, fallback to English name
   const localizedName = person.translations?.[lang] || person.name;
@@ -322,7 +364,12 @@ export default async function Page(props) {
       title: "Memorability Metrics",
       slug: "metrics",
       content: (
-        <MemMetrics person={localizedPerson} personRanks={personRanks} />
+        <MemMetrics
+          person={localizedPerson}
+          personRanks={personRanks}
+          occupationData={memMetricsData.occupationData}
+          totalViews={memMetricsData.totalViews}
+        />
       ),
     },
     {

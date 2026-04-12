@@ -2,7 +2,7 @@
 
 import {useEffect, useRef} from "react";
 import * as echarts from "echarts";
-import {FORMATTERS} from "/components/utils/consts";
+import {FORMATTERS} from "@/components/utils/consts";
 
 export default function PageViewByLangAreaPlot({baseOption, style}) {
   const chartRef = useRef(null);

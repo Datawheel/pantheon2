@@ -1,4 +1,4 @@
-import {generateQuestions} from "/lib/trivia/generators";
+import {generateQuestions} from "@/lib/trivia/generators";
 
 export const dynamic = "force-dynamic";
 

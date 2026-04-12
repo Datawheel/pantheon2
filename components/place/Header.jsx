@@ -2,7 +2,7 @@ import {Suspense} from "react";
 import {max as d3Max, min as d3Min} from "d3-array";
 import dayjs from "dayjs";
 import HeaderLine from "./HeaderLine";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 

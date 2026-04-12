@@ -2,7 +2,7 @@
 import {useEffect, useMemo, useReducer, useRef, useState} from "react";
 import {useParams, usePathname} from "next/navigation";
 import {v4 as uuidv4} from "uuid";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import ModeSelector from "./ModeSelector";
 import DifficultySelector from "./DifficultySelector";
 import QuestionCard from "./QuestionCard";
@@ -12,7 +12,7 @@ import TimerBar from "./TimerBar";
 import PersonReveal from "./PersonReveal";
 import ScoreSummary from "./ScoreSummary";
 import ResultsReview from "./ResultsReview";
-import {gameNumber as calcGameNumber, todayDateStr} from "/lib/trivia/seedRandom";
+import {gameNumber as calcGameNumber, todayDateStr} from "@/lib/trivia/seedRandom";
 import "./Trivia.css";
 
 const TIME_PER_QUESTION = 20;

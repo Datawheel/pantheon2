@@ -5,6 +5,7 @@ import {
   dataRequestFailed,
 } from "../../features/exploreSlice";
 import dataFormatter from "../../components/utils/dataFormatter";
+import {encodePostgrestList, encodePostgrestValue} from "@/app/utils/postgrest";
 
 const getQueryArgs = exploreState => {
   const {
@@ -39,7 +40,7 @@ const getQueryArgs = exploreState => {
     }
   }
   if (occupation !== "all") {
-    queryStr += `&occupation=${occupation}`;
+    queryStr += `&occupation=${encodeURIComponent(occupation)}`;
   }
   if (yearType !== "birthyear") {
     queryStr += `&yearType=${yearType}`;
@@ -111,7 +112,7 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
   // Set occupation...
   let occupationFilter = "";
   if (occupation !== "all") {
-    occupationFilter = `&occupation=in.(${occupation})`;
+    occupationFilter = `&occupation=in.(${encodePostgrestList(occupation.split(","))})`;
   }
 
   // Set gender...
@@ -169,7 +170,7 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
 
   let nameFilter = "";
   if (nameSearch && nameSearch.trim().length >= 2) {
-    nameFilter = `&name=ilike.*${encodeURIComponent(nameSearch.trim())}*`;
+    nameFilter = `&name=ilike.*${encodePostgrestValue(nameSearch.trim())}*`;
   }
 
   const apiUrl = `${baseApi}/${table}?select=${selectFields}&${yearType}=gte.${years[0]}&${yearType}=lte.${years[1]}${placeFilter}${occupationFilter}${genderFilter}${metricFilter}${birthdayFilter}${onlyShowNewFilter}${nameFilter}${sorting}${limitOffset}`;

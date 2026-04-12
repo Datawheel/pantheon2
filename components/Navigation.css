@@ -230,6 +230,7 @@
 
   & .logo {
     width: 140px;
+    height: auto;
 
     @media (max-width: 850px) {
       width: 100px;
@@ -294,6 +295,7 @@
     & img {
       @media (max-width: 990px) {
         width: 18px;
+        height: auto;
       }
     }
   }
@@ -304,6 +306,7 @@
 
     & img {
       width: 18px;
+      height: auto;
     }
 
     @media (max-width: 800px) {
@@ -344,6 +347,7 @@
 
   & .logo {
     width: 93px;
+    height: auto;
   }
 
   & .close-btn {
@@ -355,6 +359,7 @@
 
     & img {
       width: 18px;
+      height: auto;
     }
   }
 

@@ -3,7 +3,7 @@ import {Geomap} from "d3plus-react";
 import {useParams, usePathname} from "next/navigation";
 // import VizWrapper from "../../../common/VizWrapper";
 import {groupTooltip, on} from "../../../utils/vizHelpers";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 
 export default function PlacesMap({country, data, title}) {
   const params = useParams();

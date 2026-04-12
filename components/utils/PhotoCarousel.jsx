@@ -2,6 +2,7 @@
 import axios from "axios";
 import {useRef, useEffect, useState} from "react";
 import {PUBLIC_API} from "@/app/constants";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
 import Link from "next/link";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import PersonImage from "./PersonImage";
@@ -81,7 +82,7 @@ export default function PhotoCarousel({
           let datasetFilter = "";
           if (rankAccessor === "bplace_country_occupation_rank_unique") {
             datasetFilter = me
-              ? `bplace_country=eq.${me.bplace_country.id}&occupation=eq.${me.occupation.id}&`
+              ? `bplace_country=eq.${me.bplace_country.id}&occupation=eq.${encodePostgrestValue(me.occupation.id)}&`
               : "";
           } else {
             datasetFilter = me

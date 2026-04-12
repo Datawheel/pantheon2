@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import {useSearchVisibility} from "/contexts/SearchContext";
-import {getTranslations} from "/app/translations";
+import {useSearchVisibility} from "@/contexts/SearchContext";
+import {getTranslations} from "@/app/translations";
 
 export default function HomeSearch({lang = "en"}) {
   const {setSearchVisible} = useSearchVisibility();

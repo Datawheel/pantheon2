@@ -1,20 +1,20 @@
 import {cloneElement} from "react";
 // import ProfileNav from "../../../../components/common/Nav";
-import Intro from "/components/era/Intro";
-import Header from "/components/era/Header";
-import PeopleRanking from "/components/era/sections/PeopleRanking";
-import Occupations from "/components/era/sections/Occupations";
-// import OccupationTrends from "/components/era/sections/OccupationTrends";
-// import Places from "/components/era/sections/Places";
-// import Lifespans from "/components/era/sections/Lifespans";
+import Intro from "@/components/era/Intro";
+import Header from "@/components/era/Header";
+import PeopleRanking from "@/components/era/sections/PeopleRanking";
+import Occupations from "@/components/era/sections/Occupations";
+// import OccupationTrends from "@/components/era/sections/OccupationTrends";
+// import Places from "@/components/era/sections/Places";
+// import Lifespans from "@/components/era/sections/Lifespans";
 // import {
 //   NUM_RANKINGS,
 //   NUM_RANKINGS_PRE,
 //   NUM_RANKINGS_POST,
-// } from "/components/utils/consts";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
+// } from "@/components/utils/consts";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
@@ -51,7 +51,8 @@ async function getPeopleDiedInEraHpi(startYear, endYear) {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
-export async function generateMetadata({params}, parent) {
+export async function generateMetadata(props, parent) {
+  const params = await props.params;
   // read route params
   const id = params.id;
 
@@ -76,7 +77,9 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {id}}) {
+export default async function Page(props) {
+  const params = await props.params;
+  const {id} = params;
   const [era, eras, occupations] = await Promise.all([
     getEra(id),
     getEras(),

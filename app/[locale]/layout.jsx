@@ -3,17 +3,17 @@ import {GoogleAnalytics} from "@next/third-parties/google";
 import {D3plusContext} from "d3plus-react";
 import dynamic from "next/dynamic";
 import {usePathname, useParams} from "next/navigation";
-import {useD3plusConfig} from "/themes/useD3plusConfig";
-import ReduxProvider from "/components/ReduxProvider";
+import {useD3plusConfig} from "@/themes/useD3plusConfig";
+import ReduxProvider from "@/components/ReduxProvider";
 import NextTopLoader from "nextjs-toploader";
-// import Search from "/components/Search";
-import "/styles/globals.css";
+// import Search from "@/components/Search";
+import "../../styles/globals.css";
 
-import {SearchProvider} from "/contexts/SearchContext";
+import {SearchProvider} from "@/contexts/SearchContext";
 
-const Navigation = dynamic(() => import("/components/Navigation"));
-const Footer = dynamic(() => import("/components/Footer"));
-const SearchComponent = dynamic(() => import("/components/Search"));
+const Navigation = dynamic(() => import("@/components/Navigation"));
+const Footer = dynamic(() => import("@/components/Footer"));
+const SearchComponent = dynamic(() => import("@/components/Search"));
 
 export default function Layout({children}) {
   const config = useD3plusConfig();
@@ -43,14 +43,6 @@ export default function Layout({children}) {
           rel="icon"
           href="/images/favicon.ico"
           type="image/x-icon"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Amiko&display=swap"
-          rel="stylesheet"
         />
       </head>
       {isVizEmbed ? bodyContent : <SearchProvider>{bodyContent}</SearchProvider>}

@@ -11,7 +11,7 @@ import {
   buildNestedOccupations,
   buildRankingsMetricSentence,
   parseRankingsSearchParams,
-} from "/lib/rankings";
+} from "@/lib/rankings";
 import {
   FORMATTERS,
 } from "../components/utils/consts";

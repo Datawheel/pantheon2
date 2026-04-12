@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {plural} from "pluralize";
 import {micromark} from "micromark";
-import {toTitleCase} from "/components/utils/vizHelpers";
+import {toTitleCase} from "@/components/utils/vizHelpers";
 
 function TrendingReasonSnippet({reason, reasonSummary}) {
   const [isExpanded, setIsExpanded] = useState(false);

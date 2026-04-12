@@ -1,16 +1,17 @@
 import dayjs from "dayjs";
 import Link from "next/link";
 import Image from "next/image";
-import TrendingGrid from "/components/home/TrendingGrid";
-import BornTodayGrid from "/components/home/BornTodayGrid";
-import {REVALIDATE_PERIODS} from "/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import HomeSearch from "/components/home/HomeSearch";
+import TrendingGrid from "@/components/home/TrendingGrid";
+import BornTodayGrid from "@/components/home/BornTodayGrid";
+import {REVALIDATE_PERIODS} from "@/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import HomeSearch from "@/components/home/HomeSearch";
 const baseUrl = process.env.URL || "https://pantheon.world";
 const apiBaseUrl = process.env.BASE_API || "https://api.pantheon.world";
 
-export default async function Home({params}) {
+export default async function Home(props) {
+  const params = await props.params;
   const locale = params?.locale || DEFAULT_LOCALE;
   // Validate locale, fallback to default if invalid
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;

@@ -1,10 +1,10 @@
-import PersonImage from "/components/utils/PersonImage";
-import {toTitleCase} from "/components/utils/vizHelpers";
+import PersonImage from "@/components/utils/PersonImage";
+import {toTitleCase} from "@/components/utils/vizHelpers";
 import "../common/Section.css";
 import AnchorList from "../utils/AnchorList";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "./DeathsByMonth.css";
 
 dayjs.extend(utc);

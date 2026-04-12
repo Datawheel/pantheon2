@@ -2,8 +2,8 @@
 
 import {useState} from "react";
 import Link from "next/link";
-import SimpleTooltip from "/components/common/SimpleTooltip";
-import PersonImage from "/components/utils/PersonImage";
+import SimpleTooltip from "@/components/common/SimpleTooltip";
+import PersonImage from "@/components/utils/PersonImage";
 import "./MonthlyEdition.css";
 
 function formatViews(n) {

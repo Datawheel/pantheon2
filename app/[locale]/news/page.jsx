@@ -1,13 +1,14 @@
 import dayjs from "dayjs";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {REVALIDATE_PERIODS} from "/app/constants";
-import {getTranslations} from "/app/translations";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
-import TrendingNews from "/components/news/TrendingNews";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {REVALIDATE_PERIODS} from "@/app/constants";
+import {getTranslations} from "@/app/translations";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import TrendingNews from "@/components/news/TrendingNews";
 
 const baseUrl = process.env.URL || "https://pantheon.world";
 
-export async function generateMetadata({params}) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   const locale = params?.locale || DEFAULT_LOCALE;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
@@ -22,7 +23,9 @@ export async function generateMetadata({params}) {
   };
 }
 
-export default async function NewsPage({params, searchParams}) {
+export default async function NewsPage(props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const locale = params?.locale || DEFAULT_LOCALE;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
 

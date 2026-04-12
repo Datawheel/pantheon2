@@ -1,9 +1,11 @@
 import {redirect} from "next/navigation";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 
-export async function generateMetadata({params: {locale}}) {
+export async function generateMetadata(props) {
+  const params = await props.params;
+  const {locale} = params;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
 
@@ -19,7 +21,9 @@ export async function generateMetadata({params: {locale}}) {
   };
 }
 
-export default async function Page({params: {locale}}) {
+export default async function Page(props) {
+  const params = await props.params;
+  const {locale} = params;
   // Get today's date in MM-DD format
   const today = new Date();
   const month = String(today.getMonth() + 1).padStart(2, "0");

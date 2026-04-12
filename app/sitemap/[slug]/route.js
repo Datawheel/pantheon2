@@ -1,5 +1,5 @@
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 
 const SITE_URL = "https://pantheon.world";
 const ITEMS_PER_SITEMAP = 25000;
@@ -149,7 +149,8 @@ function parseSlug(slug) {
   return null;
 }
 
-export async function GET(request, {params}) {
+export async function GET(request, context) {
+  const params = await context.params;
   const {slug} = params;
   const parsed = parseSlug(slug);
 

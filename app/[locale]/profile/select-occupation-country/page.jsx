@@ -1,15 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import {plural} from "pluralize";
-import OccupationCountrySelector from "/components/occupation-country/OccupationCountrySelector";
-import TrendingSection from "/components/occupation-country/TrendingSection";
-import {toTitleCase} from "/components/utils/vizHelpers";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {safeFetchJson} from "/app/utils/safeFetch";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
-import {getTranslations} from "/app/translations";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import "/components/occupation-country/SelectOccupationCountry.css";
+import OccupationCountrySelector from "@/components/occupation-country/OccupationCountrySelector";
+import TrendingSection from "@/components/occupation-country/TrendingSection";
+import {toTitleCase} from "@/components/utils/vizHelpers";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {safeFetchJson} from "@/app/utils/safeFetch";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import {getTranslations} from "@/app/translations";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import "../../../../components/occupation-country/SelectOccupationCountry.css";
 
 async function getOccupations(lang) {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=*,${lang}_occupation:translations->${lang}->>occupation`;

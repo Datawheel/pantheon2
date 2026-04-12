@@ -1,7 +1,7 @@
 import {plural} from "pluralize";
 import {COLORS_DOMAIN} from "../utils/consts";
-import {getTranslations} from "/app/translations";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "@/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 

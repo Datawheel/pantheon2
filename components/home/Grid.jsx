@@ -1,6 +1,6 @@
 import {Fragment} from "react";
-import PersonImage from "/components/utils/PersonImage";
-import TrendingExcerpt from "/components/home/TrendingExcerpt";
+import PersonImage from "@/components/utils/PersonImage";
+import TrendingExcerpt from "@/components/home/TrendingExcerpt";
 
 const TrendIndicator = ({rankDelta}) => {
   let type = null;

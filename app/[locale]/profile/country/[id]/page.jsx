@@ -1,21 +1,21 @@
 // import ProfileNav from "../../../../components/common/Nav";
 import {cloneElement} from "react";
 import {notFound} from "next/navigation";
-import Intro from "/components/country/Intro";
-import Header from "/components/country/Header";
-import PeopleRanking from "/components/country/sections/PeopleRanking";
-import Occupations from "/components/country/sections/Occupations";
-import OccupationTrends from "/components/country/sections/OccupationTrends";
-import Places from "/components/country/sections/Places";
-import Lifespans from "/components/country/sections/Lifespans";
+import Intro from "@/components/country/Intro";
+import Header from "@/components/country/Header";
+import PeopleRanking from "@/components/country/sections/PeopleRanking";
+import Occupations from "@/components/country/sections/Occupations";
+import OccupationTrends from "@/components/country/sections/OccupationTrends";
+import Places from "@/components/country/sections/Places";
+import Lifespans from "@/components/country/sections/Lifespans";
 import {
   NUM_RANKINGS,
   NUM_RANKINGS_PRE,
   NUM_RANKINGS_POST,
-} from "/components/utils/consts";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
+} from "@/components/utils/consts";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 
 async function getWikiSummary(countryName) {
   try {
@@ -153,7 +153,8 @@ function getRankWindow(rankValue) {
   };
 }
 
-export async function generateMetadata({params}, parent) {
+export async function generateMetadata(props, parent) {
+  const params = await props.params;
   const {id, locale} = params;
   const baseUrl = process.env.URL || "https://pantheon.world";
   const lang = locale || "en";
@@ -218,7 +219,9 @@ async function getTopCities(countryId) {
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
-export default async function Page({params: {id, locale}}) {
+export default async function Page(props) {
+  const params = await props.params;
+  const {id, locale} = params;
   const [country, occupations] = await Promise.all([
     getCountry(id),
     getOccupations(),

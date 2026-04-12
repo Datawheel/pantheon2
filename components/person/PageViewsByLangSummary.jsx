@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import SimpleTooltip from "../common/SimpleTooltip";
 import {FORMATTERS} from "../utils/consts";
 import AnchorList from "../utils/AnchorList";
-import {SUPPORTED_LOCALES} from "/app/locales";
+import {SUPPORTED_LOCALES} from "@/app/locales";
 
 export default function PageViewsByLangSummary({timeSeriesData, person}) {
   // Helper function to generate URL - Pantheon for supported langs, Wikipedia otherwise

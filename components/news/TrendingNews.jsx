@@ -5,10 +5,10 @@ import {useRouter} from "next/navigation";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import {micromark} from "micromark";
-import SimpleTooltip from "/components/common/SimpleTooltip";
-import {SUPPORTED_LOCALES, getLocalizedLanguageName, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import PersonImage from "/components/utils/PersonImage";
+import SimpleTooltip from "@/components/common/SimpleTooltip";
+import {SUPPORTED_LOCALES, getLocalizedLanguageName, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import PersonImage from "@/components/utils/PersonImage";
 import "./TrendingNews.css";
 
 dayjs.extend(advancedFormat);

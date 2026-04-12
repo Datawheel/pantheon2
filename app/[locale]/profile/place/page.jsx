@@ -1,12 +1,12 @@
 import Link from "next/link";
-import {REVALIDATE_PERIODS, BASE_API} from "/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import {safeFetchJson} from "/app/utils/safeFetch";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
-import PlaceBubbleMap from "/components/place/PlaceBubbleMap";
-import PlaceList from "/components/place/PlaceList";
-import "/components/place/SelectPlace.css";
+import {REVALIDATE_PERIODS, BASE_API} from "@/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import {safeFetchJson} from "@/app/utils/safeFetch";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import PlaceBubbleMap from "@/components/place/PlaceBubbleMap";
+import PlaceList from "@/components/place/PlaceList";
+import "../../../../components/place/SelectPlace.css";
 
 async function getTopPlaces() {
   const url = `${BASE_API}/place?select=id,place,slug,lat,lon,num_born,country:country(id,country,slug)&order=num_born.desc.nullslast&limit=1000&num_born=gt.0`;

@@ -1,6 +1,7 @@
 const createThrottle = require("async-throttle");
 const axios = require("axios");
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
 
 const dedupe = (item, index, self) =>
   self.findIndex(obj => obj.slug === item.slug) === index;
@@ -149,7 +150,9 @@ export async function GET(request) {
     ({year, month, day} = getEasternDateComponents(1));
   }
 
-  const occupationCut = occupation ? `&occupation=eq.${occupation}` : "";
+  const occupationCut = occupation
+    ? `&occupation=eq.${encodePostgrestValue(occupation)}`
+    : "";
   const trendApiUrl = `${process.env.BASE_API}/trend?date=eq.${year}-${month}-${day}&lang=eq.${lang}&slug=neq.cleopatra${occupationCut}&select=*&order=rank_pantheon.asc&limit=${limit}`;
 
   const todaysBiosFromDbResp = await axios

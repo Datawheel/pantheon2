@@ -6,7 +6,7 @@ import {toTitleCase} from "../utils/vizHelpers";
 import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 import {useRouter, useParams, usePathname} from "next/navigation";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 
 export default function Intro({year, people, occupation, country}) {
   const router = useRouter();

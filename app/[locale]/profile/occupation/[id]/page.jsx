@@ -1,22 +1,23 @@
 import {cloneElement} from "react";
 import {plural} from "pluralize";
 // import ProfileNav from "../../../../components/common/Nav";
-import Intro from "/components/occupation/Intro";
-import Header from "/components/occupation/Header";
-import People from "/components/occupation/sections/People";
-import Places from "/components/occupation/sections/Places";
-import PlacesOverTime from "/components/occupation/sections/PlacesOverTime";
-import Lifespans from "/components/occupation/sections/Lifespans";
-// import OccupationTrends from "/components/country/sections/OccupationTrends";
+import Intro from "@/components/occupation/Intro";
+import Header from "@/components/occupation/Header";
+import People from "@/components/occupation/sections/People";
+import Places from "@/components/occupation/sections/Places";
+import PlacesOverTime from "@/components/occupation/sections/PlacesOverTime";
+import Lifespans from "@/components/occupation/sections/Lifespans";
+// import OccupationTrends from "@/components/country/sections/OccupationTrends";
 // import {
 //   NUM_RANKINGS,
 //   NUM_RANKINGS_PRE,
 //   NUM_RANKINGS_POST,
-// } from "/components/utils/consts";
+// } from "@/components/utils/consts";
 import {toTitleCase} from "../../../../../components/utils/vizHelpers";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {safeFetchJson, safeFetchFirst} from "/app/utils/safeFetch";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`;
@@ -36,12 +37,14 @@ async function getOccupation(occupationId) {
 // }
 
 async function getPeople(occupationId) {
-  const url = `${BASE_API}/person?occupation=eq.${occupationId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  const encodedOccupationId = encodePostgrestValue(occupationId);
+  const url = `${BASE_API}/person?occupation=eq.${encodedOccupationId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getPeopleHpi(occupationId) {
-  const url = `${BASE_API}/person_ranks?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
+  const encodedOccupationId = encodePostgrestValue(occupationId);
+  const url = `${BASE_API}/person_ranks?occupation=eq.${encodedOccupationId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
@@ -52,7 +55,8 @@ async function getPeopleHpi(occupationId) {
 //   return res.json();
 // }
 
-export async function generateMetadata({params}, parent) {
+export async function generateMetadata(props, parent) {
+  const params = await props.params;
   // read route params
   const id = params.id;
 
@@ -77,7 +81,9 @@ export async function generateMetadata({params}, parent) {
   };
 }
 
-export default async function Page({params: {id}}) {
+export default async function Page(props) {
+  const params = await props.params;
+  const {id} = params;
   const [occupation, occupations] = await Promise.all([
     getOccupation(id),
     getOccupations(),

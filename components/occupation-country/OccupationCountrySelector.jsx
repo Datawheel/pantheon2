@@ -1,11 +1,11 @@
 "use client";
 import {useState, useEffect} from "react";
 import {useRouter} from "next/navigation";
-import Select from "/components/common/Select";
+import Select from "@/components/common/Select";
 import {ArrowRight} from "lucide-react";
-import FancyButton from "/components/common/FancyButton";
-import {toTitleCase} from "/components/utils/vizHelpers";
-import {PUBLIC_API} from "/app/constants";
+import FancyButton from "@/components/common/FancyButton";
+import {toTitleCase} from "@/components/utils/vizHelpers";
+import {PUBLIC_API} from "@/app/constants";
 
 export default function OccupationCountrySelector({
   initialOccupations,

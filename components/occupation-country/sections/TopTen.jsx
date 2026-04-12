@@ -3,8 +3,8 @@ import Link from "next/link";
 import PersonImage from "../../utils/PersonImage";
 import {toTitleCase} from "../../utils/vizHelpers";
 import {FORMATTERS} from "../../utils/consts";
-import {getTranslations} from "/app/translations";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "@/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "../../common/Section.css";
 import "./TopTen.css";
 

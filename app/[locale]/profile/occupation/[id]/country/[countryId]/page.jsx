@@ -1,18 +1,19 @@
 import {plural} from "pluralize";
-import Header from "/components/occupation-country/Header";
-import Intro from "/components/occupation-country/Intro";
-import TrendingBanner from "/components/occupation-country/TrendingBanner";
-import TrendingPeople from "/components/occupation-country/sections/TrendingPeople";
-import TopTen from "/components/occupation-country/sections/TopTen";
-// import People from "/components/occupation-country/sections/People";
-import BirthDecades from "/components/occupation-country/sections/BirthDecades";
-import Lifespans from "/components/occupation-country/sections/Lifespans";
-import Footer from "/components/occupation-country/sections/Footer";
-import {toTitleCase} from "/components/utils/vizHelpers";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
+import Header from "@/components/occupation-country/Header";
+import Intro from "@/components/occupation-country/Intro";
+import TrendingBanner from "@/components/occupation-country/TrendingBanner";
+import TrendingPeople from "@/components/occupation-country/sections/TrendingPeople";
+import TopTen from "@/components/occupation-country/sections/TopTen";
+// import People from "@/components/occupation-country/sections/People";
+import BirthDecades from "@/components/occupation-country/sections/BirthDecades";
+import Lifespans from "@/components/occupation-country/sections/Lifespans";
+import Footer from "@/components/occupation-country/sections/Footer";
+import {toTitleCase} from "@/components/utils/vizHelpers";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
 
 // Safe JSON fetch with logging for debugging HTML responses
 async function safeFetchJson(url, options = {}, fallback = null) {
@@ -65,7 +66,8 @@ async function getCountry(countryId, lang = "en") {
 }
 
 async function getAllCountriesInOccupation(occupationId, lang = "en") {
-  const url = `${BASE_API}/occupation_country?occupation=eq.${occupationId}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country,${lang}_from_country:translations->${lang}->>from_country)`;
+  const encodedOccupationId = encodePostgrestValue(occupationId);
+  const url = `${BASE_API}/occupation_country?occupation=eq.${encodedOccupationId}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country,${lang}_from_country:translations->${lang}->>from_country)`;
   return await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -83,7 +85,8 @@ async function getAllOccupationsInCountry(countryId, lang = "en") {
 }
 
 async function getPeople(occupationId, countryId) {
-  const url = `${BASE_API}/person?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive,famous_for,description`;
+  const encodedOccupationId = encodePostgrestValue(occupationId);
+  const url = `${BASE_API}/person?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive,famous_for,description`;
   return await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -92,7 +95,8 @@ async function getPeople(occupationId, countryId) {
 }
 
 async function getPeopleHpi(occupationId, countryId) {
-  const url = `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`;
+  const encodedOccupationId = encodePostgrestValue(occupationId);
+  const url = `${BASE_API}/person_ranks?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`;
   return await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -146,7 +150,7 @@ export async function generateMetadata(props, parent) {
 
   // Get count of people for this occupation + country
   const countRes = await fetch(
-    `${BASE_API}/person_ranks?occupation=eq.${occupation.id}&bplace_country=eq.${country.id}&select=id`,
+    `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupation.id)}&bplace_country=eq.${country.id}&select=id`,
     {
       headers: {"Prefer": "count=exact"},
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},

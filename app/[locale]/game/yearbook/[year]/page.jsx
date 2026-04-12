@@ -1,9 +1,9 @@
 import Link from "next/link";
-import {FORMATTERS} from "/components/utils/consts";
-import {toTitleCase} from "/components/utils/vizHelpers";
-import YearbookSidebar from "/components/games/YearbookSidebar";
-import "/components/games/Yearbook.css";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
+import {FORMATTERS} from "@/components/utils/consts";
+import {toTitleCase} from "@/components/utils/vizHelpers";
+import YearbookSidebar from "@/components/games/YearbookSidebar";
+import "../../../../../components/games/Yearbook.css";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 
 async function getPeopleBornInYear(year) {
   const res = await fetch(
@@ -25,7 +25,9 @@ async function getPeopleBornInYearHpi(year) {
   return res.json();
 }
 
-export default async function Page({params: {year}}) {
+export default async function Page(props) {
+  const params = await props.params;
+  const {year} = params;
   const [peopleBornInYearAttrs, peopleBornInYearHpi] = await Promise.all([
     getPeopleBornInYear(year),
     getPeopleBornInYearHpi(year),

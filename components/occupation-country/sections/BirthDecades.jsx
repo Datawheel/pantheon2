@@ -2,10 +2,10 @@
 
 import {useState} from "react";
 import {plural} from "pluralize";
-import PersonImage from "/components/utils/PersonImage";
-import {DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import {toTitleCase} from "/components/utils/vizHelpers";
+import PersonImage from "@/components/utils/PersonImage";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import {toTitleCase} from "@/components/utils/vizHelpers";
 import "../../born-on-this-day/OccupationBreakdown.css";
 import "../../common/Section.css";
 import "./BirthDecades.css";

@@ -1,3 +1,5 @@
+"use client";
+
 import {nest} from "d3-collection";
 import {plural} from "pluralize";
 import AnchorList from "../../utils/AnchorList";
@@ -7,7 +9,7 @@ import dynamic from "next/dynamic";
 
 // Load EChart only on the client
 const PlacesTmap = dynamic(
-  () => import("/components/occupation/sections/vizes/PlacesTmap"),
+  () => import("@/components/occupation/sections/vizes/PlacesTmap"),
   {ssr: false}
 );
 

@@ -10,7 +10,8 @@ import PhotoCarousel from "../utils/PhotoCarousel";
 import {toTitleCase} from "../utils/vizHelpers";
 import SectionLayout from "../common/SectionLayout";
 import {BASE_API} from "@/app/constants";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
 
 async function getBirthCountryRankings(
   occupationId,
@@ -19,8 +20,9 @@ async function getBirthCountryRankings(
   bplaceCountryOccupationRankHigh
 ) {
   try {
+    const encodedOccupationId = encodePostgrestValue(occupationId);
     const res = await fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&bplace_country=eq.${birthCountryId}&bplace_country_occupation_rank_unique=gte.${bplaceCountryOccupationRankLow}&bplace_country_occupation_rank_unique=lte.${bplaceCountryOccupationRankHigh}&order=bplace_country_occupation_rank_unique&select=bplace_country,occupation,hpi,slug,bplace_country_occupation_rank,bplace_country_occupation_rank_unique,gender,name,id,deathyear,birthyear`
+      `${BASE_API}/person_ranks?occupation=eq.${encodedOccupationId}&bplace_country=eq.${birthCountryId}&bplace_country_occupation_rank_unique=gte.${bplaceCountryOccupationRankLow}&bplace_country_occupation_rank_unique=lte.${bplaceCountryOccupationRankHigh}&order=bplace_country_occupation_rank_unique&select=bplace_country,occupation,hpi,slug,bplace_country_occupation_rank,bplace_country_occupation_rank_unique,gender,name,id,deathyear,birthyear`
     );
     if (!res.ok) {
       console.error(`[getBirthCountryRankings] HTTP ${res.status}`);

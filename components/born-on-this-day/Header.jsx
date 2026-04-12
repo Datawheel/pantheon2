@@ -1,6 +1,6 @@
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
-import {getTranslations} from "/app/translations";
+import {getTranslations} from "@/app/translations";
 
 export default function Header({date, displayDate, people, lang = "en"}) {
   const t = getTranslations(lang);

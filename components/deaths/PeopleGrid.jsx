@@ -1,11 +1,11 @@
-import PersonImage from "/components/utils/PersonImage";
+import PersonImage from "@/components/utils/PersonImage";
 import "./PeopleGrid.css";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import {toTitleCase} from "../utils/vizHelpers";
 import Link from "next/link";
 import {plural} from "pluralize";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {DEFAULT_LOCALE} from "@/app/locales";
 
 dayjs.extend(advancedFormat);
 

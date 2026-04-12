@@ -1,15 +1,15 @@
 import {cache} from "react";
-import Explore from "/features/Explore";
-import {BASE_API, PUBLIC_API, REVALIDATE_PERIODS} from "/app/constants";
-import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "/app/locales";
-import {buildCanonical, buildLanguageAlternates} from "/app/utils/hreflang";
-import {safeFetchJson} from "/app/utils/safeFetch";
+import Explore from "@/features/Explore";
+import {BASE_API, PUBLIC_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "@/app/locales";
+import {buildCanonical, buildLanguageAlternates} from "@/app/utils/hreflang";
+import {safeFetchJson} from "@/app/utils/safeFetch";
 import {
   buildNestedOccupations,
   buildNestedPlaces,
   buildRankingsMetadata,
   parseRankingsSearchParams,
-} from "/lib/rankings";
+} from "@/lib/rankings";
 
 const getPlaces = cache(async function getPlaces() {
   const url = `${BASE_API}/place?select=id,place,lat,lon,slug,country:country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died`;

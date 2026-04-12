@@ -1,6 +1,6 @@
 import {micromark} from "micromark";
-import {getTranslations} from "/app/translations";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "@/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "./TrendingBanner.css";
 
 export default function TrendingBanner({

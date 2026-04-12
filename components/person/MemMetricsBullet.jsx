@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from "react";
 import * as echarts from "echarts";
-import {toTitleCase} from "/components/utils/vizHelpers";
-import {FORMATTERS} from "/components/utils/consts";
+import {toTitleCase} from "@/components/utils/vizHelpers";
+import {FORMATTERS} from "@/components/utils/consts";
 
 const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
   const chartRef = useRef(null);

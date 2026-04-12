@@ -3,10 +3,10 @@ import {strip, trim} from "d3plus-text";
 import axios from "axios";
 import {TrendingUp, Search as SearchIcon} from "lucide-react";
 import {useParams, usePathname} from "next/navigation";
-import {useSearchVisibility} from "/contexts/SearchContext";
+import {useSearchVisibility} from "@/contexts/SearchContext";
 import {PUBLIC_API} from "@/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import "/components/Search.css";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import "./Search.css";
 
 const SearchComponent = () => {
   const params = useParams();

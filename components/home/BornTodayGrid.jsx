@@ -1,9 +1,9 @@
 "use client";
 
-import GridCta from "/components/home/GridCta";
-import PersonImage from "/components/utils/PersonImage";
-import {DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
+import GridCta from "@/components/home/GridCta";
+import PersonImage from "@/components/utils/PersonImage";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 
 function getBirthYear(person) {
   // Use birthyear if available, otherwise extract from birthdate

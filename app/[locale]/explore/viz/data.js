@@ -1,5 +1,5 @@
-import {BASE_API} from "/app/constants";
-import {safeFetchJson} from "/app/utils/safeFetch";
+import {BASE_API} from "@/app/constants";
+import {safeFetchJson} from "@/app/utils/safeFetch";
 
 export async function getPlaces() {
   const url = `${BASE_API}/place?select=id,place,lat,lon,slug,country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died`;

@@ -6,7 +6,7 @@ import {toTitleCase} from "../../utils/vizHelpers";
 import {COLORS_CONTINENT} from "../../utils/consts";
 import {FORMATTERS} from "../../utils/consts";
 import SectionLayout from "../../common/SectionLayout";
-import {BASE_API} from "/app/constants";
+import {BASE_API} from "@/app/constants";
 
 async function getEras() {
   try {

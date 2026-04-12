@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import "/styles/Misc.css";
-import "/styles/About.css";
+import "../../../styles/Misc.css";
+import "../../../styles/About.css";
 
 export default function AboutLayout({children}) {
   return (

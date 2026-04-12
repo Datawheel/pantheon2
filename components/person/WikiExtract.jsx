@@ -1,7 +1,7 @@
 "use client";
 
 import {useState, useEffect} from "react";
-import {getTranslations} from "/app/translations";
+import {getTranslations} from "@/app/translations";
 
 const WikiExtract = ({personSlug, localizedName, lang = "en"}) => {
   const [wikiData, setWikiData] = useState(null);

@@ -1,5 +1,5 @@
 const axios = require("axios");
-import {isTrending} from "/libs/isTrending";
+import {isTrending} from "@/libs/isTrending";
 
 export async function GET(request) {
   const {searchParams} = new URL(request.url);

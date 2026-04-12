@@ -2,9 +2,9 @@
 
 import {useState, useEffect} from "react";
 import Link from "next/link";
-import {getTranslations} from "/app/translations";
+import {getTranslations} from "@/app/translations";
 import {PUBLIC_API} from "@/app/constants";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "./TrendingExcerpt.css";
 
 export default function TrendingExcerpt({trendingPeople, currentLang, allBios = []}) {

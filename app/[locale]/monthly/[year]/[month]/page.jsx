@@ -1,8 +1,10 @@
 import {notFound} from "next/navigation";
-import {getEdition} from "/components/monthly/data/editions";
-import MonthlyEdition from "/components/monthly/MonthlyEdition";
+import {getEdition} from "@/components/monthly/data/editions";
+import MonthlyEdition from "@/components/monthly/MonthlyEdition";
 
-export async function generateMetadata({params: {locale, year, month}}) {
+export async function generateMetadata(props) {
+  const params = await props.params;
+  const {locale, year, month} = params;
   const edition = await getEdition(year, month);
   if (!edition) return {};
 
@@ -47,7 +49,9 @@ export async function generateMetadata({params: {locale, year, month}}) {
   };
 }
 
-export default async function MonthlyPage({params: {locale, year, month}}) {
+export default async function MonthlyPage(props) {
+  const params = await props.params;
+  const {locale, year, month} = params;
   const edition = await getEdition(year, month);
   if (!edition) notFound();
 

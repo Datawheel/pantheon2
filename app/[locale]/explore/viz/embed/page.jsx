@@ -1,6 +1,6 @@
 import {nest} from "d3-collection";
-import Explore from "/features/Explore";
-import {PUBLIC_API} from "/app/constants";
+import Explore from "@/features/Explore";
+import {PUBLIC_API} from "@/app/constants";
 import {getPlaces, getOccupations} from "../data";
 
 export default async function Page() {

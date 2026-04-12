@@ -3,8 +3,8 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {usePathname, useParams} from "next/navigation";
-import {SUPPORTED_LOCALES, LOCALE_NATIVE_NAMES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
+import {SUPPORTED_LOCALES, LOCALE_NATIVE_NAMES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 
 const Footer = () => {
   const pathname = usePathname();

@@ -1,7 +1,7 @@
 "use client";
 
-import langFamilies from "/data/langFamilies.json";
-import PageViewsByLangSummary from "/components/person/PageViewsByLangSummary";
+import langFamilies from "@/data/langFamilies.json";
+import PageViewsByLangSummary from "@/components/person/PageViewsByLangSummary";
 import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 import {useEffect, useState} from "react";
@@ -10,7 +10,7 @@ import {PUBLIC_API} from "@/app/constants";
 
 // Load EChart only on the client
 const PageViewsByLangAreaPlot = dynamic(
-  () => import("/components/person/PageViewByLangAreaPlot"),
+  () => import("@/components/person/PageViewByLangAreaPlot"),
   {ssr: false}
 );
 
@@ -291,9 +291,7 @@ export default function PageViewsByLang({person, slug, title}) {
                 }\n${maxPoint.total.toLocaleString()} views`,
                 position: "top",
                 distance: 10,
-                textStyle: {
-                  fontSize: 12,
-                },
+                fontSize: 12,
               },
             },
           ],
@@ -376,9 +374,7 @@ export default function PageViewsByLang({person, slug, title}) {
                   },
                   position: "top",
                   distance: 10,
-                  textStyle: {
-                    fontSize: 12,
-                  },
+                  fontSize: 12,
                 },
               },
             ],

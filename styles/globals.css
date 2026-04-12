@@ -7,10 +7,33 @@
 @import '../components/utils/PersonImage.css';
 @import '../components/Spinner.css';
 
+@font-face {
+  font-family: "Marcellus";
+  src: url("/fonts/Marcellus-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Amiko";
+  src: url("/fonts/Amiko-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 * {box-sizing: border-box;}
 
 html {
   font-size: 62.5%;
+}
+
+:root {
+  --fontTitle: "Marcellus", "Times New Roman", serif;
+  --fontBody: "Amiko", Arial, sans-serif;
+  --fontMarcellus: "Marcellus", "Times New Roman", serif;
+  --fontAmiko: "Amiko", Arial, sans-serif;
 }
 
 body {

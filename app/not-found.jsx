@@ -1,8 +1,8 @@
 "use client";
 
-import "/styles/globals.css";
-import "/styles/NotFound.css";
-import "/components/common/Footer.css";
+import "./globals.css";
+import "../styles/NotFound.css";
+import "../components/common/Footer.css";
 
 export default function NotFound() {
   const messages = [

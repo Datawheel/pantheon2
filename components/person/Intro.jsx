@@ -1,8 +1,8 @@
 import PersonImage from "../utils/PersonImage";
 import {toTitleCase} from "../utils/vizHelpers";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
-import {getTranslations} from "/app/translations";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "@/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import WikiExtract from "./WikiExtract";
 import "../common/Intro.css";
 import Image from "next/image";

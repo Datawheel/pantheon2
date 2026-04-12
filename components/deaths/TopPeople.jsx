@@ -1,4 +1,4 @@
-import PeopleGrid from "/components/deaths/PeopleGrid";
+import PeopleGrid from "@/components/deaths/PeopleGrid";
 import "../common/Section.css";
 import AnchorList from "../utils/AnchorList";
 import {plural} from "pluralize";

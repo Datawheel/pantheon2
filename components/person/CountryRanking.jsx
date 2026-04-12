@@ -8,7 +8,7 @@ import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
 import SectionLayout from "../common/SectionLayout";
 import {BASE_API} from "@/app/constants";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {DEFAULT_LOCALE} from "@/app/locales";
 
 async function getBirthCountryRankings(
   birthCountryId,

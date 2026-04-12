@@ -1,5 +1,6 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
 
 export const runtime = "edge";
 
@@ -69,10 +70,10 @@ export async function GET(request) {
   // Fetch top people and total count in parallel
   const [topPeopleRes, countRes] = await Promise.all([
     fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&order=hpi.desc.nullslast&select=id,name&limit=16`
+      `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&order=hpi.desc.nullslast&select=id,name&limit=16`
     ),
     fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&select=id`,
+      `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&select=id`,
       {headers: {"Prefer": "count=exact"}}
     ),
   ]);

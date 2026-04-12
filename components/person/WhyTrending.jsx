@@ -3,7 +3,7 @@
 import {useState} from "react";
 import {micromark} from "micromark";
 import Link from "next/link";
-import {getTranslations} from "/app/translations";
+import {getTranslations} from "@/app/translations";
 import "./WhyTrending.css";
 
 // Model display names

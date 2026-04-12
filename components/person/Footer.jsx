@@ -8,6 +8,7 @@ import {
   NUM_RANKINGS_POST,
 } from "../utils/consts";
 import {BASE_API} from "@/app/constants";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
 import {toTitleCase} from "../utils/vizHelpers";
 import PersonImage from "../utils/PersonImage";
 import "../../components/common/Footer.css";
@@ -63,8 +64,9 @@ async function getOccupationRankings(
   occupationRankHigh,
 ) {
   try {
+    const encodedOccupationId = encodePostgrestValue(occupationId);
     const res = await fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${occupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`,
+      `${BASE_API}/person_ranks?occupation=eq.${encodedOccupationId}&occupation_rank_unique=gte.${occupationRankLow}&occupation_rank_unique=lte.${occupationRankHigh}&order=occupation_rank_unique&select=occupation,bplace_country,hpi,occupation_rank,occupation_rank_unique,slug,gender,name,id,birthyear,deathyear`,
     );
     if (!res.ok) {
       console.error(`[getOccupationRankings] HTTP ${res.status}`);

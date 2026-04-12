@@ -2,9 +2,10 @@ import Link from "next/link";
 import {plural} from "pluralize";
 import PersonImage from "../../utils/PersonImage";
 import {FORMATTERS} from "../../utils/consts";
-import {BASE_API, REVALIDATE_PERIODS} from "/app/constants";
-import {DEFAULT_LOCALE, getLocalizedLanguageName} from "/app/locales";
-import {getTranslations} from "/app/translations";
+import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
+import {DEFAULT_LOCALE, getLocalizedLanguageName} from "@/app/locales";
+import {encodePostgrestValue} from "@/app/utils/postgrest";
+import {getTranslations} from "@/app/translations";
 import {toTitleCase} from "../../utils/vizHelpers";
 import TrendingReasonToggle from "./TrendingReasonToggle";
 import "./TrendingPeople.css";
@@ -99,9 +100,9 @@ function buildTrendReason({trend, languageRanks, translations}, locale) {
 }
 
 async function fetchTrendRows({occupationId, countryValue, weekStart}) {
-  const trendUrl = `${BASE_API}/trend?bplace_country=eq.${encodeURIComponent(
+  const trendUrl = `${BASE_API}/trend?bplace_country=eq.${encodePostgrestValue(
     countryValue
-  )}&occupation=eq.${encodeURIComponent(
+  )}&occupation=eq.${encodePostgrestValue(
     occupationId
   )}&date=gt.${weekStart}&select=slug,name,pid,rank_pantheon,views,lang,date&limit=1000`;
   return await safeFetchJson(trendUrl, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);

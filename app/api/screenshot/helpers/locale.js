@@ -1,4 +1,4 @@
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 
 export {SUPPORTED_LOCALES, DEFAULT_LOCALE};
 

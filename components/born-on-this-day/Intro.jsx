@@ -6,8 +6,8 @@ import {FORMATTERS} from "../utils/consts";
 import "../common/Intro.css";
 import "./Intro.css";
 import {useRouter, useParams, usePathname} from "next/navigation";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 import {useState} from "react";
 
 const MONTH_KEYS = [

@@ -1,11 +1,11 @@
 import Link from "next/link";
-import {REVALIDATE_PERIODS, BASE_API} from "/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
-import {safeFetchJson} from "/app/utils/safeFetch";
-import {buildLanguageAlternates, buildCanonical} from "/app/utils/hreflang";
-import OccupationList from "/components/occupation/OccupationList";
-import "/components/occupation/SelectOccupation.css";
+import {REVALIDATE_PERIODS, BASE_API} from "@/app/constants";
+import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import {safeFetchJson} from "@/app/utils/safeFetch";
+import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import OccupationList from "@/components/occupation/OccupationList";
+import "../../../../components/occupation/SelectOccupation.css";
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?select=id,occupation,occupation_slug,domain,domain_slug,num_born,translations&order=num_born.desc.nullslast`;

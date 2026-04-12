@@ -1,7 +1,7 @@
 import {plural} from "pluralize";
 import {toTitleCase} from "../../utils/vizHelpers";
-import {DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 import "../../common/Footer.css";
 
 export default function Footer({

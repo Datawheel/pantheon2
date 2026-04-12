@@ -2,8 +2,8 @@ import AnchorList from "../utils/AnchorList";
 import {plural} from "pluralize";
 import {toTitleCase} from "../utils/vizHelpers";
 import {FORMATTERS} from "../utils/consts";
-import {getTranslations} from "/app/translations";
-import {DEFAULT_LOCALE} from "/app/locales";
+import {getTranslations} from "@/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "../common/Intro.css";
 
 export default function Intro({country, occupation, allCountriesInOccupation, locale = DEFAULT_LOCALE}) {

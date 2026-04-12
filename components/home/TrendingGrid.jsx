@@ -2,12 +2,12 @@
 
 import {useState} from "react";
 import {useRouter} from "next/navigation";
-import Grid from "/components/home/Grid";
-import GridCta from "/components/home/GridCta";
-import Spinner from "/components/Spinner";
-import Select from "/components/common/Select";
-import {SUPPORTED_LOCALES, getLocalizedLanguageName, DEFAULT_LOCALE} from "/app/locales";
-import {getTranslations} from "/app/translations";
+import Grid from "@/components/home/Grid";
+import GridCta from "@/components/home/GridCta";
+import Spinner from "@/components/Spinner";
+import Select from "@/components/common/Select";
+import {SUPPORTED_LOCALES, getLocalizedLanguageName, DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 
 const LangSelector = ({handleLanguageChange, trendingLangEdition, currentLang}) => (
   <Select
