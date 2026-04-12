@@ -79,6 +79,7 @@ function Explore({
     birthDay: exploreState.birthDay,
     nameSearch: exploreState.nameSearch,
     dataPageIndex: exploreState.dataPageIndex,
+    sorting: exploreState.sorting,
   }), [
     exploreState.birthDay,
     exploreState.birthMonth,
@@ -93,6 +94,7 @@ function Explore({
     exploreState.onlyShowNew,
     exploreState.page,
     exploreState.placeType,
+    exploreState.sorting,
     exploreState.show.depth,
     exploreState.show.type,
     exploreState.viz,
@@ -138,7 +140,7 @@ function Explore({
         router,
         pathname,
         null,
-        null,
+        filterFetchState.sorting,
         !embed
       );
     }
@@ -152,6 +154,7 @@ function Explore({
     exploreState.occupation,
     exploreState.onlyShowNew,
     exploreState.placeType,
+    exploreState.sorting,
     exploreState.show.depth,
     exploreState.show.type,
     exploreState.years,

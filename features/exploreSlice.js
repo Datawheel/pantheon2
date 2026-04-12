@@ -26,6 +26,7 @@ const initialState = {
   dataLoading: false,
   dataError: null,
   dataPageIndex: 0,
+  sorting: [{id: "hpi", desc: true}],
 };
 
 export const exploreSlice = createSlice({
@@ -91,7 +92,6 @@ export const exploreSlice = createSlice({
       }
     },
     updateShowDepth: (state, action) => {
-      const {type} = state;
       const {page, showDepth, showType} = action.payload;
       state.show = {type: showType, depth: showDepth};
       state.page = page;
@@ -102,6 +102,9 @@ export const exploreSlice = createSlice({
     },
     updateDataPageIndex: (state, action) => {
       state.dataPageIndex = action.payload;
+    },
+    updateSorting: (state, action) => {
+      state.sorting = action.payload;
     },
     updateViz: (state, action) => {
       state.viz = action.payload;
@@ -143,6 +146,7 @@ export const {
   updateShowType,
   updateShowDepth,
   updateDataPageIndex,
+  updateSorting,
   updateViz,
   updateYearType,
   updateBirthMonth,
