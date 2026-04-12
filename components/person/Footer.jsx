@@ -11,7 +11,6 @@ import {BASE_API} from "@/app/constants";
 import {toTitleCase} from "../utils/vizHelpers";
 import PersonImage from "../utils/PersonImage";
 import "../../components/common/Footer.css";
-import "tippy.js/dist/tippy.css"; // optional
 
 const baseUrl = process.env.URL || "https://pantheon.world";
 

@@ -66,14 +66,8 @@
     }
   }
 
-  & .bp3-popover-wrapper.table-tooltip-trigger {
+  & .table-tooltip-trigger {
     display: block !important;
-    & .bp3-popover-target {
-      display: block;
-    }
-    & .bp3-icon {
-      vertical-align: top;
-    }
   }
 
   /* prevent page overflow */

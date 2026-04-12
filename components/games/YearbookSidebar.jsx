@@ -2,11 +2,11 @@
 import {Fragment, useState} from "react";
 import {useRouter, useParams, usePathname} from "next/navigation";
 import Link from "next/link";
-import {AnchorButton, Collapse} from "@blueprintjs/core";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "/app/locales";
 
 import "../../styles/Misc.css";
 import "../../styles/About.css";
+import "./YearbookSidebar.css";
 
 export default function YearbookSidebar({year}) {
   const router = useRouter();
@@ -30,9 +30,7 @@ export default function YearbookSidebar({year}) {
   const [openDecade, setOpenDecade] = useState(decade);
 
   const changeYear = event => {
-    // Get the selected value
     const selectedValue = event.target.value;
-    // Update the URL
     router.push(`${localePrefix}/game/yearbook/${selectedValue}`);
   };
 
@@ -40,36 +38,35 @@ export default function YearbookSidebar({year}) {
     <Fragment>
       <nav className="page-nav" role="navigation">
         <ul className="page-items">
-          {[...Array(12).keys()].reverse().map(decade => (
-            <li className="item" key={decade}>
-              <AnchorButton
-                text={`${1900 + decade * 10}s`}
-                icon={
-                  openDecade === 1900 + decade * 10
-                    ? "chevron-down"
-                    : "chevron-right"
-                }
-                minimal={true}
-                onClick={() => setOpenDecade(1900 + decade * 10)}
-              />
-              <Collapse isOpen={openDecade === 1900 + decade * 10}>
-                <ul className="inner-page-items">
-                  {[...Array(10).keys()].reverse().map(yearIndex => (
-                    <li key={1900 + decade * 10 + yearIndex}>
-                      <Link
-                        href={`${localePrefix}/game/yearbook/${
-                          1900 + decade * 10 + yearIndex
-                        }`}
-                        className="item-link"
-                      >
-                        {1900 + decade * 10 + yearIndex}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </Collapse>
-            </li>
-          ))}
+          {[...Array(12).keys()].reverse().map(decade => {
+            const decadeYear = 1900 + decade * 10;
+            const isOpen = openDecade === decadeYear;
+            return (
+              <li className="item" key={decade}>
+                <button
+                  className="decade-toggle"
+                  onClick={() => setOpenDecade(decadeYear)}
+                >
+                  <span className={`decade-chevron ${isOpen ? "open" : ""}`}>&#9656;</span>
+                  {decadeYear}s
+                </button>
+                <div className={`collapse-panel ${isOpen ? "open" : ""}`}>
+                  <ul className="inner-page-items">
+                    {[...Array(10).keys()].reverse().map(yearIndex => (
+                      <li key={decadeYear + yearIndex}>
+                        <Link
+                          href={`${localePrefix}/game/yearbook/${decadeYear + yearIndex}`}
+                          className="item-link"
+                        >
+                          {decadeYear + yearIndex}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
@@ -78,9 +75,9 @@ export default function YearbookSidebar({year}) {
           {parseInt(year, 10) < 2000 ? (
             <Link
               href={`${localePrefix}/game/yearbook/${parseInt(year, 10) + 1}`}
-              className="bp3-button bp3-minimal bp3-icon-chevron-left"
+              className="yearbook-nav-btn"
             >
-              {parseInt(year, 10) + 1}
+              &#8249; {parseInt(year, 10) + 1}
             </Link>
           ) : null}
         </div>
@@ -98,10 +95,9 @@ export default function YearbookSidebar({year}) {
           {parseInt(year, 10) > 1900 ? (
             <Link
               href={`${localePrefix}/game/yearbook/${parseInt(year, 10) - 1}`}
-              className="bp3-button bp3-minimal"
+              className="yearbook-nav-btn"
             >
-              {parseInt(year, 10) - 1}
-              <span className="bp3-icon-standard bp3-icon-chevron-right"></span>
+              {parseInt(year, 10) - 1} &#8250;
             </Link>
           ) : null}
         </div>

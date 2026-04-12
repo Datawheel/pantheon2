@@ -138,7 +138,7 @@ export default async function Page() {
       </p>
 
       <a
-        className="bp3-button bp3-icon-link"
+        className="faq-correction-link"
         href="https://docs.google.com/forms/d/e/1FAIpQLSdHKWwONdugZfwQvCvkSHakG-xeFh_HOZcvK3NqVOv19h0-jQ/viewform"
         target="_blank"
         rel="noopener noreferrer"
