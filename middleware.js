@@ -1,31 +1,8 @@
-// middleware.ts (or src/middleware.ts)
+import createMiddleware from "next-intl/middleware";
 import {NextResponse} from "next/server";
-import {createI18nMiddleware} from "next-international/middleware";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "./app/locales";
+import {routing} from "./i18n/routing";
 
-const I18nMiddleware = createI18nMiddleware({
-  locales: SUPPORTED_LOCALES,
-  defaultLocale: DEFAULT_LOCALE,
-  urlMappingStrategy: "rewriteDefault",
-  resolveLocaleFromRequest: (request) => {
-    const pathname = new URL(request.url).pathname;
-
-    // If the URL has an explicit locale prefix, respect it
-    // This prevents Accept-Language negotiation from overriding explicit locale URLs
-    // (Important for social media crawlers like Twitterbot, Slackbot, etc.)
-    for (const locale of SUPPORTED_LOCALES) {
-      if (locale !== DEFAULT_LOCALE) {
-        if (pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`) {
-          return locale;
-        }
-      }
-    }
-
-    // No explicit locale prefix - return undefined to fall back to default behavior
-    // (Accept-Language header negotiation, NEXT_LOCALE cookie, etc.)
-    return undefined;
-  },
-});
+const intlMiddleware = createMiddleware(routing);
 
 // Extensions to skip (static assets, maps, fonts, etc.)
 const ASSET_EXT_RE =
@@ -36,7 +13,6 @@ export function middleware(request) {
   const {pathname} = url;
 
   // Always log screenshot hits so failed OG streams can be traced by URL.
-  // This runs before the route handler and still logs even if response piping fails later.
   if (pathname.startsWith("/api/screenshot/")) {
     console.log(
       "[screenshot-hit]",
@@ -52,11 +28,10 @@ export function middleware(request) {
   }
 
   // Run i18n for everything else (including slugs with dots, e.g. Michael_J._Fox)
-  return I18nMiddleware(request);
+  return intlMiddleware(request);
 }
 
 export const config = {
-  // Keep the matcher simple; don’t try to filter "dots" here.
   matcher: [
     // Everything except Next internals and your API route
     "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|ads.txt|sitemap).*)",

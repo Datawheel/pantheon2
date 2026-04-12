@@ -24,7 +24,7 @@
     "lucide-react": "^1.8.0",
     "micromark": "^4.0.1",
     "next": "^14.2.35",
-    "next-international": "^1.3.1",
+    "next-intl": "^4.9.1",
     "nextjs-toploader": "^1.6.12",
     "pluralize": "^8.0.0",
     "react": "^18",

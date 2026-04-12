@@ -1,0 +1,51 @@
+.decade-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--colorSlate);
+  font-family: var(--fontBody);
+}
+
+.decade-toggle:hover {
+  color: var(--colorDark);
+}
+
+.decade-chevron {
+  display: inline-block;
+  transition: transform 0.2s ease;
+  font-size: 10px;
+}
+
+.decade-chevron.open {
+  transform: rotate(90deg);
+}
+
+.collapse-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.collapse-panel.open {
+  grid-template-rows: 1fr;
+}
+
+.collapse-panel > ul {
+  overflow: hidden;
+}
+
+.yearbook-nav-btn {
+  color: var(--colorSlate);
+  text-decoration: none;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.yearbook-nav-btn:hover {
+  color: var(--colorDark);
+}

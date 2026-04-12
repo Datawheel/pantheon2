@@ -1,3 +1,7 @@
+const createNextIntlPlugin = require("next-intl/plugin");
+
+const withNextIntl = createNextIntlPlugin();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Ensure file watching works properly
@@ -12,16 +16,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
-
-// const nextConfig = {
-//   cacheHandler: require.resolve("./cache-handler.js"),
-// };
-
-// export default nextConfig;
-// module.exports = CacheHandler;
-
-// module.exports = () => ({
-//   cacheHandler: require.resolve("./cache-handler.js"),
-//   output: "standalone",
-// });
+module.exports = withNextIntl(nextConfig);
