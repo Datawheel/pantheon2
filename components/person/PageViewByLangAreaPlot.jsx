@@ -1,15 +1,15 @@
 "use client";
 
 import {useEffect, useRef} from "react";
-import * as echarts from "echarts";
 import {FORMATTERS} from "@/components/utils/consts";
+import {initEChart} from "@/components/utils/echarts";
 
 export default function PageViewByLangAreaPlot({baseOption, style}) {
   const chartRef = useRef(null);
 
   useEffect(() => {
     if (!chartRef.current) return;
-    const chart = echarts.init(chartRef.current);
+    const chart = initEChart(chartRef.current);
 
     // Deep clone option so we can modify it safely
     const option = JSON.parse(JSON.stringify(baseOption));

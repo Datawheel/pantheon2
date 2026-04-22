@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect, useRef} from "react";
-import * as echarts from "echarts";
+import {initEChart} from "@/components/utils/echarts";
 
 export default function PlacesStacked({baseOption, style, cohorts}) {
   const chartRef = useRef(null);
@@ -11,7 +11,7 @@ export default function PlacesStacked({baseOption, style, cohorts}) {
   useEffect(() => {
     const dom = chartRef.current;
     if (!chartRef.current) return;
-    const chart = echarts.init(chartRef.current);
+    const chart = initEChart(chartRef.current);
 
     // Deep clone option so we can modify it safely
     const option = JSON.parse(JSON.stringify(baseOption));
@@ -117,7 +117,7 @@ export default function PlacesStacked({baseOption, style, cohorts}) {
     });
 
     return () => chart.dispose();
-  }, [baseOption]);
+  }, [baseOption, cohorts]);
 
   return (
     <div

@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect, useRef} from "react";
-import * as echarts from "echarts";
+import {initEChart} from "@/components/utils/echarts";
 
 export default function PageViewsChart({pageviewsData, lang = "en"}) {
   const chartRef = useRef(null);
@@ -12,7 +12,7 @@ export default function PageViewsChart({pageviewsData, lang = "en"}) {
     }
 
     // Initialize chart
-    const chart = echarts.init(chartRef.current);
+    const chart = initEChart(chartRef.current);
 
     // Prepare data
     const dates = pageviewsData.map(d => d.date);
@@ -142,7 +142,7 @@ export default function PageViewsChart({pageviewsData, lang = "en"}) {
       window.removeEventListener("resize", handleResize);
       chart.dispose();
     };
-  }, [pageviewsData]);
+  }, [pageviewsData, lang]);
 
   if (!pageviewsData || pageviewsData.length === 0) {
     return null;

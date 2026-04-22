@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from "react";
-import * as echarts from "echarts";
 import {toTitleCase} from "@/components/utils/vizHelpers";
 import {FORMATTERS} from "@/components/utils/consts";
+import {initEChart} from "@/components/utils/echarts";
 
 const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
   const chartRef = useRef(null);
@@ -16,7 +16,7 @@ const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
     }
 
     // Initialize chart
-    const chart = echarts.init(chartRef.current);
+    const chart = initEChart(chartRef.current);
     chartInstanceRef.current = chart;
 
     const markLine = compareValue
@@ -146,7 +146,7 @@ const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
       window.removeEventListener("resize", handleResize);
       chart.dispose();
     };
-  }, [value, compareValue]);
+  }, [value, compareValue, compareValueTitle]);
 
   return <div ref={chartRef} style={{width: "100%", height: 140}} />;
 };

@@ -13,6 +13,32 @@ const PlacesTmap = dynamic(
   {ssr: false}
 );
 
+function trackTopPeople(topPeople, person) {
+  const score = person?.hpi || 0;
+
+  if (!topPeople.length) {
+    topPeople.push(person);
+    return;
+  }
+
+  let inserted = false;
+  for (let index = 0; index < topPeople.length; index += 1) {
+    if (score > (topPeople[index]?.hpi || 0)) {
+      topPeople.splice(index, 0, person);
+      inserted = true;
+      break;
+    }
+  }
+
+  if (!inserted && topPeople.length < 3) {
+    topPeople.push(person);
+  }
+
+  if (topPeople.length > 3) {
+    topPeople.length = 3;
+  }
+}
+
 const nestDataForTmap = (acc, person, accessor = "bplace_country") => {
   const continent = person[accessor].continent;
   const country = person[accessor].country;
@@ -23,8 +49,10 @@ const nestDataForTmap = (acc, person, accessor = "bplace_country") => {
       name: continent,
       value: 0,
       children: [],
+      topPeople: [],
     };
   }
+  trackTopPeople(acc[continent].topPeople, person);
 
   // Find or create country within continent
   let countryNode = acc[continent].children.find(c => c.name === country);
@@ -32,12 +60,14 @@ const nestDataForTmap = (acc, person, accessor = "bplace_country") => {
     countryNode = {
       name: country,
       value: 0,
+      topPeople: [],
     };
     acc[continent].children.push(countryNode);
   }
 
   // Update values
   countryNode.value += 1;
+  trackTopPeople(countryNode.topPeople, person);
   acc[continent].value += 1;
 
   return acc;

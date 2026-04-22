@@ -230,9 +230,9 @@ export default function PlaceBubbleMap({places, locale, hoverLabel}) {
         {/* Country outlines */}
         {geojson.features
           .filter(f => f.id !== "010")
-          .map((feature) => (
+          .map((feature, index) => (
             <path
-              key={feature.id}
+              key={`${feature.id ?? "country"}-${feature.type}-${index}`}
               d={pathGenerator(feature)}
               className="sp-map-land"
             />
