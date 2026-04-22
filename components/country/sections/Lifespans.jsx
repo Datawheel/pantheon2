@@ -29,7 +29,6 @@ const Lifespans = ({attrs, country, peopleBorn, title, slug}) => {
           {country.country} since 1700.
         </p>
         <PeoplePriestley
-          attrs={attrs}
           title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${country.country}`}
           data={priestleyData}
         />
