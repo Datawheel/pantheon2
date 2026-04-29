@@ -1,6 +1,21 @@
 import PlacesMap from "./vizes/PlacesMap";
 import SectionLayout from "../../common/SectionLayout";
 
+function hasCoord(value) {
+  return value !== null && value !== undefined && value !== "";
+}
+
+function normalizeMapPoint(d, place) {
+  const lat = place?.lat;
+  const lon = place?.lon;
+
+  d.place_name = place?.place;
+  d.lat = hasCoord(lat) ? Number(lat) : null;
+  d.lon = hasCoord(lon) ? Number(lon) : null;
+  d.place_coord =
+    d.lat !== null && d.lon !== null ? [d.lon, d.lat] : null;
+}
+
 export default function Places({country, peopleBorn, peopleDied, slug, title}) {
   const safePeopleBorn = peopleBorn || [];
   const safePeopleDied = peopleDied || [];
@@ -11,24 +26,15 @@ export default function Places({country, peopleBorn, peopleDied, slug, title}) {
 
   tmapBornData.forEach(d => {
     d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.bplace = d.bplace_geonameid;
+    d.place = d.bplace_geonameid;
   });
 
   const geomapBornData = tmapBornData
-    .filter(d => d.bplace && d.bplace.lat && d.bplace.lon)
+    .filter(d => d.place && hasCoord(d.place.lat) && hasCoord(d.place.lon))
     .sort((a, b) => b.l - a.l)
     .slice(0, 500);
   geomapBornData.forEach(d => {
-    d.place_name = d.bplace.place;
-    d.place_coord = [d.bplace.lat, d.bplace.lon];
-    if (!(d.place_coord instanceof Array)) {
-      d.place_coord = d.place_coord
-        .replace("(", "")
-        .replace(")", "")
-        .split(",")
-        .map(Number);
-    }
-    d.place_coord.reverse();
+    normalizeMapPoint(d, d.place);
   });
 
   const tmapDeathData = safePeopleDied
@@ -41,33 +47,33 @@ export default function Places({country, peopleBorn, peopleDied, slug, title}) {
   });
 
   const geomapDeathData = tmapDeathData
-    .filter(d => d.place && d.place.lat && d.place.lon && d.occupation !== null)
+    .filter(
+      d =>
+        d.place &&
+        hasCoord(d.place.lat) &&
+        hasCoord(d.place.lon) &&
+        d.occupation !== null
+    )
     .sort((a, b) => b.l - a.l)
     .slice(0, 500);
   geomapDeathData.forEach(d => {
-    d.place_name = d.place.place;
-    d.place_coord = [d.place.lat, d.place.lon];
-    if (!(d.place_coord instanceof Array)) {
-      d.place_coord = d.place_coord
-        .replace("(", "")
-        .replace(")", "")
-        .split(",")
-        .map(Number);
-    }
-    d.place_coord.reverse();
+    normalizeMapPoint(d, d.place);
   });
 
   return (
     <SectionLayout slug={slug} title={title}>
       <PlacesMap
         country={country}
-        data={geomapBornData}
+        data={geomapDeathData}
         title={`Cities by deaths in ${country.country}`}
       />
       <PlacesMap
         country={country}
-        data={geomapDeathData}
+        data={geomapBornData}
         title={`Cities by birth in ${country.country}`}
+        bubbleFill="rgba(105, 123, 232, 0.42)"
+        bubbleBorder="rgba(72, 89, 201, 0.82)"
+        bubbleHoverFill="rgba(105, 123, 232, 0.64)"
       />
     </SectionLayout>
   );

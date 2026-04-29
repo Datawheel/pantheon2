@@ -197,7 +197,7 @@ export default function CountryMap({countries, locale, hoverLabel}) {
         className="sc-map-svg"
         preserveAspectRatio="xMidYMid meet"
       >
-        {geojson.features.filter(f => f.id !== "010").map((feature) => {
+        {geojson.features.filter(f => f.id !== "010").map((feature, index) => {
           const numId = parseInt(feature.id, 10);
           const countryData = countryByNum[numId];
           const hasPeople = countryData && countryData.num_born > 0;
@@ -209,7 +209,7 @@ export default function CountryMap({countries, locale, hoverLabel}) {
 
           return (
             <path
-              key={feature.id}
+              key={`${feature.id ?? "country"}-${index}`}
               d={pathGenerator(feature)}
               className={hasPeople ? "sc-map-country sc-map-clickable" : "sc-map-country"}
               onClick={() => hasPeople && handleClick(countryData)}

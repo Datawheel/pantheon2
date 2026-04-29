@@ -17,7 +17,7 @@ export async function GET(request) {
   const year = dateobj.getFullYear();
   const month = `${dateobj.getMonth() + 1}`.replace(
     /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
+    "$10$2",
   );
   const day = `${dateobj.getDate()}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
   const yesterday = `${year}${month}${day}`;
@@ -25,11 +25,11 @@ export async function GET(request) {
   const year1monthAgo = dateobj.getFullYear();
   const month1monthAgo = `${dateobj.getMonth() + 1}`.replace(
     /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
+    "$10$2",
   );
   const day1monthAgo = `${dateobj.getDate()}`.replace(
     /(^|\D)(\d)(?!\d)/g,
-    "$10$2"
+    "$10$2",
   );
   const monthAgo = `${year1monthAgo}${month1monthAgo}${day1monthAgo}`;
 
@@ -38,7 +38,7 @@ export async function GET(request) {
   // FIRST check if this person is trending at all
   const monthAgoTrendFromDbResp = await axios
     .get(
-      `https://api.pantheon.world/trend?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}&rank_pantheon=lte.100`
+      `https://api.pantheon.world/trend?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}&rank_pantheon=lte.100`,
     )
     .catch(e => (console.log("Pantheon DB trends read Error:", e), {data: []}));
   // if empty it means this person is not trending
@@ -49,16 +49,16 @@ export async function GET(request) {
   // try to get daily pageview data from db
   const monthAgoPvFromDbResp = await axios
     .get(
-      `https://api.pantheon.world/trend_pageviews?date=eq.${year}-${month}-${day}&pid=eq.${wikiId}`
+      `https://api.pantheon.world/trend_pageviews?date=eq.${year}-${month}-${day}&pid=eq.${wikiId}`,
     )
     .catch(e => (console.log("Pantheon DB trends read Error:", e), {data: []}));
   if (monthAgoPvFromDbResp.data.length) {
     const pastMonthPvFromDbResp = await axios
       .get(
-        `https://api.pantheon.world/trend_pageviews?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}`
+        `https://api.pantheon.world/trend_pageviews?date=gte.${year1monthAgo}-${month1monthAgo}-${day1monthAgo}&pid=eq.${wikiId}`,
       )
       .catch(
-        e => (console.log("Pantheon DB trends read Error:", e), {data: []})
+        e => (console.log("Pantheon DB trends read Error:", e), {data: []}),
       );
     enrichedPageViewsFlat = pastMonthPvFromDbResp.data;
   } else {
@@ -67,13 +67,15 @@ export async function GET(request) {
     const availableLangsResp = await axios
       .get(availableLangsApi, {
         headers: {
-          'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-        }
+          "User-Agent":
+            "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+        },
       })
       .catch(
         e => (
-          console.log("Wiki Trending Error:", e), {error: "Wiki ID not found"}
-        )
+          console.log("Wiki Trending Error:", e),
+          {error: "Wiki ID not found"}
+        ),
       );
     if (availableLangsResp.error) {
       return Response.json([]);
@@ -100,31 +102,32 @@ export async function GET(request) {
             `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/${
               ll.lang
             }.wikipedia/all-access/all-agents/${encodeURIComponent(
-              ll["*"]
-            )}/daily/${monthAgo}/${yesterday}`
+              ll["*"],
+            )}/daily/${monthAgo}/${yesterday}`,
         );
         // return Response.json({langReqs, langlinks, monthAgo, yesterday});
 
         // throttle API queries to 20 at a time
-        const throttle = createThrottle(20);
+        const throttle = createThrottle(5);
         const pageViews = await Promise.all(
           langReqs.map(url =>
             throttle(async () => {
               const res = await axios
                 .get(url, {
                   headers: {
-                    'User-Agent': 'Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)'
-                  }
+                    "User-Agent":
+                      "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+                  },
                 })
                 .catch(() => ({data: {items: []}}));
               return res.data ? res.data.items : [];
-            })
-          )
+            }),
+          ),
         );
 
         // filter out empty results
         const pageViewsWithData = pageViews.filter(
-          arr => Array.isArray(arr) && arr.length
+          arr => Array.isArray(arr) && arr.length,
         );
 
         const pageViewsFlat = [].concat.apply([], pageViewsWithData);
@@ -133,7 +136,7 @@ export async function GET(request) {
           // sample date: 2020012500
           const formattedDate = `${pv.timestamp.slice(
             0,
-            4
+            4,
           )}-${pv.timestamp.slice(4, 6)}-${pv.timestamp.slice(6, 8)}`;
           return {
             pid: wikiId,
@@ -156,7 +159,7 @@ export async function GET(request) {
                   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiZGVwbG95In0.Es95xLgTB1583Sxh8MvamXIE-xEV0QsNFlRFVOq_we8",
                 "Prefer": "resolution=merge-duplicates",
               },
-            }
+            },
           )
           .catch(err => (console.log(err), []));
       }

@@ -67,6 +67,9 @@ export default function Places({place, peopleBorn, peopleDied, slug, title}) {
         place={place}
         data={geomapDeathData}
         title={`Birth places for people deceased in ${place.place}`}
+        bubbleFill="rgba(105, 123, 232, 0.42)"
+        bubbleBorder="rgba(72, 89, 201, 0.82)"
+        bubbleHoverFill="rgba(105, 123, 232, 0.64)"
       />
     </SectionLayout>
   );
