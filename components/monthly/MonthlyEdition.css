@@ -93,6 +93,47 @@
   text-align: center;
 }
 
+.monthly-sidebar-archive-heading {
+  font-family: var(--fontBody);
+  font-size: 0.92rem;
+  color: var(--colorTan);
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  margin: 2rem 0 1rem;
+}
+
+.monthly-sidebar-archive {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 2px solid var(--colorCardboard);
+}
+
+.monthly-sidebar-archive li {
+  padding: 0.45rem 0 0.45rem 1.25rem;
+}
+
+.monthly-sidebar-archive li a,
+.monthly-sidebar-archive-current {
+  font-family: var(--fontBody);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  color: var(--colorStone);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.monthly-sidebar-archive li a:hover {
+  color: var(--colorDark);
+  font-weight: 600;
+}
+
+.monthly-sidebar-archive-current {
+  color: var(--colorDark);
+  font-weight: 600;
+}
+
 @media (max-width: 991px) {
   .monthly-sidebar {
     display: none;
@@ -159,7 +200,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center bottom;
+  object-position: center top;
   filter: grayscale(100%) contrast(1.15);
 }
 

@@ -26,6 +26,33 @@ const MONTH_NAMES = [
 ];
 
 const EDITION_META = {
+  "2026-04": {
+    headline: "Michael, the Moon, and a Hungarian Upset",
+    subhead:
+      "A Jackson family revival, a stunning election in Budapest, and the Artemis II crew's return from the Moon defined April's biggest attention swings",
+    editorial: {
+      intro:
+        'April\'s clearest story wasn\'t a single name &mdash; it was a family. The late-April release of <em>Michael</em>, the long-anticipated biopic starring <a href="/profile/person/Jaafar_Jackson">Jaafar Jackson</a> as his late uncle <a href="/profile/person/Michael_Jackson">Michael Jackson</a>, pulled the entire Jackson dynasty back into the spotlight. Attention rippled outward from the King of Pop to <a href="/profile/person/Janet_Jackson">Janet</a>, <a href="/profile/person/Jermaine_Jackson">Jermaine</a>, <a href="/profile/person/Katherine_Jackson">Katherine</a>, <a href="/profile/person/Paris_Jackson">Paris</a>, and <a href="/profile/person/Debbie_Rowe">Debbie Rowe</a> &mdash; a cultural reawakening that turned a single film premiere into a family-wide search wave.',
+      middle:
+        'The other story of the month came from Budapest. <a href="/profile/person/Péter_Magyar">Péter Magyar</a>\'s Tisza Party unseated <a href="/profile/person/Viktor_Orbán">Viktor Orbán</a>\'s long-ruling Fidesz government in the April 12 election, ending one of Europe\'s most entrenched political dynasties and turning challenger and incumbent alike into global search subjects. Above the planet, NASA\'s Artemis II crew made history of their own: <a href="/profile/person/Christina_Koch">Christina Koch</a>, <a href="/profile/person/Reid_Wiseman">Reid Wiseman</a>, <a href="/profile/person/Jeremy_Hansen">Jeremy Hansen</a>, and <a href="/profile/person/Victor_Glover">Victor Glover</a> all surged in lockstep after returning to Earth on April 10 from the first crewed lunar mission in over fifty years. Sport added its own headlines &mdash; <a href="/profile/person/Rory_McIlroy">Rory McIlroy</a> won back-to-back Masters titles to join a club of just four golfers ever to do so, while Kenyan marathoner <a href="/profile/person/Sabastian_Sawe">Sabastian Sawe</a> went from near-invisible to a household name overnight after running London in 1:59:30, the first sub-two-hour marathon under race conditions.',
+      conclusion:
+        'April was also a month of farewells. Bollywood great <a href="/profile/person/Asha_Bhosle">Asha Bhosle</a> died at 92, French actresses <a href="/profile/person/Nathalie_Baye">Nathalie Baye</a> and <a href="/profile/person/Nadia_Farès">Nadia Farès</a> passed within days of one another, <a href="/profile/person/Patrick_Muldoon">Patrick Muldoon</a> died unexpectedly, and Romanian football icon <a href="/profile/person/Mircea_Lucescu">Mircea Lucescu</a> was lost at 80 &mdash; each name spiking on Wikipedia as the obituaries hit. Smaller news-cycle bumps included <a href="/profile/person/John_Ternus">John Ternus</a>, named Apple\'s incoming CEO succeeding Tim Cook, and <a href="/profile/person/Meryl_Streep">Meryl Streep</a> amid the press cycle for <em>The Devil Wears Prada 2</em>. The fallers tell the other half of the same story. <a href="/profile/person/Ali_Khamenei">Ali Khamenei</a> dropped from 16.7M views to under a million as the Iran succession story moved off front pages, with <a href="/profile/person/Mojtaba_Khamenei">Mojtaba Khamenei</a> and <a href="/profile/person/Ruhollah_Khomeini">Ruhollah Khomeini</a> fading alongside him. <a href="/profile/person/Chuck_Norris">Chuck Norris</a>, whose attention had spiked after his March 19 death, returned toward baseline as the obituary moment ended.',
+    },
+    moverSummaries: {
+      "rising:Michael_Jackson":
+        "Michael Jackson surged after the late-April theatrical release of Michael, the biopic starring his nephew Jaafar — pulling the entire Jackson family back into the cultural conversation.",
+      "rising:Péter_Magyar":
+        "Péter Magyar climbed as his Tisza Party unseated Viktor Orbán's Fidesz government in Hungary's April 12 election, ending more than a decade of one-party rule.",
+      "rising:Jaafar_Jackson":
+        "Jaafar Jackson rose into global attention after starring as his uncle Michael in the biopic that premiered in late April.",
+      "falling:Ali_Khamenei":
+        "Ali Khamenei's March spike around the Iran succession crisis cooled sharply in April as the story moved off front pages.",
+      "falling:Chuck_Norris":
+        "Chuck Norris fell back toward baseline after his March 19 death drove a one-month obituary surge that didn't carry into April.",
+      "falling:Mojtaba_Khamenei":
+        "Mojtaba Khamenei dropped alongside his father as speculation around Iran's leadership transition faded from the news cycle.",
+    },
+  },
   "2026-03": {
     headline: "March's Attention Earthquake",
     subhead:
@@ -167,15 +194,21 @@ async function buildArchive() {
 }
 
 async function resolveHeroImage(key) {
-  const filename = `${key}-hero.png`;
-  const filepath = path.join(MONTHLY_IMAGE_DIR, filename);
+  const extensions = ["jpg", "jpeg", "png"];
 
-  try {
-    await fs.access(filepath);
-    return `/images/monthly/${filename}`;
-  } catch {
-    return null;
+  for (const ext of extensions) {
+    const filename = `${key}-hero.${ext}`;
+    const filepath = path.join(MONTHLY_IMAGE_DIR, filename);
+
+    try {
+      await fs.access(filepath);
+      return `/images/monthly/${filename}`;
+    } catch {
+      // Try next extension
+    }
   }
+
+  return null;
 }
 
 function buildEditionMeta(key, year, monthNum) {

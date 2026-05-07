@@ -190,20 +190,20 @@ export default async function Home(props) {
         </div>
       </div>
 
-      <Link href={`/${lang}/monthly/2026/march`} className="monthly-callout">
+      <Link href={`/${lang}/monthly/2026/april`} className="monthly-callout">
         <div className="monthly-callout-image">
           <img
-            src="/images/monthly/2026-03-hero.png"
-            alt="March 2026 Pantheon Monthly"
+            src="/images/monthly/2026-04-hero.png"
+            alt="April 2026 Pantheon Monthly"
           />
         </div>
         <div className="monthly-callout-body">
           <span className="monthly-callout-badge">New Edition</span>
-          <h2 className="monthly-callout-title">Pantheon Monthly: March 2026</h2>
+          <h2 className="monthly-callout-title">Pantheon Monthly: April 2026</h2>
           <p className="monthly-callout-description">
-            March&rsquo;s Attention Earthquake &mdash; war abroad, upheaval at home, and the long fade after February&rsquo;s olympics.
+            Michael, the Moon, and a Hungarian upset &mdash; April&rsquo;s biggest attention swings, from a Jackson family revival to Artemis II&rsquo;s return.
           </p>
-          <span className="monthly-callout-link">Read the March Edition &rarr;</span>
+          <span className="monthly-callout-link">Read the April Edition &rarr;</span>
         </div>
       </Link>
 

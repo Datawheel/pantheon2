@@ -93,6 +93,35 @@ export default function MonthlyEdition({edition, locale}) {
               </a>
             </li>
           </ul>
+
+          {edition.archive && edition.archive.length > 1 && (
+            <>
+              <p className="monthly-sidebar-archive-heading">Past Editions</p>
+              <ul className="monthly-sidebar-archive">
+                {[...edition.archive]
+                  .reverse()
+                  .map(item => {
+                    const isCurrent =
+                      item.year === edition.year && item.month === edition.month;
+                    return (
+                      <li key={`${item.year}-${item.month}`}>
+                        {isCurrent ? (
+                          <span className="monthly-sidebar-archive-current">
+                            {item.label}
+                          </span>
+                        ) : (
+                          <Link
+                            href={`${localePrefix}/monthly/${item.year}/${item.month}`}
+                          >
+                            {item.label}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })}
+              </ul>
+            </>
+          )}
         </aside>
 
         {/* Content */}
