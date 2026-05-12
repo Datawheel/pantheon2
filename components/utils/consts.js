@@ -203,8 +203,9 @@ export const COUNTRY_LIST = [
 export const SANITIZERS = {
   vizType: viz => {
     const supportedViz = ["treemap", "stackedarea", "linechart", "map"];
-    return supportedViz.includes(viz.toLowerCase())
-      ? viz.toLowerCase()
+    const normalizedViz = `${viz || ""}`.toLowerCase();
+    return supportedViz.includes(normalizedViz)
+      ? normalizedViz
       : supportedViz[0];
   },
   show: (showStr, pageType) => {

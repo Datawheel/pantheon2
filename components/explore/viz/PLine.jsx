@@ -1,126 +1,150 @@
-import {LinePlot} from "d3plus-react";
-import {RESET} from "d3plus-common";
-import {nest} from "d3-collection";
-import {COLORS_CONTINENT, COLORS_DOMAIN} from "../../utils/consts";
+"use client";
+
+import {useEffect, useMemo, useRef} from "react";
+import {initEChart} from "@/components/utils/echarts";
+import {FORMATTERS} from "../../utils/consts";
 import {
-  calculateYearBucket,
-  groupBy,
-  groupTooltip,
-} from "../../utils/vizHelpers";
+  buildExploreRows,
+  buildTimeSeries,
+  escapeHtml,
+  formatChartValue,
+  setupResize,
+} from "./echartsData";
+
+function axisTooltip(params) {
+  const rows = Array.isArray(params) ? params : [params];
+  const visibleRows = rows
+    .filter(row => Number(row.value) > 0)
+    .sort((a, b) => Number(b.value) - Number(a.value))
+    .slice(0, 15);
+
+  if (!rows.length) return "";
+
+  let html = `<div style="text-align:center;"><b>${escapeHtml(rows[0].axisValue)}</b></div><hr/>`;
+  html += visibleRows
+    .map(
+      row =>
+        `${row.marker} ${escapeHtml(row.seriesName)}: ${formatChartValue(row.value)}`
+    )
+    .join("<br/>");
+
+  const hidden = rows.filter(row => Number(row.value) > 0).length - visibleRows.length;
+  if (hidden > 0) {
+    html += `<br/><span style="font-size:10px;color:gray;">(and ${hidden} more)</span>`;
+  }
+  return html;
+}
 
 export default function PLine({data, occupations, show, yearType}) {
-  if (!data || !data.length || !occupations || !occupations.length) {
+  const chartRef = useRef(null);
+
+  const timeSeries = useMemo(() => {
+    const {rows, levels} = buildExploreRows(data, occupations, show, yearType);
+    return buildTimeSeries(rows, levels, yearType);
+  }, [data, occupations, show, yearType]);
+
+  useEffect(() => {
+    const element = chartRef.current;
+    if (!element || !timeSeries.series.length) return;
+
+    const chart = initEChart(element);
+    const tickSet = new Set(timeSeries.ticks);
+    const option = {
+      color: timeSeries.series.map(series => series.color),
+      tooltip: {
+        trigger: "axis",
+        confine: true,
+        axisPointer: {type: "cross"},
+        formatter: axisTooltip,
+      },
+      grid: {
+        top: 18,
+        right: 24,
+        bottom: 38,
+        left: 58,
+        containLabel: false,
+      },
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        data: timeSeries.labels,
+        axisTick: {alignWithLabel: true},
+        axisLabel: {
+          color: "#9E978D",
+          fontFamily: "Amiko, Arial, sans-serif",
+          formatter: (value, index) => (tickSet.has(index) ? value : ""),
+        },
+        axisLine: {lineStyle: {color: "#D6D6D0"}},
+      },
+      yAxis: {
+        type: "value",
+        name: "Globally Memorable Individuals",
+        nameLocation: "middle",
+        nameGap: 42,
+        nameTextStyle: {
+          color: "#9E978D",
+          fontFamily: "Amiko, Arial, sans-serif",
+          fontSize: 11,
+        },
+        axisLabel: {
+          color: "#9E978D",
+          fontFamily: "Amiko, Arial, sans-serif",
+          formatter: value =>
+            value % 1 ? "" : FORMATTERS.commas(Math.round(value)),
+        },
+        splitLine: {lineStyle: {color: "#D6D6D0"}},
+      },
+      series: timeSeries.series.map(series => ({
+        name: series.name,
+        type: "line",
+        smooth: true,
+        showSymbol: false,
+        symbol: "circle",
+        sampling: "lttb",
+        data: series.values,
+        lineStyle: {
+          width: 2,
+          color: series.color,
+        },
+        itemStyle: {
+          color: series.color,
+        },
+        emphasis: {
+          focus: "series",
+          lineStyle: {width: 3},
+        },
+      })),
+    };
+
+    chart.setOption(option, {notMerge: true, lazyUpdate: true});
+    const cleanupResize = setupResize(chart, element);
+
+    return () => {
+      cleanupResize();
+      chart.dispose();
+    };
+  }, [timeSeries]);
+
+  if (!timeSeries.series.length) {
     return <div>No data available</div>;
   }
 
-  let depth = 2;
-  let dataFilter = d => d.occupation;
-  const occsObj = occupations.reduce((obj, d) => ({...obj, [d.id]: d}), {});
-  let grouping = ["domain", "industry", "occupation_name"].map(
-    groupBy(occsObj)
-  );
-
-  let shapeConf = {
-    Line: {
-      strokeWidth: 2,
-      stroke: d => {
-        if (d.color) return d.color;
-        else if (d.occupation_id !== undefined) {
-          let occ =
-            d.occupation_id.constructor === Array
-              ? d.occupation_id[0]
-              : d.occupation_id;
-          if (occ instanceof Array) occ = occ[0];
-          return COLORS_DOMAIN[occsObj[occ].domain_slug];
-        }
-        return "#ccc";
-      },
-    },
-  };
-
-  if (show === "places") {
-    dataFilter = p =>
-      p.occupation &&
-      p[yearType] !== null &&
-      p.bplace_country &&
-      p.bplace_country.country &&
-      p.bplace_country.continent;
-    grouping = ["borncontinent", "borncountry"];
-    shapeConf = {
-      Line: {
-        strokeWidth: 2,
-        stroke: d => COLORS_CONTINENT[d.borncontinent],
-      },
-    };
-    const uniqCountries = nest()
-      .key(d => d.bplace_country.id)
-      .entries(data.filter(dataFilter));
-    if (uniqCountries.length === 1) {
-      grouping = ["borncountry", "bornplace"];
-      dataFilter = p =>
-        p.occupation &&
-        p[yearType] !== null &&
-        p.bplace_country &&
-        p.bplace_country.country &&
-        p.bplace_country.continent &&
-        p.bplace_geonameid;
-    }
-    depth = 1;
-  }
-
-  const stackedData = data.filter(dataFilter).map(d => {
-    const newData = {
-      ...d, // Spread the existing properties of d
-      borncountry: d.bplace_country
-        ? d.bplace_country.country
-        : d.bplace_country,
-      bornplace: d.bplace_geonameid
-        ? d.bplace_geonameid.place
-        : d.bplace_geonameid,
-      borncontinent: d.bplace_country
-        ? d.bplace_country.continent
-        : d.bplace_country,
-      occupation_id: `${d.occupation_id}`,
-    };
-
-    // Add additional properties based on occupation_id
-    const occ = occsObj[newData.occupation_id];
-    if (occ) {
-      newData.occupation_name = occ.occupation;
-      newData.occupation_slug = occ.occupation_slug;
-      newData.domain = occ.domain;
-      newData.domain_slug = occ.domain_slug;
-      newData.industry = occ.industry;
-    }
-
-    return newData;
-  });
-
-  const [bornBuckets, bornTicks] = calculateYearBucket(
-    stackedData,
-    d => d.birthyear
-  );
-  // const [deathBuckets, deathTicks] = calculateYearBucket(stackedData, d => d.deathyear);
-
   return (
-    <LinePlot
-      config={{
-        data: stackedData,
-        depth,
-        discrete: "x",
-        groupBy: grouping,
-        height: RESET,
-        shapeConfig: shapeConf,
-        tooltipConfig: groupTooltip(stackedData),
-        xConfig: {
-          labels: bornTicks,
-          tickFormat: d => bornBuckets[d],
-        },
-        // y: d => {
-        //   console.log("y!!", d.id ? d.id instanceof Array ? d.id.length : 1 : 0);
-        //   d.id ? d.id instanceof Array ? d.id.length : 1 : 0;
-        // }
-      }}
-    />
+    <div className="pantheon-echart-shell">
+      <div
+        className="pantheon-echart"
+        ref={chartRef}
+        role="img"
+        aria-label="Explore line chart"
+      />
+      <div className="pantheon-echart-legend">
+        {timeSeries.legendItems.map(item => (
+          <div className="pantheon-echart-legend-item" key={item.name}>
+            <span style={{backgroundColor: item.color}} />
+            <span>{item.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

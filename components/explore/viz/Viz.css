@@ -3,3 +3,62 @@
 .explore-body {
   width: 100%;
 }
+
+.pantheon-echart {
+  flex: 1;
+  height: 100%;
+  min-height: 420px;
+  width: 100%;
+}
+
+.embed .pantheon-echart {
+  min-height: 0;
+}
+
+.pantheon-echart-shell {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+}
+
+.pantheon-echart-treemap {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+}
+
+.pantheon-echart-shell > .pantheon-echart {
+  height: auto;
+}
+
+.pantheon-echart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  justify-content: center;
+  margin: 14px auto 0;
+  max-width: 960px;
+  padding: 0 12px;
+}
+
+.pantheon-echart-legend-item {
+  align-items: center;
+  color: #333;
+  display: inline-flex;
+  font-size: 12px;
+  gap: 7px;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.pantheon-echart-legend-item span:first-child {
+  border-radius: 2px;
+  display: inline-block;
+  flex-shrink: 0;
+  height: 14px;
+  width: 14px;
+}

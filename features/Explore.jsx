@@ -26,6 +26,7 @@ import {
   updatePlaceType,
   updateYears,
   updateYearType,
+  updateViz,
   updateShowDepth,
   updateOccupation,
   updateOnlyShowNew,
@@ -120,6 +121,7 @@ function Explore({
     dispatch(updateGender(initialState.gender));
     dispatch(updateYears(initialState.years));
     dispatch(updateYearType(initialState.yearType));
+    dispatch(updateViz(initialState.viz));
     dispatch(updateMetricType(initialState.metricType));
     dispatch(updateMetricCutoff(initialState.metricCutoff));
     dispatch(updateOnlyShowNew(initialState.onlyShowNew));
