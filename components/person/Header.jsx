@@ -1,52 +1,15 @@
 "use client";
 
-// import {Suspense} from "react";
 import {max as d3Max, min as d3Min} from "d3-array";
 import dayjs from "dayjs";
 import {useEffect, useMemo, useState} from "react";
 import SimpleTooltip from "../common/SimpleTooltip";
-// import HeaderLine from "./HeaderLine";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import {getLocalizedLanguageName} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import PageViewsChart from "./PageViewsChart";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
-
-// async function getWikiPageViews(personName) {
-//   const wikiSlug = personName.replace(/ /g, "_");
-//   const dateobj = new Date();
-//   const year = dateobj.getFullYear();
-//   // need to add 1 since getMonth is zero based
-//   const month = `${dateobj.getMonth() + 1}`.replace(
-//     /(^|\D)(\d)(?!\d)/g,
-//     "$10$2"
-//   );
-//   const res = await fetch(
-//     `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${wikiSlug}/monthly/20110101/${year}${month}01`
-//   );
-//   return res.json();
-// }
-
-// async function getIsTrending(personId) {
-//   const dateobj = new Date();
-//   dateobj.setDate(dateobj.getDate() - 29);
-//   const year1monthAgo = dateobj.getFullYear();
-//   // need to add 1 since getMonth is zero based
-//   const month1monthAgo = `${dateobj.getMonth() + 1}`.replace(
-//     /(^|\D)(\d)(?!\d)/g,
-//     "$10$2"
-//   );
-//   const day1monthAgo = `${dateobj.getDate()}`.replace(
-//     /(^|\D)(\d)(?!\d)/g,
-//     "$10$2"
-//   );
-//   const monthAgo = `${year1monthAgo}-${month1monthAgo}-${day1monthAgo}`;
-//   const res = await fetch(
-//     `https://api.pantheon.world/trend?date=gte.${monthAgo}&pid=eq.${personId}&rank_pantheon=lte.100`
-//   );
-//   return res.json();
-// }
 
 function getBirthdayParts(person = {}) {
   const birthMonth = Number(person.birthmonth);
@@ -256,7 +219,12 @@ export default function Header({
         <h1 className="profile-name">{person.name}</h1>
         {currentLang === "en" && person.description ? (
           <p className="profile-description">
-            {person.description.replace(/\s*\([\d\s–—\-/,;.bcadBCAD]*\d{3,4}[\d\s–—\-/,;.bcadBCAD]*\)\s*/g, " ").trim()}
+            {person.description
+              .replace(
+                /\s*\([\d\s–—\-/,;.bcadBCAD]*\d{3,4}[\d\s–—\-/,;.bcadBCAD]*\)\s*/g,
+                " ",
+              )
+              .trim()}
           </p>
         ) : null}
         {person.birthyear ? (

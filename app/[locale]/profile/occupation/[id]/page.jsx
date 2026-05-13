@@ -7,7 +7,6 @@ import People from "@/components/occupation/sections/People";
 import Places from "@/components/occupation/sections/Places";
 import PlacesOverTime from "@/components/occupation/sections/PlacesOverTime";
 import Lifespans from "@/components/occupation/sections/Lifespans";
-// import OccupationTrends from "@/components/country/sections/OccupationTrends";
 // import {
 //   NUM_RANKINGS,
 //   NUM_RANKINGS_PRE,
@@ -21,12 +20,20 @@ import {encodePostgrestValue} from "@/app/utils/postgrest";
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getOccupation(occupationId) {
   const url = `${BASE_API}/occupation?occupation_slug=eq.${occupationId}`;
-  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
+  return await safeFetchFirst(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    {},
+  );
 }
 
 // async function getCountryRanks(countryRankLow, countryRankHigh) {
@@ -39,13 +46,21 @@ async function getOccupation(occupationId) {
 async function getPeople(occupationId) {
   const encodedOccupationId = encodePostgrestValue(occupationId);
   const url = `${BASE_API}/person?occupation=eq.${encodedOccupationId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleHpi(occupationId) {
   const encodedOccupationId = encodePostgrestValue(occupationId);
   const url = `${BASE_API}/person_ranks?occupation=eq.${encodedOccupationId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 // async function getPeopleDiedHere(countryId) {
@@ -165,7 +180,7 @@ export default async function Page(props) {
           id: key + 1,
           slug: section.slug,
           title: section.title,
-        })
+        }),
       )}
     </div>
   );

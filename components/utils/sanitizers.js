@@ -1,5 +1,5 @@
 import {HPI_RANGE, LANGS_RANGE, YEAR_RANGE} from "@/components/utils/consts";
-import {closest} from "d3plus-common";
+import {closest} from "@/components/utils/math";
 
 const sanitizeYear = yr => {
   const yearAsNumber = Math.abs(yr.match(/\d+/)[0]);

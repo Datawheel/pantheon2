@@ -82,7 +82,6 @@ Next.js 16 requires React 19. Update in `package.json`:
 | `@blueprintjs/core` | 5.16.1 | Medium | Check React 19 support |
 | `@blueprintjs/select` | 5.3.6 | Medium | Check React 19 support |
 | `@tippyjs/react` | 4.2.6 | Medium | May need update |
-| `d3plus-react` | 1.3.3 | High | Older package, may have issues |
 | `react-redux` | 9.1.0 | Low | Usually quick to support |
 | `react-table` | 7.8.0 | High | Old version, consider TanStack Table |
 | `react-google-recaptcha-v3` | 1.10.1 | Medium | Check compatibility |

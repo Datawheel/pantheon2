@@ -5,7 +5,6 @@ import Intro from "@/components/country/Intro";
 import Header from "@/components/country/Header";
 import PeopleRanking from "@/components/country/sections/PeopleRanking";
 import Occupations from "@/components/country/sections/Occupations";
-import OccupationTrends from "@/components/country/sections/OccupationTrends";
 import Places from "@/components/country/sections/Places";
 import Lifespans from "@/components/country/sections/Lifespans";
 import {
@@ -17,76 +16,13 @@ import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 
-async function getWikiSummary(countryName) {
-  try {
-    const res = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(countryName)}`,
-      {
-        headers: {
-          "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-          "Api-User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-        },
-        next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-      }
-    );
-    if (!res.ok) {
-      console.error(`[getWikiSummary] HTTP ${res.status} for: ${countryName}`);
-      return null;
-    }
-    const text = await res.text();
-    if (text.startsWith("<")) {
-      console.error(`[getWikiSummary] Got HTML instead of JSON for: ${countryName}`);
-      return null;
-    }
-    return JSON.parse(text);
-  } catch (e) {
-    console.error(`[getWikiSummary] Error for ${countryName}: ${e.message}`);
-    return null;
-  }
-}
-
-async function getWikiPageViews(countryName) {
-  const dateobj = new Date();
-  const year = dateobj.getFullYear();
-  const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
-  try {
-    const res = await fetch(
-      `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${encodeURIComponent(countryName)}/monthly/20110101/${year}${month}01`,
-      {
-        headers: {
-          "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-          "Api-User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-        },
-        next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-      }
-    );
-    if (!res.ok) {
-      console.error(`[getWikiPageViews] HTTP ${res.status} for: ${countryName}`);
-      return {items: null};
-    }
-    const text = await res.text();
-    if (text.startsWith("<")) {
-      console.error(`[getWikiPageViews] Got HTML instead of JSON for: ${countryName}`);
-      return {items: null};
-    }
-    const data = JSON.parse(text);
-    if (data.items) {
-      const currentYearMonth = `${year}${month}`;
-      data.items = data.items.filter(item => {
-        const itemYearMonth = item.timestamp.substring(0, 6);
-        return itemYearMonth !== currentYearMonth;
-      });
-    }
-    return data;
-  } catch (e) {
-    console.error(`[getWikiPageViews] Error for ${countryName}: ${e.message}`);
-    return {items: null};
-  }
-}
-
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getCountry(countryId) {
@@ -94,15 +30,26 @@ async function getCountry(countryId) {
     return {};
   }
   const url = `${BASE_API}/country?slug=eq.${countryId}`;
-  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
+  return await safeFetchFirst(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    {},
+  );
 }
 
 async function getCountryRanks(countryRankLow, countryRankHigh) {
-  if (!Number.isFinite(Number(countryRankLow)) || !Number.isFinite(Number(countryRankHigh))) {
+  if (
+    !Number.isFinite(Number(countryRankLow)) ||
+    !Number.isFinite(Number(countryRankHigh))
+  ) {
     return [];
   }
   const url = `${BASE_API}/country?born_rank_unique=gte.${countryRankLow}&born_rank_unique=lte.${countryRankHigh}&order=born_rank_unique`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleBornHere(countryId) {
@@ -110,7 +57,11 @@ async function getPeopleBornHere(countryId) {
     return [];
   }
   const url = `${BASE_API}/person?bplace_country=eq.${countryId}&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleBornHereHpi(countryId) {
@@ -118,7 +69,11 @@ async function getPeopleBornHereHpi(countryId) {
     return [];
   }
   const url = `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleDiedHere(countryId) {
@@ -126,7 +81,11 @@ async function getPeopleDiedHere(countryId) {
     return [];
   }
   const url = `${BASE_API}/person?dplace_country=eq.${countryId}&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleDiedHereHpi(countryId) {
@@ -134,7 +93,11 @@ async function getPeopleDiedHereHpi(countryId) {
     return [];
   }
   const url = `${BASE_API}/person_ranks?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 function formatNumber(num) {
@@ -172,7 +135,7 @@ export async function generateMetadata(props, parent) {
     {
       headers: {"Prefer": "count=exact"},
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
+    },
   );
   const contentRange = countRes.headers.get("content-range");
   let totalCount = 0;
@@ -196,10 +159,7 @@ export async function generateMetadata(props, parent) {
       title,
       description,
       type: "website",
-      images: [
-        `${baseUrl}/api/screenshot/country?id=${id}`,
-        ...previousImages,
-      ],
+      images: [`${baseUrl}/api/screenshot/country?id=${id}`, ...previousImages],
     },
     twitter: {
       card: "summary_large_image",
@@ -216,7 +176,11 @@ export async function generateMetadata(props, parent) {
 async function getTopCities(countryId) {
   if (!countryId) return [];
   const url = `${BASE_API}/place?country=eq.${countryId}&select=id,place,slug,num_born&order=num_born.desc.nullslast&limit=5&num_born=gt.0`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 export default async function Page(props) {
@@ -244,14 +208,19 @@ export default async function Page(props) {
     ? await getCountryRanks(countryRankWindow.low, countryRankWindow.high)
     : null;
 
-  let [peopleBornHere, peopleDiedHere, peopleBornHereHpi, peopleDiedHereHpi, topCities] =
-    await Promise.all([
-      getPeopleBornHere(country.id),
-      getPeopleDiedHere(country.id),
-      getPeopleBornHereHpi(country.id),
-      getPeopleDiedHereHpi(country.id),
-      getTopCities(country.id),
-    ]);
+  let [
+    peopleBornHere,
+    peopleDiedHere,
+    peopleBornHereHpi,
+    peopleDiedHereHpi,
+    topCities,
+  ] = await Promise.all([
+    getPeopleBornHere(country.id),
+    getPeopleDiedHere(country.id),
+    getPeopleBornHereHpi(country.id),
+    getPeopleDiedHereHpi(country.id),
+    getTopCities(country.id),
+  ]);
   // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
   // we calculate and add them...
   peopleBornHere = (peopleBornHere || [])
@@ -311,19 +280,6 @@ export default async function Page(props) {
       ),
     },
     {
-      slug: "occupational-trends",
-      title: "Occupational Trends",
-      content: (
-        <OccupationTrends
-          attrs={attrs}
-          country={country}
-          peopleBorn={peopleBornHere}
-          peopleDied={peopleDiedHere}
-          occupations={occupations}
-        />
-      ),
-    },
-    {
       slug: "places",
       title: "Places",
       content: (
@@ -369,7 +325,7 @@ export default async function Page(props) {
           id: key + 1,
           slug: section.slug,
           title: section.title,
-        })
+        }),
       )}
     </div>
   );

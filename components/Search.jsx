@@ -1,5 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
-import {strip, trim} from "d3plus-text";
+import React, {useState, useEffect, useRef, useCallback} from "react";
 import axios from "axios";
 import {TrendingUp, Search as SearchIcon} from "lucide-react";
 import {useParams, usePathname} from "next/navigation";
@@ -7,6 +6,16 @@ import {useSearchVisibility} from "@/contexts/SearchContext";
 import {PUBLIC_API} from "@/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import "./Search.css";
+
+async function getLatestTrendResults(locale) {
+  const response = await axios.get(`/api/wikiTrends?lang=${locale}&limit=12`);
+  return response.data.map(d => ({
+    name: d.name,
+    profile_type: "person",
+    primary_meta: d.occupation,
+    slug: d.slug,
+  }));
+}
 
 const SearchComponent = () => {
   const params = useParams();
@@ -33,8 +42,54 @@ const SearchComponent = () => {
   const {isSearchVisible, setSearchVisible} = useSearchVisibility();
   const inputRef = useRef(null);
 
+  // Function to fetch latest trend data from API
+  const fetchLatestTrendData = useCallback(async () => {
+    try {
+      const results = await getLatestTrendResults(locale);
+      setShowTrending(true);
+      setResults(results);
+    } catch (error) {
+      console.error("Error fetching latest trend data:", error);
+      setResults([]);
+    }
+  }, [locale]);
+
+  // Function to fetch data from API
+  const fetchData = useCallback(async query => {
+    if (!query || query.length < 3) {
+      fetchLatestTrendData();
+      return;
+    }
+    try {
+      setShowTrending(false);
+      const cleanedQuery = query.trim();
+      const response = await axios.get(
+        `${PUBLIC_API}/rpc/search_hybrid?q=${cleanedQuery}&lim=50`,
+      );
+      setResults(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setResults([]);
+    }
+  }, [fetchLatestTrendData]);
+
   useEffect(() => {
-    fetchLatestTrendData();
+    let cancelled = false;
+    getLatestTrendResults(locale)
+      .then(results => {
+        if (cancelled) return;
+        setShowTrending(true);
+        setResults(results);
+      })
+      .catch(error => {
+        if (cancelled) return;
+        console.error("Error fetching latest trend data:", error);
+        setResults([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [locale]);
 
   useEffect(() => {
@@ -53,7 +108,7 @@ const SearchComponent = () => {
     }, 800);
 
     return () => clearTimeout(timeout);
-  }, [inputValue]);
+  }, [inputValue, fetchData]);
 
   useEffect(() => {
     if (!isSearchVisible || !results || !results.length) return;
@@ -74,47 +129,10 @@ const SearchComponent = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [results, activeIndex, isSearchVisible]);
+  }, [results, activeIndex, isSearchVisible, locale]);
 
   const handleChange = e => {
     setInputValue(e.target.value);
-  };
-
-  // Function to fetch data from API
-  const fetchData = async query => {
-    if (!query || query.length < 3) {
-      fetchLatestTrendData();
-      return;
-    }
-    try {
-      setShowTrending(false);
-      const cleanedQuery = trim(query);
-      const response = await axios.get(
-        `${PUBLIC_API}/rpc/search_hybrid?q=${cleanedQuery}&lim=50`,
-      );
-      setResults(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setResults([]);
-    }
-  };
-
-  // Function to fetch latest trend data from API
-  const fetchLatestTrendData = async query => {
-    try {
-      const response = await axios.get(`/api/wikiTrends?lang=${locale}&limit=12`);
-      const results = response.data.map(d => ({
-        name: d.name,
-        profile_type: "person",
-        primary_meta: d.occupation,
-        slug: d.slug,
-      }));
-      setShowTrending(true);
-      setResults(results);
-    } catch (error) {
-      console.error("Error fetching latest trend data:", error);
-      setResults([]);
-    }
   };
 
   if (!isSearchVisible) return null;

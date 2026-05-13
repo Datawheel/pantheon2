@@ -1,7 +1,5 @@
-import {Suspense} from "react";
 import {max as D3Max, min as D3Min} from "d3-array";
 import dayjs from "dayjs";
-import HeaderLine from "./HeaderLine";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
@@ -55,11 +53,6 @@ export default function Header({country, wikiPageViews}) {
         <p className="top-desc">Cultural Production in</p>
         <h2 className="profile-type">Present Day</h2>
         <h1 className="profile-name">{country.country}</h1>
-        <pre>
-          <Suspense fallback={<div>Loading...</div>}>
-            <HeaderLine pageViewData={pageViewData} />
-          </Suspense>
-        </pre>
       </div>
       <div className="mouse">
         <span className="mouse-scroll"></span>

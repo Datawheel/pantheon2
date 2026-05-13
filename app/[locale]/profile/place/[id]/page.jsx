@@ -11,7 +11,6 @@ import {
   NUM_RANKINGS_PRE,
   NUM_RANKINGS_POST,
 } from "../../../../../components/utils/consts";
-import OccupationTrends from "../../../../../components/place/sections/OccupationTrends";
 import Lifespans from "../../../../../components/place/sections/Lifespans";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
@@ -23,11 +22,13 @@ async function getWikiSummary(placeName) {
       `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(placeName)}`,
       {
         headers: {
-          "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-          "Api-User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+          "User-Agent":
+            "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+          "Api-User-Agent":
+            "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
         },
         next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-      }
+      },
     );
     if (!res.ok) {
       console.error(`[getWikiSummary] HTTP ${res.status} for: ${placeName}`);
@@ -35,7 +36,9 @@ async function getWikiSummary(placeName) {
     }
     const text = await res.text();
     if (text.startsWith("<")) {
-      console.error(`[getWikiSummary] Got HTML instead of JSON for: ${placeName}`);
+      console.error(
+        `[getWikiSummary] Got HTML instead of JSON for: ${placeName}`,
+      );
       return null;
     }
     return JSON.parse(text);
@@ -48,17 +51,22 @@ async function getWikiSummary(placeName) {
 async function getWikiPageViews(placeName) {
   const dateobj = new Date();
   const year = dateobj.getFullYear();
-  const month = `${dateobj.getMonth() + 1}`.replace(/(^|\D)(\d)(?!\d)/g, "$10$2");
+  const month = `${dateobj.getMonth() + 1}`.replace(
+    /(^|\D)(\d)(?!\d)/g,
+    "$10$2",
+  );
   try {
     const res = await fetch(
       `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/${encodeURIComponent(placeName)}/monthly/20110101/${year}${month}01`,
       {
         headers: {
-          "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
-          "Api-User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+          "User-Agent":
+            "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
+          "Api-User-Agent":
+            "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
         },
         next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-      }
+      },
     );
     if (!res.ok) {
       console.error(`[getWikiPageViews] HTTP ${res.status} for: ${placeName}`);
@@ -66,7 +74,9 @@ async function getWikiPageViews(placeName) {
     }
     const text = await res.text();
     if (text.startsWith("<")) {
-      console.error(`[getWikiPageViews] Got HTML instead of JSON for: ${placeName}`);
+      console.error(
+        `[getWikiPageViews] Got HTML instead of JSON for: ${placeName}`,
+      );
       return {items: null};
     }
     const data = JSON.parse(text);
@@ -86,12 +96,20 @@ async function getWikiPageViews(placeName) {
 
 async function getPlace(id) {
   const url = `${BASE_API}/place?slug=eq.${id}`;
-  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
+  return await safeFetchFirst(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    {},
+  );
 }
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getCountry(countryId) {
@@ -99,15 +117,26 @@ async function getCountry(countryId) {
     return {};
   }
   const url = `${BASE_API}/country?id=eq.${countryId}`;
-  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
+  return await safeFetchFirst(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    {},
+  );
 }
 
 async function getPlaceRanks(placeRankLow, placeRankHigh) {
-  if (!Number.isFinite(Number(placeRankLow)) || !Number.isFinite(Number(placeRankHigh))) {
+  if (
+    !Number.isFinite(Number(placeRankLow)) ||
+    !Number.isFinite(Number(placeRankHigh))
+  ) {
     return [];
   }
   const url = `${BASE_API}/place?born_rank_unique=gte.${placeRankLow}&born_rank_unique=lte.${placeRankHigh}&order=born_rank_unique`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleBornHere(placeId) {
@@ -115,7 +144,11 @@ async function getPeopleBornHere(placeId) {
     return [];
   }
   const url = `${BASE_API}/person?bplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleBornHereHpi(placeId) {
@@ -123,7 +156,11 @@ async function getPeopleBornHereHpi(placeId) {
     return [];
   }
   const url = `${BASE_API}/person_ranks?bplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleDiedHere(placeId) {
@@ -131,7 +168,11 @@ async function getPeopleDiedHere(placeId) {
     return [];
   }
   const url = `${BASE_API}/person?dplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleDiedHereHpi(placeId) {
@@ -139,7 +180,11 @@ async function getPeopleDiedHereHpi(placeId) {
     return [];
   }
   const url = `${BASE_API}/person_ranks?dplace_geonameid=eq.${placeId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 function formatNumber(num) {
@@ -180,7 +225,7 @@ export async function generateMetadata(props, parent) {
     {
       headers: {"Prefer": "count=exact"},
       next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
-    }
+    },
   );
   const contentRange = countRes.headers.get("content-range");
   let totalCount = 0;
@@ -205,10 +250,7 @@ export async function generateMetadata(props, parent) {
       title,
       description,
       type: "website",
-      images: [
-        `${baseUrl}/api/screenshot/place?id=${id}`,
-        ...previousImages,
-      ],
+      images: [`${baseUrl}/api/screenshot/place?id=${id}`, ...previousImages],
     },
     twitter: {
       card: "summary_large_image",
@@ -321,19 +363,6 @@ export default async function Page(props) {
       ),
     },
     {
-      slug: "occupational-trends",
-      title: "Occupational Trends",
-      content: (
-        <OccupationTrends
-          attrs={attrs}
-          place={place}
-          peopleBorn={peopleBornHere}
-          peopleDied={peopleDiedHere}
-          occupations={occupations}
-        />
-      ),
-    },
-    {
       slug: "places",
       title: "Places",
       content: (
@@ -356,7 +385,12 @@ export default async function Page(props) {
 
   return (
     <div className="person">
-      <Header place={place} country={country} wikiSummary={wikiSummary} wikiPageViews={wikiPageViewsData} />
+      <Header
+        place={place}
+        country={country}
+        wikiSummary={wikiSummary}
+        wikiPageViews={wikiPageViewsData}
+      />
       <div className="about-section">
         <ProfileNav sections={sections} />
         {placeRanks && placeRanks.length ? (
@@ -376,7 +410,7 @@ export default async function Page(props) {
           id: key + 1,
           slug: section.slug,
           title: section.title,
-        })
+        }),
       )}
     </div>
   );

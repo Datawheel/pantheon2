@@ -4,7 +4,6 @@ import Intro from "@/components/era/Intro";
 import Header from "@/components/era/Header";
 import PeopleRanking from "@/components/era/sections/PeopleRanking";
 import Occupations from "@/components/era/sections/Occupations";
-// import OccupationTrends from "@/components/era/sections/OccupationTrends";
 // import Places from "@/components/era/sections/Places";
 // import Lifespans from "@/components/era/sections/Lifespans";
 // import {
@@ -18,37 +17,65 @@ import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getEras() {
   const url = `${BASE_API}/era?order=start_year`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getEra(eraId) {
   const url = `${BASE_API}/era?slug=eq.${eraId}`;
-  return await safeFetchFirst(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, {});
+  return await safeFetchFirst(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    {},
+  );
 }
 
 async function getPeopleBornInEra(startYear, endYear) {
   const url = `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleBornInEraHpi(startYear, endYear) {
   const url = `${BASE_API}/person_ranks?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleDiedInEra(startYear, endYear) {
   const url = `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleDiedInEraHpi(startYear, endYear) {
   const url = `${BASE_API}/person_ranks?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 export async function generateMetadata(props, parent) {
@@ -144,17 +171,6 @@ export default async function Page(props) {
       ),
     },
     // {
-    //   slug: "occupations-trends",
-    //   title: "Occupations Over Time",
-    //   content: (
-    //     <OccupationTrends
-    //       peopleBorn={peopleBornInEra}
-    //       peopleDied={peopleDiedInEra}
-    //       attrs={attrs}
-    //     />
-    //   ),
-    // },
-    // {
     //   slug: "places",
     //   title: "Places",
     //   content: (
@@ -190,7 +206,7 @@ export default async function Page(props) {
           id: key + 1,
           slug: section.slug,
           title: section.title,
-        })
+        }),
       )}
     </div>
   );

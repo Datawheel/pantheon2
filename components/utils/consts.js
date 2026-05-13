@@ -1,7 +1,7 @@
 import {format} from "d3-format";
 import {timeFormat} from "d3-time-format";
 import {range} from "d3-array";
-import {closest} from "d3plus-common";
+import {closest} from "@/components/utils/math";
 
 export const PAGE_SIZE = 50;
 
