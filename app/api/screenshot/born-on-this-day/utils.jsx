@@ -1,5 +1,6 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
+import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {getSupportedLocale, isArabicLocale} from "../helpers/locale";
 
 // Localized date formatters
@@ -94,29 +95,6 @@ function formatDateForDisplay(month, day, locale = "en") {
   return formatter(monthNum, dayNum);
 }
 
-async function fetchPersonImage(id) {
-  try {
-    const response = await fetch(
-      `https://static.pantheon.world/profile/people/${id}.jpg`
-    );
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const imageData = await response.arrayBuffer();
-
-    if (imageData.byteLength === 0) {
-      return null;
-    }
-
-    return imageData;
-  } catch (error) {
-    console.error("Fetching image failed:", error);
-    return null;
-  }
-}
-
 async function fetchPublicAsset(requestUrl, assetPath) {
   const assetUrl = new URL(assetPath, requestUrl);
   const response = await fetch(assetUrl);
@@ -183,7 +161,11 @@ export async function getBornOnThisDayImageResponse({
   // Fetch images for top people
   const peopleWithImages = await Promise.all(
     topPeople.map(async person => {
-      const imageData = await fetchPersonImage(person.person_id);
+      const imageData = await fetchPersonImageWithFallback(
+        requestUrl,
+        person,
+        person.person_id
+      );
       return {
         ...person,
         imageData,

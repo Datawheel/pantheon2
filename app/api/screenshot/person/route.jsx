@@ -1,6 +1,7 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {COLORS_DOMAIN} from "../../../../components/utils/consts";
+import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {getSupportedLocale} from "../helpers/locale";
 
 export const runtime = "nodejs";
@@ -47,42 +48,6 @@ const DOMAIN_COLOR_ALIASES = {
   "business_and_law": "business-law",
   "business-and-law": "business-law",
 };
-
-async function fetchPersonImage(id) {
-  const imageUrl = `https://static.pantheon.world/profile/people/${id}.jpg`;
-
-  try {
-    const response = await fetch(imageUrl);
-
-    if (!response.ok) {
-      // Missing portraits are common; silently fall back to initials/avatar rendering.
-      if (response.status === 404) {
-        return null;
-      }
-
-      console.error(
-        "[screenshot-image-fetch]",
-        {route: "person", id, status: response.status, imageUrl},
-      );
-      return null;
-    }
-
-    const imageData = await response.arrayBuffer();
-
-    if (imageData.byteLength === 0) {
-      return null;
-    }
-
-    return imageData;
-  } catch (error) {
-    console.error(
-      "[screenshot-image-fetch]",
-      {route: "person", id, imageUrl},
-      error,
-    );
-    return null;
-  }
-}
 
 async function fetchPublicAsset(request, assetPath, asText = false) {
   const assetUrl = new URL(assetPath, request.url);
@@ -283,7 +248,7 @@ export async function GET(request) {
   ).toString();
 
   const res = await fetch(
-    `${BASE_API}/person?id=eq.${id}&select=name,translations,occupation(occupation,domain,domain_slug,requested_occupation:translations->${normalizedLocale}->>occupation,en_occupation:translations->en->>occupation),birthyear,deathyear`,
+    `${BASE_API}/person?id=eq.${id}&select=name,gender,translations,occupation(occupation,occupation_slug,domain,domain_slug,requested_occupation:translations->${normalizedLocale}->>occupation,en_occupation:translations->en->>occupation),birthyear,deathyear`,
     {cache: "no-store"},
   );
 
@@ -318,7 +283,7 @@ export async function GET(request) {
 
   let hasImage = false;
   let imageD;
-  await fetchPersonImage(id).then(imageData => {
+  await fetchPersonImageWithFallback(request.url, person, id).then(imageData => {
     if (imageData) {
       imageD = imageData;
       hasImage = true;
@@ -432,6 +397,7 @@ export async function GET(request) {
                 style={{
                   width: "100%",
                   height: "100%",
+                  borderRadius: "50%",
                   objectFit: "cover",
                 }}
               />

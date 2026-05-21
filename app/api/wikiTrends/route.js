@@ -310,7 +310,7 @@ export async function GET(request) {
       }
 
       trendingPeoplePantheonUrls.push(
-        `${process.env.BASE_API}/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,slug,occupation,bplace_country`
+        `${process.env.BASE_API}/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,slug,gender,occupation,bplace_country`
       );
     }
 

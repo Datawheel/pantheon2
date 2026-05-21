@@ -9,3 +9,11 @@
   height: 100%;
   width: 100%;
 }
+
+img.is-occupation-fallback {
+  background: transparent !important;
+  box-sizing: border-box;
+  object-fit: cover !important;
+  padding: 0 !important;
+  filter: grayscale(1) brightness(0.98) contrast(1.02);
+}

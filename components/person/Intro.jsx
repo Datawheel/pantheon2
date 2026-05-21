@@ -143,6 +143,7 @@ const Intro = ({
       <div className="intro-content">
         <div className="person-image-wrapper">
           <PersonImage
+            person={person}
             fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
             src={`/profile/people/${person.id}.jpg`}
             alt={`Photo of ${person.name}`}

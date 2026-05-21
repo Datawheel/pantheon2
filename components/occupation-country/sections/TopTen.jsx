@@ -76,6 +76,7 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
                     <span className="top-10-card-rank">#{index + 1}</span>
                     <div className="top-10-card-image">
                       <PersonImage
+                        person={person}
                         fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                         src={`/profile/people/${person.id}.jpg`}
                         alt={`Photo of ${person.name}`}

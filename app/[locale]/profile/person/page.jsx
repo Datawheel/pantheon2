@@ -154,6 +154,7 @@ export default async function Page(props) {
               >
                 <div className="sp-card-image">
                   <PersonImage
+                    person={person}
                     src={`/profile/people/${person.id}.jpg`}
                     alt={person.name}
                     fallbackSrc={PERSON_FALLBACK}
@@ -185,6 +186,7 @@ export default async function Page(props) {
                 >
                   <div className="sp-card-image">
                     <PersonImage
+                      person={person}
                       src={`/profile/people/${person.pid || person.id}.jpg`}
                       alt={person.title || person.name}
                       fallbackSrc={PERSON_FALLBACK}
@@ -217,6 +219,7 @@ export default async function Page(props) {
                     >
                       <div className="sp-domain-thumb">
                         <PersonImage
+                          person={person}
                           src={`/profile/people/${person.id}.jpg`}
                           alt={person.name}
                           fallbackSrc={PERSON_FALLBACK}

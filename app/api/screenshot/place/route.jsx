@@ -1,33 +1,11 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
+import {fetchPersonImageWithFallback} from "../helpers/personImage";
 
 export const runtime = "edge";
 
 function formatNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-async function fetchPersonImage(id) {
-  try {
-    const response = await fetch(
-      `https://static.pantheon.world/profile/people/${id}.jpg`
-    );
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const imageData = await response.arrayBuffer();
-
-    if (imageData.byteLength === 0) {
-      return null;
-    }
-
-    return imageData;
-  } catch (error) {
-    console.error("Fetching image failed:", error);
-    return null;
-  }
 }
 
 async function fetchPublicAsset(request, assetPath) {
@@ -97,7 +75,7 @@ export async function GET(request) {
   // Fetch top people and count in parallel
   const [topPeopleRes, countRes] = await Promise.all([
     fetch(
-      `${BASE_API}/person_ranks?bplace_geonameid=eq.${place.id}&order=hpi.desc.nullslast&select=id,name&limit=10`
+      `${BASE_API}/person_ranks?bplace_geonameid=eq.${place.id}&order=hpi.desc.nullslast&select=id,name,gender,occupation&limit=10`
     ),
     fetch(
       `${BASE_API}/person_ranks?bplace_geonameid=eq.${place.id}&select=id`,
@@ -120,7 +98,7 @@ export async function GET(request) {
   // Fetch images for top people
   const peopleWithImages = await Promise.all(
     topPeople.map(async person => {
-      const imageData = await fetchPersonImage(person.id);
+      const imageData = await fetchPersonImageWithFallback(request.url, person);
       return {
         ...person,
         imageData,

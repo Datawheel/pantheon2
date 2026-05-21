@@ -37,7 +37,7 @@ export default async function Home(props) {
     });
 
   const recentPassings = await fetch(
-    `https://api.pantheon.world/person?alive=is.false&deathdate=gte.${date30DaysAgo}&select=wd_id,name,slug,birthyear,deathyear,id&order=deathdate.desc&limit=16`,
+    `https://api.pantheon.world/person?alive=is.false&deathdate=gte.${date30DaysAgo}&select=wd_id,name,slug,birthyear,deathyear,id,gender,occupation(occupation,occupation_slug)&order=deathdate.desc&limit=16`,
     {
       next: {revalidate: 3600 * 12}, // Cache for 12 hours
     },
@@ -50,7 +50,7 @@ export default async function Home(props) {
     });
 
   const recentlyAdded = await fetch(
-    `${apiBaseUrl}/person_hpi?created_at=gte.${date30DaysAgo}&select=created_at,person:person_id(wd_id,name,slug,birthyear,deathyear,id)&order=created_at.desc&limit=16`,
+    `${apiBaseUrl}/person_hpi?created_at=gte.${date30DaysAgo}&select=created_at,person:person_id(wd_id,name,slug,birthyear,deathyear,id,gender,occupation(occupation,occupation_slug))&order=created_at.desc&limit=16`,
     {
       next: {revalidate: 3600 * 12}, // Cache for 12 hours
     },

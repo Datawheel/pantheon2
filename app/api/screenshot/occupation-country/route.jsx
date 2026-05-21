@@ -3,6 +3,7 @@ import {NextResponse} from "next/server";
 import {plural} from "pluralize";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
 import {getTranslations} from "@/app/translations";
+import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {
   DEFAULT_LOCALE,
   getSupportedLocale,
@@ -16,29 +17,6 @@ function formatNumber(num, locale = "en") {
     return new Intl.NumberFormat(locale).format(num);
   } catch (e) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-}
-
-async function fetchPersonImage(id) {
-  try {
-    const response = await fetch(
-      `https://static.pantheon.world/profile/people/${id}.jpg`,
-    );
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const imageData = await response.arrayBuffer();
-
-    if (imageData.byteLength === 0) {
-      return null;
-    }
-
-    return imageData;
-  } catch (error) {
-    console.error("Fetching image failed:", error);
-    return null;
   }
 }
 
@@ -108,7 +86,7 @@ export async function GET(request) {
   // Fetch top people and total count in parallel
   const [topPeopleRes, countRes] = await Promise.all([
     fetch(
-      `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,name&limit=16`,
+      `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,name,gender&limit=16`,
     ),
     fetch(
       `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&bplace_country=eq.${countryId}&select=id`,
@@ -131,7 +109,10 @@ export async function GET(request) {
   // Fetch images for top people
   const peopleWithImages = await Promise.all(
     topPeople.map(async person => {
-      const imageData = await fetchPersonImage(person.id);
+      const imageData = await fetchPersonImageWithFallback(request.url, {
+        ...person,
+        occupation,
+      });
       return {
         ...person,
         imageData,

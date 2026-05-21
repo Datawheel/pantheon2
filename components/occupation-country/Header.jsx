@@ -1,4 +1,5 @@
 import {plural} from "pluralize";
+import PersonImage from "@/components/utils/PersonImage";
 import {COLORS_DOMAIN} from "../utils/consts";
 import {getTranslations} from "@/app/translations";
 import {DEFAULT_LOCALE} from "@/app/locales";
@@ -24,17 +25,23 @@ export default function Header({occupation, country, people, locale = DEFAULT_LO
         <div className="bg-img-mask profession">
           <div className="bg-img bg-img-t">
             {people.slice(0, 4).map(p => (
-              <img
+              <PersonImage
                 key={p.id}
-                src={`https://static.pantheon.world/profile/people/${p.id}.jpg`}
+                person={p}
+                src={`/profile/people/${p.id}.jpg`}
+                alt={p.name || ""}
+                wrap={false}
               />
             ))}
           </div>
           <div className="bg-img bg-img-b">
             {people.slice(5, 9).map(p => (
-              <img
+              <PersonImage
                 key={p.id}
-                src={`https://static.pantheon.world/profile/people/${p.id}.jpg`}
+                person={p}
+                src={`/profile/people/${p.id}.jpg`}
+                alt={p.name || ""}
+                wrap={false}
               />
             ))}
           </div>

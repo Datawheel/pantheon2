@@ -29,6 +29,7 @@ const PeopleGrid = ({bios, date, lang = "en"}) => {
           >
             <div className="birthday-person-card__image">
               <PersonImage
+                person={profile}
                 src={`/profile/people/${profile.id}.jpg`}
                 alt={`Photo of ${profile.name}`}
                 fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

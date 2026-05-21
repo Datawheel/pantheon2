@@ -58,6 +58,7 @@ const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = nul
                   <TrendIndicator rankDelta={profile.rank_delta} />
                 ) : null}
                 <PersonImage
+                  person={profile}
                   src={`/profile/people/${profile.pid || profile.id}.jpg`}
                   alt={`Photo of ${profile.title || profile.name}`}
                   fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

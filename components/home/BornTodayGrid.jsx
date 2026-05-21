@@ -81,6 +81,7 @@ const BornTodayGrid = ({
             <a href={`${localePrefix}/profile/person/${person.slug}`}>
               <div className="grid-box-bg-container">
                 <PersonImage
+                  person={person}
                   src={`/profile/people/${person.id || person.person_id}.jpg`}
                   alt={`Photo of ${person.name}`}
                   fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

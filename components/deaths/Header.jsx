@@ -1,6 +1,7 @@
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 import {plural} from "pluralize";
+import PersonImage from "@/components/utils/PersonImage";
 
 export default function Header({
   year,
@@ -24,9 +25,12 @@ export default function Header({
               .filter(p => p.gender === "M")
               .slice(0, 4)
               .map(p => (
-                <img
+                <PersonImage
                   key={p.id}
-                  src={`https://static.pantheon.world/profile/people/${p.id}.jpg`}
+                  person={p}
+                  src={`/profile/people/${p.id}.jpg`}
+                  alt={p.name || ""}
+                  wrap={false}
                 />
               ))}
           </div>
@@ -35,9 +39,12 @@ export default function Header({
               .filter(p => p.gender === "F")
               .slice(0, 4)
               .map(p => (
-                <img
+                <PersonImage
                   key={p.id}
-                  src={`https://static.pantheon.world/profile/people/${p.id}.jpg`}
+                  person={p}
+                  src={`/profile/people/${p.id}.jpg`}
+                  alt={p.name || ""}
+                  wrap={false}
                 />
               ))}
           </div>

@@ -217,6 +217,7 @@ export default function MonthlyEdition({edition, locale}) {
                     <div className="monthly-mover-image">
                       <Link href={`${localePrefix}/profile/person/${mover.slug}`}>
                         <PersonImage
+                          person={mover}
                           src={
                             mover.wpId
                               ? `/profile/people/${mover.wpId}.jpg`
@@ -254,6 +255,7 @@ export default function MonthlyEdition({edition, locale}) {
                     <div className="monthly-mover-image">
                       <Link href={`${localePrefix}/profile/person/${mover.slug}`}>
                         <PersonImage
+                          person={mover}
                           src={
                             mover.wpId
                               ? `/profile/people/${mover.wpId}.jpg`
@@ -354,6 +356,7 @@ export default function MonthlyEdition({edition, locale}) {
                       <Link href={`${localePrefix}/profile/person/${row.slug}`}>
                         <span className="monthly-table-person-cell">
                           <PersonImage
+                            person={row}
                             src={
                               row.wpId
                                 ? `/profile/people/${row.wpId}.jpg`

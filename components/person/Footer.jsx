@@ -31,12 +31,12 @@ async function getWikiRelatedPeople(personId) {
 
     const idQuery = related.map(r => `id.eq.${r.related_id}`).join(",");
     let peopleRes = await fetch(
-      `${BASE_API}/person?or=(${idQuery})&select=id,birthyear,name,slug,description,occupation`,
+      `${BASE_API}/person?or=(${idQuery})&select=id,birthyear,name,slug,description,gender,occupation`,
     );
     if (!peopleRes.ok) {
       // Fall back for environments where the person view does not expose description.
       peopleRes = await fetch(
-        `${BASE_API}/person?or=(${idQuery})&select=id,birthyear,name,slug,occupation`,
+        `${BASE_API}/person?or=(${idQuery})&select=id,birthyear,name,slug,gender,occupation`,
       );
     }
     if (!peopleRes.ok) {
@@ -144,6 +144,7 @@ export default async function Footer({person, personRanks}) {
                 href={`/profile/person/${belowMe.slug}`}
               >
                 <PersonImage
+                  person={belowMe}
                   src={`/profile/people/${belowMe.id}.jpg`}
                   alt={belowMe.name}
                   fallbackSrc={PERSON_FALLBACK}
@@ -164,6 +165,7 @@ export default async function Footer({person, personRanks}) {
                 href={`/profile/person/${aboveMe.slug}`}
               >
                 <PersonImage
+                  person={aboveMe}
                   src={`/profile/people/${aboveMe.id}.jpg`}
                   alt={aboveMe.name}
                   fallbackSrc={PERSON_FALLBACK}
@@ -230,6 +232,7 @@ export default async function Footer({person, personRanks}) {
                     href={`/profile/person/${relatedBio.slug}`}
                   >
                     <PersonImage
+                      person={relatedBio}
                       src={`/profile/people/${relatedBio.id}.jpg`}
                       alt={relatedBio.name}
                       fallbackSrc={PERSON_FALLBACK}

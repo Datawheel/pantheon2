@@ -1,5 +1,6 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
+import {fetchPersonImageWithFallback} from "../helpers/personImage";
 
 export const runtime = "edge";
 
@@ -12,29 +13,6 @@ async function fetchPublicAsset(request, assetPath) {
   }
 
   return response.arrayBuffer();
-}
-
-async function fetchPersonImage(id) {
-  try {
-    const response = await fetch(
-      `https://static.pantheon.world/profile/people/${id}.jpg`
-    );
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const imageData = await response.arrayBuffer();
-
-    if (imageData.byteLength === 0) {
-      return null;
-    }
-
-    return imageData;
-  } catch (error) {
-    console.error("Fetching image failed:", error);
-    return null;
-  }
 }
 
 export async function GET(request) {
@@ -64,7 +42,7 @@ export async function GET(request) {
   // Fetch people who died this year
   const [peopleDiedThisYearAttrs, peopleDiedThisYearHpi] = await Promise.all([
     fetch(
-      `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=name,slug,id,gender&order=deathdate.asc`
+      `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=name,slug,id,gender,occupation(occupation,occupation_slug)&order=deathdate.asc`
     ).then(res => res.json()),
     fetch(
       `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi`
@@ -87,7 +65,7 @@ export async function GET(request) {
   // Fetch images for top people
   const peopleWithImages = await Promise.all(
     peopleDiedThisYear.map(async person => {
-      const imageData = await fetchPersonImage(person.id);
+      const imageData = await fetchPersonImageWithFallback(request.url, person);
       return {
         ...person,
         imageData,

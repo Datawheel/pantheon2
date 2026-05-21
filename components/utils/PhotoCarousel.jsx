@@ -170,6 +170,7 @@ export default function PhotoCarousel({
               >
                 <Link href={`${localePrefix}/profile/person/${person.slug}/`}>
                   <PersonImage
+                    person={person}
                     src={`/profile/people/${person.id}.jpg`}
                     alt={`Photo of ${person.name}`}
                     fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

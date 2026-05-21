@@ -105,6 +105,7 @@ export default function BirthDecades({
                     title={person.name}
                   >
                     <PersonImage
+                      person={person}
                       src={`/profile/people/${person.id}.jpg`}
                       alt={person.name}
                       fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

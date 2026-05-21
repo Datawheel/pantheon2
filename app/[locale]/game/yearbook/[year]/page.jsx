@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {FORMATTERS} from "@/components/utils/consts";
+import PersonImage from "@/components/utils/PersonImage";
 import {toTitleCase} from "@/components/utils/vizHelpers";
 import YearbookSidebar from "@/components/games/YearbookSidebar";
 import "../../../../../components/games/Yearbook.css";
@@ -65,9 +66,11 @@ export default async function Page(props) {
                     </h2>
                   </div>
                   <div className="portrait">
-                    <img
-                      src={`https://static.pantheon.world/profile/people/${topPersonF.id}.jpg`}
+                    <PersonImage
+                      person={topPersonF}
+                      src={`/profile/people/${topPersonF.id}.jpg`}
                       alt={`Yearbook image of ${topPersonF.name}`}
+                      wrap={false}
                     />
                     <div className="shadow"></div>
                   </div>
@@ -76,9 +79,11 @@ export default async function Page(props) {
               {topPersonM ? (
                 <div className="portrait-container">
                   <div className="portrait">
-                    <img
-                      src={`https://static.pantheon.world/profile/people/${topPersonM.id}.jpg`}
+                    <PersonImage
+                      person={topPersonM}
+                      src={`/profile/people/${topPersonM.id}.jpg`}
                       alt={`Yearbook image of ${topPersonM.name}`}
+                      wrap={false}
                     />
                     <div className="shadow"></div>
                   </div>
@@ -100,9 +105,11 @@ export default async function Page(props) {
                     href={`/profile/person/${person.slug}`}
                     className="grid-portrait-container"
                   >
-                    <img
-                      src={`https://static.pantheon.world/profile/people/${person.id}.jpg`}
-                      // onError={(evt) => (evt.target.style.display = "none")}
+                    <PersonImage
+                      person={person}
+                      src={`/profile/people/${person.id}.jpg`}
+                      alt={person.name || ""}
+                      wrap={false}
                     />
                   </Link>
                   <span>

@@ -93,6 +93,7 @@ export default async function DeathsByMonth({year, people, lang = "en"}) {
                   >
                     <div className="image-column">
                       <PersonImage
+                        person={person}
                         src={`/profile/people/${person.pid || person.id}.jpg`}
                         alt={`Photo of ${person.name}`}
                         fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

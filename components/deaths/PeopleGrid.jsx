@@ -22,6 +22,7 @@ const PeopleGrid = ({bios, occupation, year, lang = "en"}) => {
         >
           <div className="person-card__image">
             <PersonImage
+              person={profile}
               src={`/profile/people/${profile.pid || profile.id}.jpg`}
               alt={`Photo of ${profile.name}`}
               fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

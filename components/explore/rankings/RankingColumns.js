@@ -43,6 +43,7 @@ const getColumns = (show, nesting, countOffset, options = {}) => {
               accessorKey: "id",
               cell: info => (
                 <PersonImage
+                  person={info.row.original}
                   className="ranking-thumbnail"
                   src={`/profile/people/${info.getValue()}.jpg`}
                   fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

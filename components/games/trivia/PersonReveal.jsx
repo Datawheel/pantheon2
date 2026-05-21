@@ -1,10 +1,11 @@
+import PersonImage from "@/components/utils/PersonImage";
+
 const PersonReveal = ({question, correct, onNext}) => {
   const {explanation, personSlug, personId, personName} = question;
 
   const photoSrc = personId
     ? `https://static.pantheon.world/profile/people/${personId}.jpg`
     : null;
-  const fallbackSrc = "/images/icons/icon-person.svg";
 
   return (
     <div className={`person-reveal ${correct ? "reveal-correct-bg" : "reveal-incorrect-bg"}`}>
@@ -16,11 +17,12 @@ const PersonReveal = ({question, correct, onNext}) => {
       {/* Large portrait */}
       {photoSrc && (
         <div className="reveal-portrait-frame">
-          <img
+          <PersonImage
+            person={question}
             src={photoSrc}
             alt={personName || ""}
             className="reveal-portrait"
-            onError={e => { e.target.onerror = null; e.target.src = fallbackSrc; }}
+            wrap={false}
           />
         </div>
       )}

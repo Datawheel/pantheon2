@@ -113,6 +113,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
           <div className="mobile-card-thumb">
             <a href={`${localePrefix}/profile/person/${person.slug}`} onClick={e => e.stopPropagation()}>
               <PersonImage
+                person={person}
                 src={`/profile/people/${person.pid || person.id}.jpg`}
                 alt={`Photo of ${person.localized_name || person.name}`}
                 fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
@@ -190,6 +191,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
           <div className="trending-news-image-container">
             <a href={`${localePrefix}/profile/person/${person.slug}`}>
               <PersonImage
+                person={person}
                 src={`/profile/people/${person.pid || person.id}.jpg`}
                 alt={`Photo of ${person.localized_name || person.name}`}
                 fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"

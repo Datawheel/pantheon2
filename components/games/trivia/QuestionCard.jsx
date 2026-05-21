@@ -1,5 +1,6 @@
+import PersonImage from "@/components/utils/PersonImage";
+
 const PERSON_CDN = "https://static.pantheon.world/profile/people";
-const FALLBACK_IMG = "/images/icons/icon-person.svg";
 
 function personImgUrl(id) {
   return `${PERSON_CDN}/${id}.jpg`;
@@ -32,13 +33,11 @@ const QuestionCard = ({question, children}) => {
           <div className="question-photos-grid">
             {personImages.map((p, i) => (
               <div key={i} className="question-photo-mini">
-                <img
+                <PersonImage
+                  person={p}
                   src={personImgUrl(p.id)}
                   alt={p.name}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = FALLBACK_IMG;
-                  }}
+                  wrap={false}
                 />
                 <span className="photo-label">{p.name}</span>
               </div>
@@ -46,13 +45,11 @@ const QuestionCard = ({question, children}) => {
           </div>
         ) : singleSrc ? (
           <div className="question-photo">
-            <img
+            <PersonImage
+              person={question}
               src={singleSrc}
               alt="Question"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = FALLBACK_IMG;
-              }}
+              wrap={false}
             />
           </div>
         ) : null}

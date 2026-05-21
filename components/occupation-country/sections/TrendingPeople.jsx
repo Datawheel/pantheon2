@@ -284,6 +284,7 @@ export default async function TrendingPeople({
                   </div>
                   <div className="trending-person-image">
                     <PersonImage
+                      person={person}
                       fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                       src={`/profile/people/${person.id}.jpg`}
                       alt={`Photo of ${person.name}`}

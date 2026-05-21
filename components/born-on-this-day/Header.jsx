@@ -1,5 +1,6 @@
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
+import PersonImage from "@/components/utils/PersonImage";
 import {getTranslations} from "@/app/translations";
 
 export default function Header({date, displayDate, people, lang = "en"}) {
@@ -24,19 +25,23 @@ export default function Header({date, displayDate, people, lang = "en"}) {
         <div className="bg-img-mask profession">
           <div className="bg-img bg-img-t">
             {topRow.map(p => (
-              <img
+              <PersonImage
                 key={p.id}
-                src={`https://static.pantheon.world/profile/people/${p.id}.jpg`}
+                person={p}
+                src={`/profile/people/${p.id}.jpg`}
                 alt={p.name}
+                wrap={false}
               />
             ))}
           </div>
           <div className="bg-img bg-img-b">
             {bottomRow.map(p => (
-              <img
+              <PersonImage
                 key={p.id}
-                src={`https://static.pantheon.world/profile/people/${p.id}.jpg`}
+                person={p}
+                src={`/profile/people/${p.id}.jpg`}
                 alt={p.name}
+                wrap={false}
               />
             ))}
           </div>

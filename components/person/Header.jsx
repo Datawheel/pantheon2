@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import {useEffect, useMemo, useState} from "react";
 import SimpleTooltip from "../common/SimpleTooltip";
 import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
+import {getPersonFallbackSources} from "../utils/personImages";
 import {getLocalizedLanguageName} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import PageViewsChart from "./PageViewsChart";
@@ -134,7 +135,12 @@ export default function Header({
   const backgroundColor = person.occupation
       ? COLORS_DOMAIN[person.occupation.domain_slug]
       : "",
-    backgroundImage = `url('https://static.pantheon.world/profile/people/${person.wp_id}.jpg')`;
+    backgroundImage = [
+      `https://static.pantheon.world/profile/people/${person.wp_id}.jpg`,
+      ...getPersonFallbackSources(person),
+    ]
+      .map(src => `url('${src}')`)
+      .join(", ");
 
   return (
     <header className="hero">

@@ -1,66 +1,78 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
+import {
+  DEFAULT_PERSON_FALLBACK_SRC,
+  getPersonFallbackSources,
+  resolvePersonImageSrc,
+} from "./personImages";
 
-const STATIC_IMAGE_BASE = "https://static.pantheon.world";
+const PersonImage = ({
+  alt,
+  className,
+  fallbackSrc = DEFAULT_PERSON_FALLBACK_SRC,
+  person,
+  src,
+  wrap = true,
+  ...props
+}) => {
+  const resolvedSrc = resolvePersonImageSrc(src);
+  const fallbackSources = useMemo(
+    () => getPersonFallbackSources(person, fallbackSrc),
+    [fallbackSrc, person]
+  );
+  const [failedSources, setFailedSources] = useState([]);
+  const imgRef = useRef(null);
+  const candidates = useMemo(
+    () => Array.from(new Set([resolvedSrc, ...fallbackSources].filter(Boolean))),
+    [fallbackSources, resolvedSrc]
+  );
+  const imageSrc =
+    candidates.find(candidate => !failedSources.includes(candidate)) ||
+    candidates[candidates.length - 1] ||
+    "";
+  const isFallback = imageSrc !== resolvedSrc;
 
-function resolveSrc(src) {
-  if (!src) {
-    return "";
+  function markFailed(failedSrc) {
+    if (!failedSrc) return;
+    setFailedSources(prev =>
+      prev.includes(failedSrc) ? prev : [...prev, failedSrc]
+    );
   }
-
-  if (src.startsWith("http://") || src.startsWith("https://")) {
-    return src;
-  }
-
-  return `${STATIC_IMAGE_BASE}${src}`;
-}
-
-const PersonImage = ({alt, className, src, fallbackSrc}) => {
-  const imageRef = useRef(null);
-  const resolvedSrc = resolveSrc(src);
-  const resolvedFallbackSrc = resolveSrc(fallbackSrc);
-  const [imageSrc, setImageSrc] = useState(resolvedSrc || resolvedFallbackSrc);
-  const [isFallback, setIsFallback] = useState(!resolvedSrc && Boolean(resolvedFallbackSrc));
-
-  useEffect(() => {
-    setImageSrc(resolvedSrc || resolvedFallbackSrc);
-    setIsFallback(!resolvedSrc && Boolean(resolvedFallbackSrc));
-  }, [resolvedFallbackSrc, resolvedSrc]);
-
-  useEffect(() => {
-    const image = imageRef.current;
-    if (!image || !resolvedFallbackSrc || imageSrc !== resolvedSrc) {
-      return;
-    }
-
-    // If the original image already failed before hydration, swap it on mount.
-    if (image.complete && image.naturalWidth === 0) {
-      setImageSrc(resolvedFallbackSrc);
-      setIsFallback(true);
-    }
-  }, [imageSrc, resolvedFallbackSrc, resolvedSrc]);
 
   function handleError() {
-    if (!resolvedFallbackSrc || imageSrc === resolvedFallbackSrc) {
-      return;
-    }
-
-    setImageSrc(resolvedFallbackSrc);
-    setIsFallback(true);
+    markFailed(imageSrc);
   }
 
-  return (
-    <div className="image">
-      <img
-        ref={imageRef}
-        src={imageSrc}
-        className={`${className || ""}${isFallback ? `${className ? " " : ""}is-fallback` : ""}`}
-        alt={alt}
-        onError={handleError}
-      />
-    </div>
+  // Catch errors that fired before hydration: a browser that already
+  // finished loading a broken img has complete=true, naturalWidth=0.
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth === 0) {
+      markFailed(imageSrc);
+    }
+  }, [imageSrc]);
+
+  const classNames = [
+    className,
+    isFallback ? "is-fallback" : "",
+    imageSrc.includes("/images/fallback/") ? "is-occupation-fallback" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const img = (
+    <img
+      {...props}
+      ref={imgRef}
+      src={imageSrc}
+      className={classNames}
+      alt={alt}
+      onError={handleError}
+    />
   );
+
+  return wrap ? <div className="image">{img}</div> : img;
 };
 
 export default PersonImage;
