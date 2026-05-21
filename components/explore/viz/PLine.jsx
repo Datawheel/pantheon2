@@ -35,20 +35,31 @@ function axisTooltip(params) {
   return html;
 }
 
-export default function PLine({data, occupations, show, yearType}) {
+export default function PLine({
+  data,
+  occupations,
+  show,
+  yearType,
+  years,
+  scale,
+  binCount,
+}) {
   const chartRef = useRef(null);
 
   const timeSeries = useMemo(() => {
     const {rows, levels} = buildExploreRows(data, occupations, show, yearType);
-    return buildTimeSeries(rows, levels, yearType);
-  }, [data, occupations, show, yearType]);
+    return buildTimeSeries(rows, levels, yearType, {
+      yearRange: years,
+      scale,
+      binCount,
+    });
+  }, [data, occupations, show, yearType, years, scale, binCount]);
 
   useEffect(() => {
     const element = chartRef.current;
     if (!element || !timeSeries.series.length) return;
 
     const chart = initEChart(element);
-    const tickSet = new Set(timeSeries.ticks);
     const option = {
       color: timeSeries.series.map(series => series.color),
       tooltip: {
@@ -60,7 +71,7 @@ export default function PLine({data, occupations, show, yearType}) {
       grid: {
         top: 18,
         right: 24,
-        bottom: 38,
+        bottom: 54,
         left: 58,
         containLabel: false,
       },
@@ -70,9 +81,11 @@ export default function PLine({data, occupations, show, yearType}) {
         data: timeSeries.labels,
         axisTick: {alignWithLabel: true},
         axisLabel: {
+          interval: 0,
+          rotate: 45,
+          fontSize: 10,
           color: "#9E978D",
           fontFamily: "Amiko, Arial, sans-serif",
-          formatter: (value, index) => (tickSet.has(index) ? value : ""),
         },
         axisLine: {lineStyle: {color: "#D6D6D0"}},
       },

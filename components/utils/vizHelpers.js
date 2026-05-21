@@ -1,7 +1,11 @@
 import {COLORS_DOMAIN, FORMATTERS} from "./consts";
 import {extent, histogram, min, max, range} from "d3-array";
 
-export const calculateYearBucket = (data = [], accessor = d => d.birthyear) => {
+export const calculateYearBucket = (
+  data = [],
+  accessor = d => d.birthyear,
+  {buckets = 50} = {}
+) => {
   let [minYear, maxYear] = extent(data, accessor);
   const earlyYears = minYear < -500 ? minYear + 500 : 1;
   const laterYears = maxYear > 2000 ? maxYear - 2000 : 1;
@@ -14,7 +18,6 @@ export const calculateYearBucket = (data = [], accessor = d => d.birthyear) => {
     return y;
   };
   const years = data.map(d => maxYear - accessorClamp(d));
-  const buckets = 50;
 
   const linspace = (min, max, num) => {
     const r = range(0, num, 1);
@@ -56,6 +59,77 @@ export const calculateYearBucket = (data = [], accessor = d => d.birthyear) => {
     );
 
   return [labels, ticks];
+};
+
+// Linear (equal-width) year buckets — intuitive raw-count binning, ideal for
+// modern ranges. Returns [labels, ticks] matching calculateYearBucket's shape
+// and tags each row with `yearBucket` (index) and `yearWeight` (1 = raw count).
+export const calculateLinearYearBuckets = (
+  data = [],
+  accessor = d => d.birthyear,
+  binCount = 10,
+  domain = null
+) => {
+  const bins = Math.max(1, Math.round(binCount));
+  let minYear;
+  let maxYear;
+  if (
+    Array.isArray(domain) &&
+    Number.isFinite(domain[0]) &&
+    Number.isFinite(domain[1])
+  ) {
+    [minYear, maxYear] = domain[0] <= domain[1] ? domain : [domain[1], domain[0]];
+  } else {
+    [minYear, maxYear] = extent(data, accessor);
+  }
+  if (!Number.isFinite(minYear) || !Number.isFinite(maxYear)) {
+    return [[], []];
+  }
+  if (maxYear === minYear) maxYear = minYear + 1;
+
+  const binWidth = Math.max(1e-9, (maxYear - minYear) / bins);
+
+  data.forEach(d => {
+    let idx = Math.floor((accessor(d) - minYear) / binWidth);
+    if (idx < 0) idx = 0;
+    if (idx > bins - 1) idx = bins - 1;
+    d.yearBucket = `${idx}`;
+    d.yearWeight = 1;
+  });
+
+  const labels = range(0, bins, 1).map(i =>
+    FORMATTERS.year(Math.round(minYear + (i + 0.5) * binWidth))
+  );
+
+  // ~6 evenly spaced ticks, always including the first and last bin
+  const desired = Math.min(6, bins);
+  const ticks = [];
+  const step = desired > 1 ? (bins - 1) / (desired - 1) : 0;
+  for (let i = 0; i < desired; i += 1) {
+    ticks.push(Math.round(i * step));
+  }
+  if (bins > 0) ticks[ticks.length - 1] = bins - 1;
+
+  return [labels, Array.from(new Set(ticks)).sort((a, b) => a - b)];
+};
+
+// Auto-pick log vs linear from the chosen span; an explicit scale always wins.
+export const resolveTimeSeriesScale = (years, scale) => {
+  if (scale === "linear" || scale === "log") return scale;
+  if (!Array.isArray(years) || years.length < 2) return "linear";
+  const [start, end] = years[0] <= years[1] ? years : [years[1], years[0]];
+  return start < 1500 || end - start > 600 ? "log" : "linear";
+};
+
+// Sensible default number of year groupings for the chosen span/scale.
+export const autoBins = (years, scale) => {
+  const effectiveScale = resolveTimeSeriesScale(years, scale);
+  if (effectiveScale === "log") return 40;
+  const span =
+    Array.isArray(years) && years.length >= 2
+      ? Math.abs(years[1] - years[0])
+      : 0;
+  return Math.min(30, Math.max(6, Math.round(span / 10)));
 };
 
 export const groupBy = attrs => {

@@ -2,6 +2,7 @@
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import VizControl from "./VizControl";
+import StackedControl from "./StackedControl";
 import ShowControl from "./ShowControl";
 import GenderControl from "./GenderControl";
 import YearControl from "./YearControl";
@@ -12,7 +13,8 @@ import MetricCutoffControl from "./MetricCutoffControl";
 import OnlyShowNewControl from "./OnlyShowNewControl";
 
 export default function Controls({places, nestedOccupations}) {
-  const {page, show} = useSelector(state => state.explore);
+  const {page, show, viz} = useSelector(state => state.explore);
+  const isTimeSeries = viz === "stackedarea" || viz === "linechart";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleSidePanel = () => {
@@ -44,6 +46,12 @@ export default function Controls({places, nestedOccupations}) {
         {page === "viz" ? <VizControl /> : null}
         <ShowControl />
       </section>
+
+      {page === "viz" && isTimeSeries ? (
+        <section className="control-group stacked-options">
+          <StackedControl />
+        </section>
+      ) : null}
 
       <section className="control-group">
         <GenderControl />

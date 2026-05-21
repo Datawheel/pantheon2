@@ -19,7 +19,10 @@ const initialState = {
   birthMonth: null,
   birthDay: null,
   nameSearch: "",
-  viz: "treemap",
+  viz: "stackedarea",
+  tsScale: null, // time-series scale for stacked/line charts: null = auto, "linear" | "log"
+  tsBins: null, // number of year groupings: null = auto
+  stackedPercent: false, // stacked chart: show share (%) instead of counts
   value: 0,
   data: null,
   dataCount: null,
@@ -54,6 +57,9 @@ export const exploreSlice = createSlice({
     updateYears: (state, action) => {
       const newYears = action.payload;
       state.years = newYears;
+      // Re-derive the auto scale/bin defaults for the newly chosen span
+      state.tsScale = null;
+      state.tsBins = null;
     },
     updateGender: (state, action) => {
       state.gender = action.payload;
@@ -126,6 +132,15 @@ export const exploreSlice = createSlice({
       state.nameSearch = action.payload;
       state.dataPageIndex = 0;
     },
+    updateTsScale: (state, action) => {
+      state.tsScale = action.payload;
+    },
+    updateTsBins: (state, action) => {
+      state.tsBins = action.payload;
+    },
+    updateStackedPercent: (state, action) => {
+      state.stackedPercent = action.payload;
+    },
   },
 });
 
@@ -153,6 +168,9 @@ export const {
   updateBirthDay,
   clearBirthDate,
   updateNameSearch,
+  updateTsScale,
+  updateTsBins,
+  updateStackedPercent,
 } = exploreSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

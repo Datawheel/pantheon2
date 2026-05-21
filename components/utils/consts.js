@@ -25,6 +25,8 @@ export const LANGS_RANGE = range(15, 20)
   .concat(range(50, 100, 15))
   .concat(range(100, 225, 25));
 export const YEAR_RANGE = [-3501, 2025];
+// Default year range for the explore /viz page (modern era reads well with linear bins)
+export const VIZ_YEAR_RANGE = [1800, 2025];
 
 // for rankings pages
 export const RANKINGS_RESULTS_PER_PAGE = 50;

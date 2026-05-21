@@ -9,7 +9,17 @@ import "./Viz.css";
 
 export default function VizShell({occupations}) {
   const exploreState = useSelector(state => state.explore);
-  const {data, dataLoading, show, viz, yearType} = exploreState;
+  const {
+    data,
+    dataLoading,
+    show,
+    viz,
+    yearType,
+    years,
+    tsScale,
+    tsBins,
+    stackedPercent,
+  } = exploreState;
 
   if (dataLoading) {
     return (
@@ -44,7 +54,7 @@ export default function VizShell({occupations}) {
       MyViz = PMap;
       break;
     default:
-      MyViz = PTreemap;
+      MyViz = PStacked;
   }
 
   return (
@@ -55,6 +65,10 @@ export default function VizShell({occupations}) {
           show={show}
           occupations={occupations}
           yearType={yearType}
+          years={years}
+          scale={tsScale}
+          binCount={tsBins}
+          percent={stackedPercent}
         />
       ) : null}
     </div>

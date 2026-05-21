@@ -1,5 +1,10 @@
 import {COLORS_CONTINENT, COLORS_DOMAIN, FORMATTERS} from "../../utils/consts";
-import {calculateYearBucket} from "../../utils/vizHelpers";
+import {
+  autoBins,
+  calculateLinearYearBuckets,
+  calculateYearBucket,
+  resolveTimeSeriesScale,
+} from "../../utils/vizHelpers";
 
 export const EMPTY_COLOR = "#ccc";
 
@@ -305,19 +310,65 @@ export function legendItemsFromTree(treeData) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export function buildTimeSeries(rows, levels, yearType) {
+export function buildTimeSeries(rows, levels, yearType, options = {}) {
+  const {
+    yearRange = null,
+    scale = null,
+    binCount = null,
+    percent = false,
+  } = options;
+  const effectiveScale = resolveTimeSeriesScale(yearRange, scale);
+
   const bucketRows = rows
     .filter(row => hasYear(row, yearType))
     .map(row => ({...row}));
   if (!bucketRows.length) {
-    return {labels: [], ticks: [], series: [], legendItems: []};
+    return {
+      labels: [],
+      ticks: [],
+      series: [],
+      legendItems: [],
+      bucketCounts: [],
+      scale: effectiveScale,
+      binCount: 0,
+      percent,
+    };
   }
 
-  const [labels, ticks] = calculateYearBucket(bucketRows, row =>
-    Number(row[yearType])
-  );
+  const effectiveBins = binCount ?? autoBins(yearRange, effectiveScale);
+  const accessor = row => Number(row[yearType]);
+
+  // Trim the binning/axis domain to the years that actually contain data. The
+  // user may select up to e.g. 2025, but the most recent years are typically
+  // empty — binning across them produces near-empty trailing bins (a visual
+  // cliff, and noisy percentages). (Log binning already self-trims via extent.)
+  let dataMin = Infinity;
+  let dataMax = -Infinity;
+  for (const row of bucketRows) {
+    const year = accessor(row);
+    if (year < dataMin) dataMin = year;
+    if (year > dataMax) dataMax = year;
+  }
+  let domain = yearRange;
+  if (
+    Array.isArray(yearRange) &&
+    Number.isFinite(dataMin) &&
+    Number.isFinite(dataMax)
+  ) {
+    const lo = Math.max(Math.min(yearRange[0], yearRange[1]), dataMin);
+    const hi = Math.min(Math.max(yearRange[0], yearRange[1]), dataMax);
+    if (hi > lo) domain = [lo, hi];
+  }
+
+  const [labels, ticks] =
+    effectiveScale === "linear"
+      ? calculateLinearYearBuckets(bucketRows, accessor, effectiveBins, domain)
+      : calculateYearBucket(bucketRows, accessor, {buckets: effectiveBins});
+
   const seriesMap = new Map();
   const groupTotals = new Map();
+  const bucketCounts = Array(labels.length).fill(0); // raw people per bin
+  const bucketPlotted = Array(labels.length).fill(0); // plotted value per bin
 
   bucketRows.forEach(row => {
     const path = rowPath(row, levels);
@@ -336,19 +387,30 @@ export function buildTimeSeries(rows, levels, yearType) {
         groupColor: group.color,
         groupOrder: group.order,
         values: Array(labels.length).fill(0),
+        counts: Array(labels.length).fill(0),
         total: 0,
-        topPeople: [],
+        totalCount: 0,
+        // top people by HPI tracked per year bucket (for the hover tooltip)
+        bucketTopPeople: Array.from({length: labels.length}, () => []),
       };
       seriesMap.set(key, series);
     }
 
     const bucketIndex = Number(row.yearBucket);
     const value = row.yearWeight || 0;
-    if (Number.isFinite(bucketIndex) && bucketIndex >= 0) {
+    if (
+      Number.isFinite(bucketIndex) &&
+      bucketIndex >= 0 &&
+      bucketIndex < labels.length
+    ) {
       series.values[bucketIndex] += value;
+      series.counts[bucketIndex] += 1;
       series.total += value;
+      series.totalCount += 1;
+      bucketCounts[bucketIndex] += 1;
+      bucketPlotted[bucketIndex] += value;
       groupTotals.set(group.name, (groupTotals.get(group.name) || 0) + value);
-      trackTopPeople(series.topPeople, row);
+      trackTopPeople(series.bucketTopPeople[bucketIndex], row, 5);
     }
   });
 
@@ -360,6 +422,15 @@ export function buildTimeSeries(rows, levels, yearType) {
     a.name.localeCompare(b.name);
 
   const series = Array.from(seriesMap.values()).sort(compareSeries);
+
+  if (percent) {
+    series.forEach(item => {
+      item.values = item.values.map((value, index) =>
+        bucketPlotted[index] ? (value / bucketPlotted[index]) * 100 : 0
+      );
+    });
+  }
+
   const legendItems = Array.from(
     new Map(
       series.map(item => [
@@ -384,5 +455,9 @@ export function buildTimeSeries(rows, levels, yearType) {
     ticks,
     series,
     legendItems,
+    bucketCounts,
+    scale: effectiveScale,
+    binCount: effectiveBins,
+    percent,
   };
 }

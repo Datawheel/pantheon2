@@ -15,7 +15,7 @@ import {
 import {
   FORMATTERS,
 } from "../components/utils/consts";
-import {fetchDataAndDispatch} from "../components/utils/exploreHelpers";
+import {fetchDataAndDispatch, getQueryArgs} from "../components/utils/exploreHelpers";
 import {
   setFirstLoad,
   updateCountry,
@@ -32,6 +32,9 @@ import {
   updateOnlyShowNew,
   updateBirthMonth,
   updateBirthDay,
+  updateTsScale,
+  updateTsBins,
+  updateStackedPercent,
 } from "./exploreSlice";
 import "./Explore.css";
 import VizShell from "../components/explore/viz/VizShell";
@@ -81,6 +84,13 @@ function Explore({
     nameSearch: exploreState.nameSearch,
     dataPageIndex: exploreState.dataPageIndex,
     sorting: exploreState.sorting,
+    // Client-only viz options: read here so getQueryArgs keeps them in the URL,
+    // but intentionally excluded from the deps below so toggling them does NOT
+    // trigger a data refetch (they don't affect the API query).
+    tsScale: exploreState.tsScale,
+    tsBins: exploreState.tsBins,
+    stackedPercent: exploreState.stackedPercent,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [
     exploreState.birthDay,
     exploreState.birthMonth,
@@ -127,6 +137,9 @@ function Explore({
     dispatch(updateOnlyShowNew(initialState.onlyShowNew));
     dispatch(updateBirthMonth(initialState.birthMonth));
     dispatch(updateBirthDay(initialState.birthDay));
+    dispatch(updateTsScale(initialState.tsScale ?? null));
+    dispatch(updateTsBins(initialState.tsBins ?? null));
+    dispatch(updateStackedPercent(initialState.stackedPercent ?? false));
     dispatch(setFirstLoad());
     // This effect should only hydrate the initial store state from the URL once.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -171,6 +184,27 @@ function Explore({
     router,
     pathname,
     embed,
+  ]);
+
+  // Sync stacked/line client-only options (scale, bins, percent) to the URL
+  // without triggering a data refetch (they don't affect the API query).
+  useEffect(() => {
+    if (firstLoad || embed || pageType !== "viz") return;
+    if (typeof window === "undefined") return;
+    const queryStr = getQueryArgs(exploreState);
+    const nextUrl = `${pathname}${queryStr}`;
+    if (`${window.location.pathname}${window.location.search}` !== nextUrl) {
+      window.history.replaceState(window.history.state, "", nextUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    firstLoad,
+    embed,
+    pageType,
+    pathname,
+    exploreState.tsScale,
+    exploreState.tsBins,
+    exploreState.stackedPercent,
   ]);
 
   const metricSentence = buildRankingsMetricSentence(effectiveExploreState);

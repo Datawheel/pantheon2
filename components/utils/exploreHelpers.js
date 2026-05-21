@@ -7,7 +7,7 @@ import {
 import dataFormatter from "../../components/utils/dataFormatter";
 import {encodePostgrestList, encodePostgrestValue} from "@/app/utils/postgrest";
 
-const getQueryArgs = exploreState => {
+export const getQueryArgs = exploreState => {
   const {
     city,
     country,
@@ -24,6 +24,9 @@ const getQueryArgs = exploreState => {
     yearType,
     birthMonth,
     birthDay,
+    tsScale,
+    tsBins,
+    stackedPercent,
   } = exploreState;
   let queryStr =
     page === "viz"
@@ -33,6 +36,17 @@ const getQueryArgs = exploreState => {
       : `?show=${show.type}${
           show.depth === show.type ? "" : `|${show.depth}`
         }&years=${years}`;
+  if (page === "viz") {
+    if (stackedPercent) {
+      queryStr += "&pct=true";
+    }
+    if (tsScale) {
+      queryStr += `&scale=${tsScale}`;
+    }
+    if (tsBins) {
+      queryStr += `&bins=${tsBins}`;
+    }
+  }
   if (country !== "all") {
     queryStr += `&place=${country.toLowerCase()}`;
     if (city !== "all") {

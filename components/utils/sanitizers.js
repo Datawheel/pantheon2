@@ -1,4 +1,4 @@
-import {HPI_RANGE, LANGS_RANGE, YEAR_RANGE} from "@/components/utils/consts";
+import {HPI_RANGE, LANGS_RANGE, VIZ_YEAR_RANGE, YEAR_RANGE} from "@/components/utils/consts";
 import {closest} from "@/components/utils/math";
 
 const sanitizeYear = yr => {
@@ -14,7 +14,7 @@ const sanitizeYear = yr => {
 
 export const SANITIZERS = {
   vizType: viz => {
-    const supportedViz = ["treemap", "stackedarea", "linechart", "map"];
+    const supportedViz = ["stackedarea", "treemap", "linechart", "map"];
     const normalizedViz = `${viz || ""}`.toLowerCase();
     return supportedViz.includes(normalizedViz)
       ? normalizedViz
@@ -45,8 +45,9 @@ export const SANITIZERS = {
     if (!depth && type === "places") depth = "places";
     return {type, depth};
   },
-  years: yearStr => {
-    if (!yearStr || !yearStr.includes(",")) return YEAR_RANGE;
+  years: (yearStr, pageType) => {
+    const defaultRange = pageType === "viz" ? VIZ_YEAR_RANGE : YEAR_RANGE;
+    if (!yearStr || !yearStr.includes(",")) return defaultRange;
     return [
       sanitizeYear(yearStr.split(",")[0]),
       sanitizeYear(yearStr.split(",")[1]),
@@ -92,4 +93,16 @@ export const SANITIZERS = {
     const parsed = parseInt(day, 10);
     return parsed >= 1 && parsed <= 31 ? parsed : null;
   },
+  // Time-series scale for stacked/line charts; null = auto
+  tsScale: scale =>
+    scale === "linear" || scale === "log" ? scale : null,
+  // Number of year groupings for stacked/line charts; null = auto
+  tsBins: bins => {
+    if (!bins) return null;
+    const parsed = parseInt(bins, 10);
+    if (!Number.isFinite(parsed)) return null;
+    return Math.min(Math.max(parsed, 4), 50);
+  },
+  // Stacked-chart percentage toggle
+  stackedPercent: pct => pct === "true",
 };
