@@ -10,22 +10,37 @@ import HomeSearch from "@/components/home/HomeSearch";
 import RandomPersonButton from "@/components/person/RandomPersonButton";
 import "../../../../components/person/SelectPerson.css";
 
-const PUBLIC_API = process.env.NEXT_PUBLIC_BASE_API || "https://api.pantheon.world";
+const PUBLIC_API =
+  process.env.NEXT_PUBLIC_BASE_API || "https://api.pantheon.world";
 const PERSON_FALLBACK = "https://static.pantheon.world/icons/icon-person.svg";
 
 async function getFeaturedPeople() {
   // Top 24 people by HPI for the hero grid
-  const url = `${PUBLIC_API}/person_ranks?select=id,name,slug,birthyear,deathyear,occupation,gender&order=hpi.desc.nullslast&limit=24`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  const url = `${BASE_API}/person_ranks?select=id,name,slug,birthyear,deathyear,occupation,gender&order=hpi.desc.nullslast&limit=24`;
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
 }
 
 async function getPeopleByDomain() {
   // Get a sample from each major occupation domain for the browse section
   const domains = [
-    {domain: "SPORTS", occupations: "SOCCER PLAYER,BASKETBALL PLAYER,TENNIS PLAYER,CRICKET PLAYER"},
+    {
+      domain: "SPORTS",
+      occupations:
+        "SOCCER PLAYER,BASKETBALL PLAYER,TENNIS PLAYER,CRICKET PLAYER",
+    },
     {domain: "ARTS", occupations: "ACTOR,SINGER,FILM DIRECTOR,PAINTER"},
-    {domain: "SCIENCE", occupations: "PHYSICIST,CHEMIST,BIOLOGIST,MATHEMATICIAN"},
-    {domain: "POLITICS", occupations: "POLITICIAN,MILITARY PERSONNEL,NOBLEMAN,RELIGIOUS FIGURE"},
+    {
+      domain: "SCIENCE",
+      occupations: "PHYSICIST,CHEMIST,BIOLOGIST,MATHEMATICIAN",
+    },
+    {
+      domain: "POLITICS",
+      occupations: "POLITICIAN,MILITARY PERSONNEL,NOBLEMAN,RELIGIOUS FIGURE",
+    },
   ];
   const results = {};
   for (const {domain, occupations} of domains) {
@@ -33,8 +48,12 @@ async function getPeopleByDomain() {
       .split(",")
       .map(o => `occupation.eq.${encodePostgrestValue(o.trim())}`)
       .join(",");
-    const url = `${PUBLIC_API}/person_ranks?or=(${occList})&select=id,name,slug,birthyear,occupation&order=hpi.desc.nullslast&limit=8`;
-    results[domain] = await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+    const url = `${BASE_API}/person_ranks?or=(${occList})&select=id,name,slug,birthyear,occupation&order=hpi.desc.nullslast&limit=8`;
+    results[domain] = await safeFetchJson(
+      url,
+      {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+      [],
+    );
   }
   return results;
 }
@@ -42,11 +61,15 @@ async function getPeopleByDomain() {
 async function getRecentlyTrending(lang) {
   const baseUrl = process.env.URL || "https://pantheon.world";
   const url = `${baseUrl}/api/wikiTrends?lang=${lang}&limit=8`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
+  return await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
+    [],
+  );
 }
 
 async function getTotalCount() {
-  const url = `${PUBLIC_API}/person?select=id&limit=1`;
+  const url = `${BASE_API}/person?select=id&limit=1`;
   const res = await fetch(url, {
     headers: {Prefer: "count=estimated", Range: "0-0"},
     next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
@@ -57,7 +80,9 @@ async function getTotalCount() {
 
 export async function generateMetadata(props) {
   const params = await props.params;
-  const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
+  const locale = SUPPORTED_LOCALES.includes(params.locale)
+    ? params.locale
+    : DEFAULT_LOCALE;
   const t = getTranslations(locale);
   const sp = t.selectPerson;
 
@@ -67,7 +92,8 @@ export async function generateMetadata(props) {
   return {
     title,
     description,
-    keywords: "famous people, historical figures, biographies, notable people, wikipedia biographies, pantheon",
+    keywords:
+      "famous people, historical figures, biographies, notable people, wikipedia biographies, pantheon",
     openGraph: {
       title,
       description,
@@ -88,17 +114,20 @@ export async function generateMetadata(props) {
 
 export default async function Page(props) {
   const params = await props.params;
-  const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
+  const locale = SUPPORTED_LOCALES.includes(params.locale)
+    ? params.locale
+    : DEFAULT_LOCALE;
   const t = getTranslations(locale);
   const sp = t.selectPerson;
   const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
 
-  const [featuredPeople, domainPeople, trendingPeople, totalCount] = await Promise.all([
-    getFeaturedPeople(),
-    getPeopleByDomain(),
-    getRecentlyTrending(locale),
-    getTotalCount(),
-  ]);
+  const [featuredPeople, domainPeople, trendingPeople, totalCount] =
+    await Promise.all([
+      getFeaturedPeople(),
+      getPeopleByDomain(),
+      getRecentlyTrending(locale),
+      getTotalCount(),
+    ]);
 
   const domainLabels = {
     SPORTS: sp.domainSports,
@@ -121,7 +150,8 @@ export default async function Page(props) {
         <div className="sp-hero-content">
           <div className="sp-stats">
             <span className="sp-stat">
-              <strong>{totalCount.toLocaleString(locale)}</strong> {sp.statPeople}
+              <strong>{totalCount.toLocaleString(locale)}</strong>{" "}
+              {sp.statPeople}
             </span>
             <span className="sp-stat-divider" aria-hidden="true" />
             <span className="sp-stat">
@@ -134,7 +164,11 @@ export default async function Page(props) {
 
           <div className="sp-search-row">
             <HomeSearch lang={locale} />
-            <RandomPersonButton label={sp.randomPerson} locale={locale} totalCount={totalCount} />
+            <RandomPersonButton
+              label={sp.randomPerson}
+              locale={locale}
+              totalCount={totalCount}
+            />
           </div>
 
           <p className="sp-description">{sp.description}</p>
@@ -163,7 +197,8 @@ export default async function Page(props) {
                 <div className="sp-card-info">
                   <span className="sp-card-name">{person.name}</span>
                   <span className="sp-card-dates">
-                    {person.birthyear}{person.deathyear ? ` - ${person.deathyear}` : ""}
+                    {person.birthyear}
+                    {person.deathyear ? ` - ${person.deathyear}` : ""}
                   </span>
                 </div>
               </Link>
@@ -193,7 +228,9 @@ export default async function Page(props) {
                     />
                   </div>
                   <div className="sp-card-info">
-                    <span className="sp-card-name">{person.title || person.name}</span>
+                    <span className="sp-card-name">
+                      {person.title || person.name}
+                    </span>
                   </div>
                 </Link>
               ))}
@@ -240,13 +277,19 @@ export default async function Page(props) {
         <div className="sp-container">
           <h2 className="sp-section-title">{sp.exploreMore}</h2>
           <div className="sp-explore-links">
-            <Link href={`${localePrefix}/profile/select-occupation-country`} className="sp-explore-card">
+            <Link
+              href={`${localePrefix}/profile/select-occupation-country`}
+              className="sp-explore-card"
+            >
               <span className="sp-explore-label">{sp.byOccupationCountry}</span>
             </Link>
             <Link href={`${localePrefix}/rankings`} className="sp-explore-card">
               <span className="sp-explore-label">{sp.rankings}</span>
             </Link>
-            <Link href={`${localePrefix}/profile/era`} className="sp-explore-card">
+            <Link
+              href={`${localePrefix}/profile/era`}
+              className="sp-explore-card"
+            >
               <span className="sp-explore-label">{sp.byEra}</span>
             </Link>
           </div>
