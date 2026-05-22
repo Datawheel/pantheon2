@@ -10,8 +10,8 @@
     "pm2": "pm2"
   },
   "dependencies": {
-    "@chenglou/pretext": "^0.0.6",
-    "@next/third-parties": "16.2.3",
+    "@chenglou/pretext": "^0.0.7",
+    "@next/third-parties": "^16.2.6",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-table": "^8.21.3",
@@ -23,18 +23,18 @@
     "d3-geo": "^3.1.1",
     "d3-time-format": "^4.1.0",
     "dayjs": "^1.11.13",
-    "echarts": "^6.0.0",
+    "echarts": "^6.1.0",
     "lucide-react": "^1.8.0",
     "micromark": "^4.0.1",
-    "next": "16.2.3",
-    "next-intl": "^4.9.1",
+    "next": "^16.2.6",
+    "next-intl": "^4.12.0",
     "nextjs-toploader": "^1.6.12",
     "pluralize": "^8.0.0",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "react-redux": "^9.2.0",
     "topojson-client": "^3.1.0",
-    "uuid": "^9.0.1"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "eslint": "^9.39.4",

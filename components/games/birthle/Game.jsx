@@ -1,5 +1,5 @@
 "use client";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import React from "react";
 import Person from "./Person";
 import "./Game.css";
@@ -26,7 +26,9 @@ export default function Game({
   gameNumber,
   setCorrectPersons,
 }) {
-  const [rKey, setRKey] = useState(Math.random() * (15000 - 150) + 150);
+  const [rKey, setRKey] = useState(
+    () => Math.random() * (15000 - 150) + 150
+  );
 
   const onPersonClick = person => {
     if (personPos.get() < N_PERSONS) {
@@ -208,6 +210,7 @@ export default function Game({
                 <ul key="bGameDivPanelList" className="panel-list">
                   {persons.map(person => (
                     <Person
+                      key={person.id}
                       data={person}
                       onClick={() => onPersonClick(person)}
                       isBoardItem={false}
@@ -249,6 +252,7 @@ export default function Game({
                         } else {
                           return (
                             <Person
+                              key={`${i}-${j}-${cell.person.id}`}
                               data={cell.person}
                               isBoardItem={true}
                               dataKey={`${i}-${j}`}
