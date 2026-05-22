@@ -1,6 +1,6 @@
 "use client";
 
-import {useEffect, useMemo, useRef} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {initEChart} from "@/components/utils/echarts";
 import {FORMATTERS} from "../../utils/consts";
 import {
@@ -29,6 +29,11 @@ export default function PStacked({
   percent = false,
 }) {
   const chartRef = useRef(null);
+  const echartRef = useRef(null);
+  const focalRef = useRef(-1);
+  const soloRef = useRef(new Set());
+  // Soloed domains: empty = all visible; otherwise only these are shown.
+  const [soloDomains, setSoloDomains] = useState(() => new Set());
 
   const timeSeries = useMemo(() => {
     const {rows, levels} = buildExploreRows(data, occupations, show, yearType);
@@ -40,34 +45,86 @@ export default function PStacked({
     });
   }, [data, occupations, show, yearType, years, scale, binCount, percent]);
 
+  // Effective solo set: ignore any soloed domains that no longer exist after a
+  // data/legend change (empty = all visible). Mirror it to a ref for handlers.
+  const legendNames = useMemo(
+    () => new Set(timeSeries.legendItems.map(item => item.name)),
+    [timeSeries]
+  );
+  const effectiveSolo = useMemo(() => {
+    if (soloDomains.size === 0) return soloDomains;
+    return new Set([...soloDomains].filter(name => legendNames.has(name)));
+  }, [soloDomains, legendNames]);
+
+  useEffect(() => {
+    soloRef.current = effectiveSolo;
+  }, [effectiveSolo]);
+
   useEffect(() => {
     const element = chartRef.current;
     if (!element || !timeSeries.series.length) return;
 
     const chart = initEChart(element);
-    const {series: tsSeries, bucketCounts, labels} = timeSeries;
-    const focalRef = {current: -1};
+    echartRef.current = chart;
+    const {series: tsSeries, labels} = timeSeries;
+    const zeros = Array(labels.length).fill(0);
+    const isVisible = name =>
+      soloRef.current.size === 0 || soloRef.current.has(name);
 
     const tooltipFormatter = params => {
       const rows = Array.isArray(params) ? params : [params];
       if (!rows.length) return "";
       const bucket = rows[0].dataIndex;
-      const totalPeople = bucketCounts[bucket] || 0;
       const focal = focalRef.current;
-      const focalSeries = focal >= 0 ? tsSeries[focal] : null;
+      const focalSeries =
+        focal >= 0 && isVisible(tsSeries[focal].groupName)
+          ? tsSeries[focal]
+          : null;
 
-      // Card shell + header (calendar icon, year, total people)
+      const breakdown = tsSeries
+        .map((series, index) => ({
+          name: series.name,
+          color: series.color,
+          count: series.counts[bucket] || 0,
+          group: series.groupName,
+          index,
+        }))
+        .filter(item => item.count > 0 && isVisible(item.group))
+        .sort((a, b) => b.count - a.count);
+      const totalPeople = breakdown.reduce((sum, item) => sum + item.count, 0);
+
+      const compact =
+        typeof window !== "undefined" && window.innerWidth < 560;
+      const W = compact ? 210 : 264;
+      const PX = compact ? 12 : 16;
+      const RAD = compact ? 12 : 14;
+      const ICON = compact ? 28 : 34;
+      const YEAR_FS = compact ? 16 : 19;
+      const SUB_FS = compact ? 11.5 : 12.5;
+      const TITLE_FS = compact ? 15 : 17;
+      const NAME_FS = compact ? 12.5 : 13.5;
+      const YR_FS = compact ? 11.5 : 12.5;
+      const LABEL_FS = compact ? 10 : 11;
+      const ROW_FS = compact ? 11 : 12;
+      const DOT = compact ? 8 : 9;
+      const PEOPLE_MB = compact ? 5 : 7;
+      const ROW_MB = compact ? 6 : 8;
+      const MAX_ROWS = compact ? 8 : 12;
+      const MAX_PEOPLE = compact ? 4 : 5;
+
       let html =
-        '<div style="width:288px;box-sizing:border-box;background:#fff;' +
-        "border-radius:16px;box-shadow:0 10px 34px rgba(0,0,0,0.16);" +
+        `<div style="width:${W}px;max-width:calc(100vw - 20px);box-sizing:border-box;` +
+        `background:#fff;border-radius:${RAD}px;box-shadow:0 8px 28px rgba(0,0,0,0.16);` +
         'overflow:hidden;font-family:Amiko,Arial,sans-serif;color:#2a2a2a;">';
+
+      // Header
       html +=
-        '<div style="display:flex;align-items:center;gap:12px;padding:15px 18px 13px;">' +
-        '<div style="width:36px;height:36px;border-radius:50%;background:#f1efe9;' +
+        `<div style="display:flex;align-items:center;gap:10px;padding:${compact ? 10 : 12}px ${PX}px ${compact ? 8 : 10}px;">` +
+        `<div style="width:${ICON}px;height:${ICON}px;border-radius:50%;background:#f1efe9;` +
         `display:flex;align-items:center;justify-content:center;flex:0 0 auto;">${CAL_ICON}</div>` +
         "<div>" +
-        `<div style="font-size:21px;font-weight:700;line-height:1.05;color:#222;">${escapeHtml(rows[0].axisValue)}</div>` +
-        `<div style="font-size:13px;color:#8a857c;margin-top:2px;">${FORMATTERS.commas(totalPeople)} ${peopleWord(totalPeople)}</div>` +
+        `<div style="font-size:${YEAR_FS}px;font-weight:700;line-height:1.05;color:#222;">${escapeHtml(rows[0].axisValue)}</div>` +
+        `<div style="font-size:${SUB_FS}px;color:#8a857c;margin-top:1px;">${FORMATTERS.commas(totalPeople)} ${peopleWord(totalPeople)}</div>` +
         "</div></div>";
       html += '<div style="height:1px;background:#ededea;"></div>';
 
@@ -78,20 +135,23 @@ export default function PStacked({
           ? ` · ${Number(focalSeries.values[bucket] || 0).toFixed(1)}%`
           : "";
         html +=
-          '<div style="padding:15px 18px 0;">' +
-          `<div style="border-left:4px solid ${focalSeries.color};padding-left:12px;">` +
-          "<div style=\"font-size:21px;font-weight:700;letter-spacing:0.5px;line-height:1.05;" +
+          `<div style="padding:${compact ? 10 : 12}px ${PX}px 0;">` +
+          `<div style="border-left:${compact ? 3 : 4}px solid ${focalSeries.color};padding-left:${compact ? 9 : 11}px;">` +
+          `<div style="font-size:${TITLE_FS}px;font-weight:700;letter-spacing:0.4px;line-height:1.05;` +
           `text-transform:uppercase;color:${focalSeries.color};">${escapeHtml(focalSeries.name)}</div>` +
-          `<div style="font-size:13px;color:#8a857c;margin-top:3px;">${FORMATTERS.commas(count)} ${peopleWord(count)}${pct}</div>` +
+          `<div style="font-size:${SUB_FS}px;color:#8a857c;margin-top:2px;">${FORMATTERS.commas(count)} ${peopleWord(count)}${pct}</div>` +
           "</div></div>";
-        html += '<div style="height:1px;background:#ededea;margin:14px 18px 0;"></div>';
+        html += `<div style="height:1px;background:#ededea;margin:${compact ? 10 : 12}px ${PX}px 0;"></div>`;
 
-        const people = focalSeries.bucketTopPeople[bucket] || [];
+        const people = (focalSeries.bucketTopPeople[bucket] || []).slice(
+          0,
+          MAX_PEOPLE
+        );
         if (people.length) {
           html +=
-            '<div style="padding:13px 18px 0;">' +
-            '<div style="font-size:11px;letter-spacing:0.8px;color:#aaa49b;' +
-            'text-transform:uppercase;margin-bottom:9px;">Top Ranked People</div>';
+            `<div style="padding:${compact ? 9 : 11}px ${PX}px 0;">` +
+            `<div style="font-size:${LABEL_FS}px;letter-spacing:0.7px;color:#aaa49b;` +
+            `text-transform:uppercase;margin-bottom:${compact ? 6 : 8}px;">Top Ranked People</div>`;
           html += people
             .map(person => {
               const yr =
@@ -99,9 +159,9 @@ export default function PStacked({
                   ? `b.${FORMATTERS.year(person.birthyear)}`
                   : "";
               return (
-                '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">' +
-                `<span style="font-size:14px;font-weight:700;color:#2a2a2a;">${escapeHtml(person.name)}</span>` +
-                `<span style="font-size:13px;color:#aaa49b;padding-left:14px;white-space:nowrap;">${escapeHtml(yr)}</span>` +
+                `<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:${PEOPLE_MB}px;">` +
+                `<span style="font-size:${NAME_FS}px;font-weight:700;color:#2a2a2a;">${escapeHtml(person.name)}</span>` +
+                `<span style="font-size:${YR_FS}px;color:#aaa49b;white-space:nowrap;">${escapeHtml(yr)}</span>` +
                 "</div>"
               );
             })
@@ -111,34 +171,24 @@ export default function PStacked({
       }
 
       // Full occupation breakdown for this bucket (raw counts, dotted leaders)
-      const breakdown = tsSeries
-        .map((series, index) => ({
-          name: series.name,
-          color: series.color,
-          count: series.counts[bucket] || 0,
-          index,
-        }))
-        .filter(item => item.count > 0)
-        .sort((a, b) => b.count - a.count);
-      const visible = breakdown.slice(0, 12);
+      const visible = breakdown.slice(0, MAX_ROWS);
       const hidden = breakdown.length - visible.length;
-
-      html += '<div style="padding:14px 18px 16px;">';
+      html += `<div style="padding:${compact ? 10 : 12}px ${PX}px ${compact ? 11 : 13}px;">`;
       html += visible
         .map(item => {
           const bold = item.index === focal ? "font-weight:700;" : "";
           return (
-            '<div style="display:flex;align-items:center;margin-bottom:10px;">' +
-            `<span style="width:9px;height:9px;border-radius:50%;background:${item.color};flex:0 0 auto;margin-right:11px;"></span>` +
-            `<span style="font-size:12.5px;letter-spacing:0.4px;color:#3a3a3a;text-transform:uppercase;${bold}">${escapeHtml(item.name)}</span>` +
-            '<span style="flex:1;border-bottom:1px dotted #d9d5ce;margin:0 9px;transform:translateY(-3px);"></span>' +
-            `<span style="font-size:13px;color:#3a3a3a;${bold}">${FORMATTERS.commas(item.count)}</span>` +
+            `<div style="display:flex;align-items:center;margin-bottom:${ROW_MB}px;">` +
+            `<span style="width:${DOT}px;height:${DOT}px;border-radius:50%;background:${item.color};flex:0 0 auto;margin-right:${compact ? 9 : 11}px;"></span>` +
+            `<span style="font-size:${ROW_FS}px;letter-spacing:0.3px;color:#3a3a3a;text-transform:uppercase;${bold}">${escapeHtml(item.name)}</span>` +
+            `<span style="flex:1;border-bottom:1px dotted #d9d5ce;margin:0 8px;transform:translateY(-3px);"></span>` +
+            `<span style="font-size:${ROW_FS}px;color:#3a3a3a;${bold}">${FORMATTERS.commas(item.count)}</span>` +
             "</div>"
           );
         })
         .join("");
       if (hidden > 0) {
-        html += `<div style="font-size:12px;color:#aaa49b;margin-top:2px;">(and ${hidden} more)</div>`;
+        html += `<div style="font-size:${LABEL_FS + 1}px;color:#aaa49b;margin-top:1px;">(and ${hidden} more)</div>`;
       }
       html += "</div></div>";
 
@@ -209,7 +259,7 @@ export default function PStacked({
         showSymbol: false,
         symbol: "circle",
         sampling: "lttb",
-        data: series.values,
+        data: isVisible(series.groupName) ? series.values : zeros,
         lineStyle: {
           width: 0.75,
           color: series.color,
@@ -234,6 +284,8 @@ export default function PStacked({
     // (and surface it + its top HPI people in the tooltip).
     const zr = chart.getZr();
     const downplayAll = () => chart.dispatchAction({type: "downplay"});
+    const visAt = i =>
+      soloRef.current.size === 0 || soloRef.current.has(tsSeries[i].groupName);
 
     const handleMove = event => {
       const pointer = [event.offsetX, event.offsetY];
@@ -251,17 +303,25 @@ export default function PStacked({
       if (bucket < 0) bucket = 0;
       if (bucket > labels.length - 1) bucket = labels.length - 1;
 
-      // Series array order == stack order (bottom → top)
+      // Series array order == stack order (bottom → top); skip hidden bands.
       let cumulative = 0;
       let focal = -1;
       for (let i = 0; i < tsSeries.length; i += 1) {
-        cumulative += tsSeries[i].values[bucket] || 0;
-        if (yVal <= cumulative) {
+        const value = visAt(i) ? tsSeries[i].values[bucket] || 0 : 0;
+        cumulative += value;
+        if (value > 0 && yVal <= cumulative) {
           focal = i;
           break;
         }
       }
-      if (focal === -1 && yVal > 0) focal = tsSeries.length - 1;
+      if (focal === -1 && yVal > 0) {
+        for (let i = tsSeries.length - 1; i >= 0; i -= 1) {
+          if (visAt(i) && (tsSeries[i].values[bucket] || 0) > 0) {
+            focal = i;
+            break;
+          }
+        }
+      }
 
       if (focal !== focalRef.current) {
         focalRef.current = focal;
@@ -287,8 +347,37 @@ export default function PStacked({
       zr.off("mousemove", handleMove);
       zr.off("globalout", handleOut);
       chart.dispose();
+      echartRef.current = null;
     };
   }, [timeSeries, percent]);
+
+  // Apply solo selection to the existing chart without a full rebuild.
+  useEffect(() => {
+    const chart = echartRef.current;
+    if (!chart || !timeSeries.series.length) return;
+    const zeros = Array(timeSeries.labels.length).fill(0);
+    chart.setOption(
+      {
+        series: timeSeries.series.map(series => ({
+          data:
+            effectiveSolo.size === 0 || effectiveSolo.has(series.groupName)
+              ? series.values
+              : zeros,
+        })),
+      },
+      {lazyUpdate: true}
+    );
+  }, [effectiveSolo, timeSeries]);
+
+  const toggleDomain = name => {
+    setSoloDomains(prev => {
+      // Start from the pruned set so stale domains don't linger.
+      const next = new Set([...prev].filter(item => legendNames.has(item)));
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
 
   if (!timeSeries.series.length) {
     return <div>No data available</div>;
@@ -303,12 +392,23 @@ export default function PStacked({
         aria-label="Explore stacked area chart"
       />
       <div className="pantheon-echart-legend">
-        {timeSeries.legendItems.map(item => (
-          <div className="pantheon-echart-legend-item" key={item.name}>
-            <span style={{backgroundColor: item.color}} />
-            <span>{item.name}</span>
-          </div>
-        ))}
+        {timeSeries.legendItems.map(item => {
+          const dimmed =
+            effectiveSolo.size > 0 && !effectiveSolo.has(item.name);
+          return (
+            <button
+              type="button"
+              className={`pantheon-echart-legend-item${dimmed ? " is-dimmed" : ""}`}
+              key={item.name}
+              onClick={() => toggleDomain(item.name)}
+              aria-pressed={effectiveSolo.has(item.name)}
+              title={`Solo ${item.name}`}
+            >
+              <span style={{backgroundColor: item.color}} />
+              <span>{item.name}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
