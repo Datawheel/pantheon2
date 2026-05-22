@@ -27,6 +27,9 @@ async function getWikiRelatedPeople(personId) {
       return [];
     }
     const related = await relRes.json();
+    if (!Array.isArray(related)) {
+      return [];
+    }
     if (!related.length) return [];
 
     const idQuery = related.map(r => `id.eq.${r.related_id}`).join(",");
@@ -44,6 +47,9 @@ async function getWikiRelatedPeople(personId) {
       return [];
     }
     const people = await peopleRes.json();
+    if (!Array.isArray(people)) {
+      return [];
+    }
 
     const scoreOrder = new Map(related.map(r => [`${r.related_id}`, r.score]));
     return people
@@ -77,7 +83,8 @@ async function getOccupationRankings(
       console.error(`[getOccupationRankings] Got HTML instead of JSON`);
       return [];
     }
-    return JSON.parse(text);
+    const data = JSON.parse(text);
+    return Array.isArray(data) ? data : [];
   } catch (e) {
     console.error(`[getOccupationRankings] Error: ${e.message}`);
     return [];

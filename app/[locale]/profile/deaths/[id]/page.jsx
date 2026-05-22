@@ -5,17 +5,18 @@ import Header from "@/components/deaths/Header";
 import TopPeople from "@/components/deaths/TopPeople";
 import DeathsByMonth from "@/components/deaths/DeathsByMonth";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
-import {safeFetchJson} from "@/app/utils/safeFetch";
+import {safeFetchArray} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import {notFound} from "next/navigation";
 
 async function getPeopleDiedThisYear(yearNum) {
   const url = `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(id,country,slug,demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchArray(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}});
 }
 
 async function getPeopleDiedThisYearHpi(yearNum) {
   const url = `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  return await safeFetchArray(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}});
 }
 
 export async function generateMetadata(props, parent) {
@@ -49,7 +50,7 @@ export default async function Page(props) {
   // Check if year is a valid integer > 2000
   const yearNum = parseInt(year);
   if (isNaN(yearNum) || yearNum < 2000) {
-    return new Response("Not Found", {status: 404});
+    notFound();
   }
 
   // Fetch both person data and HPI data in parallel

@@ -7,7 +7,9 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
-    "pm2": "pm2"
+    "pm2": "pm2",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@chenglou/pretext": "^0.0.7",
@@ -37,6 +39,7 @@
     "uuid": "^14.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.2.3",
     "postcss-css-variables": "^0.19.0",

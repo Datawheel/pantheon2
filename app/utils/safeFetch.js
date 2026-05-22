@@ -39,9 +39,17 @@ export async function safeFetchJson(url, options = {}, fallback = null) {
 }
 
 /**
+ * Fetch JSON and always return an array.
+ */
+export async function safeFetchArray(url, options = {}) {
+  const data = await safeFetchJson(url, options, []);
+  return Array.isArray(data) ? data : [];
+}
+
+/**
  * Fetch JSON and return first item from array, or fallback object.
  */
 export async function safeFetchFirst(url, options = {}, fallback = {}) {
-  const data = await safeFetchJson(url, options, []);
-  return Array.isArray(data) && data.length > 0 ? data[0] : fallback;
+  const data = await safeFetchArray(url, options);
+  return data.length > 0 ? data[0] : fallback;
 }

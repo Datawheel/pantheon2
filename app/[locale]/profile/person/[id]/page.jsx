@@ -22,6 +22,7 @@ import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
+import {safeFetchArray} from "@/app/utils/safeFetch";
 import GoogleAdSense from "@/components/common/GoogleAdSense";
 import GoogleAdSenseScript from "@/components/common/GoogleAdSenseScript";
 import rankless from "@/data/rankless.json";
@@ -90,19 +91,17 @@ async function getPersonRanks(id) {
 
 async function getBooks(personId) {
   const url = `${process.env.URL}/api/books?id=${personId}`;
-  return await safeFetchJson(
+  return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
 }
 
 async function getMovies(personId) {
   const url = `${process.env.URL}/api/movies?id=${personId}`;
-  return await safeFetchJson(
+  return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
 }
 
@@ -111,28 +110,26 @@ async function getPersonTrending(slug, userLang, date) {
 
   // Fetch trending records across all languages (top 12 only)
   const trendUrl = `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.12&date=eq.${date}&select=lang,rank_pantheon`;
-  const trendRecords = await safeFetchJson(
+  const trendRecords = await safeFetchArray(
     trendUrl,
     {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
-    [],
   );
 
   // Build ranksByLang map
-  const ranksByLang = (trendRecords || []).reduce((acc, record) => {
+  const ranksByLang = trendRecords.reduce((acc, record) => {
     acc[record.lang] = record.rank_pantheon;
     return acc;
   }, {});
 
   // Fetch localized reasons from all available models
   const reasonUrl = `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}&select=reason,llm_metadata,title,llm_provider`;
-  const reasonRecords = await safeFetchJson(
+  const reasonRecords = await safeFetchArray(
     reasonUrl,
     {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
-    [],
   );
 
   // Build array of model responses
-  const modelResponses = (reasonRecords || [])
+  const modelResponses = reasonRecords
     .filter(r => r.reason) // Only include records that have a reason
     .map(r => ({
       reason: r.reason,
@@ -141,8 +138,8 @@ async function getPersonTrending(slug, userLang, date) {
     }));
 
   return {
-    isTrending: (trendRecords || []).length > 0,
-    languages: (trendRecords || []).map(r => r.lang),
+    isTrending: trendRecords.length > 0,
+    languages: trendRecords.map(r => r.lang),
     ranksByLang,
     modelResponses,
     localizedName: reasonRecords?.[0]?.title || null,
@@ -155,12 +152,10 @@ async function getPersonTrending(slug, userLang, date) {
 async function getPageViews(personId, lang = "en") {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
   const url = `${baseApi}/pageviews?lang=eq.${lang}&wp_id=eq.${personId}&select=date,views&order=date.asc`;
-  const pageviews = await safeFetchJson(
+  return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
-  return Array.isArray(pageviews) ? pageviews : [];
 }
 
 async function getOccupationPageviews(occupationId) {

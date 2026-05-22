@@ -14,6 +14,8 @@ import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
+import {safeFetchArray} from "@/app/utils/safeFetch";
+import {notFound} from "next/navigation";
 
 // Safe JSON fetch with logging for debugging HTML responses
 async function safeFetchJson(url, options = {}, fallback = null) {
@@ -38,69 +40,62 @@ async function safeFetchJson(url, options = {}, fallback = null) {
 
 async function getOccupations() {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug`;
-  return await safeFetchJson(
+  return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
 }
 
 async function getOccupation(occupationId, lang = "en") {
   const url = `${BASE_API}/occupation?occupation_slug=eq.${occupationId}&select=*,${lang}_occupation:translations->${lang}->>occupation`;
-  const data = await safeFetchJson(
+  const data = await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
-  return Array.isArray(data) && data.length > 0 ? data[0] : {};
+  return data.length > 0 ? data[0] : {};
 }
 
 async function getCountry(countryId, lang = "en") {
   const url = `${BASE_API}/country?slug=eq.${countryId}&select=*,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym_m_plural,${lang}_nationality_adj:translations->${lang}->>nationality_adj_m,${lang}_from_country:translations->${lang}->>from_country`;
-  const data = await safeFetchJson(
+  const data = await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
-  return Array.isArray(data) && data.length > 0 ? data[0] : {};
+  return data.length > 0 ? data[0] : {};
 }
 
 async function getAllCountriesInOccupation(occupationId, lang = "en") {
   const encodedOccupationId = encodePostgrestValue(occupationId);
   const url = `${BASE_API}/occupation_country?occupation=eq.${encodedOccupationId}&order=num_people.desc.nullslast&select=*,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country,${lang}_from_country:translations->${lang}->>from_country)`;
-  return await safeFetchJson(
+  return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
 }
 
 async function getAllOccupationsInCountry(countryId, lang = "en") {
   const url = `${BASE_API}/occupation_country?country=eq.${countryId}&order=num_people.desc.nullslast&select=*,occupation_data:occupation!occupation(occupation_slug,occupation,${lang}_occupation:translations->${lang}->>occupation)`;
-  return await safeFetchJson(
+  return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
 }
 
 async function getPeople(occupationId, countryId) {
   const encodedOccupationId = encodePostgrestValue(occupationId);
   const url = `${BASE_API}/person?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive,famous_for,description`;
-  return await safeFetchJson(
+  return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
 }
 
 async function getPeopleHpi(occupationId, countryId) {
   const encodedOccupationId = encodePostgrestValue(occupationId);
   const url = `${BASE_API}/person_ranks?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`;
-  return await safeFetchJson(
+  return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
   );
 }
 
@@ -111,10 +106,9 @@ async function getTrendingStatus(occupationSlug, countrySlug, lang = "en") {
     Date.now() - 7 * 24 * 60 * 60 * 1000,
   ).toISOString();
   const url = `${BASE_API}/trend_gsc?lang=eq.${lang}&page_type=eq.occupation_country&run_at=gte.${sevenDaysAgo}&page_url=like.*profile/occupation/${occupationSlug}/country/${countrySlug}*&select=page_url,trend_score,reason,clicks_curr,impr_curr&limit=1`;
-  const data = await safeFetchJson(
+  const data = await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
-    [],
   );
   return data.length > 0 ? data[0] : null;
 }
@@ -230,6 +224,9 @@ export default async function Page(props) {
     getCountry(countryId, lang),
     getTrendingStatus(id, countryId, lang),
   ]);
+  if (!occupation?.id || !country?.id) {
+    notFound();
+  }
 
   const [
     allCountriesInOccupation,
