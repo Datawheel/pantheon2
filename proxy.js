@@ -39,7 +39,19 @@ export function proxy(request) {
   if (DEFAULT_LOCALE_PREFIX_RE.test(pathname)) {
     const stripped = pathname.replace(DEFAULT_LOCALE_PREFIX_RE, "") || "/";
     const target = new URL(stripped + url.search, url);
-    return NextResponse.redirect(target, 301);
+    const redirect = NextResponse.redirect(target, 301);
+    // next-intl uses a NEXT_LOCALE cookie to remember the user's preference
+    // under localePrefix: "as-needed". Without explicitly updating it here,
+    // the unprefixed URL we redirect to would fall back to whatever locale
+    // the cookie holds — so visiting /en/foo from a previously-set non-en
+    // session would bounce back to the saved locale. Set the cookie to "en"
+    // alongside the redirect so the language actually switches.
+    redirect.cookies.set("NEXT_LOCALE", "en", {
+      path: "/",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    return redirect;
   }
 
   // Run i18n for everything else (including slugs with dots, e.g. Michael_J._Fox)

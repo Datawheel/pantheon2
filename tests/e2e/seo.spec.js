@@ -179,6 +179,25 @@ const EN_REDIRECT_CASES = [
   },
 ];
 
+test("/en redirect sets NEXT_LOCALE=en cookie so saved non-en sessions actually switch", async ({page, context}) => {
+  // Simulate a user who previously saved French as their preferred locale.
+  // The 301 from /en/* must explicitly set NEXT_LOCALE=en alongside the
+  // redirect, otherwise next-intl's "as-needed" cookie fallback bounces the
+  // destination request back to the saved locale.
+  await context.addCookies([
+    {name: "NEXT_LOCALE", value: "fr", domain: "localhost", path: "/"},
+  ]);
+  const res = await page.goto("/en/news", {waitUntil: "domcontentloaded"});
+  expect(res.status()).toBe(200);
+  await expect(page).toHaveURL(/\/news(?:\?|$)/);
+  // After following the redirect chain, the document language should be en
+  // and the cookie should have been updated.
+  expect(await page.locator("html").getAttribute("lang")).toBe("en");
+  const cookies = await context.cookies();
+  const localeCookie = cookies.find(c => c.name === "NEXT_LOCALE");
+  expect(localeCookie?.value).toBe("en");
+});
+
 for (const {path, expected} of EN_REDIRECT_CASES) {
   test(`/en redirect: ${path} -> ${expected} (301)`, async ({playwright, baseURL}) => {
     // maxRedirects: 0 so we can inspect the redirect response itself, not
@@ -196,6 +215,10 @@ for (const {path, expected} of EN_REDIRECT_CASES) {
         ? new URL(location).pathname
         : location.split("?")[0].split("#")[0];
       expect(locationPath).toBe(expected);
+      // The redirect itself must carry Set-Cookie: NEXT_LOCALE=en so the
+      // browser uses English on the redirected request.
+      const setCookie = res.headers()["set-cookie"] || "";
+      expect(setCookie).toMatch(/NEXT_LOCALE=en/);
     } finally {
       await ctx.dispose();
     }
