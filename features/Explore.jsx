@@ -9,6 +9,7 @@ import Spinner from "../components/Spinner";
 import RankingTable from "../components/explore/rankings/RankingTable";
 import {
   buildNestedOccupations,
+  buildRankingsMetadata,
   buildRankingsMetricSentence,
   parseRankingsSearchParams,
 } from "@/lib/rankings";
@@ -184,6 +185,60 @@ function Explore({
     router,
     pathname,
     embed,
+  ]);
+
+  // Keep document.title, the description meta, and the canonical link in
+  // sync with the active rankings filters. The URL is updated via
+  // window.history.replaceState (see fetchDataAndDispatch), which bypasses
+  // Next.js's router — without this effect, generateMetadata never re-runs
+  // and the SSR title/canonical get stuck on whatever the user first landed
+  // on. SSR still renders the correct initial values, so we skip on first
+  // load to avoid a redundant write.
+  useEffect(() => {
+    if (firstLoad || embed || pageType !== "rankings") return;
+    if (typeof document === "undefined") return;
+    const metadata = buildRankingsMetadata(
+      effectiveExploreState,
+      places,
+      nestedOccupations,
+    );
+    if (document.title !== metadata.title) {
+      document.title = metadata.title;
+    }
+    const descMeta = document.querySelector('meta[name="description"]');
+    if (descMeta && descMeta.getAttribute("content") !== metadata.description) {
+      descMeta.setAttribute("content", metadata.description);
+    }
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      const origin = canonicalLink.getAttribute("href")?.match(/^https?:\/\/[^/]+/)?.[0]
+        || "https://pantheon.world";
+      const nextCanonical = `${origin}${metadata.canonicalPath}`;
+      if (canonicalLink.getAttribute("href") !== nextCanonical) {
+        canonicalLink.setAttribute("href", nextCanonical);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    firstLoad,
+    embed,
+    pageType,
+    places,
+    nestedOccupations,
+    effectiveExploreState.city,
+    effectiveExploreState.country,
+    effectiveExploreState.gender,
+    effectiveExploreState.metricCutoff,
+    effectiveExploreState.metricType,
+    effectiveExploreState.occupation,
+    effectiveExploreState.onlyShowNew,
+    effectiveExploreState.placeType,
+    effectiveExploreState.show.depth,
+    effectiveExploreState.show.type,
+    effectiveExploreState.years,
+    effectiveExploreState.yearType,
+    effectiveExploreState.birthMonth,
+    effectiveExploreState.birthDay,
   ]);
 
   // Sync stacked/line client-only options (scale, bins, percent) to the URL

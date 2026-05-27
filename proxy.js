@@ -8,6 +8,11 @@ const intlMiddleware = createMiddleware(routing);
 const ASSET_EXT_RE =
   /\.(?:ico|png|jpg|jpeg|svg|gif|webp|avif|css|js|mjs|map|txt|xml|json|woff2?|ttf|otf)$/i;
 
+// Match the default-locale ("/en" or "/en/...") prefix that should be canonicalised
+// to the unprefixed URL with a permanent (301) redirect. next-intl returns 307,
+// which Google treats as non-canonical and keeps indexing the prefixed URL.
+const DEFAULT_LOCALE_PREFIX_RE = /^\/en(?=\/|$)/;
+
 export function proxy(request) {
   const url = new URL(request.url);
   const {pathname} = url;
@@ -27,8 +32,22 @@ export function proxy(request) {
     return NextResponse.next();
   }
 
+  // Block dev host from being indexed at the response level.
+  const host = request.headers.get("host") || "";
+  const isDevHost = host.startsWith("dev.pantheon.world");
+
+  if (DEFAULT_LOCALE_PREFIX_RE.test(pathname)) {
+    const stripped = pathname.replace(DEFAULT_LOCALE_PREFIX_RE, "") || "/";
+    const target = new URL(stripped + url.search, url);
+    return NextResponse.redirect(target, 301);
+  }
+
   // Run i18n for everything else (including slugs with dots, e.g. Michael_J._Fox)
-  return intlMiddleware(request);
+  const response = intlMiddleware(request);
+  if (isDevHost && response) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
+  return response;
 }
 
 export const config = {

@@ -9,16 +9,43 @@ const baseUrl = process.env.URL || "https://pantheon.world";
 
 export async function generateMetadata(props) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
   const locale = params?.locale || DEFAULT_LOCALE;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
 
+  // Resolve the target date. ?model is a UI-only toggle (both models render in
+  // the same HTML), so we drop it from the canonical to avoid duplicate URLs.
+  // ?date= for today's date also collapses to the bare /news URL so the live
+  // page has one canonical form.
+  const dateParam = searchParams?.date;
+  const today = dayjs().format("YYYY-MM-DD");
+  const parsedDate = dateParam ? dayjs(dateParam) : null;
+  const isValidPastDate =
+    parsedDate?.isValid() &&
+    parsedDate.format("YYYY-MM-DD") !== today &&
+    parsedDate.isBefore(dayjs(), "day");
+
+  const canonicalPath = isValidPastDate
+    ? `/news?date=${parsedDate.format("YYYY-MM-DD")}`
+    : "/news";
+
+  let title = `${t.news.pageTitle} - Pantheon`;
+  let description = t.news.pageSubtitle;
+  if (isValidPastDate) {
+    const localizedDate = new Intl.DateTimeFormat(lang, {
+      dateStyle: "long",
+    }).format(parsedDate.toDate());
+    title = `${t.news.pageTitle} (${localizedDate}) - Pantheon`;
+    description = `${t.news.pageSubtitle} — ${localizedDate}.`;
+  }
+
   return {
-    title: `${t.news.pageTitle} - Pantheon`,
-    description: t.news.pageSubtitle,
+    title,
+    description,
     alternates: {
-      canonical: buildCanonical(lang, "/news"),
-      languages: buildLanguageAlternates("/news"),
+      canonical: buildCanonical(lang, canonicalPath),
+      languages: buildLanguageAlternates(canonicalPath),
     },
   };
 }

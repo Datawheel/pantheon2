@@ -119,6 +119,83 @@ async function generateEntitySitemap(locale, entity, page) {
   return buildUrlEntries(slugs, locale, cfg.pathPrefix);
 }
 
+// Expose the last N days of daily trending-news pages so Google can discover
+// each date variant. The page itself self-canonicalises to /news?date=YYYY-MM-DD
+// for past dates and has a date-specific title/description, so each URL is
+// genuinely unique content.
+const NEWS_DAYS_BACK = 90;
+
+function generateNewsSitemap(locale) {
+  const prefix = `${SITE_URL}${localePrefix(locale)}/news`;
+  const entries = [];
+  // Skip "today" since it canonicalises to bare /news (already in static sitemap).
+  for (let i = 1; i <= NEWS_DAYS_BACK; i++) {
+    const date = new Date();
+    date.setUTCDate(date.getUTCDate() - i);
+    const yyyy = date.getUTCFullYear();
+    const mm = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(date.getUTCDate()).padStart(2, "0");
+    entries.push(buildUrlEntry(`${prefix}?date=${yyyy}-${mm}-${dd}`));
+  }
+  return entries;
+}
+
+// Pull a curated set of valuable /explore/rankings filter combinations from
+// real data: single-dimension filters by top occupation and top country.
+// Google can crawl deeper combinations from on-page internal links once these
+// seed URLs are indexed.
+const RANKINGS_TOP_OCCUPATIONS = 25;
+const RANKINGS_TOP_COUNTRIES = 30;
+
+async function fetchTopOccupationIds(limit) {
+  // The /explore/rankings ?occupation= filter expects the occupation `id`
+  // (e.g. "POLITICIAN"), not the slug ("politician"). Passing the wrong value
+  // silently falls through to the unfiltered ranking.
+  const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=id&num_born=gt.0&limit=${limit}`;
+  try {
+    const res = await fetch(url, {next: {revalidate: REVALIDATE_PERIODS.LONG}});
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.map(d => d.id).filter(Boolean);
+  } catch (e) {
+    console.error("[sitemap] occupation id fetch error:", e.message);
+    return [];
+  }
+}
+
+async function fetchTopCountryCodes(limit) {
+  const url = `${BASE_API}/country?order=num_born.desc.nullslast&select=country_code&num_born=gt.0&limit=${limit}`;
+  try {
+    const res = await fetch(url, {next: {revalidate: REVALIDATE_PERIODS.LONG}});
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data
+      .map(d => d.country_code)
+      .filter(Boolean)
+      .map(code => code.toLowerCase());
+  } catch (e) {
+    console.error("[sitemap] country code fetch error:", e.message);
+    return [];
+  }
+}
+
+async function generateRankingsSitemap(locale) {
+  const base = `${SITE_URL}${localePrefix(locale)}/explore/rankings`;
+  const [occupationIds, countryCodes] = await Promise.all([
+    fetchTopOccupationIds(RANKINGS_TOP_OCCUPATIONS),
+    fetchTopCountryCodes(RANKINGS_TOP_COUNTRIES),
+  ]);
+
+  const entries = [];
+  for (const id of occupationIds) {
+    entries.push(buildUrlEntry(`${base}?occupation=${encodeURIComponent(id)}`));
+  }
+  for (const code of countryCodes) {
+    entries.push(buildUrlEntry(`${base}?place=${encodeURIComponent(code)}`));
+  }
+  return entries;
+}
+
 function parseSlug(slug) {
   if (slug === "static") {
     return {type: "static"};
@@ -126,6 +203,16 @@ function parseSlug(slug) {
 
   if (slug === "birthdays") {
     return {type: "birthdays"};
+  }
+
+  const matchNews = slug.match(/^news-([a-z]{2})$/);
+  if (matchNews && SUPPORTED_LOCALES.includes(matchNews[1])) {
+    return {type: "news", locale: matchNews[1]};
+  }
+
+  const matchRankings = slug.match(/^rankings-([a-z]{2})$/);
+  if (matchRankings && SUPPORTED_LOCALES.includes(matchRankings[1])) {
+    return {type: "rankings", locale: matchRankings[1]};
   }
 
   // Pattern: {entity}-{locale}-{page} or {entity}-{locale}
@@ -163,6 +250,10 @@ export async function GET(request, context) {
     entries = generateStaticSitemap();
   } else if (parsed.type === "birthdays") {
     entries = generateBirthdaySitemap();
+  } else if (parsed.type === "news") {
+    entries = generateNewsSitemap(parsed.locale);
+  } else if (parsed.type === "rankings") {
+    entries = await generateRankingsSitemap(parsed.locale);
   } else {
     entries = await generateEntitySitemap(parsed.locale, parsed.entity, parsed.page);
   }

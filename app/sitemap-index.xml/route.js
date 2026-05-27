@@ -50,6 +50,8 @@ export async function GET() {
     sitemaps.push(`${SITE_URL}/sitemap/countries-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/occupations-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/eras-${locale}`);
+    sitemaps.push(`${SITE_URL}/sitemap/news-${locale}`);
+    sitemaps.push(`${SITE_URL}/sitemap/rankings-${locale}`);
 
     for (let i = 0; i < placePages; i++) {
       sitemaps.push(`${SITE_URL}/sitemap/places-${locale}-${i}`);

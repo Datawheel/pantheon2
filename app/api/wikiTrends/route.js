@@ -260,19 +260,32 @@ export async function GET(request) {
               },
             }
           )
-          .catch(e => (console.log("Wiki Langlinks Error:", e), {data: []}));
-        const wikiLangLinksJson = wikiLangLinksResp.data;
+          .catch(e => (console.log("Wiki Langlinks Error:", e.message), {data: {}}));
+        const wikiLangLinksJson = wikiLangLinksResp.data || {};
+        const wikiQuery = wikiLangLinksJson.query;
+
+        // Wikipedia can legitimately return a response without `query` (all
+        // titles invalid, batch empty, API error swallowed by the catch above).
+        // Skip this chunk's lookup rather than crash on `.query.normalized`.
+        if (!wikiQuery || !wikiQuery.pages) {
+          continue;
+        }
+
+        const normalizedList = Array.isArray(wikiQuery.normalized)
+          ? wikiQuery.normalized
+          : null;
+        const pageList = Object.values(wikiQuery.pages);
 
         currentArticlesChunk.forEach(article => {
           // see if name is normalized
           let normalizedArticleTitle = article.article;
-          if (wikiLangLinksJson.query.normalized) {
-            const normForm = wikiLangLinksJson.query.normalized.find(
+          if (normalizedList) {
+            const normForm = normalizedList.find(
               norm => norm.from === article.article
             );
             normalizedArticleTitle = normForm ? normForm.to : article.article;
           }
-          const enArticle = Object.values(wikiLangLinksJson.query.pages).find(
+          const enArticle = pageList.find(
             page => page.title === normalizedArticleTitle
           );
           if (
@@ -308,6 +321,11 @@ export async function GET(request) {
         });
         // trendingArticlesQuery = currentArticlesChunk.map(p => `slug.eq.${encodeURIComponent(p.article)}`);
       }
+
+      // Skip pushing a malformed `?or=()` URL when the chunk yielded no
+      // matches — both the non-en langlink lookup and an empty trailing
+      // slice can leave trendingArticlesQuery empty.
+      if (!trendingArticlesQuery.length) continue;
 
       trendingPeoplePantheonUrls.push(
         `${process.env.BASE_API}/person?or=(${trendingArticlesQuery})&select=id,birthyear,name,slug,gender,occupation,bplace_country`
