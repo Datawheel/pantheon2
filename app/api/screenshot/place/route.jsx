@@ -1,5 +1,6 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
+import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 
 export const runtime = "edge";
@@ -333,6 +334,7 @@ export async function GET(request) {
           style: "normal",
         },
       ],
+      headers: {"cache-control": OG_CACHE_CONTROL},
       }
     );
   } catch (error) {

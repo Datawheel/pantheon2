@@ -2,6 +2,7 @@ import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {getSupportedLocale, isArabicLocale} from "../helpers/locale";
+import {OG_CACHE_CONTROL} from "../helpers/cache";
 
 // Localized date formatters
 const DATE_FORMATTERS = {
@@ -347,7 +348,7 @@ export async function getBornOnThisDayImageResponse({
     const pngBuffer = await imageResponse.arrayBuffer();
     return new NextResponse(pngBuffer, {
       status: 200,
-      headers: {"content-type": "image/png"},
+      headers: {"content-type": "image/png", "cache-control": OG_CACHE_CONTROL},
     });
   };
 

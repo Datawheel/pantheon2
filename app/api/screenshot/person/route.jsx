@@ -3,6 +3,7 @@ import {NextResponse} from "next/server";
 import {COLORS_DOMAIN} from "../../../../components/utils/consts";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {getSupportedLocale} from "../helpers/locale";
+import {OG_CACHE_CONTROL} from "../helpers/cache";
 
 export const runtime = "nodejs";
 
@@ -543,7 +544,10 @@ export async function GET(request) {
     const pngBuffer = await imageResponse.arrayBuffer();
     return new NextResponse(pngBuffer, {
       status: 200,
-      headers: {"content-type": "image/png"},
+      headers: {
+        "content-type": "image/png",
+        "cache-control": OG_CACHE_CONTROL,
+      },
     });
   };
 

@@ -1,5 +1,6 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
+import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {plural} from "pluralize";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
 import {getTranslations} from "@/app/translations";
@@ -330,7 +331,7 @@ export async function GET(request) {
     const pngBuffer = await imageResponse.arrayBuffer();
     return new NextResponse(pngBuffer, {
       status: 200,
-      headers: {"content-type": "image/png"},
+      headers: {"content-type": "image/png", "cache-control": OG_CACHE_CONTROL},
     });
   };
 
