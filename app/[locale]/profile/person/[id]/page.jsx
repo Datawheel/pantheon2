@@ -151,7 +151,7 @@ async function getPersonTrending(slug, userLang, date) {
 
 async function getPageViews(personId, lang = "en") {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
-  const url = `${baseApi}/pageviews?lang=eq.${lang}&wp_id=eq.${personId}&select=date,views&order=date.asc`;
+  const url = `${baseApi}/pageviews_ch?lang=eq.${lang}&wp_id=eq.${personId}&select=date,views&order=date.asc`;
   return await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},

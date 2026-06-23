@@ -190,20 +190,20 @@ export default async function Home(props) {
         </div>
       </div>
 
-      <Link href={`/${lang}/monthly/2026/april`} className="monthly-callout">
+      <Link href={`/${lang}/monthly/2026/may`} className="monthly-callout">
         <div className="monthly-callout-image">
           <img
-            src="/images/monthly/2026-04-hero.png"
-            alt="April 2026 Pantheon Monthly"
+            src="/images/monthly/2026-05-hero.png"
+            alt="May 2026 Pantheon Monthly"
           />
         </div>
         <div className="monthly-callout-body">
           <span className="monthly-callout-badge">New Edition</span>
-          <h2 className="monthly-callout-title">Pantheon Monthly: April 2026</h2>
+          <h2 className="monthly-callout-title">Pantheon Monthly: May 2026</h2>
           <p className="monthly-callout-description">
-            Michael, the Moon, and a Hungarian upset &mdash; April&rsquo;s biggest attention swings, from a Jackson family revival to Artemis II&rsquo;s return.
+            The month the world said goodbye &mdash; a heavy run of farewells topped May&rsquo;s chart, even as a Knicks&ndash;Spurs NBA Finals lifted Jalen Brunson and Victor Wembanyama, and Olivia Rodrigo&rsquo;s new album sent her climbing.
           </p>
-          <span className="monthly-callout-link">Read the April Edition &rarr;</span>
+          <span className="monthly-callout-link">Read the May Edition &rarr;</span>
         </div>
       </Link>
 

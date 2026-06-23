@@ -26,6 +26,33 @@ const MONTH_NAMES = [
 ];
 
 const EDITION_META = {
+  "2026-05": {
+    headline: "The Month the World Said Goodbye",
+    subhead:
+      "A heavy run of farewells—Kyle Busch, Alex Zanardi, Ted Turner, and Brandon Clarke among them—topped May's chart, even as a Champions League climax lifted football's managers and the Michael Jackson revival rolled on",
+    editorial: {
+      intro:
+        'May\'s rankings were shaped, more than anything, by loss. Four of the month\'s ten biggest risers were people the world was mourning &mdash; an unusually heavy concentration of obituary traffic at the very top of the chart. Motorsport lost two of its own within the same weeks: NASCAR champion <a href="/profile/person/Kyle_Busch">Kyle Busch</a> spiked more than a hundredfold after his death on May 21, while Italian racer-turned-Paralympian <a href="/profile/person/Alex_Zanardi">Alex Zanardi</a> surged on May 1. Basketball\'s <a href="/profile/person/Brandon_Clarke">Brandon Clarke</a> posted the single sharpest jump of the month &mdash; a 122x ratio &mdash; after his death on May 11, and media mogul <a href="/profile/person/Ted_Turner">Ted Turner</a>, the founder of CNN, climbed from near-zero to over two million views following his passing on May 6. The single largest mover, though, belonged to the living: Indian superstar <a href="/profile/person/Vijay_(actor)">Vijay</a> added more than four million views to top the month outright.',
+      middle:
+        'Live sport supplied May\'s other engine. A Champions League climax pulled Europe\'s touchline into the spotlight, lifting managers <a href="/profile/person/Luis_Enrique_(footballer)">Luis Enrique</a>, <a href="/profile/person/Mikel_Arteta">Mikel Arteta</a>, and <a href="/profile/person/Pep_Guardiola">Pep Guardiola</a> in lockstep. Across the Atlantic, an NBA Finals between the Knicks and the Spurs carried two of the league\'s brightest stars upward together &mdash; New York\'s <a href="/profile/person/Jalen_Brunson">Jalen Brunson</a> and San Antonio\'s <a href="/profile/person/Victor_Wembanyama">Victor Wembanyama</a>, the eighth-biggest mover of the month. Culture provided the rest. Pop star <a href="/profile/person/Olivia_Rodrigo">Olivia Rodrigo</a> surged on the release of a new album, while the <em>Michael</em> biopic wave that defined April rolled into May: <a href="/profile/person/Michael_Jackson">Michael Jackson</a> rose again as the third-biggest mover, with the King of Pop\'s former wife <a href="/profile/person/Debbie_Rowe">Debbie Rowe</a> rippling alongside him. British naturalist <a href="/profile/person/David_Attenborough">David Attenborough</a> surged in his ninety-ninth year, and a cluster of screen names &mdash; <a href="/profile/person/Spencer_Pratt">Spencer Pratt</a>, <a href="/profile/person/Sally_Field">Sally Field</a>, and <a href="/profile/person/Gina_Carano">Gina Carano</a> &mdash; rounded out the risers. Jazz lost a giant late in the month as <a href="/profile/person/Sonny_Rollins">Sonny Rollins</a> joined the long roll of May farewells.',
+      conclusion:
+        'The decline column is, almost line for line, April\'s front page in retreat. Hungary\'s election drama cooled fastest: <a href="/profile/person/Péter_Magyar">Péter Magyar</a>, April\'s giant-killer, was the single biggest faller of May, with the man he unseated, <a href="/profile/person/Viktor_Orbán">Viktor Orbán</a>, close behind. NASA\'s Artemis II crew came back down to earth in the data as well &mdash; <a href="/profile/person/Christina_Koch">Christina Koch</a>, <a href="/profile/person/Reid_Wiseman">Reid Wiseman</a>, and <a href="/profile/person/Jeremy_Hansen">Jeremy Hansen</a> all shed the bulk of their April homecoming traffic. Golf\'s <a href="/profile/person/Rory_McIlroy">Rory McIlroy</a> faded after his back-to-back Masters, and April\'s wave of obituaries &mdash; <a href="/profile/person/Asha_Bhosle">Asha Bhosle</a>, <a href="/profile/person/Nathalie_Baye">Nathalie Baye</a>, <a href="/profile/person/Nadia_Farès">Nadia Farès</a>, and <a href="/profile/person/Mircea_Lucescu">Mircea Lucescu</a> &mdash; eased back toward baseline as their moments passed. It is the monthly dataset\'s clearest signature: this month\'s headlines become next month\'s steepest falls.',
+    },
+    moverSummaries: {
+      "rising:Vijay_(actor)":
+        "Vijay was the single biggest mover of May, adding more than four million views as the Indian superstar dominated attention across the month.",
+      "rising:Kyle_Busch":
+        "Kyle Busch spiked more than a hundredfold following his death on May 21 — the most prominent of a striking cluster of motorsport and athletic losses this month.",
+      "rising:Michael_Jackson":
+        "Michael Jackson rose again as the Michael biopic wave carried over from April, pulling former wife Debbie Rowe and the wider Jackson story back into view.",
+      "falling:Péter_Magyar":
+        "Péter Magyar was May's steepest faller, cooling sharply after April's stunning Hungarian election victory moved off the front pages.",
+      "falling:Christina_Koch":
+        "Christina Koch dropped back toward baseline as the Artemis II crew's April lunar homecoming faded from the news cycle.",
+      "falling:Viktor_Orbán":
+        "Viktor Orbán fell alongside the broader Hungarian election story, shedding most of the attention his April defeat had generated.",
+    },
+  },
   "2026-04": {
     headline: "Michael, the Moon, and a Hungarian Upset",
     subhead:

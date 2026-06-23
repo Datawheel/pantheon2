@@ -106,7 +106,7 @@ export default function PageViewsByLang({person, slug, title}) {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${PUBLIC_API}/pageviews?wp_id=eq.${person.id}`
+          `${PUBLIC_API}/pageviews_ch?wp_id=eq.${person.id}`
         );
         const data = await response.json();
         const [formattedData, langCount] = formatTimeSeriesData(data);
