@@ -91,6 +91,7 @@ export const FORMATTERS = {
   //   }
   // },
   ordinal: n => {
+    if (n == null || Number.isNaN(Number(n))) return "";
     const j = n % 10,
       k = n % 100;
     if (j === 1 && k !== 11) {
