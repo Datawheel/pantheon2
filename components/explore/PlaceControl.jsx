@@ -100,6 +100,10 @@ export default function PlaceControl({places}) {
               ))
           : null}
       </select>
+
+      <p className="place-control-note">
+        Only places with at least 5 people born there are listed.
+      </p>
     </div>
   );
 }

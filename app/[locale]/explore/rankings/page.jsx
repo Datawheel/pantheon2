@@ -12,7 +12,7 @@ import {
 } from "@/lib/rankings";
 
 const getPlaces = cache(async function getPlaces() {
-  const url = `${BASE_API}/place?select=id,place,lat,lon,slug,country:country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died`;
+  const url = `${BASE_API}/place?select=id,place,lat,lon,slug,country:country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died&num_born=gte.5`;
   return await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.LONG}},
