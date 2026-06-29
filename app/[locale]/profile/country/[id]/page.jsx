@@ -159,12 +159,22 @@ export async function generateMetadata(props, parent) {
       title,
       description,
       type: "website",
-      images: [`${baseUrl}/api/screenshot/country?id=${id}`, ...previousImages],
+      images: [
+        {
+          url: `${baseUrl}/api/screenshot/country?id=${id}`,
+          width: 1200,
+          height: 630,
+          type: "image/png",
+          alt: title,
+        },
+        ...previousImages,
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [`${baseUrl}/api/screenshot/country?id=${id}`],
     },
     alternates: {
       canonical: buildCanonical(lang, `/profile/country/${id}`),

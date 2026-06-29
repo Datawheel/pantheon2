@@ -133,7 +133,13 @@ export async function generateMetadata(props, parent) {
       description,
       type: "website",
       images: [
-        `${process.env.URL || "https://pantheon.world"}/api/screenshot/born-on-this-day/${lang}/${date}`,
+        {
+          url: `${process.env.URL || "https://pantheon.world"}/api/screenshot/born-on-this-day/${lang}/${date}`,
+          width: 1200,
+          height: 630,
+          type: "image/png",
+          alt: title,
+        },
         ...previousImages,
       ],
     },

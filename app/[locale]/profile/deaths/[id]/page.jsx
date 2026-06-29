@@ -27,15 +27,28 @@ export async function generateMetadata(props, parent) {
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 
+  const ogTitle = `${year} Celebrity Deaths | Pantheon`;
+  const ogImageUrl = `${
+    process.env.URL || "https://pantheon.world"
+  }/api/screenshot/deaths?year=${year}`;
   return {
-    title: `${year} Celebrity Deaths | Pantheon`,
+    title: ogTitle,
     openGraph: {
       images: [
-        `${
-          process.env.URL || "https://pantheon.world"
-        }/api/screenshot/deaths?year=${year}`,
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          type: "image/png",
+          alt: ogTitle,
+        },
         ...previousImages,
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: buildCanonical(params.locale, `/profile/deaths/${year}`),

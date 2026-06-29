@@ -244,17 +244,31 @@ export async function generateMetadata(props, parent) {
       })
     : `${localizedName} Biography | Pantheon`;
 
+  const ogImageUrl = `https://pantheon.world/api/screenshot/person?id=${person.id}&locale=${lang}`;
+  // Explicit dimensions/type matter: Slack, Discord and LinkedIn frequently
+  // skip the large image preview when og:image has no width/height, and Twitter
+  // needs summary_large_image to render the 1200×630 card instead of a thumbnail.
+  const ogImage = {
+    url: ogImageUrl,
+    width: 1200,
+    height: 630,
+    type: "image/png",
+    alt: `${localizedName} | Pantheon`,
+  };
+
   return {
     title: `${localizedName} Biography | Pantheon`,
     description,
     openGraph: {
-      images: [
-        `https://pantheon.world/api/screenshot/person?id=${person.id}&locale=${lang}`,
-        ...previousImages,
-      ],
+      type: "profile",
+      siteName: "Pantheon",
+      url: buildCanonical(locale, `/profile/person/${id}`),
+      images: [ogImage, ...previousImages],
       description,
     },
     twitter: {
+      card: "summary_large_image",
+      images: [ogImageUrl],
       description,
     },
     alternates: {

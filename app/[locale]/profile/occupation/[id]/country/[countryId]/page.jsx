@@ -196,7 +196,13 @@ export async function generateMetadata(props, parent) {
       description,
       type: "website",
       images: [
-        `${baseUrl}/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}&lang=${lang}`,
+        {
+          url: `${baseUrl}/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}&lang=${lang}`,
+          width: 1200,
+          height: 630,
+          type: "image/png",
+          alt: title,
+        },
         ...previousImages,
       ],
     },
@@ -204,6 +210,9 @@ export async function generateMetadata(props, parent) {
       card: "summary_large_image",
       title,
       description,
+      images: [
+        `${baseUrl}/api/screenshot/occupation-country?occupation=${id}&country=${country.country_code}&lang=${lang}`,
+      ],
     },
     alternates: {
       canonical: buildCanonical(lang, `/profile/occupation/${id}/country/${countryId}`),

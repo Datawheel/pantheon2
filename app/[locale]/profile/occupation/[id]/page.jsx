@@ -79,13 +79,26 @@ export async function generateMetadata(props, parent) {
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 
+  const ogTitle = `${toTitleCase(plural(occupation.occupation))} | Pantheon`;
+  const ogImageUrl = `https://pantheon.world/api/screenshot/occupation?id=${id}`;
   return {
-    title: `${toTitleCase(plural(occupation.occupation))} | Pantheon`,
+    title: ogTitle,
     openGraph: {
       images: [
-        `https://pantheon.world/api/screenshot/occupation?id=${id}`,
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          type: "image/png",
+          alt: ogTitle,
+        },
         ...previousImages,
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: buildCanonical(params.locale, `/profile/occupation/${id}`),
