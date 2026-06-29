@@ -3,8 +3,11 @@ import {NextResponse} from "next/server";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
+import {safeFetchArray, safeFetchFirst} from "@/app/utils/safeFetch";
 
-export const runtime = "edge";
+// Match the hardened person route: the Node runtime has higher memory limits
+// and more predictable image decoding than the edge sandbox.
+export const runtime = "nodejs";
 
 function formatNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -36,31 +39,34 @@ export async function GET(request) {
     "/fonts/Marcellus-Regular.ttf"
   );
 
-  // Fetch occupation data
-  const res = await fetch(`${BASE_API}/occupation?occupation_slug=eq.${id}`);
-  const data = await res.json();
-  const occupation = Array.isArray(data) && data.length > 0 ? data[0] : {};
+  // Fetch occupation data. safeFetchFirst guards res.ok / HTML responses so an
+  // API error during saturation windows yields a clean 404 instead of a 500.
+  const occupation = await safeFetchFirst(
+    `${BASE_API}/occupation?occupation_slug=eq.${id}`,
+    {},
+    {}
+  );
   const {occupation: occupationName, id: occupationId} = occupation;
 
   if (!occupationName) {
     return new NextResponse("ID mismatch", {status: 404});
   }
 
-  // Fetch top people and total count in parallel
-  const [topPeopleRes, countRes] = await Promise.all([
-    fetch(
+  // Fetch top people and total count in parallel. topPeople is guarded by
+  // safeFetchArray; the count fetch only reads a header, so a failure just
+  // leaves the count at 0 rather than throwing a 500.
+  const [topPeople, countRes] = await Promise.all([
+    safeFetchArray(
       `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&order=hpi.desc.nullslast&select=id,name,gender&limit=16`
     ),
     fetch(
       `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&select=id`,
       {headers: {"Prefer": "count=exact"}}
-    ),
+    ).catch(() => null),
   ]);
 
-  const topPeople = await topPeopleRes.json();
-
   // Get total count from headers
-  const contentRange = countRes.headers.get("content-range");
+  const contentRange = countRes?.headers?.get("content-range");
   let totalCount = 0;
   if (contentRange) {
     const match = contentRange.match(/\/(\d+)/);
@@ -109,7 +115,6 @@ export async function GET(request) {
             height: "100%",
             padding: "0 60px",
             position: "relative",
-            zIndex: 10,
           }}
         >
           <h2
@@ -179,7 +184,6 @@ export async function GET(request) {
             height: "100%",
             padding: "40px 60px 40px 0",
             position: "relative",
-            zIndex: 10,
           }}
         >
           <div

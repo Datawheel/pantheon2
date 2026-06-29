@@ -2,8 +2,11 @@ import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
+import {safeFetchArray, safeFetchFirst} from "@/app/utils/safeFetch";
 
-export const runtime = "edge";
+// Match the hardened person route: the Node runtime has higher memory limits
+// and more predictable image decoding than the edge sandbox.
+export const runtime = "nodejs";
 
 function formatNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -35,10 +38,13 @@ export async function GET(request) {
     "/fonts/Marcellus-Regular.ttf"
   );
 
-  // Fetch country data
-  const countryRes = await fetch(`${BASE_API}/country?slug=eq.${id}`);
-  const data = await countryRes.json();
-  const country = Array.isArray(data) && data.length > 0 ? data[0] : {};
+  // Fetch country data. safeFetchFirst guards res.ok / HTML responses so an API
+  // error during saturation windows yields a clean 404 instead of a thrown 500.
+  const country = await safeFetchFirst(
+    `${BASE_API}/country?slug=eq.${id}`,
+    {},
+    {}
+  );
   const {country: countryName, img_link, slug, id: countryId} = country;
 
   if (!countryName) {
@@ -50,22 +56,21 @@ export async function GET(request) {
     ? `https://static.pantheon.world/profile/country/${slug}.jpg`
     : "https://static.pantheon.world/profile/placeholder_place_profile.jpg";
 
-  // Fetch top people and count in parallel
-  const [bgImageData, topPeopleRes, countRes] = await Promise.all([
+  // Fetch background image, top people, and count in parallel. topPeople is
+  // guarded by safeFetchArray; the count fetch only reads a header, so a
+  // failure just leaves the count at 0 rather than throwing a 500.
+  const [bgImageData, topPeople, countRes] = await Promise.all([
     fetch(countryImgPath).then(res => res.arrayBuffer()),
-    fetch(
+    safeFetchArray(
       `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,name,gender,occupation&limit=10`
     ),
-    fetch(
-      `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&select=id`,
-      {headers: {"Prefer": "count=exact"}}
-    ),
+    fetch(`${BASE_API}/person_ranks?bplace_country=eq.${countryId}&select=id`, {
+      headers: {"Prefer": "count=exact"},
+    }).catch(() => null),
   ]);
 
-  const topPeople = await topPeopleRes.json();
-
   // Get total count from headers
-  const contentRange = countRes.headers.get("content-range");
+  const contentRange = countRes?.headers?.get("content-range");
   let totalCount = 0;
   if (contentRange) {
     const match = contentRange.match(/\/(\d+)/);
@@ -135,7 +140,8 @@ export async function GET(request) {
           />
         </div>
 
-        {/* Content overlay */}
+        {/* Content overlay — rendered after the background, so DOM order
+            already stacks it on top (satori has no z-index support). */}
         <div
           style={{
             position: "relative",
@@ -143,7 +149,6 @@ export async function GET(request) {
             flexDirection: "column",
             width: "100%",
             height: "100%",
-            zIndex: 10,
           }}
         >
           {/* Top: Pantheon branding */}
@@ -225,7 +230,6 @@ export async function GET(request) {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                gap: "-20px",
               }}
             >
               {peopleToShow.map((person, index) => (
@@ -241,7 +245,6 @@ export async function GET(request) {
                     marginLeft: index === 0 ? "0" : "-15px",
                     display: "flex",
                     position: "relative",
-                    zIndex: peopleToShow.length - index,
                   }}
                 >
                   <img

@@ -2,8 +2,17 @@ import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
+import {safeFetchArray, safeFetchFirst} from "@/app/utils/safeFetch";
 
-export const runtime = "edge";
+// Match the hardened person route: run in the Node runtime, which has higher
+// memory limits and more predictable image decoding than the edge sandbox.
+export const runtime = "nodejs";
+
+// Best-effort Wikipedia background image limits. We pull the ~320px thumbnail
+// (never `originalimage`, which can be 10–50MB and was the main heap killer)
+// and still cap type/size so a surprise response can't blow up the heap.
+const MAX_BG_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB
+const WIKI_TIMEOUT_MS = 2500;
 
 function formatNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -35,10 +44,9 @@ export async function GET(request) {
     "/fonts/Marcellus-Regular.ttf"
   );
 
-  // Fetch place data
-  const placeRes = await fetch(`${BASE_API}/place?slug=eq.${id}`);
-  const placeData = await placeRes.json();
-  const place = Array.isArray(placeData) && placeData.length > 0 ? placeData[0] : {};
+  // Fetch place data. safeFetchFirst guards res.ok / HTML responses so an API
+  // error during saturation windows yields a clean 404 instead of a thrown 500.
+  const place = await safeFetchFirst(`${BASE_API}/place?slug=eq.${id}`, {}, {});
   const {place: name, country: countryId} = place;
 
   if (!name) {
@@ -46,48 +54,70 @@ export async function GET(request) {
   }
 
   // Fetch country data
-  const countryRes = await fetch(`${BASE_API}/country?id=eq.${countryId}`);
-  const countryData = await countryRes.json();
-  const country = Array.isArray(countryData) && countryData.length > 0 ? countryData[0] : {};
-  const {country: countryName, country_code} = country;
+  const country = await safeFetchFirst(
+    `${BASE_API}/country?id=eq.${countryId}`,
+    {},
+    {}
+  );
+  const {country: countryName} = country;
 
-  // Fetch Wikipedia image for the place
+  // Fetch a Wikipedia thumbnail to use as the card background. This is entirely
+  // best-effort: on any failure we fall back to the gradient below.
   let bgImageData = null;
   try {
+    // Wikipedia article titles are underscore-delimited; normalize the place
+    // display name toward that canonical form to improve the match rate.
+    const wikiTitle = encodeURIComponent(name.trim().replace(/\s+/g, "_"));
     const wikiRes = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`,
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`,
       {
         headers: {
           "User-Agent": "Pantheon/1.0 (https://pantheon.world; contact@pantheon.world)",
         },
+        signal: AbortSignal.timeout(WIKI_TIMEOUT_MS),
       }
     );
-    const wiki = await wikiRes.json();
-    if (wiki.originalimage?.source) {
-      const imgRes = await fetch(wiki.originalimage.source);
-      if (imgRes.ok) {
-        bgImageData = await imgRes.arrayBuffer();
+    // On 429/503 Wikipedia returns an HTML page; only parse confirmed JSON.
+    if (wikiRes.ok && wikiRes.headers.get("content-type")?.includes("json")) {
+      const wiki = await wikiRes.json();
+      // Use the ~320px thumbnail, never originalimage (can be 10–50MB).
+      const thumbSource = wiki.thumbnail?.source;
+      if (thumbSource) {
+        const imgRes = await fetch(thumbSource, {
+          signal: AbortSignal.timeout(WIKI_TIMEOUT_MS),
+        });
+        const contentType = imgRes.headers.get("content-type") || "";
+        const contentLength = Number(imgRes.headers.get("content-length") || 0);
+        if (
+          imgRes.ok &&
+          contentType.startsWith("image/") &&
+          contentLength <= MAX_BG_IMAGE_BYTES
+        ) {
+          const buffer = await imgRes.arrayBuffer();
+          if (buffer.byteLength <= MAX_BG_IMAGE_BYTES) {
+            bgImageData = buffer;
+          }
+        }
       }
     }
   } catch (error) {
     console.error("Error fetching Wikipedia image:", error);
   }
 
-  // Fetch top people and count in parallel
-  const [topPeopleRes, countRes] = await Promise.all([
-    fetch(
+  // Fetch top people and count in parallel. topPeople is guarded by
+  // safeFetchArray (always an array); the count fetch only reads a header, so a
+  // failure just leaves the count at 0 rather than throwing a 500.
+  const [topPeople, countRes] = await Promise.all([
+    safeFetchArray(
       `${BASE_API}/person_ranks?bplace_geonameid=eq.${place.id}&order=hpi.desc.nullslast&select=id,name,gender,occupation&limit=10`
     ),
-    fetch(
-      `${BASE_API}/person_ranks?bplace_geonameid=eq.${place.id}&select=id`,
-      {headers: {"Prefer": "count=exact"}}
-    ),
+    fetch(`${BASE_API}/person_ranks?bplace_geonameid=eq.${place.id}&select=id`, {
+      headers: {"Prefer": "count=exact"},
+    }).catch(() => null),
   ]);
 
-  const topPeople = await topPeopleRes.json();
-
   // Get total count from headers
-  const contentRange = countRes.headers.get("content-range");
+  const contentRange = countRes?.headers?.get("content-range");
   let totalCount = 0;
   if (contentRange) {
     const match = contentRange.match(/\/(\d+)/);
@@ -183,7 +213,8 @@ export async function GET(request) {
           </div>
         )}
 
-        {/* Content overlay */}
+        {/* Content overlay — rendered after the background, so DOM order
+            already stacks it on top (satori has no z-index support). */}
         <div
           style={{
             position: "relative",
@@ -191,7 +222,6 @@ export async function GET(request) {
             flexDirection: "column",
             width: "100%",
             height: "100%",
-            zIndex: 10,
           }}
         >
           {/* Top: Pantheon branding */}
@@ -288,7 +318,6 @@ export async function GET(request) {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  gap: "-20px",
                 }}
               >
                 {peopleToShow.map((person, index) => (
@@ -304,7 +333,6 @@ export async function GET(request) {
                       marginLeft: index === 0 ? "0" : "-15px",
                       display: "flex",
                       position: "relative",
-                      zIndex: peopleToShow.length - index,
                     }}
                   >
                     <img

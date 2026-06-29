@@ -3,6 +3,7 @@ import {NextResponse} from "next/server";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {plural} from "pluralize";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
+import {safeFetchArray, safeFetchFirst} from "@/app/utils/safeFetch";
 import {getTranslations} from "@/app/translations";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {
@@ -53,25 +54,21 @@ export async function GET(request) {
     "/fonts/Marcellus-Regular.ttf",
   );
 
-  // Fetch occupation and country data in parallel
-  const [occupationRes, countryRes] = await Promise.all([
-    fetch(
+  // Fetch occupation and country data in parallel. safeFetchFirst guards
+  // res.ok / HTML responses so an API error during saturation windows yields a
+  // clean 404 instead of a thrown 500.
+  const [occupation, country] = await Promise.all([
+    safeFetchFirst(
       `${BASE_API}/occupation?occupation_slug=eq.${occupationQueryId}&select=id,occupation,${lang}_occupation:translations->${lang}->>occupation`,
+      {},
+      {}
     ),
-    fetch(
+    safeFetchFirst(
       `${BASE_API}/country?country_code=eq.${countryQueryId}&select=id,country,${lang}_country:translations->${lang}->>country,${lang}_from_country:translations->${lang}->>from_country`,
+      {},
+      {}
     ),
   ]);
-
-  const occupationData = await occupationRes.json();
-  const countryData = await countryRes.json();
-
-  const occupation =
-    Array.isArray(occupationData) && occupationData.length > 0
-      ? occupationData[0]
-      : {};
-  const country =
-    Array.isArray(countryData) && countryData.length > 0 ? countryData[0] : {};
 
   const {occupation: occupationName, id: occupationId} = occupation;
   const {country: countryName, id: countryId} = country;
@@ -84,21 +81,21 @@ export async function GET(request) {
     return new NextResponse("Not Found", {status: 404});
   }
 
-  // Fetch top people and total count in parallel
-  const [topPeopleRes, countRes] = await Promise.all([
-    fetch(
+  // Fetch top people and total count in parallel. topPeople is guarded by
+  // safeFetchArray; the count fetch only reads a header, so a failure just
+  // leaves the count at 0 rather than throwing a 500.
+  const [topPeople, countRes] = await Promise.all([
+    safeFetchArray(
       `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,name,gender&limit=16`,
     ),
     fetch(
       `${BASE_API}/person_ranks?occupation=eq.${encodePostgrestValue(occupationId)}&bplace_country=eq.${countryId}&select=id`,
       {headers: {"Prefer": "count=exact"}},
-    ),
+    ).catch(() => null),
   ]);
 
-  const topPeople = await topPeopleRes.json();
-
   // Get total count from headers
-  const contentRange = countRes.headers.get("content-range");
+  const contentRange = countRes?.headers?.get("content-range");
   let totalCount = 0;
   if (contentRange) {
     const match = contentRange.match(/\/(\d+)/);
@@ -159,7 +156,6 @@ export async function GET(request) {
           height: "100%",
           padding: "0 50px",
           position: "relative",
-          zIndex: 10,
         }}
       >
         <h2
@@ -249,7 +245,6 @@ export async function GET(request) {
           height: "100%",
           padding: "40px 60px 40px 0",
           position: "relative",
-          zIndex: 10,
         }}
       >
         <div
