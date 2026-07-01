@@ -25,7 +25,12 @@ export async function fetchPersonImageWithFallback(requestUrl, person, id) {
       const imageData = await response.arrayBuffer();
       if (imageData.byteLength === 0) continue;
 
-      return imageData;
+      // Label the data URI with the response's real type. Sources include the
+      // SVG person icon (image/svg+xml) as a last resort, so a hardcoded
+      // image/jpeg would make Satori throw "Invalid JPEG" on it.
+      const contentType = response.headers.get("content-type") || "image/jpeg";
+      const base64 = Buffer.from(imageData).toString("base64");
+      return `data:${contentType.split(";")[0].trim()};base64,${base64}`;
     } catch (error) {
       if (src === sources[sources.length - 1]) {
         console.error("Fetching person fallback image failed:", error);

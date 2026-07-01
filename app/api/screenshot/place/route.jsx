@@ -95,7 +95,8 @@ export async function GET(request) {
         ) {
           const buffer = await imgRes.arrayBuffer();
           if (buffer.byteLength <= MAX_BG_IMAGE_BYTES) {
-            bgImageData = buffer;
+            const base64 = Buffer.from(buffer).toString("base64");
+            bgImageData = `data:${contentType};base64,${base64}`;
           }
         }
       }
