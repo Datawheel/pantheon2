@@ -26,6 +26,33 @@ const MONTH_NAMES = [
 ];
 
 const EDITION_META = {
+  "2026-06": {
+    headline: "The Month Football Swallowed the Chart",
+    subhead:
+      "Football swept June's chart as the 48-team World Cup kicked off across North America, pulling Messi, Ronaldo, Mbappé, Haaland, and a new generation of breakout names to the top. But the month's single largest surge came from outside the tournament, after the sudden death of Oliver Tree in Rio de Janeiro.",
+    editorial: {
+      intro:
+        'June belonged to football. The 48-team FIFA World Cup opened across the United States, Canada, and Mexico on June 11, and the tournament reshaped the top of the chart almost single-handedly: eight of the month\'s ten biggest risers were footballers. <a href="/profile/person/Lionel_Messi">Lionel Messi</a>, turning 39 during a record sixth World Cup, surged again as he stretched his run of scoring form and pushed deeper into the tournament\'s record books, while <a href="/profile/person/Cristiano_Ronaldo">Cristiano Ronaldo</a>, <a href="/profile/person/Kylian_Mbappé">Kylian Mbappé</a>, and Spain\'s teenage star <a href="/profile/person/Lamine_Yamal">Lamine Yamal</a> climbed in lockstep. Norway\'s <a href="/profile/person/Erling_Haaland">Erling Haaland</a> was one of the month\'s breakout stories, dragging his country to its first World Cup since 1998 and then scoring the winner in Norway\'s first-ever World Cup knockout victory. The single largest mover, though, was not a footballer at all: American musician <a href="/profile/person/Oliver_Tree">Oliver Tree</a> added more than seven million views to top the month outright after his death in a Rio de Janeiro helicopter collision on June 14, at just 32.',
+      middle:
+        'The tournament\'s pull ran deep into the field. Japan goalkeeper <a href="/profile/person/Zion_Suzuki">Zion Suzuki</a> was the third-biggest mover of the month, and the group stage lifted an unlikely supporting cast: host-nation forwards <a href="/profile/person/Folarin_Balogun">Folarin Balogun</a> of the United States and <a href="/profile/person/Julián_Quiñones">Julián Quiñones</a> of Mexico, Germany\'s <a href="/profile/person/Deniz_Undav">Deniz Undav</a>, France\'s <a href="/profile/person/Michael_Olise">Michael Olise</a>, and <a href="/profile/person/Luca_Zidane">Luca Zidane</a> &mdash; <a href="/profile/person/Zinedine_Zidane">Zinedine Zidane</a>\'s son, keeping goal for Algeria. Even FIFA president <a href="/profile/person/Gianni_Infantino">Gianni Infantino</a> and retired Swedish icon <a href="/profile/person/Zlatan_Ibrahimović">Zlatan Ibrahimović</a> rode the broader World Cup media wave. Away from football, June delivered two more championship climaxes: <a href="/profile/person/Alexander_Zverev">Alexander Zverev</a> won the French Open on June 7 for his first Grand Slam title, and <a href="/profile/person/Jalen_Brunson">Jalen Brunson</a> carried the New York Knicks to their first NBA title since 1973, taking Finals MVP as a series that began in May finished in June. Off the field, Britain\'s <a href="/profile/person/Andy_Burnham">Andy Burnham</a> surged after winning the June 18 Makerfield by-election and emerging as the likely successor to Keir Starmer. And June carried its own roll of farewells beyond Oliver Tree: <em>The Ring</em> and <em>Lilo &amp; Stitch</em> actress <a href="/profile/person/Daveigh_Chase">Daveigh Chase</a> died on June 16 at 35, <em>Buffy</em> and <em>Ted Lasso</em> actor <a href="/profile/person/Anthony_Head">Anthony Head</a> on June 1, and <em>Persepolis</em> author <a href="/profile/person/Marjane_Satrapi">Marjane Satrapi</a> on June 4.',
+      conclusion:
+        'The decline column was, once again, last month\'s front page in retreat. May\'s single biggest riser, Indian superstar <a href="/profile/person/Vijay_(actor)">Vijay</a>, became June\'s steepest faller, shedding more than four million views. May\'s heavy cluster of deaths eased back toward baseline almost in unison &mdash; NASCAR\'s <a href="/profile/person/Kyle_Busch">Kyle Busch</a>, racer <a href="/profile/person/Alex_Zanardi">Alex Zanardi</a>, CNN founder <a href="/profile/person/Ted_Turner">Ted Turner</a>, and basketball\'s <a href="/profile/person/Brandon_Clarke">Brandon Clarke</a> all falling sharply as their memorial surges passed. <a href="/profile/person/David_Attenborough">David Attenborough</a> receded from his 100th-birthday spike, and the <em>Michael</em> biopic wave that had run since April finally broke, with <a href="/profile/person/Michael_Jackson">Michael Jackson</a>, <a href="/profile/person/Debbie_Rowe">Debbie Rowe</a>, and <a href="/profile/person/Jaafar_Jackson">Jaafar Jackson</a> sliding together. May\'s Champions League touchline cooled as managers <a href="/profile/person/Mikel_Arteta">Mikel Arteta</a> and <a href="/profile/person/Luis_Enrique_(footballer)">Luis Enrique</a> gave way to the international game, while screen names <a href="/profile/person/Gina_Carano">Gina Carano</a>, <a href="/profile/person/Meryl_Streep">Meryl Streep</a>, and <a href="/profile/person/Stanley_Tucci">Stanley Tucci</a> drifted back down. It is one of the dataset\'s most reliable signatures: this month\'s headlines become next month\'s steepest falls.',
+    },
+    moverSummaries: {
+      "rising:Oliver_Tree":
+        "Oliver Tree was June's single biggest mover, adding more than seven million views after the 32-year-old musician was killed in a helicopter collision near Rio de Janeiro on June 14.",
+      "rising:Lionel_Messi":
+        "Lionel Messi surged as the World Cup opened across North America, staying in scoring form at 39 during a record sixth World Cup appearance.",
+      "rising:Zion_Suzuki":
+        "Zion Suzuki, Japan's goalkeeper, climbed nearly thirtyfold during the World Cup group stage — one of dozens of footballers the tournament pulled onto the chart.",
+      "falling:Vijay_(actor)":
+        "Vijay was June's steepest faller, shedding more than four million views as May's chart-topping surge around the Indian superstar cooled back toward baseline.",
+      "falling:Kyle_Busch":
+        "Kyle Busch fell back sharply as the obituary traffic from his May 21 death faded — one of several May farewells receding at once.",
+      "falling:David_Attenborough":
+        "David Attenborough dropped as the attention around his 100th birthday in May eased, returning him toward baseline.",
+    },
+  },
   "2026-05": {
     headline: "The Month the World Said Goodbye",
     subhead:

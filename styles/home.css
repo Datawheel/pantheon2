@@ -42,7 +42,7 @@
     flex-direction: column;
   }
 
-  & .home-head-title > div {
+  & .home-head-title > div:not(.home-search) {
     /* margin: 0 auto; */
     text-align: left;
     @media (max-width: 750px) {
