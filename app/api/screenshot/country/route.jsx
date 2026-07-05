@@ -3,6 +3,7 @@ import {NextResponse} from "next/server";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {safeFetchArray, safeFetchFirst} from "@/app/utils/safeFetch";
+import {cleanParam} from "../helpers/params";
 
 // Match the hardened person route: the Node runtime has higher memory limits
 // and more predictable image decoding than the edge sandbox.
@@ -23,10 +24,32 @@ async function fetchPublicAsset(request, assetPath) {
   return response.arrayBuffer();
 }
 
+// Fetch an image and only hand it to satori if it really is one. Error pages
+// served with 200 (HTML/XML) make satori throw "not iterable" mid-stream,
+// which surfaces as "failed to pipe response". Returned as a data URI labeled
+// with the real content-type: satori <img src> must be a string, not an
+// ArrayBuffer (another "i is not iterable" trigger).
+async function fetchImageDataUri(url) {
+  try {
+    const res = await fetch(url, {signal: AbortSignal.timeout(5000)});
+    if (!res.ok) return null;
+    const contentType = (res.headers.get("content-type") || "")
+      .split(";")[0]
+      .trim()
+      .toLowerCase();
+    if (!contentType.startsWith("image/")) return null;
+    const buffer = await res.arrayBuffer();
+    if (buffer.byteLength === 0) return null;
+    return `data:${contentType};base64,${Buffer.from(buffer).toString("base64")}`;
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
-  const id = searchParams.get("id");
+  const id = cleanParam(searchParams.get("id"));
 
   if (!id) {
     return new NextResponse("Not Found", {status: 404});
@@ -47,7 +70,8 @@ export async function GET(request) {
   );
   const {country: countryName, img_link, slug, id: countryId} = country;
 
-  if (!countryName) {
+  // Unknown slugs resolve to the {} fallback: no name and no id.
+  if (!countryName || !countryId) {
     return new NextResponse("ID mismatch", {status: 404});
   }
 
@@ -56,11 +80,18 @@ export async function GET(request) {
     ? `https://static.pantheon.world/profile/country/${slug}.jpg`
     : "https://static.pantheon.world/profile/placeholder_place_profile.jpg";
 
-  // Fetch background image, top people, and count in parallel. topPeople is
-  // guarded by safeFetchArray; the count fetch only reads a header, so a
-  // failure just leaves the count at 0 rather than throwing a 500.
+  // Fetch background image, top people, and count in parallel. Every branch
+  // degrades instead of throwing: bgImageData falls back to the placeholder
+  // (or null), topPeople is guarded by safeFetchArray, and the count fetch
+  // only reads a header, so a failure just leaves the count at 0.
   const [bgImageData, topPeople, countRes] = await Promise.all([
-    fetch(countryImgPath).then(res => res.arrayBuffer()),
+    fetchImageDataUri(countryImgPath).then(
+      dataUri =>
+        dataUri ||
+        fetchImageDataUri(
+          "https://static.pantheon.world/profile/placeholder_place_profile.jpg",
+        ),
+    ),
     safeFetchArray(
       `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,name,gender,occupation&limit=10`
     ),
@@ -96,7 +127,7 @@ export async function GET(request) {
   const backgroundColor = "#f4f4f1";
 
   try {
-    return new ImageResponse(
+    const imageResponse = new ImageResponse(
       (
       <div
         style={{
@@ -119,14 +150,24 @@ export async function GET(request) {
             display: "flex",
           }}
         >
-          <img
-            src={bgImageData}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
+          {bgImageData ? (
+            <img
+              src={bgImageData}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                background: "linear-gradient(135deg, #44403a 0%, #1f1d1a 100%)",
+              }}
+            />
+          )}
           {/* Gradient overlay - darker at bottom for text/portraits */}
           <div
             style={{
@@ -232,7 +273,7 @@ export async function GET(request) {
                 justifyContent: "center",
               }}
             >
-              {peopleToShow.map((person, index) => (
+              {(peopleToShow || []).map((person, index) => (
                 <div
                   key={person.id || index}
                   style={{
@@ -266,16 +307,26 @@ export async function GET(request) {
       width: 1200,
       height: 630,
       debug: false,
-      fonts: [
-        {
-          name: "Marcellus",
-          data: MarcellusfontData,
-          style: "normal",
-        },
-      ],
-      headers: {"cache-control": OG_CACHE_CONTROL},
+      fonts: MarcellusfontData
+        ? [
+            {
+              name: "Marcellus",
+              data: MarcellusfontData,
+              style: "normal",
+            },
+          ]
+        : [],
       }
     );
+
+    // Render eagerly: ImageResponse streams lazily, so satori errors thrown
+    // during piping would bypass this try/catch and crash the response
+    // ("failed to pipe response"). Buffering forces them into the catch.
+    const pngBuffer = await imageResponse.arrayBuffer();
+    return new NextResponse(pngBuffer, {
+      status: 200,
+      headers: {"content-type": "image/png", "cache-control": OG_CACHE_CONTROL},
+    });
   } catch (error) {
     console.error(
       "[screenshot-fail]",

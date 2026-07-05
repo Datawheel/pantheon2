@@ -3,6 +3,7 @@ import {NextResponse} from "next/server";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {getSupportedLocale, isArabicLocale} from "../helpers/locale";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
+import {safeFetchArray} from "@/app/utils/safeFetch";
 
 // Localized date formatters
 const DATE_FORMATTERS = {
@@ -142,16 +143,11 @@ export async function getBornOnThisDayImageResponse({
     "/fonts/Marcellus-Regular.ttf"
   );
 
-  // Fetch people born on this day
-  const peopleBornOnDay = await fetch(
+  // Fetch people born on this day. safeFetchArray guards res.ok / HTML
+  // responses so an API error degrades to an empty grid instead of a 500.
+  const peopleBornOnDay = await safeFetchArray(
     `${BASE_API}/rpc/born_on_day?m=${month}&d=${day}&lang=${normalizedLocale}`
-  )
-    .then(res => res.json())
-    .then(data => Array.isArray(data) ? data : [])
-    .catch(error => {
-      console.error("Error fetching people:", error);
-      return [];
-    });
+  );
 
   // Sort by HPI and take top 16
   const topPeople = peopleBornOnDay

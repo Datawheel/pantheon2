@@ -13,7 +13,11 @@ import {
   NUM_RANKINGS_POST,
 } from "@/components/utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
-import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
+import {
+  safeFetchArrayPaged,
+  safeFetchJson,
+  safeFetchFirst,
+} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 
 async function getOccupations() {
@@ -56,23 +60,24 @@ async function getPeopleBornHere(countryId) {
   if (!countryId) {
     return [];
   }
-  const url = `${BASE_API}/person?bplace_country=eq.${countryId}&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
-  return await safeFetchJson(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
-  );
+  // Paged with a stable id order: big countries (US ~17MB) blow past Next's
+  // 2MB data-cache limit as a single fetch and would re-hit PostgREST on
+  // every request.
+  const url = `${BASE_API}/person?bplace_country=eq.${countryId}&order=id.asc&select=bplace_country(id,country,slug),bplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  return await safeFetchArrayPaged(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 }
 
 async function getPeopleBornHereHpi(countryId) {
   if (!countryId) {
     return [];
   }
-  const url = `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(
+  const url = `${BASE_API}/person_ranks?bplace_country=eq.${countryId}&order=hpi.desc.nullslast,id.asc&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchArrayPaged(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
+    12000,
   );
 }
 
@@ -80,23 +85,21 @@ async function getPeopleDiedHere(countryId) {
   if (!countryId) {
     return [];
   }
-  const url = `${BASE_API}/person?dplace_country=eq.${countryId}&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
-  return await safeFetchJson(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
-  );
+  const url = `${BASE_API}/person?dplace_country=eq.${countryId}&order=id.asc&select=dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  return await safeFetchArrayPaged(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 }
 
 async function getPeopleDiedHereHpi(countryId) {
   if (!countryId) {
     return [];
   }
-  const url = `${BASE_API}/person_ranks?dplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(
+  const url = `${BASE_API}/person_ranks?dplace_country=eq.${countryId}&order=hpi.desc.nullslast,id.asc&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchArrayPaged(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
+    12000,
   );
 }
 

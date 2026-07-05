@@ -1,13 +1,30 @@
 import {plural} from "pluralize";
 import PersonImage from "@/components/utils/PersonImage";
 import {COLORS_DOMAIN} from "../utils/consts";
+import {getTranslations} from "@/app/translations";
+import {DEFAULT_LOCALE} from "@/app/locales";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
+import "../occupation-country/Header.css";
 
-export default function Header({occupation, people}) {
+export default function Header({
+  occupation,
+  people,
+  breadcrumbs,
+  locale = DEFAULT_LOCALE,
+}) {
+  const t = getTranslations(locale);
+  const accentColor = COLORS_DOMAIN[occupation.domain_slug] || "#BB3B57";
+  const occupationDisplay = locale === DEFAULT_LOCALE
+    ? plural(occupation.occupation)
+    : occupation.occupation;
+
   return (
-    <header className="hero">
-      <div className="bg-container">
+    <header
+      className="hero occupation-profile-hero"
+      style={{"--hero-accent": accentColor}}
+    >
+      <div className="bg-container" aria-hidden="true">
         <div className="bg-img-mask profession">
           <div className="bg-img bg-img-t">
             {people.slice(0, 4).map(p => (
@@ -21,7 +38,7 @@ export default function Header({occupation, people}) {
             ))}
           </div>
           <div className="bg-img bg-img-b">
-            {people.slice(5, 9).map(p => (
+            {people.slice(4, 8).map(p => (
               <PersonImage
                 key={p.id}
                 person={p}
@@ -31,15 +48,23 @@ export default function Header({occupation, people}) {
               />
             ))}
           </div>
-          <div
-            style={{backgroundColor: COLORS_DOMAIN[occupation.domain_slug]}}
-            className="bg-img-mask-after"
-          ></div>
+          <div className="bg-img-mask-after"></div>
         </div>
       </div>
+      {breadcrumbs}
       <div className="info">
-        <h2 className="profile-type">Occupation</h2>
-        <h1 className="profile-name">{plural(occupation.occupation)}</h1>
+        <p className="profile-type">{t.nav?.occupations || "Occupation"}</p>
+        <h1 className="profile-name">{occupationDisplay}</h1>
+        {people.length > 0 && (
+          <p className="profile-count">
+            {t.occupationCountry?.notablePeople
+              ? t.occupationCountry.notablePeople({
+                  count: people.length,
+                  countFormatted: people.length.toLocaleString(locale),
+                })
+              : `${people.length.toLocaleString(locale)} notable people`}
+          </p>
+        )}
       </div>
       <div className="mouse">
         <span className="mouse-scroll"></span>

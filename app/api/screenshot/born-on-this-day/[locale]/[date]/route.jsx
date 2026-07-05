@@ -2,7 +2,9 @@ import {getBornOnThisDayImageResponse} from "../../utils";
 import {NextResponse} from "next/server";
 import {getSupportedLocale} from "../../../helpers/locale";
 
-export const runtime = "edge";
+// Match the hardened person route: the Node runtime has higher memory limits
+// and more predictable image decoding than the edge sandbox.
+export const runtime = "nodejs";
 
 export async function GET(request, context) {
   // In Next.js 14.2+, params may need to be awaited

@@ -7,8 +7,15 @@ import "../../styles/Header.css";
 import "../../styles/mouse.css";
 import "./Header.css";
 
-export default function Header({occupation, country, people, locale = DEFAULT_LOCALE}) {
+export default function Header({
+  occupation,
+  country,
+  people,
+  breadcrumbs,
+  locale = DEFAULT_LOCALE,
+}) {
   const t = getTranslations(locale);
+  const accentColor = COLORS_DOMAIN[occupation.domain_slug] || "#BB3B57";
 
   // For English, use plural form; for other languages, use the occupation as-is
   const occupationDisplay = locale === "en"
@@ -21,7 +28,10 @@ export default function Header({occupation, country, people, locale = DEFAULT_LO
     : `${t.occupationCountry.from} ${country.country}`;
 
   return (
-    <header className="hero occupation-country-hero">
+    <header
+      className="hero occupation-country-hero"
+      style={{"--hero-accent": accentColor}}
+    >
       <div className="bg-container" aria-hidden="true">
         <div className="bg-img-mask profession">
           <div className="bg-img bg-img-t">
@@ -36,7 +46,7 @@ export default function Header({occupation, country, people, locale = DEFAULT_LO
             ))}
           </div>
           <div className="bg-img bg-img-b">
-            {people.slice(5, 9).map(p => (
+            {people.slice(4, 8).map(p => (
               <PersonImage
                 key={p.id}
                 person={p}
@@ -46,12 +56,10 @@ export default function Header({occupation, country, people, locale = DEFAULT_LO
               />
             ))}
           </div>
-          <div
-            style={{backgroundColor: COLORS_DOMAIN[occupation.domain_slug]}}
-            className="bg-img-mask-after"
-          ></div>
+          <div className="bg-img-mask-after"></div>
         </div>
       </div>
+      {breadcrumbs}
       <div className="info">
         <p className="profile-type">{t.occupationCountry.theMostFamous}</p>
         <h1 className="profile-name">

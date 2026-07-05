@@ -1,26 +1,133 @@
-/* Scoped overrides for the occupation-in-country hero.
-   The shared header (styles/Header.css) reserves 65vh, which pushes all
-   content below the fold on phones. */
-header.occupation-country-hero {
+/* Occupation profiles use a portrait mosaic with a quiet glass panel.
+   Everything is scoped so other profile heroes retain their existing look. */
+header.occupation-country-hero,
+header.occupation-profile-hero {
+  min-height: clamp(420px, 65vh, 600px);
+  isolation: isolate;
+
+  & .bg-img-mask.profession {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    filter: none;
+  }
+
+  & .bg-img-mask.profession .bg-img {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    flex: 0 0 50%;
+    height: 50%;
+    overflow: hidden;
+  }
+
+  & .bg-img-mask.profession .bg-img img {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    object-fit: cover;
+    filter: grayscale(18%) saturate(82%) contrast(104%);
+    transform: scale(1.025);
+  }
+
+  & .bg-img-mask.profession .bg-img-mask-after {
+    background: var(--hero-accent);
+    opacity: 0.3;
+    mix-blend-mode: color;
+  }
+
+  & .bg-container::after {
+    background:
+      linear-gradient(
+        115deg,
+        rgba(244, 244, 241, 0.64),
+        rgba(244, 244, 241, 0.38) 48%,
+        rgba(54, 54, 54, 0.18)
+      ),
+      url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAM0lEQVQoU2P88uXDGR4eARMGHIARJI5PEVgBPkVwBbgUoSjApghDAboirAqQFeFUAFMEAHvkH63uqfBbAAAAAElFTkSuQmCC)
+        repeat;
+  }
+
+  & .info {
+    width: min(620px, calc(100% - 3rem));
+    max-width: none;
+    padding: 3.8rem 4.2rem 3.4rem;
+    overflow: hidden;
+    background: linear-gradient(
+      145deg,
+      rgba(250, 249, 247, 0.92),
+      rgba(244, 244, 241, 0.8)
+    );
+    border: 1px solid rgba(54, 54, 54, 0.22);
+    border-radius: 4px;
+    box-shadow: 0 18px 55px rgba(54, 54, 54, 0.18);
+    backdrop-filter: blur(18px) saturate(110%);
+    -webkit-backdrop-filter: blur(18px) saturate(110%);
+  }
+
+  & .info::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: var(--hero-accent);
+    opacity: 0.85;
+  }
+
+  & .profile-type {
+    margin-bottom: 1.4rem;
+    color: #575654;
+    font-size: 1.15rem;
+    letter-spacing: 0.25em;
+  }
+
+  & .profile-name {
+    color: var(--colorDark);
+    font-size: clamp(3.2rem, 4.7vw, 5.4rem);
+    line-height: 1.08;
+    letter-spacing: 0.035em;
+    text-wrap: balance;
+  }
+
   @media (max-width: 750px) {
-    min-height: 42vh;
-    padding-top: 24px;
-    padding-bottom: 24px;
+    min-height: min(520px, 72svh);
+    max-height: none;
+    padding: 9.2rem 1rem 3rem;
+
+    & .info {
+      width: min(100%, 500px);
+      padding: 2.5rem 1.8rem 2.2rem;
+    }
+
+    & .profile-type {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    & .profile-name {
+      font-size: clamp(2.8rem, 9vw, 4rem);
+    }
   }
 }
 
-header.occupation-country-hero .profile-count {
-  margin: 10px auto 0;
-  font-size: 0.9rem;
-  letter-spacing: 0.08em;
+header.occupation-country-hero .profile-count,
+header.occupation-profile-hero .profile-count {
+  align-self: center;
+  margin: 1.8rem auto 0;
+  padding: 0.55rem 1rem 0.45rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: var(--colorStone);
-  opacity: 0.75;
+  color: #676663;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(54, 54, 54, 0.1);
+  border-radius: 999px;
 }
 
 /* The scroll hint eats vertical space on short mobile heroes */
 @media (max-width: 750px) {
-  header.occupation-country-hero .mouse {
+  header.occupation-country-hero .mouse,
+  header.occupation-profile-hero .mouse {
     display: none;
   }
 }

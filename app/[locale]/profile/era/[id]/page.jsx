@@ -12,7 +12,11 @@ import Occupations from "@/components/era/sections/Occupations";
 //   NUM_RANKINGS_POST,
 // } from "@/components/utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
-import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
+import {
+  safeFetchArrayPaged,
+  safeFetchJson,
+  safeFetchFirst,
+} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 
 async function getOccupations() {
@@ -42,39 +46,39 @@ async function getEra(eraId) {
   );
 }
 
+// The person queries below list explicit columns instead of `*`: the wildcard
+// dragged in translations/addl_info and pushed responses to 25-35MB, far past
+// Next's 2MB data-cache limit. They are also fetched in pages (with a stable
+// id order) so every underlying fetch entry stays cacheable.
 async function getPeopleBornInEra(startYear, endYear) {
-  const url = `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`;
-  return await safeFetchJson(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
-  );
+  const url = `${BASE_API}/person?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=id.asc&select=bplace_geonameid(id,place,slug,lat,lon),bplace_country(id,continent,country_code,country,slug),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,id,name,slug,gender,birthyear,deathyear,alive`;
+  return await safeFetchArrayPaged(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 }
 
 async function getPeopleBornInEraHpi(startYear, endYear) {
-  const url = `${BASE_API}/person_ranks?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(
+  const url = `${BASE_API}/person_ranks?birthyear=gte.${startYear}&birthyear=lte.${endYear}&order=hpi.desc.nullslast,id.asc&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchArrayPaged(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
+    12000,
   );
 }
 
 async function getPeopleDiedInEra(startYear, endYear) {
-  const url = `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,*`;
-  return await safeFetchJson(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
-  );
+  const url = `${BASE_API}/person?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=id.asc&select=dplace_country(id,continent,country_code,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,id,name,slug,gender,birthyear,deathyear,alive`;
+  return await safeFetchArrayPaged(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 }
 
 async function getPeopleDiedInEraHpi(startYear, endYear) {
-  const url = `${BASE_API}/person_ranks?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchJson(
+  const url = `${BASE_API}/person_ranks?deathyear=gte.${startYear}&deathyear=lte.${endYear}&order=hpi.desc.nullslast,id.asc&select=id,hpi,hpi_prev,non_en_page_views`;
+  return await safeFetchArrayPaged(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-    [],
+    12000,
   );
 }
 

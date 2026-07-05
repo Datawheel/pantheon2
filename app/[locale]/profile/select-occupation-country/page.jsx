@@ -5,7 +5,7 @@ import OccupationCountrySelector from "@/components/occupation-country/Occupatio
 import TrendingSection from "@/components/occupation-country/TrendingSection";
 import {toTitleCase} from "@/components/utils/vizHelpers";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
-import {safeFetchJson} from "@/app/utils/safeFetch";
+import {safeFetchArrayPaged, safeFetchJson} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 import {getTranslations} from "@/app/translations";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
@@ -17,14 +17,23 @@ async function getOccupations(lang) {
 }
 
 async function getCountries(lang) {
-  const url = `${BASE_API}/country?order=country.asc&select=*,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym`;
+  // Only these columns are consumed here; select=* dragged in translations
+  // and pushed the cached entry over Next's 2MB data-cache limit.
+  const url = `${BASE_API}/country?order=country.asc&select=id,slug,country,demonym,continent,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym`;
   return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
 }
 
 async function getAllCombinations(lang) {
-  // Fetch all occupation-country combinations with at least 1 person
-  const url = `${BASE_API}/occupation_country?num_people=gte.1&order=num_people.desc&select=*,occupation_data:occupation!occupation(occupation_slug,occupation,${lang}_occupation:translations->${lang}->>occupation),country_data:country!country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym)`;
-  return await safeFetchJson(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}}, []);
+  // Fetch all occupation-country combinations with at least 1 person.
+  // Only num_people plus the embedded names are consumed here; select=* pushed
+  // the response to ~3.8MB, past Next's 2MB data-cache limit, so it was
+  // re-fetched from PostgREST on every request.
+  const url = `${BASE_API}/occupation_country?num_people=gte.1&order=num_people.desc,occupation.asc,country.asc&select=num_people,occupation_data:occupation!occupation(occupation_slug,occupation,${lang}_occupation:translations->${lang}->>occupation),country_data:country!country(slug,country,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym)`;
+  return await safeFetchArrayPaged(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    4000,
+  );
 }
 
 async function getTopOccupationsByRca(lang) {

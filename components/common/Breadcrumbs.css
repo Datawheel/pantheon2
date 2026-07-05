@@ -57,42 +57,46 @@
   padding: 0.35rem 0;
 }
 
-/* ============================================================
-   Desktop: the site nav is a ~102px transparent overlay, so an
-   in-flow eggshell breadcrumb block leaves a tall empty band
-   ("forehead") above the hero. Instead, overlay a slim strip
-   just under the nav icons and let the hero image fill the top.
-   ============================================================ */
+/* On occupation profiles the hero begins behind the global nav. Keep that
+   image visible with a compact breadcrumb grouped with the title panel. */
+.occupation-country-page,
+.occupation-page {
+  position: relative;
+}
+
+.occupation-country-page .breadcrumbs,
+.occupation-page .breadcrumbs {
+  position: relative;
+  inset: auto;
+  z-index: 10;
+  align-self: center;
+  width: 100%;
+  margin: 0 0 1.2rem;
+  padding-top: 0;
+  background: transparent;
+  border: 0;
+  pointer-events: auto;
+}
+
+.occupation-country-page .breadcrumbs-list,
+.occupation-page .breadcrumbs-list {
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  margin: 0 auto;
+  padding: 0.6rem 1rem;
+  pointer-events: auto;
+  background: rgba(244, 244, 241, 0.78);
+  border: 1px solid rgba(54, 54, 54, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 5px 20px rgba(54, 54, 54, 0.1);
+  backdrop-filter: blur(14px) saturate(125%);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+}
+
 @media (min-width: 801px) {
-  .occupation-country-page {
-    position: relative;
-  }
-
-  .occupation-country-page .breadcrumbs {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 97; /* above the site nav (z-index 96) so links stay clickable */
-    background: transparent;
-    border-bottom: none;
-    padding-top: 0;
-    pointer-events: none; /* don't block the hero beneath; re-enabled on the row */
-  }
-
-  .occupation-country-page .breadcrumbs-list {
-    pointer-events: auto;
-    /* Nav icons end at ~63px; sit just below them. */
-    margin-top: 66px;
-    max-width: none;
-    /* Center the content column to 1200px while spanning full width. */
-    padding: 0.5rem max(1.5rem, calc((100% - 1200px) / 2 + 1.5rem));
+  .occupation-country-page .breadcrumbs-list,
+  .occupation-page .breadcrumbs-list {
     font-size: 1rem;
-    background: rgba(244, 244, 244, 0.82);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
 }
 
@@ -100,5 +104,18 @@
   .breadcrumbs-list {
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
+  }
+
+  .occupation-country-page .breadcrumbs-list,
+  .occupation-page .breadcrumbs-list {
+    max-width: calc(100% - 1.5rem);
+    margin: 0 auto;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.78rem;
+  }
+
+  .occupation-country-page .breadcrumbs-item + .breadcrumbs-item::before,
+  .occupation-page .breadcrumbs-item + .breadcrumbs-item::before {
+    margin: 0 0.35rem;
   }
 }

@@ -11,6 +11,7 @@ import {
   getSupportedLocale,
   isArabicLocale,
 } from "../helpers/locale";
+import {cleanParam} from "../helpers/params";
 
 export const runtime = "nodejs";
 
@@ -36,8 +37,8 @@ async function fetchPublicAsset(request, assetPath) {
 export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
-  const occupationQueryId = searchParams.get("occupation");
-  const countryQueryId = searchParams.get("country");
+  const occupationQueryId = cleanParam(searchParams.get("occupation"));
+  const countryQueryId = cleanParam(searchParams.get("country"));
   const lang = getSupportedLocale(
     searchParams.get("lang") || searchParams.get("locale") || DEFAULT_LOCALE,
   );
@@ -70,16 +71,23 @@ export async function GET(request) {
     ),
   ]);
 
+  // Unknown slugs resolve to the {} fallback: no id and no display name.
+  // Bail out before any of the names below get pluralized/lowercased.
+  if (
+    !occupation?.id ||
+    !occupation?.occupation ||
+    !country?.id ||
+    !country?.country
+  ) {
+    return new NextResponse("Not Found", {status: 404});
+  }
+
   const {occupation: occupationName, id: occupationId} = occupation;
   const {country: countryName, id: countryId} = country;
   const localizedOccupation =
-    occupation?.[`${lang}_occupation`] || occupationName;
-  const localizedCountry = country?.[`${lang}_country`] || countryName;
-  const localizedFromCountry = country?.[`${lang}_from_country`];
-
-  if (!localizedOccupation || !localizedCountry) {
-    return new NextResponse("Not Found", {status: 404});
-  }
+    occupation[`${lang}_occupation`] || occupationName;
+  const localizedCountry = country[`${lang}_country`] || countryName;
+  const localizedFromCountry = country[`${lang}_from_country`];
 
   // Fetch top people and total count in parallel. topPeople is guarded by
   // safeFetchArray; the count fetch only reads a header, so a failure just

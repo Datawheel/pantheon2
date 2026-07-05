@@ -1,7 +1,12 @@
 import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
+import {OG_CACHE_CONTROL} from "../helpers/cache";
+import {cleanParam} from "../helpers/params";
+import {safeFetchFirst} from "@/app/utils/safeFetch";
 
-export const runtime = "edge";
+// Match the hardened person route: the Node runtime has higher memory limits
+// and more predictable image decoding than the edge sandbox.
+export const runtime = "nodejs";
 
 async function fetchPublicAsset(request, assetPath) {
   const assetUrl = new URL(assetPath, request.url);
@@ -14,10 +19,31 @@ async function fetchPublicAsset(request, assetPath) {
   return response.arrayBuffer();
 }
 
+// Fetch an image and only hand it to satori if it really is one. Error pages
+// served with 200 (HTML/XML) make satori throw mid-render, and a raw
+// ArrayBuffer <img src> is another known satori crash trigger, so this
+// returns a data URI labeled with the real content-type.
+async function fetchImageDataUri(url) {
+  try {
+    const res = await fetch(url, {signal: AbortSignal.timeout(5000)});
+    if (!res.ok) return null;
+    const contentType = (res.headers.get("content-type") || "")
+      .split(";")[0]
+      .trim()
+      .toLowerCase();
+    if (!contentType.startsWith("image/")) return null;
+    const buffer = await res.arrayBuffer();
+    if (buffer.byteLength === 0) return null;
+    return `data:${contentType};base64,${Buffer.from(buffer).toString("base64")}`;
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
-  const id = searchParams.get("id");
+  const id = cleanParam(searchParams.get("id"));
   if (!id) {
     return new NextResponse("Not Found", {status: 404});
   }
@@ -27,27 +53,23 @@ export async function GET(request) {
     fetchPublicAsset(request, "/fonts/Amiko-Regular.ttf"),
   ]);
 
-  const eraRes = await fetch(`${BASE_API}/era?slug=eq.${id}`, {
-    method: "GET",
-  });
-  const data = await eraRes.json();
-
-  // Return first item if array has content, otherwise empty object
-  const era = Array.isArray(data) && data.length > 0 ? data[0] : {};
+  // safeFetchFirst guards res.ok / HTML responses so an API error during
+  // saturation windows yields a clean 404 instead of a thrown 500.
+  const era = await safeFetchFirst(`${BASE_API}/era?slug=eq.${id}`, {}, {});
 
   const {id: eraId, name: eraName, start_year, end_year} = era;
 
-  if (!eraName) {
+  if (!eraName || eraId === undefined) {
     return new NextResponse("ID mismatch", {status: 404});
   }
   const backgroundColor = "#f4f4f1";
 
-  const countryImgPath = `https://static.pantheon.world/profile/era/${eraId}.jpg`;
-
-  const bgImageData = await fetch(countryImgPath).then(res => res.arrayBuffer());
+  const bgImageData = await fetchImageDataUri(
+    `https://static.pantheon.world/profile/era/${eraId}.jpg`,
+  );
 
   try {
-    return new ImageResponse(
+    const imageResponse = new ImageResponse(
       (
       <div
         style={{
@@ -78,15 +100,17 @@ export async function GET(request) {
                 height: "100%",
               }}
             >
-              <img
-                src={bgImageData}
-                style={{
-                  height: "100%",
-                  width: "100%",
-                  objectFit: "cover",
-                  transform: "scale(1.1, 1.1)",
-                }}
-              />
+              {bgImageData ? (
+                <img
+                  src={bgImageData}
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    objectFit: "cover",
+                    transform: "scale(1.1, 1.1)",
+                  }}
+                />
+              ) : null}
             </div>
             <div
               style={{
@@ -195,6 +219,15 @@ export async function GET(request) {
       ],
       }
     );
+
+    // Render eagerly: ImageResponse streams lazily, so satori errors thrown
+    // during piping would bypass this try/catch and crash the response
+    // ("failed to pipe response"). Buffering forces them into the catch.
+    const pngBuffer = await imageResponse.arrayBuffer();
+    return new NextResponse(pngBuffer, {
+      status: 200,
+      headers: {"content-type": "image/png", "cache-control": OG_CACHE_CONTROL},
+    });
   } catch (error) {
     console.error(
       "[screenshot-fail]",

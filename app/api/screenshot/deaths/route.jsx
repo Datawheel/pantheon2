@@ -2,8 +2,11 @@ import {ImageResponse} from "next/og";
 import {NextResponse} from "next/server";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
+import {safeFetchArray} from "@/app/utils/safeFetch";
 
-export const runtime = "edge";
+// Match the hardened person route: the Node runtime has higher memory limits
+// and more predictable image decoding than the edge sandbox.
+export const runtime = "nodejs";
 
 async function fetchPublicAsset(request, assetPath) {
   const assetUrl = new URL(assetPath, request.url);
@@ -40,14 +43,17 @@ export async function GET(request) {
   const wreathBase64 = Buffer.from(wreathImageBuffer).toString("base64");
   const wreathDataUrl = `data:image/png;base64,${wreathBase64}`;
 
-  // Fetch people who died this year
+  // Fetch people who died this year. safeFetchArray guards res.ok / HTML
+  // responses so an API error during saturation windows degrades to an empty
+  // grid instead of a thrown 500 (a bare .json() also broke the .map below
+  // when PostgREST returned an error object).
   const [peopleDiedThisYearAttrs, peopleDiedThisYearHpi] = await Promise.all([
-    fetch(
+    safeFetchArray(
       `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=name,slug,id,gender,occupation(occupation,occupation_slug)&order=deathdate.asc`
-    ).then(res => res.json()),
-    fetch(
+    ),
+    safeFetchArray(
       `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi`
-    ).then(res => res.json()),
+    ),
   ]);
 
   // Merge and sort by HPI
@@ -77,7 +83,7 @@ export async function GET(request) {
   const backgroundColor = "#f4f4f1";
 
   try {
-    return new ImageResponse(
+    const imageResponse = new ImageResponse(
       (
       <div
         style={{
@@ -121,7 +127,6 @@ export async function GET(request) {
             height: "100%",
             padding: "0 60px",
             position: "relative",
-            zIndex: 10,
           }}
         >
           <h1
@@ -177,7 +182,6 @@ export async function GET(request) {
             height: "100%",
             padding: "80px 60px 80px 0",
             position: "relative",
-            zIndex: 10,
           }}
         >
           <div
@@ -243,9 +247,17 @@ export async function GET(request) {
           style: "normal",
         },
       ],
-      headers: {"cache-control": OG_CACHE_CONTROL},
       }
     );
+
+    // Render eagerly: ImageResponse streams lazily, so satori errors thrown
+    // during piping would bypass this try/catch and crash the response
+    // ("failed to pipe response"). Buffering forces them into the catch.
+    const pngBuffer = await imageResponse.arrayBuffer();
+    return new NextResponse(pngBuffer, {
+      status: 200,
+      headers: {"content-type": "image/png", "cache-control": OG_CACHE_CONTROL},
+    });
   } catch (error) {
     console.error(
       "[screenshot-fail]",

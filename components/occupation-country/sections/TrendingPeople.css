@@ -3,9 +3,12 @@
    ============================================ */
 
 .trending-people-section {
-  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-  padding: 2.75rem 0;
-  border-bottom: 2px solid #fdba74;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(253, 186, 116, 0.2), transparent 34rem),
+    linear-gradient(180deg, #fbf8f2 0%, #f8f3ea 100%);
+  padding: 3.5rem 0 3.75rem;
+  border-top: 1px solid rgba(154, 52, 18, 0.08);
+  border-bottom: 1px solid rgba(154, 52, 18, 0.12);
 }
 
 .trending-people-container {
@@ -19,11 +22,18 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .trending-people-icon {
-  font-size: 2rem;
+  display: grid;
+  place-items: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  font-size: 1.8rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(234, 88, 12, 0.16);
+  border-radius: 999px;
 }
 
 .trending-people-title {
@@ -38,7 +48,7 @@
 .trending-people-intro {
   font-size: 1.05rem;
   line-height: 1.6;
-  color: #9a3412;
+  color: #775345;
   text-align: center;
   max-width: 720px;
   margin: 0 auto 2rem;
@@ -63,8 +73,8 @@
 /* Card Styling */
 .trending-person-card {
   background: rgba(255, 255, 255, 0.96);
-  border-radius: 12px;
-  border: 1px solid rgba(235, 120, 35, 0.2);
+  border-radius: 10px;
+  border: 1px solid rgba(154, 52, 18, 0.14);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -72,6 +82,7 @@
   transition: box-shadow 0.2s ease, transform 0.2s ease;
   flex: 1;
   height: 100%;
+  box-shadow: 0 2px 10px rgba(54, 54, 54, 0.035);
 }
 
 .trending-person-card:hover {

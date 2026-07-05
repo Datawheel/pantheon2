@@ -15,7 +15,7 @@ import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
-import {safeFetchArray} from "@/app/utils/safeFetch";
+import {safeFetchArray, safeFetchArrayPaged} from "@/app/utils/safeFetch";
 import {notFound} from "next/navigation";
 
 // Safe JSON fetch with logging for debugging HTML responses
@@ -82,21 +82,25 @@ async function getAllOccupationsInCountry(countryId, lang = "en") {
   );
 }
 
+// No occupation(...) embed here: every row shares the page's occupation, so
+// the caller attaches it in JS instead of repeating it per row. Fetched in
+// id-ordered pages to keep each fetch under Next's 2MB data-cache limit
+// (big combos like US actors were ~7MB and never cached).
 async function getPeople(occupationId, countryId) {
   const encodedOccupationId = encodePostgrestValue(occupationId);
-  const url = `${BASE_API}/person?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation(id,occupation,domain,num_born,hpi,l,occupation_slug,domain_slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive,famous_for,description`;
-  return await safeFetchArray(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-  );
+  const url = `${BASE_API}/person?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&order=id.asc&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive,famous_for,description`;
+  return await safeFetchArrayPaged(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 }
 
 async function getPeopleHpi(occupationId, countryId) {
   const encodedOccupationId = encodePostgrestValue(occupationId);
-  const url = `${BASE_API}/person_ranks?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`;
-  return await safeFetchArray(
+  const url = `${BASE_API}/person_ranks?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&order=hpi.desc.nullslast,id.asc&select=id,hpi,hpi_prev,l,l_prev,non_en_page_views`;
+  return await safeFetchArrayPaged(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    12000,
   );
 }
 
@@ -140,8 +144,12 @@ export async function generateMetadata(props, parent) {
   const localizedOccupation =
     occupation[`${lang}_occupation`] || occupation.occupation;
   const localizedCountry = country[`${lang}_country`] || country.country;
-  const localizedDemonym = country[`${lang}_demonym`] || country.demonym;
-  const localizedNationalityAdj = country[`${lang}_nationality_adj`] || country.demonym;
+  // demonym can be null in the DB even for valid countries; fall back to the
+  // country name so metadata never reads "undefined".
+  const localizedDemonym =
+    country[`${lang}_demonym`] || country.demonym || localizedCountry;
+  const localizedNationalityAdj =
+    country[`${lang}_nationality_adj`] || country.demonym || localizedCountry;
 
   // Get count of people for this occupation + country
   const countRes = await fetch(
@@ -260,6 +268,8 @@ export default async function Page(props) {
       const hpiData = peopleHpi.find(hpi => hpi.id === person.id);
       return {
         ...person,
+        // getPeople no longer embeds the (identical) occupation row per person.
+        occupation,
         ...(hpiData || {}), // Spread hpiData if found, otherwise spread empty object
       };
     })
@@ -274,8 +284,12 @@ export default async function Page(props) {
   const localizedOccupation =
     occupation[`${lang}_occupation`] || occupation.occupation;
   const localizedCountry = country[`${lang}_country`] || country.country;
-  const localizedDemonym = country[`${lang}_demonym`] || country.demonym;
-  const localizedNationalityAdj = country[`${lang}_nationality_adj`] || country.demonym;
+  // demonym can be null in the DB even for valid countries; fall back to the
+  // country name so metadata never reads "undefined".
+  const localizedDemonym =
+    country[`${lang}_demonym`] || country.demonym || localizedCountry;
+  const localizedNationalityAdj =
+    country[`${lang}_nationality_adj`] || country.demonym || localizedCountry;
   const localizedFromCountry = country[`${lang}_from_country`];
 
   // Create localized versions of occupation and country to pass to components
@@ -356,12 +370,12 @@ export default async function Page(props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{__html: JSON.stringify(itemListJsonLd)}}
       />
-      <Breadcrumbs items={breadcrumbItems} />
       <Header
         country={localizedCountryObj}
         occupation={localizedOccupationObj}
         people={people}
         locale={lang}
+        breadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
       />
       {trendingStatus && (
         <TrendingBanner
