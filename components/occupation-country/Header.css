@@ -1,0 +1,26 @@
+/* Scoped overrides for the occupation-in-country hero.
+   The shared header (styles/Header.css) reserves 65vh, which pushes all
+   content below the fold on phones. */
+header.occupation-country-hero {
+  @media (max-width: 750px) {
+    min-height: 42vh;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+header.occupation-country-hero .profile-count {
+  margin: 10px auto 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--colorStone);
+  opacity: 0.75;
+}
+
+/* The scroll hint eats vertical space on short mobile heroes */
+@media (max-width: 750px) {
+  header.occupation-country-hero .mouse {
+    display: none;
+  }
+}

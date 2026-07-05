@@ -1,4 +1,5 @@
 import {plural} from "pluralize";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Header from "@/components/occupation-country/Header";
 import Intro from "@/components/occupation-country/Intro";
 import TrendingBanner from "@/components/occupation-country/TrendingBanner";
@@ -226,6 +227,10 @@ export default async function Page(props) {
   const params = await props.params;
   const {locale, id, countryId} = params;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
+  const tEn = getTranslations(DEFAULT_LOCALE);
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+  const baseUrl = process.env.URL || "https://pantheon.world";
 
   const [occupations, occupation, country, trendingStatus] = await Promise.all([
     getOccupations(),
@@ -287,8 +292,71 @@ export default async function Page(props) {
     fromCountry: localizedFromCountry,
   };
 
+  // For English, use plural form; for other languages, use the occupation as-is
+  const occupationDisplay = lang === "en"
+    ? toTitleCase(plural(localizedOccupation))
+    : localizedOccupation;
+
+  const pagePath = `${localePrefix}/profile/occupation/${id}/country/${countryId}`;
+  const breadcrumbItems = [
+    {label: t.nav?.home || tEn.nav.home, href: `${localePrefix}/`},
+    {
+      label: t.nav?.occupations || tEn.nav.occupations,
+      href: `${localePrefix}/profile/occupation`,
+    },
+    {
+      label: occupationDisplay,
+      href: `${localePrefix}/profile/occupation/${id}`,
+    },
+    {label: localizedCountry},
+  ];
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbItems.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.label,
+      item: `${baseUrl}${item.href || pagePath}`,
+    })),
+  };
+
+  const topPeople = people.slice(0, 10);
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${t.occupationCountry?.greatest || tEn.occupationCountry.greatest} ${localizedNationalityAdj} ${occupationDisplay}`,
+    url: `${baseUrl}${pagePath}`,
+    numberOfItems: topPeople.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    itemListElement: topPeople.map((person, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Person",
+        name: person.name,
+        url: `${baseUrl}${localePrefix}/profile/person/${person.slug}`,
+        image: `https://static.pantheon.world/profile/people/${person.id}.jpg`,
+        jobTitle: toTitleCase(localizedOccupation),
+        nationality: {"@type": "Country", name: localizedCountry},
+        ...(person.birthyear > 0 && {birthDate: `${person.birthyear}`}),
+        ...(person.deathyear > 0 && {deathDate: `${person.deathyear}`}),
+      },
+    })),
+  };
+
   return (
-    <div className="person">
+    <div className="person occupation-country-page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbJsonLd)}}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(itemListJsonLd)}}
+      />
+      <Breadcrumbs items={breadcrumbItems} />
       <Header
         country={localizedCountryObj}
         occupation={localizedOccupationObj}

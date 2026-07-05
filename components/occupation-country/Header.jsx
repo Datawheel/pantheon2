@@ -5,6 +5,7 @@ import {getTranslations} from "@/app/translations";
 import {DEFAULT_LOCALE} from "@/app/locales";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
+import "./Header.css";
 
 export default function Header({occupation, country, people, locale = DEFAULT_LOCALE}) {
   const t = getTranslations(locale);
@@ -20,8 +21,8 @@ export default function Header({occupation, country, people, locale = DEFAULT_LO
     : `${t.occupationCountry.from} ${country.country}`;
 
   return (
-    <header className="hero">
-      <div className="bg-container">
+    <header className="hero occupation-country-hero">
+      <div className="bg-container" aria-hidden="true">
         <div className="bg-img-mask profession">
           <div className="bg-img bg-img-t">
             {people.slice(0, 4).map(p => (
@@ -52,10 +53,20 @@ export default function Header({occupation, country, people, locale = DEFAULT_LO
         </div>
       </div>
       <div className="info">
-        <h2 className="profile-type">{t.occupationCountry.theMostFamous}</h2>
+        <p className="profile-type">{t.occupationCountry.theMostFamous}</p>
         <h1 className="profile-name">
           {occupationDisplay} {countryPart}
         </h1>
+        {people.length > 0 && (
+          <p className="profile-count">
+            {t.occupationCountry.notablePeople
+              ? t.occupationCountry.notablePeople({
+                  count: people.length,
+                  countFormatted: people.length.toLocaleString(locale),
+                })
+              : `${people.length.toLocaleString(locale)} notable people`}
+          </p>
+        )}
       </div>
       <div className="mouse">
         <span className="mouse-scroll"></span>

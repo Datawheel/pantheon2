@@ -81,12 +81,9 @@ export default function Intro({country, occupation, allCountriesInOccupation, lo
     <section className="intro-section">
       <div className="intro-content">
         <div className="intro-text">
-          <h3>
-            <img
-              src="/images/ui/profile-w.svg"
-              alt="Icon of occuation in country"
-            />
-          </h3>
+          <div className="intro-icon" aria-hidden="true">
+            <img src="/images/ui/profile-w.svg" alt="" />
+          </div>
           <p dangerouslySetInnerHTML={{__html: introHTML}} />
         </div>
       </div>

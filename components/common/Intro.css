@@ -184,7 +184,8 @@
     }
   }
 
-  & h3 {
+  & h3,
+  & .intro-icon {
     @mixin profileIntroTitle;
     color: inherit;
     display: block;
