@@ -1,10 +1,11 @@
 "use client";
 
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import Link from "next/link";
 import {getTranslations} from "@/app/translations";
 import {PUBLIC_API} from "@/app/constants";
 import {DEFAULT_LOCALE} from "@/app/locales";
+import {encodePostgrestQuotedList} from "@/app/utils/postgrest";
 import "./TrendingExcerpt.css";
 
 export default function TrendingExcerpt({trendingPeople, currentLang, allBios = []}) {
@@ -12,10 +13,14 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [trendingReasons, setTrendingReasons] = useState({});
+  const [cycleVersion, setCycleVersion] = useState(0);
+  const manualTransitionTimeout = useRef(null);
   const t = getTranslations(currentLang);
 
-  // Get slugs of first 4 people in grid
-  const firstRowSlugs = allBios.slice(0, 4).map(b => b.slug);
+  // Keep the carousel in the same rank order as the complete visible grid.
+  const displayedBios = allBios.slice(0, 16);
+  const displayedSlugs = displayedBios.map(b => b.slug).filter(Boolean);
+  const displayedSlugsKey = encodePostgrestQuotedList(displayedSlugs);
 
   // Fetch trending reasons for the current language
   useEffect(() => {
@@ -28,10 +33,14 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
 
       try {
         const response = await fetch(
-          `${PUBLIC_API}/trend_news?date=eq.${yesterday}&lang=eq.${currentLang}&slug=in.(${firstRowSlugs.join(",")})&select=slug,title,reason,llm_metadata`,
+          `${PUBLIC_API}/trend_news?date=eq.${yesterday}&lang=eq.${currentLang}&slug=in.(${displayedSlugsKey})&select=slug,title,reason,llm_metadata`,
           {cache: "force-cache"}
         );
-        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`Trending reasons request failed: HTTP ${response.status}`);
+        }
+        const json = await response.json();
+        const data = Array.isArray(json) ? json : [];
 
         // Build a map of slug -> reason data
         const reasonsMap = data.reduce((acc, item) => {
@@ -50,50 +59,72 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
       }
     }
 
-    if (firstRowSlugs.length > 0) {
+    if (displayedSlugsKey) {
       fetchTrendingReasons();
     }
-  }, [currentLang, firstRowSlugs.join(",")]);
+  }, [currentLang, displayedSlugsKey]);
 
-  // Merge trending people with their reasons from the current language
-  const peopleWithReasons = trendingPeople
-    .filter(person => firstRowSlugs.includes(person.slug))
-    .map(person => ({
-      ...person,
-      trending_reason: trendingReasons[person.slug]?.trending_reason || person.trending_reason,
-      llm_metadata: trendingReasons[person.slug]?.llm_metadata || person.llm_metadata,
-      localized_name: trendingReasons[person.slug]?.localized_name || person.localized_name,
-    }))
+  // Merge server-provided reasons and the client refresh into grid order. Only
+  // profiles with an actual reason become carousel stories.
+  const providedReasons = new Map(
+    trendingPeople.map(person => [person.slug, person]),
+  );
+  const peopleWithReasons = displayedBios
+    .map(person => {
+      const provided = providedReasons.get(person.slug) || {};
+      const refreshed = trendingReasons[person.slug] || {};
+      return {
+        ...person,
+        ...provided,
+        trending_reason:
+          refreshed.trending_reason || provided.trending_reason || person.trending_reason,
+        llm_metadata:
+          refreshed.llm_metadata || provided.llm_metadata || person.llm_metadata,
+        localized_name:
+          refreshed.localized_name || provided.localized_name || person.localized_name,
+      };
+    })
     .filter(person => person.trending_reason && person.trending_reason.trim().length > 0);
+
+  useEffect(() => {
+    setCurrentIndex(index => index < peopleWithReasons.length ? index : 0);
+  }, [peopleWithReasons.length]);
+
+  useEffect(() => () => clearTimeout(manualTransitionTimeout.current), []);
 
   useEffect(() => {
     if (peopleWithReasons.length === 0) return;
 
+    let transitionTimeout;
     const interval = setInterval(() => {
       // Fade out
       setIsVisible(false);
 
       // After fade out completes, change content and fade in
-      setTimeout(() => {
+      transitionTimeout = setTimeout(() => {
         setCurrentIndex(prev => (prev + 1) % peopleWithReasons.length);
         setIsVisible(true);
       }, 500); // Match CSS transition duration
     }, 10000); // Rotate every 10 seconds
 
-    return () => clearInterval(interval);
-  }, [peopleWithReasons.length]);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(transitionTimeout);
+    };
+  }, [peopleWithReasons.length, cycleVersion]);
 
   if (peopleWithReasons.length === 0) {
     return null;
   }
 
-  const currentPerson = peopleWithReasons[currentIndex];
+  const safeCurrentIndex = currentIndex % peopleWithReasons.length;
+  const currentPerson = peopleWithReasons[safeCurrentIndex];
 
-  // Find this person's position in the first row (first 4 people)
-  const firstRowBios = allBios.slice(0, 4);
-  const columnPosition = firstRowBios.findIndex(b => b.slug === currentPerson.slug);
-  // If not in first row, default to position 0
-  const arrowPosition = columnPosition >= 0 ? columnPosition : 0;
+  // Move the excerpt directly below the active profile's row and point its
+  // arrow toward that profile's column. The row changes while faded out.
+  const gridPosition = displayedBios.findIndex(b => b.slug === currentPerson.slug);
+  const arrowPosition = gridPosition >= 0 ? gridPosition % 4 : 0;
+  const excerptGridRow = gridPosition >= 0 ? Math.floor(gridPosition / 4) + 2 : 2;
 
   // Truncate reason to ~150 characters for excerpt
   const truncateExcerpt = (text, maxLength = 150) => {
@@ -112,41 +143,47 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
+  const selectStory = index => {
+    clearTimeout(manualTransitionTimeout.current);
+    setCycleVersion(version => version + 1);
+    setIsVisible(false);
+    manualTransitionTimeout.current = setTimeout(() => {
+      setCurrentIndex(index);
+      setIsVisible(true);
+    }, 500);
+  };
+
   return (
-    <div className={`trending-excerpt-container ${isVisible ? "visible" : ""}`}>
-      <div className="trending-excerpt-bubble" data-grid-position={arrowPosition}>
-        <div className="trending-excerpt-header">
-          <strong>
-            <Link href={`${localePrefix}/profile/person/${currentPerson.slug}`} className="excerpt-person-link">
-              {currentPerson.localized_name || currentPerson.title || currentPerson.name}
-            </Link>
-          </strong>
-          {" "}{t.home.isTrending}
+    <li className="grid-excerpt-item" style={{gridRow: excerptGridRow}}>
+      <div className={`trending-excerpt-container ${isVisible ? "visible" : ""}`}>
+        <div className="trending-excerpt-bubble" data-grid-position={arrowPosition}>
+          <div className="trending-excerpt-header">
+            <strong>
+              <Link href={`${localePrefix}/profile/person/${currentPerson.slug}`} className="excerpt-person-link">
+                {currentPerson.localized_name || currentPerson.title || currentPerson.name}
+              </Link>
+            </strong>
+            {" "}{t.home.isTrending}
+          </div>
+          <p className="trending-excerpt-text">{excerpt}</p>
+          <Link
+            href={`/${currentLang}/news?date=${today}#${currentPerson.slug}`}
+            className="trending-excerpt-link"
+          >
+            {t.home.readFullStory} →
+          </Link>
         </div>
-        <p className="trending-excerpt-text">{excerpt}</p>
-        <Link
-          href={`/${currentLang}/news?date=${today}#${currentPerson.slug}`}
-          className="trending-excerpt-link"
-        >
-          {t.home.readFullStory} →
-        </Link>
+        <div className="trending-excerpt-pagination">
+          {peopleWithReasons.map((person, index) => (
+            <button
+              key={person.slug}
+              className={`pagination-dot ${index === safeCurrentIndex ? "active" : ""}`}
+              onClick={() => selectStory(index)}
+              aria-label={`Go to ${person.localized_name || person.title || person.name}'s story (${index + 1} of ${peopleWithReasons.length})`}
+            />
+          ))}
+        </div>
       </div>
-      <div className="trending-excerpt-pagination">
-        {peopleWithReasons.map((_, index) => (
-          <button
-            key={index}
-            className={`pagination-dot ${index === currentIndex ? "active" : ""}`}
-            onClick={() => {
-              setIsVisible(false);
-              setTimeout(() => {
-                setCurrentIndex(index);
-                setIsVisible(true);
-              }, 500);
-            }}
-            aria-label={`Go to story ${index + 1}`}
-          />
-        ))}
-      </div>
-    </div>
+    </li>
   );
 }

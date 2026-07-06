@@ -7,6 +7,7 @@ import {REVALIDATE_PERIODS} from "@/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import HomeSearch from "@/components/home/HomeSearch";
+import {encodePostgrestQuotedList} from "@/app/utils/postgrest";
 const baseUrl = process.env.URL || "https://pantheon.world";
 const apiBaseUrl = process.env.BASE_API || "https://api.pantheon.world";
 
@@ -94,18 +95,20 @@ export default async function Home(props) {
   const yesterday = `${easternNow.getFullYear()}-${String(easternNow.getMonth() + 1).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
   const todayString = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
-  // Get slugs from top trending people (first 5 to check for reasons)
+  // Fetch reasons for every profile shown in the trending grid. The grid is
+  // capped at 16, so the excerpt carousel can cover the complete visible set.
   const topTrendingSlugs = trendingAll
-    .slice(0, 5)
+    .slice(0, 16)
     .map(p => p.slug)
     .filter(Boolean);
+  const topTrendingSlugFilter = encodePostgrestQuotedList(topTrendingSlugs);
 
   // Fetch trending reasons for these people
   let trendingWithReasons = [];
   if (topTrendingSlugs.length > 0) {
     try {
       const reasonsData = await fetch(
-        `${apiBaseUrl}/trend_news?date=eq.${yesterday}&lang=eq.${lang}&slug=in.(${topTrendingSlugs.join(",")})&select=slug,title,reason,llm_metadata`,
+        `${apiBaseUrl}/trend_news?date=eq.${yesterday}&lang=eq.${lang}&slug=in.(${topTrendingSlugFilter})&select=slug,title,reason,llm_metadata`,
         {
           next: {revalidate: REVALIDATE_PERIODS.SHORT * 2},
         },

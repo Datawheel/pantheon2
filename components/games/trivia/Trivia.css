@@ -1394,6 +1394,9 @@
 /* ===== Light nav for dark trivia background ===== */
 body:has(.trivia-container) .globalNav .item-link {
   color: var(--mythic-gold-light);
+  transition:
+    color 260ms ease-in-out,
+    opacity 160ms ease;
 }
 
 body:has(.trivia-container) .globalNav .item-link:hover {
@@ -1411,6 +1414,30 @@ body:has(.trivia-container) .globalNav .logo {
 
 body:has(.trivia-container) .globalNav .search-btn img {
   filter: brightness(0) invert(0.85) sepia(0.5) saturate(2) hue-rotate(10deg);
+}
+
+/* The global desktop nav fades to a light surface on interaction. Fade the
+   trivia-specific gold treatment back to the standard dark palette with it. */
+@media (min-width: 801px) {
+  body:has(.trivia-container) .navigation:hover .item-link,
+  body:has(.trivia-container) .navigation:focus-within .item-link {
+    color: var(--colorDark);
+  }
+
+  body:has(.trivia-container) .navigation:hover .item-link:hover,
+  body:has(.trivia-container) .navigation:focus-within .item-link:hover {
+    color: var(--colorDark);
+    opacity: 0.7;
+  }
+
+  body:has(.trivia-container) .navigation:hover .item-link::before,
+  body:has(.trivia-container) .navigation:focus-within .item-link::before,
+  body:has(.trivia-container) .navigation:hover .logo,
+  body:has(.trivia-container) .navigation:focus-within .logo,
+  body:has(.trivia-container) .navigation:hover .search-btn img,
+  body:has(.trivia-container) .navigation:focus-within .search-btn img {
+    filter: none;
+  }
 }
 
 /* ===== Trivia Confetti ===== */

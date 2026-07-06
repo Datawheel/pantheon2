@@ -74,15 +74,13 @@ const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = nul
               </div>
             </a>
           </li>
-          {/* Insert excerpt after first row (index 3 = after 4th person) */}
+          {/* Mount once; the excerpt positions its grid row from the active story. */}
           {index === 3 && trendingExcerpt && (
-            <li className="grid-excerpt-item">
-              <TrendingExcerpt
-                trendingPeople={trendingExcerpt.trendingPeople}
-                currentLang={trendingExcerpt.currentLang}
-                allBios={bios}
-              />
-            </li>
+            <TrendingExcerpt
+              trendingPeople={trendingExcerpt.trendingPeople}
+              currentLang={trendingExcerpt.currentLang}
+              allBios={bios}
+            />
           )}
         </Fragment>
       ))}
