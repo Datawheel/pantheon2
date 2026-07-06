@@ -27,7 +27,7 @@
 
 .trending-excerpt-bubble {
   position: relative;
-  background: linear-gradient(135deg, rgba(184, 147, 98, 0.95) 0%, rgba(164, 127, 78, 0.95) 100%);
+  background: var(--excerpt-color, rgb(184, 147, 98));
   border-radius: 16px;
   padding: 1.5rem 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -48,7 +48,7 @@
   height: 0;
   border-left: 20px solid transparent;
   border-right: 20px solid transparent;
-  border-bottom: 20px solid rgba(184, 147, 98, 0.95);
+  border-bottom: 20px solid var(--excerpt-color, rgb(184, 147, 98));
   filter: drop-shadow(0 -2px 3px rgba(0, 0, 0, 0.1));
 }
 
@@ -112,7 +112,8 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(184, 147, 98, 0.3);
+  background: var(--pagination-color, rgba(184, 147, 98, 0.95));
+  opacity: 0.32;
   border: none;
   cursor: pointer;
   padding: 0;
@@ -120,12 +121,12 @@
 }
 
 .pagination-dot:hover {
-  background: rgba(184, 147, 98, 0.5);
+  opacity: 0.62;
   transform: scale(1.2);
 }
 
 .pagination-dot.active {
-  background: rgba(184, 147, 98, 0.95);
+  opacity: 1;
   width: 24px;
   border-radius: 5px;
 }

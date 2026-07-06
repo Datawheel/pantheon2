@@ -8,7 +8,19 @@ import {DEFAULT_LOCALE} from "@/app/locales";
 import {encodePostgrestQuotedList} from "@/app/utils/postgrest";
 import "./TrendingExcerpt.css";
 
-export default function TrendingExcerpt({trendingPeople, currentLang, allBios = []}) {
+const ROW_COLORS = [
+  "var(--colorAqua)",
+  "var(--colorSports)",
+  "var(--colorArts)",
+  "var(--colorExploration)",
+];
+
+export default function TrendingExcerpt({
+  trendingPeople,
+  currentLang,
+  allBios = [],
+  onActivePersonChange,
+}) {
   const localePrefix = currentLang === DEFAULT_LOCALE ? "" : `/${currentLang}`;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
@@ -113,18 +125,31 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
     };
   }, [peopleWithReasons.length, cycleVersion]);
 
-  if (peopleWithReasons.length === 0) {
-    return null;
-  }
-
-  const safeCurrentIndex = currentIndex % peopleWithReasons.length;
-  const currentPerson = peopleWithReasons[safeCurrentIndex];
+  const safeCurrentIndex = peopleWithReasons.length > 0
+    ? currentIndex % peopleWithReasons.length
+    : 0;
+  const currentPerson = peopleWithReasons[safeCurrentIndex] || null;
+  const currentPersonSlug = currentPerson?.slug || null;
 
   // Move the excerpt directly below the active profile's row and point its
   // arrow toward that profile's column. The row changes while faded out.
-  const gridPosition = displayedBios.findIndex(b => b.slug === currentPerson.slug);
+  const gridPosition = currentPerson
+    ? displayedBios.findIndex(b => b.slug === currentPerson.slug)
+    : -1;
   const arrowPosition = gridPosition >= 0 ? gridPosition % 4 : 0;
-  const excerptGridRow = gridPosition >= 0 ? Math.floor(gridPosition / 4) + 2 : 2;
+  const activeProfileRow = gridPosition >= 0 ? Math.floor(gridPosition / 4) : 0;
+  const excerptGridRow = activeProfileRow + 2;
+  const activeRowColor = ROW_COLORS[activeProfileRow % ROW_COLORS.length];
+
+  useEffect(() => {
+    onActivePersonChange?.(currentPersonSlug
+      ? {slug: currentPersonSlug, color: activeRowColor}
+      : null);
+  }, [activeRowColor, currentPersonSlug, onActivePersonChange]);
+
+  if (!currentPerson) {
+    return null;
+  }
 
   // Truncate reason to ~150 characters for excerpt
   const truncateExcerpt = (text, maxLength = 150) => {
@@ -156,7 +181,11 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
   return (
     <li className="grid-excerpt-item" style={{gridRow: excerptGridRow}}>
       <div className={`trending-excerpt-container ${isVisible ? "visible" : ""}`}>
-        <div className="trending-excerpt-bubble" data-grid-position={arrowPosition}>
+        <div
+          className="trending-excerpt-bubble"
+          data-grid-position={arrowPosition}
+          style={{"--excerpt-color": activeRowColor}}
+        >
           <div className="trending-excerpt-header">
             <strong>
               <Link href={`${localePrefix}/profile/person/${currentPerson.slug}`} className="excerpt-person-link">
@@ -174,14 +203,23 @@ export default function TrendingExcerpt({trendingPeople, currentLang, allBios = 
           </Link>
         </div>
         <div className="trending-excerpt-pagination">
-          {peopleWithReasons.map((person, index) => (
-            <button
-              key={person.slug}
-              className={`pagination-dot ${index === safeCurrentIndex ? "active" : ""}`}
-              onClick={() => selectStory(index)}
-              aria-label={`Go to ${person.localized_name || person.title || person.name}'s story (${index + 1} of ${peopleWithReasons.length})`}
-            />
-          ))}
+          {peopleWithReasons.map((person, index) => {
+            const personGridPosition = displayedBios.findIndex(
+              bio => bio.slug === person.slug,
+            );
+            const personRow = personGridPosition >= 0
+              ? Math.floor(personGridPosition / 4)
+              : 0;
+            return (
+              <button
+                key={person.slug}
+                className={`pagination-dot ${index === safeCurrentIndex ? "active" : ""}`}
+                style={{"--pagination-color": ROW_COLORS[personRow % ROW_COLORS.length]}}
+                onClick={() => selectStory(index)}
+                aria-label={`Go to ${person.localized_name || person.title || person.name}'s story (${index + 1} of ${peopleWithReasons.length})`}
+              />
+            );
+          })}
         </div>
       </div>
     </li>

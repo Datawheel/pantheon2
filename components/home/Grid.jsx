@@ -1,4 +1,6 @@
-import {Fragment} from "react";
+"use client";
+
+import {Fragment, useCallback, useState} from "react";
 import PersonImage from "@/components/utils/PersonImage";
 import TrendingExcerpt from "@/components/home/TrendingExcerpt";
 
@@ -47,43 +49,57 @@ const TrendIndicator = ({rankDelta}) => {
 };
 
 const Grid = ({bios, showDates, showTrendIndicator = true, trendingExcerpt = null, localePrefix = ""}) => {
+  const [activeTrendingPerson, setActiveTrendingPerson] = useState(null);
+  const handleActiveTrendingPerson = useCallback(person => {
+    setActiveTrendingPerson(person);
+  }, []);
+
   return (
     <ul className="grid-row">
-      {bios.map((profile, index) => (
-        <Fragment key={profile.pid || profile.id}>
-          <li className="grid-box">
-            <a href={`${localePrefix}/profile/person/${profile.slug}`}>
-              <div className="grid-box-bg-container">
-                {showTrendIndicator ? (
-                  <TrendIndicator rankDelta={profile.rank_delta} />
-                ) : null}
-                <PersonImage
-                  person={profile}
-                  src={`/profile/people/${profile.pid || profile.id}.jpg`}
-                  alt={`Photo of ${profile.title || profile.name}`}
-                  fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                />
-              </div>
-              <div className="grid-box-title-container">
-                {profile.title || profile.name}
-                {showDates ? (
-                  <div className="grid-box-title-dates">
-                    {profile.birthyear} - {profile.deathyear}
-                  </div>
-                ) : null}
-              </div>
-            </a>
-          </li>
-          {/* Mount once; the excerpt positions its grid row from the active story. */}
-          {index === 3 && trendingExcerpt && (
-            <TrendingExcerpt
-              trendingPeople={trendingExcerpt.trendingPeople}
-              currentLang={trendingExcerpt.currentLang}
-              allBios={bios}
-            />
-          )}
-        </Fragment>
-      ))}
+      {bios.map((profile, index) => {
+        const isHighlighted = profile.slug === activeTrendingPerson?.slug;
+        return (
+          <Fragment key={profile.pid || profile.id}>
+            <li
+              className={`grid-box${isHighlighted ? " trending-highlighted" : ""}`}
+              style={isHighlighted
+                ? {"--trend-highlight-color": activeTrendingPerson.color}
+                : undefined}
+            >
+              <a href={`${localePrefix}/profile/person/${profile.slug}`}>
+                <div className="grid-box-bg-container">
+                  {showTrendIndicator ? (
+                    <TrendIndicator rankDelta={profile.rank_delta} />
+                  ) : null}
+                  <PersonImage
+                    person={profile}
+                    src={`/profile/people/${profile.pid || profile.id}.jpg`}
+                    alt={`Photo of ${profile.title || profile.name}`}
+                    fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                  />
+                </div>
+                <div className="grid-box-title-container">
+                  {profile.title || profile.name}
+                  {showDates ? (
+                    <div className="grid-box-title-dates">
+                      {profile.birthyear} - {profile.deathyear}
+                    </div>
+                  ) : null}
+                </div>
+              </a>
+            </li>
+            {/* Mount once; the excerpt positions its grid row from the active story. */}
+            {index === 3 && trendingExcerpt && (
+              <TrendingExcerpt
+                trendingPeople={trendingExcerpt.trendingPeople}
+                currentLang={trendingExcerpt.currentLang}
+                allBios={bios}
+                onActivePersonChange={handleActiveTrendingPerson}
+              />
+            )}
+          </Fragment>
+        );
+      })}
     </ul>
   );
 };
