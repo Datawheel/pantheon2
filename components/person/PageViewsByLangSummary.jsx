@@ -5,20 +5,18 @@ import dayjs from "dayjs";
 import SimpleTooltip from "../common/SimpleTooltip";
 import {FORMATTERS} from "../utils/consts";
 import AnchorList from "../utils/AnchorList";
-import {SUPPORTED_LOCALES} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 
 export default function PageViewsByLangSummary({timeSeriesData, person, lang = "en"}) {
   const tp = getTranslations(lang).person;
   const tc = tp.pageViewsByLangChart;
 
-  // Helper function to generate URL - Pantheon for supported langs, Wikipedia otherwise
-  const getLanguageUrl = (langCode, wikiUrl) => {
-    if (SUPPORTED_LOCALES.includes(langCode)) {
-      return `/${langCode}/profile/person/${person.slug}`;
-    }
-    return wikiUrl;
-  };
+  // These links describe Wikipedia editions, so they always point at the
+  // Wikipedia article. Never link to /xx/profile/... here: locale-prefixed
+  // internal links get prefetched by next/link in production, and each
+  // prefetch response sets the next-intl NEXT_LOCALE cookie — after which
+  // every unprefixed link on the page redirects to that (random) locale.
+  const getLanguageUrl = (langCode, wikiUrl) => wikiUrl;
 
   // Localize wiki-edition language names ("English" -> "inglês") via the
   // edition code; fall back to the English name from langFamilies data.
@@ -128,18 +126,13 @@ export default function PageViewsByLangSummary({timeSeriesData, person, lang = "
   // console.log("dataProjectGrowth", dataProjectGrowth);
 
   const topLang = dataPastYearAgg[0];
-  const topLangCode = topLang.lang || topLang.language.toLowerCase();
-  const topLangUrl = getLanguageUrl(topLangCode, topLang.pageUrl);
-  const isTopLangExternal = !SUPPORTED_LOCALES.includes(topLangCode);
+  const topLangUrl = getLanguageUrl(topLang.lang, topLang.pageUrl);
 
   return (
     <p>
       {tc.summaryIntro({name: person.name})}
       <SimpleTooltip content={languageTooltip(topLang)}>
-        <a
-          href={topLangUrl}
-          {...(isTopLangExternal && { target: "_blank", rel: "noopener" })}
-        >
+        <a href={topLangUrl} target="_blank" rel="noopener">
           {tc.wikipediaEdition({language: languageName(topLang)})}
         </a>
       </SimpleTooltip>
@@ -149,7 +142,7 @@ export default function PageViewsByLangSummary({timeSeriesData, person, lang = "
       <AnchorList
         items={dataPastYearAgg.slice(1, 3)}
         name={d => `${languageName(d)} (${FORMATTERS.commas(d.views)})`}
-        url={d => getLanguageUrl(d.lang || d.language.toLowerCase(), d.pageUrl)}
+        url={d => getLanguageUrl(d.lang, d.pageUrl)}
         tooltip={languageTooltip}
         newWindow={true}
         andWord={tp.ranking.and}
@@ -158,7 +151,7 @@ export default function PageViewsByLangSummary({timeSeriesData, person, lang = "
       <AnchorList
         items={dataProjectGrowth.slice(0, 3)}
         name={d => `${languageName(d)} (${FORMATTERS.share(d.growthPct)})`}
-        url={d => getLanguageUrl(d.lang || d.language.toLowerCase(), d.pageUrl)}
+        url={d => getLanguageUrl(d.lang, d.pageUrl)}
         tooltip={languageTooltip}
         newWindow={true}
         andWord={tp.ranking.and}
