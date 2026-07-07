@@ -3,9 +3,7 @@
 import {useState, useEffect, useRef} from "react";
 import Link from "next/link";
 import {getTranslations} from "@/app/translations";
-import {PUBLIC_API} from "@/app/constants";
 import {DEFAULT_LOCALE} from "@/app/locales";
-import {encodePostgrestQuotedList} from "@/app/utils/postgrest";
 import "./TrendingExcerpt.css";
 
 const ROW_COLORS = [
@@ -24,83 +22,33 @@ export default function TrendingExcerpt({
   const localePrefix = currentLang === DEFAULT_LOCALE ? "" : `/${currentLang}`;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const [trendingReasons, setTrendingReasons] = useState({});
   const [cycleVersion, setCycleVersion] = useState(0);
   const manualTransitionTimeout = useRef(null);
   const t = getTranslations(currentLang);
 
   // Keep the carousel in the same rank order as the complete visible grid.
   const displayedBios = allBios.slice(0, 16);
-  const displayedSlugs = displayedBios.map(b => b.slug).filter(Boolean);
-  const displayedSlugsKey = encodePostgrestQuotedList(displayedSlugs);
 
-  // Fetch trending reasons for the current language
-  useEffect(() => {
-    async function fetchTrendingReasons() {
-      // Calculate yesterday's date (same logic as server)
-      const now = new Date();
-      const easternNow = new Date(now.toLocaleString("en-US", {timeZone: "America/Godthab"}));
-      easternNow.setDate(easternNow.getDate() - 1);
-      const yesterday = `${easternNow.getFullYear()}-${String(easternNow.getMonth() + 1).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
-
-      try {
-        const response = await fetch(
-          `${PUBLIC_API}/trend_news?date=eq.${yesterday}&lang=eq.${currentLang}&slug=in.(${displayedSlugsKey})&select=slug,title,reason,llm_metadata`,
-          {cache: "force-cache"}
-        );
-        if (!response.ok) {
-          throw new Error(`Trending reasons request failed: HTTP ${response.status}`);
-        }
-        const json = await response.json();
-        const data = Array.isArray(json) ? json : [];
-
-        // Build a map of slug -> reason data
-        const reasonsMap = data.reduce((acc, item) => {
-          acc[item.slug] = {
-            trending_reason: item.reason || "",
-            llm_metadata: item.llm_metadata,
-            localized_name: item.title || "",
-          };
-          return acc;
-        }, {});
-
-        setTrendingReasons(reasonsMap);
-      } catch (error) {
-        console.error("Error fetching trending reasons:", error);
-        setTrendingReasons({});
-      }
-    }
-
-    if (displayedSlugsKey) {
-      fetchTrendingReasons();
-    }
-  }, [currentLang, displayedSlugsKey]);
-
-  // Merge server-provided reasons and the client refresh into grid order. Only
-  // profiles with an actual reason become carousel stories.
+  // Reasons are fetched and localized by the homepage server component. Merge
+  // that payload into grid order without a duplicate cross-origin browser call.
   const providedReasons = new Map(
     trendingPeople.map(person => [person.slug, person]),
   );
   const peopleWithReasons = displayedBios
     .map(person => {
       const provided = providedReasons.get(person.slug) || {};
-      const refreshed = trendingReasons[person.slug] || {};
       return {
         ...person,
         ...provided,
         trending_reason:
-          refreshed.trending_reason || provided.trending_reason || person.trending_reason,
+          provided.trending_reason || person.trending_reason,
         llm_metadata:
-          refreshed.llm_metadata || provided.llm_metadata || person.llm_metadata,
+          provided.llm_metadata || person.llm_metadata,
         localized_name:
-          refreshed.localized_name || provided.localized_name || person.localized_name,
+          provided.localized_name || person.localized_name,
       };
     })
     .filter(person => person.trending_reason && person.trending_reason.trim().length > 0);
-
-  useEffect(() => {
-    setCurrentIndex(index => index < peopleWithReasons.length ? index : 0);
-  }, [peopleWithReasons.length]);
 
   useEffect(() => () => clearTimeout(manualTransitionTimeout.current), []);
 

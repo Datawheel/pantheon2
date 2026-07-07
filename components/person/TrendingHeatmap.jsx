@@ -2,11 +2,25 @@
 
 import {useEffect, useState, useRef, useCallback} from "react";
 import SectionLayout from "../common/SectionLayout";
+import {getTranslations} from "@/app/translations";
 import "./TrendingHeatmap.css";
 
-const DAY_LABELS = ["M", "", "W", "", "F", "", "S"];
-const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const REASON_HOVER_LIMIT = 80;
+
+// Localized single-letter labels for Mon/Wed/Fri/Sun rows and short month
+// names, derived from Intl so every supported locale works without a table.
+function getDayLabels(lang) {
+  const fmt = new Intl.DateTimeFormat(lang, {weekday: "narrow"});
+  // 2024-01-01 is a Monday; offsets pick Mon, Wed, Fri, Sun.
+  const narrow = offset => fmt.format(new Date(2024, 0, 1 + offset));
+  return [narrow(0), "", narrow(2), "", narrow(4), "", narrow(6)];
+}
+
+function getMonthName(monthIndex, lang) {
+  return new Intl.DateTimeFormat(lang, {month: "short"}).format(
+    new Date(2024, monthIndex, 1),
+  );
+}
 
 function todayStr() {
   const d = new Date();
@@ -42,7 +56,7 @@ function getWeeksForYear(year) {
   return weeks;
 }
 
-function getMonthLabels(weeks, year) {
+function getMonthLabels(weeks, year, lang) {
   const labels = [];
   let lastMonth = -1;
   weeks.forEach((week, weekIdx) => {
@@ -50,7 +64,7 @@ function getMonthLabels(weeks, year) {
     if (!monday.inYear) return;
     const month = parseInt(monday.date.split("-")[1], 10) - 1;
     if (month !== lastMonth) {
-      labels.push({month, weekIdx, label: MONTH_NAMES[month]});
+      labels.push({month, weekIdx, label: getMonthName(month, lang)});
       lastMonth = month;
     }
   });
@@ -66,10 +80,10 @@ function getCellColor(rank) {
   return "var(--heatmap-1, #c8a96e)";
 }
 
-function formatDateLabel(dateStr) {
+function formatDateLabel(dateStr, lang = "en") {
   const [y, m, d] = dateStr.split("-");
   const date = new Date(Number(y), Number(m) - 1, Number(d));
-  return date.toLocaleDateString("en-US", {weekday: "short", month: "short", day: "numeric", year: "numeric"});
+  return date.toLocaleDateString(lang, {weekday: "short", month: "short", day: "numeric", year: "numeric"});
 }
 
 function truncateReason(reason) {
@@ -77,8 +91,8 @@ function truncateReason(reason) {
   return reason.slice(0, REASON_HOVER_LIMIT).replace(/\s+\S*$/, "") + "...";
 }
 
-function YearGrid({year, weeks, trendMap, onHover, onLeave, onClick}) {
-  const monthLabels = getMonthLabels(weeks, year);
+function YearGrid({year, weeks, trendMap, onHover, onLeave, onClick, lang = "en"}) {
+  const monthLabels = getMonthLabels(weeks, year, lang);
   const today = todayStr();
 
   return (
@@ -86,7 +100,7 @@ function YearGrid({year, weeks, trendMap, onHover, onLeave, onClick}) {
       <div className="heatmap-year-col">
         <div className="heatmap-year-label">{year}</div>
         <div className="heatmap-day-labels">
-          {DAY_LABELS.map((label, i) => (
+          {getDayLabels(lang).map((label, i) => (
             <span key={i} className="heatmap-day-label">{label}</span>
           ))}
         </div>
@@ -139,6 +153,7 @@ function YearGrid({year, weeks, trendMap, onHover, onLeave, onClick}) {
 }
 
 export default function TrendingHeatmap({personSlug, lang = "en", title, slug: sectionSlug}) {
+  const t = getTranslations(lang);
   const [trendData, setTrendData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tooltip, setTooltip] = useState(null);
@@ -158,9 +173,11 @@ export default function TrendingHeatmap({personSlug, lang = "en", title, slug: s
   }, [personSlug, lang]);
 
   const handleHover = useCallback((e, date, entry) => {
-    const label = formatDateLabel(date);
+    const label = formatDateLabel(date, lang);
     const rank = entry?.rank;
-    let text = rank ? `${label} — Rank #${rank}` : `${label} — Not trending`;
+    let text = rank
+      ? `${label} — ${t.person.heatmap.rankNum({rank})}`
+      : `${label} — ${t.person.heatmap.notTrending}`;
     if (entry?.reason) {
       text += `\n${truncateReason(entry.reason)}`;
     }
@@ -172,7 +189,7 @@ export default function TrendingHeatmap({personSlug, lang = "en", title, slug: s
       x: rect.left + rect.width / 2,
       y: rect.top - 8,
     });
-  }, []);
+  }, [lang, t]);
 
   const handleLeave = useCallback(() => {
     setTooltip(null);
@@ -188,9 +205,9 @@ export default function TrendingHeatmap({personSlug, lang = "en", title, slug: s
       nextDate,
       rank: entry.rank,
       reason: entry.reason,
-      label: formatDateLabel(date),
+      label: formatDateLabel(date, lang),
     });
-  }, []);
+  }, [lang]);
 
   const closeDetail = useCallback(() => {
     setDetail(null);
@@ -218,19 +235,21 @@ export default function TrendingHeatmap({personSlug, lang = "en", title, slug: s
     <SectionLayout slug={sectionSlug} title={title}>
       <div className="trending-heatmap">
         <div className="heatmap-header">
-          <span className="heatmap-summary">{totalDays} trending {totalDays === 1 ? "day" : "days"}</span>
+          <span className="heatmap-summary">
+            {t.person.heatmap.trendingDays({count: totalDays})}
+          </span>
         </div>
-        <YearGrid year={currentYear} weeks={currentWeeks} trendMap={trendMap} onHover={handleHover} onLeave={handleLeave} onClick={handleClick} />
-        <YearGrid year={prevYear} weeks={prevWeeks} trendMap={trendMap} onHover={handleHover} onLeave={handleLeave} onClick={handleClick} />
+        <YearGrid year={currentYear} weeks={currentWeeks} trendMap={trendMap} onHover={handleHover} onLeave={handleLeave} onClick={handleClick} lang={lang} />
+        <YearGrid year={prevYear} weeks={prevWeeks} trendMap={trendMap} onHover={handleHover} onLeave={handleLeave} onClick={handleClick} lang={lang} />
         <div className="heatmap-legend">
-          <span className="heatmap-legend-label">Less</span>
+          <span className="heatmap-legend-label">{t.person.heatmap.less}</span>
           <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-0, #ebedf0)"}} />
           <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-1, #c8a96e)"}} />
           <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-2, #b8923a)"}} />
           <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-3, #a07920)"}} />
           <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-4, #86640e)"}} />
           <span className="heatmap-cell heatmap-legend-cell" style={{backgroundColor: "var(--heatmap-5, #6b4e00)"}} />
-          <span className="heatmap-legend-label">More</span>
+          <span className="heatmap-legend-label">{t.person.heatmap.more}</span>
         </div>
 
         {/* Hover tooltip */}
@@ -248,7 +267,9 @@ export default function TrendingHeatmap({personSlug, lang = "en", title, slug: s
               <div key={i} className={i > 0 ? "heatmap-tooltip-reason" : ""}>{line}</div>
             ))}
             {tooltip.hasReason && (
-              <div className="heatmap-tooltip-hint">Click for details</div>
+              <div className="heatmap-tooltip-hint">
+                {t.person.heatmap.clickForDetails}
+              </div>
             )}
           </div>
         )}
@@ -259,16 +280,18 @@ export default function TrendingHeatmap({personSlug, lang = "en", title, slug: s
             <div className="heatmap-detail-header">
               <div className="heatmap-detail-date">
                 <span className="heatmap-detail-label">{detail.label}</span>
-                <span className="heatmap-detail-rank">Rank #{detail.rank}</span>
+                <span className="heatmap-detail-rank">
+                  {t.person.heatmap.rankNum({rank: detail.rank})}
+                </span>
               </div>
               <button className="heatmap-detail-close" onClick={closeDetail} type="button">&times;</button>
             </div>
             <p className="heatmap-detail-reason">{detail.reason}</p>
             <a
-              href={`/en/news?date=${detail.nextDate}`}
+              href={`/${lang}/news?date=${detail.nextDate}`}
               className="heatmap-detail-link"
             >
-              View all trending news for {detail.label} &rarr;
+              {t.person.heatmap.viewAllTrendingNews({date: detail.label})} &rarr;
             </a>
           </div>
         )}

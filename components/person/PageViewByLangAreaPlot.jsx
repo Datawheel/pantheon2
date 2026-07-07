@@ -3,12 +3,14 @@
 import {useEffect, useRef} from "react";
 import {FORMATTERS} from "@/components/utils/consts";
 import {initEChart} from "@/components/utils/echarts";
+import {getTranslations} from "@/app/translations";
 
-export default function PageViewByLangAreaPlot({baseOption, style}) {
+export default function PageViewByLangAreaPlot({baseOption, style, lang = "en"}) {
   const chartRef = useRef(null);
 
   useEffect(() => {
     if (!chartRef.current) return;
+    const t = getTranslations(lang);
     const chart = initEChart(chartRef.current);
 
     // Deep clone option so we can modify it safely
@@ -53,9 +55,9 @@ export default function PageViewByLangAreaPlot({baseOption, style}) {
             `<strong>${title}</strong><br/>` +
             lines.join("") +
             (numLangs > 10
-              ? `<span style="font-size:10px;color:gray;">(and ${
-                  numLangs - 10
-                } others)</span>`
+              ? `<span style="font-size:10px;color:gray;">${t.person.pageViewsByLangChart.andOthers(
+                  {count: numLangs - 10},
+                )}</span>`
               : "")
           );
         },
@@ -92,7 +94,7 @@ export default function PageViewByLangAreaPlot({baseOption, style}) {
     chart.setOption(option);
 
     return () => chart.dispose();
-  }, [baseOption]);
+  }, [baseOption, lang]);
 
   return (
     <div

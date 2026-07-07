@@ -38,6 +38,13 @@ export default function Layout({children}) {
           rel="icon"
           href="/images/favicon.ico"
           type="image/x-icon"
+          sizes="64x64"
+        />
+        <link
+          rel="icon"
+          href="/images/favicon.svg"
+          type="image/svg+xml"
+          sizes="any"
         />
       </head>
       {isVizEmbed ? bodyContent : <SearchProvider>{bodyContent}</SearchProvider>}

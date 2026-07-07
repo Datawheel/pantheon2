@@ -9,6 +9,7 @@ import PhotoCarousel from "../utils/PhotoCarousel";
 import SectionLayout from "../common/SectionLayout";
 import {BASE_API} from "@/app/constants";
 import {DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 
 async function getBirthCountryRankings(
   birthCountryId,
@@ -43,6 +44,7 @@ export default async function CountryRanking({
   lang = "en",
 }) {
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+  const t = getTranslations(lang);
 
   if (!person.bplace_country) {
     return null;
@@ -83,13 +85,16 @@ export default async function CountryRanking({
   if (betterRankedBirthPeers.length) {
     betterBirthPeers = (
       <span>
-        Before{" "}
-        {person.gender ? (person.gender === "M" ? "him" : "her") : "them"} are{" "}
+        {t.person.ranking.beforePeers({
+          gender: person.gender,
+          count: betterRankedBirthPeers.length,
+        })}
         {
           <AnchorList
             items={betterRankedBirthPeers}
             name={d => `${d.name} (${d.birthyear})`}
             url={d => `${localePrefix}/profile/person/${d.slug}/`}
+            andWord={t.person.ranking.and}
           />
         }
         .{" "}
@@ -99,13 +104,16 @@ export default async function CountryRanking({
   if (worseRankedBirthPeers.length) {
     worseBirthPeers = (
       <span>
-        After {person.gender ? (person.gender === "M" ? "him" : "her") : "them"}{" "}
-        are{" "}
+        {t.person.ranking.afterPeers({
+          gender: person.gender,
+          count: worseRankedBirthPeers.length,
+        })}
         {
           <AnchorList
             items={worseRankedBirthPeers}
             name={d => `${d.name} (${d.birthyear})`}
             url={d => `${localePrefix}/profile/person/${d.slug}/`}
+            andWord={t.person.ranking.and}
           />
         }
         .
@@ -113,17 +121,23 @@ export default async function CountryRanking({
     );
   }
 
+  const countryHtml = `<a href="${localePrefix}/profile/country/${person.bplace_country.slug}">${person.bplace_country.country}</a>`;
+
   return (
     <SectionLayout slug={slug} title={title}>
       <div>
         <p>
-          Among people born in{" "}
-          <a href={`${localePrefix}/profile/country/${person.bplace_country.slug}`}>
-            {person.bplace_country.country}
-          </a>
-          , {person.name} ranks{" "}
-          <strong>{FORMATTERS.commas(me.bplace_country_rank_unique)}</strong>{" "}
-          out of {FORMATTERS.commas(person.bplace_country.num_born)}.&nbsp;
+          <span
+            dangerouslySetInnerHTML={{
+              __html: t.person.ranking.amongBornCountryRanks({
+                countryHtml,
+                name: person.name,
+                rankHtml: `<strong>${FORMATTERS.commas(me.bplace_country_rank_unique)}</strong>`,
+                totalFormatted: FORMATTERS.commas(person.bplace_country.num_born),
+              }),
+            }}
+          />
+          &nbsp;
           {betterBirthPeers}
           {worseBirthPeers}
           {/* { ranking.deathcountryPeers.length
@@ -131,16 +145,15 @@ export default async function CountryRanking({
              : null} */}
         </p>
         <div className="rank-title">
-          <h3>
-            Others born in{" "}
-            <a href={`${localePrefix}/profile/country/${person.bplace_country.slug}`}>
-              {person.bplace_country.country}
-            </a>
-          </h3>
+          <h3
+            dangerouslySetInnerHTML={{
+              __html: t.person.ranking.othersBornInCountry({countryHtml}),
+            }}
+          />
           <a
             href={`${localePrefix}/explore/rankings?show=people&place=${person.bplace_country.country_code}`}
           >
-            Go to all Rankings
+            {t.person.ranking.goToAllRankings}
           </a>
         </div>
         <PhotoCarousel
@@ -149,6 +162,7 @@ export default async function CountryRanking({
           rankAccessor="bplace_country_rank_unique"
           showOccupation={true}
           localePrefix={localePrefix}
+          lang={lang}
         />
       </div>
     </SectionLayout>

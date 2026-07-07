@@ -11,6 +11,7 @@ import {BASE_API} from "@/app/constants";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
 import {toTitleCase} from "../utils/vizHelpers";
 import PersonImage from "../utils/PersonImage";
+import {getTranslations} from "@/app/translations";
 import "../../components/common/Footer.css";
 
 const baseUrl = process.env.URL || "https://pantheon.world";
@@ -91,7 +92,8 @@ async function getOccupationRankings(
   }
 }
 
-export default async function Footer({person, personRanks}) {
+export default async function Footer({person, personRanks, lang = "en"}) {
+  const t = getTranslations(lang);
   if (
     !personRanks ||
     !person.occupation ||
@@ -121,7 +123,7 @@ export default async function Footer({person, personRanks}) {
   return (
     <footer className="profile-footer">
       <div className="footer-container">
-        <h4 className="footer-title">Related Profiles</h4>
+        <h4 className="footer-title">{t.person.footer.relatedProfiles}</h4>
         <ul className="footer-carousel-container">
           <li className="footer-carousel-item">
             <div className="footer-carousel-item-photo">
@@ -140,7 +142,11 @@ export default async function Footer({person, personRanks}) {
                 {person.occupation.occupation}
               </a>
             </h4>
-            <p>{FORMATTERS.commas(person.occupation.num_born)} Individuals</p>
+            <p>
+              {t.person.footer.individuals({
+                countFormatted: FORMATTERS.commas(person.occupation.num_born),
+              })}
+            </p>
           </li>
 
           {belowMe ? (
@@ -160,7 +166,11 @@ export default async function Footer({person, personRanks}) {
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/person/${belowMe.slug}`}>{belowMe.name}</a>
               </h4>
-              <p>Rank {FORMATTERS.commas(belowMe.occupation_rank)}</p>
+              <p>
+                {t.person.footer.rank({
+                  rankFormatted: FORMATTERS.commas(belowMe.occupation_rank),
+                })}
+              </p>
             </li>
           ) : null}
 
@@ -181,7 +191,11 @@ export default async function Footer({person, personRanks}) {
               <h4 className="footer-carousel-item-title">
                 <a href={`/profile/person/${aboveMe.slug}`}>{aboveMe.name}</a>
               </h4>
-              <p>Rank {FORMATTERS.commas(aboveMe.occupation_rank)}</p>
+              <p>
+                {t.person.footer.rank({
+                  rankFormatted: FORMATTERS.commas(aboveMe.occupation_rank),
+                })}
+              </p>
             </li>
           ) : null}
 
@@ -201,7 +215,11 @@ export default async function Footer({person, personRanks}) {
                   {person.birthplace.place}
                 </a>
               </h4>
-              <p>{person.birthplace.num_born} Individuals</p>
+              <p>
+                {t.person.footer.individuals({
+                  countFormatted: person.birthplace.num_born,
+                })}
+              </p>
             </li>
           ) : null}
 
@@ -226,7 +244,11 @@ export default async function Footer({person, personRanks}) {
                   {person.birthcountry.name}
                 </a>
               </h4>
-              <p>{person.birthcountry.num_born} Individuals</p>
+              <p>
+                {t.person.footer.individuals({
+                  countFormatted: person.birthcountry.num_born,
+                })}
+              </p>
             </li>
           ) : null}
 

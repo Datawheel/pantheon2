@@ -3,7 +3,9 @@ import {toTitleCase} from "@/components/utils/vizHelpers";
 import {FORMATTERS} from "@/components/utils/consts";
 import {initEChart} from "@/components/utils/echarts";
 
-const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
+// compareLabel is the fully localized display label (e.g. "Avg Soccer Player");
+// compareValueTitle is the legacy English fallback kept for other callers.
+const MemMetricsBullet = ({value, compareValue, compareValueTitle, compareLabel}) => {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
 
@@ -44,7 +46,7 @@ const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
           data: [
             {
               xAxis: compareValue,
-              name: `Avg ${toTitleCase(compareValueTitle)}`,
+              name: compareLabel || `Avg ${toTitleCase(compareValueTitle)}`,
             },
             // {xAxis: , name: "Avg Occupation"},
           ],
@@ -146,7 +148,7 @@ const MemMetricsBullet = ({value, compareValue, compareValueTitle}) => {
       window.removeEventListener("resize", handleResize);
       chart.dispose();
     };
-  }, [value, compareValue, compareValueTitle]);
+  }, [value, compareValue, compareValueTitle, compareLabel]);
 
   return <div ref={chartRef} style={{width: "100%", height: 140}} />;
 };

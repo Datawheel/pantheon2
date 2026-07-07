@@ -257,7 +257,9 @@ export async function generateMetadata(props, parent) {
   };
 
   return {
-    title: `${localizedName} Biography | Pantheon`,
+    title: t.person.metaTitle
+      ? t.person.metaTitle({name: localizedName})
+      : `${localizedName} Biography | Pantheon`,
     description,
     openGraph: {
       type: "profile",
@@ -284,6 +286,7 @@ export default async function Page(props) {
   const {id, locale} = params;
   // Extract locale and calculate yesterday's date
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
+  const t = getTranslations(lang);
 
   // Calculate yesterday's date using same pattern as wikiTrends (New York timezone)
   const now = new Date();
@@ -368,9 +371,16 @@ export default async function Page(props) {
     books = await getBooks(person.id);
   }
 
+  // English pluralizes occupations; other locales use the localized name as-is
+  // (same convention as the occupation-country metadata).
+  const occupationPlural =
+    lang === "en"
+      ? plural(localizedOccupation || "People")
+      : localizedOccupation || "People";
+
   const sections = [
     {
-      title: "Memorability Metrics",
+      title: t.person.sections.memorabilityMetrics,
       slug: "metrics",
       content: (
         <MemMetrics
@@ -378,11 +388,12 @@ export default async function Page(props) {
           personRanks={personRanks}
           occupationData={memMetricsData.occupationData}
           totalViews={memMetricsData.totalViews}
+          lang={lang}
         />
       ),
     },
     {
-      title: "Trending Activity",
+      title: t.person.sections.trendingActivity,
       slug: "trending_heatmap",
       content: (
         <TrendingHeatmap personSlug={id} lang={lang} />
@@ -394,43 +405,59 @@ export default async function Page(props) {
     //   content: <News newsArticles={newsArticles} />,
     // },
     {
-      title: "Notable Works",
+      title: t.person.sections.notableWorks,
       slug: "books",
       content: <Books person={localizedPerson} books={books} />,
     },
     {
-      title: `Page views of ${localizedName} by language`,
+      title: t.person.sections.pageViewsByLang({name: localizedName}),
       slug: "page-views-by-lang",
-      content: <PageViewsByLang person={localizedPerson} />,
+      content: <PageViewsByLang person={localizedPerson} lang={lang} />,
     },
     {
-      title: `Among ${plural(localizedOccupation || "People")}`,
+      title: t.person.sections.amongOccupation({occupationPlural}),
       slug: "occupation_peers",
       content: (
-        <OccupationRanking person={localizedPerson} personRanks={personRanks} />
+        <OccupationRanking
+          person={localizedPerson}
+          personRanks={personRanks}
+          lang={lang}
+        />
       ),
     },
     {
-      title: "Contemporaries",
+      title: t.person.sections.contemporaries,
       slug: "year_peers",
       content: (
-        <YearRanking person={localizedPerson} personRanks={personRanks} />
+        <YearRanking
+          person={localizedPerson}
+          personRanks={personRanks}
+          lang={lang}
+        />
       ),
     },
     {
-      title: `In ${localizedCountry}`,
+      title: t.person.sections.inCountry({country: localizedCountry}),
       slug: "country_peers",
       content: (
-        <CountryRanking person={localizedPerson} personRanks={personRanks} />
+        <CountryRanking
+          person={localizedPerson}
+          personRanks={personRanks}
+          lang={lang}
+        />
       ),
     },
     {
-      title: `Among ${plural(localizedOccupation || "People")} In ${localizedCountry}`,
+      title: t.person.sections.amongOccupationInCountry({
+        occupationPlural,
+        country: localizedCountry,
+      }),
       slug: "country_occupation_peers",
       content: (
         <CountryOccupationRanking
           person={localizedPerson}
           personRanks={personRanks}
+          lang={lang}
         />
       ),
     },
@@ -442,8 +469,8 @@ export default async function Page(props) {
     {
       title:
         person.occupation?.id === "FILM DIRECTOR"
-          ? "Filmography"
-          : "Television and Movie Roles",
+          ? t.person.sections.filmography
+          : t.person.sections.tvMovieRoles,
       slug: "movies",
       content: <Movies person={localizedPerson} movies={movies} />,
     },
@@ -451,7 +478,7 @@ export default async function Page(props) {
 
   if (personTrending.isTrending) {
     sections.unshift({
-      title: "Trending",
+      title: t.person.sections.trending,
       slug: "why_trending",
       content: (
         <WhyTrending
@@ -531,7 +558,7 @@ export default async function Page(props) {
           title: section.title,
         }),
       )}
-      <Footer person={localizedPerson} personRanks={personRanks} />
+      <Footer person={localizedPerson} personRanks={personRanks} lang={lang} />
     </div>
   );
 }

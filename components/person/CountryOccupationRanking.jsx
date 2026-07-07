@@ -12,6 +12,7 @@ import SectionLayout from "../common/SectionLayout";
 import {BASE_API} from "@/app/constants";
 import {DEFAULT_LOCALE} from "@/app/locales";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
+import {getTranslations} from "@/app/translations";
 
 async function getBirthCountryRankings(
   occupationId,
@@ -48,6 +49,7 @@ export default async function CountryRanking({
   lang = "en",
 }) {
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+  const t = getTranslations(lang);
 
   if (!person.bplace_country) {
     return null;
@@ -76,13 +78,20 @@ export default async function CountryRanking({
     bplaceCountryOccupationRankLow,
     bplaceCountryOccupationRankHigh
   );
+  const countryHtml = `<a href="${localePrefix}/profile/country/${person.bplace_country.slug}">${person.bplace_country.country}</a>`;
+
   const me = birthCountryRankings.find(rank => rank.slug === person.slug);
   if (!me) {
     return (
       <SectionLayout slug={slug} title={title}>
-        <p>
-          {person.name} is not ranked in {person.bplace_country.country}
-        </p>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: t.person.ranking.notRankedIn({
+              name: person.name,
+              countryHtml: person.bplace_country.country,
+            }),
+          }}
+        />
       </SectionLayout>
     );
   }
@@ -100,13 +109,16 @@ export default async function CountryRanking({
   if (betterRankedBirthPeers.length) {
     betterBirthPeers = (
       <span>
-        Before{" "}
-        {person.gender ? (person.gender === "M" ? "him" : "her") : "them"} are{" "}
+        {t.person.ranking.beforePeers({
+          gender: person.gender,
+          count: betterRankedBirthPeers.length,
+        })}
         {
           <AnchorList
             items={betterRankedBirthPeers}
             name={d => `${d.name} (${d.birthyear})`}
             url={d => `${localePrefix}/profile/person/${d.slug}/`}
+            andWord={t.person.ranking.and}
           />
         }
         .{" "}
@@ -116,13 +128,16 @@ export default async function CountryRanking({
   if (worseRankedBirthPeers.length) {
     worseBirthPeers = (
       <span>
-        After {person.gender ? (person.gender === "M" ? "him" : "her") : "them"}{" "}
-        are{" "}
+        {t.person.ranking.afterPeers({
+          gender: person.gender,
+          count: worseRankedBirthPeers.length,
+        })}
         {
           <AnchorList
             items={worseRankedBirthPeers}
             name={d => `${d.name} (${d.birthyear})`}
             url={d => `${localePrefix}/profile/person/${d.slug}/`}
+            andWord={t.person.ranking.and}
           />
         }
         .
@@ -130,19 +145,26 @@ export default async function CountryRanking({
     );
   }
 
+  const occupationPlural =
+    lang === "en"
+      ? plural(person.occupation.occupation.toLowerCase())
+      : person.occupation.occupation;
+
   return (
     <SectionLayout slug={slug} title={title}>
       <div>
         <p>
-          Among {plural(person.occupation.occupation.toLowerCase())} born in{" "}
-          <a href={`${localePrefix}/profile/country/${person.bplace_country.slug}`}>
-            {person.bplace_country.country}
-          </a>
-          , {person.name} ranks{" "}
-          <strong>
-            {FORMATTERS.commas(me.bplace_country_occupation_rank_unique)}
-          </strong>
-          .&nbsp;
+          <span
+            dangerouslySetInnerHTML={{
+              __html: t.person.ranking.amongOccupationBornCountryRanks({
+                occupationPlural,
+                countryHtml,
+                name: person.name,
+                rankHtml: `<strong>${FORMATTERS.commas(me.bplace_country_occupation_rank_unique)}</strong>`,
+              }),
+            }}
+          />
+          &nbsp;
           {betterBirthPeers}
           {worseBirthPeers}
         </p>
@@ -151,14 +173,19 @@ export default async function CountryRanking({
             <a
               href={`${localePrefix}/profile/occupation/${person.occupation.occupation_slug}/country/${person.bplace_country.slug}`}
             >
-              {person.bplace_country.demonym} born{" "}
-              {toTitleCase(plural(person.occupation.occupation.toLowerCase()))}
+              {t.person.ranking.demonymBornOccupations({
+                demonym: person.bplace_country.demonym,
+                occupationPlural:
+                  lang === "en"
+                    ? toTitleCase(plural(person.occupation.occupation.toLowerCase()))
+                    : person.occupation.occupation,
+              })}
             </a>
           </h3>
           <a
             href={`${localePrefix}/explore/rankings?show=people&place=${person.bplace_country.country_code}&occupation=${person.occupation.id}`}
           >
-            Go to all Rankings
+            {t.person.ranking.goToAllRankings}
           </a>
         </div>
         <PhotoCarousel
@@ -166,6 +193,7 @@ export default async function CountryRanking({
           people={birthCountryRankings}
           rankAccessor="bplace_country_occupation_rank_unique"
           localePrefix={localePrefix}
+          lang={lang}
         />
       </div>
     </SectionLayout>

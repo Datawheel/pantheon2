@@ -5,6 +5,8 @@ import SectionLayout from "../common/SectionLayout";
 import "./MemMetrics.css";
 import {useCallback, useState} from "react";
 import MemMetricsBullet from "./MemMetricsBullet";
+import {getTranslations} from "@/app/translations";
+import {toTitleCase} from "../utils/vizHelpers";
 
 function YouTubeFacade({videoId}) {
   const [play, setPlay] = useState(false);
@@ -34,7 +36,13 @@ function YouTubeFacade({videoId}) {
   );
 }
 
-export default function MemMetrics({person, personRanks, occupationData, totalViews = 0, slug, title}) {
+export default function MemMetrics({person, personRanks, occupationData, totalViews = 0, slug, title, lang = "en"}) {
+  const t = getTranslations(lang);
+  // person.occupation.occupation is already localized by the page; the id is
+  // the uppercase English name, so prefer the display name for chart labels.
+  const occupationLabel = t.person.metrics.avgOf({
+    label: toTitleCase(person.occupation?.occupation || person.occupation?.id || ""),
+  });
   return (
     <SectionLayout slug={slug} title={title}>
       <div className="metrics-container">
@@ -57,14 +65,14 @@ export default function MemMetrics({person, personRanks, occupationData, totalVi
             <div className="stat-container">
               <div className="stat-title">
                 <h4>{FORMATTERS.bigNum(totalViews || 0)}</h4>
-                <p className="stat-title-text">Page Views</p>
-                <p className="stat-title-desc">Past 12 months</p>
+                <p className="stat-title-text">{t.person.metrics.pageViews}</p>
+                <p className="stat-title-desc">{t.person.metrics.past12Months}</p>
               </div>
               <div className="stat-bullet">
                 <MemMetricsBullet
                   value={totalViews}
                   compareValue={occupationData.pageviews_avg}
-                  compareValueTitle={person.occupation?.id}
+                  compareLabel={occupationLabel}
                 />
               </div>
             </div>
@@ -73,14 +81,14 @@ export default function MemMetrics({person, personRanks, occupationData, totalVi
             <div className="stat-container">
               <div className="stat-title">
                 <h4>{FORMATTERS.decimal(personRanks.hpi)}</h4>
-                <p className="stat-title-text">HPI</p>
-                <p className="stat-title-desc">Historical Popularity Index</p>
+                <p className="stat-title-text">{t.person.metrics.hpi}</p>
+                <p className="stat-title-desc">{t.person.metrics.hpiDesc}</p>
               </div>
               <div className="stat-bullet">
                 <MemMetricsBullet
                   value={personRanks.hpi}
                   compareValue={person.occupation?.hpi_avg || 0}
-                  compareValueTitle={person.occupation?.id}
+                  compareLabel={occupationLabel}
                 />
               </div>
             </div>

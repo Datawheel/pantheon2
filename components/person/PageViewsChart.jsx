@@ -2,8 +2,10 @@
 
 import {useEffect, useRef} from "react";
 import {initEChart} from "@/components/utils/echarts";
+import {getTranslations} from "@/app/translations";
 
 export default function PageViewsChart({pageviewsData, lang = "en"}) {
+  const t = getTranslations(lang);
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -155,7 +157,9 @@ export default function PageViewsChart({pageviewsData, lang = "en"}) {
         className="pageviews-chart"
         style={{width: "100%", height: "120px"}}
       />
-      <p className="pageviews-label">{lang.toUpperCase()}.WIKIPEDIA PAGE VIEWS (PV)</p>
+      <p className="pageviews-label">
+        {t.person.header.wikipediaPageViews({langCode: lang.toUpperCase()})}
+      </p>
     </div>
   );
 }

@@ -196,7 +196,10 @@ export default function Header({
               .map(([langCode, rank]) => (
                 <SimpleTooltip
                   key={langCode}
-                  content={`Rank #${rank} in ${getLocalizedLanguageName(langCode, currentLang)}`}
+                  content={t.person.header.rankInLanguage({
+                    rank,
+                    language: getLocalizedLanguageName(langCode, currentLang),
+                  })}
                 >
                   <div
                     className={`lang-rank-badge ${langCode === currentLang ? "current-lang" : ""}`}

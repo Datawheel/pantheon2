@@ -1,11 +1,11 @@
 import Link from "next/link";
 
-export default function AnchorList({items, name, url, noAnd, newWindow}) {
+export default function AnchorList({items, name, url, noAnd, newWindow, andWord = " and "}) {
   return items ? (
     <span>
       {items.map((item, index) => (
         <span key={item.id || index}>
-          {!noAnd && index && index === items.length - 1 ? " and " : null}
+          {!noAnd && index && index === items.length - 1 ? andWord : null}
           <Link href={url(item)} target={newWindow ? "_blank" : "_self"}>
             {name(item)}
           </Link>

@@ -12,6 +12,7 @@ import {toTitleCase} from "../utils/vizHelpers";
 import SectionLayout from "../common/SectionLayout";
 import {BASE_API} from "@/app/constants";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
+import {getTranslations} from "@/app/translations";
 
 async function getOccupationRankings(
   occupationId,
@@ -44,7 +45,9 @@ export default async function OccupationRanking({
   personRanks,
   slug,
   title,
+  lang = "en",
 }) {
+  const t = getTranslations(lang);
   if (
     !personRanks ||
     !person.occupation ||
@@ -85,8 +88,10 @@ export default async function OccupationRanking({
   if (betterRankedPeers.length) {
     betterPeers = (
       <span>
-        Before{" "}
-        {person.gender ? (person.gender === "M" ? "him" : "her") : "them"} are{" "}
+        {t.person.ranking.beforePeers({
+          gender: person.gender,
+          count: betterRankedPeers.length,
+        })}
         <AnchorList
           items={betterRankedPeers}
           name={d =>
@@ -95,6 +100,7 @@ export default async function OccupationRanking({
               : d.name
           }
           url={d => `/profile/person/${d.slug}/`}
+          andWord={t.person.ranking.and}
         />
         .{" "}
       </span>
@@ -103,8 +109,10 @@ export default async function OccupationRanking({
   if (worseRankedPeers.length) {
     worsePeers = (
       <span>
-        After {person.gender ? (person.gender === "M" ? "him" : "her") : "them"}{" "}
-        are{" "}
+        {t.person.ranking.afterPeers({
+          gender: person.gender,
+          count: worseRankedPeers.length,
+        })}
         <AnchorList
           items={worseRankedPeers}
           name={d =>
@@ -113,38 +121,56 @@ export default async function OccupationRanking({
               : d.name
           }
           url={d => `/profile/person/${d.slug}/`}
+          andWord={t.person.ranking.and}
         />
         .
       </span>
     );
   }
 
+  const occupationPlural =
+    lang === "en"
+      ? plural(person.occupation.occupation.toLowerCase())
+      : person.occupation.occupation;
+
   return (
     <SectionLayout slug={slug} title={title}>
       <div>
         <p>
-          Among {plural(person.occupation.occupation.toLowerCase())},{" "}
-          {person.name} ranks{" "}
-          <strong>{FORMATTERS.commas(me.occupation_rank)}</strong> out of{" "}
-          {FORMATTERS.commas(person.occupation.num_born)}.&nbsp;
+          <span
+            dangerouslySetInnerHTML={{
+              __html: t.person.ranking.amongOccupationRanks({
+                occupationPlural,
+                name: person.name,
+                rankHtml: `<strong>${FORMATTERS.commas(me.occupation_rank)}</strong>`,
+                totalFormatted: FORMATTERS.commas(person.occupation.num_born),
+              }),
+            }}
+          />
+          &nbsp;
           {betterPeers}
           {worsePeers}
         </p>
         <div className="rank-title">
           <h3>
-            Most Popular {toTitleCase(plural(person.occupation.occupation))} in
-            Wikipedia
+            {t.person.ranking.mostPopularInWikipedia({
+              occupationPlural:
+                lang === "en"
+                  ? toTitleCase(plural(person.occupation.occupation))
+                  : person.occupation.occupation,
+            })}
           </h3>
           <Link
             href={`/explore/rankings?show=people&occupation=${person.occupation.id}`}
           >
-            Go to all Rankings
+            {t.person.ranking.goToAllRankings}
           </Link>
         </div>
         <PhotoCarousel
           me={person}
           people={occupationRankings}
           rankAccessor="occupation_rank_unique"
+          lang={lang}
         />
       </div>
     </SectionLayout>

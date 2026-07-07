@@ -7,6 +7,7 @@ import "./MemMetrics.css";
 import {useEffect, useState} from "react";
 import dynamic from "next/dynamic";
 import {PUBLIC_API} from "@/app/constants";
+import {getTranslations} from "@/app/translations";
 
 // Load EChart only on the client
 const PageViewsByLangAreaPlot = dynamic(
@@ -58,6 +59,23 @@ const formatTimeSeriesData = pageviewsData => {
   return [langsTs, numLangs];
 };
 
+const EN_MONTHS = {Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11};
+
+// Axis categories are built (and sorted) as en-US "Mon YYYY" keys; localize
+// them only at display time. Formatter functions don't survive the JSON
+// clone in PageViewsByLangAreaPlot, so the category strings themselves carry
+// the localized label.
+const localizeMonthLabel = (label, lang) => {
+  if (lang === "en" || !label) return label;
+  const [mon, year] = label.split(" ");
+  const monthIndex = EN_MONTHS[mon];
+  if (monthIndex === undefined || !year) return label;
+  return new Date(Number(year), monthIndex).toLocaleDateString(lang, {
+    month: "short",
+    year: "numeric",
+  });
+};
+
 const calculateCumulativeLanguages = (timeSeriesData, allDates) => {
   // First pass: group languages by date (O(m) where m = data points)
   const languagesByDate = {};
@@ -96,7 +114,8 @@ const calculateCumulativeLanguages = (timeSeriesData, allDates) => {
   return cumulativeData;
 };
 
-export default function PageViewsByLang({person, slug, title}) {
+export default function PageViewsByLang({person, slug, title, lang = "en"}) {
+  const t = getTranslations(lang);
   const [timeSeriesData, setTimeSeriesData] = useState([]);
   const [numLangs, setNumLangs] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -125,7 +144,7 @@ export default function PageViewsByLang({person, slug, title}) {
   if (loading) {
     return (
       <SectionLayout slug={slug} title={title}>
-        <div>Loading...</div>
+        <div>{t.person.loading}</div>
       </SectionLayout>
     );
   }
@@ -205,9 +224,13 @@ export default function PageViewsByLang({person, slug, title}) {
     return months[monthA] - months[monthB];
   });
 
+  const tChart = t.person.pageViewsByLangChart;
+  const familyLabel = f => tChart.families?.[f] || f;
+  const displayDates = allDates.map(d => localizeMonthLabel(d, lang));
+
   const series = Object.values(seriesMap)
     .map(({name, family, values}) => ({
-      name: family,
+      name: familyLabel(family),
       type: "line",
       stack: "views",
       symbol: "none",
@@ -242,6 +265,10 @@ export default function PageViewsByLang({person, slug, title}) {
     (max, curr) => (curr.total > max.total ? curr : max),
     totalsByDate[0]
   );
+  // Right-align the annotation when the peak sits near the chart's right
+  // edge, so localized (longer) labels don't get clipped.
+  const maxPointNearRightEdge =
+    allDates.indexOf(maxPoint.date) > allDates.length * 0.85;
 
   const pageviewsOption = {
     grid: {
@@ -252,18 +279,18 @@ export default function PageViewsByLang({person, slug, title}) {
     },
     legend: {
       type: "scroll",
-      data: Array.from(familyLegendSet),
+      data: Array.from(familyLegendSet).map(familyLabel),
       bottom: 0,
       left: "center",
     },
     xAxis: {
       type: "category",
       boundaryGap: false,
-      data: allDates,
+      data: displayDates,
     },
     yAxis: {
       type: "value",
-      name: "Pageviews by language edition",
+      name: tChart.pageviewsByLanguageEdition,
       nameLocation: "middle",
       nameGap: 65,
       nameTextStyle: {
@@ -283,15 +310,16 @@ export default function PageViewsByLang({person, slug, title}) {
           },
           data: [
             {
-              coord: [maxPoint.date, maxPoint.total],
+              coord: [localizeMonthLabel(maxPoint.date, lang), maxPoint.total],
               label: {
                 show: true,
-                formatter: `${
-                  maxPoint.date
-                }\n${maxPoint.total.toLocaleString()} views`,
+                formatter: `${localizeMonthLabel(maxPoint.date, lang)}\n${tChart.viewsAnnotation(
+                  {countFormatted: maxPoint.total.toLocaleString(lang)},
+                )}`,
                 position: "top",
                 distance: 10,
                 fontSize: 12,
+                align: maxPointNearRightEdge ? "right" : "center",
               },
             },
           ],
@@ -323,11 +351,11 @@ export default function PageViewsByLang({person, slug, title}) {
       xAxis: {
         type: "category",
         boundaryGap: false,
-        data: allDates,
+        data: displayDates,
       },
       yAxis: {
         type: "value",
-        name: "Cumulative language editions",
+        name: tChart.cumulativeLanguageEditions,
         nameLocation: "middle",
         nameGap: 35,
         nameTextStyle: {
@@ -340,12 +368,12 @@ export default function PageViewsByLang({person, slug, title}) {
         formatter: function (params) {
           const date = params[0].axisValueLabel;
           const count = params[0].data;
-          return `<strong>${date}</strong><br/>Language editions: <strong>${count}</strong>`;
+          return `<strong>${date}</strong><br/>${t.person.pageViewsByLangChart.languageEditions}: <strong>${count}</strong>`;
         },
       },
       series: [
         {
-          name: "Language Editions",
+          name: t.person.pageViewsByLangChart.languageEditions,
           type: "line",
           step: "end",
           symbol: "circle",
@@ -369,9 +397,9 @@ export default function PageViewsByLang({person, slug, title}) {
                 type: "max",
                 label: {
                   show: true,
-                  formatter: function (params) {
-                    return `${params.name}\n${params.value} editions`;
-                  },
+                  // String template ({c} = value): function formatters are
+                  // stripped by the JSON clone in the area-plot wrapper.
+                  formatter: `{c} ${tChart.editionsWord}`,
                   position: "top",
                   distance: 10,
                   fontSize: 12,
@@ -392,26 +420,27 @@ export default function PageViewsByLang({person, slug, title}) {
         <PageViewsByLangSummary
           timeSeriesData={timeSeriesData}
           person={person}
+          lang={lang}
         />
         <div className="chart-view-toggle">
           <button
             className={viewMode === "pageviews" ? "active" : ""}
             onClick={() => setViewMode("pageviews")}
           >
-            Page Views
+            {t.person.metrics.pageViews}
           </button>
           <button
             className={viewMode === "editions" ? "active" : ""}
             onClick={() => setViewMode("editions")}
           >
-            Language Editions
+            {tChart.languageEditions}
           </button>
         </div>
         {/* <PageViewsByLangAreaPlot
           timeSeriesData={timeSeriesData}
           numLangs={numLangs}
         /> */}
-        <PageViewsByLangAreaPlot baseOption={option} />
+        <PageViewsByLangAreaPlot baseOption={option} lang={lang} />
       </div>
     </SectionLayout>
   );

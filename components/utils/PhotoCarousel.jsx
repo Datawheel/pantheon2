@@ -8,6 +8,7 @@ import {COLORS_DOMAIN, FORMATTERS} from "../utils/consts";
 import PersonImage from "./PersonImage";
 import Image from "next/image";
 import {min as D3Min, max as D3Max} from "d3-array";
+import {getTranslations} from "@/app/translations";
 
 const PHOTO_WIDTH = 150;
 const PHOTO_PADDING = 36;
@@ -20,7 +21,9 @@ export default function PhotoCarousel({
   showOccupation,
   peopleAll,
   localePrefix = "",
+  lang = "en",
 }) {
+  const t = getTranslations(lang);
   const [lowerBound, setLowerBound] = useState(null);
   const [upperBound, setUpperBound] = useState(null);
   const [replacementPeople, setReplacementPeople] = useState([]);
@@ -196,15 +199,16 @@ export default function PhotoCarousel({
                   {FORMATTERS.year(person.birthyear)} -{" "}
                   {person.deathyear
                     ? `${FORMATTERS.year(person.deathyear)}`
-                    : "Present"}
+                    : t.person.carousel.present}
                 </p>
               ) : null}
               <p className="rank-year">
-                <strong>HPI:</strong> {FORMATTERS.decimal(person.hpi)}
+                <strong>{t.person.carousel.hpiLabel}</strong>{" "}
+                {FORMATTERS.decimal(person.hpi)}
               </p>
               {rankAccessor && person[rankAccessor] ? (
                 <p className="rank-year">
-                  <strong>Rank:</strong>{" "}
+                  <strong>{t.person.carousel.rankLabel}</strong>{" "}
                   {FORMATTERS.commas(person[rankAccessor])}
                 </p>
               ) : null}

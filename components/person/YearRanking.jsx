@@ -9,6 +9,7 @@ import AnchorList from "../utils/AnchorList";
 import PhotoCarousel from "../utils/PhotoCarousel";
 import SectionLayout from "../common/SectionLayout";
 import {BASE_API} from "@/app/constants";
+import {getTranslations} from "@/app/translations";
 
 async function getBirthYearRankings(
   birthYear,
@@ -75,7 +76,8 @@ async function getDeathYearRankings(
   }
 }
 
-export default async function YearRanking({person, personRanks, title, slug}) {
+export default async function YearRanking({person, personRanks, title, slug, lang = "en"}) {
+  const t = getTranslations(lang);
   if (!person.birthyear || !personRanks || !personRanks.birthyear_rank_unique) {
     return null;
   }
@@ -146,9 +148,10 @@ export default async function YearRanking({person, personRanks, title, slug}) {
   if (betterRankedBirthPeers.length) {
     betterBirthPeers = (
       <span>
-        Before{" "}
-        {person.gender ? (person.gender === "M" ? "him" : "her") : "them"}{" "}
-        {betterRankedBirthPeers.length > 1 ? "are" : "is"}{" "}
+        {t.person.ranking.beforePeers({
+          gender: person.gender,
+          count: betterRankedBirthPeers.length,
+        })}
         {
           <AnchorList
             items={betterRankedBirthPeers}
@@ -158,6 +161,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
                 : d.name
             }
             url={d => `/profile/person/${d.slug}/`}
+            andWord={t.person.ranking.and}
           />
         }
         .{" "}
@@ -167,8 +171,10 @@ export default async function YearRanking({person, personRanks, title, slug}) {
   if (worseRankedBirthPeers.length) {
     worseBirthPeers = (
       <span>
-        After {person.gender ? (person.gender === "M" ? "him" : "her") : "them"}{" "}
-        {worseRankedBirthPeers.length > 1 ? "are" : "is"}{" "}
+        {t.person.ranking.afterPeers({
+          gender: person.gender,
+          count: worseRankedBirthPeers.length,
+        })}
         {
           <AnchorList
             items={worseRankedBirthPeers}
@@ -178,6 +184,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
                 : d.name
             }
             url={d => `/profile/person/${d.slug}/`}
+            andWord={t.person.ranking.and}
           />
         }
         .
@@ -199,9 +206,10 @@ export default async function YearRanking({person, personRanks, title, slug}) {
     if (betterRankedDeathPeers.length) {
       betterDeathPeers = (
         <span>
-          Before{" "}
-          {person.gender ? (person.gender === "M" ? "him" : "her") : "them"}{" "}
-          {betterRankedDeathPeers.length > 1 ? "are" : "is"}{" "}
+          {t.person.ranking.beforePeers({
+            gender: person.gender,
+            count: betterRankedDeathPeers.length,
+          })}
           {
             <AnchorList
               items={betterRankedDeathPeers}
@@ -211,6 +219,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
                   : d.name
               }
               url={d => `/profile/person/${d.slug}/`}
+              andWord={t.person.ranking.and}
             />
           }
           .{" "}
@@ -220,9 +229,10 @@ export default async function YearRanking({person, personRanks, title, slug}) {
     if (worseRankedDeathPeers.length) {
       worseDeathPeers = (
         <span>
-          After{" "}
-          {person.gender ? (person.gender === "M" ? "him" : "her") : "them"}{" "}
-          {worseRankedDeathPeers.length > 1 ? "are" : "is"}{" "}
+          {t.person.ranking.afterPeers({
+            gender: person.gender,
+            count: worseRankedDeathPeers.length,
+          })}
           {
             <AnchorList
               items={worseRankedDeathPeers}
@@ -232,6 +242,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
                   : d.name
               }
               url={d => `/profile/person/${d.slug}/`}
+              andWord={t.person.ranking.and}
             />
           }
           .
@@ -245,27 +256,46 @@ export default async function YearRanking({person, personRanks, title, slug}) {
     <SectionLayout slug={slug} title={title}>
       <div>
         <p>
-          Among people born in {FORMATTERS.year(person.birthyear)},{" "}
-          {person.name} ranks{" "}
-          <strong>{FORMATTERS.commas(meBy.birthyear_rank)}</strong>.&nbsp;
+          <span
+            dangerouslySetInnerHTML={{
+              __html: t.person.ranking.amongBornYearRanks({
+                year: FORMATTERS.year(person.birthyear),
+                name: person.name,
+                rankHtml: `<strong>${FORMATTERS.commas(meBy.birthyear_rank)}</strong>`,
+              }),
+            }}
+          />
+          &nbsp;
           {betterBirthPeers}
           {worseBirthPeers}
           {deathYearRanking.length && meDy ? (
             <span>
-              &nbsp;Among people deceased in {FORMATTERS.year(person.deathyear)}
-              , {person.name} ranks <strong>{meDy.deathyear_rank}</strong>
-              .&nbsp;
+              &nbsp;
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: t.person.ranking.amongDeceasedYearRanks({
+                    year: FORMATTERS.year(person.deathyear),
+                    name: person.name,
+                    rankHtml: `<strong>${meDy.deathyear_rank}</strong>`,
+                  }),
+                }}
+              />
+              &nbsp;
             </span>
           ) : null}
           {betterDeathPeers}
           {worseDeathPeers}
         </p>
         <div className="rank-title">
-          <h3>Others Born in {FORMATTERS.year(person.birthyear)}</h3>
+          <h3>
+            {t.person.ranking.othersBornInYear({
+              year: FORMATTERS.year(person.birthyear),
+            })}
+          </h3>
           <Link
             href={`/explore/rankings?viz=treemap&show=people&years=${person.birthyear},${person.birthyear}&yearType=birthyear`}
           >
-            Go to all Rankings
+            {t.person.ranking.goToAllRankings}
           </Link>
         </div>
         <PhotoCarousel
@@ -273,15 +303,20 @@ export default async function YearRanking({person, personRanks, title, slug}) {
           people={birthYearRanking}
           rankAccessor="birthyear_rank_unique"
           showOccupation={true}
+          lang={lang}
         />
         {deathYearRanking.length && meDy ? (
           <div className="rank-sec-body">
             <div className="rank-title">
-              <h3>Others Deceased in {FORMATTERS.year(person.deathyear)}</h3>
+              <h3>
+                {t.person.ranking.othersDeceasedInYear({
+                  year: FORMATTERS.year(person.deathyear),
+                })}
+              </h3>
               <Link
                 href={`/explore/rankings?viz=treemap&show=people&years=${person.deathyear},${person.deathyear}&yearType=deathyear`}
               >
-                Go to all Rankings
+                {t.person.ranking.goToAllRankings}
               </Link>
             </div>
             <PhotoCarousel
@@ -289,6 +324,7 @@ export default async function YearRanking({person, personRanks, title, slug}) {
               people={deathYearRanking}
               rankAccessor="deathyear_rank_unique"
               showOccupation={true}
+              lang={lang}
             />
           </div>
         ) : null}
