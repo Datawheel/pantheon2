@@ -1,13 +1,18 @@
 "use client";
 
-import {useState} from "react";
-import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
+import {useRouter, useSearchParams} from "next/navigation";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import {micromark} from "micromark";
 import SimpleTooltip from "@/components/common/SimpleTooltip";
 import {SUPPORTED_LOCALES, getLocalizedLanguageName, DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
+import {
+  getTrendingNewsCardId,
+  getTrendingNewsSlugFromHash,
+  getTrendingNewsSlugFromSearchParams,
+} from "@/app/utils/trendingNewsAnchors";
 import PersonImage from "@/components/utils/PersonImage";
 import "./TrendingNews.css";
 
@@ -24,12 +29,15 @@ const MODEL_NAMES = {
 
 export default function TrendingNews({languageSections, currentLang, currentDate, currentModel}) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = getTranslations(currentLang);
   // Track per-card model overrides: { [slug]: "grok" | "gemini" | etc }
   const [cardModelOverrides, setCardModelOverrides] = useState({});
   // Track which cards are expanded on mobile
   const [expandedCards, setExpandedCards] = useState({});
+  const [highlightedSlug, setHighlightedSlug] = useState("");
   const localePrefix = currentLang === DEFAULT_LOCALE ? "" : `/${currentLang}`;
+  const permalinkSlug = getTrendingNewsSlugFromSearchParams(searchParams);
 
   const handleModelChange = model => {
     router.push(`/${currentLang}/news?date=${dateValue}&model=${model}`);
@@ -80,6 +88,46 @@ export default function TrendingNews({languageSections, currentLang, currentDate
     return a.localeCompare(b);
   });
 
+  useEffect(() => {
+    let frame;
+
+    const syncTargetFromHash = () => {
+      const slug = getTrendingNewsSlugFromHash(window.location.hash) ||
+        permalinkSlug;
+      setHighlightedSlug(slug);
+
+      if (!slug) return;
+
+      setExpandedCards(prev => (
+        prev[slug] ? prev : {...prev, [slug]: true}
+      ));
+
+      frame = window.requestAnimationFrame(() => {
+        const target = document.getElementById(getTrendingNewsCardId(slug)) ||
+          document.getElementById(slug);
+
+        if (!target) return;
+
+        const prefersReducedMotion = window.matchMedia?.(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+
+        target.scrollIntoView({
+          block: "center",
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+        });
+      });
+    };
+
+    syncTargetFromHash();
+    window.addEventListener("hashchange", syncTargetFromHash);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("hashchange", syncTargetFromHash);
+    };
+  }, [languageSections, permalinkSlug]);
+
   const toggleCardExpand = slug => {
     setExpandedCards(prev => ({...prev, [slug]: !prev[slug]}));
   };
@@ -97,7 +145,9 @@ export default function TrendingNews({languageSections, currentLang, currentDate
     const activeModel = cardModelOverrides[person.slug] || currentModel;
     const hasMultipleModels = responses.length > 1;
     const isExpanded = expandedCards[person.slug];
+    const isHighlighted = highlightedSlug === person.slug;
     const currentLangRank = person.languageRanks?.[currentLang];
+    const cardId = getTrendingNewsCardId(person.slug);
 
     const handleCardModelChange = provider => {
       setCardModelOverrides(prev => ({
@@ -107,7 +157,16 @@ export default function TrendingNews({languageSections, currentLang, currentDate
     };
 
     return (
-      <div key={person.id || person.slug} className={`trending-news-card ${isExpanded ? "expanded" : ""}`}>
+      <div
+        key={person.id || person.slug}
+        id={cardId}
+        data-news-slug={person.slug}
+        className={[
+          "trending-news-card",
+          isExpanded ? "expanded" : "",
+          isHighlighted ? "news-card-highlighted" : "",
+        ].filter(Boolean).join(" ")}
+      >
         {/* Mobile compact row */}
         <div className="mobile-card-row" onClick={() => toggleCardExpand(person.slug)}>
           <div className="mobile-card-thumb">

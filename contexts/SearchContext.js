@@ -40,7 +40,9 @@ export const SearchProvider = ({children}) => {
   const toggleSearchVisibility = useCallback(event => {
     const tag = event.target.tagName;
     const isTyping = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || event.target.isContentEditable;
-    if (event.key === "s" && !isSearchVisible && !isTyping) {
+    const isSearchShortcut = event.key.toLowerCase() === "s" && !event.metaKey && !event.ctrlKey && !event.altKey;
+    if (isSearchShortcut && !isSearchVisible && !isTyping) {
+      event.preventDefault();
       openSearch();
     } else if (event.key === "Escape" && isSearchVisible) {
       closeSearch();

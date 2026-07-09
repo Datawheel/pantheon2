@@ -6,6 +6,7 @@ import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 import TrendingNews from "@/components/news/TrendingNews";
 
 const baseUrl = process.env.URL || "https://pantheon.world";
+const TRENDING_NEWS_LIMIT = 16;
 
 export async function generateMetadata(props) {
   const params = await props.params;
@@ -71,7 +72,7 @@ export default async function NewsPage(props) {
   // Fetch trending people for ALL languages
   const allLanguagePromises = SUPPORTED_LOCALES.map(locale =>
     fetch(
-      `${baseUrl}/api/wikiTrends?lang=${locale}&date=${dataFetchDate}&limit=12`,
+      `${baseUrl}/api/wikiTrends?lang=${locale}&date=${dataFetchDate}&limit=${TRENDING_NEWS_LIMIT}`,
       {
         next: {revalidate: REVALIDATE_PERIODS.SHORT * 2},
       }

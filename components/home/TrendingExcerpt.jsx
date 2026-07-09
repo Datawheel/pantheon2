@@ -4,6 +4,7 @@ import {useState, useEffect, useRef} from "react";
 import Link from "next/link";
 import {getTranslations} from "@/app/translations";
 import {DEFAULT_LOCALE} from "@/app/locales";
+import {getTrendingNewsPermalink} from "@/app/utils/trendingNewsAnchors";
 import "./TrendingExcerpt.css";
 
 const ROW_COLORS = [
@@ -144,7 +145,11 @@ export default function TrendingExcerpt({
           </div>
           <p className="trending-excerpt-text">{excerpt}</p>
           <Link
-            href={`/${currentLang}/news?date=${today}#${currentPerson.slug}`}
+            href={getTrendingNewsPermalink({
+              locale: currentLang,
+              date: today,
+              slug: currentPerson.slug,
+            })}
             className="trending-excerpt-link"
           >
             {t.home.readFullStory} →
