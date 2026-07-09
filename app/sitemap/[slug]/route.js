@@ -66,6 +66,7 @@ const STATIC_PATHS = [
   "/profile/era",
   "/profile/deaths",
   "/profile/born-on-this-day",
+  "/profile/recently-added",
   "/explore/rankings",
   "/explore/viz",
   "/news",

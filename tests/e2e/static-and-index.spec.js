@@ -11,6 +11,7 @@ const STATIC_PAGES = [
   {name: "explore viz", path: "/explore/viz"},
   {name: "news", path: "/news"},
   {name: "monthly index", path: "/monthly"},
+  {name: "recently added", path: "/profile/recently-added"},
   {name: "game: trivia", path: "/game/trivia"},
   {name: "game: birthle", path: "/game/birthle"},
   {name: "game: yearbook", path: "/game/yearbook"},

@@ -244,6 +244,8 @@ export default async function Home(props) {
         initialTrendingAll={recentlyAdded}
         defaultLang={lang}
         showTrendIndicator={false}
+        ctaHref={`${lang === DEFAULT_LOCALE ? "" : `/${lang}`}/profile/recently-added`}
+        ctaLabel={t.recentlyAdded.viewMore}
       />
 
       <div className="profile-grid">
