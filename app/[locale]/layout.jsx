@@ -4,14 +4,13 @@ import dynamic from "next/dynamic";
 import {usePathname, useParams} from "next/navigation";
 import ReduxProvider from "@/components/ReduxProvider";
 import NextTopLoader from "nextjs-toploader";
-// import Search from "@/components/Search";
+import SearchComponent from "@/components/Search";
 import "../../styles/globals.css";
 
 import {SearchProvider} from "@/contexts/SearchContext";
 
 const Navigation = dynamic(() => import("@/components/Navigation"));
 const Footer = dynamic(() => import("@/components/Footer"));
-const SearchComponent = dynamic(() => import("@/components/Search"));
 
 export default function Layout({children}) {
   const pathname = usePathname();

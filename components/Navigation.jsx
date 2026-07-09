@@ -8,7 +8,7 @@ import {getTranslations} from "@/app/translations";
 import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "@/app/locales";
 
 export default function Navigation() {
-  const {setSearchVisible} = useSearchVisibility();
+  const {openSearch} = useSearchVisibility();
   const [mobileNavVisible, setMobileNavVisible] = useState(false);
   const [mobileSubnav, setMobileSubnav] = useState(null);
 
@@ -23,6 +23,11 @@ export default function Navigation() {
     subnavType === mobileSubnav
       ? setMobileSubnav(null)
       : setMobileSubnav(subnavType);
+  };
+
+  const handleOpenSearch = () => {
+    setMobileNavVisible(false);
+    openSearch();
   };
 
   return (
@@ -245,7 +250,7 @@ export default function Navigation() {
             </ul>
           </li>
           <li className="search-btn">
-            <button onClick={() => setSearchVisible(true)}>
+            <button type="button" onClick={openSearch}>
               <Image
                 width={18}
                 height={18}
@@ -430,7 +435,7 @@ export default function Navigation() {
             </li>
             <li
               className="item search-link item-link"
-              onClick={() => setSearchVisible(true)}
+              onClick={handleOpenSearch}
             >
               {t.nav.search}
             </li>

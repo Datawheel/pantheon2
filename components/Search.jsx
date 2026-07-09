@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import axios from "axios";
 import {TrendingUp, Search as SearchIcon} from "lucide-react";
 import {useParams, usePathname} from "next/navigation";
@@ -39,8 +39,12 @@ const SearchComponent = () => {
   const [showTrending, setShowTrending] = useState(true);
   const [debouncedValue, setDebouncedValue] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
-  const {isSearchVisible, setSearchVisible} = useSearchVisibility();
-  const inputRef = useRef(null);
+  const {
+    isSearchVisible,
+    closeSearch,
+    focusSearchInput,
+    searchInputRef,
+  } = useSearchVisibility();
 
   // Function to fetch latest trend data from API
   const fetchLatestTrendData = useCallback(async () => {
@@ -93,13 +97,17 @@ const SearchComponent = () => {
   }, [locale]);
 
   useEffect(() => {
-    if (isSearchVisible && inputRef.current) {
-      const timer = setTimeout(() => {
-        inputRef.current.focus(); // Focus after a delay
-      }, 100);
-      return () => clearTimeout(timer); // Clear the timeout if the component unmounts or isVisible changes again
-    }
-  }, [isSearchVisible]);
+    if (!isSearchVisible) return;
+
+    focusSearchInput();
+    const frame = window.requestAnimationFrame(focusSearchInput);
+    const timer = window.setTimeout(focusSearchInput, 100);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
+  }, [isSearchVisible, focusSearchInput]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -139,7 +147,7 @@ const SearchComponent = () => {
 
   return (
     <div className="search">
-      <button className="search-close" onClick={() => setSearchVisible(false)}>
+      <button className="search-close" onClick={closeSearch}>
         <i>
           <span className="close-perimeter" />
           <span className="close-x close-back" />
@@ -154,7 +162,7 @@ const SearchComponent = () => {
           </div>
           <>
             <input
-              ref={inputRef}
+              ref={searchInputRef}
               type="text"
               value={inputValue}
               onChange={handleChange}

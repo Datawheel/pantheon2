@@ -5,12 +5,12 @@ import {useSearchVisibility} from "@/contexts/SearchContext";
 import {getTranslations} from "@/app/translations";
 
 export default function HomeSearch({lang = "en"}) {
-  const {setSearchVisible} = useSearchVisibility();
+  const {openSearch} = useSearchVisibility();
   const t = getTranslations(lang);
 
   return (
     <div className="home-search">
-      <a onClick={() => setSearchVisible(true)}>
+      <a onClick={openSearch}>
         <Image
           src="/images/icons/icon-search.svg"
           alt="search icon"
