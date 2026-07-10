@@ -86,9 +86,9 @@ async function getAllOccupationsInCountry(countryId, lang = "en") {
 // the caller attaches it in JS instead of repeating it per row. Fetched in
 // id-ordered pages to keep each fetch under Next's 2MB data-cache limit
 // (big combos like US actors were ~7MB and never cached).
-async function getPeople(occupationId, countryId) {
+async function getPeople(occupationId, countryId, lang = DEFAULT_LOCALE) {
   const encodedOccupationId = encodePostgrestValue(occupationId);
-  const url = `${BASE_API}/person?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&order=id.asc&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive,famous_for,description`;
+  const url = `${BASE_API}/person?occupation=eq.${encodedOccupationId}&bplace_country=eq.${countryId}&order=id.asc&select=bplace_geonameid(id,place,slug),bplace_country(id,continent,country,slug),dplace_country(id,continent,country,slug),dplace_geonameid(id,place,slug),occupation_id:occupation,name,localized_name:translations->>${lang},slug,id,gender,birthyear,deathyear,alive,famous_for,description`;
   return await safeFetchArrayPaged(url, {
     next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
   });
@@ -258,7 +258,7 @@ export default async function Page(props) {
   ] = await Promise.all([
     getAllCountriesInOccupation(occupation.occupation, lang),
     getAllOccupationsInCountry(country.id, lang),
-    getPeople(occupation.id, country.id),
+    getPeople(occupation.id, country.id, lang),
     getPeopleHpi(occupation.id, country.id),
   ]);
 
@@ -268,6 +268,7 @@ export default async function Page(props) {
       const hpiData = peopleHpi.find(hpi => hpi.id === person.id);
       return {
         ...person,
+        localizedName: person.localized_name || person.name,
         // getPeople no longer embeds the (identical) occupation row per person.
         occupation,
         ...(hpiData || {}), // Spread hpiData if found, otherwise spread empty object
@@ -349,7 +350,7 @@ export default async function Page(props) {
       position: i + 1,
       item: {
         "@type": "Person",
-        name: person.name,
+        name: person.localizedName || person.name,
         url: `${baseUrl}${localePrefix}/profile/person/${person.slug}`,
         image: `https://static.pantheon.world/profile/people/${person.id}.jpg`,
         jobTitle: toTitleCase(localizedOccupation),

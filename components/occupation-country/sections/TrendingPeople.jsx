@@ -183,7 +183,7 @@ async function getTrendingPeopleForOccupationCountry({
     .slice(0, limit);
 
   const trendingSlugs = deduped.map(t => `"${t.slug}"`).join(",");
-  const fullDataUrl = `${BASE_API}/person?slug=in.(${trendingSlugs})&select=id,name,slug,birthyear,deathyear,occupation(occupation)`;
+  const fullDataUrl = `${BASE_API}/person?slug=in.(${trendingSlugs})&select=id,name,localized_name:translations->>${locale},slug,birthyear,deathyear,occupation(occupation)`;
   const fullData = await safeFetchJson(fullDataUrl, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
   const fullDataBySlug = new Map(fullData.map(person => [person.slug, person]));
 
@@ -194,6 +194,7 @@ async function getTrendingPeopleForOccupationCountry({
       ...trend,
       ...person,
       id: personId,
+      localizedName: person.localized_name || person.name || trend.name,
       trendReason: buildTrendReason(
         {trend, languageRanks: trend.languageRanks, translations},
         locale
@@ -287,11 +288,13 @@ export default async function TrendingPeople({
                       person={person}
                       fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                       src={`/profile/people/${person.id}.jpg`}
-                      alt={`Photo of ${person.name}`}
+                      alt={`Photo of ${person.localizedName || person.name}`}
                     />
                   </div>
                   <div className="trending-person-content">
-                    <h3 className="trending-person-name">{person.name}</h3>
+                    <h3 className="trending-person-name">
+                      {person.localizedName || person.name}
+                    </h3>
                     <p className="trending-person-dates">
                       {person.birthyear && (
                         person.deathyear

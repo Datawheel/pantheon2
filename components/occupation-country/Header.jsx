@@ -40,7 +40,7 @@ export default function Header({
                 key={p.id}
                 person={p}
                 src={`/profile/people/${p.id}.jpg`}
-                alt={p.name || ""}
+                alt={p.localizedName || p.name || ""}
                 wrap={false}
               />
             ))}
@@ -51,7 +51,7 @@ export default function Header({
                 key={p.id}
                 person={p}
                 src={`/profile/people/${p.id}.jpg`}
-                alt={p.name || ""}
+                alt={p.localizedName || p.name || ""}
                 wrap={false}
               />
             ))}

@@ -62,6 +62,7 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
 
         <ol className="top-10-grid">
           {top10.map((person, index) => {
+            const personName = person.localizedName || person.name;
             const famousFor = locale === "en" ? (person.famous_for || person.description) : null;
             const excerpt = famousFor ? truncateText(famousFor) : null;
             const isExpandable = famousFor && excerpt && excerpt !== famousFor;
@@ -79,11 +80,11 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
                         person={person}
                         fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                         src={`/profile/people/${person.id}.jpg`}
-                        alt={`Photo of ${person.name}`}
+                        alt={`Photo of ${personName}`}
                       />
                     </div>
                     <div className="top-10-card-content">
-                      <h3 className="top-10-card-name">{person.name}</h3>
+                      <h3 className="top-10-card-name">{personName}</h3>
                       <p className="top-10-card-dates">
                         {person.deathyear
                           ? `${FORMATTERS.year(person.birthyear)} - ${FORMATTERS.year(person.deathyear)}`

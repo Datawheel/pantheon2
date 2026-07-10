@@ -73,7 +73,7 @@ export default function People({
               })}
               <AnchorList
                 items={people.filter(p => p.alive).slice(0, 3)}
-                name={d => d.name}
+                name={d => d.localizedName || d.name}
                 url={d => `/profile/person/${d.slug}/`}
               />
               .
@@ -88,7 +88,7 @@ export default function People({
               })}
               <AnchorList
                 items={people.filter(p => !p.alive).slice(0, 3)}
-                name={d => d.name}
+                name={d => d.localizedName || d.name}
                 url={d => `/profile/person/${d.slug}/`}
               />
               .
@@ -105,7 +105,7 @@ export default function People({
               })}
               <AnchorList
                 items={peopleNew.slice(0, 3)}
-                name={d => d.name}
+                name={d => d.localizedName || d.name}
                 url={d => `/profile/person/${d.slug}/`}
               />
               .

@@ -97,22 +97,26 @@ export default function BirthDecades({
                 <span className="occupation-group__count">({groupPeople.length})</span>
               </h3>
               <div className="occupation-group__people">
-                {displayPeople.map(person => (
-                  <a
-                    key={person.id}
-                    href={`${localePrefix}/profile/person/${person.slug}`}
-                    className="occupation-person"
-                    title={person.name}
-                  >
-                    <PersonImage
-                      person={person}
-                      src={`/profile/people/${person.id}.jpg`}
-                      alt={person.name}
-                      fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                    />
-                    <span className="occupation-person__name">{person.name}</span>
-                  </a>
-                ))}
+                {displayPeople.map(person => {
+                  const personName = person.localizedName || person.name;
+
+                  return (
+                    <a
+                      key={person.id}
+                      href={`${localePrefix}/profile/person/${person.slug}`}
+                      className="occupation-person"
+                      title={personName}
+                    >
+                      <PersonImage
+                        person={person}
+                        src={`/profile/people/${person.id}.jpg`}
+                        alt={personName}
+                        fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                      />
+                      <span className="occupation-person__name">{personName}</span>
+                    </a>
+                  );
+                })}
                 {groupPeople.length > 10 && (
                   <button
                     className="occupation-group__more"
