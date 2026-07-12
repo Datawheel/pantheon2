@@ -14,6 +14,7 @@ import Books from "@/components/person/Books";
 import News from "@/components/person/News";
 //  Twitter from "@/components/person/tter";
 import Movies from "@/components/person/Movies";
+import Insights, {buildInsights} from "@/components/person/Insights";
 import WhyTrending from "@/components/person/WhyTrending";
 import Footer from "@/components/person/Footer";
 import TrendingHeatmap from "@/components/person/TrendingHeatmap";
@@ -68,7 +69,7 @@ async function getPerson(id, lang = "en") {
 }
 
 async function getPersonRanks(id) {
-  const url = `${BASE_API}/person_ranks?slug=eq.${id}&select=l,l_prev,hpi,occupation_rank,occupation_rank_prev,bplace_country_rank,bplace_country_rank_prev,bplace_country_occupation_rank,occupation_rank_unique,bplace_country_rank_unique,bplace_country_occupation_rank_unique,birthyear_rank_unique,deathyear_rank_unique,bplace_country`;
+  const url = `${BASE_API}/person_ranks?slug=eq.${id}&select=l,l_prev,hpi,occupation_rank,occupation_rank_prev,bplace_country_rank,bplace_country_rank_prev,bplace_country_occupation_rank,occupation_rank_unique,bplace_country_rank_unique,bplace_country_occupation_rank_unique,birthyear_rank_unique,deathyear_rank_unique,bplace_country,rank,rank_unique,bplace_name,bplace_name_rank_unique,non_en_page_views`;
   const data = await safeFetchJson(
     url,
     {method: "GET", next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -147,6 +148,52 @@ async function getPersonTrending(slug, userLang, date) {
     trendingReason: reasonRecords?.[0]?.reason || null,
     llmMetadata: reasonRecords?.[0]?.llm_metadata || null,
   };
+}
+
+// Exact row count via PostgREST's content-range header. Uses GET (not HEAD)
+// so the response lands in the Next.js data cache.
+async function getPostgrestCount(query) {
+  try {
+    const res = await fetch(`${BASE_API}${query}`, {
+      headers: {Prefer: "count=exact"},
+      next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+    });
+    if (!res.ok) return null;
+    const total = res.headers.get("content-range")?.split("/")[1];
+    return total && total !== "*" ? Number(total) : null;
+  } catch {
+    return null;
+  }
+}
+
+// How this person's Wikipedia language-edition count compares to occupation
+// peers: what percent of them have fewer editions.
+async function getLangEditionContext(occupationId, l) {
+  if (!occupationId || !l) return null;
+  const enc = encodePostgrestValue(occupationId);
+  const [totalPeers, atOrAbove] = await Promise.all([
+    getPostgrestCount(`/person_ranks?occupation=eq.${enc}&select=id&limit=1`),
+    getPostgrestCount(`/person_ranks?occupation=eq.${enc}&l=gte.${l}&select=id&limit=1`),
+  ]);
+  if (!totalPeers || !atOrAbove || totalPeers < 30) return null;
+  return {
+    totalPeers,
+    percentBelow: Math.floor(((totalPeers - atOrAbove) / totalPeers) * 100),
+  };
+}
+
+// Highest-ranked *other* person sharing this person's birth month/day, via the
+// core.born_on_day() function (already ordered by hpi desc).
+async function getBirthdayTwin(person, lang = "en") {
+  if (!person?.birthdate) return null;
+  const [, m, d] = person.birthdate.split("-");
+  if (!Number(m) || !Number(d)) return null;
+  const url = `${BASE_API}/rpc/born_on_day?m=${Number(m)}&d=${Number(d)}&lang=${lang}&limit=2`;
+  const rows = await safeFetchArray(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+  );
+  return rows.find(r => String(r.person_id) !== String(person.id)) || null;
 }
 
 async function getPageViews(personId, lang = "en") {
@@ -312,16 +359,19 @@ export default async function Page(props) {
     return notFound();
   }
 
-  const [pageViews, memMetricsData] = await Promise.all([
-    getPageViews(person.id, lang),
-    Promise.all([
-      getOccupationPageviews(person.occupation?.id),
-      getRolling12MonthViews(person.id),
-    ]).then(([occupationData, totalViews]) => ({
-      occupationData,
-      totalViews,
-    })),
-  ]);
+  const [pageViews, memMetricsData, birthdayTwin, langContext] =
+    await Promise.all([
+      getPageViews(person.id, lang),
+      Promise.all([
+        getOccupationPageviews(person.occupation?.id),
+        getRolling12MonthViews(person.id),
+      ]).then(([occupationData, totalViews]) => ({
+        occupationData,
+        totalViews,
+      })),
+      getBirthdayTwin(person, lang),
+      getLangEditionContext(person.occupation?.id, personRanks.l),
+    ]);
 
   // Get localized name from translations column, fallback to English name
   const localizedName = person.translations?.[lang] || person.name;
@@ -378,6 +428,15 @@ export default async function Page(props) {
       ? plural(localizedOccupation || "People")
       : localizedOccupation || "People";
 
+  const insights = buildInsights({
+    person: localizedPerson,
+    personRanks,
+    birthdayTwin,
+    langContext,
+    occupationPlural,
+    lang,
+  });
+
   const sections = [
     {
       title: t.person.sections.memorabilityMetrics,
@@ -391,6 +450,11 @@ export default async function Page(props) {
           lang={lang}
         />
       ),
+    },
+    {
+      title: t.person.sections.insights,
+      slug: "insights",
+      content: <Insights person={localizedPerson} insights={insights} />,
     },
     {
       title: t.person.sections.trendingActivity,
@@ -497,6 +561,9 @@ export default async function Page(props) {
     // if (section.slug === "twitter" && !twitterData?.timeline?.length) {
     //   return false;
     // }
+    if (section.slug === "insights" && !insights.length) {
+      return false;
+    }
     if (section.slug === "movies" && !movies.length) {
       return false;
     }

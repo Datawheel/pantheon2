@@ -1,0 +1,29 @@
+@import "../../styles/mixins.css";
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.insight-card {
+  background-color: var(--colorLint, #e4e4e1);
+  border-top: 4px solid var(--colorCtrl, #36687f);
+  padding: 14px 18px 16px;
+
+  & .insight-stat {
+    @mixin calloutText;
+    color: var(--colorSlate, #4b4a48);
+    font-size: 26px;
+    line-height: 1;
+    margin: 0 0 8px;
+  }
+
+  /* !important beats the global p line-height (same workaround as MemMetrics) */
+  & .insight-text {
+    font-size: var(--sizeSmall, 1.2rem);
+    line-height: 1.5 !important;
+    margin: 0;
+  }
+}

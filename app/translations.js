@@ -20,6 +20,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Among ${occupationPlural} In ${country}`,
         filmography: "Filmography",
         tvMovieRoles: "Television and Movie Roles",
+        insights: "Data Insights",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} is the top-ranked of all ${totalFormatted} ${occupationPlural} in Pantheon worldwide.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} ranks #${rank} of ${totalFormatted} ${occupationPlural} worldwide — among the top ${topPercent}% of the profession.`,
+        topCountry: ({name, country}) =>
+          `${name} is the highest-ranked individual ever born in ${country}.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `Of all ${occupationPlural} born in ${country}, ${name} ranks first.`,
+        topCity: ({name, city}) =>
+          `${name} is the most memorable person ever born in ${city}.`,
+        topBirthyear: ({name, year}) =>
+          `Of everyone born in ${year}, ${name} is the most memorable.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `${name}'s biography appears in ${count} language editions of Wikipedia — more than ${percent}% of all ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `${name}'s biography was added to ${count} new Wikipedia language editions in the past year.`,
+        nonEnglish: ({name, count}) =>
+          `${name}'s biography drew ${count} page views from non-English Wikipedia editions in the past year — fame that reaches well beyond the English-speaking world.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `More than ${centuries} centuries after death, ${name} still holds rank #${rank} among all individuals in Pantheon.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} shares a ${date} birthday with ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `${name}'s biography spans ${count} Wikipedia language editions and earns a Historical Popularity Index of ${hpi}.`,
       },
       metrics: {
         pageViews: "Page Views",
@@ -464,6 +491,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Entre ${occupationPlural} en ${country}`,
         filmography: "Filmografía",
         tvMovieRoles: "Papeles en televisión y cine",
+        insights: "Datos destacados",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} ocupa el primer puesto entre los ${totalFormatted} ${occupationPlural} de Pantheon en todo el mundo.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} ocupa el puesto n.º ${rank} entre ${totalFormatted} ${occupationPlural} del mundo, dentro del ${topPercent} % más destacado de la profesión.`,
+        topCountry: ({name, country}) =>
+          `${name} es la figura mejor clasificada de todas las nacidas en ${country}.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `De todos los ${occupationPlural} nacidos en ${country}, ${name} ocupa el primer puesto.`,
+        topCity: ({name, city}) =>
+          `${name} es la persona más memorable nacida en ${city}.`,
+        topBirthyear: ({name, year}) =>
+          `De todas las personas nacidas en ${year}, ${name} es la más memorable.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `La biografía de ${name} aparece en ${count} ediciones lingüísticas de Wikipedia, más que el ${percent} % de los ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `La biografía de ${name} se añadió a ${count} nuevas ediciones lingüísticas de Wikipedia durante el último año.`,
+        nonEnglish: ({name, count}) =>
+          `La página de ${name} recibió ${count} visitas desde ediciones de Wikipedia distintas de la inglesa durante el último año: una fama que va mucho más allá del mundo anglosajón.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `Más de ${centuries} siglos después de su muerte, ${name} aún ocupa el puesto n.º ${rank} entre todas las personas de Pantheon.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} comparte cumpleaños (${date}) con ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `La biografía de ${name} abarca ${count} ediciones lingüísticas de Wikipedia y obtiene un Índice de Popularidad Histórica de ${hpi}.`,
       },
       metrics: {
         pageViews: "Visitas",
@@ -995,6 +1049,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Parmi les ${occupationPlural} en ${country}`,
         filmography: "Filmographie",
         tvMovieRoles: "Rôles à la télévision et au cinéma",
+        insights: "Faits marquants",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} occupe la première place parmi les ${totalFormatted} ${occupationPlural} recensés dans Pantheon à travers le monde.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} se classe n° ${rank} sur ${totalFormatted} ${occupationPlural} dans le monde — dans le top ${topPercent} % de la profession.`,
+        topCountry: ({name, country}) =>
+          `${name} arrive en tête du classement des personnalités nées en ${country}.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `Parmi les ${occupationPlural} nés en ${country}, ${name} occupe la première place.`,
+        topCity: ({name, city}) =>
+          `${name} est la personnalité la plus mémorable née à ${city}.`,
+        topBirthyear: ({name, year}) =>
+          `De toutes les personnes nées en ${year}, ${name} est la plus mémorable.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `La biographie de ${name} figure dans ${count} éditions linguistiques de Wikipédia — plus que ${percent} % de l'ensemble des ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `La biographie de ${name} a été ajoutée à ${count} nouvelles éditions linguistiques de Wikipédia au cours de l'année écoulée.`,
+        nonEnglish: ({name, count}) =>
+          `La biographie de ${name} a enregistré ${count} consultations sur des éditions de Wikipédia autres qu'anglophones au cours de l'année écoulée — une renommée qui dépasse largement le monde anglophone.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `Plus de ${centuries} siècles après sa mort, ${name} occupe toujours le rang n° ${rank} parmi toutes les personnalités de Pantheon.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} partage sa date d'anniversaire (${date}) avec ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `La biographie de ${name} couvre ${count} éditions linguistiques de Wikipédia et obtient un Indice de Popularité Historique de ${hpi}.`,
       },
       metrics: {
         pageViews: "Pages vues",
@@ -1541,6 +1622,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Unter ${occupationPlural} in ${country}`,
         filmography: "Filmografie",
         tvMovieRoles: "Fernseh- und Filmrollen",
+        insights: "Daten-Einblicke",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} führt die Rangliste aller ${totalFormatted} ${occupationPlural} in Pantheon weltweit an.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} belegt Platz ${rank} von ${totalFormatted} ${occupationPlural} weltweit – unter den besten ${topPercent} % des Berufsstands.`,
+        topCountry: ({name, country}) =>
+          `${name} ist die bestplatzierte Persönlichkeit, die je in ${country} geboren wurde.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `Unter allen in ${country} geborenen ${occupationPlural} belegt ${name} den ersten Platz.`,
+        topCity: ({name, city}) =>
+          `${name} ist die bekannteste Persönlichkeit, die je in ${city} geboren wurde.`,
+        topBirthyear: ({name, year}) =>
+          `Von allen im Jahr ${year} geborenen Menschen ist ${name} am bekanntesten.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `Die Biografie von ${name} erscheint in ${count} Sprachversionen der Wikipedia – mehr als bei ${percent} % aller ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `Die Biografie von ${name} kam im vergangenen Jahr in ${count} neuen Sprachversionen der Wikipedia hinzu.`,
+        nonEnglish: ({name, count}) =>
+          `Die Biografie von ${name} verzeichnete im vergangenen Jahr ${count} Aufrufe in nicht-englischen Sprachversionen der Wikipedia – eine Bekanntheit weit über den englischsprachigen Raum hinaus.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `Mehr als ${centuries} Jahrhunderte nach dem Tod belegt ${name} noch immer Platz ${rank} unter allen Persönlichkeiten in Pantheon.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} hat am selben Tag Geburtstag (${date}) wie ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `Die Biografie von ${name} umfasst ${count} Sprachversionen der Wikipedia und erreicht einen Historischen Popularitätsindex von ${hpi}.`,
       },
       metrics: {
         pageViews: "Seitenaufrufe",
@@ -2066,6 +2174,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Среди представителей профессии «${occupationPlural}» в стране ${country}`,
         filmography: "Фильмография",
         tvMovieRoles: "Роли в кино и на телевидении",
+        insights: "Интересные факты",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} занимает первое место среди всех ${totalFormatted} ${occupationPlural} в Pantheon по всему миру.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} занимает ${rank}-е место среди ${totalFormatted} ${occupationPlural} мира — в числе ${topPercent} % лучших в профессии.`,
+        topCountry: ({name, country}) =>
+          `${name} — самая высокоранговая личность из всех, родившихся в стране ${country}.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `Среди ${occupationPlural}, родившихся в стране ${country}, ${name} занимает первое место.`,
+        topCity: ({name, city}) =>
+          `${name} — самая известная личность, родившаяся в городе ${city}.`,
+        topBirthyear: ({name, year}) =>
+          `Из всех, кто родился в ${year} году, ${name} — самая известная личность.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `Биография ${name} представлена в ${count} языковых разделах Википедии — больше, чем у ${percent} % всех ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `За последний год биография ${name} появилась в ${count} новых языковых разделах Википедии.`,
+        nonEnglish: ({name, count}) =>
+          `За последний год страница ${name} набрала ${count} просмотров в неанглоязычных разделах Википедии — известность далеко за пределами англоязычного мира.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `Спустя более ${centuries} веков после смерти ${name} по-прежнему занимает ${rank}-е место среди всех личностей в Pantheon.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} отмечает день рождения (${date}) в один день с ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `Биография ${name} представлена в ${count} языковых разделах Википедии, а Индекс исторической популярности составляет ${hpi}.`,
       },
       metrics: {
         pageViews: "Просмотры страниц",
@@ -2617,6 +2752,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `在${country}的${occupationPlural}中`,
         filmography: "电影作品",
         tvMovieRoles: "影视角色",
+        insights: "数据洞察",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `在 Pantheon 收录的全球 ${totalFormatted} 位${occupationPlural}中，${name}排名第一。`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name}在全球 ${totalFormatted} 位${occupationPlural}中排名第 ${rank}，位居该职业前 ${topPercent}%。`,
+        topCountry: ({name, country}) =>
+          `${name}是${country}有史以来排名最高的人物。`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `在${country}出生的${occupationPlural}中，${name}排名第一。`,
+        topCity: ({name, city}) =>
+          `${name}是出生于${city}的人物中最著名的一位。`,
+        topBirthyear: ({name, year}) =>
+          `在 ${year} 年出生的所有人中，${name}最为著名。`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `${name}的传记出现在 ${count} 个维基百科语言版本中——超过 ${percent}% 的${occupationPlural}。`,
+        newLangs: ({name, count}) =>
+          `过去一年中，${name}的传记新增了 ${count} 个维基百科语言版本。`,
+        nonEnglish: ({name, count}) =>
+          `过去一年，${name}的传记在非英语维基百科版本中获得了 ${count} 次浏览——其影响力远超英语世界。`,
+        enduringFame: ({name, centuries, rank}) =>
+          `逝世 ${centuries} 个多世纪后，${name}在 Pantheon 全部人物中仍排名第 ${rank}。`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name}与${twinName}同一天生日（${date}）。`,
+        fallback: ({name, count, hpi}) =>
+          `${name}的传记涵盖 ${count} 个维基百科语言版本，历史知名度指数为 ${hpi}。`,
       },
       metrics: {
         pageViews: "页面浏览量",
@@ -3142,6 +3304,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `${country}の${occupationPlural}の中で`,
         filmography: "フィルモグラフィー",
         tvMovieRoles: "テレビ・映画出演",
+        insights: "データインサイト",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name}は、Pantheonに収録された世界${totalFormatted}人の${occupationPlural}の中で第1位です。`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name}は世界${totalFormatted}人の${occupationPlural}の中で第${rank}位、職業全体の上位${topPercent}%に入ります。`,
+        topCountry: ({name, country}) =>
+          `${name}は、${country}生まれの人物として史上最高位にランクされています。`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `${country}生まれの${occupationPlural}の中で、${name}は第1位です。`,
+        topCity: ({name, city}) =>
+          `${name}は、${city}生まれの人物の中で最も著名です。`,
+        topBirthyear: ({name, year}) =>
+          `${year}年生まれの人物の中で、${name}は最も著名です。`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `${name}の伝記はウィキペディアの${count}言語版に掲載されており、${occupationPlural}全体の${percent}%を上回っています。`,
+        newLangs: ({name, count}) =>
+          `${name}の伝記は過去1年間で${count}の新しいウィキペディア言語版に追加されました。`,
+        nonEnglish: ({name, count}) =>
+          `${name}の伝記は過去1年間に英語以外のウィキペディア版で${count}回閲覧されており、その知名度は英語圏をはるかに超えています。`,
+        enduringFame: ({name, centuries, rank}) =>
+          `没後${centuries}世紀以上を経た今も、${name}はPantheonの全人物中第${rank}位を保っています。`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name}は${twinName}と同じ${date}生まれです。`,
+        fallback: ({name, count, hpi}) =>
+          `${name}の伝記はウィキペディアの${count}言語版に掲載され、歴史的人気指数は${hpi}です。`,
       },
       metrics: {
         pageViews: "ページビュー",
@@ -3677,6 +3866,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `من بين ${occupationPlural} في ${country}`,
         filmography: "الأعمال السينمائية",
         tvMovieRoles: "أدوار تلفزيونية وسينمائية",
+        insights: "رؤى من البيانات",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} في المرتبة الأولى بين ${totalFormatted} من ${occupationPlural} المدرجين في بانثيون حول العالم.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} في المرتبة ${rank} من بين ${totalFormatted} من ${occupationPlural} حول العالم — ضمن أفضل ${topPercent}٪ في المهنة.`,
+        topCountry: ({name, country}) =>
+          `${name} أعلى شخصية تصنيفًا وُلدت في ${country} على الإطلاق.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `${name} في المرتبة الأولى بين ${occupationPlural} المولودين في ${country}.`,
+        topCity: ({name, city}) =>
+          `${name} أشهر شخصية وُلدت في ${city} على الإطلاق.`,
+        topBirthyear: ({name, year}) =>
+          `${name} الشخصية الأبرز بين جميع مواليد عام ${year}.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `تظهر سيرة ${name} في ${count} نسخة لغوية من ويكيبيديا — أكثر من ${percent}٪ من جميع ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `أُضيفت سيرة ${name} إلى ${count} نسخ لغوية جديدة من ويكيبيديا خلال العام الماضي.`,
+        nonEnglish: ({name, count}) =>
+          `حصدت سيرة ${name} ${count} مشاهدة من نسخ ويكيبيديا غير الإنجليزية خلال العام الماضي — شهرة تتجاوز العالم الناطق بالإنجليزية بكثير.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `بعد أكثر من ${centuries} قرون على الوفاة، لا يزال ${name} في المرتبة ${rank} بين جميع الشخصيات في بانثيون.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} يشارك ${twinName} يوم الميلاد نفسه (${date}).`,
+        fallback: ({name, count, hpi}) =>
+          `تمتد سيرة ${name} عبر ${count} نسخة لغوية من ويكيبيديا وتبلغ قيمة مؤشر الشعبية التاريخية ${hpi}.`,
       },
       metrics: {
         pageViews: "مشاهدات الصفحة",
@@ -4205,6 +4421,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Tra ${occupationPlural} in ${country}`,
         filmography: "Filmografia",
         tvMovieRoles: "Ruoli televisivi e cinematografici",
+        insights: "Dati in evidenza",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} è al primo posto tra tutti i ${totalFormatted} ${occupationPlural} presenti in Pantheon nel mondo.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} occupa la posizione n. ${rank} su ${totalFormatted} ${occupationPlural} al mondo — nel ${topPercent}% più alto della professione.`,
+        topCountry: ({name, country}) =>
+          `${name} è la personalità con il miglior posizionamento mai nata in ${country}.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `Tra i ${occupationPlural} nati in ${country}, ${name} è al primo posto.`,
+        topCity: ({name, city}) =>
+          `${name} è la personalità più memorabile mai nata a ${city}.`,
+        topBirthyear: ({name, year}) =>
+          `Tra tutte le persone nate nel ${year}, ${name} è la più memorabile.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `La biografia di ${name} compare in ${count} edizioni linguistiche di Wikipedia — più del ${percent}% di tutti i ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `Nell'ultimo anno la biografia di ${name} è stata aggiunta a ${count} nuove edizioni linguistiche di Wikipedia.`,
+        nonEnglish: ({name, count}) =>
+          `Nell'ultimo anno la biografia di ${name} ha registrato ${count} visualizzazioni nelle edizioni di Wikipedia non in inglese — una fama che va ben oltre il mondo anglofono.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `A oltre ${centuries} secoli dalla morte, ${name} occupa ancora la posizione n. ${rank} tra tutte le personalità di Pantheon.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} condivide il compleanno (${date}) con ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `La biografia di ${name} copre ${count} edizioni linguistiche di Wikipedia e ottiene un Indice di Popolarità Storica di ${hpi}.`,
       },
       metrics: {
         pageViews: "Visualizzazioni",
@@ -4770,6 +5013,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Entre ${occupationPlural} em ${country}`,
         filmography: "Filmografia",
         tvMovieRoles: "Papéis na TV e no cinema",
+        insights: "Destaques dos dados",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} ocupa o primeiro lugar entre todos os ${totalFormatted} ${occupationPlural} do Pantheon no mundo.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} ocupa a posição nº ${rank} entre ${totalFormatted} ${occupationPlural} no mundo — entre os ${topPercent}% melhores da profissão.`,
+        topCountry: ({name, country}) =>
+          `${name} é a personalidade mais bem classificada já nascida em ${country}.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `Entre os ${occupationPlural} nascidos em ${country}, ${name} ocupa o primeiro lugar.`,
+        topCity: ({name, city}) =>
+          `${name} é a personalidade mais memorável já nascida em ${city}.`,
+        topBirthyear: ({name, year}) =>
+          `De todas as pessoas nascidas em ${year}, ${name} é a mais memorável.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `A biografia de ${name} aparece em ${count} edições de idiomas da Wikipédia — mais do que ${percent}% de todos os ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `A biografia de ${name} foi adicionada a ${count} novas edições de idiomas da Wikipédia no último ano.`,
+        nonEnglish: ({name, count}) =>
+          `A biografia de ${name} recebeu ${count} visualizações em edições da Wikipédia em idiomas diferentes do inglês no último ano — uma fama que vai muito além do mundo anglófono.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `Mais de ${centuries} séculos após a morte, ${name} ainda ocupa a posição nº ${rank} entre todas as personalidades do Pantheon.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} faz aniversário no mesmo dia (${date}) que ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `A biografia de ${name} abrange ${count} edições de idiomas da Wikipédia e alcança um Índice de Popularidade Histórica de ${hpi}.`,
       },
       metrics: {
         pageViews: "Visualizações",
@@ -5324,6 +5594,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `A(z) ${occupationPlural} között – ${country}`,
         filmography: "Filmográfia",
         tvMovieRoles: "Televíziós és filmszerepek",
+        insights: "Adatérdekességek",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} az első helyen áll a Pantheonban szereplő ${totalFormatted} ${occupationPlural} között világszerte.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} a(z) ${rank}. helyen áll a világ ${totalFormatted} ${occupationPlural} között — a szakma legjobb ${topPercent}%-ában.`,
+        topCountry: ({name, country}) =>
+          `${name} a legmagasabban rangsorolt személyiség, aki valaha ${country} területén született.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `A(z) ${country} területén született ${occupationPlural} között ${name} az első helyen áll.`,
+        topCity: ({name, city}) =>
+          `${name} a legemlékezetesebb személyiség, aki valaha ${city} városában született.`,
+        topBirthyear: ({name, year}) =>
+          `A(z) ${year}. évben születettek közül ${name} a legemlékezetesebb.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `${name} életrajza a Wikipédia ${count} nyelvi változatában szerepel — több nyelven, mint a(z) ${occupationPlural} ${percent}%-a esetében.`,
+        newLangs: ({name, count}) =>
+          `${name} életrajza az elmúlt évben ${count} új Wikipédia-nyelvi változattal bővült.`,
+        nonEnglish: ({name, count}) =>
+          `${name} életrajza az elmúlt évben ${count} megtekintést kapott a Wikipédia nem angol nyelvű változataiban — hírneve messze túlmutat az angol nyelvterületen.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `Több mint ${centuries} évszázaddal a halála után ${name} még mindig a(z) ${rank}. helyen áll a Pantheon összes személyisége között.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} ugyanazon a napon (${date}) ünnepli születésnapját, mint ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `${name} életrajza a Wikipédia ${count} nyelvi változatában érhető el, történelmi népszerűségi indexe ${hpi}.`,
       },
       metrics: {
         pageViews: "Oldalmegtekintések",
@@ -5827,6 +6124,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Onder ${occupationPlural} in ${country}`,
         filmography: "Filmografie",
         tvMovieRoles: "Televisie- en filmrollen",
+        insights: "Data-inzichten",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} staat op de eerste plaats van alle ${totalFormatted} ${occupationPlural} in Pantheon wereldwijd.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} staat op plaats ${rank} van ${totalFormatted} ${occupationPlural} wereldwijd — bij de beste ${topPercent}% van het vak.`,
+        topCountry: ({name, country}) =>
+          `${name} is de hoogst gerangschikte persoonlijkheid ooit geboren in ${country}.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `Van alle ${occupationPlural} geboren in ${country} staat ${name} op de eerste plaats.`,
+        topCity: ({name, city}) =>
+          `${name} is de meest memorabele persoon ooit geboren in ${city}.`,
+        topBirthyear: ({name, year}) =>
+          `Van iedereen geboren in ${year} is ${name} het meest memorabel.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `De biografie van ${name} verschijnt in ${count} taalversies van Wikipedia — meer dan bij ${percent}% van alle ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `De biografie van ${name} is het afgelopen jaar aan ${count} nieuwe taalversies van Wikipedia toegevoegd.`,
+        nonEnglish: ({name, count}) =>
+          `De biografie van ${name} kreeg het afgelopen jaar ${count} weergaven in niet-Engelstalige versies van Wikipedia — faam die ver voorbij de Engelstalige wereld reikt.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `Meer dan ${centuries} eeuwen na de dood staat ${name} nog altijd op plaats ${rank} van alle personen in Pantheon.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} is jarig op dezelfde dag (${date}) als ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `De biografie van ${name} beslaat ${count} taalversies van Wikipedia en behaalt een Historische Populariteitsindex van ${hpi}.`,
       },
       metrics: {
         pageViews: "Paginaweergaven",
@@ -6361,6 +6685,33 @@ export const translations = {
         amongOccupationInCountry: ({occupationPlural, country}) => `Wśród przedstawicieli zawodu ${occupationPlural} w kraju ${country}`,
         filmography: "Filmografia",
         tvMovieRoles: "Role telewizyjne i filmowe",
+        insights: "Ciekawostki z danych",
+      },
+      insights: {
+        topOccupation: ({name, occupationPlural, totalFormatted}) =>
+          `${name} zajmuje pierwsze miejsce wśród ${totalFormatted} ${occupationPlural} na świecie w rankingu Pantheonu.`,
+        topOccupationRank: ({name, rank, occupationPlural, totalFormatted, topPercent}) =>
+          `${name} zajmuje ${rank}. miejsce wśród ${totalFormatted} ${occupationPlural} na świecie — w najlepszych ${topPercent}% profesji.`,
+        topCountry: ({name, country}) =>
+          `${name} to najwyżej sklasyfikowana postać urodzona w kraju ${country}.`,
+        topCountryOccupation: ({name, occupationPlural, country}) =>
+          `Wśród ${occupationPlural} urodzonych w kraju ${country} ${name} zajmuje pierwsze miejsce.`,
+        topCity: ({name, city}) =>
+          `${name} to najbardziej znana postać urodzona w mieście ${city}.`,
+        topBirthyear: ({name, year}) =>
+          `Spośród wszystkich osób urodzonych w roku ${year} najbardziej znaną postacią jest ${name}.`,
+        globalLangs: ({name, count, percent, occupationPlural}) =>
+          `Biografia postaci ${name} występuje w ${count} wersjach językowych Wikipedii — w większej liczbie niż u ${percent}% wszystkich ${occupationPlural}.`,
+        newLangs: ({name, count}) =>
+          `W ciągu ostatniego roku biografia postaci ${name} pojawiła się w ${count} nowych wersjach językowych Wikipedii.`,
+        nonEnglish: ({name, count}) =>
+          `W ciągu ostatniego roku biografia postaci ${name} zanotowała ${count} wyświetleń w nieanglojęzycznych wersjach Wikipedii — to sława sięgająca daleko poza świat anglojęzyczny.`,
+        enduringFame: ({name, centuries, rank}) =>
+          `Ponad ${centuries} wieków po śmierci ${name} wciąż zajmuje ${rank}. miejsce wśród wszystkich postaci w Pantheonie.`,
+        birthdayTwin: ({name, date, twinName}) =>
+          `${name} obchodzi urodziny tego samego dnia (${date}) co ${twinName}.`,
+        fallback: ({name, count, hpi}) =>
+          `Biografia postaci ${name} obejmuje ${count} wersji językowych Wikipedii, a jej Historyczny Indeks Popularności wynosi ${hpi}.`,
       },
       metrics: {
         pageViews: "Wyświetlenia strony",
