@@ -4,7 +4,7 @@ import {getTranslations} from "@/app/translations";
 import {DEFAULT_LOCALE} from "@/app/locales";
 import "./Insights.css";
 
-const MAX_INSIGHTS = 3;
+const MAX_INSIGHTS = 4;
 
 const escapeHtml = s =>
   String(s)
@@ -15,11 +15,51 @@ const escapeHtml = s =>
 
 const anchor = (href, label) => `<a href="${href}">${escapeHtml(label)}</a>`;
 
-// Builds a scored list of data-driven callouts from person_ranks columns
-// (occupation/country/city/birthyear #1s, language-edition reach, non-English
-// pageview share, longevity of fame, birthday twins) and keeps the top 3.
-// Exported separately so the page can decide whether to render the section.
-export function buildInsights({person, personRanks, birthdayTwin, langContext, occupationPlural, lang = "en"}) {
+// Exact age when full dates exist, otherwise the year difference.
+function ageAtDeath(person) {
+  if (person.birthdate && person.deathdate) {
+    const born = new Date(person.birthdate);
+    const died = new Date(person.deathdate);
+    if (!Number.isNaN(born.getTime()) && !Number.isNaN(died.getTime())) {
+      let age = died.getUTCFullYear() - born.getUTCFullYear();
+      const monthDiff = died.getUTCMonth() - born.getUTCMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && died.getUTCDate() < born.getUTCDate())) {
+        age -= 1;
+      }
+      return age;
+    }
+  }
+  if (person.birthyear && person.deathyear) {
+    return person.deathyear - person.birthyear;
+  }
+  return null;
+}
+
+function joinList(items, lang) {
+  try {
+    return new Intl.ListFormat(lang, {style: "long", type: "conjunction"}).format(items);
+  } catch {
+    return items.join(", ");
+  }
+}
+
+// Builds a scored list of data-driven callouts from person_ranks columns and
+// the pre-fetched comparison data (peer counts, occupation pageview stats,
+// birthday twins) and keeps the top 4. Exported separately so the page can
+// decide whether to render the section.
+export function buildInsights({
+  person,
+  personRanks,
+  birthdayTwins = [],
+  langContext,
+  birthyearCount,
+  countryOccupationCount,
+  earliestBornCount,
+  occupationPageviews,
+  totalViews = 0,
+  occupationPlural,
+  lang = "en",
+}) {
   const t = getTranslations(lang);
   // Fall back to English strings so a locale missing these keys degrades
   // gracefully instead of crashing the page.
@@ -83,31 +123,93 @@ export function buildInsights({person, personRanks, birthdayTwin, langContext, o
     });
   }
 
-  if (countryRank === 1 && country) {
+  // Most-viewed in the occupation over the past year: recency-based #1,
+  // complements the all-time HPI ranks. Skipped when the all-time #1 card
+  // already fires to avoid two near-identical claims.
+  const maxViews = occupationPageviews?.pageviews_max;
+  const avgViews = occupationPageviews?.pageviews_avg;
+  const enoughPeers = occupationPageviews?.num_people >= 20;
+  if (occRank !== 1 && enoughPeers && totalViews > 0 && maxViews && totalViews >= maxViews) {
+    candidates.push({
+      key: "mostViewed",
+      score: 92,
+      stat: FORMATTERS.bigNum(totalViews),
+      text: strings.mostViewed({
+        name,
+        views: FORMATTERS.bigNum(totalViews),
+        occupationPlural: linkedOccupationPlural,
+      }),
+    });
+  } else if (enoughPeers && totalViews > 0 && avgViews > 0) {
+    const multiple = Math.round(totalViews / avgViews);
+    if (multiple >= 10) {
+      candidates.push({
+        key: "viewsMultiple",
+        score: 52,
+        stat: `${FORMATTERS.commas(multiple)}×`,
+        text: strings.viewsMultiple({
+          name,
+          views: FORMATTERS.bigNum(totalViews),
+          multiple: FORMATTERS.commas(multiple),
+          occupationPlural: linkedOccupationPlural,
+        }),
+      });
+    }
+  }
+
+  const countryTotal = person.bplace_country?.num_born;
+  if (countryRank === 1 && country && countryTotal) {
     candidates.push({
       key: "topCountry",
       score: 88,
       stat: "#1",
-      text: strings.topCountry({name, country}),
+      text: strings.topCountry({
+        name,
+        country,
+        totalFormatted: FORMATTERS.commas(countryTotal),
+      }),
     });
-  } else if (cityRank === 1 && personRanks.bplace_name) {
+  } else if (
+    cityRank === 1 &&
+    personRanks.bplace_name &&
+    // Being the most memorable of 1 is a tautology, not an insight
+    person.bplace_geonameid?.num_born >= 2 &&
+    country
+  ) {
     // Country #1 already implies city #1, so only surface the city callout
     // when the person tops their hometown but not their country.
-    const city = person.bplace_geonameid?.slug
+    const city = person.bplace_geonameid.slug
       ? anchor(
           `${localePrefix}/profile/place/${person.bplace_geonameid.slug}`,
           personRanks.bplace_name,
         )
       : escapeHtml(personRanks.bplace_name);
+    // For people born before modern nation-states (or with unknown birth
+    // year), hedge with "in what is now modern-day {country}".
+    const cityTemplate =
+      person.birthyear && person.birthyear >= 1800
+        ? strings.topCity
+        : strings.topCityHistorical;
     candidates.push({
       key: "topCity",
       score: 85,
       stat: "#1",
-      text: strings.topCity({name, city}),
+      text: cityTemplate({
+        name,
+        city,
+        country,
+        count: FORMATTERS.commas(person.bplace_geonameid.num_born),
+      }),
     });
   }
 
-  if (occRank !== 1 && countryRank !== 1 && countryOccRank === 1 && country) {
+  if (
+    occRank !== 1 &&
+    countryRank !== 1 &&
+    countryOccRank === 1 &&
+    country &&
+    countryOccupationCount
+  ) {
     candidates.push({
       key: "topCountryOccupation",
       score: 80,
@@ -116,17 +218,52 @@ export function buildInsights({person, personRanks, birthdayTwin, langContext, o
         name,
         occupationPlural: linkedOccupationPlural,
         country,
+        count: FORMATTERS.commas(countryOccupationCount),
       }),
     });
   }
 
+  // Tiny cohorts (ancient birth years) make "most memorable of N" unimpressive
   const birthyearRank = personRanks.birthyear_rank_unique;
-  if (birthyearRank === 1 && person.birthyear) {
+  if (birthyearRank === 1 && person.birthyear && birthyearCount >= 10) {
     candidates.push({
       key: "topBirthyear",
       score: 75,
       stat: "#1",
-      text: strings.topBirthyear({name, year: FORMATTERS.year(person.birthyear)}),
+      text: strings.topBirthyear({
+        name,
+        year: FORMATTERS.year(person.birthyear),
+        count: FORMATTERS.commas(birthyearCount),
+      }),
+    });
+  }
+
+  // Among the handful of earliest-born members of the occupation.
+  if (earliestBornCount && earliestBornCount <= 10 && total >= 100) {
+    candidates.push({
+      key: "earliestBorn",
+      score: 72,
+      stat: `${earliestBornCount}`,
+      text: strings.earliestBorn({
+        name,
+        count: earliestBornCount,
+        occupationPlural: linkedOccupationPlural,
+      }),
+    });
+  }
+
+  const age = ageAtDeath(person);
+  if (age != null && age >= 20 && age <= 45 && occRank && occRank <= 300) {
+    candidates.push({
+      key: "shortLife",
+      score: 68,
+      stat: `${age}`,
+      text: strings.shortLife({
+        name,
+        age,
+        rank: FORMATTERS.commas(occRank),
+        occupationPlural: linkedOccupationPlural,
+      }),
     });
   }
 
@@ -141,6 +278,26 @@ export function buildInsights({person, personRanks, birthdayTwin, langContext, o
         name,
         centuries,
         rank: FORMATTERS.commas(globalRank),
+      }),
+    });
+  }
+
+  const womenCount = person.occupation?.num_born_women;
+  if (
+    person.gender === "F" &&
+    womenCount >= 1 &&
+    total >= 100 &&
+    womenCount / total <= 0.25
+  ) {
+    candidates.push({
+      key: "womenPioneer",
+      score: 62,
+      stat: FORMATTERS.commas(womenCount),
+      text: strings.womenPioneer({
+        name,
+        womenCount: FORMATTERS.commas(womenCount),
+        totalFormatted,
+        occupationPlural: linkedOccupationPlural,
       }),
     });
   }
@@ -161,12 +318,20 @@ export function buildInsights({person, personRanks, birthdayTwin, langContext, o
     });
   }
 
-  if (birthdayTwin && person.birthdate) {
+  if (birthdayTwins.length && person.birthdate) {
     const [, m, d] = person.birthdate.split("-");
     if (Number(m) && Number(d)) {
       const dateObj = new Date(Date.UTC(2000, Number(m) - 1, Number(d)));
       const dateFmt = opts =>
         new Intl.DateTimeFormat(lang, {...opts, timeZone: "UTC"}).format(dateObj);
+      const twinNames = joinList(
+        birthdayTwins.map(twin =>
+          twin.slug
+            ? anchor(`${localePrefix}/profile/person/${twin.slug}`, twin.name)
+            : escapeHtml(twin.name),
+        ),
+        lang,
+      );
       candidates.push({
         key: "birthdayTwin",
         score: 55,
@@ -174,12 +339,7 @@ export function buildInsights({person, personRanks, birthdayTwin, langContext, o
         text: strings.birthdayTwin({
           name,
           date: dateFmt({month: "long", day: "numeric"}),
-          twinName: birthdayTwin.slug
-            ? anchor(
-                `${localePrefix}/profile/person/${birthdayTwin.slug}`,
-                birthdayTwin.name,
-              )
-            : escapeHtml(birthdayTwin.name),
+          twinNames,
         }),
       });
     }

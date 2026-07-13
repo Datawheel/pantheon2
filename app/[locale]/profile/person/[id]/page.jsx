@@ -50,7 +50,7 @@ async function safeFetchJson(url, options = {}, fallback = null) {
 }
 
 async function getPerson(id, lang = "en") {
-  const url = `${BASE_API}/person?slug=eq.${id}&select=*,description,occupation(id,occupation,occupation_slug,domain_slug,num_born,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,country_code,demonym,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place),dplace_geonameid(slug,place)`;
+  const url = `${BASE_API}/person?slug=eq.${id}&select=*,description,occupation(id,occupation,occupation_slug,domain_slug,num_born,num_born_women,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,country_code,demonym,num_born,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place,num_born),dplace_geonameid(slug,place)`;
   const data = await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -182,18 +182,32 @@ async function getLangEditionContext(occupationId, l) {
   };
 }
 
-// Highest-ranked *other* person sharing this person's birth month/day, via the
+// Highest-ranked *other* people sharing this person's birth month/day, via the
 // core.born_on_day() function (already ordered by hpi desc).
-async function getBirthdayTwin(person, lang = "en") {
-  if (!person?.birthdate) return null;
+async function getBirthdayTwins(person, lang = "en") {
+  if (!person?.birthdate) return [];
   const [, m, d] = person.birthdate.split("-");
-  if (!Number(m) || !Number(d)) return null;
-  const url = `${BASE_API}/rpc/born_on_day?m=${Number(m)}&d=${Number(d)}&lang=${lang}&limit=2`;
+  if (!Number(m) || !Number(d)) return [];
+  const url = `${BASE_API}/rpc/born_on_day?m=${Number(m)}&d=${Number(d)}&lang=${lang}&limit=5`;
   const rows = await safeFetchArray(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
   );
-  return rows.find(r => String(r.person_id) !== String(person.id)) || null;
+  return rows
+    .filter(r => String(r.person_id) !== String(person.id))
+    .slice(0, 3);
+}
+
+// Notable people sharing this person's birth country + occupation, from the
+// occupation_country materialized view.
+async function getCountryOccupationCount(countrySlug, occupationSlug) {
+  const url = `${BASE_API}/occupation_country?country_slug=eq.${countrySlug}&occupation_slug=eq.${occupationSlug}&select=num_people`;
+  const data = await safeFetchJson(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+    [],
+  );
+  return Array.isArray(data) && data.length > 0 ? data[0].num_people : null;
 }
 
 async function getPageViews(personId, lang = "en") {
@@ -359,19 +373,45 @@ export default async function Page(props) {
     return notFound();
   }
 
-  const [pageViews, memMetricsData, birthdayTwin, langContext] =
-    await Promise.all([
-      getPageViews(person.id, lang),
-      Promise.all([
-        getOccupationPageviews(person.occupation?.id),
-        getRolling12MonthViews(person.id),
-      ]).then(([occupationData, totalViews]) => ({
-        occupationData,
-        totalViews,
-      })),
-      getBirthdayTwin(person, lang),
-      getLangEditionContext(person.occupation?.id, personRanks.l),
-    ]);
+  const [
+    pageViews,
+    memMetricsData,
+    birthdayTwins,
+    langContext,
+    birthyearCount,
+    countryOccupationCount,
+    earliestBornCount,
+  ] = await Promise.all([
+    getPageViews(person.id, lang),
+    Promise.all([
+      getOccupationPageviews(person.occupation?.id),
+      getRolling12MonthViews(person.id),
+    ]).then(([occupationData, totalViews]) => ({
+      occupationData,
+      totalViews,
+    })),
+    getBirthdayTwins(person, lang),
+    getLangEditionContext(person.occupation?.id, personRanks.l),
+    // Count queries only when the insight they feed can actually fire
+    personRanks.birthyear_rank_unique === 1 && person.birthyear
+      ? getPostgrestCount(
+          `/person_ranks?birthyear=eq.${person.birthyear}&select=id&limit=1`,
+        )
+      : null,
+    personRanks.bplace_country_occupation_rank_unique === 1 &&
+    person.bplace_country?.slug &&
+    person.occupation?.occupation_slug
+      ? getCountryOccupationCount(
+          person.bplace_country.slug,
+          person.occupation.occupation_slug,
+        )
+      : null,
+    person.birthyear && person.birthyear <= 1600 && person.occupation?.id
+      ? getPostgrestCount(
+          `/person_ranks?occupation=eq.${encodePostgrestValue(person.occupation.id)}&birthyear=lte.${person.birthyear}&select=id&limit=1`,
+        )
+      : null,
+  ]);
 
   // Get localized name from translations column, fallback to English name
   const localizedName = person.translations?.[lang] || person.name;
@@ -431,8 +471,13 @@ export default async function Page(props) {
   const insights = buildInsights({
     person: localizedPerson,
     personRanks,
-    birthdayTwin,
+    birthdayTwins,
     langContext,
+    birthyearCount,
+    countryOccupationCount,
+    earliestBornCount,
+    occupationPageviews: memMetricsData.occupationData,
+    totalViews: memMetricsData.totalViews,
     occupationPlural,
     lang,
   });
