@@ -31,10 +31,10 @@ export const translations = {
           `${name} is the highest-ranked of the ${totalFormatted} individuals in Pantheon born in ${country}.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `Of the ${count} ${occupationPlural} born in ${country}, ${name} ranks first.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} is the most memorable of the ${count} notable people born in ${city}, ${country}.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} is the most memorable of the ${count} notable people born in ${city}, in what is now modern-day ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} is the most memorable of the ${count} notable people born in ${city}, ${country}${peers ? `, ahead of ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} is the most memorable of the ${count} notable people born in ${city}, in what is now modern-day ${country}${peers ? `, ahead of ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `Of the ${count} people in Pantheon born in ${year}, ${name} is the most memorable.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -514,10 +514,10 @@ export const translations = {
           `${name} es la figura mejor clasificada de las ${totalFormatted} personas de Pantheon nacidas en ${country}.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `De los ${count} ${occupationPlural} nacidos en ${country}, ${name} ocupa el primer puesto.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} es la figura más memorable de las ${count} personas notables nacidas en ${city}, ${country}.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} es la figura más memorable de las ${count} personas notables nacidas en ${city}, en lo que hoy es ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} es la figura más memorable de las ${count} personas notables nacidas en ${city}, ${country}${peers ? `, por delante de ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} es la figura más memorable de las ${count} personas notables nacidas en ${city}, en lo que hoy es ${country}${peers ? `, por delante de ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `De las ${count} personas de Pantheon nacidas en ${year}, ${name} es la más memorable.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -1084,10 +1084,10 @@ export const translations = {
           `${name} arrive en tête des ${totalFormatted} personnalités de Pantheon nées en ${country}.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `Sur les ${count} ${occupationPlural} nés en ${country}, ${name} occupe la première place.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} est la personnalité la plus mémorable des ${count} personnes notables nées à ${city}, ${country}.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} est la personnalité la plus mémorable des ${count} personnes notables nées à ${city}, dans ce qui est aujourd'hui ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} est la personnalité la plus mémorable des ${count} personnes notables nées à ${city}, ${country}${peers ? `, devant ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} est la personnalité la plus mémorable des ${count} personnes notables nées à ${city}, dans ce qui est aujourd'hui ${country}${peers ? `, devant ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `Des ${count} personnes de Pantheon nées en ${year}, ${name} est la plus mémorable.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -1669,10 +1669,10 @@ export const translations = {
           `${name} ist die bestplatzierte der ${totalFormatted} in ${country} geborenen Persönlichkeiten in Pantheon.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `Von den ${count} in ${country} geborenen ${occupationPlural} belegt ${name} den ersten Platz.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} ist die bekannteste der ${count} bedeutenden Persönlichkeiten, die in ${city}, ${country}, geboren wurden.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} ist die bekannteste der ${count} bedeutenden Persönlichkeiten, die in ${city}, im heutigen ${country}, geboren wurden.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} ist die bekannteste der ${count} bedeutenden Persönlichkeiten, die in ${city}, ${country}, geboren wurden${peers ? ` — noch vor ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} ist die bekannteste der ${count} bedeutenden Persönlichkeiten, die in ${city}, im heutigen ${country}, geboren wurden${peers ? ` — noch vor ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `Von den ${count} im Jahr ${year} geborenen Menschen in Pantheon ist ${name} am bekanntesten.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -2233,10 +2233,10 @@ export const translations = {
           `${name} — самая высокоранговая из ${totalFormatted} личностей Pantheon, родившихся в стране ${country}.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `Из ${count} ${occupationPlural}, родившихся в стране ${country}, ${name} занимает первое место.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} — самая известная из ${count} значимых личностей, родившихся в городе ${city} (${country}).`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} — самая известная из ${count} значимых личностей, родившихся в городе ${city}, на территории современного государства ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} — самая известная из ${count} значимых личностей, родившихся в городе ${city} (${country})${peers ? `, опережая таких, как ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} — самая известная из ${count} значимых личностей, родившихся в городе ${city}, на территории современного государства ${country}${peers ? `, опережая таких, как ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `Из ${count} личностей Pantheon, родившихся в ${year} году, ${name} — самая известная.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -2823,10 +2823,10 @@ export const translations = {
           `在 Pantheon 收录的 ${totalFormatted} 位出生于${country}的人物中，${name}排名最高。`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `在${country}出生的 ${count} 位${occupationPlural}中，${name}排名第一。`,
-        topCity: ({name, city, country, count}) =>
-          `${name}是出生于${country}${city}的 ${count} 位知名人物中最著名的一位。`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name}是出生于${city}（今属${country}）的 ${count} 位知名人物中最著名的一位。`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name}是出生于${country}${city}的 ${count} 位知名人物中最著名的一位${peers ? `，知名度领先于${peers}` : ""}。`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name}是出生于${city}（今属${country}）的 ${count} 位知名人物中最著名的一位${peers ? `，知名度领先于${peers}` : ""}。`,
         topBirthyear: ({name, year, count}) =>
           `在 Pantheon 收录的 ${count} 位 ${year} 年出生的人物中，${name}最为著名。`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -3387,10 +3387,10 @@ export const translations = {
           `${name}は、Pantheonに収録された${country}生まれの${totalFormatted}人の中で最高位です。`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `${country}生まれの${count}人の${occupationPlural}の中で、${name}は第1位です。`,
-        topCity: ({name, city, country, count}) =>
-          `${name}は、${country}の${city}生まれの著名人${count}人の中で最も著名です。`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name}は、${city}（現在の${country}）生まれの著名人${count}人の中で最も著名です。`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name}は、${country}の${city}生まれの著名人${count}人の中で最も著名${peers ? `で、${peers}を上回ります` : "です"}。`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name}は、${city}（現在の${country}）生まれの著名人${count}人の中で最も著名${peers ? `で、${peers}を上回ります` : "です"}。`,
         topBirthyear: ({name, year, count}) =>
           `Pantheonに収録された${year}年生まれの${count}人の中で、${name}は最も著名です。`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -3961,10 +3961,10 @@ export const translations = {
           `${name} أعلى الشخصيات تصنيفًا من بين ${totalFormatted} شخصية في بانثيون وُلدت في ${country}.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `${name} في المرتبة الأولى بين ${count} من ${occupationPlural} المولودين في ${country}.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} أشهر شخصية من بين ${count} شخصية بارزة وُلدت في ${city}، ${country}.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} أشهر شخصية من بين ${count} شخصية بارزة وُلدت في ${city}، فيما يُعرف اليوم بدولة ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} أشهر شخصية من بين ${count} شخصية بارزة وُلدت في ${city}، ${country}${peers ? `، متقدّمةً على ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} أشهر شخصية من بين ${count} شخصية بارزة وُلدت في ${city}، فيما يُعرف اليوم بدولة ${country}${peers ? `، متقدّمةً على ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `${name} الشخصية الأبرز من بين ${count} شخصية في بانثيون من مواليد عام ${year}.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -4528,10 +4528,10 @@ export const translations = {
           `${name} è la personalità con il miglior posizionamento tra le ${totalFormatted} persone di Pantheon nate in ${country}.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `Dei ${count} ${occupationPlural} nati in ${country}, ${name} è al primo posto.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} è la personalità più memorabile tra le ${count} persone illustri nate a ${city}, ${country}.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} è la personalità più memorabile tra le ${count} persone illustri nate a ${city}, in quella che è oggi ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} è la personalità più memorabile tra le ${count} persone illustri nate a ${city}, ${country}${peers ? `, davanti a ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} è la personalità più memorabile tra le ${count} persone illustri nate a ${city}, in quella che è oggi ${country}${peers ? `, davanti a ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `Delle ${count} persone di Pantheon nate nel ${year}, ${name} è la più memorabile.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -5132,10 +5132,10 @@ export const translations = {
           `${name} é a personalidade mais bem classificada entre as ${totalFormatted} pessoas do Pantheon nascidas em ${country}.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `Dos ${count} ${occupationPlural} nascidos em ${country}, ${name} ocupa o primeiro lugar.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} é a personalidade mais memorável entre as ${count} pessoas notáveis nascidas em ${city}, ${country}.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} é a personalidade mais memorável entre as ${count} pessoas notáveis nascidas em ${city}, no que hoje é ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} é a personalidade mais memorável entre as ${count} pessoas notáveis nascidas em ${city}, ${country}${peers ? `, à frente de ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} é a personalidade mais memorável entre as ${count} pessoas notáveis nascidas em ${city}, no que hoje é ${country}${peers ? `, à frente de ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `Das ${count} pessoas do Pantheon nascidas em ${year}, ${name} é a mais memorável.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -5725,10 +5725,10 @@ export const translations = {
           `${name} a legmagasabban rangsorolt a Pantheonban szereplő, ${country} területén született ${totalFormatted} személy közül.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `A(z) ${country} területén született ${count} ${occupationPlural} között ${name} az első helyen áll.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} a legemlékezetesebb a(z) ${city} (${country}) városában született ${count} nevezetes személy közül.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} a legemlékezetesebb a(z) ${city} városában — a mai ${country} területén — született ${count} nevezetes személy közül.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} a legemlékezetesebb a(z) ${city} (${country}) városában született ${count} nevezetes személy közül${peers ? `, megelőzve olyan neveket, mint ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} a legemlékezetesebb a(z) ${city} városában — a mai ${country} területén — született ${count} nevezetes személy közül${peers ? `, megelőzve olyan neveket, mint ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `A(z) ${year}. évben született ${count} pantheonbeli személy közül ${name} a legemlékezetesebb.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -6267,10 +6267,10 @@ export const translations = {
           `${name} is de hoogst gerangschikte van de ${totalFormatted} personen in Pantheon die in ${country} zijn geboren.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `Van de ${count} ${occupationPlural} geboren in ${country} staat ${name} op de eerste plaats.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} is de meest memorabele van de ${count} opmerkelijke personen geboren in ${city}, ${country}.`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} is de meest memorabele van de ${count} opmerkelijke personen geboren in ${city}, in het huidige ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} is de meest memorabele van de ${count} opmerkelijke personen geboren in ${city}, ${country}${peers ? `, vóór ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} is de meest memorabele van de ${count} opmerkelijke personen geboren in ${city}, in het huidige ${country}${peers ? `, vóór ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `Van de ${count} personen in Pantheon geboren in ${year} is ${name} het meest memorabel.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>
@@ -6840,10 +6840,10 @@ export const translations = {
           `${name} to najwyżej sklasyfikowana z ${totalFormatted} postaci w Pantheonie urodzonych w kraju ${country}.`,
         topCountryOccupation: ({name, occupationPlural, country, count}) =>
           `Wśród ${count} ${occupationPlural} urodzonych w kraju ${country} ${name} zajmuje pierwsze miejsce.`,
-        topCity: ({name, city, country, count}) =>
-          `${name} to najbardziej znana z ${count} wybitnych postaci urodzonych w mieście ${city} (${country}).`,
-        topCityHistorical: ({name, city, country, count}) =>
-          `${name} to najbardziej znana z ${count} wybitnych postaci urodzonych w mieście ${city}, na terenie dzisiejszego państwa ${country}.`,
+        topCity: ({name, city, country, count, peers}) =>
+          `${name} to najbardziej znana z ${count} wybitnych postaci urodzonych w mieście ${city} (${country})${peers ? `, wyprzedzając takie postacie jak ${peers}` : ""}.`,
+        topCityHistorical: ({name, city, country, count, peers}) =>
+          `${name} to najbardziej znana z ${count} wybitnych postaci urodzonych w mieście ${city}, na terenie dzisiejszego państwa ${country}${peers ? `, wyprzedzając takie postacie jak ${peers}` : ""}.`,
         topBirthyear: ({name, year, count}) =>
           `Spośród ${count} postaci w Pantheonie urodzonych w roku ${year} najbardziej znaną jest ${name}.`,
         globalLangs: ({name, count, percent, occupationPlural}) =>

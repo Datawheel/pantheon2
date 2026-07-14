@@ -50,7 +50,7 @@ async function safeFetchJson(url, options = {}, fallback = null) {
 }
 
 async function getPerson(id, lang = "en") {
-  const url = `${BASE_API}/person?slug=eq.${id}&select=*,description,occupation(id,occupation,occupation_slug,domain_slug,num_born,num_born_women,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,country_code,demonym,num_born,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(slug,place,num_born),dplace_geonameid(slug,place)`;
+  const url = `${BASE_API}/person?slug=eq.${id}&select=*,description,occupation(id,occupation,occupation_slug,domain_slug,num_born,num_born_women,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,country_code,demonym,num_born,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(id,slug,place,num_born),dplace_geonameid(slug,place)`;
   const data = await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -196,6 +196,38 @@ async function getBirthdayTwins(person, lang = "en") {
   return rows
     .filter(r => String(r.person_id) !== String(person.id))
     .slice(0, 3);
+}
+
+// Next-most-memorable people born in the same city, ordered by the city fame
+// rank (bplace_name_rank_unique) so the person themselves is rank #1. Returns
+// up to 3 peers with localized names + slugs to enrich the "topCity" insight.
+async function getCityPeers(placeId, excludePersonId, lang = "en") {
+  if (!placeId) return [];
+  const url = `${BASE_API}/person_ranks?bplace_geonameid=eq.${placeId}&order=bplace_name_rank_unique&limit=4&select=id,name,slug`;
+  const rows = await safeFetchArray(
+    url,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+  );
+  const peers = rows
+    .filter(r => String(r.id) !== String(excludePersonId))
+    .slice(0, 3);
+  if (!peers.length || lang === DEFAULT_LOCALE) {
+    return peers.map(p => ({name: p.name, slug: p.slug}));
+  }
+  // person_ranks holds only English names, so pull localized names from the
+  // base person table for non-English locales.
+  const ids = peers.map(p => p.id).join(",");
+  const translated = await safeFetchArray(
+    `${BASE_API}/person?id=in.(${ids})&select=id,translations`,
+    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
+  );
+  const nameById = new Map(
+    translated.map(t => [String(t.id), t.translations?.[lang]]),
+  );
+  return peers.map(p => ({
+    name: nameById.get(String(p.id)) || p.name,
+    slug: p.slug,
+  }));
 }
 
 // Notable people sharing this person's birth country + occupation, from the
@@ -381,6 +413,7 @@ export default async function Page(props) {
     birthyearCount,
     countryOccupationCount,
     earliestBornCount,
+    cityPeers,
   ] = await Promise.all([
     getPageViews(person.id, lang),
     Promise.all([
@@ -411,6 +444,16 @@ export default async function Page(props) {
           `/person_ranks?occupation=eq.${encodePostgrestValue(person.occupation.id)}&birthyear=lte.${person.birthyear}&select=id&limit=1`,
         )
       : null,
+    // Only fetch hometown peers when the "topCity" insight can actually fire:
+    // the person tops their city (rank #1) but not their country, and the city
+    // has at least one other notable person to name.
+    personRanks.bplace_name_rank_unique === 1 &&
+    person.bplace_geonameid?.id &&
+    person.bplace_geonameid.num_born >= 2 &&
+    personRanks.bplace_country_rank_unique !== 1 &&
+    personRanks.bplace_country_rank !== 1
+      ? getCityPeers(person.bplace_geonameid.id, person.id, lang)
+      : [],
   ]);
 
   // Get localized name from translations column, fallback to English name
@@ -476,6 +519,7 @@ export default async function Page(props) {
     birthyearCount,
     countryOccupationCount,
     earliestBornCount,
+    cityPeers,
     occupationPageviews: memMetricsData.occupationData,
     totalViews: memMetricsData.totalViews,
     occupationPlural,

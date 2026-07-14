@@ -18,8 +18,9 @@ export default async function Home(props) {
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
   const currentYear = new Date().getFullYear();
-  const deathsPageLabel = (t.home.notableDeathsLink || `Notable Deaths of ${currentYear}`)
-    .replace("2025", `${currentYear}`);
+  const deathsPageLabel = (
+    t.home.notableDeathsLink || `Notable Deaths of ${currentYear}`
+  ).replace("2025", `${currentYear}`);
 
   const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
@@ -146,7 +147,10 @@ export default async function Home(props) {
 
   return (
     <div className="container">
-      <title>Pantheon — Explore the Most Memorable People in History | 85,000+ Biographies</title>
+      <title>
+        Pantheon — Explore the Most Memorable People in History | 85,000+
+        Biographies
+      </title>
       <img
         className="bg-design"
         src="/images/home/printing.png"
@@ -193,7 +197,7 @@ export default async function Home(props) {
         </div>
       </div>
 
-      <Link href={`/${lang}/monthly/2026/june`} className="monthly-callout">
+      {/* <Link href={`/${lang}/monthly/2026/june`} className="monthly-callout">
         <div className="monthly-callout-image">
           <img
             src="/images/monthly/2026-06-hero.png"
@@ -208,7 +212,7 @@ export default async function Home(props) {
           </p>
           <span className="monthly-callout-link">Read the June Edition &rarr;</span>
         </div>
-      </Link>
+      </Link> */}
 
       <TrendingGrid
         title={t.home.trendingProfiles}

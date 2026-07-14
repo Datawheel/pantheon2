@@ -55,6 +55,7 @@ export function buildInsights({
   birthyearCount,
   countryOccupationCount,
   earliestBornCount,
+  cityPeers = [],
   occupationPageviews,
   totalViews = 0,
   occupationPlural,
@@ -190,6 +191,19 @@ export function buildInsights({
       person.birthyear && person.birthyear >= 1800
         ? strings.topCity
         : strings.topCityHistorical;
+    // Name the next-most-memorable people born in the same city, linked to
+    // their profiles. Empty string when we have no peers so the template omits
+    // the "ahead of …" clause entirely.
+    const peers = cityPeers.length
+      ? joinList(
+          cityPeers.map(peer =>
+            peer.slug
+              ? anchor(`${localePrefix}/profile/person/${peer.slug}`, peer.name)
+              : escapeHtml(peer.name),
+          ),
+          lang,
+        )
+      : "";
     candidates.push({
       key: "topCity",
       score: 85,
@@ -199,6 +213,7 @@ export function buildInsights({
         city,
         country,
         count: FORMATTERS.commas(person.bplace_geonameid.num_born),
+        peers,
       }),
     });
   }
