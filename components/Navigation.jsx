@@ -15,13 +15,22 @@ const localePattern = new RegExp(
   `^/(${SUPPORTED_LOCALES.join("|")})(?=/|$)`,
 );
 
+function getPathWithoutLocale(pathname) {
+  return (pathname || "/").replace(localePattern, "") || "/";
+}
+
 function getLocaleHref(pathname, locale) {
-  const pathWithoutLocale = (pathname || "/").replace(localePattern, "") || "/";
+  const pathWithoutLocale = getPathWithoutLocale(pathname);
   const localizedPath = pathWithoutLocale === "/" ? "" : pathWithoutLocale;
 
   // Keep the explicit /en prefix here. The proxy uses it to update NEXT_LOCALE
   // before redirecting to the canonical, unprefixed English URL.
   return `/${locale}${localizedPath}`;
+}
+
+function persistLocaleCookie(locale) {
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `NEXT_LOCALE=${locale}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
 }
 
 export default function Navigation() {
@@ -77,6 +86,18 @@ export default function Navigation() {
   const handleLanguageChange = (event, nextLocale) => {
     event.preventDefault();
     setLanguageMenuVisible(false);
+
+    // The default-locale homepage is already canonical at `/`. Persist the
+    // locale before loading it so a saved non-English preference cannot send
+    // the browser straight back to (for example) `/fr`.
+    if (
+      nextLocale === DEFAULT_LOCALE &&
+      getPathWithoutLocale(pathname) === "/"
+    ) {
+      persistLocaleCookie(DEFAULT_LOCALE);
+      window.location.assign(`/${window.location.search}${window.location.hash}`);
+      return;
+    }
 
     const href = getLocaleHref(pathname, nextLocale);
     window.location.assign(`${href}${window.location.search}${window.location.hash}`);

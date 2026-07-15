@@ -1,6 +1,48 @@
 import {expect, test} from "@playwright/test";
 import {attachErrorWatch, goto} from "./helpers.js";
 
+test("homepage language selector switches from French to English", async ({
+  page,
+  context,
+}) => {
+  await page.setViewportSize({width: 1440, height: 900});
+  const watch = attachErrorWatch(page);
+  await goto(page, "/fr");
+
+  const frenchTrigger = page.getByRole("button", {
+    name: "Select language. Current language: Français",
+  });
+  await expect(frenchTrigger).toBeVisible();
+  await page.waitForTimeout(1_000);
+  await frenchTrigger.click();
+
+  const englishLink = page.locator("#header-language-menu").getByRole("link", {
+    name: "English",
+    exact: true,
+  });
+  await expect(englishLink).toHaveAttribute("href", "/en");
+
+  const navigationPaths = [];
+  page.on("request", request => {
+    if (request.isNavigationRequest() && request.frame() === page.mainFrame()) {
+      navigationPaths.push(new URL(request.url()).pathname);
+    }
+  });
+  await englishLink.click();
+
+  await expect(page).toHaveURL(url => url.pathname === "/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.getByRole("button", {
+    name: "Select language. Current language: English",
+  })).toBeVisible();
+
+  const cookies = await context.cookies();
+  expect(cookies.find(cookie => cookie.name === "NEXT_LOCALE")?.value).toBe("en");
+  expect(navigationPaths).toContain("/");
+  expect(navigationPaths).not.toContain("/en");
+  watch.assertClean();
+});
+
 test("header language selector keeps users on the current page", async ({page}) => {
   await page.setViewportSize({width: 1440, height: 900});
   const watch = attachErrorWatch(page);
