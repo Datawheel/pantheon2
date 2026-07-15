@@ -8,7 +8,7 @@ import {DEFAULT_LOCALE} from "@/app/locales";
 import "../../common/Section.css";
 import "./TopTen.css";
 
-const EXCERPT_LENGTH = 140;
+const EXCERPT_LENGTH = 320;
 
 function truncateText(text, maxLength = EXCERPT_LENGTH) {
   if (!text) return "";
@@ -29,6 +29,8 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
   const occupationPlural = locale === "en"
     ? toTitleCase(plural(occupation.occupation))
     : occupation.occupation;
+  const nationality = country.nationalityAdj || country.demonym;
+  const languagesLabel = t.home?.languages || tEn.home.languages;
 
   const count = Math.min(people.length, 10);
   const top10 = people.slice(0, 10);
@@ -44,18 +46,18 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
         <p className="top-10-intro">
           {t.occupationCountry.topTenIntro({
             count,
-            demonym: country.demonym,
+            demonym: nationality,
             occupationPlural,
           })}
           {people.length >= 10 && (
             <>
               {" "}
               {t.occupationCountry.visitRankings}{" "}
-              <a href={`${localePrefix}/explore/rankings?show=people&place=${country.country_code}&occupation=${occupation.occupation}`}>
+              <Link href={`${localePrefix}/explore/rankings?show=people&place=${country.country_code}&occupation=${occupation.occupation}`}>
                 {locale === "en"
-                  ? `${country.demonym} ${occupationPlural}`
-                  : `${occupationPlural} ${country.demonym}`}
-              </a>.
+                  ? `${nationality} ${occupationPlural}`
+                  : `${occupationPlural} ${nationality}`}
+              </Link>.
             </>
           )}
         </p>
@@ -69,22 +71,37 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
 
             return (
               <li key={person.id} className="top-10-item">
-                <div className="top-10-card">
+                <article
+                  className="top-10-card"
+                  itemScope
+                  itemType="https://schema.org/Person"
+                >
+                  <meta itemProp="jobTitle" content={occupation.occupation} />
+                  <meta itemProp="nationality" content={country.country} />
                   <Link
                     href={`${localePrefix}/profile/person/${person.slug}`}
                     className="top-10-card-link"
+                    itemProp="url"
                   >
-                    <span className="top-10-card-rank">#{index + 1}</span>
+                    <span
+                      className="top-10-card-rank"
+                      aria-label={`Rank ${index + 1}`}
+                    >
+                      #{index + 1}
+                    </span>
                     <div className="top-10-card-image">
                       <PersonImage
                         person={person}
                         fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                         src={`/profile/people/${person.id}.jpg`}
                         alt={`Photo of ${personName}`}
+                        itemProp="image"
                       />
                     </div>
                     <div className="top-10-card-content">
-                      <h3 className="top-10-card-name">{personName}</h3>
+                      <h3 className="top-10-card-name" itemProp="name">
+                        {personName}
+                      </h3>
                       <p className="top-10-card-dates">
                         {person.deathyear
                           ? `${FORMATTERS.year(person.birthyear)} - ${FORMATTERS.year(person.deathyear)}`
@@ -95,7 +112,7 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
                           HPI {FORMATTERS.decimal(person.hpi)}
                         </span>
                         <span className="top-10-card-languages" title="Wikipedia languages">
-                          {person.l} langs
+                          {person.l} {languagesLabel}
                         </span>
                       </div>
                     </div>
@@ -103,7 +120,9 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
                   {famousFor && (
                     <div className="top-10-famous">
                       {!isExpandable && (
-                        <p className="top-10-famous-text">{famousFor}</p>
+                        <p className="top-10-famous-text" itemProp="description">
+                          {famousFor}
+                        </p>
                       )}
                       {isExpandable && (
                         <details className="top-10-famous-details">
@@ -138,12 +157,14 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
                               </svg>
                             </span>
                           </summary>
-                          <p className="top-10-famous-full">{famousFor}</p>
+                          <p className="top-10-famous-full" itemProp="description">
+                            {famousFor}
+                          </p>
                         </details>
                       )}
                     </div>
                   )}
-                </div>
+                </article>
               </li>
           );
         })}

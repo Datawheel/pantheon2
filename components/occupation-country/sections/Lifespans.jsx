@@ -4,35 +4,24 @@ import PeoplePriestley from "../../place/sections/vizes/PeoplePriestley";
 import {toTitleCase} from "../../utils/vizHelpers";
 
 const Lifespans = ({attrs, occupation, people, title, slug}) => {
-  people = people
-    .filter(p => p.birthyear && p.occupation)
-    .sort((a, b) => b.birthyear - a.birthyear);
-
-  const tmapBornData = people
+  const eligiblePeople = people
     .filter(
-      p =>
-        p.birthyear !== null &&
-        p.birthyear > 1699 &&
-        p.bplace_country &&
-        p.bplace_country.country &&
-        p.bplace_country.continent &&
-        p.dplace_country &&
-        p.dplace_country.country &&
-        p.dplace_country.continent
-    )
-    .sort((a, b) => b.l - a.l);
+      person => {
+        const hasKnownDeathYear = Number.isFinite(person.deathyear);
+        const isLiving = person.alive === true && !hasKnownDeathYear;
 
-  tmapBornData.forEach(d => {
-    d.borncountry = d.bplace_country.country_name;
-    d.borncontinent = d.bplace_country.continent;
-    d.diedcontinent = d.dplace_country.continent;
-  });
+        return (
+          Number.isFinite(person.birthyear) &&
+          person.birthyear > 1699 &&
+          person.occupation &&
+          (hasKnownDeathYear || isLiving)
+        );
+      }
+    )
+    .sort((a, b) => (b.hpi ?? b.l ?? 0) - (a.hpi ?? a.l ?? 0));
 
   const priestleyMax = 25;
-
-  const priestleyData = tmapBornData
-    .filter(p => p.deathyear !== null && p.dplace_country !== null)
-    .slice(0, priestleyMax);
+  const priestleyData = eligiblePeople.slice(0, priestleyMax);
 
   if (priestleyData.length < 3) {
     return null;

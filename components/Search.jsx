@@ -10,9 +10,10 @@ import "./Search.css";
 async function getLatestTrendResults(locale) {
   const response = await axios.get(`/api/wikiTrends?lang=${locale}&limit=12`);
   return response.data.map(d => ({
+    "entity_id": d.pid,
     name: d.name,
-    profile_type: "person",
-    primary_meta: d.occupation,
+    "profile_type": "person",
+    "primary_meta": d.occupation,
     slug: d.slug,
   }));
 }
@@ -179,7 +180,7 @@ const SearchComponent = () => {
             <ul className="results-list">
               {results.map((result, index) => (
                 <li
-                  key={`person_${result.slug}`}
+                  key={`${result.profile_type}_${result.entity_id ?? result.pid ?? `${result.slug}_${index}`}`}
                   className={`result-${result.profile_type}`}
                 >
                   <a href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/profile/${result.profile_type}/${result.slug}`}>

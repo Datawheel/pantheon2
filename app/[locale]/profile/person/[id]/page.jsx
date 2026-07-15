@@ -50,7 +50,7 @@ async function safeFetchJson(url, options = {}, fallback = null) {
 }
 
 async function getPerson(id, lang = "en") {
-  const url = `${BASE_API}/person?slug=eq.${id}&select=*,description,occupation(id,occupation,occupation_slug,domain_slug,num_born,num_born_women,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,country_code,demonym,num_born,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(id,slug,place,num_born),dplace_geonameid(slug,place)`;
+  const url = `${BASE_API}/person?slug=eq.${id}&select=*,description,occupation(id,occupation,occupation_slug,domain_slug,num_born,hpi_avg,${lang}_occupation:translations->${lang}->>occupation),bplace_country(slug,country,country_code,demonym,num_born,${lang}_country:translations->${lang}->>country,${lang}_demonym:translations->${lang}->>demonym,${lang}_nationality_adj:translations->${lang}->>nationality_adj_plural_m,${lang}_from_country:translations->${lang}->>from_country),bplace_geonameid(id,slug,place,num_born),dplace_geonameid(slug,place)`;
   const data = await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -69,7 +69,7 @@ async function getPerson(id, lang = "en") {
 }
 
 async function getPersonRanks(id) {
-  const url = `${BASE_API}/person_ranks?slug=eq.${id}&select=l,l_prev,hpi,occupation_rank,occupation_rank_prev,bplace_country_rank,bplace_country_rank_prev,bplace_country_occupation_rank,occupation_rank_unique,bplace_country_rank_unique,bplace_country_occupation_rank_unique,birthyear_rank_unique,deathyear_rank_unique,bplace_country,rank,rank_unique,bplace_name,bplace_name_rank_unique,non_en_page_views`;
+  const url = `${BASE_API}/person_ranks?slug=eq.${id}&select=l,l_prev,hpi,hpi_prev,rank,rank_unique,rank_prev,rank_delta,occupation_rank,occupation_rank_prev,occupation_rank_unique,bplace_country_rank,bplace_country_rank_prev,bplace_country_rank_unique,bplace_country_occupation_rank,bplace_country_occupation_rank_unique,birthyear_rank_unique,deathyear_rank_unique,bplace_country,bplace_name,bplace_name_rank_unique`;
   const data = await safeFetchJson(
     url,
     {method: "GET", next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -180,22 +180,6 @@ async function getLangEditionContext(occupationId, l) {
     totalPeers,
     percentBelow: Math.floor(((totalPeers - atOrAbove) / totalPeers) * 100),
   };
-}
-
-// Highest-ranked *other* people sharing this person's birth month/day, via the
-// core.born_on_day() function (already ordered by hpi desc).
-async function getBirthdayTwins(person, lang = "en") {
-  if (!person?.birthdate) return [];
-  const [, m, d] = person.birthdate.split("-");
-  if (!Number(m) || !Number(d)) return [];
-  const url = `${BASE_API}/rpc/born_on_day?m=${Number(m)}&d=${Number(d)}&lang=${lang}&limit=5`;
-  const rows = await safeFetchArray(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-  );
-  return rows
-    .filter(r => String(r.person_id) !== String(person.id))
-    .slice(0, 3);
 }
 
 // Next-most-memorable people born in the same city, ordered by the city fame
@@ -408,7 +392,6 @@ export default async function Page(props) {
   const [
     pageViews,
     memMetricsData,
-    birthdayTwins,
     langContext,
     birthyearCount,
     countryOccupationCount,
@@ -423,7 +406,6 @@ export default async function Page(props) {
       occupationData,
       totalViews,
     })),
-    getBirthdayTwins(person, lang),
     getLangEditionContext(person.occupation?.id, personRanks.l),
     // Count queries only when the insight they feed can actually fire
     personRanks.birthyear_rank_unique === 1 && person.birthyear
@@ -431,7 +413,6 @@ export default async function Page(props) {
           `/person_ranks?birthyear=eq.${person.birthyear}&select=id&limit=1`,
         )
       : null,
-    personRanks.bplace_country_occupation_rank_unique === 1 &&
     person.bplace_country?.slug &&
     person.occupation?.occupation_slug
       ? getCountryOccupationCount(
@@ -439,17 +420,16 @@ export default async function Page(props) {
           person.occupation.occupation_slug,
         )
       : null,
-    person.birthyear && person.birthyear <= 1600 && person.occupation?.id
+    person.birthyear && person.birthyear <= 1800 && person.occupation?.id
       ? getPostgrestCount(
           `/person_ranks?occupation=eq.${encodePostgrestValue(person.occupation.id)}&birthyear=lte.${person.birthyear}&select=id&limit=1`,
         )
       : null,
-    // Only fetch hometown peers when the "topCity" insight can actually fire:
-    // the person tops their city (rank #1) but not their country, and the city
-    // has at least one other notable person to name.
+    // Only fetch hometown peers when the city cohort is large enough to make
+    // a #1 rank meaningful and a broader country distinction will not win.
     personRanks.bplace_name_rank_unique === 1 &&
     person.bplace_geonameid?.id &&
-    person.bplace_geonameid.num_born >= 2 &&
+    person.bplace_geonameid.num_born >= 10 &&
     personRanks.bplace_country_rank_unique !== 1 &&
     personRanks.bplace_country_rank !== 1
       ? getCityPeers(person.bplace_geonameid.id, person.id, lang)
@@ -514,7 +494,6 @@ export default async function Page(props) {
   const insights = buildInsights({
     person: localizedPerson,
     personRanks,
-    birthdayTwins,
     langContext,
     birthyearCount,
     countryOccupationCount,

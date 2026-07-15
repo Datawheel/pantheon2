@@ -33,6 +33,25 @@ for (const {slug, name} of PEOPLE) {
   });
 }
 
+test("person carousel uses the film director occupation fallback", async ({page}) => {
+  const watch = attachErrorWatch(page);
+  await goto(page, "/profile/person/Maizie_Williams");
+  await expectProfileLoaded(page);
+
+  const martinBrestCard = page.locator(".rank-list li").filter({
+    has: page.getByRole("heading", {name: "Martin Brest", exact: true}),
+  }).first();
+  const image = martinBrestCard.locator("img");
+
+  await expect(martinBrestCard).toBeVisible();
+  await expect(image).toHaveAttribute(
+    "src",
+    "/images/fallback/fallback-film-director-m.webp",
+  );
+  await expect(image).toHaveClass(/is-occupation-fallback/);
+  watch.assertClean();
+});
+
 /**
  * Discover a detail page from each index, then verify it loads with data.
  * Avoids hardcoding slug formats and also validates index→detail links.
@@ -100,6 +119,24 @@ test("cascade: occupation → country", async ({page}) => {
   test.skip(res.status() >= 400, `no page for ${occ} × ${country}`);
   await expect(page.locator("h2.error-msg")).toHaveCount(0);
   await expectProfileLoaded(page);
+  watch.assertClean();
+});
+
+test("occupation-country overlapping lives includes living people", async ({page}) => {
+  const watch = attachErrorWatch(page);
+  await goto(page, "/profile/occupation/film-director/country/brazil");
+
+  const section = page.locator("section", {
+    has: page.locator("#overlapping-lives"),
+  });
+
+  await expect(section).toBeVisible();
+  await expect(section.locator(".section-body > p")).toContainText(
+    "10 most globally memorable Film Directors",
+  );
+  await expect(
+    section.getByRole("img", {name: "Lifespans of the Top 10 Film Directors"}),
+  ).toBeVisible();
   watch.assertClean();
 });
 

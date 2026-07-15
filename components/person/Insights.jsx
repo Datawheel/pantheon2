@@ -4,7 +4,7 @@ import {getTranslations} from "@/app/translations";
 import {DEFAULT_LOCALE} from "@/app/locales";
 import "./Insights.css";
 
-const MAX_INSIGHTS = 4;
+const MAX_INSIGHTS = 3;
 
 const escapeHtml = s =>
   String(s)
@@ -43,14 +43,34 @@ function joinList(items, lang) {
   }
 }
 
-// Builds a scored list of data-driven callouts from person_ranks columns and
-// the pre-fetched comparison data (peer counts, occupation pageview stats,
-// birthday twins) and keeps the top 4. Exported separately so the page can
-// decide whether to render the section.
+function topPercent(rank, total) {
+  if (!rank || !total || rank > total) return null;
+  return Math.max(1, Math.ceil((rank / total) * 100));
+}
+
+function rankStrength(rank, total) {
+  if (!rank || !total || rank > total) return 0;
+  return Math.log10(total / rank);
+}
+
+function rankStat(rank, total) {
+  const formattedTotal = total < 10000
+    ? FORMATTERS.commas(total)
+    : FORMATTERS.bigNum(total);
+  return `#${FORMATTERS.commas(rank)} / ${formattedTotal}`;
+}
+
+function movementStat(value) {
+  return value < 10000 ? FORMATTERS.commas(value) : FORMATTERS.bigNum(value);
+}
+
+// Selects one insight per editorial dimension instead of filling the section
+// with overlapping ranks. The result answers three different questions when
+// the data supports them: where does this person stand out, what changed, and
+// how unusually broad is their present-day audience?
 export function buildInsights({
   person,
   personRanks,
-  birthdayTwins = [],
   langContext,
   birthyearCount,
   countryOccupationCount,
@@ -64,8 +84,11 @@ export function buildInsights({
   const t = getTranslations(lang);
   // Fall back to English strings so a locale missing these keys degrades
   // gracefully instead of crashing the page.
-  const strings = t.person?.insights || getTranslations("en").person.insights;
-  if (!person || !personRanks || personRanks.l == null || !strings) return [];
+  const strings = {
+    ...getTranslations("en").person.insights,
+    ...t.person?.insights,
+  };
+  if (!person || !personRanks) return [];
 
   // Sentences render via dangerouslySetInnerHTML (same convention as the
   // Intro ranking sentence) so params can carry pre-built profile links.
@@ -96,30 +119,48 @@ export function buildInsights({
   const cityRank = personRanks.bplace_name_rank_unique;
   const globalRank = personRanks.rank_unique || personRanks.rank;
 
-  const candidates = [];
+  const distinctionCandidates = [];
+  const addRankCandidate = ({key, rank, cohortTotal, text, minCohort = 10}) => {
+    const percent = topPercent(rank, cohortTotal);
+    if (
+      !percent ||
+      cohortTotal < minCohort ||
+      (rank !== 1 && percent > 10)
+    ) return;
+    distinctionCandidates.push({
+      key,
+      kind: "distinction",
+      score: 78 + Math.min(20, rankStrength(rank, cohortTotal) * 6),
+      stat: rankStat(rank, cohortTotal),
+      text,
+    });
+  };
 
   if (occRank === 1 && totalFormatted) {
-    candidates.push({
+    addRankCandidate({
       key: "topOccupation",
-      score: 100,
-      stat: "#1",
+      rank: occRank,
+      cohortTotal: total,
+      minCohort: 30,
       text: strings.topOccupation({
         name,
         occupationPlural: linkedOccupationPlural,
         totalFormatted,
       }),
     });
-  } else if (occRank && occRank <= 10 && total >= 100) {
-    candidates.push({
+  } else if (occRank && total) {
+    const percent = topPercent(occRank, total);
+    addRankCandidate({
       key: "topOccupationRank",
-      score: 70,
-      stat: `#${occRank}`,
+      rank: occRank,
+      cohortTotal: total,
+      minCohort: 30,
       text: strings.topOccupationRank({
         name,
         rank: FORMATTERS.commas(occRank),
         occupationPlural: linkedOccupationPlural,
         totalFormatted,
-        topPercent: Math.max(1, Math.ceil((occRank / total) * 100)),
+        topPercent: percent,
       }),
     });
   }
@@ -130,9 +171,11 @@ export function buildInsights({
   const maxViews = occupationPageviews?.pageviews_max;
   const avgViews = occupationPageviews?.pageviews_avg;
   const enoughPeers = occupationPageviews?.num_people >= 20;
-  if (occRank !== 1 && enoughPeers && totalViews > 0 && maxViews && totalViews >= maxViews) {
-    candidates.push({
+  const reachCandidates = [];
+  if (enoughPeers && totalViews > 0 && maxViews && totalViews >= maxViews) {
+    reachCandidates.push({
       key: "mostViewed",
+      kind: "reach",
       score: 92,
       stat: FORMATTERS.bigNum(totalViews),
       text: strings.mostViewed({
@@ -142,11 +185,15 @@ export function buildInsights({
       }),
     });
   } else if (enoughPeers && totalViews > 0 && avgViews > 0) {
-    const multiple = Math.round(totalViews / avgViews);
-    if (multiple >= 10) {
-      candidates.push({
+    const rawMultiple = totalViews / avgViews;
+    const multiple = rawMultiple >= 10
+      ? Math.round(rawMultiple)
+      : Math.round(rawMultiple * 10) / 10;
+    if (rawMultiple >= 2.5) {
+      reachCandidates.push({
         key: "viewsMultiple",
-        score: 52,
+        kind: "reach",
+        score: 76 + Math.min(12, multiple),
         stat: `${FORMATTERS.commas(multiple)}×`,
         text: strings.viewsMultiple({
           name,
@@ -160,91 +207,125 @@ export function buildInsights({
 
   const countryTotal = person.bplace_country?.num_born;
   if (countryRank === 1 && country && countryTotal) {
-    candidates.push({
+    addRankCandidate({
       key: "topCountry",
-      score: 88,
-      stat: "#1",
+      rank: countryRank,
+      cohortTotal: countryTotal,
+      minCohort: 30,
       text: strings.topCountry({
         name,
         country,
         totalFormatted: FORMATTERS.commas(countryTotal),
       }),
     });
-  } else if (
-    cityRank === 1 &&
-    personRanks.bplace_name &&
-    // Being the most memorable of 1 is a tautology, not an insight
-    person.bplace_geonameid?.num_born >= 2 &&
-    country
-  ) {
-    // Country #1 already implies city #1, so only surface the city callout
-    // when the person tops their hometown but not their country.
+  } else if (countryRank && country && countryTotal) {
+    const percent = topPercent(countryRank, countryTotal);
+    addRankCandidate({
+      key: "countryRank",
+      rank: countryRank,
+      cohortTotal: countryTotal,
+      minCohort: 30,
+      text: strings.countryRank({
+        name,
+        rank: FORMATTERS.commas(countryRank),
+        country,
+        totalFormatted: FORMATTERS.commas(countryTotal),
+        topPercent: percent,
+      }),
+    });
+  }
+
+  const cityTotal = person.bplace_geonameid?.num_born;
+  if (cityRank && personRanks.bplace_name && cityTotal >= 10 && country) {
     const city = person.bplace_geonameid.slug
       ? anchor(
           `${localePrefix}/profile/place/${person.bplace_geonameid.slug}`,
           personRanks.bplace_name,
         )
       : escapeHtml(personRanks.bplace_name);
-    // For people born before modern nation-states (or with unknown birth
-    // year), hedge with "in what is now modern-day {country}".
-    const cityTemplate =
-      person.birthyear && person.birthyear >= 1800
-        ? strings.topCity
-        : strings.topCityHistorical;
-    // Name the next-most-memorable people born in the same city, linked to
-    // their profiles. Empty string when we have no peers so the template omits
-    // the "ahead of …" clause entirely.
-    const peers = cityPeers.length
-      ? joinList(
-          cityPeers.map(peer =>
-            peer.slug
-              ? anchor(`${localePrefix}/profile/person/${peer.slug}`, peer.name)
-              : escapeHtml(peer.name),
-          ),
-          lang,
-        )
-      : "";
-    candidates.push({
-      key: "topCity",
-      score: 85,
-      stat: "#1",
-      text: cityTemplate({
-        name,
-        city,
-        country,
-        count: FORMATTERS.commas(person.bplace_geonameid.num_born),
-        peers,
-      }),
-    });
+    if (cityRank === 1) {
+      const cityTemplate =
+        person.birthyear && person.birthyear >= 1800
+          ? strings.topCity
+          : strings.topCityHistorical;
+      const peers = cityPeers.length
+        ? joinList(
+            cityPeers.map(peer =>
+              peer.slug
+                ? anchor(`${localePrefix}/profile/person/${peer.slug}`, peer.name)
+                : escapeHtml(peer.name),
+            ),
+            lang,
+          )
+        : "";
+      addRankCandidate({
+        key: "topCity",
+        rank: cityRank,
+        cohortTotal: cityTotal,
+        text: cityTemplate({
+          name,
+          city,
+          country,
+          count: FORMATTERS.commas(cityTotal),
+          peers,
+        }),
+      });
+    } else {
+      const percent = topPercent(cityRank, cityTotal);
+      addRankCandidate({
+        key: "cityRank",
+        rank: cityRank,
+        cohortTotal: cityTotal,
+        text: strings.cityRank({
+          name,
+          rank: FORMATTERS.commas(cityRank),
+          city,
+          country,
+          count: FORMATTERS.commas(cityTotal),
+          topPercent: percent,
+        }),
+      });
+    }
   }
 
-  if (
-    occRank !== 1 &&
-    countryRank !== 1 &&
-    countryOccRank === 1 &&
-    country &&
-    countryOccupationCount
-  ) {
-    candidates.push({
-      key: "topCountryOccupation",
-      score: 80,
-      stat: "#1",
-      text: strings.topCountryOccupation({
-        name,
-        occupationPlural: linkedOccupationPlural,
-        country,
-        count: FORMATTERS.commas(countryOccupationCount),
-      }),
-    });
+  if (countryOccRank && country && countryOccupationCount >= 10) {
+    if (countryOccRank === 1) {
+      addRankCandidate({
+        key: "topCountryOccupation",
+        rank: countryOccRank,
+        cohortTotal: countryOccupationCount,
+        text: strings.topCountryOccupation({
+          name,
+          occupationPlural: linkedOccupationPlural,
+          country,
+          count: FORMATTERS.commas(countryOccupationCount),
+        }),
+      });
+    } else {
+      const percent = topPercent(countryOccRank, countryOccupationCount);
+      addRankCandidate({
+        key: "countryOccupationRank",
+        rank: countryOccRank,
+        cohortTotal: countryOccupationCount,
+        text: strings.countryOccupationRank({
+          name,
+          rank: FORMATTERS.commas(countryOccRank),
+          occupationPlural: linkedOccupationPlural,
+          country,
+          count: FORMATTERS.commas(countryOccupationCount),
+          topPercent: percent,
+        }),
+      });
+    }
   }
 
   // Tiny cohorts (ancient birth years) make "most memorable of N" unimpressive
   const birthyearRank = personRanks.birthyear_rank_unique;
   if (birthyearRank === 1 && person.birthyear && birthyearCount >= 10) {
-    candidates.push({
+    addRankCandidate({
       key: "topBirthyear",
-      score: 75,
-      stat: "#1",
+      rank: birthyearRank,
+      cohortTotal: birthyearCount,
       text: strings.topBirthyear({
         name,
         year: FORMATTERS.year(person.birthyear),
@@ -253,11 +334,13 @@ export function buildInsights({
     });
   }
 
+  const legacyCandidates = [];
   // Among the handful of earliest-born members of the occupation.
   if (earliestBornCount && earliestBornCount <= 10 && total >= 100) {
-    candidates.push({
+    legacyCandidates.push({
       key: "earliestBorn",
-      score: 72,
+      kind: "legacy",
+      score: 82,
       stat: `${earliestBornCount}`,
       text: strings.earliestBorn({
         name,
@@ -268,10 +351,18 @@ export function buildInsights({
   }
 
   const age = ageAtDeath(person);
-  if (age != null && age >= 20 && age <= 45 && occRank && occRank <= 300) {
-    candidates.push({
+  const occupationPercent = topPercent(occRank, total);
+  if (
+    age != null &&
+    age >= 20 &&
+    age <= 45 &&
+    occupationPercent &&
+    occupationPercent <= 2
+  ) {
+    legacyCandidates.push({
       key: "shortLife",
-      score: 68,
+      kind: "legacy",
+      score: 80,
       stat: `${age}`,
       text: strings.shortLife({
         name,
@@ -283,46 +374,33 @@ export function buildInsights({
   }
 
   const currentYear = new Date().getFullYear();
-  if (person.deathyear && globalRank && currentYear - person.deathyear >= 200) {
-    const centuries = Math.floor((currentYear - person.deathyear) / 100);
-    candidates.push({
+  if (
+    person.deathyear &&
+    globalRank &&
+    globalRank <= 500 &&
+    currentYear - person.deathyear >= 200
+  ) {
+    const years = currentYear - person.deathyear;
+    legacyCandidates.push({
       key: "enduringFame",
-      score: 65,
+      kind: "legacy",
+      score: 78 + Math.max(0, 5 - Math.floor(years / 100)),
       stat: `#${FORMATTERS.commas(globalRank)}`,
       text: strings.enduringFame({
         name,
-        centuries,
+        years: FORMATTERS.commas(years),
         rank: FORMATTERS.commas(globalRank),
       }),
     });
   }
 
-  const womenCount = person.occupation?.num_born_women;
-  if (
-    person.gender === "F" &&
-    womenCount >= 1 &&
-    total >= 100 &&
-    womenCount / total <= 0.25
-  ) {
-    candidates.push({
-      key: "womenPioneer",
-      score: 62,
-      stat: FORMATTERS.commas(womenCount),
-      text: strings.womenPioneer({
-        name,
-        womenCount: FORMATTERS.commas(womenCount),
-        totalFormatted,
-        occupationPlural: linkedOccupationPlural,
-      }),
-    });
-  }
-
-  // Only worth calling out when the edition count actually stands out among
-  // occupation peers; percentile comes from getLangEditionContext in the page.
-  if (personRanks.l >= 30 && langContext?.percentBelow >= 75) {
-    candidates.push({
+  // Wikipedia edition count is only an insight when it clears a demanding
+  // peer percentile; raw counts alone tend to reward large occupations.
+  if (personRanks.l >= 20 && langContext?.percentBelow >= 90) {
+    reachCandidates.push({
       key: "globalLangs",
-      score: 60,
+      kind: "reach",
+      score: 80 + Math.min(10, langContext.percentBelow - 90),
       stat: `${personRanks.l}`,
       text: strings.globalLangs({
         name,
@@ -333,57 +411,55 @@ export function buildInsights({
     });
   }
 
-  if (birthdayTwins.length && person.birthdate) {
-    const [, m, d] = person.birthdate.split("-");
-    if (Number(m) && Number(d)) {
-      const dateObj = new Date(Date.UTC(2000, Number(m) - 1, Number(d)));
-      const dateFmt = opts =>
-        new Intl.DateTimeFormat(lang, {...opts, timeZone: "UTC"}).format(dateObj);
-      const twinNames = joinList(
-        birthdayTwins.map(twin =>
-          twin.slug
-            ? anchor(`${localePrefix}/profile/person/${twin.slug}`, twin.name)
-            : escapeHtml(twin.name),
-        ),
-        lang,
-      );
-      candidates.push({
-        key: "birthdayTwin",
-        score: 55,
-        stat: dateFmt({month: "short", day: "numeric"}),
-        text: strings.birthdayTwin({
-          name,
-          date: dateFmt({month: "long", day: "numeric"}),
-          twinNames,
-        }),
-      });
-    }
+  const momentumCandidates = [];
+  const rankGain = Number(personRanks.rank_delta) || 0;
+  const previousRank = Number(personRanks.rank_prev) || 0;
+  const relativeGain = previousRank ? rankGain / previousRank : 0;
+  if (
+    globalRank &&
+    previousRank &&
+    rankGain >= 25 &&
+    (relativeGain >= 0.15 || (rankGain >= 10000 && relativeGain >= 0.05))
+  ) {
+    momentumCandidates.push({
+      key: "rankMomentum",
+      kind: "momentum",
+      score: 84 + Math.min(10, relativeGain * 10),
+      stat: `+${movementStat(rankGain)}`,
+      text: strings.rankMomentum({
+        name,
+        places: FORMATTERS.commas(rankGain),
+        previousRank: FORMATTERS.commas(previousRank),
+        currentRank: FORMATTERS.commas(globalRank),
+      }),
+    });
   }
 
   const newLangs = personRanks.l_prev ? personRanks.l - personRanks.l_prev : 0;
   if (newLangs >= 5) {
-    candidates.push({
+    momentumCandidates.push({
       key: "newLangs",
-      score: 50,
+      kind: "momentum",
+      score: 72 + Math.min(8, newLangs / 2),
       stat: `+${newLangs}`,
       text: strings.newLangs({name, count: newLangs}),
     });
   }
 
-  // non_en_page_views is an absolute yearly count, not a share
-  const nonEnViews = personRanks.non_en_page_views;
-  if (nonEnViews >= 1000000) {
-    candidates.push({
-      key: "nonEnglish",
-      score: 45,
-      stat: FORMATTERS.bigNum(nonEnViews),
-      text: strings.nonEnglish({name, count: FORMATTERS.bigNum(nonEnViews)}),
-    });
-  }
+  const bestByScore = candidates =>
+    candidates.sort((a, b) => b.score - a.score)[0];
+  const bestDistinction = bestByScore(distinctionCandidates);
+  const selected = [
+    bestDistinction,
+    bestByScore(momentumCandidates),
+    bestByScore(reachCandidates),
+    bestByScore(legacyCandidates),
+  ].filter(Boolean);
 
-  if (!candidates.length && personRanks.hpi != null) {
-    candidates.push({
+  if (!selected.length && personRanks.hpi != null && personRanks.l != null) {
+    selected.push({
       key: "fallback",
+      kind: "reach",
       score: 10,
       stat: `${personRanks.l}`,
       text: strings.fallback({
@@ -394,7 +470,7 @@ export function buildInsights({
     });
   }
 
-  return candidates.sort((a, b) => b.score - a.score).slice(0, MAX_INSIGHTS);
+  return selected.sort((a, b) => b.score - a.score).slice(0, MAX_INSIGHTS);
 }
 
 export default function Insights({person, insights = [], slug, title}) {
@@ -407,6 +483,7 @@ export default function Insights({person, insights = [], slug, title}) {
           <div
             className="insight-card"
             key={insight.key}
+            data-kind={insight.kind}
             style={accentColor ? {borderTopColor: accentColor} : undefined}
           >
             <h4

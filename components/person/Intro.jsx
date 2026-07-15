@@ -29,6 +29,8 @@ const Intro = ({
   const bplaceCountryRankDisplay = bplaceCountryRankUnique || bplaceCountryRank;
   const bplaceCountryOccupationRankDisplay =
     bplaceCountryOccupationRankUnique || bplaceCountryOccupationRank;
+  const hasOccupationRank = occupationRankDisplay != null;
+  const hasBplaceCountryRank = bplaceCountryRankDisplay != null;
   // const bplaceCountryRank = personRanks.bplaceCountryRank ? personRanks.bplaceCountryRank : null;
   const backgroundColor = COLORS_DOMAIN[person.occupation.domain_slug];
   const decoLines = 14;
@@ -39,6 +41,34 @@ const Intro = ({
         ? person.deathyear - person.birthyear
         : new Date().getFullYear() - person.birthyear;
   }
+
+  const rankingSentence = hasOccupationRank
+    ? t.intro.rankingSentence({
+        name: person.name,
+        gender: person.gender,
+        l: personRanks.l,
+        // Translation functions use the API's historical snake_case key.
+        // eslint-disable-next-line camelcase
+        l_prev: personRanks.l_prev,
+        occupationRank: occupationRankDisplay,
+        occupationRankPrev,
+        occupation: person.occupation.occupation,
+        occupationSlug: person.occupation.occupation_slug,
+        bplaceCountryRank: bplaceCountryRankDisplay,
+        bplaceCountryRankPrev,
+        country: hasBplaceCountryRank ? person.bplace_country?.country : null,
+        countrySlug: person.bplace_country?.slug,
+        bplaceCountryOccupationRank: bplaceCountryOccupationRankDisplay,
+        demonym: person.bplace_country?.demonym || "",
+        nationalityAdj: person.bplace_country?.nationalityAdj || "",
+        fromCountry: person.bplace_country?.fromCountry || "",
+        formatOrdinal: FORMATTERS.ordinal,
+      })
+    : "";
+  const ranklessLink = ranklessUrl
+    ? `<a href="${ranklessUrl}">${t.learnMoreRankless.replace("{name}", person.name)}</a>.`
+    : "";
+  const rankingHtml = [rankingSentence, ranklessLink].filter(Boolean).join(" ");
 
   let fromSentence;
   if (person.bplace_country) {
@@ -179,33 +209,9 @@ const Intro = ({
             localizedName={person.name}
             lang={lang}
           />
-          <p
-            dangerouslySetInnerHTML={{
-              __html:
-                t.intro.rankingSentence({
-                  name: person.name,
-                  gender: person.gender,
-                  l: personRanks.l,
-                  l_prev: personRanks.l_prev,
-                  occupationRank: occupationRankDisplay,
-                  occupationRankPrev,
-                  occupation: person.occupation.occupation,
-                  occupationSlug: person.occupation.occupation_slug,
-                  bplaceCountryRank: bplaceCountryRankDisplay,
-                  bplaceCountryRankPrev,
-                  country: person.bplace_country?.country,
-                  countrySlug: person.bplace_country?.slug,
-                  bplaceCountryOccupationRank: bplaceCountryOccupationRankDisplay,
-                  demonym: person.bplace_country?.demonym,
-                  nationalityAdj: person.bplace_country?.nationalityAdj,
-                  fromCountry: person.bplace_country?.fromCountry,
-                  formatOrdinal: FORMATTERS.ordinal,
-                }) +
-                (ranklessUrl
-                  ? ` <a href="${ranklessUrl}">${t.learnMoreRankless.replace("{name}", person.name)}</a>.`
-                  : ""),
-            }}
-          />
+          {rankingHtml ? (
+            <p dangerouslySetInnerHTML={{__html: rankingHtml}} />
+          ) : null}
           {person.famous_for && lang === "en" ? <p>{person.famous_for}</p> : null}
         </div>
       </div>

@@ -15,23 +15,30 @@ export default function PeoplePriestley({data, title}) {
 
   const {categories, seriesData, domains, yearMin, yearMax} = useMemo(() => {
     const sorted = [...data].sort((a, b) => a.birthyear - b.birthyear);
+    const currentYear = new Date().getFullYear();
 
     const categories = sorted.map(p => p.name);
 
-    const seriesData = sorted.map((person, i) => [
-      i,
-      person.birthyear,
-      person.deathyear,
-      person.name,
-      person.occupation?.domain || "",
-      getDomainColor(person),
-      person.slug,
-    ]);
+    const seriesData = sorted.map((person, i) => {
+      const isLiving = person.alive === true && !Number.isFinite(person.deathyear);
+      const endYear = isLiving ? currentYear : person.deathyear;
+
+      return [
+        i,
+        person.birthyear,
+        endYear,
+        person.name,
+        person.occupation?.domain || "",
+        getDomainColor(person),
+        person.slug,
+        isLiving,
+      ];
+    });
 
     const births = sorted.map(p => p.birthyear);
-    const deaths = sorted.map(p => p.deathyear).filter(Boolean);
+    const endYears = seriesData.map(d => d[2]);
     const rawMin = Math.min(...births);
-    const rawMax = Math.max(...deaths);
+    const rawMax = Math.max(...endYears);
 
     const pad = Math.max(5, Math.round((rawMax - rawMin) * 0.03));
     const yearMin = rawMin - pad;
@@ -68,13 +75,15 @@ export default function PeoplePriestley({data, title}) {
         extraCssText: "box-shadow: 0 2px 10px rgba(0,0,0,0.15);",
         formatter: params => {
           if (!params.value) return "";
-          const [, birth, death, name, domain] = params.value;
-          const lifespan = death - birth;
+          const [, birth, endYear, name, domain, , , isLiving] = params.value;
+          const lifespan = endYear - birth;
+          const endLabel = isLiving ? "Present" : FORMATTERS.year(endYear);
+          const lifespanLabel = isLiving ? "Age" : "Lifespan";
           return (
             `<strong style="font-size:14px;">${name}</strong><br/>` +
             `<span style="color:#888;font-size:12px;">${domain}</span><br/>` +
-            `<span style="font-size:12px;">${FORMATTERS.year(birth)} – ${FORMATTERS.year(death)}</span><br/>` +
-            `<span style="color:#888;font-size:12px;">Lifespan: ${lifespan} years</span><br/>` +
+            `<span style="font-size:12px;">${FORMATTERS.year(birth)} – ${endLabel}</span><br/>` +
+            `<span style="color:#888;font-size:12px;">${lifespanLabel}: ${lifespan} years</span><br/>` +
             `<span style="color:#aaa;font-size:11px;display:block;margin-top:4px;">Click to view profile</span>`
           );
         },
@@ -219,7 +228,7 @@ export default function PeoplePriestley({data, title}) {
       ro.disconnect();
       chart.dispose();
     };
-  }, [seriesData, yearMin, yearMax, title]);
+  }, [categories, seriesData, yearMin, yearMax, title]);
 
   return (
     <VizWrapper>

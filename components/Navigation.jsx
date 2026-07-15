@@ -1,16 +1,36 @@
 "use client";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {usePathname, useParams} from "next/navigation";
 import {useSearchVisibility} from "@/contexts/SearchContext";
 import {getTranslations} from "@/app/translations";
-import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "@/app/locales";
+import {
+  DEFAULT_LOCALE,
+  LOCALE_NATIVE_NAMES,
+  SUPPORTED_LOCALES,
+} from "@/app/locales";
+
+const localePattern = new RegExp(
+  `^/(${SUPPORTED_LOCALES.join("|")})(?=/|$)`,
+);
+
+function getLocaleHref(pathname, locale) {
+  const pathWithoutLocale = (pathname || "/").replace(localePattern, "") || "/";
+  const localizedPath = pathWithoutLocale === "/" ? "" : pathWithoutLocale;
+
+  // Keep the explicit /en prefix here. The proxy uses it to update NEXT_LOCALE
+  // before redirecting to the canonical, unprefixed English URL.
+  return `/${locale}${localizedPath}`;
+}
 
 export default function Navigation() {
   const {openSearch} = useSearchVisibility();
   const [mobileNavVisible, setMobileNavVisible] = useState(false);
   const [mobileSubnav, setMobileSubnav] = useState(null);
+  const [languageMenuVisible, setLanguageMenuVisible] = useState(false);
+  const languageSwitcherRef = useRef(null);
+  const languageButtonRef = useRef(null);
 
   const pathname = usePathname();
   const params = useParams();
@@ -18,6 +38,30 @@ export default function Navigation() {
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    if (!languageMenuVisible) return undefined;
+
+    const handlePointerDown = event => {
+      if (!languageSwitcherRef.current?.contains(event.target)) {
+        setLanguageMenuVisible(false);
+      }
+    };
+    const handleKeyDown = event => {
+      if (event.key === "Escape") {
+        setLanguageMenuVisible(false);
+        languageButtonRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [languageMenuVisible]);
 
   const toggleSubNav = subnavType => {
     subnavType === mobileSubnav
@@ -28,6 +72,14 @@ export default function Navigation() {
   const handleOpenSearch = () => {
     setMobileNavVisible(false);
     openSearch();
+  };
+
+  const handleLanguageChange = (event, nextLocale) => {
+    event.preventDefault();
+    setLanguageMenuVisible(false);
+
+    const href = getLocaleHref(pathname, nextLocale);
+    window.location.assign(`${href}${window.location.search}${window.location.hash}`);
   };
 
   return (
@@ -248,6 +300,48 @@ export default function Navigation() {
                 </Link>
               </li>
             </ul>
+          </li>
+          <li className="language-btn" ref={languageSwitcherRef}>
+            <button
+              ref={languageButtonRef}
+              type="button"
+              className="language-trigger"
+              aria-expanded={languageMenuVisible}
+              aria-haspopup="true"
+              aria-controls="header-language-menu"
+              aria-label={`Select language. Current language: ${LOCALE_NATIVE_NAMES[lang]}`}
+              title="Select language"
+              onClick={() => setLanguageMenuVisible(visible => !visible)}
+            >
+              <Image
+                width={20}
+                height={20}
+                src="/images/icons/icon-language.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <span className="language-label">{LOCALE_NATIVE_NAMES[lang]}</span>
+            </button>
+            {languageMenuVisible ? (
+              <ul id="header-language-menu" className="language-menu">
+                {SUPPORTED_LOCALES.map(optionLocale => (
+                  <li key={optionLocale}>
+                    <a
+                      href={getLocaleHref(pathname, optionLocale)}
+                      hrefLang={optionLocale}
+                      lang={optionLocale}
+                      aria-current={optionLocale === lang ? "page" : undefined}
+                      onClick={event => handleLanguageChange(event, optionLocale)}
+                    >
+                      <span>{LOCALE_NATIVE_NAMES[optionLocale]}</span>
+                      {optionLocale === lang ? (
+                        <span className="language-check" aria-hidden="true">✓</span>
+                      ) : null}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </li>
           <li className="search-btn">
             <button type="button" onClick={openSearch}>

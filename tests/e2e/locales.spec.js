@@ -9,6 +9,7 @@ import {attachErrorWatch, goto, expectProfileLoaded, expectContent} from "./help
 const PROFILE_LOCALES = [
   {locale: "fr", path: "/fr/profile/person/Isaac_Newton"},
   {locale: "de", path: "/de/profile/deaths/2024"},
+  {locale: "es", path: "/es/profile/person/Michael_Ronda"},
 ];
 
 for (const {locale, path} of PROFILE_LOCALES) {

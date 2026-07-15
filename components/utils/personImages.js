@@ -4,8 +4,7 @@ export const DEFAULT_PERSON_FALLBACK_SRC = "/images/icons/icon-person.svg";
 
 const FALLBACK_IMAGE_DIR = "/images/fallback";
 const OCCUPATION_ALIASES = {
-  "film-director": "director",
-  director: "director",
+  director: "film-director",
 };
 
 export function getPersonImageSrc(id) {

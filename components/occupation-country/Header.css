@@ -31,7 +31,7 @@ header.occupation-profile-hero {
   }
 
   & .bg-img-mask.profession .bg-img-mask-after {
-    background: var(--hero-accent);
+    background: var(--hero-accent, #BB3B57);
     opacity: 0.3;
     mix-blend-mode: color;
   }
@@ -70,7 +70,7 @@ header.occupation-profile-hero {
     position: absolute;
     inset: 0 0 auto;
     height: 3px;
-    background: var(--hero-accent);
+    background: var(--hero-accent, #BB3B57);
     opacity: 0.85;
   }
 

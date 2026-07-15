@@ -2,22 +2,42 @@
 
 .insights-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
   width: 100%;
 }
 
 .insight-card {
-  background-color: var(--colorLint, #e4e4e1);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 55%), transparent 58%),
+    var(--colorLint, #e4e4e1);
   border-top: 4px solid var(--colorCtrl, #36687f);
-  padding: 14px 18px 16px;
+  box-shadow: 0 10px 30px rgb(35 42 45 / 8%);
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  overflow: hidden;
+  padding: 18px 20px 16px;
+  position: relative;
+
+  &::after {
+    background: currentcolor;
+    border-radius: 50%;
+    content: "";
+    height: 90px;
+    opacity: 0.035;
+    position: absolute;
+    right: -38px;
+    top: -42px;
+    width: 90px;
+  }
 
   & .insight-stat {
     @mixin calloutText;
     color: var(--colorSlate, #4b4a48);
-    font-size: 26px;
+    font-size: 30px;
     line-height: 1;
-    margin: 0 0 8px;
+    margin: 0 0 12px;
   }
 
   /* !important beats the global p line-height (same workaround as MemMetrics) */
@@ -25,5 +45,16 @@
     font-size: var(--sizeSmall, 1.2rem);
     line-height: 1.5 !important;
     margin: 0;
+  }
+
+}
+
+@media (max-width: 520px) {
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insight-card {
+    min-height: 0;
   }
 }
