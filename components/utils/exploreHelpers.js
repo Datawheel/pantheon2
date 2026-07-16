@@ -6,6 +6,7 @@ import {
 } from "../../features/exploreSlice";
 import dataFormatter from "../../components/utils/dataFormatter";
 import {encodePostgrestList, encodePostgrestValue} from "@/app/utils/postgrest";
+import {DEFAULT_LOCALE} from "@/app/locales";
 
 export const getQueryArgs = exploreState => {
   const {
@@ -83,7 +84,14 @@ export const getQueryArgs = exploreState => {
   return queryStr;
 };
 
-const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
+const makeApiUrl = (
+  baseApi,
+  places,
+  exploreState,
+  pageIndex,
+  sortBy,
+  locale = DEFAULT_LOCALE,
+) => {
   const {
     city,
     country,
@@ -103,7 +111,7 @@ const makeApiUrl = (baseApi, places, exploreState, pageIndex, sortBy) => {
   } = exploreState;
   // const apiHeaders = {Prefer: "count=estimated"};
   let selectFields =
-    "name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,birthmonth,birthday,deathyear,bplace_country(id,country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,occupation_slug,industry,domain)";
+    `name,l,l_,age,non_en_page_views,coefficient_of_variation,hpi,hpi_prev,id,slug,gender,birthyear,birthmonth,birthday,deathyear,bplace_country(id,country,localized_country:translations->${locale}->>country,continent,slug),bplace_geonameid(id,place,country,slug,lat,lon),dplace_country(id,country,localized_country:translations->${locale}->>country,slug),dplace_geonameid(id,place,country,slug),occupation_id:occupation,occupation(id,occupation,localized_occupation:translations->${locale}->>occupation,occupation_slug,industry,localized_industry:translations->${locale}->>industry,domain,localized_domain:translations->${locale}->>domain,domain_slug)`;
   let sorting = "&order=hpi.desc.nullslast";
 
   // Set place...
@@ -196,7 +204,8 @@ const fetchDataFromApi = async (
   places,
   exploreState,
   pageOverride,
-  sortBy
+  sortBy,
+  locale = DEFAULT_LOCALE,
 ) => {
   const {
     dataPageIndex,
@@ -212,7 +221,14 @@ const fetchDataFromApi = async (
     typeof pageOverride === "number" && !isNaN(pageOverride)
       ? pageOverride
       : dataPageIndex;
-  const apiUrl = makeApiUrl(baseApi, places, exploreState, pageIndex, sortBy);
+  const apiUrl = makeApiUrl(
+    baseApi,
+    places,
+    exploreState,
+    pageIndex,
+    sortBy,
+    locale,
+  );
   try {
     const response = await fetch(apiUrl, {
       headers: {Prefer: "count=estimated"},
@@ -221,6 +237,7 @@ const fetchDataFromApi = async (
       throw new Error("Failed to fetch data from the API");
     }
     let data = await response.json();
+    data = data.map(row => localizeExploreRow(row, locale));
     // const range = response.headers.get("content-range")
     //   ? response.headers.get("content-range").split("/")[0]
     //   : null;
@@ -247,11 +264,80 @@ const fetchDataFromApi = async (
         PAGE_SIZE * pageIndex + PAGE_SIZE
       );
     }
+    if (page === "rankings" && locale !== DEFAULT_LOCALE) {
+      data = await localizeRankingPersonNames(baseApi, data, locale);
+    }
     return {data, count};
   } catch (error) {
     throw new Error("Failed to fetch data from the API");
   }
 };
+
+function localizedValue(record, locale, key) {
+  return record?.translations?.[locale]?.[key]
+    || record?.translations?.[DEFAULT_LOCALE]?.[key]
+    || record?.[key];
+}
+
+function localizeExploreRow(row, locale) {
+  const occupation = row.occupation
+    ? {
+        ...row.occupation,
+        occupation: row.occupation.localized_occupation
+          || localizedValue(row.occupation, locale, "occupation"),
+        industry: row.occupation.localized_industry
+          || localizedValue(row.occupation, locale, "industry"),
+        domain: row.occupation.localized_domain
+          || localizedValue(row.occupation, locale, "domain"),
+      }
+    : row.occupation;
+  const localizeCountry = country => country
+    ? {
+        ...country,
+        country: country.localized_country
+          || localizedValue(country, locale, "country"),
+      }
+    : country;
+  return {
+    ...row,
+    occupation,
+    ["bplace_country"]: localizeCountry(row.bplace_country),
+    ["dplace_country"]: localizeCountry(row.dplace_country),
+  };
+}
+
+async function localizeRankingPersonNames(baseApi, data, locale) {
+  const ids = new Set();
+  data.forEach(row => {
+    if (row?.id !== null && row?.id !== undefined) ids.add(row.id);
+    row?.top_ranked?.forEach(person => {
+      if (person?.id !== null && person?.id !== undefined) ids.add(person.id);
+    });
+  });
+  if (!ids.size) return data;
+
+  try {
+    const url = `${baseApi}/person?id=in.(${encodePostgrestList([...ids])})&select=id,localized_name:translations->>${locale}`;
+    const response = await fetch(url);
+    if (!response.ok) return data;
+    const localizedPeople = await response.json();
+    const names = new Map(
+      localizedPeople
+        .filter(person => person.localized_name)
+        .map(person => [`${person.id}`, person.localized_name]),
+    );
+    return data.map(row => ({
+      ...row,
+      name: names.get(`${row.id}`) || row.name,
+      ["top_ranked"]: row.top_ranked?.map(person => ({
+        ...person,
+        name: names.get(`${person.id}`) || person.name,
+      })),
+    }));
+  } catch {
+    return data;
+  }
+}
 
 export async function fetchDataAndDispatch(
   baseApi,
@@ -262,7 +348,8 @@ export async function fetchDataAndDispatch(
   pathname,
   pageOverride,
   sortBy,
-  shouldUpdateRoute = true
+  shouldUpdateRoute = true,
+  locale = DEFAULT_LOCALE,
 ) {
   dispatch(dataRequested());
   try {
@@ -271,7 +358,8 @@ export async function fetchDataAndDispatch(
       places,
       exploreState,
       pageOverride,
-      sortBy
+      sortBy,
+      locale,
     );
     dispatch(dataReceived(responseData));
     if (shouldUpdateRoute) {

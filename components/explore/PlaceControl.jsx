@@ -5,6 +5,7 @@ import {
   updateCountry,
   updatePlaceType,
 } from "../../features/exploreSlice";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 
 const getClassName = (placetype, activePlaceType, loading) => {
   if (placetype === activePlaceType) {
@@ -19,7 +20,8 @@ const getClassName = (placetype, activePlaceType, loading) => {
   }
 };
 
-export default function PlaceControl({places}) {
+export default function PlaceControl({places, locale}) {
+  const t = getExploreTranslations(locale);
   const loading = false;
   const dispatch = useDispatch();
   const {city, country, placeType} = useSelector(state => state.explore);
@@ -38,7 +40,7 @@ export default function PlaceControl({places}) {
             id="birthplace"
             className={getClassName("birthplace", placeType, loading)}
           >
-            Born in
+            {t("bornIn")}
           </a>
         </li>
         <li>
@@ -52,7 +54,7 @@ export default function PlaceControl({places}) {
             id="deathplace"
             className={getClassName("deathplace", placeType, loading)}
           >
-            Died in
+            {t("diedIn")}
           </a>
         </li>
       </ul>
@@ -62,10 +64,12 @@ export default function PlaceControl({places}) {
         value={country}
         onChange={e => dispatch(updateCountry(e.target.value))}
       >
-        <option value="all">All Countries</option>
-        {places
+        <option value="all">{t("allCountries")}</option>
+        {[...places]
           .filter(c => c.country.country_code)
-          .sort((a, b) => a.country.country.localeCompare(b.country.country))
+          .sort((a, b) =>
+            a.country.country.localeCompare(b.country.country, locale)
+          )
           .map(c => (
             <option
               key={`${c.country.country_code}-${c.country.id}`}
@@ -82,7 +86,7 @@ export default function PlaceControl({places}) {
         value={city}
         onChange={e => dispatch(updateCity(e.target.value))}
       >
-        <option value="all">All Cities</option>
+        <option value="all">{t("allCities")}</option>
         {country !== "all" &&
         places.length &&
         places.find(c => `${c.country.country_code}` === `${country}`)
@@ -102,7 +106,7 @@ export default function PlaceControl({places}) {
       </select>
 
       <p className="place-control-note">
-        Only places with at least 5 people born there are listed.
+        {t("placeLimit")}
       </p>
     </div>
   );

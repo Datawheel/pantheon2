@@ -1,4 +1,9 @@
-import {COLORS_CONTINENT, COLORS_DOMAIN, FORMATTERS} from "../../utils/consts";
+import {COLORS_CONTINENT, COLORS_DOMAIN} from "../../utils/consts";
+import {
+  formatExploreNumber,
+  formatExploreYear,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
 import {
   autoBins,
   calculateLinearYearBuckets,
@@ -36,13 +41,14 @@ export function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
-export function formatChartValue(value) {
+export function formatChartValue(value, locale = "en") {
   const n = Number(value);
   if (!Number.isFinite(n)) return "0";
-  if (Math.abs(n) >= 10 || Number.isInteger(n)) {
-    return FORMATTERS.commas(Math.round(n));
-  }
-  return n.toLocaleString(undefined, {maximumFractionDigits: 2});
+  return formatExploreNumber(
+    Math.abs(n) >= 10 || Number.isInteger(n) ? Math.round(n) : n,
+    locale,
+    {maximumFractionDigits: 2},
+  );
 }
 
 export function setupResize(chart, element) {
@@ -79,14 +85,21 @@ function trackTopPeople(topPeople, person, limit = 3) {
   if (topPeople.length > limit) topPeople.length = limit;
 }
 
-export function formatTopPeopleHtml(people = []) {
+export function formatTopPeopleHtml(people = [], locale = "en") {
   if (!people.length) return "";
 
-  const peopleLabel = people.length === 1 ? "Person" : "People";
-  let html = `<div style="margin-top: 10px; font-size: 10px; letter-spacing: 0.5px; color: #888; text-transform: uppercase;">Top Ranked ${peopleLabel}</div>`;
+  const t = getExploreTranslations(locale);
+  const peopleLabel = people.length === 1
+    ? t("topRankedPerson")
+    : t("topRankedPeople");
+  let html = `<div style="margin-top: 10px; font-size: 10px; letter-spacing: 0.5px; color: #888; text-transform: uppercase;">${escapeHtml(peopleLabel)}</div>`;
   people.forEach(person => {
     const yearStr =
-      person.birthyear != null ? `b.${FORMATTERS.year(person.birthyear)}` : "";
+      person.birthyear != null
+        ? t("bornAbbreviation", {
+            year: formatExploreYear(person.birthyear, locale),
+          })
+        : "";
     html += `<div style="margin-top: 2px; font-size: 12px;"><strong style="color: #222;">${escapeHtml(person.name)}</strong> <span style="color: #888;">${escapeHtml(yearStr)}</span></div>`;
   });
   return html;
@@ -101,7 +114,8 @@ function buildOccupationLookup(occupations = []) {
   }, {});
 }
 
-function normalizePerson(person, occupationLookup) {
+function normalizePerson(person, occupationLookup, locale) {
+  const t = getExploreTranslations(locale);
   const occupationId =
     person.occupation_id ?? person.occupation?.id ?? person.occupation;
   const occupation =
@@ -123,7 +137,10 @@ function normalizePerson(person, occupationLookup) {
     bornCountry: person.bplace_country?.country || null,
     bornCountryId: person.bplace_country?.id || null,
     bornCountrySlug: person.bplace_country?.slug || null,
-    bornContinent: person.bplace_country?.continent || null,
+    bornContinent: person.bplace_country?.continent
+      ? t(person.bplace_country.continent.toLowerCase())
+      : null,
+    bornContinentKey: person.bplace_country?.continent || null,
     bornPlace: person.bplace_geonameid?.place || null,
     bornPlaceId: person.bplace_geonameid?.id || null,
     bornPlaceSlug: person.bplace_geonameid?.slug || null,
@@ -135,7 +152,7 @@ function domainColor(row) {
 }
 
 function continentColor(row) {
-  return COLORS_CONTINENT[row.bornContinent] || EMPTY_COLOR;
+  return COLORS_CONTINENT[row.bornContinentKey] || EMPTY_COLOR;
 }
 
 function occupationLevels() {
@@ -171,7 +188,7 @@ function placeLevels(rows) {
         name: row => row.bornCountry,
         color: continentColor,
         order: row =>
-          CONTINENT_ORDER.get(row.bornContinent) ?? Number.MAX_SAFE_INTEGER,
+          CONTINENT_ORDER.get(row.bornContinentKey) ?? Number.MAX_SAFE_INTEGER,
         profileType: () => "country",
         slug: row => row.bornCountrySlug,
       },
@@ -191,7 +208,7 @@ function placeLevels(rows) {
       name: row => row.bornContinent,
       color: continentColor,
       order: row =>
-        CONTINENT_ORDER.get(row.bornContinent) ?? Number.MAX_SAFE_INTEGER,
+        CONTINENT_ORDER.get(row.bornContinentKey) ?? Number.MAX_SAFE_INTEGER,
     },
     {
       id: "country",
@@ -207,9 +224,17 @@ function hasYear(row, yearType) {
   return row[yearType] !== null && row[yearType] !== undefined;
 }
 
-export function buildExploreRows(data, occupations, show, yearType) {
+export function buildExploreRows(
+  data,
+  occupations,
+  show,
+  yearType,
+  locale = "en",
+) {
   const occupationLookup = buildOccupationLookup(occupations);
-  let rows = (data || []).map(person => normalizePerson(person, occupationLookup));
+  let rows = (data || []).map(person =>
+    normalizePerson(person, occupationLookup, locale)
+  );
 
   if (show?.type === "places") {
     rows = rows.filter(

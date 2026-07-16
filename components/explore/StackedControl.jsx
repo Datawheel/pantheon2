@@ -6,17 +6,19 @@ import {
   updateStackedPercent,
 } from "../../features/exploreSlice";
 import {autoBins, resolveTimeSeriesScale} from "../utils/vizHelpers";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 
 const SCALE_OPTIONS = [
-  {id: "auto", label: "Auto", value: null},
-  {id: "linear", label: "Linear", value: "linear"},
-  {id: "log", label: "Log", value: "log"},
+  {id: "auto", key: "auto", value: null},
+  {id: "linear", key: "linear", value: "linear"},
+  {id: "log", key: "log", value: "log"},
 ];
 
 const BIN_MIN = 4;
 const BIN_MAX = 50;
 
-export default function StackedControl() {
+export default function StackedControl({locale}) {
+  const t = getExploreTranslations(locale);
   const dispatch = useDispatch();
   const {viz, years, tsScale, tsBins, stackedPercent} = useSelector(
     state => state.explore
@@ -34,13 +36,15 @@ export default function StackedControl() {
 
   return (
     <div className="filter stacked-control">
-      <h3>{isStacked ? "Stacked options" : "Time chart options"}</h3>
+      <h3>{t(isStacked ? "stackedOptions" : "timeChartOptions")}</h3>
 
       <div className="stacked-field">
         <label className="stacked-label">
-          Scale{" "}
+          {t("scale")}{" "}
           {tsScale === null ? (
-            <span className="stacked-hint">(auto: {resolvedScale})</span>
+            <span className="stacked-hint">
+              ({t("autoResolved", {scale: t(resolvedScale)})})
+            </span>
           ) : null}
         </label>
         <ul className="items options flat-options filter">
@@ -54,7 +58,7 @@ export default function StackedControl() {
                   dispatch(updateTsScale(option.value));
                 }}
               >
-                {option.label}
+                {t(option.key)}
               </a>
             </li>
           ))}
@@ -63,11 +67,11 @@ export default function StackedControl() {
 
       <div className="stacked-field">
         <label className="stacked-label" htmlFor="stacked-bins">
-          Year groupings: <strong>{effectiveBins}</strong>
+          {t("yearGroupings", {count: effectiveBins})}
         </label>
         {resolvedScale === "linear" && yearsPerBin ? (
           <span className="stacked-hint stacked-hint-block">
-            ~{yearsPerBin} yr each
+            {t("yearsEach", {count: yearsPerBin})}
           </span>
         ) : null}
         <input
@@ -88,7 +92,7 @@ export default function StackedControl() {
             className={stackedPercent ? "active" : ""}
             htmlFor="stackedPercent"
           >
-            Show as percentage
+            {t("showAsPercentage")}
           </label>
           <input
             type="checkbox"

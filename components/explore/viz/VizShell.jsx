@@ -6,8 +6,10 @@ import PStacked from "../../../components/explore/viz/PStacked";
 import PLine from "../../../components/explore/viz/PLine";
 import PMap from "../../../components/explore/viz/PMap";
 import "./Viz.css";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 
-export default function VizShell({occupations}) {
+export default function VizShell({occupations, locale}) {
+  const t = getExploreTranslations(locale);
   const exploreState = useSelector(state => state.explore);
   const {
     data,
@@ -24,7 +26,7 @@ export default function VizShell({occupations}) {
   if (dataLoading) {
     return (
       <div className="explore-viz-container">
-        <Spinner />
+        <Spinner label={t("loading")} />
       </div>
     );
   }
@@ -33,7 +35,7 @@ export default function VizShell({occupations}) {
     return (
       <div className="explore-viz-container">
         <div className="loading-img">
-          <p>No data found.</p>
+          <p>{t("noDataFound")}</p>
         </div>
       </div>
     );
@@ -69,6 +71,7 @@ export default function VizShell({occupations}) {
           scale={tsScale}
           binCount={tsBins}
           percent={stackedPercent}
+          locale={locale}
         />
       ) : null}
     </div>

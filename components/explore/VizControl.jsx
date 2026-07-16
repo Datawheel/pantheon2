@@ -1,22 +1,24 @@
 "use client";
 import {useDispatch, useSelector} from "react-redux";
 import {updateViz} from "../../features/exploreSlice";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 
 const allVizTypes = [
-  {id: "Treemap", name: "Tree Map"},
-  {id: "StackedArea", name: "Stacked"},
-  {id: "LineChart", name: "Line Chart"},
-  {id: "Map", name: "Map"},
+  {id: "Treemap", key: "treeMap"},
+  {id: "StackedArea", key: "stacked"},
+  {id: "LineChart", key: "lineChart"},
+  {id: "Map", key: "map"},
 ];
 
-export default function VizControl() {
+export default function VizControl({locale}) {
+  const t = getExploreTranslations(locale);
   const loading = false;
   const dispatch = useDispatch();
   const {viz} = useSelector(state => state.explore);
 
   return (
     <div className="filter">
-      <h3>Make a</h3>
+      <h3>{t("makeA")}</h3>
       <ul className="items options viztype-options">
         {allVizTypes.map(v => (
           <li key={v.id}>
@@ -34,7 +36,7 @@ export default function VizControl() {
                   loading ? "disabled" : null
                 } ${viz === v.id.toLowerCase() ? "active" : ""}`}
               >
-                {v.name}
+                {t(v.key)}
               </a>
             </h4>
           </li>

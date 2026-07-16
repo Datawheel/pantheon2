@@ -1,8 +1,10 @@
 "use client";
 import {useDispatch, useSelector} from "react-redux";
 import {updateOccupation} from "../../features/exploreSlice";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 
-export default function OccupationControl({nestedOccupations}) {
+export default function OccupationControl({nestedOccupations, locale}) {
+  const t = getExploreTranslations(locale);
   const loading = false;
   const dispatch = useDispatch();
   const {occupation} = useSelector(state => state.explore);
@@ -10,7 +12,7 @@ export default function OccupationControl({nestedOccupations}) {
   return (
     <div className="filter prof-control">
       <div className="">
-        <h3>Working in</h3>
+        <h3>{t("workingIn")}</h3>
       </div>
 
       <div>
@@ -20,7 +22,7 @@ export default function OccupationControl({nestedOccupations}) {
           onChange={e => dispatch(updateOccupation(e.target.value))}
         >
           <option value="all" data-occupations="all">
-            All Occupations
+            {t("allOccupations")}
           </option>
           {nestedOccupations
             ? nestedOccupations.map(domain => (
@@ -29,7 +31,7 @@ export default function OccupationControl({nestedOccupations}) {
                     value={domain.domain.id}
                     data-occupations={domain.domain.occupations}
                   >
-                    All {domain.domain.name} occupations
+                    {t("allDomainOccupations", {domain: domain.domain.name})}
                   </option>
                   {domain.occupations.map(occ => (
                     <option

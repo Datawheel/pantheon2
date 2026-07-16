@@ -1,7 +1,10 @@
 "use client";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {FORMATTERS} from "../utils/consts";
+import {
+  formatExploreYear,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
 import {updateYears, updateYearType} from "../../features/exploreSlice";
 
 const ENTER_KEY_CODE = 13;
@@ -31,7 +34,8 @@ const getClasName = (yearType, activeYearType, loading) => {
   }
 };
 
-export default function YearControl() {
+export default function YearControl({locale}) {
+  const t = getExploreTranslations(locale);
   const loading = false;
   const dispatch = useDispatch();
   const {years, yearType} = useSelector(state => state.explore);
@@ -81,7 +85,7 @@ export default function YearControl() {
             id="birthyear"
             className={getClasName("birthyear", yearType, loading)}
           >
-            Born
+            {t("born")}
           </a>
         </li>
         <li>
@@ -91,7 +95,7 @@ export default function YearControl() {
             id="deathyear"
             className={getClasName("deathyear", yearType, loading)}
           >
-            Died
+            {t("died")}
           </a>
         </li>
       </ul>
@@ -103,13 +107,13 @@ export default function YearControl() {
           value={
             tempYearStart !== null && !tempYearEnd
               ? tempYearStart
-              : FORMATTERS.year(years[0])
+              : formatExploreYear(years[0], locale)
           }
           onChange={yearChange}
           onKeyDown={yearChange}
           onBlur={yearChange}
         />
-        <span>and</span>
+        <span>{t("and")}</span>
         <input
           disabled={loading}
           type="text"
@@ -117,7 +121,7 @@ export default function YearControl() {
           value={
             !tempYearStart && tempYearEnd !== null
               ? tempYearEnd
-              : FORMATTERS.year(years[1])
+              : formatExploreYear(years[1], locale)
           }
           onChange={yearChange}
           onKeyDown={yearChange}

@@ -11,8 +11,12 @@ const SITE_URL = "https://pantheon.world";
  * @returns {string}
  */
 export function buildCanonical(locale, path) {
+  return `${SITE_URL}${localizePath(locale, path)}`;
+}
+
+export function localizePath(locale, path) {
   const prefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
-  return `${SITE_URL}${prefix}${path}`;
+  return `${prefix}${path}`;
 }
 
 /**

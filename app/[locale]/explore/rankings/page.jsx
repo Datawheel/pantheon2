@@ -8,11 +8,13 @@ import {
   buildNestedOccupations,
   buildNestedPlaces,
   buildRankingsMetadata,
+  localizeExploreOccupations,
+  localizeExplorePlaces,
   parseRankingsSearchParams,
 } from "@/lib/rankings";
 
-const getPlaces = cache(async function getPlaces() {
-  const url = `${BASE_API}/place?select=id,place,lat,lon,slug,country:country(id,country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died&num_born=gte.5`;
+const getPlaces = cache(async function getPlaces(locale) {
+  const url = `${BASE_API}/place?select=id,place,lat,lon,slug,country:country(id,country,localized_country:translations->${locale}->>country,slug,country_num,country_code,continent,region),country_id:country,num_born,num_died&num_born=gte.5`;
   return await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.LONG}},
@@ -20,8 +22,8 @@ const getPlaces = cache(async function getPlaces() {
   );
 });
 
-const getOccupations = cache(async function getOccupations() {
-  const url = `${BASE_API}/occupation?order=num_born.desc.nullslast`;
+const getOccupations = cache(async function getOccupations(locale) {
+  const url = `${BASE_API}/occupation?select=id,occupation,localized_occupation:translations->${locale}->>occupation,industry,localized_industry:translations->${locale}->>industry,domain,localized_domain:translations->${locale}->>domain,group,num_born,num_born_men,num_born_women,hpi,l,occupation_slug,industry_slug,domain_slug,group_slug,hpi_avg&order=num_born.desc.nullslast`;
   return await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.LONG}},
@@ -36,17 +38,20 @@ export async function generateMetadata(props) {
     ? params.locale
     : DEFAULT_LOCALE;
 
-  const [places, occupations] = await Promise.all([
-    getPlaces(),
-    getOccupations(),
+  const [rawPlaces, rawOccupations] = await Promise.all([
+    getPlaces(locale),
+    getOccupations(locale),
   ]);
+  const places = localizeExplorePlaces(rawPlaces, locale);
+  const occupations = localizeExploreOccupations(rawOccupations, locale);
   const nestedPlaces = buildNestedPlaces(places);
-  const nestedOccupations = buildNestedOccupations(occupations);
+  const nestedOccupations = buildNestedOccupations(occupations, locale);
   const initialExploreState = parseRankingsSearchParams(searchParams, occupations);
   const metadata = buildRankingsMetadata(
     initialExploreState,
     nestedPlaces,
     nestedOccupations,
+    locale,
   );
 
   return {
@@ -70,11 +75,17 @@ export async function generateMetadata(props) {
 }
 
 export default async function Page(props) {
+  const params = await props.params;
   const searchParams = await props.searchParams;
-  const [places, occupations] = await Promise.all([
-    getPlaces(),
-    getOccupations(),
+  const locale = SUPPORTED_LOCALES.includes(params?.locale)
+    ? params.locale
+    : DEFAULT_LOCALE;
+  const [rawPlaces, rawOccupations] = await Promise.all([
+    getPlaces(locale),
+    getOccupations(locale),
   ]);
+  const places = localizeExplorePlaces(rawPlaces, locale);
+  const occupations = localizeExploreOccupations(rawOccupations, locale);
   const nestedPlaces = buildNestedPlaces(places);
   const initialExploreState = parseRankingsSearchParams(searchParams, occupations);
 
@@ -85,6 +96,7 @@ export default async function Page(props) {
         places={nestedPlaces}
         occupations={occupations}
         pageType="rankings"
+        locale={locale}
         initialExploreState={initialExploreState}
       />
       <div className="explore-body"></div>

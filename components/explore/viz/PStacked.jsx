@@ -2,7 +2,11 @@
 
 import {useEffect, useMemo, useRef, useState} from "react";
 import {initEChart} from "@/components/utils/echarts";
-import {FORMATTERS} from "../../utils/consts";
+import {
+  formatExploreNumber,
+  formatExploreYear,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
 import {
   buildExploreRows,
   buildTimeSeries,
@@ -16,8 +20,6 @@ const CAL_ICON =
   '<rect x="3" y="4.5" width="18" height="17" rx="2.5"/>' +
   '<path d="M3 9.5h18"/><path d="M8 2.5v4"/><path d="M16 2.5v4"/></svg>';
 
-const peopleWord = n => (n === 1 ? "person" : "people");
-
 export default function PStacked({
   data,
   occupations,
@@ -27,7 +29,9 @@ export default function PStacked({
   scale,
   binCount,
   percent = false,
+  locale,
 }) {
+  const t = useMemo(() => getExploreTranslations(locale), [locale]);
   const chartRef = useRef(null);
   const echartRef = useRef(null);
   const focalRef = useRef(-1);
@@ -36,14 +40,20 @@ export default function PStacked({
   const [soloDomains, setSoloDomains] = useState(() => new Set());
 
   const timeSeries = useMemo(() => {
-    const {rows, levels} = buildExploreRows(data, occupations, show, yearType);
+    const {rows, levels} = buildExploreRows(
+      data,
+      occupations,
+      show,
+      yearType,
+      locale,
+    );
     return buildTimeSeries(rows, levels, yearType, {
       yearRange: years,
       scale,
       binCount,
       percent,
     });
-  }, [data, occupations, show, yearType, years, scale, binCount, percent]);
+  }, [data, occupations, show, yearType, years, scale, binCount, percent, locale]);
 
   // Effective solo set: ignore any soloed domains that no longer exist after a
   // data/legend change (empty = all visible). Mirror it to a ref for handlers.
@@ -124,7 +134,7 @@ export default function PStacked({
         `display:flex;align-items:center;justify-content:center;flex:0 0 auto;">${CAL_ICON}</div>` +
         "<div>" +
         `<div style="font-size:${YEAR_FS}px;font-weight:700;line-height:1.05;color:#222;">${escapeHtml(rows[0].axisValue)}</div>` +
-        `<div style="font-size:${SUB_FS}px;color:#8a857c;margin-top:1px;">${FORMATTERS.commas(totalPeople)} ${peopleWord(totalPeople)}</div>` +
+        `<div style="font-size:${SUB_FS}px;color:#8a857c;margin-top:1px;">${formatExploreNumber(totalPeople, locale)} ${t(totalPeople === 1 ? "person" : "peopleCount")}</div>` +
         "</div></div>";
       html += '<div style="height:1px;background:#ededea;"></div>';
 
@@ -139,7 +149,7 @@ export default function PStacked({
           `<div style="border-left:${compact ? 3 : 4}px solid ${focalSeries.color};padding-left:${compact ? 9 : 11}px;">` +
           `<div style="font-size:${TITLE_FS}px;font-weight:700;letter-spacing:0.4px;line-height:1.05;` +
           `text-transform:uppercase;color:${focalSeries.color};">${escapeHtml(focalSeries.name)}</div>` +
-          `<div style="font-size:${SUB_FS}px;color:#8a857c;margin-top:2px;">${FORMATTERS.commas(count)} ${peopleWord(count)}${pct}</div>` +
+          `<div style="font-size:${SUB_FS}px;color:#8a857c;margin-top:2px;">${formatExploreNumber(count, locale)} ${t(count === 1 ? "person" : "peopleCount")}${pct}</div>` +
           "</div></div>";
         html += `<div style="height:1px;background:#ededea;margin:${compact ? 10 : 12}px ${PX}px 0;"></div>`;
 
@@ -151,12 +161,14 @@ export default function PStacked({
           html +=
             `<div style="padding:${compact ? 9 : 11}px ${PX}px 0;">` +
             `<div style="font-size:${LABEL_FS}px;letter-spacing:0.7px;color:#aaa49b;` +
-            `text-transform:uppercase;margin-bottom:${compact ? 6 : 8}px;">Top Ranked People</div>`;
+            `text-transform:uppercase;margin-bottom:${compact ? 6 : 8}px;">${t("topRankedPeople")}</div>`;
           html += people
             .map(person => {
               const yr =
                 person.birthyear != null
-                  ? `b.${FORMATTERS.year(person.birthyear)}`
+                  ? t("bornAbbreviation", {
+                      year: formatExploreYear(person.birthyear, locale),
+                    })
                   : "";
               return (
                 `<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:${PEOPLE_MB}px;">` +
@@ -182,13 +194,13 @@ export default function PStacked({
             `<span style="width:${DOT}px;height:${DOT}px;border-radius:50%;background:${item.color};flex:0 0 auto;margin-right:${compact ? 9 : 11}px;"></span>` +
             `<span style="font-size:${ROW_FS}px;letter-spacing:0.3px;color:#3a3a3a;text-transform:uppercase;${bold}">${escapeHtml(item.name)}</span>` +
             `<span style="flex:1;border-bottom:1px dotted #d9d5ce;margin:0 8px;transform:translateY(-3px);"></span>` +
-            `<span style="font-size:${ROW_FS}px;color:#3a3a3a;${bold}">${FORMATTERS.commas(item.count)}</span>` +
+            `<span style="font-size:${ROW_FS}px;color:#3a3a3a;${bold}">${formatExploreNumber(item.count, locale)}</span>` +
             "</div>"
           );
         })
         .join("");
       if (hidden > 0) {
-        html += `<div style="font-size:${LABEL_FS + 1}px;color:#aaa49b;margin-top:1px;">(and ${hidden} more)</div>`;
+        html += `<div style="font-size:${LABEL_FS + 1}px;color:#aaa49b;margin-top:1px;">${t("andMore", {count: formatExploreNumber(hidden, locale)})}</div>`;
       }
       html += "</div></div>";
 
@@ -232,8 +244,8 @@ export default function PStacked({
       yAxis: {
         type: "value",
         name: percent
-          ? "Share of Memorable Individuals"
-          : "Globally Memorable Individuals",
+          ? t("shareOfMemorableIndividuals")
+          : t("globallyMemorableIndividuals"),
         nameLocation: "middle",
         nameGap: 42,
         max: percent ? 100 : undefined,
@@ -247,7 +259,9 @@ export default function PStacked({
           fontFamily: "Amiko, Arial, sans-serif",
           formatter: percent
             ? value => `${value}%`
-            : value => (value % 1 ? "" : FORMATTERS.commas(Math.round(value))),
+            : value => (value % 1
+              ? ""
+              : formatExploreNumber(Math.round(value), locale)),
         },
         splitLine: {lineStyle: {color: "#D6D6D0"}},
       },
@@ -349,7 +363,7 @@ export default function PStacked({
       chart.dispose();
       echartRef.current = null;
     };
-  }, [timeSeries, percent]);
+  }, [timeSeries, percent, locale, t]);
 
   // Apply solo selection to the existing chart without a full rebuild.
   useEffect(() => {
@@ -380,7 +394,7 @@ export default function PStacked({
   };
 
   if (!timeSeries.series.length) {
-    return <div>No data available</div>;
+    return <div>{t("noDataAvailable")}</div>;
   }
 
   return (
@@ -389,7 +403,7 @@ export default function PStacked({
         className="pantheon-echart"
         ref={chartRef}
         role="img"
-        aria-label="Explore stacked area chart"
+        aria-label={t("exploreStackedChart")}
       />
       <div className="pantheon-echart-legend">
         {timeSeries.legendItems.map(item => {
@@ -402,7 +416,7 @@ export default function PStacked({
               key={item.name}
               onClick={() => toggleDomain(item.name)}
               aria-pressed={effectiveSolo.has(item.name)}
-              title={`Solo ${item.name}`}
+              title={t("solo", {name: item.name})}
             >
               <span style={{backgroundColor: item.color}} />
               <span>{item.name}</span>

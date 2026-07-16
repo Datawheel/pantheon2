@@ -9,6 +9,11 @@ import {
 } from "@chenglou/pretext";
 import {initEChart} from "@/components/utils/echarts";
 import {
+  formatExploreNumber,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
+import {localizePath} from "@/app/utils/hreflang";
+import {
   TOOLTIP_STYLE,
   buildExploreRows,
   buildTreeData,
@@ -31,9 +36,9 @@ const MIN_LABEL_WIDTH = 28;
 const MIN_LABEL_HEIGHT = 22;
 const MAX_LABEL_CACHE_SIZE = 1500;
 
-function profilePath(profileType, slug) {
+function profilePath(profileType, slug, locale) {
   if (!profileType || !slug) return null;
-  return `/profile/${profileType}/${slug}`;
+  return localizePath(locale, `/profile/${profileType}/${slug}`);
 }
 
 const ROOT_LEVEL = {
@@ -261,20 +266,27 @@ function buildGraphicLabels(chart, total, fitCache) {
   return labels;
 }
 
-export default function PTreemap({data, occupations, show, yearType}) {
+export default function PTreemap({data, occupations, show, yearType, locale}) {
+  const t = useMemo(() => getExploreTranslations(locale), [locale]);
   const chartRef = useRef(null);
   const fitCacheRef = useRef(new Map());
   const isPlaces = show?.type === "places";
 
   const {treeData, total, legendItems} = useMemo(() => {
-    const {rows, levels} = buildExploreRows(data, occupations, show, yearType);
+    const {rows, levels} = buildExploreRows(
+      data,
+      occupations,
+      show,
+      yearType,
+      locale,
+    );
     const tree = buildTreeData(rows, levels);
     return {
       treeData: tree,
       total: treeTotal(tree),
       legendItems: legendItemsFromTree(tree),
     };
-  }, [data, occupations, show, yearType]);
+  }, [data, occupations, show, yearType, locale]);
 
   useEffect(() => {
     const element = chartRef.current;
@@ -318,10 +330,10 @@ export default function PTreemap({data, occupations, show, yearType}) {
             html += `<div style="font-size: 10px; letter-spacing: 0.5px; color: #888; text-transform: uppercase; margin-bottom: 3px;">${escapeHtml(path)}</div>`;
           }
           html += `<div style="font-weight: 700; font-size: 15px; color: #222;">${escapeHtml(name)}</div>`;
-          html += `<div style="font-size: 12px; color: #666; margin-top: 2px;">${Number(value).toLocaleString()} ${value === 1 ? "person" : "people"} · ${percent}%</div>`;
-          html += formatTopPeopleHtml(datum.topPeople);
-          if (profilePath(datum.profileType, datum.slug)) {
-            html += `<div style="margin-top: 8px; font-size: 10px; color: #aaa;">Click to view profile</div>`;
+          html += `<div style="font-size: 12px; color: #666; margin-top: 2px;">${formatExploreNumber(Number(value), locale)} ${t(value === 1 ? "person" : "peopleCount")} · ${percent}%</div>`;
+          html += formatTopPeopleHtml(datum.topPeople, locale);
+          if (profilePath(datum.profileType, datum.slug, locale)) {
+            html += `<div style="margin-top: 8px; font-size: 10px; color: #aaa;">${t("clickToViewProfile")}</div>`;
           }
           return html;
         },
@@ -398,7 +410,11 @@ export default function PTreemap({data, occupations, show, yearType}) {
     }
 
     const handleClick = params => {
-      const path = profilePath(params?.data?.profileType, params?.data?.slug);
+      const path = profilePath(
+        params?.data?.profileType,
+        params?.data?.slug,
+        locale,
+      );
       if (path) window.location.href = path;
     };
     chart.on("click", handleClick);
@@ -428,10 +444,10 @@ export default function PTreemap({data, occupations, show, yearType}) {
       chart.off("click", handleClick);
       chart.dispose();
     };
-  }, [treeData, total, isPlaces]);
+  }, [treeData, total, isPlaces, locale, t]);
 
   if (!treeData.length) {
-    return <div>No data available</div>;
+    return <div>{t("noDataAvailable")}</div>;
   }
 
   return (
@@ -440,7 +456,7 @@ export default function PTreemap({data, occupations, show, yearType}) {
         className="pantheon-echart pantheon-echart-treemap"
         ref={chartRef}
         role="img"
-        aria-label="Explore treemap"
+        aria-label={t("exploreTreemap")}
       />
       <div className="pantheon-echart-legend">
         {legendItems.map(item => (

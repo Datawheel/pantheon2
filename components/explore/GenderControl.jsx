@@ -1,6 +1,7 @@
 "use client";
 import {useDispatch, useSelector} from "react-redux";
 import {updateGender} from "../../features/exploreSlice";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 
 const getClassName = (genderId, genderName, currentGender, loading) => {
   if (genderId === currentGender) {
@@ -15,14 +16,15 @@ const getClassName = (genderId, genderName, currentGender, loading) => {
   }
 };
 
-export default function GenderControl() {
+export default function GenderControl({locale}) {
+  const t = getExploreTranslations(locale);
   const loading = false;
   const dispatch = useDispatch();
   const {gender} = useSelector(state => state.explore);
 
   return (
     <div className="filter">
-      <h3>Filtered By</h3>
+      <h3>{t("filteredBy")}</h3>
       <ul className="items options flat-options filter">
         <li>
           <a
@@ -35,7 +37,7 @@ export default function GenderControl() {
             id="allgender"
             className={getClassName(null, "allgender", gender, loading)}
           >
-            All
+            {t("all")}
           </a>
         </li>
         <li>
@@ -49,7 +51,7 @@ export default function GenderControl() {
             id="femalegender"
             className={getClassName("F", "femalegender", gender, loading)}
           >
-            Females
+            {t("females")}
           </a>
         </li>
         <li>
@@ -63,7 +65,7 @@ export default function GenderControl() {
             id="malegender"
             className={getClassName("M", "malegender", gender, loading)}
           >
-            Males
+            {t("males")}
           </a>
         </li>
       </ul>

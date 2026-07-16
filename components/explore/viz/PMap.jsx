@@ -4,6 +4,11 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import * as topojson from "topojson-client";
 import {initEChart, echarts} from "@/components/utils/echarts";
 import {
+  formatExploreNumber,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
+import {localizePath} from "@/app/utils/hreflang";
+import {
   escapeHtml,
   formatTopPeopleHtml,
   setupResize,
@@ -132,7 +137,8 @@ function buildMapPoints(data) {
   );
 }
 
-export default function PMap({data}) {
+export default function PMap({data, locale}) {
+  const t = useMemo(() => getExploreTranslations(locale), [locale]);
   const chartRef = useRef(null);
   const [features, setFeatures] = useState(null);
 
@@ -174,10 +180,10 @@ export default function PMap({data}) {
           const datum = params.data;
           const count = datum.value[2];
           let html = `<div style="font-weight:700;font-size:15px;color:#222;">${escapeHtml(datum.name)}</div>`;
-          html += `<div style="font-size:12px;color:#666;margin-top:2px;">${count.toLocaleString()} ${count === 1 ? "person" : "people"}</div>`;
-          html += formatTopPeopleHtml(datum.topPeople);
+          html += `<div style="font-size:12px;color:#666;margin-top:2px;">${formatExploreNumber(count, locale)} ${t(count === 1 ? "person" : "peopleCount")}</div>`;
+          html += formatTopPeopleHtml(datum.topPeople, locale);
           if (datum.slug) {
-            html += `<div style="margin-top:8px;font-size:10px;color:#aaa;">Click to view profile</div>`;
+            html += `<div style="margin-top:8px;font-size:10px;color:#aaa;">${t("clickToViewProfile")}</div>`;
           }
           return html;
         },
@@ -234,7 +240,10 @@ export default function PMap({data}) {
 
     const handleClick = params => {
       if (params.seriesType === "scatter" && params.data?.slug) {
-        window.location.href = `/profile/place/${params.data.slug}`;
+        window.location.href = localizePath(
+          locale,
+          `/profile/place/${params.data.slug}`,
+        );
       }
     };
     chart.on("click", handleClick);
@@ -245,10 +254,10 @@ export default function PMap({data}) {
       chart.off("click", handleClick);
       chart.dispose();
     };
-  }, [features, points, maxCount]);
+  }, [features, points, maxCount, locale, t]);
 
   if (!points.length) {
-    return <div>No data available</div>;
+    return <div>{t("noDataAvailable")}</div>;
   }
 
   return (
@@ -256,7 +265,7 @@ export default function PMap({data}) {
       className="pantheon-echart"
       ref={chartRef}
       role="img"
-      aria-label="Explore map"
+      aria-label={t("exploreMap")}
     />
   );
 }

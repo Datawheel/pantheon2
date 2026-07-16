@@ -99,9 +99,10 @@ export const exploreSlice = createSlice({
     },
     updateShowDepth: (state, action) => {
       const {page, showDepth, showType} = action.payload;
+      const pageChanged = state.page !== page;
       state.show = {type: showType, depth: showDepth};
       state.page = page;
-      if (page === "rankings") {
+      if (page === "rankings" || pageChanged) {
         state.data = null;
         state.dataPageIndex = 0;
       }

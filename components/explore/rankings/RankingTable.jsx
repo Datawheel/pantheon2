@@ -15,8 +15,13 @@ import {
   updateSorting,
 } from "../../../features/exploreSlice";
 import "./Rankings.css";
+import {
+  formatExploreNumber,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
 
-export default function RankingTable({baseApi, places}) {
+export default function RankingTable({baseApi, places, locale}) {
+  const t = getExploreTranslations(locale);
   const exploreState = useSelector(state => state.explore);
   const {
     data,
@@ -60,8 +65,14 @@ export default function RankingTable({baseApi, places}) {
   const hasBirthdayFilter = birthMonth !== null || birthDay !== null;
   const hasNameSearch = nameSearch && nameSearch.trim().length >= 2;
   const columns = useMemo(
-    () => getColumns(show.type, show.depth, controlledPageIndex * pageSize, {hasBirthdayFilter, nameSearch: hasNameSearch}),
-    [controlledPageIndex, show.type, show.depth, hasBirthdayFilter, hasNameSearch]
+    () => getColumns(
+      show.type,
+      show.depth,
+      controlledPageIndex * pageSize,
+      {hasBirthdayFilter, nameSearch: hasNameSearch},
+      locale,
+    ),
+    [controlledPageIndex, show.type, show.depth, hasBirthdayFilter, hasNameSearch, locale]
   );
 
   const handleSortingChange = useCallback((updater) => {
@@ -113,7 +124,9 @@ export default function RankingTable({baseApi, places}) {
       router,
       pathname,
       pageNum,
-      sorting
+      sorting,
+      true,
+      locale,
     );
   };
 
@@ -124,7 +137,7 @@ export default function RankingTable({baseApi, places}) {
           <input
             type="text"
             className="ranking-search-input"
-            placeholder="Search by name..."
+            placeholder={t("searchByName")}
             value={searchInputVal}
             onChange={handleSearchChange}
           />
@@ -132,7 +145,7 @@ export default function RankingTable({baseApi, places}) {
             <button
               className="ranking-search-clear"
               onClick={handleSearchClear}
-              aria-label="Clear search"
+              aria-label={t("clearSearch")}
             >
               &times;
             </button>
@@ -170,7 +183,7 @@ export default function RankingTable({baseApi, places}) {
             {dataLoading
               ? (
                 <tr>
-                  <td colSpan={999}>Loading...</td>
+                  <td colSpan={999}>{t("loading")}</td>
                 </tr>
               )
               : (
@@ -190,8 +203,10 @@ export default function RankingTable({baseApi, places}) {
                   ))}
                   <tr>
                     <td colSpan={999}>
-                      Showing {table.getRowModel().rows.length} of ~{controlledPageCount * pageSize}{" "}
-                      results
+                      {t("showingResults", {
+                        shown: formatExploreNumber(table.getRowModel().rows.length, locale),
+                        total: formatExploreNumber(controlledPageCount * pageSize, locale),
+                      })}
                     </td>
                   </tr>
                 </>
@@ -201,37 +216,43 @@ export default function RankingTable({baseApi, places}) {
       </div>
       <div className="pagination">
         <button
+          aria-label={t("firstPage")}
           onClick={() => setPageAndFetchData(0)}
           disabled={!canPreviousPage || dataLoading}
         >
           {"<<"}
         </button>{" "}
         <button
+          aria-label={t("previousPage")}
           onClick={() => setPageAndFetchData(controlledPageIndex - 1)}
           disabled={!canPreviousPage || dataLoading}
         >
           {"<"}
         </button>{" "}
         <button
+          aria-label={t("nextPage")}
           onClick={() => setPageAndFetchData(controlledPageIndex + 1)}
           disabled={!canNextPage || dataLoading}
         >
           {">"}
         </button>{" "}
         <button
+          aria-label={t("lastPage")}
           onClick={() => setPageAndFetchData(pageCount - 1)}
           disabled={!canNextPage || dataLoading}
         >
           {">>"}
         </button>{" "}
         <span>
-          Page{" "}
           <strong>
-            {controlledPageIndex + 1} of {pageCount}
+            {t("pageOf", {
+              page: formatExploreNumber(controlledPageIndex + 1, locale),
+              pages: formatExploreNumber(pageCount, locale),
+            })}
           </strong>{" "}
         </span>
         <span>
-          | Go to page:{" "}
+          | {t("goToPage")}{" "}
           <input
             type="number"
             onChange={e => {

@@ -1,8 +1,7 @@
-const Spinner = () => (
+const Spinner = ({label = "Loading data"}) => (
   <div className="spinner">
     <p className="spinner-text">
-      {" "}
-      Loading data
+      {label}
       <span className="spinner-dot">.</span>
       <span className="spinner-dot">.</span>
       <span className="spinner-dot">.</span>

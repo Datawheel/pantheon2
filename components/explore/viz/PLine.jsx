@@ -2,7 +2,10 @@
 
 import {useEffect, useMemo, useRef} from "react";
 import {initEChart} from "@/components/utils/echarts";
-import {FORMATTERS} from "../../utils/consts";
+import {
+  formatExploreNumber,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
 import {
   buildExploreRows,
   buildTimeSeries,
@@ -11,7 +14,7 @@ import {
   setupResize,
 } from "./echartsData";
 
-function axisTooltip(params) {
+function axisTooltip(params, locale, t) {
   const rows = Array.isArray(params) ? params : [params];
   const visibleRows = rows
     .filter(row => Number(row.value) > 0)
@@ -24,13 +27,13 @@ function axisTooltip(params) {
   html += visibleRows
     .map(
       row =>
-        `${row.marker} ${escapeHtml(row.seriesName)}: ${formatChartValue(row.value)}`
+        `${row.marker} ${escapeHtml(row.seriesName)}: ${formatChartValue(row.value, locale)}`
     )
     .join("<br/>");
 
   const hidden = rows.filter(row => Number(row.value) > 0).length - visibleRows.length;
   if (hidden > 0) {
-    html += `<br/><span style="font-size:10px;color:gray;">(and ${hidden} more)</span>`;
+    html += `<br/><span style="font-size:10px;color:gray;">${escapeHtml(t("andMore", {count: formatExploreNumber(hidden, locale)}))}</span>`;
   }
   return html;
 }
@@ -43,17 +46,25 @@ export default function PLine({
   years,
   scale,
   binCount,
+  locale,
 }) {
+  const t = useMemo(() => getExploreTranslations(locale), [locale]);
   const chartRef = useRef(null);
 
   const timeSeries = useMemo(() => {
-    const {rows, levels} = buildExploreRows(data, occupations, show, yearType);
+    const {rows, levels} = buildExploreRows(
+      data,
+      occupations,
+      show,
+      yearType,
+      locale,
+    );
     return buildTimeSeries(rows, levels, yearType, {
       yearRange: years,
       scale,
       binCount,
     });
-  }, [data, occupations, show, yearType, years, scale, binCount]);
+  }, [data, occupations, show, yearType, years, scale, binCount, locale]);
 
   useEffect(() => {
     const element = chartRef.current;
@@ -66,7 +77,7 @@ export default function PLine({
         trigger: "axis",
         confine: true,
         axisPointer: {type: "cross"},
-        formatter: axisTooltip,
+        formatter: params => axisTooltip(params, locale, t),
       },
       grid: {
         top: 18,
@@ -91,7 +102,7 @@ export default function PLine({
       },
       yAxis: {
         type: "value",
-        name: "Globally Memorable Individuals",
+        name: t("globallyMemorableIndividuals"),
         nameLocation: "middle",
         nameGap: 42,
         nameTextStyle: {
@@ -103,7 +114,7 @@ export default function PLine({
           color: "#9E978D",
           fontFamily: "Amiko, Arial, sans-serif",
           formatter: value =>
-            value % 1 ? "" : FORMATTERS.commas(Math.round(value)),
+            value % 1 ? "" : formatExploreNumber(Math.round(value), locale),
         },
         splitLine: {lineStyle: {color: "#D6D6D0"}},
       },
@@ -136,10 +147,10 @@ export default function PLine({
       cleanupResize();
       chart.dispose();
     };
-  }, [timeSeries]);
+  }, [timeSeries, locale, t]);
 
   if (!timeSeries.series.length) {
-    return <div>No data available</div>;
+    return <div>{t("noDataAvailable")}</div>;
   }
 
   return (
@@ -148,7 +159,7 @@ export default function PLine({
         className="pantheon-echart"
         ref={chartRef}
         role="img"
-        aria-label="Explore line chart"
+        aria-label={t("exploreLineChart")}
       />
       <div className="pantheon-echart-legend">
         {timeSeries.legendItems.map(item => (

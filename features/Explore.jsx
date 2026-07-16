@@ -14,8 +14,10 @@ import {
   parseRankingsSearchParams,
 } from "@/lib/rankings";
 import {
-  FORMATTERS,
-} from "../components/utils/consts";
+  formatExploreYear,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
+import {localizePath} from "@/app/utils/hreflang";
 import {fetchDataAndDispatch, getQueryArgs} from "../components/utils/exploreHelpers";
 import {
   setFirstLoad,
@@ -45,6 +47,7 @@ function Explore({
   places,
   occupations,
   pageType,
+  locale,
   embed = false,
   initialExploreState = null,
 }) {
@@ -57,11 +60,15 @@ function Explore({
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const t = getExploreTranslations(locale);
 
-  const nestedOccupations = buildNestedOccupations(occupations);
+  const nestedOccupations = buildNestedOccupations(occupations, locale);
+  const routeExploreState = initialExploreState
+    || parseRankingsSearchParams(searchParams, occupations, pageType);
+  const pageChanged = exploreState.page !== pageType;
   const effectiveExploreState =
-    firstLoad && initialExploreState
-      ? {...exploreState, ...initialExploreState}
+    firstLoad || pageChanged
+      ? {...exploreState, ...routeExploreState, page: pageType}
       : exploreState;
   const filterFetchState = useMemo(() => ({
     city: exploreState.city,
@@ -115,8 +122,7 @@ function Explore({
   ]);
 
   useEffect(() => {
-    const initialState =
-      initialExploreState || parseRankingsSearchParams(searchParams, occupations, pageType);
+    const initialState = routeExploreState;
 
     dispatch(
       updateShowDepth({
@@ -142,12 +148,14 @@ function Explore({
     dispatch(updateTsBins(initialState.tsBins ?? null));
     dispatch(updateStackedPercent(initialState.stackedPercent ?? false));
     dispatch(setFirstLoad());
-    // This effect should only hydrate the initial store state from the URL once.
+    // Rehydrate when navigating between Explore routes. The Redux provider is
+    // shared across routes, so rankings state can otherwise leak into viz (and
+    // vice versa) during client-side navigation.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageType, pathname]);
 
   useEffect(() => {
-    if (!firstLoad) {
+    if (!firstLoad && !pageChanged) {
       fetchDataAndDispatch(
         baseApi,
         places,
@@ -157,11 +165,13 @@ function Explore({
         pathname,
         null,
         filterFetchState.sorting,
-        !embed
+        !embed,
+        locale,
       );
     }
   }, [
     firstLoad,
+    pageChanged,
     exploreState.city,
     exploreState.country,
     exploreState.gender,
@@ -185,6 +195,7 @@ function Explore({
     router,
     pathname,
     embed,
+    locale,
   ]);
 
   // Keep document.title, the description meta, and the canonical link in
@@ -201,6 +212,7 @@ function Explore({
       effectiveExploreState,
       places,
       nestedOccupations,
+      locale,
     );
     if (document.title !== metadata.title) {
       document.title = metadata.title;
@@ -213,7 +225,7 @@ function Explore({
     if (canonicalLink) {
       const origin = canonicalLink.getAttribute("href")?.match(/^https?:\/\/[^/]+/)?.[0]
         || "https://pantheon.world";
-      const nextCanonical = `${origin}${metadata.canonicalPath}`;
+      const nextCanonical = `${origin}${localizePath(locale, metadata.canonicalPath)}`;
       if (canonicalLink.getAttribute("href") !== nextCanonical) {
         canonicalLink.setAttribute("href", nextCanonical);
       }
@@ -223,6 +235,7 @@ function Explore({
     firstLoad,
     embed,
     pageType,
+    locale,
     places,
     nestedOccupations,
     effectiveExploreState.city,
@@ -262,17 +275,18 @@ function Explore({
     exploreState.stackedPercent,
   ]);
 
-  const metricSentence = buildRankingsMetricSentence(effectiveExploreState);
+  const metricSentence = buildRankingsMetricSentence(effectiveExploreState, locale);
 
-  const vizContent = data ? (
+  const activeData = pageChanged ? null : data;
+  const vizContent = activeData ? (
     pageType === "rankings" ? (
-      <RankingTable baseApi={baseApi} places={places} />
+      <RankingTable baseApi={baseApi} places={places} locale={locale} />
     ) : (
-      <VizShell occupations={occupations} />
+      <VizShell occupations={occupations} locale={locale} />
     )
   ) : (
     <div style={{position: "relative", width: "100%"}}>
-      <Spinner />
+      <Spinner label={t("loading")} />
     </div>
   );
 
@@ -284,6 +298,7 @@ function Explore({
             places={places}
             nestedOccupations={nestedOccupations}
             exploreState={effectiveExploreState}
+            locale={locale}
           />
         </div>
         <div className="explore-body">{vizContent}</div>
@@ -298,16 +313,22 @@ function Explore({
           places={places}
           nestedOccupations={nestedOccupations}
           exploreState={effectiveExploreState}
+          locale={locale}
         />
         {effectiveExploreState.years.length ? (
           <h3 className="explore-date">
-            {FORMATTERS.year(effectiveExploreState.years[0])} - {FORMATTERS.year(effectiveExploreState.years[1])}
+            {formatExploreYear(effectiveExploreState.years[0], locale)} - {formatExploreYear(effectiveExploreState.years[1], locale)}
           </h3>
         ) : null}
         {metricSentence ? <p>{metricSentence}</p> : null}
       </div>
       <div className="explore-body">
-        <Controls nestedOccupations={nestedOccupations} places={places} />
+        <Controls
+          nestedOccupations={nestedOccupations}
+          places={places}
+          locale={locale}
+          pageType={pageType}
+        />
         {vizContent}
       </div>
     </div>

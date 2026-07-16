@@ -1,913 +1,420 @@
 /* eslint react/display-name: 0 */
 import React from "react";
 import {Info} from "lucide-react";
+import {
+  formatExploreNumber,
+  formatExploreYear,
+  getExploreTranslations,
+} from "@/app/exploreTranslations";
+import {localizePath} from "@/app/utils/hreflang";
 import SimpleTooltip from "../../common/SimpleTooltip";
 import AnchorList from "../../utils/AnchorList";
 import PersonImage from "../../utils/PersonImage";
-import {FORMATTERS} from "../../utils/consts";
 
 const genderOrder = ["M", null, "F", "Non-binary"];
 
-const MONTH_NAMES = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-];
+function formatBirthday(birthyear, birthmonth, birthday, locale, t) {
+  if (!birthyear) return t("unknown");
+  if (!birthmonth || !birthday) return formatExploreYear(birthyear, locale);
+  const date = new Intl.DateTimeFormat(locale, {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(2000, birthmonth - 1, birthday)));
+  return `${date} ${formatExploreYear(birthyear, locale)}`;
+}
 
-const formatBirthday = (birthyear, birthmonth, birthday) => {
-  if (!birthyear) return "Unknown";
-  if (!birthmonth || !birthday) return FORMATTERS.year(birthyear);
-  const monthName = MONTH_NAMES[birthmonth - 1] || "";
-  return `${monthName} ${birthday}, ${FORMATTERS.year(birthyear)}`;
-};
+function tooltipHeader(content, label) {
+  return () => (
+    <SimpleTooltip className="table-tooltip-trigger" content={content}>
+      <div>
+        {label} <Info size={10} />
+      </div>
+    </SimpleTooltip>
+  );
+}
 
-const getColumns = (show, nesting, countOffset, options = {}) => {
-  const {hasBirthdayFilter = false} = options;
-  const COLUMNS = {
-    people: {
-      people: [
-        {
-          header: "Info",
-          columns: [
-            {
-              enableSorting: false,
-              header: "#",
-              id: "row",
-              accessorFn: options.nameSearch
-                ? (d) => d.rank
-                : (_d, i) => i + 1 + countOffset,
-              maxSize: 45,
-            },
-            {
-              enableSorting: false,
-              header: "",
-              accessorKey: "id",
-              cell: info => (
-                <PersonImage
-                  person={info.row.original}
-                  className="ranking-thumbnail"
-                  src={`/profile/people/${info.getValue()}.jpg`}
-                  fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                />
-              ),
-              maxSize: 70,
-            },
-            {
-              header: "Name",
-              accessorKey: "name",
-              style: {whiteSpace: "unset"},
-              cell: info => (
-                <a href={`/profile/person/${info.row.original.slug}`}>{info.getValue()}</a>
-              ),
-            },
-            {
-              id: "occupation_id",
-              header: "Occupation",
-              accessorFn: d => (d.occupation ? d.occupation.occupation : null),
-              cell: info => {
-                const value = info.getValue();
-                const original = info.row.original;
-                return value ? (
-                  <a href={`/profile/occupation/${original.occupation.occupation_slug}`}>
-                    {value}
-                  </a>
-                ) : (
-                  <span>-</span>
-                );
-              },
-            },
-            {
-              header: "Birth",
-              accessorKey: "birthyear",
-              cell: info => {
-                const value = info.getValue();
-                const original = info.row.original;
-                return hasBirthdayFilter ? (
-                  <span>{formatBirthday(value, original.birthmonth, original.birthday)}</span>
-                ) : value ? (
-                  <span>{FORMATTERS.year(value)}</span>
-                ) : (
-                  <span>{"Unknown"}</span>
-                );
-              },
-              minSize: hasBirthdayFilter ? 90 : 50,
-            },
-            {
-              header: "Death",
-              accessorKey: "deathyear",
-              cell: info => {
-                const value = info.getValue();
-                return value ? (
-                  <span>{FORMATTERS.year(value)}</span>
-                ) : (
-                  <span>{"-"}</span>
-                );
-              },
-              minSize: 45,
-            },
-            {
-              header: "Gender",
-              accessorKey: "gender",
-              cell: info => {
-                const value = info.getValue();
-                return (
-                  <span>
-                    {value === "M"
-                      ? "Male"
-                      : value === "F"
-                      ? "Female"
-                      : "Non-binary"}
-                  </span>
-                );
-              },
-              minSize: 65,
-              sortingFn: (rowA, rowB, columnId) => {
-                const a = rowA.getValue(columnId);
-                const b = rowB.getValue(columnId);
-                const aIndex = genderOrder.indexOf(a);
-                const bIndex = genderOrder.indexOf(b);
-                return bIndex < aIndex ? -1 : bIndex > aIndex ? 1 : 0;
-              },
-            },
-          ],
-        },
-        {
-          header: "Birthplace",
-          columns: [
-            {
-              id: "bplace_geonameid",
-              header: "City",
-              style: {whiteSpace: "unset"},
-              accessorFn: d =>
-                d.bplace_geonameid ? d.bplace_geonameid.place : null,
-              cell: info => {
-                const value = info.getValue();
-                const original = info.row.original;
-                return value ? (
-                  <a href={`/profile/place/${original.bplace_geonameid.slug}`}>
-                    {value}
-                  </a>
-                ) : (
-                  <span>-</span>
-                );
-              },
-            },
-            {
-              id: "bplace_country",
-              header: "Country",
-              style: {whiteSpace: "unset"},
-              accessorFn: d =>
-                d.bplace_country ? d.bplace_country.country : null,
-              cell: info => {
-                const value = info.getValue();
-                const original = info.row.original;
-                return value ? (
-                  <a href={`/profile/country/${original.bplace_country.slug}`}>
-                    {value}
-                  </a>
-                ) : (
-                  <span>-</span>
-                );
-              },
-            },
-          ],
-        },
-        {
-          header: "Deathplace",
-          columns: [
-            {
-              id: "dplace_geonameid",
-              header: "City",
-              style: {whiteSpace: "unset"},
-              accessorFn: d =>
-                d.dplace_geonameid ? d.dplace_geonameid.place : null,
-              cell: info => {
-                const value = info.getValue();
-                const original = info.row.original;
-                return value ? (
-                  <a href={`/profile/place/${original.dplace_geonameid.slug}`}>
-                    {value}
-                  </a>
-                ) : (
-                  <span>-</span>
-                );
-              },
-            },
-            {
-              id: "dplace_country",
-              header: "Country",
-              style: {whiteSpace: "unset"},
-              accessorFn: d =>
-                d.dplace_country ? d.dplace_country.country : null,
-              cell: info => {
-                const value = info.getValue();
-                const original = info.row.original;
-                return value ? (
-                  <a href={`/profile/country/${original.dplace_country.slug}`}>
-                    {value}
-                  </a>
-                ) : (
-                  <span>-</span>
-                );
-              },
-            },
-          ],
-        },
-        {
-          header: "Stats",
-          columns: [
-            {
-              header: () => (
-                <SimpleTooltip
-                  className="table-tooltip-trigger"
-                  content={"Wikipedia language editions"}
-                >
-                  <div>
-                    L <Info size={10} />
-                  </div>
-                </SimpleTooltip>
-              ),
-              accessorKey: "l",
-              minSize: 105,
-              className: "cell_numeric",
-              headerClassName: "nowrap",
-              sortDescFirst: true,
-            },
-            {
-              header: () => (
-                <SimpleTooltip
-                  className="table-tooltip-trigger"
-                  content={"Effective Wikipedia language editions"}
-                >
-                  <div>
-                    L* <Info size={10} />
-                  </div>
-                </SimpleTooltip>
-              ),
-              accessorKey: "l_",
-              cell: info => FORMATTERS.decimal(info.getValue()),
-              minSize: 105,
-              className: "cell_numeric",
-              headerClassName: "nowrap",
-              sortDescFirst: true,
-            },
-            {
-              header: () => (
-                <SimpleTooltip
-                  className="table-tooltip-trigger"
-                  content={
-                    "Non-english Wikipedia pageviews in the past 6 months"
-                  }
-                >
-                  <div>
-                    PVne <Info size={10} />
-                  </div>
-                </SimpleTooltip>
-              ),
-              accessorKey: "non_en_page_views",
-              cell: info => FORMATTERS.bigNum(info.getValue()),
-              size: 105,
-              headerClassName: "nowrap",
-              sortDescFirst: true,
-            },
-            {
-              header: () => (
-                <SimpleTooltip
-                  className="table-tooltip-trigger"
-                  content={
-                    "Coefficient of variation in Wikipedia Pageviews: to discount characters that have short periods of popularity"
-                  }
-                >
-                  <div>
-                    CV <Info size={10} />
-                  </div>
-                </SimpleTooltip>
-              ),
-              accessorKey: "coefficient_of_variation",
-              cell: info => FORMATTERS.decimal(info.getValue()),
-              minSize: 105,
-              className: "cell_numeric",
-              headerClassName: "nowrap",
-              sortDescFirst: true,
-            },
-            {
-              header: () => (
-                <SimpleTooltip
-                  className="table-tooltip-trigger"
-                  content={"Historical Popularity Index"}
-                >
-                  <div>
-                    HPI 2025 <Info size={10} />
-                  </div>
-                </SimpleTooltip>
-              ),
-              accessorKey: "hpi",
-              cell: info => FORMATTERS.decimal(info.getValue()),
-              minSize: 105,
-              className: "cell_numeric",
-              sortDescFirst: true,
-            },
-            {
-              header: () => (
-                <SimpleTooltip
-                  className="table-tooltip-trigger"
-                  content={"Historical Popularity Index"}
-                >
-                  <div>
-                    HPI 2024 <Info size={10} />
-                  </div>
-                </SimpleTooltip>
-              ),
-              accessorKey: "hpi_prev",
-              cell: info => {
-                const value = info.getValue();
-                return value ? FORMATTERS.decimal(value) : "-";
-              },
-              minSize: 105,
-              className: "cell_numeric",
-              sortDescFirst: true,
-            },
-            {
-              header: "Rank 2025",
-              accessorKey: "rank",
-              minSize: 45,
-              className: "cell_numeric",
-            },
-            {
-              header: "Rank 2024",
-              accessorKey: "rank_prev",
-              minSize: 45,
-              className: "cell_numeric",
-            },
-            {
-              header: "∆",
-              accessorKey: "rank_delta",
-              minSize: 45,
-              className: "cell_numeric",
-              cell: info => {
-                const value = info.getValue();
-                return value ? (
-                  value > 0 ? (
-                    <span className="u-positive-text u-positive-arrow">{`+${value}`}</span>
-                  ) : (
-                    <span className="u-negative-text u-negative-arrow">
-                      {value}
-                    </span>
-                  )
-                ) : (
-                  "-"
-                );
-              },
-            },
-          ],
-        },
-      ],
+function metricColumns(t, locale) {
+  const compact = value => formatExploreNumber(value || 0, locale, {
+    notation: "compact",
+    maximumFractionDigits: 2,
+  });
+  const decimal = value => formatExploreNumber(value || 0, locale, {
+    maximumFractionDigits: 2,
+  });
+  return [
+    {
+      header: tooltipHeader(t("historicalPopularityIndex"), "HPI 2022"),
+      accessorKey: "hpi",
+      cell: info => compact(info.getValue()),
+      minSize: 55,
+      className: "cell_numeric",
+      sortDescFirst: true,
     },
-    occupations: {
-      occupations: [
+    {
+      header: tooltipHeader(
+        t("averageHistoricalPopularityIndex"),
+        `${t("average")} HPI`,
+      ),
+      accessorKey: "avg_hpi",
+      cell: info => decimal(info.getValue()),
+      minSize: 55,
+      className: "cell_numeric",
+      sortDescFirst: true,
+    },
+    {
+      header: tooltipHeader(t("languageEditionCount"), "L"),
+      accessorKey: "langs",
+      cell: info => formatExploreNumber(info.getValue() || 0, locale),
+      minSize: 55,
+      className: "cell_numeric",
+      sortDescFirst: true,
+    },
+    {
+      header: tooltipHeader(
+        t("averageLanguageEditionCount"),
+        `${t("average")} L`,
+      ),
+      accessorKey: "avg_langs",
+      cell: info => decimal(info.getValue()),
+      minSize: 55,
+      className: "cell_numeric",
+      sortDescFirst: true,
+    },
+    {
+      header: t("topThree"),
+      accessorKey: "top_ranked",
+      cell: info => (
+        <AnchorList
+          items={info.getValue()}
+          name={person => person.name}
+          url={person => localizePath(locale, `/profile/person/${person.slug}/`)}
+          noAnd
+        />
+      ),
+    },
+  ];
+}
+
+function rowNumberColumn(countOffset) {
+  return {
+    enableSorting: false,
+    header: "#",
+    id: "row",
+    accessorFn: (_datum, index) => index + 1 + countOffset,
+    maxSize: 45,
+  };
+}
+
+function aggregateColumns(show, nesting, countOffset, t, locale) {
+  const columns = [rowNumberColumn(countOffset)];
+
+  if (show === "occupations" && nesting === "occupations") {
+    columns.push({
+      header: t("occupation"),
+      accessorKey: "name",
+      style: {whiteSpace: "unset"},
+      cell: info => (
+        <a href={localizePath(locale, `/profile/occupation/${info.row.original.slug}`)}>
+          {info.getValue()}
+        </a>
+      ),
+    });
+  }
+  if (show === "occupations" && nesting !== "domains") {
+    columns.push({header: t("industry"), accessorKey: "industry"});
+  }
+  if (show === "occupations") {
+    columns.push({header: t("domain"), accessorKey: "domain"});
+  }
+
+  if (show === "places" && nesting === "countries") {
+    columns.push({
+      header: t("country"),
+      accessorKey: "country_name",
+      style: {whiteSpace: "unset"},
+      cell: info => (
+        <a href={localizePath(locale, `/profile/country/${info.row.original.country_slug}`)}>
+          {info.getValue()}
+        </a>
+      ),
+    });
+  }
+  if (show === "places" && nesting === "places") {
+    columns.push(
+      {
+        header: t("city"),
+        accessorKey: "name",
+        style: {whiteSpace: "unset"},
+        cell: info => info.row.original.count > 15 ? (
+          <a href={localizePath(locale, `/profile/place/${info.row.original.slug}`)}>
+            {info.getValue()}
+          </a>
+        ) : info.getValue(),
+      },
+      {
+        header: t("country"),
+        accessorKey: "country_name",
+        style: {whiteSpace: "unset"},
+        cell: info => (
+          <a href={localizePath(locale, `/profile/country/${info.row.original.country_slug}`)}>
+            {info.getValue()}
+          </a>
+        ),
+      },
+    );
+  }
+
+  columns.push({
+    header: t("people"),
+    accessorKey: "count",
+    minSize: 60,
+    className: "cell_numeric",
+  });
+  return columns.concat(metricColumns(t, locale));
+}
+
+function peopleColumns(countOffset, options, t, locale) {
+  const decimal = value => formatExploreNumber(value || 0, locale, {
+    maximumFractionDigits: 2,
+  });
+  const compact = value => formatExploreNumber(value || 0, locale, {
+    notation: "compact",
+    maximumFractionDigits: 2,
+  });
+  const rankDeltaCell = info => {
+    const value = info.getValue();
+    if (!value) return "-";
+    return value > 0 ? (
+      <span className="u-positive-text u-positive-arrow">{`+${value}`}</span>
+    ) : (
+      <span className="u-negative-text u-negative-arrow">{value}</span>
+    );
+  };
+
+  return [
+    {
+      header: t("info"),
+      columns: [
         {
           enableSorting: false,
           header: "#",
           id: "row",
-          accessorFn: (_d, i) => i + 1 + countOffset,
+          accessorFn: options.nameSearch
+            ? datum => datum.rank
+            : (_datum, index) => index + 1 + countOffset,
           maxSize: 45,
         },
         {
-          header: "Occupation",
+          enableSorting: false,
+          header: "",
+          accessorKey: "id",
+          cell: info => (
+            <PersonImage
+              person={info.row.original}
+              className="ranking-thumbnail"
+              src={`/profile/people/${info.getValue()}.jpg`}
+              fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+            />
+          ),
+          maxSize: 70,
+        },
+        {
+          header: t("name"),
           accessorKey: "name",
           style: {whiteSpace: "unset"},
           cell: info => (
-            <a href={`/profile/occupation/${info.row.original.slug}`}>{info.getValue()}</a>
+            <a href={localizePath(locale, `/profile/person/${info.row.original.slug}`)}>
+              {info.getValue()}
+            </a>
           ),
         },
         {
-          header: "Industry",
-          accessorKey: "industry",
-        },
-        {
-          header: "Domain",
-          accessorKey: "domain",
-        },
-        {
-          header: "People",
-          accessorKey: "count",
-          minSize: 60,
-          className: "cell_numeric",
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Historical Popularity Index"}
-            >
-              <div>
-                HPI 2022 <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "hpi",
-          cell: info => FORMATTERS.bigNum(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Historical Popularity Index"}
-            >
-              <div>
-                Avg HPI <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_hpi",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Count of Wikipedia Language Editions"}
-            >
-              <div>
-                L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "langs",
-          cell: info => FORMATTERS.commas(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Count of Wikipedia Language Editions"}
-            >
-              <div>
-                Avg L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_langs",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: "Top 3",
-          accessorKey: "top_ranked",
-          cell: info => (
-            <AnchorList
-              items={info.getValue()}
-              name={d => d.name}
-              url={d => `/profile/person/${d.slug}/`}
-              noAnd
-            />
-          ),
-        },
-      ],
-      industries: [
-        {
-          enableSorting: false,
-          header: "#",
-          id: "row",
-          accessorFn: (_d, i) => i + 1 + countOffset,
-          maxSize: 45,
-        },
-        {
-          header: "Industry",
-          accessorKey: "industry",
-        },
-        {
-          header: "Domain",
-          accessorKey: "domain",
-        },
-        {
-          header: "People",
-          accessorKey: "count",
-          minSize: 60,
-          className: "cell_numeric",
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Historical Popularity Index"}
-            >
-              <div>
-                HPI 2022 <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "hpi",
-          cell: info => FORMATTERS.bigNum(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Historical Popularity Index"}
-            >
-              <div>
-                Avg HPI <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_hpi",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Count of Wikipedia Language Editions"}
-            >
-              <div>
-                L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "langs",
-          cell: info => FORMATTERS.commas(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Count of Wikipedia Language Editions"}
-            >
-              <div>
-                Avg L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_langs",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: "Top 3",
-          accessorKey: "top_ranked",
-          cell: info => (
-            <AnchorList
-              items={info.getValue()}
-              name={d => d.name}
-              url={d => `/profile/person/${d.slug}/`}
-              noAnd
-            />
-          ),
-        },
-      ],
-      domains: [
-        {
-          enableSorting: false,
-          header: "#",
-          id: "row",
-          accessorFn: (_d, i) => i + 1 + countOffset,
-          maxSize: 45,
-        },
-        {
-          header: "Domain",
-          accessorKey: "domain",
-        },
-        {
-          header: "People",
-          accessorKey: "count",
-          minSize: 60,
-          className: "cell_numeric",
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Historical Popularity Index"}
-            >
-              <div>
-                HPI 2022 <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "hpi",
-          cell: info => FORMATTERS.bigNum(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Historical Popularity Index"}
-            >
-              <div>
-                Avg HPI <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_hpi",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Count of Wikipedia Language Editions"}
-            >
-              <div>
-                L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "langs",
-          cell: info => FORMATTERS.commas(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Count of Wikipedia Language Editions"}
-            >
-              <div>
-                Avg L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_langs",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: "Top 3",
-          accessorKey: "top_ranked",
-          cell: info => (
-            <AnchorList
-              items={info.getValue()}
-              name={d => d.name}
-              url={d => `/profile/person/${d.slug}/`}
-              noAnd
-            />
-          ),
-        },
-      ],
-    },
-    places: {
-      countries: [
-        {
-          enableSorting: false,
-          header: "#",
-          id: "row",
-          accessorFn: (_d, i) => i + 1 + countOffset,
-          maxSize: 45,
-        },
-        {
-          header: "Country",
-          accessorKey: "country_name",
-          style: {whiteSpace: "unset"},
-          cell: info => (
-            <a href={`/profile/country/${info.row.original.country_slug}`}>{info.getValue()}</a>
-          ),
-        },
-        {
-          header: "People",
-          accessorKey: "count",
-          minSize: 60,
-          className: "cell_numeric",
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Historical Popularity Index"}
-            >
-              <div>
-                HPI 2022 <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "hpi",
-          cell: info => FORMATTERS.bigNum(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Historical Popularity Index"}
-            >
-              <div>
-                Avg HPI <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_hpi",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Count of Wikipedia Language Editions"}
-            >
-              <div>
-                L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "langs",
-          cell: info => FORMATTERS.commas(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Count of Wikipedia Language Editions"}
-            >
-              <div>
-                Avg L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_langs",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: "Top 3",
-          accessorKey: "top_ranked",
-          cell: info => (
-            <AnchorList
-              items={info.getValue()}
-              name={d => d.name}
-              url={d => `/profile/person/${d.slug}/`}
-              noAnd
-            />
-          ),
-        },
-      ],
-      places: [
-        {
-          enableSorting: false,
-          header: "#",
-          id: "row",
-          accessorFn: (_d, i) => i + 1 + countOffset,
-          maxSize: 45,
-        },
-        {
-          header: "City",
-          accessorKey: "name",
-          style: {whiteSpace: "unset"},
+          id: "occupation_id",
+          header: t("occupation"),
+          accessorFn: datum => datum.occupation?.occupation || null,
           cell: info => {
-            const value = info.getValue();
-            const original = info.row.original;
-            return original.count > 15 ? (
-              <a href={`/profile/place/${original.slug}`}>{value}</a>
-            ) : (
-              value
-            );
+            const occupation = info.row.original.occupation;
+            return info.getValue() ? (
+              <a href={localizePath(locale, `/profile/occupation/${occupation.occupation_slug}`)}>
+                {info.getValue()}
+              </a>
+            ) : <span>-</span>;
           },
         },
         {
-          header: "Country",
-          accessorKey: "country_name",
-          style: {whiteSpace: "unset"},
-          cell: info => (
-            <a href={`/profile/country/${info.row.original.country_slug}`}>{info.getValue()}</a>
-          ),
+          header: t("birth"),
+          accessorKey: "birthyear",
+          cell: info => options.hasBirthdayFilter
+            ? formatBirthday(
+                info.getValue(),
+                info.row.original.birthmonth,
+                info.row.original.birthday,
+                locale,
+                t,
+              )
+            : info.getValue()
+              ? formatExploreYear(info.getValue(), locale)
+              : t("unknown"),
+          minSize: options.hasBirthdayFilter ? 90 : 50,
         },
         {
-          header: "People",
-          accessorKey: "count",
-          minSize: 60,
-          className: "cell_numeric",
+          header: t("death"),
+          accessorKey: "deathyear",
+          cell: info => info.getValue()
+            ? formatExploreYear(info.getValue(), locale)
+            : "-",
+          minSize: 45,
         },
         {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Historical Popularity Index"}
-            >
-              <div>
-                HPI 2022 <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "hpi",
-          cell: info => FORMATTERS.bigNum(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Historical Popularity Index"}
-            >
-              <div>
-                Avg HPI <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_hpi",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Count of Wikipedia Language Editions"}
-            >
-              <div>
-                L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "langs",
-          cell: info => FORMATTERS.commas(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: () => (
-            <SimpleTooltip
-              className="table-tooltip-trigger"
-              content={"Average Count of Wikipedia Language Editions"}
-            >
-              <div>
-                Avg L <Info size={10} />
-              </div>
-            </SimpleTooltip>
-          ),
-          accessorKey: "avg_langs",
-          cell: info => FORMATTERS.decimal(info.getValue()),
-          minSize: 55,
-          className: "cell_numeric",
-          sortDescFirst: true,
-        },
-        {
-          header: "Top 3",
-          accessorKey: "top_ranked",
-          cell: info => (
-            <AnchorList
-              items={info.getValue()}
-              name={d => d.name}
-              url={d => `/profile/person/${d.slug}/`}
-              noAnd
-            />
-          ),
+          header: t("gender"),
+          accessorKey: "gender",
+          cell: info => info.getValue() === "M"
+            ? t("male")
+            : info.getValue() === "F"
+              ? t("female")
+              : t("nonBinary"),
+          minSize: 65,
+          sortingFn: (rowA, rowB, columnId) => {
+            const aIndex = genderOrder.indexOf(rowA.getValue(columnId));
+            const bIndex = genderOrder.indexOf(rowB.getValue(columnId));
+            return bIndex < aIndex ? -1 : bIndex > aIndex ? 1 : 0;
+          },
         },
       ],
     },
-  };
+    {
+      header: t("birthplace"),
+      columns: [
+        {
+          id: "bplace_geonameid",
+          header: t("city"),
+          style: {whiteSpace: "unset"},
+          accessorFn: datum => datum.bplace_geonameid?.place || null,
+          cell: info => info.getValue() ? (
+            <a href={localizePath(locale, `/profile/place/${info.row.original.bplace_geonameid.slug}`)}>
+              {info.getValue()}
+            </a>
+          ) : <span>-</span>,
+        },
+        {
+          id: "bplace_country",
+          header: t("country"),
+          style: {whiteSpace: "unset"},
+          accessorFn: datum => datum.bplace_country?.country || null,
+          cell: info => info.getValue() ? (
+            <a href={localizePath(locale, `/profile/country/${info.row.original.bplace_country.slug}`)}>
+              {info.getValue()}
+            </a>
+          ) : <span>-</span>,
+        },
+      ],
+    },
+    {
+      header: t("deathplace"),
+      columns: [
+        {
+          id: "dplace_geonameid",
+          header: t("city"),
+          style: {whiteSpace: "unset"},
+          accessorFn: datum => datum.dplace_geonameid?.place || null,
+          cell: info => info.getValue() ? (
+            <a href={localizePath(locale, `/profile/place/${info.row.original.dplace_geonameid.slug}`)}>
+              {info.getValue()}
+            </a>
+          ) : <span>-</span>,
+        },
+        {
+          id: "dplace_country",
+          header: t("country"),
+          style: {whiteSpace: "unset"},
+          accessorFn: datum => datum.dplace_country?.country || null,
+          cell: info => info.getValue() ? (
+            <a href={localizePath(locale, `/profile/country/${info.row.original.dplace_country.slug}`)}>
+              {info.getValue()}
+            </a>
+          ) : <span>-</span>,
+        },
+      ],
+    },
+    {
+      header: t("stats"),
+      columns: [
+        {
+          header: tooltipHeader(t("wikipediaLanguageEditions"), "L"),
+          accessorKey: "l",
+          minSize: 105,
+          className: "cell_numeric",
+          headerClassName: "nowrap",
+          sortDescFirst: true,
+        },
+        {
+          header: tooltipHeader(t("effectiveWikipediaLanguageEditions"), "L*"),
+          accessorKey: "l_",
+          cell: info => decimal(info.getValue()),
+          minSize: 105,
+          className: "cell_numeric",
+          headerClassName: "nowrap",
+          sortDescFirst: true,
+        },
+        {
+          header: tooltipHeader(t("nonEnglishPageviews"), "PVne"),
+          accessorKey: "non_en_page_views",
+          cell: info => compact(info.getValue()),
+          size: 105,
+          headerClassName: "nowrap",
+          sortDescFirst: true,
+        },
+        {
+          header: tooltipHeader(t("pageviewVariation"), "CV"),
+          accessorKey: "coefficient_of_variation",
+          cell: info => decimal(info.getValue()),
+          minSize: 105,
+          className: "cell_numeric",
+          headerClassName: "nowrap",
+          sortDescFirst: true,
+        },
+        ...[2025, 2024].map((year, index) => ({
+          header: tooltipHeader(t("historicalPopularityIndex"), `HPI ${year}`),
+          accessorKey: index ? "hpi_prev" : "hpi",
+          cell: info => info.getValue() ? decimal(info.getValue()) : "-",
+          minSize: 105,
+          className: "cell_numeric",
+          sortDescFirst: true,
+        })),
+        {
+          header: t("rankYear", {year: 2025}),
+          accessorKey: "rank",
+          minSize: 45,
+          className: "cell_numeric",
+        },
+        {
+          header: t("rankYear", {year: 2024}),
+          accessorKey: "rank_prev",
+          minSize: 45,
+          className: "cell_numeric",
+        },
+        {
+          header: "∆",
+          accessorKey: "rank_delta",
+          minSize: 45,
+          className: "cell_numeric",
+          cell: rankDeltaCell,
+        },
+      ],
+    },
+  ];
+}
 
-  const initialColumns = COLUMNS[show][nesting];
-
-  if (show === "people") {
-    // enrich columns with proper ranks
-  }
-
-  return initialColumns;
-};
-
-export default getColumns;
+export default function getColumns(
+  show,
+  nesting,
+  countOffset,
+  options = {},
+  locale = "en",
+) {
+  const t = getExploreTranslations(locale);
+  return show === "people"
+    ? peopleColumns(countOffset, options, t, locale)
+    : aggregateColumns(show, nesting, countOffset, t, locale);
+}

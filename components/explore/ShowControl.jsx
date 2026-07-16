@@ -1,17 +1,20 @@
 "use client";
 import {useDispatch, useSelector} from "react-redux";
 import {updateShowDepth, updateShowType} from "../../features/exploreSlice";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 
 const rankingTypes = [
-  {id: "people", name: "People"},
-  {id: "places", name: "Places"},
-  {id: "occupations", name: "Occupations"},
+  {id: "people", key: "people"},
+  {id: "places", key: "places"},
+  {id: "occupations", key: "occupations"},
 ];
 
-export default function ShowControl() {
+export default function ShowControl({locale, pageType}) {
+  const t = getExploreTranslations(locale);
   const loading = false;
   const dispatch = useDispatch();
-  const {page, show} = useSelector(state => state.explore);
+  const {show} = useSelector(state => state.explore);
+  const page = pageType;
   let pageRankingTypes = rankingTypes;
 
   if (page === "viz") {
@@ -22,7 +25,7 @@ export default function ShowControl() {
 
   return (
     <div className="filter">
-      <h3>Group People by</h3>
+      <h3>{t("groupPeopleBy")}</h3>
       <ul className="items filter options viztype-options">
         {pageRankingTypes.map(rt => (
           <li key={rt.id} value={rt.id}>
@@ -42,7 +45,7 @@ export default function ShowControl() {
                   !showType || showType === rt.id ? "active" : ""
                 }`}
               >
-                {rt.name}
+                {t(rt.key)}
               </a>
             </h4>
           </li>
@@ -50,7 +53,7 @@ export default function ShowControl() {
       </ul>
       {showType === "occupations" && page === "rankings" ? (
         <div className="options filter">
-          <h3>Data Depth</h3>
+          <h3>{t("dataDepth")}</h3>
           <ul className="items options viztype-options">
             <li>
               <h4>
@@ -73,7 +76,7 @@ export default function ShowControl() {
                     !showDepth || showDepth === "occupations" ? "active" : ""
                   }`}
                 >
-                  Occupation
+                  {t("occupation")}
                 </a>
               </h4>
             </li>
@@ -98,7 +101,7 @@ export default function ShowControl() {
                     showDepth === "industries" ? "active" : ""
                   }`}
                 >
-                  Industry
+                  {t("industry")}
                 </a>
               </h4>
             </li>
@@ -121,7 +124,7 @@ export default function ShowControl() {
                   }
                   className={`d-1 ${showDepth === "domains" ? "active" : ""}`}
                 >
-                  Domain
+                  {t("domain")}
                 </a>
               </h4>
             </li>
@@ -130,7 +133,7 @@ export default function ShowControl() {
       ) : null}
       {showType === "places" && page === "rankings" ? (
         <div className="options filter">
-          <h3>Data Depth</h3>
+          <h3>{t("dataDepth")}</h3>
           <ul className="items options viztype-options">
             <li>
               <h4>
@@ -153,7 +156,7 @@ export default function ShowControl() {
                     !showDepth || showDepth === "places" ? "active" : ""
                   }`}
                 >
-                  City
+                  {t("city")}
                 </a>
               </h4>
             </li>
@@ -176,7 +179,7 @@ export default function ShowControl() {
                   }
                   className={`d-1 ${showDepth === "countries" ? "active" : ""}`}
                 >
-                  Country
+                  {t("country")}
                 </a>
               </h4>
             </li>
