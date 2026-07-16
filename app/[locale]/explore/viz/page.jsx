@@ -4,6 +4,7 @@ import {PUBLIC_API} from "@/app/constants";
 import {getExploreTranslations} from "@/app/exploreTranslations";
 import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "@/app/locales";
 import {buildCanonical, buildLanguageAlternates} from "@/app/utils/hreflang";
+import {buildExploreSocialMetadata} from "@/app/utils/exploreSocial";
 import {
   localizeExploreOccupations,
   localizeExplorePlaces,
@@ -17,22 +18,22 @@ export async function generateMetadata({params}) {
     : DEFAULT_LOCALE;
   const t = getExploreTranslations(locale);
   const canonicalPath = "/explore/viz";
+  const title = t("vizMetaTitle");
+  const description = t("vizMetaDescription");
+  const socialMetadata = buildExploreSocialMetadata({
+    locale,
+    kind: "viz",
+    title,
+    description,
+    canonicalPath,
+  });
   return {
-    title: t("vizMetaTitle"),
-    description: t("vizMetaDescription"),
+    title,
+    description,
+    ...socialMetadata,
     alternates: {
       canonical: buildCanonical(locale, canonicalPath),
       languages: buildLanguageAlternates(canonicalPath),
-    },
-    openGraph: {
-      title: t("vizMetaTitle"),
-      description: t("vizMetaDescription"),
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("vizMetaTitle"),
-      description: t("vizMetaDescription"),
     },
   };
 }

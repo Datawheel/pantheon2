@@ -1,6 +1,6 @@
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 
-const SITE_URL = "https://pantheon.world";
+export const SITE_URL = "https://pantheon.world";
 
 /**
  * Build a canonical URL for the given locale and path.

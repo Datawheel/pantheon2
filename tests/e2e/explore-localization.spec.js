@@ -13,6 +13,29 @@ function localePath(locale, path) {
   return locale === "en" ? path : `/${locale}${path}`;
 }
 
+async function assertSocialImage(page, {kind, locale, title}) {
+  const ogImage = page.locator('meta[property="og:image"]').first();
+  await expect(ogImage).toHaveAttribute("content", /\/api\/screenshot\/explore\?/);
+  const content = await ogImage.getAttribute("content");
+  const url = new URL(content);
+  expect(url.origin).toBe("https://pantheon.world");
+  expect(url.searchParams.get("locale")).toBe(locale);
+  expect(url.searchParams.get("kind")).toBe(kind);
+  expect(url.searchParams.get("title")).toBe(title);
+  await expect(page.locator('meta[property="og:image:width"]').first())
+    .toHaveAttribute("content", "1200");
+  await expect(page.locator('meta[property="og:image:height"]').first())
+    .toHaveAttribute("content", "630");
+  await expect(page.locator('meta[property="og:image:type"]').first())
+    .toHaveAttribute("content", "image/png");
+  await expect(page.locator('meta[property="og:image:alt"]').first())
+    .toHaveAttribute("content", title);
+  await expect(page.locator('meta[name="twitter:card"]'))
+    .toHaveAttribute("content", "summary_large_image");
+  await expect(page.locator('meta[name="twitter:image"]').first())
+    .toHaveAttribute("content", content);
+}
+
 for (const locale of LOCALES) {
   test(`explore pages use the ${locale} locale`, async ({page}) => {
     const t = getExploreTranslations(locale);
@@ -51,6 +74,11 @@ for (const locale of LOCALES) {
       "href",
       `https://pantheon.world${localePath(locale, "/explore/rankings")}`,
     );
+    await assertSocialImage(page, {
+      kind: "rankings",
+      locale,
+      title: heading,
+    });
 
     await goto(page, localePath(locale, "/explore/viz"));
     await expect(page.locator("h1.explore-title")).toHaveText(vizHeading);
@@ -63,12 +91,24 @@ for (const locale of LOCALES) {
       "href",
       `https://pantheon.world${localePath(locale, "/explore/viz")}`,
     );
+    await assertSocialImage(page, {
+      kind: "viz",
+      locale,
+      title: t("vizMetaTitle"),
+    });
 
     await goto(page, localePath(locale, "/explore/viz/embed"));
     await expect(page.locator("h1.explore-title")).toHaveText(vizHeading);
     await expect(page.locator(".explore-viz-container")).toContainText(
       t("noDataFound"),
     );
+    await expect(page.locator('meta[name="robots"]'))
+      .toHaveAttribute("content", /noindex/i);
+    await assertSocialImage(page, {
+      kind: "viz",
+      locale,
+      title: t("vizMetaTitle"),
+    });
 
     watch.assertClean();
   });
@@ -90,3 +130,22 @@ test("explore selectors use localized API taxonomy labels", async ({page}) => {
     "Arabia Saudí",
   );
 });
+
+for (const locale of ["es", "ru", "zh", "ja", "ar"]) {
+  test(`explore OG image renders localized ${locale} text`, async ({request, baseURL}) => {
+    const t = getExploreTranslations(locale);
+    const imageUrl = new URL("/api/screenshot/explore", baseURL);
+    imageUrl.searchParams.set("locale", locale);
+    imageUrl.searchParams.set("kind", "viz");
+    imageUrl.searchParams.set("title", t("vizMetaTitle"));
+    imageUrl.searchParams.set("subtitle", t("vizMetaDescription"));
+
+    const response = await request.get(`${imageUrl.pathname}${imageUrl.search}`);
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toContain("image/png");
+    expect(response.headers()["cache-control"]).toContain("s-maxage");
+    expect(response.headers()["x-og-locale"]).toBe(locale);
+    expect(response.headers()["x-og-kind"]).toBe("viz");
+    expect((await response.body()).byteLength).toBeGreaterThan(5_000);
+  });
+}

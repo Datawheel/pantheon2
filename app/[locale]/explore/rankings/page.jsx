@@ -3,6 +3,7 @@ import Explore from "@/features/Explore";
 import {BASE_API, PUBLIC_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "@/app/locales";
 import {buildCanonical, buildLanguageAlternates} from "@/app/utils/hreflang";
+import {buildExploreSocialMetadata} from "@/app/utils/exploreSocial";
 import {safeFetchJson} from "@/app/utils/safeFetch";
 import {
   buildNestedOccupations,
@@ -53,20 +54,20 @@ export async function generateMetadata(props) {
     nestedOccupations,
     locale,
   );
+  const socialMetadata = buildExploreSocialMetadata({
+    locale,
+    kind: "rankings",
+    title: metadata.title,
+    description: metadata.description,
+    imageTitle: metadata.heading,
+    imageDescription: metadata.socialDescription,
+    canonicalPath: metadata.canonicalPath,
+  });
 
   return {
     title: metadata.title,
     description: metadata.description,
-    openGraph: {
-      title: metadata.title,
-      description: metadata.description,
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: metadata.title,
-      description: metadata.description,
-    },
+    ...socialMetadata,
     alternates: {
       canonical: buildCanonical(locale, metadata.canonicalPath),
       languages: buildLanguageAlternates(metadata.canonicalPath),
