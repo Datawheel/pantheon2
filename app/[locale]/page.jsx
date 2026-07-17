@@ -8,6 +8,7 @@ import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import HomeSearch from "@/components/home/HomeSearch";
 import {encodePostgrestQuotedList} from "@/app/utils/postgrest";
+import {localizePersonGroups} from "@/app/utils/personLocalization";
 const baseUrl = process.env.URL || "https://pantheon.world";
 const apiBaseUrl = process.env.BASE_API || "https://api.pantheon.world";
 
@@ -85,6 +86,16 @@ export default async function Home(props) {
       console.error("Error fetching born today data:", error);
       return [];
     });
+
+  // The homepage RPC/ranking feeds expose English person names even when the
+  // surrounding content is localized. Enrich only the cards rendered outside
+  // the trends block, and cap birthdays to the 12 cards shown by the grid.
+  const [localizedRecentPassings, localizedRecentlyAdded, localizedBornToday]
+    = await localizePersonGroups(
+      [recentPassings, recentlyAdded, bornToday.slice(0, 12)],
+      lang,
+      {baseApi: apiBaseUrl},
+    );
 
   // Fetch trending reasons for top trending people
   // Use yesterday's date (same as news page logic)
@@ -227,14 +238,14 @@ export default async function Home(props) {
 
       <BornTodayGrid
         title={t.home?.bornTodayTitle || "Born Today"}
-        bios={bornToday}
+        bios={localizedBornToday}
         currentLang={lang}
       />
 
       <TrendingGrid
         title={t.home.recentPassings}
         allowLangChange={false}
-        initialTrendingAll={recentPassings}
+        initialTrendingAll={localizedRecentPassings}
         defaultLang={lang}
         showTrendIndicator={false}
         showDates={true}
@@ -245,7 +256,7 @@ export default async function Home(props) {
       <TrendingGrid
         title={t.home.recentlyAdded}
         allowLangChange={false}
-        initialTrendingAll={recentlyAdded}
+        initialTrendingAll={localizedRecentlyAdded}
         defaultLang={lang}
         showTrendIndicator={false}
         ctaHref={`${lang === DEFAULT_LOCALE ? "" : `/${lang}`}/profile/recently-added`}
