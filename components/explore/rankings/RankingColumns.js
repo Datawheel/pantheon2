@@ -10,8 +10,11 @@ import {localizePath} from "@/app/utils/hreflang";
 import SimpleTooltip from "../../common/SimpleTooltip";
 import AnchorList from "../../utils/AnchorList";
 import PersonImage from "../../utils/PersonImage";
+import HpiSparkline from "./HpiSparkline";
 
 const genderOrder = ["M", null, "F", "Non-binary"];
+const CURRENT_RANK_YEAR = 2025;
+const PREV_RANK_YEAR = 2024;
 
 function formatBirthday(birthyear, birthmonth, birthday, locale, t) {
   if (!birthyear) return t("unknown");
@@ -44,7 +47,7 @@ function metricColumns(t, locale) {
   });
   return [
     {
-      header: tooltipHeader(t("historicalPopularityIndex"), "HPI 2022"),
+      header: tooltipHeader(t("historicalPopularityIndex"), "HPI"),
       accessorKey: "hpi",
       cell: info => compact(info.getValue()),
       minSize: 55,
@@ -174,6 +177,13 @@ function aggregateColumns(show, nesting, countOffset, t, locale) {
   return columns.concat(metricColumns(t, locale));
 }
 
+function trendHeaderLabel(t, trendYears) {
+  if (!trendYears) return t("trend");
+  const [from, to] = trendYears;
+  const short = year => `’${`${year}`.slice(-2)}`;
+  return `${t("trend")} ${short(from)}–${short(to)}`;
+}
+
 function peopleColumns(countOffset, options, t, locale) {
   const decimal = value => formatExploreNumber(value || 0, locale, {
     maximumFractionDigits: 2,
@@ -184,17 +194,19 @@ function peopleColumns(countOffset, options, t, locale) {
   });
   const rankDeltaCell = info => {
     const value = info.getValue();
-    if (!value) return "-";
+    if (!value) return <span className="cell_delta-none">–</span>;
     return value > 0 ? (
-      <span className="u-positive-text u-positive-arrow">{`+${value}`}</span>
+      <span className="u-positive-text u-positive-arrow">{`+${formatExploreNumber(value, locale)}`}</span>
     ) : (
-      <span className="u-negative-text u-negative-arrow">{value}</span>
+      <span className="u-negative-text u-negative-arrow">{formatExploreNumber(value, locale)}</span>
     );
   };
 
   return [
     {
-      header: t("info"),
+      header: t("person"),
+      id: "group_person",
+      headerClassName: "col-group",
       columns: [
         {
           enableSorting: false,
@@ -203,16 +215,19 @@ function peopleColumns(countOffset, options, t, locale) {
           accessorFn: options.nameSearch
             ? datum => datum.rank
             : (_datum, index) => index + 1 + countOffset,
+          className: "cell_rowno",
           maxSize: 45,
         },
         {
           enableSorting: false,
           header: "",
           accessorKey: "id",
+          className: "cell_photo",
           cell: info => (
             <PersonImage
               person={info.row.original}
               className="ranking-thumbnail"
+              alt={info.row.original.name}
               src={`/profile/people/${info.getValue()}.jpg`}
               fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
             />
@@ -222,6 +237,7 @@ function peopleColumns(countOffset, options, t, locale) {
         {
           header: t("name"),
           accessorKey: "name",
+          className: "cell_name",
           style: {whiteSpace: "unset"},
           cell: info => (
             <a href={localizePath(locale, `/profile/person/${info.row.original.slug}`)}>
@@ -232,6 +248,7 @@ function peopleColumns(countOffset, options, t, locale) {
         {
           id: "occupation_id",
           header: t("occupation"),
+          className: "cell_occupation",
           accessorFn: datum => datum.occupation?.occupation || null,
           cell: info => {
             const occupation = info.row.original.occupation;
@@ -239,12 +256,13 @@ function peopleColumns(countOffset, options, t, locale) {
               <a href={localizePath(locale, `/profile/occupation/${occupation.occupation_slug}`)}>
                 {info.getValue()}
               </a>
-            ) : <span>-</span>;
+            ) : <span>–</span>;
           },
         },
         {
-          header: t("birth"),
+          header: t("born"),
           accessorKey: "birthyear",
+          className: "cell_numeric",
           cell: info => options.hasBirthdayFilter
             ? formatBirthday(
                 info.getValue(),
@@ -259,11 +277,12 @@ function peopleColumns(countOffset, options, t, locale) {
           minSize: options.hasBirthdayFilter ? 90 : 50,
         },
         {
-          header: t("death"),
+          header: t("died"),
           accessorKey: "deathyear",
+          className: "cell_numeric",
           cell: info => info.getValue()
             ? formatExploreYear(info.getValue(), locale)
-            : "-",
+            : "–",
           minSize: 45,
         },
         {
@@ -285,74 +304,86 @@ function peopleColumns(countOffset, options, t, locale) {
     },
     {
       header: t("birthplace"),
+      id: "group_birthplace",
+      headerClassName: "col-group col-group-start",
       columns: [
         {
           id: "bplace_geonameid",
           header: t("city"),
+          className: "cell_place col-group-start",
+          headerClassName: "col-group-start",
           style: {whiteSpace: "unset"},
           accessorFn: datum => datum.bplace_geonameid?.place || null,
           cell: info => info.getValue() ? (
             <a href={localizePath(locale, `/profile/place/${info.row.original.bplace_geonameid.slug}`)}>
               {info.getValue()}
             </a>
-          ) : <span>-</span>,
+          ) : <span>–</span>,
         },
         {
           id: "bplace_country",
           header: t("country"),
+          className: "cell_place",
           style: {whiteSpace: "unset"},
           accessorFn: datum => datum.bplace_country?.country || null,
           cell: info => info.getValue() ? (
             <a href={localizePath(locale, `/profile/country/${info.row.original.bplace_country.slug}`)}>
               {info.getValue()}
             </a>
-          ) : <span>-</span>,
+          ) : <span>–</span>,
         },
       ],
     },
     {
       header: t("deathplace"),
+      id: "group_deathplace",
+      headerClassName: "col-group col-group-start",
       columns: [
         {
           id: "dplace_geonameid",
           header: t("city"),
+          className: "cell_place col-group-start",
+          headerClassName: "col-group-start",
           style: {whiteSpace: "unset"},
           accessorFn: datum => datum.dplace_geonameid?.place || null,
           cell: info => info.getValue() ? (
             <a href={localizePath(locale, `/profile/place/${info.row.original.dplace_geonameid.slug}`)}>
               {info.getValue()}
             </a>
-          ) : <span>-</span>,
+          ) : <span>–</span>,
         },
         {
           id: "dplace_country",
           header: t("country"),
+          className: "cell_place",
           style: {whiteSpace: "unset"},
           accessorFn: datum => datum.dplace_country?.country || null,
           cell: info => info.getValue() ? (
             <a href={localizePath(locale, `/profile/country/${info.row.original.dplace_country.slug}`)}>
               {info.getValue()}
             </a>
-          ) : <span>-</span>,
+          ) : <span>–</span>,
         },
       ],
     },
     {
       header: t("stats"),
+      id: "group_stats",
+      headerClassName: "col-group col-group-start",
       columns: [
         {
           header: tooltipHeader(t("wikipediaLanguageEditions"), "L"),
           accessorKey: "l",
-          minSize: 105,
-          className: "cell_numeric",
-          headerClassName: "nowrap",
+          minSize: 55,
+          className: "cell_numeric col-group-start",
+          headerClassName: "nowrap col-group-start",
           sortDescFirst: true,
         },
         {
           header: tooltipHeader(t("effectiveWikipediaLanguageEditions"), "L*"),
           accessorKey: "l_",
           cell: info => decimal(info.getValue()),
-          minSize: 105,
+          minSize: 55,
           className: "cell_numeric",
           headerClassName: "nowrap",
           sortDescFirst: true,
@@ -361,7 +392,8 @@ function peopleColumns(countOffset, options, t, locale) {
           header: tooltipHeader(t("nonEnglishPageviews"), "PVne"),
           accessorKey: "non_en_page_views",
           cell: info => compact(info.getValue()),
-          size: 105,
+          size: 60,
+          className: "cell_numeric",
           headerClassName: "nowrap",
           sortDescFirst: true,
         },
@@ -369,36 +401,57 @@ function peopleColumns(countOffset, options, t, locale) {
           header: tooltipHeader(t("pageviewVariation"), "CV"),
           accessorKey: "coefficient_of_variation",
           cell: info => decimal(info.getValue()),
-          minSize: 105,
+          minSize: 55,
           className: "cell_numeric",
           headerClassName: "nowrap",
           sortDescFirst: true,
         },
-        ...[2025, 2024].map((year, index) => ({
-          header: tooltipHeader(t("historicalPopularityIndex"), `HPI ${year}`),
-          accessorKey: index ? "hpi_prev" : "hpi",
-          cell: info => info.getValue() ? decimal(info.getValue()) : "-",
-          minSize: 105,
-          className: "cell_numeric",
+        {
+          header: tooltipHeader(
+            `${t("historicalPopularityIndex")} (${CURRENT_RANK_YEAR})`,
+            "HPI",
+          ),
+          accessorKey: "hpi",
+          cell: info => info.getValue() ? decimal(info.getValue()) : "–",
+          minSize: 60,
+          className: "cell_numeric cell_hpi",
           sortDescFirst: true,
-        })),
+        },
         {
-          header: t("rankYear", {year: 2025}),
+          enableSorting: false,
+          id: "hpi_trend",
+          header: tooltipHeader(
+            t("historicalPopularityIndex"),
+            trendHeaderLabel(t, options.trendYears),
+          ),
+          accessorFn: datum => datum.hpi_history || null,
+          cell: info => (
+            <HpiSparkline history={info.getValue()} locale={locale} />
+          ),
+          minSize: 80,
+          className: "cell_trend",
+          headerClassName: "nowrap",
+        },
+        {
+          header: tooltipHeader(
+            t("rankYear", {year: CURRENT_RANK_YEAR}),
+            t("rank"),
+          ),
           accessorKey: "rank",
+          cell: info => info.getValue()
+            ? formatExploreNumber(info.getValue(), locale)
+            : "–",
           minSize: 45,
           className: "cell_numeric",
         },
         {
-          header: t("rankYear", {year: 2024}),
-          accessorKey: "rank_prev",
-          minSize: 45,
-          className: "cell_numeric",
-        },
-        {
-          header: "∆",
+          header: tooltipHeader(
+            t("rankChange", {year: PREV_RANK_YEAR}),
+            "∆",
+          ),
           accessorKey: "rank_delta",
           minSize: 45,
-          className: "cell_numeric",
+          className: "cell_numeric cell_delta",
           cell: rankDeltaCell,
         },
       ],

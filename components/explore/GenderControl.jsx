@@ -24,7 +24,7 @@ export default function GenderControl({locale}) {
 
   return (
     <div className="filter">
-      <h3>{t("filteredBy")}</h3>
+      <h3>{t("gender")}</h3>
       <ul className="items options flat-options filter">
         <li>
           <a

@@ -25,7 +25,7 @@ export default function Controls({places, nestedOccupations, locale, pageType}) 
 
   return (
     <div
-      className={`explore-controls viz-explorer ${
+      className={`explore-controls viz-explorer controls-${pageType} ${
         isMobileMenuOpen ? "mobile-show" : ""
       }`}
       id="side-panel"

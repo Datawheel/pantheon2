@@ -267,6 +267,9 @@ const fetchDataFromApi = async (
     if (page === "rankings" && locale !== DEFAULT_LOCALE) {
       data = await localizeRankingPersonNames(baseApi, data, locale);
     }
+    if (page === "rankings" && show.type === "people") {
+      data = await attachHpiHistory(baseApi, data);
+    }
     return {data, count};
   } catch (error) {
     throw new Error("Failed to fetch data from the API");
@@ -306,6 +309,36 @@ function localizeExploreRow(row, locale) {
   };
 }
 
+// Fetch every yearly HPI value for the people on the current page so the
+// table can draw a trend sparkline per row. Fails soft: rows simply have no
+// hpi_history and the sparkline cell renders a dash.
+async function attachHpiHistory(baseApi, data) {
+  const ids = data
+    .map(row => row?.id)
+    .filter(id => id !== null && id !== undefined);
+  if (!ids.length) return data;
+
+  try {
+    const url = `${baseApi}/person_hpi?person_id=in.(${encodePostgrestList(ids)})&select=person_id,yr,hpi&order=yr.asc`;
+    const response = await fetch(url);
+    if (!response.ok) return data;
+    const rows = await response.json();
+    const histories = new Map();
+    rows.forEach(({person_id: personId, yr, hpi}) => {
+      if (hpi === null || hpi === undefined) return;
+      const key = `${personId}`;
+      if (!histories.has(key)) histories.set(key, []);
+      histories.get(key).push({yr, hpi});
+    });
+    return data.map(row => ({
+      ...row,
+      ["hpi_history"]: histories.get(`${row.id}`) || [],
+    }));
+  } catch {
+    return data;
+  }
+}
+
 async function localizeRankingPersonNames(baseApi, data, locale) {
   const ids = new Set();
   data.forEach(row => {
@@ -339,6 +372,11 @@ async function localizeRankingPersonNames(baseApi, data, locale) {
   }
 }
 
+// Monotonic id so an in-flight response that has been superseded by a newer
+// request (e.g. rapid filter clicks; the unlimited aggregate fetches can take
+// seconds) never clobbers the newer request's data.
+let fetchSequence = 0;
+
 export async function fetchDataAndDispatch(
   baseApi,
   places,
@@ -351,6 +389,7 @@ export async function fetchDataAndDispatch(
   shouldUpdateRoute = true,
   locale = DEFAULT_LOCALE,
 ) {
+  const requestId = ++fetchSequence;
   dispatch(dataRequested());
   try {
     const responseData = await fetchDataFromApi(
@@ -361,6 +400,7 @@ export async function fetchDataAndDispatch(
       sortBy,
       locale,
     );
+    if (requestId !== fetchSequence) return;
     dispatch(dataReceived(responseData));
     if (shouldUpdateRoute) {
       const queryStr = getQueryArgs(exploreState);
@@ -373,6 +413,7 @@ export async function fetchDataAndDispatch(
       }
     }
   } catch (error) {
+    if (requestId !== fetchSequence) return;
     dispatch(dataRequestFailed(error.message));
   }
 }

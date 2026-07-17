@@ -1,43 +1,196 @@
 @import "../../../styles/mixins.css";
 
 /* ============================================
-   Ranking Name Search
+   Rankings redesign — warm paper, hairlines,
+   small-caps headers, gold accents
    ============================================ */
 
+.ranking-table-container {
+  --rankGold: #8a6f3c;
+  --rankGoldSoft: #b39a63;
+  --rankInk: #2e2c28;
+  --rankHairline: rgba(74, 60, 34, 0.18);
+  --rankHairlineSoft: rgba(74, 60, 34, 0.08);
+  --rankPaper: #fdfcf9;
+  --rankCream: #f7f5ef;
+
+  width: 100%;
+  /* flex item inside .explore-body: allow shrinking so the table scrolls
+     inside .ranking-table instead of overflowing the page */
+  min-width: 0;
+
+  & .table-tooltip-trigger {
+    display: block !important;
+  }
+
+  /* prevent page overflow */
+  @media (min-width: 751px) {
+    padding: 0 0 10px 20px;
+    max-width: calc(100% - 20px);
+  }
+}
+
+/* ============================================
+   Toolbar: result count · pagination · search
+   ============================================ */
+
+.ranking-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 10px;
+
+  @media (max-width: 750px) {
+    justify-content: center;
+    row-gap: 8px;
+  }
+}
+
+.ranking-toolbar-bottom {
+  justify-content: center;
+  gap: 20px;
+  margin: 14px 0 0;
+}
+
+.ranking-result-count {
+  margin: 0;
+  font-size: 12px;
+  color: var(--colorSlate);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  @media (max-width: 750px) {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* --- numbered pagination --- */
+
+.ranking-pagination-nav {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.ranking-page-btn {
+  min-width: 26px;
+  padding: 3px 7px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-family: var(--fontTitle);
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--colorSlate);
+  cursor: pointer;
+  font-variant-numeric: oldstyle-nums;
+
+  &:hover:not(:disabled) {
+    color: var(--rankGold, #8a6f3c);
+    border-color: var(--rankHairline, rgba(74, 60, 34, 0.18));
+  }
+
+  &.is-current {
+    color: var(--rankGold, #8a6f3c);
+    border-color: var(--rankGoldSoft, #b39a63);
+    cursor: default;
+  }
+
+  &:disabled:not(.is-current) {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+.ranking-page-arrow {
+  font-family: var(--fontBody);
+  font-size: 14px;
+}
+
+.ranking-page-gap {
+  padding: 0 3px;
+  color: var(--colorTan);
+  font-size: 12px;
+}
+
+/* --- go to page (bottom toolbar) --- */
+
+.ranking-goto {
+  font-size: 11px;
+  color: var(--colorStone);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  & input {
+    width: 58px;
+    margin-inline-start: 4px;
+    padding: 3px 5px;
+    border: 1px solid var(--rankHairline, rgba(74, 60, 34, 0.18));
+    border-radius: 2px;
+    background: var(--rankPaper, #fdfcf9);
+    color: var(--colorSlate);
+    font-size: 12px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--rankGoldSoft, #b39a63);
+    }
+  }
+}
+
+/* --- name search --- */
+
 .ranking-search-bar {
-  position: sticky;
-  float: right;
-  right: 0;
-  top: 0;
-  z-index: 10;
-  margin-bottom: -32px;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 750px) {
+    width: 100%;
+  }
+}
+
+.ranking-search-icon {
+  position: absolute;
+  inset-inline-start: 9px;
+  color: var(--colorTan);
+  pointer-events: none;
 }
 
 .ranking-search-input {
-  width: 200px;
-  padding: 5px 28px 5px 10px;
+  width: 230px;
+  padding: 6px 10px;
+  padding-inline-start: 28px;
+  padding-inline-end: 24px;
   font-size: 0.8rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  background: #fff;
+  border: 1px solid var(--rankHairline, rgba(74, 60, 34, 0.18));
+  border-radius: 3px;
+  background: var(--rankPaper, #fdfcf9);
   color: var(--colorSlate);
   outline: none;
-  transition: border-color 0.15s, width 0.2s;
+  transition: border-color 0.15s;
 
   &::placeholder {
     color: var(--colorTan);
   }
 
   &:focus {
-    border-color: var(--colorStone);
-    width: 260px;
+    border-color: var(--rankGoldSoft, #b39a63);
+  }
+
+  @media (max-width: 750px) {
+    width: 100%;
   }
 }
 
 .ranking-search-clear {
   position: absolute;
   top: 50%;
-  right: 6px;
+  inset-inline-end: 6px;
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -52,231 +205,221 @@
   }
 }
 
-/* ============================================ */
-
-.ranking-table-container {
-
-  /* error message */
-  & .ReactTable {
-    min-height: 200px; /* prevent error message from overlapping table header & footer */
-
-    & .rt-noData {
-      background: none;
-      bottom: 20px;
-    }
-  }
-
-  & .table-tooltip-trigger {
-    display: block !important;
-  }
-
-  /* prevent page overflow */
-  @media (min-width: 751px) {
-    padding: 0 0 10px 20px;
-    max-width: calc(100% - 20px);
-    overflow-x: auto;
-  }
-}
+/* ============================================
+   Table
+   ============================================ */
 
 .ranking-table {
   position: relative;
   max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--rankHairline, rgba(74, 60, 34, 0.18));
+  background: var(--rankPaper, #fdfcf9);
 
   & table {
-    /* width: 100%; */
+    width: 100%;
+    min-width: 1080px;
     border-spacing: 0;
-    border: 1px solid rgba(0,0,0,0.05);
-
-    & tr {
-      &:last-child {
-        & td {
-          border-bottom: 0;
-        }
-      }
-    }
+    border-collapse: separate;
 
     & th,
     & td {
       margin: 0;
-      padding: 0.5rem;
-      border-bottom: solid 1px rgba(0,0,0,0.05);
-      border-right: solid 1px rgba(0,0,0,0.05);
-      text-align: left;
-      vertical-align: top;
-
-      & :last-child {
-        border-right: 0;
-      }
+      padding: 0.5rem 0.6rem;
+      border-bottom: solid 1px var(--rankHairlineSoft, rgba(74, 60, 34, 0.08));
+      text-align: start;
+      vertical-align: middle;
 
       &.cell_numeric {
         text-align: right;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
       }
 
       &.nowrap {
         white-space: nowrap;
       }
 
+      /* hairline between column groups */
+      &.col-group-start {
+        border-inline-start: 1px solid var(--rankHairline, rgba(74, 60, 34, 0.18));
+      }
+
       & .u-positive-text {
-        color: #10B28A !important;
+        color: #0e8a6c !important;
       }
       & .u-negative-text {
-        color: #B03B3B !important;
+        color: #b03b3b !important;
       }
-      /* :before icons */
-      /* & .u-positive-arrow:before {
-        padding-right: 0.25em;
-        position: relative;
-        top: -0.125em;
-        display: inline-block;
-        content: '↑';
-      }
-      & .u-negative-arrow:before {
-        padding-right: 0.25em;
-        position: relative;
-        top: -0.125em;
-        display: inline-block;
-        content: '↓';
-      } */
+    }
+
+    & tbody tr:last-child td {
+      border-bottom: 0;
     }
 
     & thead {
-      box-shadow: 0 2px 15px 0 rgba(0,0,0,0.15);
       & tr {
         & th {
           font-weight: normal;
+
           &.col-sort-asc {
-            box-shadow: inset 0 -3px 0 0 rgba(0,0,0,0.6);
+            box-shadow: inset 0 -2px 0 0 var(--rankGold, #8a6f3c);
           }
           &.col-sort-desc {
-            box-shadow: inset 0 3px 0 0 rgba(0,0,0,0.6);
+            box-shadow: inset 0 2px 0 0 var(--rankGold, #8a6f3c);
           }
         }
+
+        /* group header row: PERSON · BIRTHPLACE · DEATHPLACE · STATISTICS */
         &:first-child {
-          background: rgba(0,0,0,0.03);
-          border-bottom: 1px solid rgba(0,0,0,0.05);
           & th {
-            text-align: center;
+            padding-top: 0.65rem;
+            border-bottom: 1px solid var(--rankHairline, rgba(74, 60, 34, 0.18));
+            color: var(--rankGold, #8a6f3c);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+          }
+        }
+
+        /* column header row */
+        &:last-child {
+          & th {
+            border-bottom: 1px solid var(--rankHairline, rgba(74, 60, 34, 0.18));
+            color: var(--colorStone);
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
           }
         }
       }
     }
 
-    & tbody tr:nth-child(odd) {
-      background-color: rgba(0,0,0,0.03);
+    & tbody tr {
+      &:nth-child(even) {
+        background-color: var(--rankCream, #f7f5ef);
+      }
+
+      &:hover {
+        background-color: rgba(138, 111, 60, 0.06);
+      }
+    }
+  }
+}
+
+.ranking-table-message {
+  padding: 1.5rem !important;
+  text-align: center !important;
+  color: var(--colorTan);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   Cells
+   ============================================ */
+
+.ranking-table td {
+  font-size: 12px;
+  color: var(--colorSlate);
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 400;
+    border-bottom: 1px solid var(--rankHairlineSoft, rgba(74, 60, 34, 0.08));
+
+    &:hover {
+      color: var(--rankGold, #8a6f3c);
+      border-bottom-color: currentColor;
     }
   }
 
-  & .rt-th {}
+  &.cell_rowno {
+    color: var(--colorTan);
+    font-family: var(--fontTitle);
+    font-size: 12px;
+    font-variant-numeric: oldstyle-nums;
+    text-align: right;
+  }
 
-  & .rt-td {
-    @mixin small;
-    font-size: 11px;
+  &.cell_photo {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    line-height: 0;
+  }
 
+  &.cell_name {
     & a {
-      @mixin bodyLink;
-      font-size: 11px;
-      font-weight: 400;
-      border-bottom: 1px solid var(--colorSnow);
+      font-family: var(--fontTitle);
+      font-size: 13.5px;
+      color: var(--rankInk, #2e2c28);
+
+      &:hover {
+        color: var(--rankGold, #8a6f3c);
+      }
     }
   }
 
-  & .rt-td, & .rt-th {
-    &:nth-child(1), &:nth-child(2) {
-      text-align: left;
+  &.cell_occupation {
+    & a,
+    & span {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--rankGold, #8a6f3c);
+      border-bottom-color: transparent;
+
+      &:hover {
+        border-bottom-color: currentColor;
+      }
     }
   }
+
+  &.cell_hpi {
+    font-weight: 700;
+    color: var(--rankInk, #2e2c28);
+  }
+
+  &.cell_trend {
+    /* sparklines always read left→right, even in RTL locales */
+    direction: ltr;
+    text-align: center;
+    color: var(--rankGoldSoft, #b39a63);
+    line-height: 0;
+  }
+
+  &.cell_delta {
+    font-size: 11px;
+  }
+}
+
+.hpi-sparkline {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.hpi-sparkline-empty {
+  color: var(--colorTan);
+  line-height: normal;
+}
+
+.cell_delta-none {
+  color: var(--colorTan);
 }
 
 .ranking-thumbnail {
+  display: block;
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
   background-size: cover;
   background-repeat: no-repeat;
-  object-fit: cover;
-  width: 50px;
-  height: 50px;
-}
-
-.ranking-head {
-  width: 100%;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-
-  & select {
-    margin-left: 0.5em;
-  }
-
-  & input {
-    border: 1px solid var(--colorTan);
-    border-right-width: 0;
-    padding: 0.25em 0.5em;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-
-  & button {
-    border: 1px solid var(--colorStone);
-    background: none;
-    cursor: pointer;
-    padding: 0.25em 0.5em;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
-
-  @media (max-width: 400px) {
-    display: block;
-
-    & .ranking-result-count {
-      margin-bottom: 0.5em;
-    }
-
-    & .ranking-search {
-      display: flex;
-
-      & > input {
-        @mixin exploreControlInputText;
-        flex: 1 0 auto;
-      }
-    }
-  }
-}
-
-.ranking-pagination {
-  padding: 10px 0 7px;
-  height: 30px;
-
-  & span {
-    @mixin smallCaps;
-  }
-
-  & a {
-    border-bottom: 1px solid transparent;
-    @mixin bodyLink;
-    @mixin smallCaps;
-
-    &:last-child::after {
-      content: '';
-      position: relative;
-      display: inline-block;
-      background: url('/images/ui/tri-right-b.svg') no-repeat;
-      background-size: contain;
-      width: 7px;
-      height: 13px;
-      margin: 0 0 -4px 3px;
-    }
-
-    &:first-child::before {
-      content: '';
-      position: relative;
-      display: inline-block;
-      background: url('/images/ui/tri-right-b.svg') no-repeat;
-      background-size: contain;
-      width: 7px;
-      height: 13px;
-      margin: 0 3px -4px 0;
-      transform: scaleX(-1);
-    }
-  }
+  background-color: var(--rankCream, #f7f5ef);
+  border: 1px solid var(--rankHairline, rgba(74, 60, 34, 0.18));
+  border-radius: 2px;
 }

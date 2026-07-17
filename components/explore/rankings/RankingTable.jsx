@@ -7,6 +7,7 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
+import {Search} from "lucide-react";
 import getColumns from "./RankingColumns";
 import {fetchDataAndDispatch} from "../../../components/utils/exploreHelpers";
 import {
@@ -19,6 +20,80 @@ import {
   formatExploreNumber,
   getExploreTranslations,
 } from "@/app/exploreTranslations";
+
+// Builds the visible page buttons: first, last, a window around the current
+// page, and gap markers where pages are skipped (1 2 3 … 1777).
+function buildPageItems(pageIndex, pageCount) {
+  const candidates = new Set();
+  [0, pageCount - 1, pageIndex - 1, pageIndex, pageIndex + 1].forEach(p => {
+    if (p >= 0 && p < pageCount) candidates.add(p);
+  });
+  if (pageIndex <= 2) {
+    [1, 2].forEach(p => p < pageCount && candidates.add(p));
+  }
+  if (pageIndex >= pageCount - 3) {
+    [pageCount - 2, pageCount - 3].forEach(p => p >= 0 && candidates.add(p));
+  }
+  const sorted = [...candidates].sort((a, b) => a - b);
+  const items = [];
+  sorted.forEach((p, i) => {
+    if (i && p - sorted[i - 1] > 1) items.push({type: "gap", page: p});
+    items.push({type: "page", page: p});
+  });
+  return items;
+}
+
+function PaginationNav({pageIndex, pageCount, disabled, onPage, t, locale}) {
+  const items = buildPageItems(pageIndex, pageCount);
+  const canPrevious = pageIndex > 0;
+  const canNext = pageIndex < pageCount - 1;
+
+  return (
+    <nav className="ranking-pagination-nav" aria-label={t("goToPage")}>
+      <button
+        type="button"
+        className="ranking-page-btn ranking-page-arrow"
+        aria-label={t("previousPage")}
+        onClick={() => onPage(pageIndex - 1)}
+        disabled={!canPrevious || disabled}
+      >
+        ‹
+      </button>
+      {items.map(item =>
+        item.type === "gap" ? (
+          <span key={`gap-${item.page}`} className="ranking-page-gap">
+            …
+          </span>
+        ) : (
+          <button
+            type="button"
+            key={item.page}
+            className={`ranking-page-btn${
+              item.page === pageIndex ? " is-current" : ""
+            }`}
+            aria-label={t("pageN", {
+              page: formatExploreNumber(item.page + 1, locale),
+            })}
+            aria-current={item.page === pageIndex ? "page" : undefined}
+            onClick={() => onPage(item.page)}
+            disabled={disabled || item.page === pageIndex}
+          >
+            {formatExploreNumber(item.page + 1, locale)}
+          </button>
+        ),
+      )}
+      <button
+        type="button"
+        className="ranking-page-btn ranking-page-arrow"
+        aria-label={t("nextPage")}
+        onClick={() => onPage(pageIndex + 1)}
+        disabled={!canNext || disabled}
+      >
+        ›
+      </button>
+    </nav>
+  );
+}
 
 export default function RankingTable({baseApi, places, locale}) {
   const t = getExploreTranslations(locale);
@@ -64,15 +139,30 @@ export default function RankingTable({baseApi, places, locale}) {
 
   const hasBirthdayFilter = birthMonth !== null || birthDay !== null;
   const hasNameSearch = nameSearch && nameSearch.trim().length >= 2;
+
+  // Year span covered by the fetched HPI histories, shown in the trend
+  // column header (e.g. Trend ’23–’25).
+  const trendYears = useMemo(() => {
+    let min = Infinity;
+    let max = -Infinity;
+    (data || []).forEach(row => {
+      (row?.hpi_history || []).forEach(({yr}) => {
+        if (yr < min) min = yr;
+        if (yr > max) max = yr;
+      });
+    });
+    return Number.isFinite(min) && max > min ? [min, max] : null;
+  }, [data]);
+
   const columns = useMemo(
     () => getColumns(
       show.type,
       show.depth,
       controlledPageIndex * pageSize,
-      {hasBirthdayFilter, nameSearch: hasNameSearch},
+      {hasBirthdayFilter, nameSearch: hasNameSearch, trendYears},
       locale,
     ),
-    [controlledPageIndex, show.type, show.depth, hasBirthdayFilter, hasNameSearch, locale]
+    [controlledPageIndex, show.type, show.depth, hasBirthdayFilter, hasNameSearch, trendYears, locale]
   );
 
   const handleSortingChange = useCallback((updater) => {
@@ -97,9 +187,8 @@ export default function RankingTable({baseApi, places, locale}) {
     onSortingChange: handleSortingChange,
   });
 
-  const canPreviousPage = controlledPageIndex > 0;
-  const canNextPage = controlledPageIndex < controlledPageCount - 1;
   const pageCount = controlledPageCount;
+  const rows = table.getRowModel().rows;
 
   useEffect(() => {
     setPageInputVal(controlledPageIndex);
@@ -130,14 +219,43 @@ export default function RankingTable({baseApi, places, locale}) {
     );
   };
 
+  const rangeStart = controlledPageIndex * pageSize + 1;
+  const rangeEnd = controlledPageIndex * pageSize + rows.length;
+  const resultCount = dataCount !== null && rows.length ? (
+    <p className="ranking-result-count">
+      {t("showingRange", {
+        start: formatExploreNumber(rangeStart, locale),
+        end: formatExploreNumber(rangeEnd, locale),
+        total: formatExploreNumber(dataCount, locale),
+      })}
+    </p>
+  ) : (
+    <p className="ranking-result-count" />
+  );
+
+  const searchPlaceholder =
+    show.type === "people" && dataCount !== null && !hasNameSearch
+      ? t("searchPeopleByName", {total: formatExploreNumber(dataCount, locale)})
+      : t("searchByName");
+
   return (
     <div className="ranking-table-container">
-      <div className="ranking-table">
+      <div className="ranking-toolbar">
+        {resultCount}
+        <PaginationNav
+          pageIndex={controlledPageIndex}
+          pageCount={pageCount}
+          disabled={dataLoading}
+          onPage={setPageAndFetchData}
+          t={t}
+          locale={locale}
+        />
         <div className="ranking-search-bar">
+          <Search size={13} className="ranking-search-icon" aria-hidden="true" />
           <input
             type="text"
             className="ranking-search-input"
-            placeholder={t("searchByName")}
+            placeholder={searchPlaceholder}
             value={searchInputVal}
             onChange={handleSearchChange}
           />
@@ -151,6 +269,8 @@ export default function RankingTable({baseApi, places, locale}) {
             </button>
           )}
         </div>
+      </div>
+      <div className="ranking-table">
         <table>
           <thead>
             {table.getHeaderGroups().map(headerGroup => (
@@ -183,12 +303,11 @@ export default function RankingTable({baseApi, places, locale}) {
             {dataLoading
               ? (
                 <tr>
-                  <td colSpan={999}>{t("loading")}</td>
+                  <td className="ranking-table-message" colSpan={999}>{t("loading")}</td>
                 </tr>
               )
-              : (
-                <>
-                  {table.getRowModel().rows.map(row => (
+              : rows.length
+                ? rows.map(row => (
                     <tr key={row.id}>
                       {row.getVisibleCells().map(cell => (
                         <td
@@ -200,59 +319,26 @@ export default function RankingTable({baseApi, places, locale}) {
                         </td>
                       ))}
                     </tr>
-                  ))}
+                  ))
+                : (
                   <tr>
-                    <td colSpan={999}>
-                      {t("showingResults", {
-                        shown: formatExploreNumber(table.getRowModel().rows.length, locale),
-                        total: formatExploreNumber(controlledPageCount * pageSize, locale),
-                      })}
-                    </td>
+                    <td className="ranking-table-message" colSpan={999}>{t("noDataFound")}</td>
                   </tr>
-                </>
-              )}
+                )}
           </tbody>
         </table>
       </div>
-      <div className="pagination">
-        <button
-          aria-label={t("firstPage")}
-          onClick={() => setPageAndFetchData(0)}
-          disabled={!canPreviousPage || dataLoading}
-        >
-          {"<<"}
-        </button>{" "}
-        <button
-          aria-label={t("previousPage")}
-          onClick={() => setPageAndFetchData(controlledPageIndex - 1)}
-          disabled={!canPreviousPage || dataLoading}
-        >
-          {"<"}
-        </button>{" "}
-        <button
-          aria-label={t("nextPage")}
-          onClick={() => setPageAndFetchData(controlledPageIndex + 1)}
-          disabled={!canNextPage || dataLoading}
-        >
-          {">"}
-        </button>{" "}
-        <button
-          aria-label={t("lastPage")}
-          onClick={() => setPageAndFetchData(pageCount - 1)}
-          disabled={!canNextPage || dataLoading}
-        >
-          {">>"}
-        </button>{" "}
-        <span>
-          <strong>
-            {t("pageOf", {
-              page: formatExploreNumber(controlledPageIndex + 1, locale),
-              pages: formatExploreNumber(pageCount, locale),
-            })}
-          </strong>{" "}
-        </span>
-        <span>
-          | {t("goToPage")}{" "}
+      <div className="ranking-toolbar ranking-toolbar-bottom">
+        <PaginationNav
+          pageIndex={controlledPageIndex}
+          pageCount={pageCount}
+          disabled={dataLoading}
+          onPage={setPageAndFetchData}
+          t={t}
+          locale={locale}
+        />
+        <span className="ranking-goto">
+          {t("goToPage")}{" "}
           <input
             type="number"
             onChange={e => {
@@ -273,10 +359,9 @@ export default function RankingTable({baseApi, places, locale}) {
               if (page < 0) page = 0;
               setPageAndFetchData(page);
             }}
-            style={{width: "100px"}}
             value={pageInputVal + 1}
           />
-        </span>{" "}
+        </span>
       </div>
     </div>
   );

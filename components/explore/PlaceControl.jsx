@@ -28,36 +28,39 @@ export default function PlaceControl({places, locale}) {
 
   return (
     <div className="filter place-control">
-      <ul className="items options flat-options filter">
-        <li>
-          <a
-            onClick={e =>
-              loading
-                ? e.preventDefault()
-                : (e.preventDefault(), dispatch(updatePlaceType("birthplace")))
-            }
-            href="#"
-            id="birthplace"
-            className={getClassName("birthplace", placeType, loading)}
-          >
-            {t("bornIn")}
-          </a>
-        </li>
-        <li>
-          <a
-            onClick={e =>
-              loading
-                ? e.preventDefault()
-                : (e.preventDefault(), dispatch(updatePlaceType("deathplace")))
-            }
-            href="#"
-            id="deathplace"
-            className={getClassName("deathplace", placeType, loading)}
-          >
-            {t("diedIn")}
-          </a>
-        </li>
-      </ul>
+      <div className="flat-options-w-title">
+        <h3>{t("location")}</h3>
+        <ul className="items options flat-options filter">
+          <li>
+            <a
+              onClick={e =>
+                loading
+                  ? e.preventDefault()
+                  : (e.preventDefault(), dispatch(updatePlaceType("birthplace")))
+              }
+              href="#"
+              id="birthplace"
+              className={getClassName("birthplace", placeType, loading)}
+            >
+              {t("bornIn")}
+            </a>
+          </li>
+          <li>
+            <a
+              onClick={e =>
+                loading
+                  ? e.preventDefault()
+                  : (e.preventDefault(), dispatch(updatePlaceType("deathplace")))
+              }
+              href="#"
+              id="deathplace"
+              className={getClassName("deathplace", placeType, loading)}
+            >
+              {t("diedIn")}
+            </a>
+          </li>
+        </ul>
+      </div>
 
       <select
         disabled={loading}

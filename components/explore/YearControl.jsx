@@ -77,28 +77,31 @@ export default function YearControl({locale}) {
 
   return (
     <div className="year-control filter">
-      <ul className="items options flat-options filter">
-        <li>
-          <a
-            onClick={e => yearTypeChange("birthyear", e)}
-            href="#"
-            id="birthyear"
-            className={getClasName("birthyear", yearType, loading)}
-          >
-            {t("born")}
-          </a>
-        </li>
-        <li>
-          <a
-            onClick={e => yearTypeChange("deathyear", e)}
-            href="#"
-            id="deathyear"
-            className={getClasName("deathyear", yearType, loading)}
-          >
-            {t("died")}
-          </a>
-        </li>
-      </ul>
+      <div className="flat-options-w-title">
+        <h3>{t("years")}</h3>
+        <ul className="items options flat-options filter">
+          <li>
+            <a
+              onClick={e => yearTypeChange("birthyear", e)}
+              href="#"
+              id="birthyear"
+              className={getClasName("birthyear", yearType, loading)}
+            >
+              {t("born")}
+            </a>
+          </li>
+          <li>
+            <a
+              onClick={e => yearTypeChange("deathyear", e)}
+              href="#"
+              id="deathyear"
+              className={getClasName("deathyear", yearType, loading)}
+            >
+              {t("died")}
+            </a>
+          </li>
+        </ul>
+      </div>
       <div className="year-inputs">
         <input
           disabled={loading}
