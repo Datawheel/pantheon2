@@ -140,6 +140,19 @@ test("occupation-country overlapping lives includes living people", async ({page
   watch.assertClean();
 });
 
+test("occupation-country rankings link uses the canonical occupation ID", async ({page}) => {
+  const watch = attachErrorWatch(page);
+  await goto(page, "/es/profile/occupation/soccer-player/country/spain");
+
+  await expect(
+    page.locator(".top-10-intro a[href*='/explore/rankings']"),
+  ).toHaveAttribute(
+    "href",
+    "/es/explore/rankings?show=people&years=-3501,2025&place=esp&occupation=SOCCER%20PLAYER",
+  );
+  watch.assertClean();
+});
+
 test("cascade: deaths → country", async ({page}) => {
   const watch = attachErrorWatch(page);
   await goto(page, "/profile/deaths"); // redirects to the canonical year

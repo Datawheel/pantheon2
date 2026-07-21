@@ -31,6 +31,18 @@ for (const {name, path} of STATIC_PAGES) {
   });
 }
 
+test("recently added cards show Wikipedia language edition counts", async ({
+  page,
+}) => {
+  await goto(page, "/profile/recently-added");
+  await expect(page.locator(".recently-added-languages").first())
+    .toHaveText(/^\d+ language editions$/);
+
+  await goto(page, "/ja/profile/recently-added");
+  await expect(page.locator(".recently-added-languages").first())
+    .toHaveText(/^\d+ 言語版$/);
+});
+
 /**
  * Entity index pages. Same checks, plus: each must surface at least one working
  * link to a detail page (so the index→detail navigation isn't broken).

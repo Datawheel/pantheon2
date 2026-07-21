@@ -17,7 +17,7 @@ function parsePage(value) {
 
 async function getRecentlyAdded(page, locale) {
   const offset = (page - 1) * PAGE_SIZE;
-  const url = `${BASE_API}/person_hpi?select=created_at,person:person_id(id,name,translations,slug,birthyear,deathyear,gender,occupation(occupation,occupation_slug,translations))&order=created_at.desc&limit=${PAGE_SIZE + 1}&offset=${offset}`;
+  const url = `${BASE_API}/person_hpi?select=created_at,l,person:person_id(id,name,translations,slug,birthyear,deathyear,gender,occupation(occupation,occupation_slug,translations))&order=created_at.desc&limit=${PAGE_SIZE + 1}&offset=${offset}`;
 
   try {
     const response = await fetch(url, {
@@ -36,11 +36,18 @@ async function getRecentlyAdded(page, locale) {
       .map(row => {
         const person = row.person;
         const occupation = person.occupation;
+        const languageEditions = row.l === null || row.l === undefined
+          ? null
+          : Number(row.l);
         return {
           ...person,
           name: person.translations?.[locale] || person.name,
           occupationLabel:
             occupation?.translations?.[locale]?.occupation || occupation?.occupation,
+          languageEditions: languageEditions !== null
+            && Number.isFinite(languageEditions)
+            ? languageEditions
+            : null,
           createdAt: row.created_at,
         };
       });
@@ -81,7 +88,9 @@ export default async function Page(props) {
     ? params.locale
     : DEFAULT_LOCALE;
   const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
-  const t = getTranslations(locale).recentlyAdded;
+  const translations = getTranslations(locale);
+  const t = translations.recentlyAdded;
+  const languageEditionsLabel = translations.selectPerson.statLanguages;
   const page = parsePage(searchParams?.page);
   const {people, hasNext} = await getRecentlyAdded(page, locale);
   const pagePath = `${localePrefix}/profile/recently-added`;
@@ -137,6 +146,12 @@ export default async function Page(props) {
                           ? ` · ${person.birthyear}${person.deathyear ? `–${person.deathyear}` : ""}`
                           : null}
                       </p>
+                      {person.languageEditions !== null ? (
+                        <p className="recently-added-languages">
+                          <strong>{person.languageEditions}</strong>{" "}
+                          {languageEditionsLabel}
+                        </p>
+                      ) : null}
                       {formattedDate ? (
                         <time dateTime={person.createdAt}>
                           {t.addedOn({date: formattedDate})}

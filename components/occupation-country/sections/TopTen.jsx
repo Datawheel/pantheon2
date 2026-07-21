@@ -53,7 +53,9 @@ export default function TopTen({country, occupation, people, locale = DEFAULT_LO
             <>
               {" "}
               {t.occupationCountry.visitRankings}{" "}
-              <Link href={`${localePrefix}/explore/rankings?show=people&place=${country.country_code}&occupation=${occupation.occupation}`}>
+              <Link
+                href={`${localePrefix}/explore/rankings?show=people&years=-3501,2025&place=${country.country_code}&occupation=${encodeURIComponent(occupation.id)}`}
+              >
                 {locale === "en"
                   ? `${nationality} ${occupationPlural}`
                   : `${occupationPlural} ${nationality}`}
