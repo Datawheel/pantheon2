@@ -8,8 +8,14 @@ import {
   layoutWithLines,
 } from "@chenglou/pretext";
 import VizWrapper from "../../../common/VizWrapper";
-import {COLORS_DOMAIN, FORMATTERS} from "../../../utils/consts";
+import {COLORS_DOMAIN} from "../../../utils/consts";
 import {initEChart} from "@/components/utils/echarts";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {
+  formatExploreNumber,
+  formatExploreYear,
+} from "@/app/exploreTranslations";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
 const LABEL_FONT_FAMILY = '"Amiko", Arial, sans-serif';
 const LINE_HEIGHT_MUL = 1.08;
@@ -382,9 +388,11 @@ function buildGraphicLabels(chart, total, fitCache) {
   return labels;
 }
 
-export default function OccupationsTmap({data, title}) {
+export default function OccupationsTmap({data, title, lang = "en"}) {
   const chartRef = useRef(null);
   const fitCacheRef = useRef(new Map());
+  const t = useMemo(() => getLocationTranslations(lang), [lang]);
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
 
   const {treeData, total, domains} = useMemo(() => {
     const tree = buildTreeData(data);
@@ -429,8 +437,8 @@ export default function OccupationsTmap({data, title}) {
             : "0.00";
           const peopleLabel =
             datum.topPeople && datum.topPeople.length === 1
-              ? "Person"
-              : "People";
+              ? t("topRankedPerson")
+              : t("topRankedPeople");
 
           const ancestors = params.treeAncestors || params.treePathInfo || [];
           const path = ancestors
@@ -444,18 +452,22 @@ export default function OccupationsTmap({data, title}) {
             html += `<div style="font-size: 10px; letter-spacing: 0.5px; color: #888; text-transform: uppercase; margin-bottom: 3px;">${path}</div>`;
           }
           html += `<div style="font-weight: 700; font-size: 15px; color: #222;">${name}</div>`;
-          html += `<div style="font-size: 12px; color: #666; margin-top: 2px;">${value.toLocaleString()} ${value === 1 ? "person" : "people"} · ${percent}%</div>`;
+          html += `<div style="font-size: 12px; color: #666; margin-top: 2px;">${formatExploreNumber(value, lang)} ${value === 1 ? t("person") : t("peopleCount")} · ${percent}%</div>`;
 
           if (datum.topPeople && datum.topPeople.length) {
-            html += `<div style="margin-top: 10px; font-size: 10px; letter-spacing: 0.5px; color: #888; text-transform: uppercase;">Top Ranked ${peopleLabel}</div>`;
+            html += `<div style="margin-top: 10px; font-size: 10px; letter-spacing: 0.5px; color: #888; text-transform: uppercase;">${peopleLabel}</div>`;
             datum.topPeople.forEach(p => {
               const yearStr =
-                p.birthyear != null ? `b.${FORMATTERS.year(p.birthyear)}` : "";
+                p.birthyear != null
+                  ? t("bornAbbreviation", {
+                      year: formatExploreYear(p.birthyear, lang),
+                    })
+                  : "";
               html += `<div style="margin-top: 2px; font-size: 12px;"><strong style="color: #222;">${p.name}</strong> <span style="color: #888;">${yearStr}</span></div>`;
             });
           }
           if (datum.occupationSlug) {
-            html += `<div style="margin-top: 8px; font-size: 10px; color: #aaa;">Click to view profile</div>`;
+            html += `<div style="margin-top: 8px; font-size: 10px; color: #aaa;">${t("clickToViewProfile")}</div>`;
           }
           return html;
         },
@@ -568,7 +580,7 @@ export default function OccupationsTmap({data, title}) {
 
     const handleClick = params => {
       if (params && params.data && params.data.occupationSlug) {
-        window.location.href = `/profile/occupation/${params.data.occupationSlug}`;
+        window.location.href = `${localePrefix}/profile/occupation/${params.data.occupationSlug}`;
       }
     };
     chart.on("click", handleClick);
@@ -598,7 +610,7 @@ export default function OccupationsTmap({data, title}) {
       chart.off("click", handleClick);
       chart.dispose();
     };
-  }, [treeData, total, title]);
+  }, [lang, localePrefix, t, title, total, treeData]);
 
   return (
     <VizWrapper>

@@ -3,6 +3,15 @@ import {NextResponse} from "next/server";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {safeFetchArray, safeFetchFirst} from "@/app/utils/safeFetch";
+import {getSupportedLocale, isArabicLocale} from "../helpers/locale";
+import {getLocationTranslations} from "@/app/locationTranslations";
+import {
+  formatLocationNumber,
+  getLocalizedPlaceNameMap,
+  localizeCountry,
+  localizePlace,
+} from "@/app/utils/locationLocalization";
+import {createArabicLocationCard} from "../helpers/arabicLocationCard";
 
 // Match the hardened person route: run in the Node runtime, which has higher
 // memory limits and more predictable image decoding than the edge sandbox.
@@ -13,10 +22,6 @@ export const runtime = "nodejs";
 // and still cap type/size so a surprise response can't blow up the heap.
 const MAX_BG_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB
 const WIKI_TIMEOUT_MS = 2500;
-
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 
 async function fetchPublicAsset(request, assetPath) {
   const assetUrl = new URL(assetPath, request.url);
@@ -33,6 +38,10 @@ export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = searchParams.get("id");
+  const lang = getSupportedLocale(
+    searchParams.get("lang") || searchParams.get("locale") || "en",
+  );
+  const t = getLocationTranslations(lang);
 
   if (!id) {
     return new NextResponse("Not Found", {status: 404});
@@ -46,19 +55,26 @@ export async function GET(request) {
 
   // Fetch place data. safeFetchFirst guards res.ok / HTML responses so an API
   // error during saturation windows yields a clean 404 instead of a thrown 500.
-  const place = await safeFetchFirst(`${BASE_API}/place?slug=eq.${id}`, {}, {});
+  const rawPlace = await safeFetchFirst(
+    `${BASE_API}/place?slug=eq.${id}`,
+    {},
+    {},
+  );
+  const localizedPlaceNames = await getLocalizedPlaceNameMap([rawPlace], lang);
+  const place = localizePlace(rawPlace, localizedPlaceNames);
   const {place: name, country: countryId} = place;
+  const wikipediaName = place.englishPlace || name;
 
   if (!name) {
     return new NextResponse("ID mismatch", {status: 404});
   }
 
   // Fetch country data
-  const country = await safeFetchFirst(
+  const country = localizeCountry(await safeFetchFirst(
     `${BASE_API}/country?id=eq.${countryId}`,
     {},
     {}
-  );
+  ), lang);
   const {country: countryName} = country;
 
   // Fetch a Wikipedia thumbnail to use as the card background. This is entirely
@@ -67,7 +83,9 @@ export async function GET(request) {
   try {
     // Wikipedia article titles are underscore-delimited; normalize the place
     // display name toward that canonical form to improve the match rate.
-    const wikiTitle = encodeURIComponent(name.trim().replace(/\s+/g, "_"));
+    const wikiTitle = encodeURIComponent(
+      wikipediaName.trim().replace(/\s+/g, "_"),
+    );
     const wikiRes = await fetch(
       `https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`,
       {
@@ -142,6 +160,39 @@ export async function GET(request) {
   const peopleToShow = peopleWithImages.filter(p => p.imageData).slice(0, 8);
 
   const backgroundColor = "#f4f4f1";
+  const notableLabel = totalCount > 0
+    ? t("notablePeople", {count: formatLocationNumber(totalCount, lang)})
+    : "";
+
+  if (isArabicLocale(lang)) {
+    try {
+      const png = await createArabicLocationCard({
+        backgroundImage: bgImageData,
+        countryName,
+        locationName: name,
+        notableLabel,
+        people: peopleToShow,
+      });
+      return new NextResponse(png, {
+        status: 200,
+        headers: {
+          "cache-control": OG_CACHE_CONTROL,
+          "content-type": "image/png",
+        },
+      });
+    } catch (error) {
+      console.error(
+        "[screenshot-fail]",
+        {route: "place", url: request.url, id, stage: "sharp-rtl"},
+        error,
+      );
+      return new NextResponse("OG render failed", {status: 500});
+    }
+  }
+
+  const localizedFontFamily = isArabicLocale(lang)
+    ? "Arial,sans-serif"
+    : "Marcellus,Times,serif";
 
   try {
     return new ImageResponse(
@@ -150,7 +201,7 @@ export async function GET(request) {
         style={{
           background: backgroundColor,
           display: "flex",
-          fontFamily: "Marcellus,Times,serif",
+          fontFamily: localizedFontFamily,
           height: "100%",
           width: "100%",
           position: "relative",
@@ -262,10 +313,10 @@ export async function GET(request) {
             <h1
               style={{
                 color: "#ffffff",
-                fontFamily: "Marcellus,Times,serif",
-                textTransform: "uppercase",
+                fontFamily: localizedFontFamily,
+                textTransform: isArabicLocale(lang) ? "none" : "uppercase",
                 fontWeight: "400",
-                letterSpacing: ".35rem",
+                letterSpacing: isArabicLocale(lang) ? "0" : ".35rem",
                 fontSize: "4rem",
                 margin: "0",
                 textAlign: "center",
@@ -300,7 +351,7 @@ export async function GET(request) {
                   letterSpacing: ".1rem",
                 }}
               >
-                {formatNumber(totalCount)} notable people
+                {notableLabel}
               </p>
             )}
           </div>

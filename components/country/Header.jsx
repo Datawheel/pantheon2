@@ -1,9 +1,11 @@
 import {max as D3Max, min as D3Min} from "d3-array";
 import dayjs from "dayjs";
+import {getLocationTranslations} from "@/app/locationTranslations";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
-export default function Header({country, wikiPageViews}) {
+export default function Header({country, wikiPageViews, lang = "en"}) {
+  const t = getLocationTranslations(lang);
   const wikiPageViewItems = wikiPageViews?.items || null;
 
   let pageViewData = null;
@@ -50,8 +52,8 @@ export default function Header({country, wikiPageViews}) {
         </div>
       </div>
       <div className="info">
-        <p className="top-desc">Cultural Production in</p>
-        <h2 className="profile-type">Present Day</h2>
+        <p className="top-desc">{t("culturalProductionIn")}</p>
+        <h2 className="profile-type">{t("presentDay")}</h2>
         <h1 className="profile-name">{country.country}</h1>
       </div>
       <div className="mouse">

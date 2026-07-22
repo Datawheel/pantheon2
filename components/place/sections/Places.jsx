@@ -1,13 +1,21 @@
 import PlacesMap from "./vizes/PlacesMap";
 import SectionLayout from "../../common/SectionLayout";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
-export default function Places({place, peopleBorn, peopleDied, slug, title}) {
+export default function Places({
+  place,
+  peopleBorn,
+  peopleDied,
+  slug,
+  title,
+  lang = "en",
+}) {
+  const t = getLocationTranslations(lang);
   const tmapBornData = peopleBorn
     .filter(p => p.deathyear !== null)
     .sort((a, b) => b.l - a.l)
     .map(d => ({
       ...d,
-      event: "CITY OF DEATHS OF FAMOUS PEOPLE",
       place: d.dplace_geonameid,
     }));
 
@@ -36,7 +44,6 @@ export default function Places({place, peopleBorn, peopleDied, slug, title}) {
     .sort((a, b) => b.l - a.l)
     .map(d => ({
       ...d,
-      event: "CITY FOR BIRTHS OF FAMOUS PEOPLE",
       place: d.bplace_geonameid,
     }));
   // console.log("tmapDeathData!", tmapDeathData.length);
@@ -61,12 +68,12 @@ export default function Places({place, peopleBorn, peopleDied, slug, title}) {
       <PlacesMap
         place={place}
         data={geomapBornData}
-        title={`Death places for people born in ${place.place}`}
+        title={t("deathPlacesTitle", {location: place.place})}
       />
       <PlacesMap
         place={place}
         data={geomapDeathData}
-        title={`Birth places for people deceased in ${place.place}`}
+        title={t("birthPlacesTitle", {location: place.place})}
         bubbleFill="rgba(105, 123, 232, 0.42)"
         bubbleBorder="rgba(72, 89, 201, 0.82)"
         bubbleHoverFill="rgba(105, 123, 232, 0.64)"

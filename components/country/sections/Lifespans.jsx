@@ -1,18 +1,19 @@
 import SectionLayout from "../../common/SectionLayout";
 import PeoplePriestley from "../../place/sections/vizes/PeoplePriestley";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
-const Lifespans = ({attrs, country, peopleBorn, title, slug}) => {
+const Lifespans = ({attrs, country, peopleBorn, title, slug, lang = "en"}) => {
+  const t = getLocationTranslations(lang);
   const safePeopleBorn = peopleBorn || [];
   const tmapBornData = safePeopleBorn
     .filter(p => p.birthyear !== null && p.birthyear > 1699 && p.occupation)
-    .sort((a, b) => b.langs - a.langs);
-
-  tmapBornData.forEach(d => {
-    d.occupation_name = d.occupation.occupation;
-    d.occupation_id = `${d.occupation_id}`;
-    d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
-  });
+    .sort((a, b) => b.langs - a.langs)
+    .map(d => ({
+      ...d,
+      occupation_name: d.occupation.occupation,
+      occupation_id: `${d.occupation_id}`,
+      place: d.birthplace,
+    }));
 
   const priestleyMax = 25;
 
@@ -24,13 +25,18 @@ const Lifespans = ({attrs, country, peopleBorn, title, slug}) => {
     <SectionLayout slug={slug} title={title}>
       <div className="section-body">
         <p>
-          Below is a visual represetation of the lifespans of the top{" "}
-          {priestleyData.length} globally memorable people born in present day{" "}
-          {country.country} since 1700.
+          {t("lifespanIntro", {
+            count: priestleyData.length,
+            location: country.country,
+          })}
         </p>
         <PeoplePriestley
-          title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${country.country}`}
+          title={t("lifespanTitle", {
+            count: priestleyData.length,
+            location: country.country,
+          })}
           data={priestleyData}
+          lang={lang}
         />
       </div>
     </SectionLayout>

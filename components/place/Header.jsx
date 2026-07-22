@@ -1,6 +1,7 @@
 import {max as d3Max, min as d3Min} from "d3-array";
 import dayjs from "dayjs";
 import {DEFAULT_LOCALE} from "@/app/locales";
+import {getLocationTranslations} from "@/app/locationTranslations";
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
 
@@ -11,6 +12,7 @@ export default function Header({
   wikiPageViews,
   lang = "en",
 }) {
+  const t = getLocationTranslations(lang);
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const wikiPageViewItems = wikiPageViews?.items || null;
 
@@ -63,8 +65,8 @@ export default function Header({
         </div>
       </div>
       <div className="info">
-        <p className="top-desc">Cultural Production in</p>
-        <h2 className="profile-type">Present Day</h2>
+        <p className="top-desc">{t("culturalProductionIn")}</p>
+        <h2 className="profile-type">{t("presentDay")}</h2>
 
         {country && country.country_code ? (
           <h1 className="profile-name">

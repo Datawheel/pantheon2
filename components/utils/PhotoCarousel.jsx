@@ -9,6 +9,8 @@ import PersonImage from "./PersonImage";
 import Image from "next/image";
 import {min as D3Min, max as D3Max} from "d3-array";
 import {getTranslations} from "@/app/translations";
+import {formatExploreYear} from "@/app/exploreTranslations";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
 const PHOTO_WIDTH = 150;
 const PHOTO_PADDING = 36;
@@ -24,6 +26,7 @@ export default function PhotoCarousel({
   lang = "en",
 }) {
   const t = getTranslations(lang);
+  const locationT = getLocationTranslations(lang);
   const [lowerBound, setLowerBound] = useState(null);
   const [upperBound, setUpperBound] = useState(null);
   const [replacementPeople, setReplacementPeople] = useState([]);
@@ -153,7 +156,7 @@ export default function PhotoCarousel({
           height={12}
           className="back"
           src="/images/ui/tri-left-b.svg"
-          alt="Load previous"
+          alt={locationT("loadPrevious")}
         />
       </a>
       <>
@@ -175,7 +178,7 @@ export default function PhotoCarousel({
                   <PersonImage
                     person={person}
                     src={`/profile/people/${person.id}.jpg`}
-                    alt={`Photo of ${person.name}`}
+                    alt={locationT("photoOf", {name: person.name})}
                     fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                   />
                 </Link>
@@ -196,9 +199,9 @@ export default function PhotoCarousel({
               ) : null}
               {person.birthyear ? (
                 <p className="rank-year">
-                  {FORMATTERS.year(person.birthyear)} -{" "}
+                  {formatExploreYear(person.birthyear, lang)} -{" "}
                   {person.deathyear
-                    ? `${FORMATTERS.year(person.deathyear)}`
+                    ? formatExploreYear(person.deathyear, lang)
                     : t.person.carousel.present}
                 </p>
               ) : null}
@@ -226,7 +229,7 @@ export default function PhotoCarousel({
           height={12}
           className="forward"
           src="/images/ui/tri-right-b.svg"
-          alt="Load previous"
+          alt={locationT("loadNext")}
         />
       </a>
     </div>

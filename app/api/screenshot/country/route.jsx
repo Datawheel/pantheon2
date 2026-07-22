@@ -4,14 +4,17 @@ import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {safeFetchArray, safeFetchFirst} from "@/app/utils/safeFetch";
 import {cleanParam} from "../helpers/params";
+import {getSupportedLocale, isArabicLocale} from "../helpers/locale";
+import {getLocationTranslations} from "@/app/locationTranslations";
+import {
+  formatLocationNumber,
+  localizeCountry,
+} from "@/app/utils/locationLocalization";
+import {createArabicLocationCard} from "../helpers/arabicLocationCard";
 
 // Match the hardened person route: the Node runtime has higher memory limits
 // and more predictable image decoding than the edge sandbox.
 export const runtime = "nodejs";
-
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 
 async function fetchPublicAsset(request, assetPath) {
   const assetUrl = new URL(assetPath, request.url);
@@ -50,6 +53,10 @@ export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const id = cleanParam(searchParams.get("id"));
+  const lang = getSupportedLocale(
+    searchParams.get("lang") || searchParams.get("locale") || "en",
+  );
+  const t = getLocationTranslations(lang);
 
   if (!id) {
     return new NextResponse("Not Found", {status: 404});
@@ -63,11 +70,12 @@ export async function GET(request) {
 
   // Fetch country data. safeFetchFirst guards res.ok / HTML responses so an API
   // error during saturation windows yields a clean 404 instead of a thrown 500.
-  const country = await safeFetchFirst(
+  const rawCountry = await safeFetchFirst(
     `${BASE_API}/country?slug=eq.${id}`,
     {},
     {}
   );
+  const country = localizeCountry(rawCountry, lang);
   const {country: countryName, img_link, slug, id: countryId} = country;
 
   // Unknown slugs resolve to the {} fallback: no name and no id.
@@ -125,6 +133,39 @@ export async function GET(request) {
   const peopleToShow = peopleWithImages.filter(p => p.imageData).slice(0, 8);
 
   const backgroundColor = "#f4f4f1";
+  const notableLabel = totalCount > 0
+    ? t("notablePeople", {count: formatLocationNumber(totalCount, lang)})
+    : "";
+
+  if (isArabicLocale(lang)) {
+    try {
+      const png = await createArabicLocationCard({
+        backgroundImage: bgImageData,
+        countryName: "",
+        locationName: countryName,
+        notableLabel,
+        people: peopleToShow,
+      });
+      return new NextResponse(png, {
+        status: 200,
+        headers: {
+          "cache-control": OG_CACHE_CONTROL,
+          "content-type": "image/png",
+        },
+      });
+    } catch (error) {
+      console.error(
+        "[screenshot-fail]",
+        {route: "country", url: request.url, id, stage: "sharp-rtl"},
+        error,
+      );
+      return new NextResponse("OG render failed", {status: 500});
+    }
+  }
+
+  const localizedFontFamily = isArabicLocale(lang)
+    ? "Arial,sans-serif"
+    : "Marcellus,Times,serif";
 
   try {
     const imageResponse = new ImageResponse(
@@ -133,7 +174,7 @@ export async function GET(request) {
         style={{
           background: backgroundColor,
           display: "flex",
-          fontFamily: "Marcellus,Times,serif",
+          fontFamily: localizedFontFamily,
           height: "100%",
           width: "100%",
           position: "relative",
@@ -229,10 +270,10 @@ export async function GET(request) {
             <h1
               style={{
                 color: "#ffffff",
-                fontFamily: "Marcellus,Times,serif",
-                textTransform: "uppercase",
+                fontFamily: localizedFontFamily,
+                textTransform: isArabicLocale(lang) ? "none" : "uppercase",
                 fontWeight: "400",
-                letterSpacing: ".4rem",
+                letterSpacing: isArabicLocale(lang) ? "0" : ".4rem",
                 fontSize: "4.5rem",
                 margin: "0",
                 textAlign: "center",
@@ -253,7 +294,7 @@ export async function GET(request) {
                   letterSpacing: ".1rem",
                 }}
               >
-                {formatNumber(totalCount)} notable people
+              {notableLabel}
               </p>
             )}
           </div>

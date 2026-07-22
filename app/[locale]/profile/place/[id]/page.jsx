@@ -15,6 +15,17 @@ import Lifespans from "../../../../../components/place/sections/Lifespans";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {safeFetchJson, safeFetchFirst} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
+import {getLocationTranslations} from "@/app/locationTranslations";
+import {
+  buildLocalizedOccupationMap,
+  formatLocationNumber,
+  getLocalizedPlaceNameMap,
+  localizeCountry,
+  localizePeople,
+  localizePersonPlaces,
+  localizePlace,
+  normalizeLocationLocale,
+} from "@/app/utils/locationLocalization";
 
 async function getWikiSummary(placeName) {
   try {
@@ -139,11 +150,11 @@ async function getPlaceRanks(placeRankLow, placeRankHigh) {
   );
 }
 
-async function getPeopleBornHere(placeId) {
+async function getPeopleBornHere(placeId, locale) {
   if (!placeId) {
     return [];
   }
-  const url = `${BASE_API}/person?bplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  const url = `${BASE_API}/person?bplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,localized_name:translations->>${locale},slug,id,gender,birthyear,deathyear,alive`;
   return await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -163,11 +174,11 @@ async function getPeopleBornHereHpi(placeId) {
   );
 }
 
-async function getPeopleDiedHere(placeId) {
+async function getPeopleDiedHere(placeId, locale) {
   if (!placeId) {
     return [];
   }
-  const url = `${BASE_API}/person?dplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,deathyear,alive`;
+  const url = `${BASE_API}/person?dplace_geonameid=eq.${placeId}&select=bplace_geonameid(id,place,slug,lat,lon),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,localized_name:translations->>${locale},slug,id,gender,birthyear,deathyear,alive`;
   return await safeFetchJson(
     url,
     {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
@@ -187,10 +198,6 @@ async function getPeopleDiedHereHpi(placeId) {
   );
 }
 
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 function getRankWindow(rankValue) {
   const rank = parseInt(rankValue, 10);
   if (!Number.isFinite(rank)) {
@@ -207,17 +214,21 @@ export async function generateMetadata(props, parent) {
   const params = await props.params;
   const {id, locale} = params;
   const baseUrl = process.env.URL || "https://pantheon.world";
-  const lang = locale || "en";
+  const lang = normalizeLocationLocale(locale);
+  const t = getLocationTranslations(lang);
 
   // fetch data
-  const place = await getPlace(id);
+  const rawPlace = await getPlace(id);
 
-  if (!place || !place.place) {
-    return {title: "Place Not Found | Pantheon"};
+  if (!rawPlace || !rawPlace.place) {
+    return {title: t("placeNotFound")};
   }
 
+  const localizedPlaceNames = await getLocalizedPlaceNameMap([rawPlace], lang);
+  const place = localizePlace(rawPlace, localizedPlaceNames);
+
   // Get country info
-  const country = await getCountry(place.country);
+  const country = localizeCountry(await getCountry(place.country), lang);
 
   // Get count of notable people born here
   const countRes = await fetch(
@@ -239,20 +250,22 @@ export async function generateMetadata(props, parent) {
   const previousImages = (await parent).openGraph?.images || [];
 
   const countryName = country?.country || "";
-  const title = `Famous People from ${place.place}${countryName ? `, ${countryName}` : ""} | ${formatNumber(totalCount)} Notable People | Pantheon`;
-  const description = `Explore ${formatNumber(totalCount)} historically significant people born in ${place.place}${countryName ? `, ${countryName}` : ""}. Discover famous celebrities, leaders, artists, scientists, athletes and more from this city throughout history.`;
+  const location = `${place.place}${countryName ? `, ${countryName}` : ""}`;
+  const count = formatLocationNumber(totalCount, lang);
+  const title = t("placeMetaTitle", {count, location});
+  const description = t("placeMetaDescription", {count, location});
 
   return {
     title,
     description,
-    keywords: `${place.place} famous people, famous people from ${place.place}, ${place.place} celebrities, notable people born in ${place.place}, ${place.place} historical figures${countryName ? `, ${countryName} famous people` : ""}`,
+    keywords: t("placeMetaKeywords", {location}),
     openGraph: {
       title,
       description,
       type: "website",
       images: [
         {
-          url: `${baseUrl}/api/screenshot/place?id=${id}`,
+          url: `${baseUrl}/api/screenshot/place?id=${id}&lang=${lang}`,
           width: 1200,
           height: 630,
           type: "image/png",
@@ -265,7 +278,7 @@ export async function generateMetadata(props, parent) {
       card: "summary_large_image",
       title,
       description,
-      images: [`${baseUrl}/api/screenshot/place?id=${id}`],
+      images: [`${baseUrl}/api/screenshot/place?id=${id}&lang=${lang}`],
     },
     alternates: {
       canonical: buildCanonical(lang, `/profile/place/${id}`),
@@ -276,13 +289,15 @@ export async function generateMetadata(props, parent) {
 
 export default async function Page(props) {
   const params = await props.params;
-  const {id} = params;
-  const [place, occupations] = await Promise.all([
+  const {id, locale} = params;
+  const lang = normalizeLocationLocale(locale);
+  const t = getLocationTranslations(lang);
+  const [rawPlace, occupations] = await Promise.all([
     getPlace(id),
     getOccupations(),
   ]);
 
-  if (!place?.id || !place?.place) {
+  if (!rawPlace?.id || !rawPlace?.place) {
     notFound();
   }
 
@@ -292,20 +307,20 @@ export default async function Page(props) {
   //   getWikiSummary(place.place),
   //   getWikiPageViews(place.place),
   // ]);
-  const country = await getCountry(place.country);
+  const country = localizeCountry(await getCountry(rawPlace.country), lang);
   const wikiSummary = null;
   const wikiPageViewsData = [];
-  const placeRankWindow = getRankWindow(place?.born_rank_unique);
+  const placeRankWindow = getRankWindow(rawPlace?.born_rank_unique);
   const placeRanks = placeRankWindow
     ? await getPlaceRanks(placeRankWindow.low, placeRankWindow.high)
     : null;
 
   let [peopleBornHere, peopleDiedHere, peopleBornHereHpi, peopleDiedHereHpi] =
     await Promise.all([
-      getPeopleBornHere(place.id),
-      getPeopleDiedHere(place.id),
-      getPeopleBornHereHpi(place.id),
-      getPeopleDiedHereHpi(place.id),
+      getPeopleBornHere(rawPlace.id, lang),
+      getPeopleDiedHere(rawPlace.id, lang),
+      getPeopleBornHereHpi(rawPlace.id),
+      getPeopleDiedHereHpi(rawPlace.id),
     ]);
   // since bplace_country_rank_unique and bplace_country_rank_unique no longer exist
   // we calculate and add them...
@@ -342,7 +357,57 @@ export default async function Page(props) {
           }))
       : [];
 
-  const attrs = occupations.reduce((obj, d) => {
+  const localizedOccupationById = buildLocalizedOccupationMap(
+    occupations,
+    lang,
+  );
+  peopleBornHere = localizePeople(
+    peopleBornHere,
+    lang,
+    localizedOccupationById,
+  );
+  peopleDiedHere = localizePeople(
+    peopleDiedHere,
+    lang,
+    localizedOccupationById,
+  );
+
+  const primaryPlaceNames = await getLocalizedPlaceNameMap([rawPlace], lang);
+  const visiblePlaces = [
+    ...(placeRanks || []),
+    ...peopleBornHere
+      .filter(person =>
+        person.deathyear !== null
+        && person.dplace_geonameid?.lat != null
+        && person.dplace_geonameid?.lon != null,
+      )
+      .slice(0, 100)
+      .map(person => person.dplace_geonameid),
+    ...peopleDiedHere
+      .filter(person =>
+        person.deathyear !== null
+        && person.bplace_geonameid?.lat != null
+        && person.bplace_geonameid?.lon != null,
+      )
+      .slice(0, 100)
+      .map(person => person.bplace_geonameid),
+  ];
+  const relatedPlaceNames = await getLocalizedPlaceNameMap(
+    visiblePlaces,
+    lang,
+  );
+  const localizedPlaceNames = new Map([
+    ...relatedPlaceNames,
+    ...primaryPlaceNames,
+  ]);
+  const place = localizePlace(rawPlace, localizedPlaceNames);
+  const localizedPlaceRanks = placeRanks
+    ? placeRanks.map(rankPlace => localizePlace(rankPlace, localizedPlaceNames))
+    : null;
+  peopleBornHere = localizePersonPlaces(peopleBornHere, localizedPlaceNames);
+  peopleDiedHere = localizePersonPlaces(peopleDiedHere, localizedPlaceNames);
+
+  const attrs = [...localizedOccupationById.values()].reduce((obj, d) => {
     obj[d.id] = d;
     return obj;
   }, {});
@@ -350,44 +415,52 @@ export default async function Page(props) {
   const sections = [
     {
       slug: "people",
-      title: "People",
+      title: t("people"),
       content: (
         <PeopleRanking
           country={country}
           place={place}
           peopleBorn={peopleBornHere}
           peopleDied={peopleDiedHere}
+          lang={lang}
         />
       ),
     },
     {
       slug: "occupations",
-      title: "Occupations",
+      title: t("occupations"),
       content: (
         <Occupations
           attrs={attrs}
           place={place}
           peopleBorn={peopleBornHere}
           peopleDied={peopleDiedHere}
+          lang={lang}
         />
       ),
     },
     {
       slug: "places",
-      title: "Places",
+      title: t("places"),
       content: (
         <Places
           place={place}
           peopleBorn={peopleBornHere}
           peopleDied={peopleDiedHere}
+          lang={lang}
         />
       ),
     },
     {
       slug: "overlapping-lives",
-      title: "Overlapping Lives",
+      title: t("overlappingLives"),
       content: (
-        <Lifespans attrs={attrs} place={place} peopleBorn={peopleBornHere} />
+        <Lifespans
+          attrs={attrs}
+          place={place}
+          peopleBorn={peopleBornHere}
+          lang={lang}
+        />
       ),
     },
     // {slug: "living-people", title: "Living People"}
@@ -400,17 +473,19 @@ export default async function Page(props) {
         country={country}
         wikiSummary={wikiSummary}
         wikiPageViews={wikiPageViewsData}
+        lang={lang}
       />
       <div className="about-section">
         <ProfileNav sections={sections} />
-        {placeRanks && placeRanks.length ? (
+        {localizedPlaceRanks && localizedPlaceRanks.length ? (
           <Intro
             place={place}
             country={country}
-            placeRanks={placeRanks}
+            placeRanks={localizedPlaceRanks}
             peopleBornHere={peopleBornHere}
             peopleDiedHere={peopleDiedHere}
             wikiSummary={wikiSummary}
+            lang={lang}
           />
         ) : null}
       </div>

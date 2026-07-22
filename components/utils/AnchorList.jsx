@@ -1,11 +1,30 @@
 import Link from "next/link";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 
-export default function AnchorList({items, name, url, noAnd, newWindow, andWord = " and "}) {
+function getLocalizedAndWord(lang) {
+  const and = getExploreTranslations(lang)("and");
+  if (lang === "zh" || lang === "ja") return and;
+  if (lang === "ar") return ` ${and}`;
+  return ` ${and} `;
+}
+
+export default function AnchorList({
+  items,
+  name,
+  url,
+  noAnd,
+  newWindow,
+  andWord,
+  lang = "en",
+}) {
+  const conjunction = andWord ?? getLocalizedAndWord(lang);
   return items ? (
     <span>
       {items.map((item, index) => (
         <span key={item.id || index}>
-          {!noAnd && index && index === items.length - 1 ? andWord : null}
+          {!noAnd && index && index === items.length - 1
+            ? conjunction
+            : null}
           <Link href={url(item)} target={newWindow ? "_blank" : "_self"}>
             {name(item)}
           </Link>

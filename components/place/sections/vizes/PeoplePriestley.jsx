@@ -2,16 +2,24 @@
 
 import {useEffect, useRef, useMemo} from "react";
 import {initEChart, echarts} from "@/components/utils/echarts";
-import {COLORS_DOMAIN, FORMATTERS} from "@/components/utils/consts";
+import {COLORS_DOMAIN} from "@/components/utils/consts";
 import VizWrapper from "../../../common/VizWrapper";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {
+  formatExploreNumber,
+  formatExploreYear,
+} from "@/app/exploreTranslations";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
 function getDomainColor(person) {
   const slug = person.occupation?.domain_slug;
   return slug && COLORS_DOMAIN[slug] ? COLORS_DOMAIN[slug] : "#ccc";
 }
 
-export default function PeoplePriestley({data, title}) {
+export default function PeoplePriestley({data, title, lang = "en"}) {
   const chartRef = useRef(null);
+  const t = useMemo(() => getLocationTranslations(lang), [lang]);
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
 
   const {categories, seriesData, domains, yearMin, yearMax} = useMemo(() => {
     const sorted = [...data].sort((a, b) => a.birthyear - b.birthyear);
@@ -77,14 +85,16 @@ export default function PeoplePriestley({data, title}) {
           if (!params.value) return "";
           const [, birth, endYear, name, domain, , , isLiving] = params.value;
           const lifespan = endYear - birth;
-          const endLabel = isLiving ? "Present" : FORMATTERS.year(endYear);
-          const lifespanLabel = isLiving ? "Age" : "Lifespan";
+          const endLabel = isLiving
+            ? t("present")
+            : formatExploreYear(endYear, lang);
+          const lifespanLabel = isLiving ? t("age") : t("lifespan");
           return (
             `<strong style="font-size:14px;">${name}</strong><br/>` +
             `<span style="color:#888;font-size:12px;">${domain}</span><br/>` +
-            `<span style="font-size:12px;">${FORMATTERS.year(birth)} – ${endLabel}</span><br/>` +
-            `<span style="color:#888;font-size:12px;">${lifespanLabel}: ${lifespan} years</span><br/>` +
-            `<span style="color:#aaa;font-size:11px;display:block;margin-top:4px;">Click to view profile</span>`
+            `<span style="font-size:12px;">${formatExploreYear(birth, lang)} – ${endLabel}</span><br/>` +
+            `<span style="color:#888;font-size:12px;">${lifespanLabel}: ${formatExploreNumber(lifespan, lang)} ${t("yearsUnit")}</span><br/>` +
+            `<span style="color:#aaa;font-size:11px;display:block;margin-top:4px;">${t("clickToViewProfile")}</span>`
           );
         },
       },
@@ -125,7 +135,7 @@ export default function PeoplePriestley({data, title}) {
           left: 48,
           top: 16,
           style: {
-            text: "OVERLAPPING LIVES",
+            text: t("overlappingLives").toLocaleUpperCase(lang),
             fill: "#333",
             font: "700 17px sans-serif",
           },
@@ -210,7 +220,9 @@ export default function PeoplePriestley({data, title}) {
     chart.on("click", params => {
       if (params.value) {
         const slug = params.value[6];
-        if (slug) window.location.href = `/profile/person/${slug}`;
+        if (slug) {
+          window.location.href = `${localePrefix}/profile/person/${slug}`;
+        }
       }
     });
 
@@ -228,7 +240,7 @@ export default function PeoplePriestley({data, title}) {
       ro.disconnect();
       chart.dispose();
     };
-  }, [categories, seriesData, yearMin, yearMax, title]);
+  }, [categories, lang, localePrefix, seriesData, t, title, yearMin, yearMax]);
 
   return (
     <VizWrapper>

@@ -1,8 +1,11 @@
 import Link from "next/link";
-import {FORMATTERS} from "../../utils/consts";
 import AnchorList from "../../utils/AnchorList";
 import PhotoCarousel from "../../utils/PhotoCarousel";
 import SectionLayout from "../../common/SectionLayout";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {formatExploreYear} from "@/app/exploreTranslations";
+import {getLocationTranslations} from "@/app/locationTranslations";
+import {formatLocationNumber} from "@/app/utils/locationLocalization";
 
 export default async function PeopleRanking({
   place,
@@ -11,15 +14,21 @@ export default async function PeopleRanking({
   peopleDied,
   title,
   slug,
+  lang = "en",
 }) {
+  const t = getLocationTranslations(lang);
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const newPeopleBorn = peopleBorn
     .filter(p => !p.hpi_prev)
     .sort((personA, personB) => personB.hpi - personA.hpi);
   const newPeopleDied = peopleDied
     .filter(p => !p.hpi_prev)
     .sort((personA, personB) => personB.hpi - personA.hpi);
-  const youngestBirthyear = Math.max(...peopleBorn.map(r => r.birthyear));
-  const oldestBirthyear = Math.min(...peopleBorn.map(r => r.birthyear));
+  const birthYears = peopleBorn
+    .map(person => person.birthyear)
+    .filter(Number.isFinite);
+  const youngestBirthyear = birthYears.length ? Math.max(...birthYears) : 0;
+  const oldestBirthyear = birthYears.length ? Math.min(...birthYears) : 0;
   const moreDeaths = peopleDied.length > peopleBorn.length ? true : false;
 
   const topRankingBorn = peopleBorn.slice(0, 12);
@@ -27,40 +36,48 @@ export default async function PeopleRanking({
   const placeQueryParamId = country
     ? `${country.id}|${place.id}`
     : `|${place.id}`;
+  const time = oldestBirthyear === youngestBirthyear
+    ? t("inYear", {year: formatExploreYear(oldestBirthyear, lang)})
+    : t("betweenYears", {
+        oldest: formatExploreYear(oldestBirthyear, lang),
+        youngest: formatExploreYear(youngestBirthyear, lang),
+      });
 
   return (
     <SectionLayout slug={slug} title={title}>
       <div>
         <p>
-          {oldestBirthyear === youngestBirthyear ? (
-            <span>In {FORMATTERS.year(oldestBirthyear)}</span>
-          ) : (
+          {peopleBorn.length ? (
             <span>
-              Between {FORMATTERS.year(oldestBirthyear)} and{" "}
-              {FORMATTERS.year(youngestBirthyear)}
+              {t("birthNarrative", {
+                time,
+                location: place.place,
+                count: formatLocationNumber(peopleBorn.length, lang),
+              })}{" "}
+              <AnchorList
+                items={peopleBorn.slice(0, 3)}
+                name={d => d.name}
+                url={d => `${localePrefix}/profile/person/${d.slug}/`}
+                lang={lang}
+              />
+              .{" "}
             </span>
-          )}
-          , {place.place} was the birth place of{" "}
-          {FORMATTERS.commas(peopleBorn.length)} globally memorable people,
-          including{" "}
-          <AnchorList
-            items={peopleBorn.slice(0, 3)}
-            name={d => d.name}
-            url={d => `/profile/person/${d.slug}/`}
-          />
-          .{" "}
+          ) : null}
           {topRankingDied.length ? (
             <span>
-              Additionaly, {FORMATTERS.commas(peopleDied.length)} globally
-              memorable people have passed away in {place.place} including{" "}
+              {t("deathNarrative", {
+                count: formatLocationNumber(peopleDied.length, lang),
+                location: place.place,
+              })}{" "}
               <AnchorList
                 items={peopleDied.slice(0, 3)}
                 name={d => d.name}
-                url={d => `/profile/person/${d.slug}/`}
+                url={d => `${localePrefix}/profile/person/${d.slug}/`}
+                lang={lang}
               />
               .{" "}
               {moreDeaths
-                ? `Interestingly, more notably known people have passed away in ${place.place} than were born there.`
+                ? t("moreDeaths", {location: place.place})
                 : null}
             </span>
           ) : null}
@@ -68,11 +85,11 @@ export default async function PeopleRanking({
         {topRankingBorn.length ? (
           <div className="rank-sec-body">
             <div className="rank-title">
-              <h3>People Born in {place.place}</h3>
+              <h3>{t("bornHeading", {location: place.place})}</h3>
               <Link
-                href={`/explore/rankings?show=people&place=${placeQueryParamId}`}
+                href={`${localePrefix}/explore/rankings?show=people&place=${placeQueryParamId}`}
               >
-                Go to all Rankings
+                {t("goAllRankings")}
               </Link>
             </div>
             <PhotoCarousel
@@ -80,17 +97,19 @@ export default async function PeopleRanking({
               rankAccessor="bplace_name_rank"
               peopleAll={peopleBorn}
               showOccupation={true}
+              lang={lang}
+              localePrefix={localePrefix}
             />
           </div>
         ) : null}
         {newPeopleBorn.length ? (
           <div className="rank-sec-body">
             <div className="rank-title">
-              <h3>Newly Added People Born in {place.place}</h3>
+              <h3>{t("newBornHeading", {location: place.place})}</h3>
               <Link
-                href={`/explore/rankings?show=people&place=${placeQueryParamId}`}
+                href={`${localePrefix}/explore/rankings?show=people&place=${placeQueryParamId}`}
               >
-                Go to all Rankings
+                {t("goAllRankings")}
               </Link>
             </div>
             <PhotoCarousel
@@ -98,17 +117,19 @@ export default async function PeopleRanking({
               rankAccessor="bplace_name_rank"
               peopleAll={newPeopleBorn}
               showOccupation={true}
+              lang={lang}
+              localePrefix={localePrefix}
             />
           </div>
         ) : null}
         {topRankingDied.length ? (
           <div className="rank-sec-body">
             <div className="rank-title">
-              <h3>People Deceased in {place.place}</h3>
+              <h3>{t("diedHeading", {location: place.place})}</h3>
               <Link
-                href={`/explore/rankings?show=people&place=${placeQueryParamId}&placeType=deathplace`}
+                href={`${localePrefix}/explore/rankings?show=people&place=${placeQueryParamId}&placeType=deathplace`}
               >
-                Go to all Rankings
+                {t("goAllRankings")}
               </Link>
             </div>
             <PhotoCarousel
@@ -116,17 +137,19 @@ export default async function PeopleRanking({
               rankAccessor="dplace_name_rank"
               peopleAll={peopleDied}
               showOccupation={true}
+              lang={lang}
+              localePrefix={localePrefix}
             />
           </div>
         ) : null}
         {newPeopleDied.length ? (
           <div className="rank-sec-body">
             <div className="rank-title">
-              <h3>Newly Added People Deceased in {place.place}</h3>
+              <h3>{t("newDiedHeading", {location: place.place})}</h3>
               <Link
-                href={`/explore/rankings?show=people&place=${placeQueryParamId}`}
+                href={`${localePrefix}/explore/rankings?show=people&place=${placeQueryParamId}`}
               >
-                Go to all Rankings
+                {t("goAllRankings")}
               </Link>
             </div>
             <PhotoCarousel
@@ -134,6 +157,8 @@ export default async function PeopleRanking({
               rankAccessor="dplace_name_rank"
               peopleAll={newPeopleDied}
               showOccupation={true}
+              lang={lang}
+              localePrefix={localePrefix}
             />
           </div>
         ) : null}

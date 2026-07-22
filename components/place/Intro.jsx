@@ -2,8 +2,8 @@ import {nest} from "d3-collection";
 import {plural} from "pluralize";
 import Image from "next/image";
 import AnchorList from "../utils/AnchorList";
-import {FORMATTERS} from "../utils/consts";
 import {DEFAULT_LOCALE} from "@/app/locales";
+import {getLocationTranslations} from "@/app/locationTranslations";
 import "../common/Intro.css";
 
 export default function Intro({
@@ -15,9 +15,10 @@ export default function Intro({
   wikiSummary,
   lang = "en",
 }) {
+  const t = getLocationTranslations(lang);
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const myIndex = placeRanks
-    ? placeRanks.findIndex(p => p.place === place.place)
+    ? placeRanks.findIndex(p => p.id === place.id)
     : null;
   let wikiLink, wikiSentence;
 
@@ -58,71 +59,79 @@ export default function Intro({
           <h3>
             <Image
               src="/images/ui/profile-w.svg"
-              alt="Icon of place"
+              alt={t("iconPlace")}
               width={24}
               height={24}
             />
             {place.place}
           </h3>
           <p>
-            {placeRanks ? (
+            {placeRanks && myIndex > 0 ? (
               <span>
-                {place.place} ranks {FORMATTERS.ordinal(place.born_rank_unique)}{" "}
-                in number of biographies on Pantheon, behind{" "}
+                {t("rankIntro", {
+                  location: place.place,
+                  rank: place.born_rank_unique,
+                })}{" "}
                 <AnchorList
                   items={placeRanks.slice(Math.max(0, myIndex - 3), myIndex)}
                   name={d => d.place}
                   url={d => `${localePrefix}/profile/place/${d.slug}/`}
+                  lang={lang}
                 />
                 .{" "}
               </span>
             ) : null}
             {peopleBornHere.length ? (
               <span>
-                The most famous people from {place.place} are{" "}
+                {t("famousBorn", {location: place.place})}{" "}
                 <AnchorList
                   items={peopleBornHere.slice(0, 3)}
                   name={d => d.name}
                   url={d => `${localePrefix}/profile/person/${d.slug}/`}
+                  lang={lang}
                 />
                 .
               </span>
             ) : null}
             {peopleDiedHere.length ? (
               <span>
-                {" "}
-                The most famous people who died in {place.place} are{" "}
+                {" "}{t("famousDied", {location: place.place})}{" "}
                 <AnchorList
                   items={peopleDiedHere.slice(0, 3)}
                   name={d => d.name}
                   url={d => `${localePrefix}/profile/person/${d.slug}/`}
+                  lang={lang}
                 />
                 .
               </span>
             ) : null}
             {occupationsBorn.length ? (
               <span>
-                {" "}
-                {place.place} has been the birth place of many{" "}
+                {" "}{t("birthOccupations", {location: place.place})}{" "}
                 <AnchorList
                   items={occupationsBorn}
-                  name={d => plural(d.occupation.occupation.toLowerCase())}
+                  name={d => lang === "en"
+                    ? plural(d.occupation.occupation.toLowerCase())
+                    : d.occupation.occupation}
                   url={d =>
                     `${localePrefix}/profile/occupation/${d.occupation.occupation_slug}/`
                   }
+                  lang={lang}
                 />
               </span>
             ) : null}
             {occupationsDied.length ? (
               <span>
-                {" "}
-                and the death place of many{" "}
+                {" "}{t("deathOccupations")}{" "}
                 <AnchorList
                   items={occupationsDied}
-                  name={d => plural(d.occupation.occupation.toLowerCase())}
+                  name={d => lang === "en"
+                    ? plural(d.occupation.occupation.toLowerCase())
+                    : d.occupation.occupation}
                   url={d =>
                     `${localePrefix}/profile/occupation/${d.occupation.occupation_slug}/`
                   }
+                  lang={lang}
                 />
                 .
               </span>
@@ -131,8 +140,7 @@ export default function Intro({
             )}
             {country ? (
               <span>
-                {" "}
-                {place.place} is located in{" "}
+                {" "}{t("locatedIn", {place: place.place})}{" "}
                 <a href={`${localePrefix}/profile/country/${country.slug}`}>
                   {country.country}
                 </a>
@@ -144,7 +152,7 @@ export default function Intro({
             <p>
               {wikiSentence}{" "}
               <a href={wikiLink} target="_blank" rel="noopener noreferrer">
-                Read more on Wikipedia
+                {t("readMoreWikipedia")}
               </a>
             </p>
           ) : null}

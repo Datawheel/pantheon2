@@ -1,19 +1,20 @@
 import SectionLayout from "../../common/SectionLayout";
 import PeoplePriestley from "./vizes/PeoplePriestley";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
-const Lifespans = ({attrs, place, peopleBorn, title, slug}) => {
+const Lifespans = ({attrs, place, peopleBorn, title, slug, lang = "en"}) => {
+  const t = getLocationTranslations(lang);
   const tmapBornData = peopleBorn
     .filter(
       p => p.birthyear !== null && p.birthyear > 1699 && p.occupation !== null
     )
-    .sort((a, b) => b.langs - a.langs);
-
-  tmapBornData.forEach(d => {
-    d.occupation_name = d.occupation.occupation;
-    d.occupation_id = `${d.occupation_id}`;
-    d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.birthplace;
-  });
+    .sort((a, b) => b.langs - a.langs)
+    .map(d => ({
+      ...d,
+      occupation_name: d.occupation.occupation,
+      occupation_id: `${d.occupation_id}`,
+      place: d.birthplace,
+    }));
 
   const priestleyMax = 25;
 
@@ -25,13 +26,18 @@ const Lifespans = ({attrs, place, peopleBorn, title, slug}) => {
     <SectionLayout slug={slug} title={title}>
       <div className="section-body">
         <p>
-          Below is a visual represetation of the lifespans of the top{" "}
-          {priestleyData.length} globally memorable people born in {place.place}{" "}
-          since 1700.
+          {t("lifespanIntro", {
+            count: priestleyData.length,
+            location: place.place,
+          })}
         </p>
         <PeoplePriestley
-          title={`Lifespans of Top ${priestleyData.length} Individuals Born in ${place.place}`}
+          title={t("lifespanTitle", {
+            count: priestleyData.length,
+            location: place.place,
+          })}
           data={priestleyData}
+          lang={lang}
         />
       </div>
     </SectionLayout>

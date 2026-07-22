@@ -5,6 +5,7 @@ import {getTranslations} from "@/app/translations";
 import {safeFetchJson} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
+import {localizePersonGroups} from "@/app/utils/personLocalization";
 import PersonImage from "@/components/utils/PersonImage";
 import HomeSearch from "@/components/home/HomeSearch";
 import RandomPersonButton from "@/components/person/RandomPersonButton";
@@ -129,6 +130,20 @@ export default async function Page(props) {
       getTotalCount(),
     ]);
 
+  const domainEntries = Object.entries(domainPeople);
+  const localizedGroups = await localizePersonGroups(
+    [featuredPeople, ...domainEntries.map(([, people]) => people)],
+    locale,
+    {baseApi: BASE_API},
+  );
+  const [localizedFeaturedPeople, ...localizedDomainPeople] = localizedGroups;
+  const localizedDomainPeopleByDomain = Object.fromEntries(
+    domainEntries.map(([domain], index) => [
+      domain,
+      localizedDomainPeople[index],
+    ]),
+  );
+
   const domainLabels = {
     SPORTS: sp.domainSports,
     ARTS: sp.domainArts,
@@ -180,7 +195,7 @@ export default async function Page(props) {
         <div className="sp-container">
           <h2 className="sp-section-title">{sp.featuredPeople}</h2>
           <div className="sp-grid">
-            {featuredPeople.map(person => (
+            {localizedFeaturedPeople.map(person => (
               <Link
                 key={person.id}
                 href={`${localePrefix}/profile/person/${person.slug}`}
@@ -244,7 +259,7 @@ export default async function Page(props) {
         <div className="sp-container">
           <h2 className="sp-section-title">{sp.browseByField}</h2>
           <div className="sp-domains">
-            {Object.entries(domainPeople).map(([domain, people]) => (
+            {Object.entries(localizedDomainPeopleByDomain).map(([domain, people]) => (
               <div key={domain} className="sp-domain-group">
                 <h3 className="sp-domain-title">{domainLabels[domain]}</h3>
                 <div className="sp-domain-list">

@@ -5,8 +5,12 @@ import {useParams, usePathname, useRouter} from "next/navigation";
 import * as topojson from "topojson-client";
 import {initEChart, echarts} from "@/components/utils/echarts";
 import VizWrapper from "./VizWrapper";
-import {FORMATTERS} from "@/components/utils/consts";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {
+  formatExploreNumber,
+  formatExploreYear,
+} from "@/app/exploreTranslations";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
 const WORLD_MAP_NAME = "pantheon-world";
 let worldFeaturesPromise = null;
@@ -118,6 +122,7 @@ export default function PeopleLocationsMap({
     return m ? m[1] : DEFAULT_LOCALE;
   }, [params, pathname]);
   const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+  const t = useMemo(() => getLocationTranslations(locale), [locale]);
 
   useEffect(() => {
     let cancelled = false;
@@ -210,24 +215,24 @@ export default function PeopleLocationsMap({
           if (params.seriesType !== "scatter" || !params.data) return "";
           const d = params.data;
           const count = d.value[2];
-          const label = count === 1 ? "person" : "people";
+          const label = count === 1 ? t("person") : t("peopleCount");
           const top = [...d.people]
             .sort((a, b) => (b.hpi || 0) - (a.hpi || 0))
             .slice(0, 3);
           let html = `<div style="font-weight:700;font-size:14px;color:#222;">${d.name}</div>`;
-          html += `<div style="color:#777;font-size:12px;margin-top:2px;">${count.toLocaleString()} ${label}</div>`;
+          html += `<div style="color:#777;font-size:12px;margin-top:2px;">${formatExploreNumber(count, locale)} ${label}</div>`;
           if (top.length) {
-            html += `<div style="margin-top:8px;font-size:10px;letter-spacing:0.5px;color:#888;text-transform:uppercase;">Top Ranked ${top.length === 1 ? "Person" : "People"}</div>`;
+            html += `<div style="margin-top:8px;font-size:10px;letter-spacing:0.5px;color:#888;text-transform:uppercase;">${top.length === 1 ? t("topRankedPerson") : t("topRankedPeople")}</div>`;
             for (const p of top) {
               const yr =
                 p.birthyear != null
-                  ? ` <span style="color:#999;">b.${FORMATTERS.year(p.birthyear)}</span>`
+                  ? ` <span style="color:#999;">${t("bornAbbreviation", {year: formatExploreYear(p.birthyear, locale)})}</span>`
                   : "";
               html += `<div style="margin-top:2px;font-size:12px;color:#222;">${p.name}${yr}</div>`;
             }
           }
           if (d.slug) {
-            html += `<div style="margin-top:8px;font-size:10px;color:#aaa;">Click to view location</div>`;
+            html += `<div style="margin-top:8px;font-size:10px;color:#aaa;">${t("clickLocation")}</div>`;
           }
           return html;
         },
@@ -322,8 +327,10 @@ export default function PeopleLocationsMap({
     points,
     maxCount,
     title,
+    locale,
     localePrefix,
     router,
+    t,
     bubbleFill,
     bubbleBorder,
     bubbleHoverFill,

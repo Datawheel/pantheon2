@@ -1,5 +1,6 @@
 import PlacesMap from "./vizes/PlacesMap";
 import SectionLayout from "../../common/SectionLayout";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
 function hasCoord(value) {
   return value !== null && value !== undefined && value !== "";
@@ -16,18 +17,22 @@ function normalizeMapPoint(d, place) {
     d.lat !== null && d.lon !== null ? [d.lon, d.lat] : null;
 }
 
-export default function Places({country, peopleBorn, peopleDied, slug, title}) {
+export default function Places({
+  country,
+  peopleBorn,
+  peopleDied,
+  slug,
+  title,
+  lang = "en",
+}) {
+  const t = getLocationTranslations(lang);
   const safePeopleBorn = peopleBorn || [];
   const safePeopleDied = peopleDied || [];
 
   const tmapBornData = safePeopleBorn
     .filter(p => p.birthyear !== null)
-    .sort((a, b) => b.l - a.l);
-
-  tmapBornData.forEach(d => {
-    d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.bplace_geonameid;
-  });
+    .sort((a, b) => b.l - a.l)
+    .map(d => ({...d, place: d.bplace_geonameid}));
 
   const geomapBornData = tmapBornData
     .filter(d => d.place && hasCoord(d.place.lat) && hasCoord(d.place.lon))
@@ -39,12 +44,8 @@ export default function Places({country, peopleBorn, peopleDied, slug, title}) {
 
   const tmapDeathData = safePeopleDied
     .filter(p => p.deathyear !== null && p.occupation !== null)
-    .sort((a, b) => b.l - a.l);
-
-  tmapDeathData.forEach(d => {
-    d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.dplace_geonameid;
-  });
+    .sort((a, b) => b.l - a.l)
+    .map(d => ({...d, place: d.dplace_geonameid}));
 
   const geomapDeathData = tmapDeathData
     .filter(
@@ -65,12 +66,12 @@ export default function Places({country, peopleBorn, peopleDied, slug, title}) {
       <PlacesMap
         country={country}
         data={geomapDeathData}
-        title={`Cities by deaths in ${country.country}`}
+        title={t("citiesDeathsTitle", {location: country.country})}
       />
       <PlacesMap
         country={country}
         data={geomapBornData}
-        title={`Cities by birth in ${country.country}`}
+        title={t("citiesBirthsTitle", {location: country.country})}
         bubbleFill="rgba(105, 123, 232, 0.42)"
         bubbleBorder="rgba(72, 89, 201, 0.82)"
         bubbleHoverFill="rgba(105, 123, 232, 0.64)"

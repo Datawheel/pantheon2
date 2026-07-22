@@ -3,6 +3,8 @@ import {plural} from "pluralize";
 import AnchorList from "../../utils/AnchorList";
 import SectionLayout from "../../common/SectionLayout";
 import OccupationsTmap from "../../place/sections/vizes/OccupationsTmap";
+import {DEFAULT_LOCALE} from "@/app/locales";
+import {getLocationTranslations} from "@/app/locationTranslations";
 
 export default async function Occupations({
   attrs,
@@ -11,33 +13,34 @@ export default async function Occupations({
   peopleDied,
   title,
   slug,
+  lang = "en",
 }) {
+  const t = getLocationTranslations(lang);
+  const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
   const safePeopleBorn = peopleBorn || [];
   const safePeopleDied = peopleDied || [];
 
   const tmapBornData = safePeopleBorn
     .filter(p => p.birthyear !== null && p.occupation !== null)
-    .sort((a, b) => b.l - a.l);
-
-  tmapBornData.forEach(d => {
-    d.occupation_name = d.occupation.occupation;
-    d.occupation_id = `${d.occupation_id}`;
-    d.event = "CITY FOR BIRTHS OF FAMOUS PEOPLE";
-    d.place = d.bplace_geonameid;
-  });
+    .sort((a, b) => b.l - a.l)
+    .map(d => ({
+      ...d,
+      occupation_name: d.occupation.occupation,
+      occupation_id: `${d.occupation_id}`,
+      place: d.bplace_geonameid,
+    }));
 
   const tmapDeathData = safePeopleDied
     .filter(p => p.deathyear !== null && p.occupation !== null)
-    .sort((a, b) => b.l - a.l);
-
-  tmapDeathData.forEach(d => {
-    d.industry = d.occupation.industry;
-    d.domain = d.occupation.domain;
-    d.occupation_name = d.occupation.occupation;
-    d.occupation_id = `${d.occupation_id}`;
-    d.event = "CITY FOR DEATHS OF FAMOUS PEOPLE";
-    d.place = d.dplace_geonameid;
-  });
+    .sort((a, b) => b.l - a.l)
+    .map(d => ({
+      ...d,
+      industry: d.occupation.industry,
+      domain: d.occupation.domain,
+      occupation_name: d.occupation.occupation,
+      occupation_id: `${d.occupation_id}`,
+      place: d.dplace_geonameid,
+    }));
 
   const occupationsBorn = nest()
     .key(d => d.occupation.id)
@@ -62,21 +65,27 @@ export default async function Occupations({
     <SectionLayout slug={slug} title={title}>
       <div>
         <p>
-          Most individuals born in present day {country.country} were&nbsp;
+          {t("mostBorn", {location: country.country})}&nbsp;
           <AnchorList
             items={occupationsBorn.slice(0, 5).filter(d => d.occupation)}
             name={d =>
-              `${plural(d.occupation.occupation.toLowerCase())} (${d.num_born})`
+              `${lang === "en"
+                ? plural(d.occupation.occupation.toLowerCase())
+                : d.occupation.occupation} (${d.num_born})`
             }
-            url={d => `/profile/occupation/${d.occupation.occupation_slug}`}
+            url={d => `${localePrefix}/profile/occupation/${d.occupation.occupation_slug}`}
+            lang={lang}
           />
-          ,&nbsp; while most who died were&nbsp;
+          ,&nbsp; {t("mostDied")}&nbsp;
           <AnchorList
             items={occupationsDied.slice(0, 5).filter(d => d.occupation)}
             name={d =>
-              `${plural(d.occupation.occupation.toLowerCase())} (${d.num_died})`
+              `${lang === "en"
+                ? plural(d.occupation.occupation.toLowerCase())
+                : d.occupation.occupation} (${d.num_died})`
             }
-            url={d => `/profile/occupation/${d.occupation.occupation_slug}`}
+            url={d => `${localePrefix}/profile/occupation/${d.occupation.occupation_slug}`}
+            lang={lang}
           />
           .
         </p>
@@ -85,14 +94,16 @@ export default async function Occupations({
         <OccupationsTmap
           attrs={attrs}
           data={tmapBornData}
-          title={`Occupations of People Born in present day ${country.country}`}
+          title={t("occupationsBornTitle", {location: country.country})}
+          lang={lang}
         />
       ) : null}
       {occupationsDied.length ? (
         <OccupationsTmap
           attrs={attrs}
           data={tmapDeathData}
-          title={`Occupations of People Deceased in present day ${country.country}`}
+          title={t("occupationsDiedTitle", {location: country.country})}
+          lang={lang}
         />
       ) : null}
     </SectionLayout>
