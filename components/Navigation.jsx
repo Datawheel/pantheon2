@@ -23,8 +23,8 @@ function getLocaleHref(pathname, locale) {
   const pathWithoutLocale = getPathWithoutLocale(pathname);
   const localizedPath = pathWithoutLocale === "/" ? "" : pathWithoutLocale;
 
-  // Keep the explicit /en prefix here. The proxy uses it to update NEXT_LOCALE
-  // before redirecting to the canonical, unprefixed English URL.
+  // Keep the explicit /en prefix here. The proxy canonicalizes it to the
+  // unprefixed English URL for both JavaScript and no-JavaScript navigation.
   return `/${locale}${localizedPath}`;
 }
 
@@ -84,23 +84,26 @@ export default function Navigation() {
   };
 
   const handleLanguageChange = (event, nextLocale) => {
-    event.preventDefault();
     setLanguageMenuVisible(false);
 
-    // The default-locale homepage is already canonical at `/`. Persist the
-    // locale before loading it so a saved non-English preference cannot send
-    // the browser straight back to (for example) `/fr`.
-    if (
-      nextLocale === DEFAULT_LOCALE &&
-      getPathWithoutLocale(pathname) === "/"
-    ) {
+    // Let the anchor perform a normal document navigation, matching the
+    // working footer switcher. Set English first so the canonical unprefixed
+    // request cannot be resolved using a previously saved non-English locale.
+    if (nextLocale === DEFAULT_LOCALE) {
       persistLocaleCookie(DEFAULT_LOCALE);
-      window.location.assign(`/${window.location.search}${window.location.hash}`);
-      return;
+
+      // Preserve the canonical homepage behavior: go straight to `/` rather
+      // than adding a redundant /en request to the navigation history.
+      if (getPathWithoutLocale(pathname) === "/") {
+        event.preventDefault();
+        window.location.assign(`/${window.location.search}${window.location.hash}`);
+        return;
+      }
     }
 
-    const href = getLocaleHref(pathname, nextLocale);
-    window.location.assign(`${href}${window.location.search}${window.location.hash}`);
+    // usePathname excludes the query and hash. Add them to the anchor before
+    // its default action so active rankings filters survive the language swap.
+    event.currentTarget.href = `${getLocaleHref(pathname, nextLocale)}${window.location.search}${window.location.hash}`;
   };
 
   return (

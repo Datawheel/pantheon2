@@ -211,6 +211,8 @@
 
 .ranking-table {
   position: relative;
+  box-sizing: border-box;
+  width: 100%;
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

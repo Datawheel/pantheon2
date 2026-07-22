@@ -43,6 +43,51 @@ test("homepage language selector switches from French to English", async ({
   watch.assertClean();
 });
 
+test("rankings header selector switches from French to English", async ({
+  page,
+  context,
+}) => {
+  await page.setViewportSize({width: 1440, height: 900});
+  const watch = attachErrorWatch(page);
+  const navigationPaths = [];
+  page.on("request", request => {
+    if (request.isNavigationRequest() && request.frame() === page.mainFrame()) {
+      navigationPaths.push(new URL(request.url()).pathname);
+    }
+  });
+
+  await goto(page, "/fr/explore/rankings?show=occupations&gender=F");
+  const trigger = page.getByRole("button", {
+    name: "Select language. Current language: Français",
+  });
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+
+  const englishLink = page.locator("#header-language-menu").getByRole("link", {
+    name: "English",
+    exact: true,
+  });
+  await expect(englishLink).toHaveAttribute("href", "/en/explore/rankings");
+  await englishLink.click();
+
+  await expect(page).toHaveURL(url =>
+    url.pathname === "/explore/rankings"
+    && url.searchParams.get("show") === "occupations"
+    && url.searchParams.get("gender") === "F"
+  );
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.getByRole("button", {
+    name: "Select language. Current language: English",
+  })).toBeVisible();
+
+  const cookies = await context.cookies();
+  expect(cookies.find(cookie => cookie.name === "NEXT_LOCALE")?.value).toBe("en");
+  expect(navigationPaths).toContain("/en/explore/rankings");
+  expect(navigationPaths).toContain("/explore/rankings");
+
+  watch.assertClean();
+});
+
 test("header language selector keeps users on the current page", async ({page}) => {
   await page.setViewportSize({width: 1440, height: 900});
   const watch = attachErrorWatch(page);
