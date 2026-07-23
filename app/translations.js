@@ -295,6 +295,7 @@ export const translations = {
       whoAreTheMostFamous: "Who are the most famous...",
       trendingThisWeek: "Trending This Week",
       browseByCountry: "Browse by Country",
+      browseCountriesByRegion: "Browse countries by region",
     },
     intro: {
       rankingSentence: ({
@@ -3212,6 +3213,7 @@ export const translations = {
       whoAreTheMostFamous: "谁是最著名的...",
       trendingThisWeek: "本周热门",
       browseByCountry: "按国家浏览",
+      browseCountriesByRegion: "按地区浏览国家",
     },
     intro: {
       rankingSentence: ({
@@ -3784,6 +3786,7 @@ export const translations = {
       whoAreTheMostFamous: "最も有名なのは誰...",
       trendingThisWeek: "今週のトレンド",
       browseByCountry: "国別に閲覧",
+      browseCountriesByRegion: "地域別に国を閲覧",
     },
     intro: {
       rankingSentence: ({

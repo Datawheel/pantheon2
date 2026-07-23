@@ -8,8 +8,12 @@ import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {safeFetchArrayPaged, safeFetchJson} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 import {getTranslations} from "@/app/translations";
+import {getExploreTranslations} from "@/app/exploreTranslations";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import "../../../../components/occupation-country/SelectOccupationCountry.css";
+
+const REGION_BROWSE_LOCALES = new Set(["zh", "ja"]);
+const CONTINENT_ORDER = ["Asia", "Europe", "Americas", "Africa", "Oceania"];
 
 async function getOccupations(lang) {
   const url = `${BASE_API}/occupation?order=num_born.desc.nullslast&select=*,${lang}_occupation:translations->${lang}->>occupation`;
@@ -87,6 +91,8 @@ export default async function Page(props) {
   const params = await props.params;
   const locale = SUPPORTED_LOCALES.includes(params.locale) ? params.locale : DEFAULT_LOCALE;
   const t = getTranslations(locale);
+  const exploreT = getExploreTranslations(locale);
+  const useRegionBrowse = REGION_BROWSE_LOCALES.has(locale);
 
   const [occupationsRaw, countriesRaw, allCombinations, trendingPagesRaw, rcaOccupations] = await Promise.all([
     getOccupations(locale),
@@ -112,7 +118,11 @@ export default async function Page(props) {
   // Build a lookup for localized country/demonym names from the countries list
   const countryLookup = {};
   countries.forEach(c => {
-    countryLookup[c.slug] = {country: c.country, demonym: c.demonym};
+    countryLookup[c.slug] = {
+      country: c.country,
+      demonym: c.demonym,
+      continent: c.continent,
+    };
   });
 
   // Build a lookup for localized occupation names from the occupations list
@@ -133,6 +143,7 @@ export default async function Page(props) {
         country: localized?.country || row.country,
         countrySlug,
         demonym: localized?.demonym || "",
+        continent: localized?.continent || row.continent,
         occupations: [],
       };
     }
@@ -144,21 +155,54 @@ export default async function Page(props) {
     });
   });
 
-  // Group countries by first letter (alphabetically)
-  const countriesByLetter = {};
-  Object.values(combinationsByCountry)
+  const countryCollator = new Intl.Collator(locale, {
+    sensitivity: "base",
+    numeric: true,
+  });
+  const browsableCountries = Object.values(combinationsByCountry)
     .filter(c => c.occupations.length > 0)
-    .sort((a, b) => a.country.localeCompare(b.country))
-    .forEach(country => {
-      const firstLetter = country.country.charAt(0).toUpperCase();
-      if (!countriesByLetter[firstLetter]) {
-        countriesByLetter[firstLetter] = [];
-      }
-      countriesByLetter[firstLetter].push(country);
-    });
+    .sort((a, b) => countryCollator.compare(a.country, b.country));
 
-  // Get sorted letters
-  const sortedLetters = Object.keys(countriesByLetter).sort();
+  // Alphabetic locales use an initial-letter index.
+  const countriesByLetter = {};
+  browsableCountries.forEach(country => {
+    const firstLetter = country.country.charAt(0).toUpperCase();
+    if (!countriesByLetter[firstLetter]) {
+      countriesByLetter[firstLetter] = [];
+    }
+    countriesByLetter[firstLetter].push(country);
+  });
+  const sortedLetters = Object.keys(countriesByLetter)
+    .sort((a, b) => countryCollator.compare(a, b));
+
+  // A first-character index is not useful for Chinese or Japanese country
+  // names. Group those editions geographically instead.
+  const countriesByContinent = {};
+  browsableCountries.forEach(country => {
+    if (!country.continent) return;
+    if (!countriesByContinent[country.continent]) {
+      countriesByContinent[country.continent] = [];
+    }
+    countriesByContinent[country.continent].push(country);
+  });
+  const remainingContinents = Object.keys(countriesByContinent)
+    .filter(continent => !CONTINENT_ORDER.includes(continent))
+    .sort((a, b) => countryCollator.compare(a, b));
+  const sortedContinents = [
+    ...CONTINENT_ORDER.filter(continent => countriesByContinent[continent]?.length),
+    ...remainingContinents,
+  ];
+  const browseGroups = useRegionBrowse
+    ? sortedContinents.map(continent => ({
+        id: `region-${continent.toLowerCase().replaceAll(" ", "-")}`,
+        label: exploreT(continent.toLowerCase()),
+        countries: countriesByContinent[continent],
+      }))
+    : sortedLetters.map(letter => ({
+        id: `letter-${letter}`,
+        label: letter,
+        countries: countriesByLetter[letter],
+      }));
 
   // Process trending pages - filter for occupation-country combos and enrich with data
   const trendingCombos = trendingPagesRaw
@@ -265,31 +309,55 @@ export default async function Page(props) {
         </section>
       )}
 
-      {/* Alphabet Navigation */}
-      <nav className="alphabet-nav">
+      {/* Country browse index: regional for CJK, alphabetical elsewhere */}
+      <nav
+        className={`alphabet-nav${useRegionBrowse ? " region-nav" : ""}`}
+        data-browse-mode={useRegionBrowse ? "region" : "initial"}
+        aria-label={
+          useRegionBrowse
+            ? t.selectOccupationCountry.browseCountriesByRegion
+            : t.selectOccupationCountry.browseByCountry
+        }
+      >
         <div className="section-container">
           <div className="alphabet-links">
-            {sortedLetters.map(letter => (
-              <a key={letter} href={`#letter-${letter}`} className="alphabet-link">
-                {letter}
+            {browseGroups.map(group => (
+              <a
+                key={group.id}
+                href={`#${group.id}`}
+                className="alphabet-link"
+              >
+                {group.label}
               </a>
             ))}
           </div>
         </div>
       </nav>
 
-      {/* Browse by Country (Alphabetical) */}
-      <section className="browse-section browse-alphabetical">
+      {/* Browse by Country */}
+      <section
+        className={`browse-section ${
+          useRegionBrowse ? "browse-regional" : "browse-alphabetical"
+        }`}
+      >
         <div className="section-container">
           <h2 className="section-title">
-            {t.selectOccupationCountry.browseByCountry || "Browse by Country"}
+            {useRegionBrowse
+              ? t.selectOccupationCountry.browseCountriesByRegion
+              : t.selectOccupationCountry.browseByCountry || "Browse by Country"}
           </h2>
 
-          {sortedLetters.map(letter => (
-            <div key={letter} id={`letter-${letter}`} className="letter-section">
-              <h3 className="letter-heading">{letter}</h3>
+          {browseGroups.map(group => (
+            <div
+              key={group.id}
+              id={group.id}
+              className={`letter-section${useRegionBrowse ? " region-section" : ""}`}
+            >
+              <h3 className={`letter-heading${useRegionBrowse ? " region-heading" : ""}`}>
+                {group.label}
+              </h3>
               <div className="countries-grid">
-                {countriesByLetter[letter].map(country => (
+                {group.countries.map(country => (
                   <div key={country.countrySlug} className="country-card">
                     <div className="country-header">
                       <Image

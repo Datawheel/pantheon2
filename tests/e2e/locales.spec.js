@@ -46,6 +46,81 @@ for (const {locale, path} of CONTENT_LOCALES) {
   });
 }
 
+const REGION_BROWSE_LOCALES = [
+  {
+    locale: "zh",
+    heading: "按地区浏览国家",
+    regions: ["亚洲", "欧洲", "美洲", "非洲", "大洋洲"],
+  },
+  {
+    locale: "ja",
+    heading: "地域別に国を閲覧",
+    regions: ["アジア", "ヨーロッパ", "アメリカ大陸", "アフリカ", "オセアニア"],
+  },
+];
+
+for (const {locale, heading, regions} of REGION_BROWSE_LOCALES) {
+  test(`${locale} occupation-country landing page browses by region`, async ({
+    page,
+  }) => {
+    if (locale === "zh") {
+      await page.setViewportSize({width: 390, height: 844});
+    }
+    const watch = attachErrorWatch(page);
+    await goto(page, `/${locale}/profile/select-occupation-country`);
+
+    const browseNav = page.locator("nav[data-browse-mode='region']");
+    await expect(browseNav).toBeVisible();
+    await expect(browseNav.locator("a")).toHaveText(regions);
+    expect(
+      await browseNav.locator("a").evaluateAll(links =>
+        links.map(link => link.getAttribute("href"))
+      ),
+    ).toEqual([
+      "#region-asia",
+      "#region-europe",
+      "#region-americas",
+      "#region-africa",
+      "#region-oceania",
+    ]);
+    await expect(page.locator(".browse-regional > .section-container > .section-title"))
+      .toHaveText(heading);
+    await expect(page.locator(".browse-regional .region-heading"))
+      .toHaveText(regions);
+    await expect(page.locator("a[href^='#letter-']")).toHaveCount(0);
+
+    for (const region of ["asia", "europe", "americas", "africa", "oceania"]) {
+      const section = page.locator(`#region-${region}`);
+      await expect(section.locator(".country-card").first()).toBeVisible();
+      await expect(section.locator("a[href*='/profile/occupation/']").first())
+        .toHaveAttribute(
+          "href",
+          new RegExp(`^/${locale}/profile/occupation/.+/country/.+`),
+        );
+    }
+
+    await browseNav.getByRole("link", {name: regions[0], exact: true}).click();
+    const navBox = await browseNav.boundingBox();
+    const headingBox = await page.locator("#region-asia .region-heading").boundingBox();
+    expect(navBox).not.toBeNull();
+    expect(headingBox).not.toBeNull();
+    expect(headingBox.y).toBeGreaterThanOrEqual(navBox.y + navBox.height);
+
+    watch.assertClean();
+  });
+}
+
+test("English occupation-country landing page retains its initial-letter index", async ({
+  page,
+}) => {
+  await goto(page, "/profile/select-occupation-country");
+  const browseNav = page.locator("nav[data-browse-mode='initial']");
+  await expect(browseNav).toBeVisible();
+  await expect(browseNav.locator("a").first())
+    .toHaveAttribute("href", /^#letter-/);
+  await expect(page.locator("nav[data-browse-mode='region']")).toHaveCount(0);
+});
+
 test("Japanese homepage localizes person names outside trends", async ({
   page,
   request,

@@ -449,6 +449,22 @@
   color: var(--colorStone);
 }
 
+.region-nav .alphabet-links {
+  gap: 0.75rem;
+}
+
+.region-nav .alphabet-link {
+  width: auto;
+  min-width: 7rem;
+  padding: 0 1.25rem;
+  background: var(--colorEggshell);
+  border: 1px solid var(--colorLint);
+}
+
+.region-nav .alphabet-link:hover {
+  background: var(--colorLint);
+}
+
 @media (min-width: 640px) {
   .alphabet-link {
     width: 2.75rem;
@@ -483,6 +499,14 @@
   margin: 0 0 2rem 0;
   padding-bottom: 1rem;
   border-bottom: 3px solid var(--colorLint);
+}
+
+.region-heading {
+  font-size: 2.75rem;
+}
+
+.letter-section.region-section {
+  scroll-margin-top: 100px;
 }
 
 /* Countries Grid */
@@ -630,6 +654,22 @@
     width: 2rem;
     height: 2rem;
     font-size: 0.95rem;
+  }
+
+  .region-nav .alphabet-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .region-nav .alphabet-link {
+    width: 100%;
+    min-width: 0;
+    padding: 0 0.75rem;
+  }
+
+  .letter-section.region-section {
+    scroll-margin-top: 110px;
   }
 
   .letter-section {
