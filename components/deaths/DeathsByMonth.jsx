@@ -1,32 +1,24 @@
 import PersonImage from "@/components/utils/PersonImage";
-import {toTitleCase} from "@/components/utils/vizHelpers";
 import "../common/Section.css";
 import AnchorList from "../utils/AnchorList";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import {DEFAULT_LOCALE} from "@/app/locales";
+import {
+  formatDeathsDate,
+  formatDeathsMonthYear,
+  formatDeathsNumber,
+  formatDeathsYear,
+  getDeathsTranslations,
+} from "@/app/deathsTranslations";
 import "./DeathsByMonth.css";
 
 dayjs.extend(utc);
 
-// Iterate over each month in order (January = 1, December = 12)
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-export default async function DeathsByMonth({year, people, lang = "en"}) {
+export default function DeathsByMonth({year, people, lang = "en"}) {
+  const t = getDeathsTranslations(lang);
   const localePrefix = lang === DEFAULT_LOCALE ? "" : `/${lang}`;
+  const formattedYear = formatDeathsYear(year, lang);
   // Group by death month
   const groupedByMonth = people.reduce((acc, person) => {
     if (person.deathdate) {
@@ -49,25 +41,23 @@ export default async function DeathsByMonth({year, people, lang = "en"}) {
 
   return (
     <section className="profile-section deaths-by-month">
-      <h2>Deaths by Month in {year}</h2>
+      <h2>{t("byMonthTitle", {year: formattedYear})}</h2>
       <div className="section-body"></div>
 
-      {months.map((monthName, index) => {
+      {Array.from({length: 12}, (_, index) => index).map(index => {
         const month = index + 1;
         const peopleInMonth = groupedByMonth[month] || [];
+        const monthYear = formatDeathsMonthYear(year, index, lang);
         if (peopleInMonth.length === 0) {
           return null;
         }
         return (
-          <div key={monthName} className="month-section">
-            <h3>
-              {monthName} {year}
-            </h3>
+          <div key={month} className="month-section">
+            <h3>{monthYear}</h3>
             <div className="section-body">
               <p>
-                The following is a chronological list of the most famous people
-                to have died in {monthName} of {year}. Sorted by popularity, the
-                most famous people to pass away in {monthName} were{" "}
+                {t("monthIntro", {monthYear})}{" "}
+                {t("monthMostFamous")}{" "}
                 <AnchorList
                   items={[...peopleInMonth]
                     .sort((a, b) => {
@@ -77,8 +67,17 @@ export default async function DeathsByMonth({year, people, lang = "en"}) {
                       return b.hpi - a.hpi;
                     })
                     .slice(0, 3)}
-                  name={d => `${d.name} (HPI: ${d?.hpi?.toFixed(2)})`}
+                  name={d => `${d.name} (HPI: ${formatDeathsNumber(
+                    d?.hpi || 0,
+                    lang,
+                    {
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 2,
+                    },
+                  )})`}
                   url={d => `${localePrefix}/profile/person/${d.slug}/`}
+                  lang={lang}
+                  noAnd
                 />
                 .
               </p>
@@ -95,35 +94,40 @@ export default async function DeathsByMonth({year, people, lang = "en"}) {
                       <PersonImage
                         person={person}
                         src={`/profile/people/${person.pid || person.id}.jpg`}
-                        alt={`Photo of ${person.name}`}
+                        alt={t("photoAlt", {name: person.name})}
                         fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                       />
                     </div>
                     <div className="text-column">
                       <h4>{person.name}</h4>
-                      {/* <p className="person-card__dates">
-                        {dayjs(person.birthdate).format("MMM D, YYYY")} -{" "}
-                        {dayjs(person.deathdate).format("MMM D, YYYY")}
-                      </p> */}
                       <p className="person-card__occupation">
-                        {dayjs(person.deathdate).format("MMM D, YYYY")}
+                        {formatDeathsDate(person.deathdate, lang)}
                       </p>
                       <p className="person-card__occupation">
-                        {person.bplace_country?.demonym
-                          ? `${person.bplace_country?.demonym} ${toTitleCase(
-                              person.occupation?.occupation
-                            )}`
-                          : `${toTitleCase(person.occupation?.occupation)}`}
+                        {person.occupation?.occupation
+                          && person.bplace_country?.country
+                          ? t("personFrom", {
+                              occupation: person.occupation.occupation,
+                              country: person.bplace_country.country,
+                            })
+                          : person.occupation?.occupation
+                            ? t("occupationOnly", {
+                                occupation: person.occupation.occupation,
+                              })
+                            : t("unknownOccupation")}
                       </p>
                       <p className="person-card__hpi">
-                        HPI: {person.hpi?.toFixed(2)}
+                        HPI: {formatDeathsNumber(person.hpi || 0, lang, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </p>
                     </div>
                   </a>
                 ))}
               </div>
             ) : (
-              <p>No deaths recorded this month</p>
+              <p>{t("noDeathsMonth")}</p>
             )}
           </div>
         );

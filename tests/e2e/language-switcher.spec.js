@@ -49,14 +49,21 @@ test("rankings header selector switches from French to English", async ({
 }) => {
   await page.setViewportSize({width: 1440, height: 900});
   const watch = attachErrorWatch(page);
-  const navigationPaths = [];
+  const navigationRequests = [];
   page.on("request", request => {
     if (request.isNavigationRequest() && request.frame() === page.mainFrame()) {
-      navigationPaths.push(new URL(request.url()).pathname);
+      navigationRequests.push({
+        pathname: new URL(request.url()).pathname,
+        cookie: request.headerValue("cookie"),
+      });
     }
   });
 
   await goto(page, "/fr/explore/rankings?show=occupations&gender=F");
+  expect(
+    (await context.cookies()).find(cookie => cookie.name === "NEXT_LOCALE")?.value,
+  ).toBe("fr");
+
   const trigger = page.getByRole("button", {
     name: "Select language. Current language: Français",
   });
@@ -68,6 +75,11 @@ test("rankings header selector switches from French to English", async ({
     exact: true,
   });
   await expect(englishLink).toHaveAttribute("href", "/en/explore/rankings");
+
+  // The header must establish English before requesting the canonical URL.
+  // Otherwise the unprefixed request can be resolved back to the saved French
+  // locale. Ignore requests from the initial French page load.
+  navigationRequests.length = 0;
   await englishLink.click();
 
   await expect(page).toHaveURL(url =>
@@ -82,8 +94,11 @@ test("rankings header selector switches from French to English", async ({
 
   const cookies = await context.cookies();
   expect(cookies.find(cookie => cookie.name === "NEXT_LOCALE")?.value).toBe("en");
-  expect(navigationPaths).toContain("/en/explore/rankings");
-  expect(navigationPaths).toContain("/explore/rankings");
+  expect(await navigationRequests[0].cookie).toContain("NEXT_LOCALE=en");
+  expect(navigationRequests.map(request => request.pathname))
+    .toContain("/en/explore/rankings");
+  expect(navigationRequests.map(request => request.pathname))
+    .toContain("/explore/rankings");
 
   watch.assertClean();
 });

@@ -4,50 +4,51 @@ import Intro from "@/components/deaths/Intro";
 import Header from "@/components/deaths/Header";
 import TopPeople from "@/components/deaths/TopPeople";
 import DeathsByMonth from "@/components/deaths/DeathsByMonth";
-import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
-import {safeFetchArray} from "@/app/utils/safeFetch";
 import {buildLanguageAlternates, buildCanonical} from "@/app/utils/hreflang";
 import {notFound} from "next/navigation";
-
-async function getPeopleDiedThisYear(yearNum) {
-  const url = `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=bplace_country(id,country,slug,demonym),dplace_country(id,country,slug),dplace_geonameid(id,place,slug,lat,lon),occupation(id,occupation,occupation_slug,domain_slug,industry,domain),occupation_id:occupation,name,slug,id,gender,birthyear,birthdate,deathyear,deathdate,alive&order=deathdate.asc`;
-  return await safeFetchArray(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}});
-}
-
-async function getPeopleDiedThisYearHpi(yearNum) {
-  const url = `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi,hpi_prev,non_en_page_views`;
-  return await safeFetchArray(url, {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}});
-}
+import {
+  formatDeathsYear,
+  getDeathsTranslations,
+} from "@/app/deathsTranslations";
+import {
+  getDeathsPeople,
+  normalizeDeathsLocale,
+} from "@/app/utils/deaths";
 
 export async function generateMetadata(props, parent) {
   const params = await props.params;
-  // read route params
   const year = params.id;
-
-  // optionally access and extend (rather than replace) parent metadata
+  const locale = normalizeDeathsLocale(params.locale);
+  const t = getDeathsTranslations(locale);
+  const formattedYear = formatDeathsYear(year, locale);
   const previousImages = (await parent).openGraph?.images || [];
 
-  const ogTitle = `${year} Celebrity Deaths | Pantheon`;
+  const title = t("metaTitle", {year: formattedYear});
+  const description = t("metaDescription", {year: formattedYear});
   const ogImageUrl = `${
     process.env.URL || "https://pantheon.world"
-  }/api/screenshot/deaths?year=${year}`;
+  }/api/screenshot/deaths?year=${year}&lang=${locale}`;
   return {
-    title: ogTitle,
+    title,
+    description,
     openGraph: {
+      title,
+      description,
       images: [
         {
           url: ogImageUrl,
           width: 1200,
           height: 630,
           type: "image/png",
-          alt: ogTitle,
+          alt: title,
         },
         ...previousImages,
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: ogTitle,
+      title,
+      description,
       images: [ogImageUrl],
     },
     alternates: {
@@ -60,46 +61,48 @@ export async function generateMetadata(props, parent) {
 export default async function Page(props) {
   const params = await props.params;
   const {id: year} = params;
+  const locale = normalizeDeathsLocale(params.locale);
+  const localePrefix = locale === "en" ? "" : `/${locale}`;
+  const t = getDeathsTranslations(locale);
   // Check if year is a valid integer > 2000
   const yearNum = parseInt(year);
   if (isNaN(yearNum) || yearNum < 2000) {
     notFound();
   }
 
-  // Fetch both person data and HPI data in parallel
-  const [peopleDiedThisYearAttrs, peopleDiedThisYearHpi] = await Promise.all([
-    getPeopleDiedThisYear(yearNum),
-    getPeopleDiedThisYearHpi(yearNum),
-  ]);
-
-  // Merge the results
-  const peopleDiedThisYear = peopleDiedThisYearAttrs.map(person => {
-    const hpiData = peopleDiedThisYearHpi.find(hpi => hpi.id === person.id);
-    return {
-      ...person,
-      ...(hpiData || {}),
-    };
-  });
+  const peopleDiedThisYear = await getDeathsPeople(yearNum, locale);
 
   const sections = [
     {
       slug: "people",
-      title: "People",
-      content: <TopPeople year={year} people={peopleDiedThisYear} />,
+      title: t("people"),
+      content: (
+        <TopPeople
+          year={year}
+          people={peopleDiedThisYear}
+          lang={locale}
+        />
+      ),
     },
     {
       slug: "deaths-by-month",
-      title: "Deaths by Month",
-      content: <DeathsByMonth year={year} people={peopleDiedThisYear} />,
+      title: t("deathsByMonth"),
+      content: (
+        <DeathsByMonth
+          year={year}
+          people={peopleDiedThisYear}
+          lang={locale}
+        />
+      ),
     },
   ];
 
   return (
     <div className="person">
-      <Header year={year} people={peopleDiedThisYear} />
+      <Header year={year} people={peopleDiedThisYear} lang={locale} />
       <div className="about-section">
         <ProfileNav sections={sections} />
-        <Intro year={year} people={peopleDiedThisYear} />
+        <Intro year={year} people={peopleDiedThisYear} lang={locale} />
       </div>
       {sections.map((section, key) =>
         cloneElement(section.content, {
@@ -112,19 +115,23 @@ export default async function Page(props) {
       <div className="year-navigation">
         <div>
           <a
-            href={`/profile/deaths/${parseInt(year) - 1}`}
+            href={`${localePrefix}/profile/deaths/${parseInt(year) - 1}`}
             className="year-navigation-link"
           >
-            &laquo; view {parseInt(year) - 1} deaths
+            &laquo; {t("previousYear", {
+              year: formatDeathsYear(parseInt(year) - 1, locale),
+            })}
           </a>
         </div>
-        {parseInt(year) + 1 < 2025 ? (
+        {parseInt(year) + 1 <= new Date().getFullYear() ? (
           <div>
             <a
-              href={`/profile/deaths/${parseInt(year) + 1}`}
+              href={`${localePrefix}/profile/deaths/${parseInt(year) + 1}`}
               className="year-navigation-link"
             >
-              view {parseInt(year) + 1} deaths &raquo;
+              {t("nextYear", {
+                year: formatDeathsYear(parseInt(year) + 1, locale),
+              })} &raquo;
             </a>
           </div>
         ) : null}

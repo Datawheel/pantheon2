@@ -1,14 +1,20 @@
 import "../../styles/Header.css";
 import "../../styles/mouse.css";
-import {plural} from "pluralize";
 import PersonImage from "@/components/utils/PersonImage";
+import {
+  formatDeathsYear,
+  getDeathsTranslations,
+} from "@/app/deathsTranslations";
 
 export default function Header({
   year,
   people,
   occupation = null,
   country = null,
+  lang = "en",
 }) {
+  const t = getDeathsTranslations(lang);
+  const formattedYear = formatDeathsYear(year, lang);
   const sortedPeople = [...people].sort((a, b) => {
     if (!a.hpi && !b.hpi) return 0;
     if (!a.hpi) return 1;
@@ -54,12 +60,12 @@ export default function Header({
       <div className="info">
         <h2 className="profile-type">
           {occupation
-            ? `${plural(occupation.occupation)} that died in `
+            ? t("headerOccupation", {occupation: occupation.occupation})
             : country
-            ? `${country.demonym} people that Died in `
-            : "Celebrity Deaths in"}
+            ? t("headerCountry", {country: country.country})
+            : t("header")}
         </h2>
-        <h1 className="profile-name">{year}</h1>
+        <h1 className="profile-name">{formattedYear}</h1>
       </div>
       <div className="mouse">
         <span className="mouse-scroll"></span>

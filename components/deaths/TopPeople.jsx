@@ -1,78 +1,49 @@
 import PeopleGrid from "@/components/deaths/PeopleGrid";
 import "../common/Section.css";
-import AnchorList from "../utils/AnchorList";
-import {plural} from "pluralize";
-import {toTitleCase} from "../utils/vizHelpers";
+import {
+  formatDeathsYear,
+  getDeathsTranslations,
+} from "@/app/deathsTranslations";
 
-export default async function TopPeople({occupation, country, year, people}) {
-  const peopleSortedByHPI = people.sort((a, b) => {
+export default function TopPeople({
+  occupation,
+  country,
+  year,
+  people,
+  lang = "en",
+}) {
+  const t = getDeathsTranslations(lang);
+  const formattedYear = formatDeathsYear(year, lang);
+  const peopleSortedByHPI = [...people].sort((a, b) => {
     // Handle undefined HPI values to prevent NaN in sort comparison
     if (!a.hpi && !b.hpi) return 0;
     if (!a.hpi) return 1; // People without HPI go to the end
     if (!b.hpi) return -1;
     return b.hpi - a.hpi; // Sort by HPI descending
   });
-  const topActors = peopleSortedByHPI.filter(p =>
-    ["ACTOR"].includes(p.occupation?.occupation)
-  );
-  const topMusicians = peopleSortedByHPI.filter(p =>
-    ["MUSICIAN", "SINGER"].includes(p.occupation?.occupation)
-  );
-  const topAthletes = peopleSortedByHPI.filter(
-    p => p.occupation?.domain === "SPORTS"
-  );
-  const typeOfCeleb = occupation
-    ? plural(occupation.occupation.toLowerCase())
-    : country
-    ? `${country.demonym.toLowerCase()} celebrities`
-    : "celebrities";
   return (
     <section className="profile-section">
       {occupation ? (
-        <h2>
-          {year} Deaths: Honoring Lives and Legacies of{" "}
-          {plural(toTitleCase(occupation.occupation))}
-        </h2>
+        <h2>{t("topPeopleOccupationTitle", {
+          year: formattedYear,
+          occupation: occupation.occupation,
+        })}</h2>
       ) : country ? (
-        <h2>
-          {year} Deaths: Honoring Lives and Legacies of {country.demonym} People
-        </h2>
+        <h2>{t("topPeopleCountryTitle", {
+          year: formattedYear,
+          country: country.country,
+        })}</h2>
       ) : (
-        <h2>{year} Deaths: Honoring Lives and Legacies</h2>
+        <h2>{t("topPeopleTitle", {year: formattedYear})}</h2>
       )}
       <div className="section-body">
-        <p>
-          The year {year} saw the passing of many beloved {typeOfCeleb}, leaving
-          behind legacies that continue to inspire fans across the globe. From
-          legendary actors like{" "}
-          <AnchorList
-            items={topActors.slice(0, 3)}
-            name={d => d.name}
-            url={d => `/profile/person/${d.slug}/`}
-          />{" "}
-          and iconic musicians like{" "}
-          <AnchorList
-            items={topMusicians.slice(0, 3)}
-            name={d => d.name}
-            url={d => `/profile/person/${d.slug}/`}
-          />{" "}
-          to groundbreaking athletes like{" "}
-          <AnchorList
-            items={topAthletes.slice(0, 3)}
-            name={d => d.name}
-            url={d => `/profile/person/${d.slug}/`}
-          />
-          , these remarkable individuals have made a lasting impact in their
-          fields. This page is dedicated to commemorating the lives of those we
-          lost in {year}, celebrating their achievements and remembering their
-          contributions to art, culture, and history. Below are the list of the
-          most famous people to have died in {year} based on cultural impact.
-        </p>
+        <p>{t("topPeopleDescription")}</p>
       </div>
       <PeopleGrid
         bios={peopleSortedByHPI.slice(0, 16)}
         occupation={occupation}
         year={year}
+        lang={lang}
       />
     </section>
   );

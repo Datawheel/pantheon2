@@ -3,6 +3,9 @@ import {NextResponse} from "next/server";
 import {OG_CACHE_CONTROL} from "../helpers/cache";
 import {fetchPersonImageWithFallback} from "../helpers/personImage";
 import {safeFetchArray} from "@/app/utils/safeFetch";
+import {getSupportedLocale} from "@/app/api/screenshot/helpers/locale";
+import {loadLocalizedGoogleFonts} from "@/app/api/screenshot/helpers/localizedFont";
+import {getDeathsTranslations} from "@/app/deathsTranslations";
 
 // Match the hardened person route: the Node runtime has higher memory limits
 // and more predictable image decoding than the edge sandbox.
@@ -23,6 +26,9 @@ export async function GET(request) {
   const BASE_API = process.env.BASE_API || "https://api.pantheon.world";
   const {searchParams} = new URL(request.url);
   const year = searchParams.get("year");
+  const locale = getSupportedLocale(searchParams.get("lang"));
+  const t = getDeathsTranslations(locale);
+  const label = t("ogLabel");
 
   if (!year) {
     return new NextResponse("Year parameter required", {status: 400});
@@ -34,9 +40,10 @@ export async function GET(request) {
   }
 
   // Load fonts and images
-  const [MarcellusfontData, wreathImageBuffer] = await Promise.all([
+  const [MarcellusfontData, wreathImageBuffer, localizedFonts] = await Promise.all([
     fetchPublicAsset(request, "/fonts/Marcellus-Regular.ttf"),
     fetchPublicAsset(request, "/images/misc/wreath.png"),
+    loadLocalizedGoogleFonts(locale, label, "DeathsText"),
   ]);
 
   // Convert wreath image to base64 data URL
@@ -49,7 +56,7 @@ export async function GET(request) {
   // when PostgREST returned an error object).
   const [peopleDiedThisYearAttrs, peopleDiedThisYearHpi] = await Promise.all([
     safeFetchArray(
-      `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=name,slug,id,gender,occupation(occupation,occupation_slug)&order=deathdate.asc`
+      `${BASE_API}/person?alive=is.false&deathdate=gte.01-01-${yearNum}&deathdate=lte.12-31-${yearNum}&select=name,localized_name:translations->>${locale},slug,id,gender,occupation(occupation,occupation_slug)&order=deathdate.asc`
     ),
     safeFetchArray(
       `${BASE_API}/person_ranks?deathyear=eq.${yearNum}&select=id,hpi`
@@ -62,6 +69,7 @@ export async function GET(request) {
       const hpiData = peopleDiedThisYearHpi.find(hpi => hpi.id === person.id);
       return {
         ...person,
+        name: person.localized_name || person.name,
         ...(hpiData || {}),
       };
     })
@@ -86,6 +94,7 @@ export async function GET(request) {
     const imageResponse = new ImageResponse(
       (
       <div
+        dir={locale === "ar" ? "rtl" : "ltr"}
         style={{
           background: backgroundColor,
           display: "flex",
@@ -132,16 +141,18 @@ export async function GET(request) {
           <h1
             style={{
               color: "#363636",
-              fontFamily: "Marcellus,Times,serif",
+              fontFamily: localizedFonts.length
+                ? "DeathsText"
+                : "Marcellus,Times,serif",
               textTransform: "uppercase",
               fontWeight: "400",
               letterSpacing: ".4rem",
-              fontSize: "4.5rem",
+              fontSize: label.length > 22 ? "3rem" : "4.5rem",
               margin: "0",
               textAlign: "center",
             }}
           >
-            PASSINGS
+            {label}
           </h1>
           <h2
             style={{
@@ -207,6 +218,7 @@ export async function GET(request) {
                 {person.imageData ? (
                   <img
                     src={person.imageData}
+                    alt=""
                     style={{
                       width: "100%",
                       height: "100%",
@@ -246,6 +258,7 @@ export async function GET(request) {
           data: MarcellusfontData,
           style: "normal",
         },
+        ...localizedFonts,
       ],
       }
     );

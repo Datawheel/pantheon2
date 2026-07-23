@@ -4,6 +4,11 @@ import {
   getLocationLocaleMessages,
   getLocationMessageKeys,
 } from "@/app/locationTranslations";
+import {
+  getDeathsLocaleMessages,
+  getDeathsMessageKeys,
+  getDeathsTranslations,
+} from "@/app/deathsTranslations";
 import {SUPPORTED_LOCALES} from "@/app/locales";
 import {attachErrorWatch, goto, expectProfileLoaded, expectContent} from "./helpers.js";
 
@@ -148,6 +153,79 @@ test("location profile copy covers every supported locale", () => {
     const missing = requiredKeys.filter(key => !localeMessages[key]);
     expect(missing, `${locale} is missing: ${missing.join(", ")}`).toEqual([]);
   }
+});
+
+test("deaths page copy covers every supported locale", () => {
+  const requiredKeys = getDeathsMessageKeys();
+
+  for (const locale of SUPPORTED_LOCALES) {
+    const localeMessages = getDeathsLocaleMessages(locale);
+    expect(localeMessages, `${locale} must have deaths page messages`)
+      .toBeTruthy();
+    const missing = requiredKeys.filter(key => !localeMessages[key]);
+    expect(missing, `${locale} is missing: ${missing.join(", ")}`).toEqual([]);
+  }
+});
+
+test("Chinese deaths page localizes copy, entities, dates, links, and metadata", async ({
+  page,
+  request,
+}) => {
+  const locale = "zh";
+  const year = "2026";
+  const t = getDeathsTranslations(locale);
+  const watch = attachErrorWatch(page);
+  await goto(page, `/${locale}/profile/deaths/${year}`);
+
+  await expect(page).toHaveTitle(t("metaTitle", {year}));
+  await expect(page.locator(".hero .profile-type")).toHaveText(t("header"));
+  await expect(page.locator(".profile-nav-link-title"))
+    .toHaveText([t("people"), t("deathsByMonth")]);
+  await expect(page.locator("label[for='occupation-select']"))
+    .toHaveText(t("filterOccupation"));
+  await expect(page.locator("#occupation-select option").first())
+    .toHaveText(t("allOccupations"));
+  await expect(page.locator("label[for='country-select']"))
+    .toHaveText(t("filterCountry"));
+  await expect(page.locator("#country-select option").first())
+    .toHaveText(t("allCountries"));
+
+  const firstCard = page.locator(".profile-section .person-card").first();
+  await expect(firstCard).toBeVisible();
+  await expect(firstCard).toHaveAttribute("href", /^\/zh\/profile\/person\//);
+  await expect(firstCard.locator(".person-card__dates"))
+    .toContainText(`${year}年`);
+  await expect(firstCard.locator(".person-card__age")).toContainText("享年");
+
+  const personHref = await firstCard.getAttribute("href");
+  const slug = decodeURIComponent(personHref.split("/").filter(Boolean).pop());
+  const personUrl = new URL("https://api.pantheon.world/person");
+  personUrl.searchParams.set("slug", `eq.${slug}`);
+  personUrl.searchParams.set("select", "name,translations");
+  const personResponse = await request.get(personUrl.toString());
+  expect(personResponse.ok()).toBe(true);
+  const [person] = await personResponse.json();
+  expect(person).toBeTruthy();
+  await expect(firstCard.locator(".person-card__name"))
+    .toHaveText(person.translations?.[locale] || person.name);
+
+  await expect(page.locator(".month-section h3").first())
+    .toContainText(`${year}年`);
+  await expect(page.locator("meta[name='description']"))
+    .toHaveAttribute("content", t("metaDescription", {year}));
+  const ogImage = page.locator("meta[property='og:image']");
+  await expect(ogImage)
+    .toHaveAttribute("content", /\/api\/screenshot\/deaths\?year=2026&lang=zh/);
+  const ogResponse = await request.get(await ogImage.getAttribute("content"));
+  expect(ogResponse.ok()).toBe(true);
+  expect(ogResponse.headers()["content-type"]).toContain("image/png");
+
+  const body = await page.locator("body").innerText();
+  expect(body).not.toContain("Celebrity Deaths");
+  expect(body).not.toContain("Deaths by Month");
+  expect(body).not.toContain("Filter by Occupation");
+  expect(body).not.toContain("All Countries");
+  watch.assertClean();
 });
 
 test("Chinese place profile localizes entities, copy, links, and metadata", async ({
