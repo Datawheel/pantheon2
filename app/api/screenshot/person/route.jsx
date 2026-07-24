@@ -230,7 +230,9 @@ export async function GET(request) {
     searchParams.get("locale") || searchParams.get("lang") || "en";
   const normalizedLocale = getSupportedLocale(requestedLocale);
 
-  if (!id) {
+  // person.id is a bigint; reject anything non-numeric (bots hit mangled URLs
+  // like ?id=15997043&amp;locale=en which otherwise reach a bigint query and 500).
+  if (!id || !/^\d+$/.test(id)) {
     return new NextResponse("Not Found", {status: 404});
   }
 

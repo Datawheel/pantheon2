@@ -339,12 +339,19 @@ async function attachHpiHistory(baseApi, data) {
   }
 }
 
+// person.id is a bigint. Grouped ranking rows (by occupation/industry/domain/
+// country) instead carry the dimension key as `id` (e.g. "SOCCER PLAYER",
+// "United States"), which must not be sent into the person id=in.(...) lookup.
+const isPersonId = value => /^\d+$/.test(String(value));
+
 async function localizeRankingPersonNames(baseApi, data, locale) {
   const ids = new Set();
   data.forEach(row => {
-    if (row?.id !== null && row?.id !== undefined) ids.add(row.id);
+    // Only flat "people" rows have a numeric person id here; `top_ranked` are
+    // always people. Group-key ids are skipped and fall back to row.name below.
+    if (isPersonId(row?.id)) ids.add(row.id);
     row?.top_ranked?.forEach(person => {
-      if (person?.id !== null && person?.id !== undefined) ids.add(person.id);
+      if (isPersonId(person?.id)) ids.add(person.id);
     });
   });
   if (!ids.size) return data;

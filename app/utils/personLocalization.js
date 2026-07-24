@@ -7,7 +7,11 @@ const PERSON_BATCH_SIZE = 100;
 
 function getPersonId(person) {
   const id = person?.person_id ?? person?.id;
-  return id === null || id === undefined ? null : `${id}`;
+  if (id === null || id === undefined) return null;
+  // person.id is a bigint; drop any non-numeric value so slugs/mangled ids
+  // never reach the person id=in.(...) lookup.
+  const stringId = `${id}`;
+  return /^\d+$/.test(stringId) ? stringId : null;
 }
 
 /**
