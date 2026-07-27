@@ -92,29 +92,26 @@ async function getPersonRanks(id) {
 
 async function getBooks(personId) {
   const url = `${process.env.URL}/api/books?id=${personId}`;
-  return await safeFetchArray(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-  );
+  return await safeFetchArray(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 }
 
 async function getMovies(personId) {
   const url = `${process.env.URL}/api/movies?id=${personId}`;
-  return await safeFetchArray(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-  );
+  return await safeFetchArray(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 }
 
 async function getPersonTrending(slug, userLang, date) {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
 
-  // Fetch trending records across all languages (top 12 only)
-  const trendUrl = `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.12&date=eq.${date}&select=lang,rank_pantheon`;
-  const trendRecords = await safeFetchArray(
-    trendUrl,
-    {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
-  );
+  // Fetch trending records across all languages (top 16 only)
+  const trendUrl = `${baseApi}/trend?slug=eq.${slug}&rank_pantheon=lte.16&date=eq.${date}&select=lang,rank_pantheon`;
+  const trendRecords = await safeFetchArray(trendUrl, {
+    next: {revalidate: REVALIDATE_PERIODS.SHORT},
+  });
 
   // Build ranksByLang map
   const ranksByLang = trendRecords.reduce((acc, record) => {
@@ -124,10 +121,9 @@ async function getPersonTrending(slug, userLang, date) {
 
   // Fetch localized reasons from all available models
   const reasonUrl = `${baseApi}/trend_news?slug=eq.${slug}&lang=eq.${userLang}&date=eq.${date}&select=reason,llm_metadata,title,llm_provider`;
-  const reasonRecords = await safeFetchArray(
-    reasonUrl,
-    {next: {revalidate: REVALIDATE_PERIODS.SHORT}},
-  );
+  const reasonRecords = await safeFetchArray(reasonUrl, {
+    next: {revalidate: REVALIDATE_PERIODS.SHORT},
+  });
 
   // Build array of model responses
   const modelResponses = reasonRecords
@@ -173,7 +169,9 @@ async function getLangEditionContext(occupationId, l) {
   const enc = encodePostgrestValue(occupationId);
   const [totalPeers, atOrAbove] = await Promise.all([
     getPostgrestCount(`/person_ranks?occupation=eq.${enc}&select=id&limit=1`),
-    getPostgrestCount(`/person_ranks?occupation=eq.${enc}&l=gte.${l}&select=id&limit=1`),
+    getPostgrestCount(
+      `/person_ranks?occupation=eq.${enc}&l=gte.${l}&select=id&limit=1`,
+    ),
   ]);
   if (!totalPeers || !atOrAbove || totalPeers < 30) return null;
   return {
@@ -188,10 +186,9 @@ async function getLangEditionContext(occupationId, l) {
 async function getCityPeers(placeId, excludePersonId, lang = "en") {
   if (!placeId) return [];
   const url = `${BASE_API}/person_ranks?bplace_geonameid=eq.${placeId}&order=bplace_name_rank_unique&limit=4&select=id,name,slug`;
-  const rows = await safeFetchArray(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-  );
+  const rows = await safeFetchArray(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
   const peers = rows
     .filter(r => String(r.id) !== String(excludePersonId))
     .slice(0, 3);
@@ -229,10 +226,9 @@ async function getCountryOccupationCount(countrySlug, occupationSlug) {
 async function getPageViews(personId, lang = "en") {
   const baseApi = process.env.BASE_API || "https://api.pantheon.world";
   const url = `${baseApi}/pageviews_ch?lang=eq.${lang}&wp_id=eq.${personId}&select=date,views&order=date.asc`;
-  return await safeFetchArray(
-    url,
-    {next: {revalidate: REVALIDATE_PERIODS.DEFAULT}},
-  );
+  return await safeFetchArray(url, {
+    next: {revalidate: REVALIDATE_PERIODS.DEFAULT},
+  });
 }
 
 async function getOccupationPageviews(occupationId) {
@@ -263,9 +259,7 @@ async function getRolling12MonthViews(personId) {
     [],
   );
 
-  return Array.isArray(data) && data.length > 0
-    ? data[0]?.total_views || 0
-    : 0;
+  return Array.isArray(data) && data.length > 0 ? data[0]?.total_views || 0 : 0;
 }
 
 export async function generateMetadata(props, parent) {
@@ -295,19 +289,24 @@ export async function generateMetadata(props, parent) {
   const localizedName = person.translations?.[lang] || person.name;
 
   // Build localized meta description
-  const demonym = person.bplace_country?.[`${lang}_demonym`]
-    || person.bplace_country?.[`${lang}_nationality_adj`]
-    || person.bplace_country?.demonym
-    || "";
-  const occupation = person.occupation?.[`${lang}_occupation`]
-    || person.occupation?.occupation
-    || "";
+  const demonym =
+    person.bplace_country?.[`${lang}_demonym`] ||
+    person.bplace_country?.[`${lang}_nationality_adj`] ||
+    person.bplace_country?.demonym ||
+    "";
+  const occupation =
+    person.occupation?.[`${lang}_occupation`] ||
+    person.occupation?.occupation ||
+    "";
   const birthYear = person.birthyear || "";
-  const deathYear = person.alive ? t.stillAlive : (person.deathyear || "");
+  const deathYear = person.alive ? t.stillAlive : person.deathyear || "";
   const rank = personRanks?.l || "";
-  const possessiveName = lang === "en"
-    ? (localizedName.endsWith("s") ? `${localizedName}'` : `${localizedName}'s`)
-    : localizedName;
+  const possessiveName =
+    lang === "en"
+      ? localizedName.endsWith("s")
+        ? `${localizedName}'`
+        : `${localizedName}'s`
+      : localizedName;
 
   const description = t.personMetaDescription
     ? t.personMetaDescription({
@@ -413,8 +412,7 @@ export default async function Page(props) {
           `/person_ranks?birthyear=eq.${person.birthyear}&select=id&limit=1`,
         )
       : null,
-    person.bplace_country?.slug &&
-    person.occupation?.occupation_slug
+    person.bplace_country?.slug && person.occupation?.occupation_slug
       ? getCountryOccupationCount(
           person.bplace_country.slug,
           person.occupation.occupation_slug,
@@ -475,7 +473,10 @@ export default async function Page(props) {
   // const tweetsData = getTweets(person.id);
 
   let movies = [];
-  if (person.occupation && ["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)) {
+  if (
+    person.occupation &&
+    ["ACTOR", "COMEDIAN", "FILM DIRECTOR"].includes(person.occupation.id)
+  ) {
     movies = await getMovies(person.id);
   }
 
@@ -527,9 +528,7 @@ export default async function Page(props) {
     {
       title: t.person.sections.trendingActivity,
       slug: "trending_heatmap",
-      content: (
-        <TrendingHeatmap personSlug={id} lang={lang} />
-      ),
+      content: <TrendingHeatmap personSlug={id} lang={lang} />,
     },
     // {
     //   title: "In the news",
