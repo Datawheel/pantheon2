@@ -9,6 +9,7 @@ import {getTranslations} from "@/app/translations";
 import HomeSearch from "@/components/home/HomeSearch";
 import {encodePostgrestQuotedList} from "@/app/utils/postgrest";
 import {localizePersonGroups} from "@/app/utils/personLocalization";
+import {getEditionHeroImage} from "@/components/monthly/data/editions";
 const baseUrl = process.env.URL || "https://pantheon.world";
 const apiBaseUrl = process.env.BASE_API || "https://api.pantheon.world";
 
@@ -24,6 +25,9 @@ export default async function Home(props) {
   ).replace("2025", `${currentYear}`);
 
   const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
+
+  // Latest Pantheon Monthly edition promoted on the homepage
+  const latestEditionHero = await getEditionHeroImage("2026-08");
 
   // Fetch initial data server-side using the URL locale
   const trendingAll = await fetch(
@@ -90,8 +94,8 @@ export default async function Home(props) {
   // The homepage RPC/ranking feeds expose English person names even when the
   // surrounding content is localized. Enrich only the cards rendered outside
   // the trends block, and cap birthdays to the 12 cards shown by the grid.
-  const [localizedRecentPassings, localizedRecentlyAdded, localizedBornToday]
-    = await localizePersonGroups(
+  const [localizedRecentPassings, localizedRecentlyAdded, localizedBornToday] =
+    await localizePersonGroups(
       [recentPassings, recentlyAdded, bornToday.slice(0, 12)],
       lang,
       {baseApi: apiBaseUrl},
@@ -207,6 +211,31 @@ export default async function Home(props) {
           </div>
         </div>
       </div>
+
+      <Link href={`/${lang}/monthly/2026/august`} className="monthly-callout">
+        {latestEditionHero && (
+          <div className="monthly-callout-image">
+            <img src={latestEditionHero} alt="August 2026 Pantheon Monthly" />
+          </div>
+        )}
+        <div className="monthly-callout-body">
+          <span className="monthly-callout-badge">New Edition</span>
+          <h2 className="monthly-callout-title">
+            Pantheon Monthly: August 2026
+          </h2>
+          <p className="monthly-callout-description">
+            Dolly, Hayden, and the King of Norway &mdash; August read almost
+            entirely as an obituary page, with Hayden Panettiere&rsquo;s sudden
+            death at 36 producing the largest one-month rise in the dataset,
+            followed over the next twelve days by Dolly Parton, Tim Curry, and
+            King Harald V, even as every World Cup name from July collapsed at
+            once.
+          </p>
+          <span className="monthly-callout-link">
+            Read the August Edition &rarr;
+          </span>
+        </div>
+      </Link>
 
       {/* <Link href={`/${lang}/monthly/2026/june`} className="monthly-callout">
         <div className="monthly-callout-image">
