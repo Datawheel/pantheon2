@@ -155,6 +155,9 @@ export const translations = {
       showLess: "Show less",
       notablePeople: ({count, countFormatted}) =>
         `${countFormatted || count} notable ${count === 1 ? "person" : "people"}`,
+      countOfCountryTotal: ({count, countFormatted, occupation, occupationPlural, totalFormatted, fromCountry}) =>
+        `${countFormatted} ${count === 1 ? occupation : occupationPlural} out of <a>${totalFormatted} people ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `See all ${totalFormatted} people ${fromCountry}`,
       viewsLabel: "views",
       onDate: ({date}) => `on ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -728,6 +731,8 @@ export const translations = {
       readMore: "Leer más",
       showLess: "Mostrar menos",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} persona${count === 1 ? "" : "s"} destacada${count === 1 ? "" : "s"}`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `${countFormatted} de <a>${totalFormatted} personas ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Ver las ${totalFormatted} personas ${fromCountry}`,
       viewsLabel: "vistas",
       onDate: ({date}) => `el ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -1306,6 +1311,8 @@ export const translations = {
       readMore: "Lire la suite",
       showLess: "Afficher moins",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} personne${count === 1 ? "" : "s"} notable${count === 1 ? "" : "s"}`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `${countFormatted} sur <a>${totalFormatted} personnes ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Voir les ${totalFormatted} personnes ${fromCountry}`,
       viewsLabel: "vues",
       onDate: ({date}) => `le ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -1899,6 +1906,8 @@ export const translations = {
       readMore: "Mehr lesen",
       showLess: "Weniger anzeigen",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} bemerkenswerte Person${count === 1 ? "" : "en"}`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `${countFormatted} von <a>${totalFormatted} Personen ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Alle ${totalFormatted} Personen ${fromCountry} ansehen`,
       viewsLabel: "Aufrufe",
       onDate: ({date}) => `am ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -2471,6 +2480,9 @@ export const translations = {
       readMore: "Читать далее",
       showLess: "Скрыть",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} ${count === 1 ? "заметная персона" : "заметных персон"}`,
+      countOfCountryTotal: ({countFormatted, total, totalFormatted, fromCountry}) =>
+        `${countFormatted} из <a>${totalFormatted} ${total % 10 === 1 && total % 100 !== 11 ? "человека" : "человек"} ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Все люди ${fromCountry} (${totalFormatted})`,
       viewsLabel: "просмотров",
       onDate: ({date}) => `на ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -3069,6 +3081,8 @@ export const translations = {
       readMore: "阅读更多",
       showLess: "收起",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} 位知名人物`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, country}) => `<a>来自${country}的 ${totalFormatted} 人</a>中的 ${countFormatted} 位`,
+      allPeopleFromCountry: ({totalFormatted, country}) => `查看来自${country}的全部 ${totalFormatted} 人`,
       viewsLabel: "次浏览",
       onDate: ({date}) => `${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -3642,6 +3656,8 @@ export const translations = {
       readMore: "もっと読む",
       showLess: "折りたたむ",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} 人の著名人`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, country}) => `<a>${country}出身の${totalFormatted}人</a>のうち${countFormatted}人`,
+      allPeopleFromCountry: ({totalFormatted, country}) => `${country}出身の全${totalFormatted}人を見る`,
       viewsLabel: "回表示",
       onDate: ({date}) => `${date}に`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -4225,6 +4241,8 @@ export const translations = {
       readMore: "اقرأ المزيد",
       showLess: "عرض أقل",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} شخصية بارزة`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `${countFormatted} من أصل <a>${totalFormatted} شخصية ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `عرض جميع الشخصيات ${fromCountry} (${totalFormatted})`,
       viewsLabel: "مشاهدة",
       onDate: ({date}) => `في ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -4800,6 +4818,8 @@ export const translations = {
       readMore: "Leggi di più",
       showLess: "Mostra meno",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} persona${count === 1 ? "" : "e"} notevole${count === 1 ? "" : "i"}`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `${countFormatted} su <a>${totalFormatted} persone ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Vedi tutte le ${totalFormatted} persone ${fromCountry}`,
       viewsLabel: "visualizzazioni",
       onDate: ({date}) => `il ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -5412,6 +5432,8 @@ export const translations = {
       readMore: "Leia mais",
       showLess: "Mostrar menos",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} pessoa${count === 1 ? "" : "s"} notável${count === 1 ? "" : "eis"}`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `${countFormatted} de <a>${totalFormatted} pessoas ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Ver todas as ${totalFormatted} pessoas ${fromCountry}`,
       viewsLabel: "visualizações",
       onDate: ({date}) => `em ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -6041,6 +6063,8 @@ export const translations = {
       readMore: "Olvass tovább",
       showLess: "Kevesebb",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} híres személy`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `<a>${totalFormatted} ${fromCountry} származó személy</a> közül ${countFormatted}`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Az összes ${fromCountry} származó személy (${totalFormatted})`,
       viewsLabel: "megtekintés",
       onDate: ({date}) => `${date}-án`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -6563,6 +6587,8 @@ export const translations = {
       readMore: "Lees meer",
       showLess: "Toon minder",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} opvallende persoon${count === 1 ? "" : "en"}`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `${countFormatted} van <a>${totalFormatted} personen ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Bekijk alle ${totalFormatted} personen ${fromCountry}`,
       viewsLabel: "weergaven",
       onDate: ({date}) => `op ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {
@@ -7144,6 +7170,8 @@ export const translations = {
       readMore: "Czytaj więcej",
       showLess: "Pokaż mniej",
       notablePeople: ({count, countFormatted}) => `${countFormatted || count} ${count === 1 ? "znana osoba" : "znanych osób"}`,
+      countOfCountryTotal: ({countFormatted, totalFormatted, fromCountry}) => `${countFormatted} z <a>${totalFormatted} osób ${fromCountry}</a>`,
+      allPeopleFromCountry: ({totalFormatted, fromCountry}) => `Zobacz wszystkie osoby ${fromCountry} (${totalFormatted})`,
       viewsLabel: "wyświetleń",
       onDate: ({date}) => `dnia ${date}`,
       trendingTitle: ({locationLabel, occupationPlural, hasFromPrefix}) => {

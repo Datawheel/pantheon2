@@ -27,7 +27,7 @@ export default async function Home(props) {
   const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
   // Latest Pantheon Monthly edition promoted on the homepage
-  const latestEditionHero = await getEditionHeroImage("2026-08");
+  const latestEditionHero = await getEditionHeroImage("2026-09");
 
   // Fetch initial data server-side using the URL locale
   const trendingAll = await fetch(
@@ -212,27 +212,27 @@ export default async function Home(props) {
         </div>
       </div>
 
-      <Link href={`/${lang}/monthly/2026/august`} className="monthly-callout">
+      <Link href={`/${lang}/monthly/2026/september`} className="monthly-callout">
         {latestEditionHero && (
           <div className="monthly-callout-image">
-            <img src={latestEditionHero} alt="August 2026 Pantheon Monthly" />
+            <img src={latestEditionHero} alt="September 2026 Pantheon Monthly" />
           </div>
         )}
         <div className="monthly-callout-body">
           <span className="monthly-callout-badge">New Edition</span>
           <h2 className="monthly-callout-title">
-            Pantheon Monthly: August 2026
+            Pantheon Monthly: September 2026
           </h2>
           <p className="monthly-callout-description">
-            Dolly, Hayden, and the King of Norway &mdash; August read almost
-            entirely as an obituary page, with Hayden Panettiere&rsquo;s sudden
-            death at 36 producing the largest one-month rise in the dataset,
-            followed over the next twelve days by Dolly Parton, Tim Curry, and
-            King Harald V, even as every World Cup name from July collapsed at
-            once.
+            Lizzie Borden Takes September &mdash; a Netflix season put a woman
+            acquitted in 1893 at the top of the chart, with Elizabeth Holmes,
+            Ted Kaczynski, and Aileen Wuornos right behind her. Zverev and
+            Rybakina won in New York, Gloria Steinem died at 92, and
+            August&rsquo;s obituaries gave back almost everything they had
+            gained.
           </p>
           <span className="monthly-callout-link">
-            Read the August Edition &rarr;
+            Read the September Edition &rarr;
           </span>
         </div>
       </Link>

@@ -204,6 +204,15 @@
   filter: grayscale(100%) contrast(1.15);
 }
 
+/* On phones the fixed-height box crops wide group portraits at the sides;
+   show the whole image at its natural ratio instead. */
+@media (max-width: 750px) {
+  .monthly-hero-image-wrap .image,
+  .monthly-hero-image-wrap .image img {
+    height: auto;
+  }
+}
+
 .monthly-hero-quote {
   background: var(--colorKashi);
   padding: 1rem 1.25rem;

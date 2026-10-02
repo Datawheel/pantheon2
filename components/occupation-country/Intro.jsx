@@ -77,6 +77,23 @@ export default function Intro({country, occupation, allCountriesInOccupation, lo
     return match.replace(country.country, countryLink);
   });
 
+  // Direct route to the unfiltered country profile
+  const tEn = getTranslations(DEFAULT_LOCALE);
+  const allPeopleFromCountry =
+    t.occupationCountry.allPeopleFromCountry ||
+    tEn.occupationCountry.allPeopleFromCountry;
+  const countryTotal = country.num_born || 0;
+  const allPeopleLabel =
+    countryTotal > 0
+      ? allPeopleFromCountry({
+          totalFormatted: countryTotal.toLocaleString(locale),
+          country: country.country,
+          fromCountry:
+            country.fromCountry ||
+            `${t.occupationCountry.from} ${country.country}`,
+        })
+      : null;
+
   return (
     <section className="intro-section">
       <div className="intro-content">
@@ -85,6 +102,16 @@ export default function Intro({country, occupation, allCountriesInOccupation, lo
             <img src="/images/ui/profile-w.svg" alt="" />
           </div>
           <p dangerouslySetInnerHTML={{__html: introHTML}} />
+          {allPeopleLabel && (
+            <p>
+              <a
+                className="deep-link"
+                href={`${localePrefix}/profile/country/${country.slug}`}
+              >
+                {allPeopleLabel}
+              </a>
+            </p>
+          )}
         </div>
       </div>
     </section>
