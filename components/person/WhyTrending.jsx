@@ -70,7 +70,7 @@ export default function WhyTrending({
           <div className="reason-header">
             <h3>{t.trending.whyTrending.replace("{name}", person.name)}</h3>
           </div>
-          <p dangerouslySetInnerHTML={{__html: reasonHtml}} />
+          <div className="reason-text" dangerouslySetInnerHTML={{__html: reasonHtml}} />
           {citations.length > 0 && (
             <div className="citations-container">
               <h4>{t.trending.references}</h4>
