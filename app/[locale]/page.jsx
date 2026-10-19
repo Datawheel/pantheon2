@@ -9,7 +9,7 @@ import {getTranslations} from "@/app/translations";
 import HomeSearch from "@/components/home/HomeSearch";
 import {encodePostgrestQuotedList} from "@/app/utils/postgrest";
 import {localizePersonGroups} from "@/app/utils/personLocalization";
-import {getEditionHeroImage} from "@/components/monthly/data/editions";
+// import {getEditionHeroImage} from "@/components/monthly/data/editions";
 const baseUrl = process.env.URL || "https://pantheon.world";
 const apiBaseUrl = process.env.BASE_API || "https://api.pantheon.world";
 
@@ -26,8 +26,8 @@ export default async function Home(props) {
 
   const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
-  // Latest Pantheon Monthly edition promoted on the homepage
-  const latestEditionHero = await getEditionHeroImage("2026-09");
+  // Latest Pantheon Monthly edition promoted on the homepage (callout hidden)
+  // const latestEditionHero = await getEditionHeroImage("2026-09");
 
   // Fetch initial data server-side using the URL locale
   const trendingAll = await fetch(
@@ -212,6 +212,8 @@ export default async function Home(props) {
         </div>
       </div>
 
+      {/* Pantheon Monthly callout, hidden late in the month. To re-enable,
+          restore this block and the getEditionHeroImage call above.
       <Link href={`/${lang}/monthly/2026/september`} className="monthly-callout">
         {latestEditionHero && (
           <div className="monthly-callout-image">
@@ -236,23 +238,7 @@ export default async function Home(props) {
           </span>
         </div>
       </Link>
-
-      {/* <Link href={`/${lang}/monthly/2026/june`} className="monthly-callout">
-        <div className="monthly-callout-image">
-          <img
-            src="/images/monthly/2026-06-hero.png"
-            alt="June 2026 Pantheon Monthly"
-          />
-        </div>
-        <div className="monthly-callout-body">
-          <span className="monthly-callout-badge">New Edition</span>
-          <h2 className="monthly-callout-title">Pantheon Monthly: June 2026</h2>
-          <p className="monthly-callout-description">
-            The month the World Cup took over &mdash; football&rsquo;s biggest names swept the chart as the 48-team tournament kicked off across North America, even as the sudden death of Oliver Tree topped June and Andy Burnham&rsquo;s rise reshaped British politics.
-          </p>
-          <span className="monthly-callout-link">Read the June Edition &rarr;</span>
-        </div>
-      </Link> */}
+      */}
 
       <TrendingGrid
         title={t.home.trendingProfiles}
