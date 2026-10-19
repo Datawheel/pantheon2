@@ -39,10 +39,14 @@
 
     @media (min-width: 751px) {
       position: absolute;
+      /* Pin to the section edges: without an explicit top, ads injected
+         above the deco push it down and it overflows the section bottom. */
+      top: 0;
+      bottom: 0;
       inset-inline-start: -15vw; /* Use logical property for RTL/LTR support */
-      height: 100%;
       width: 100%;
       overflow: hidden;
+      pointer-events: none;
     }
   }
 
