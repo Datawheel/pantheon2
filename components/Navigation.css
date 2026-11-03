@@ -13,7 +13,6 @@
   }
 
   & .item-link {
-    @include boldSmallCaps;
     color: var(--colorDark);
     position: relative;
 
@@ -199,7 +198,6 @@
 
     & > .dd {
       &::after {
-        @include dropdownLink;
       }
     }
   }
@@ -404,7 +402,6 @@
   }
 
   & .language-label {
-    @include boldSmallCaps;
     display: none;
     white-space: nowrap;
 
@@ -563,12 +560,10 @@
     display: block;
     padding: 1em 0;
     margin-left: 40px;
-    @include profileSectionTitle;
 
     /* &.profiles-link, &.about-link, &.data-link { */
     &.profiles-link, &.data-link, &.game-link {
       &::after {
-        @include dropdownLink;
         width: 16px !important;
         height: 8px !important;
         margin-left: 4px !important;
@@ -670,7 +665,6 @@
       display: block;
 
       & a {
-        @include boldSmallCaps;
         display: block;
         color: var(--colorDark);
         margin-left: 60px;
@@ -691,8 +685,6 @@
       text-transform: none;
       display: block;
       width: 100%;
-      @include panelInput;
-      @include exploreControlInputText;
       margin-top: 13px;
       margin-left: -20px;
     }

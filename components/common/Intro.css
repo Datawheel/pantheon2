@@ -3,6 +3,10 @@
 .intro-section {
   @mixin themeDark;
   position: relative;
+  /* Contain child margins: AdSense auto ads inject an <ins> with a 10px
+     margin as the first child, which otherwise collapses through the
+     section and leaves a light gap above it. */
+  display: flow-root;
 
   @media (min-width: 751px) {
     padding: 18px 0 36px;

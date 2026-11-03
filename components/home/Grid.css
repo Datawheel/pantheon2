@@ -74,6 +74,33 @@
     }
   } /* end .grid-subtitle */
 
+  /* Shown when the trending edition differs from the site language */
+  & .grid-lang-note {
+    margin: -10px 10px 20px;
+    padding: 8px 14px;
+    font-size: 14px;
+    text-align: right;
+    color: #575654;
+    background: rgba(54, 54, 54, 0.05);
+    border-radius: 4px;
+
+    @media (max-width: 480px) {
+      margin-top: 0;
+      text-align: left;
+    }
+
+    & a {
+      color: var(--colorDark, #363636);
+      font-weight: 600;
+      white-space: nowrap;
+      border-bottom: 1px solid currentColor;
+
+      &:hover {
+        border-bottom-color: transparent;
+      }
+    }
+  }
+
   & .grid-row {
     list-style: none;
     margin: 0 auto;

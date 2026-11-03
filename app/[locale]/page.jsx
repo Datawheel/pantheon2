@@ -7,8 +7,8 @@ import {REVALIDATE_PERIODS} from "@/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import HomeSearch from "@/components/home/HomeSearch";
-import {encodePostgrestQuotedList} from "@/app/utils/postgrest";
 import {localizePersonGroups} from "@/app/utils/personLocalization";
+import {fetchTrendReasons} from "@/app/utils/trendReasons";
 // import {getEditionHeroImage} from "@/components/monthly/data/editions";
 const baseUrl = process.env.URL || "https://pantheon.world";
 const apiBaseUrl = process.env.BASE_API || "https://api.pantheon.world";
@@ -101,14 +101,7 @@ export default async function Home(props) {
       {baseApi: apiBaseUrl},
     );
 
-  // Fetch trending reasons for top trending people
-  // Use yesterday's date (same as news page logic)
   const now = new Date();
-  const easternNow = new Date(
-    now.toLocaleString("en-US", {timeZone: "America/Godthab"}),
-  );
-  easternNow.setDate(easternNow.getDate() - 1);
-  const yesterday = `${easternNow.getFullYear()}-${String(easternNow.getMonth() + 1).padStart(2, "0")}-${String(easternNow.getDate()).padStart(2, "0")}`;
   const todayString = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
   // Fetch reasons for every profile shown in the trending grid. The grid is
@@ -117,48 +110,11 @@ export default async function Home(props) {
     .slice(0, 16)
     .map(p => p.slug)
     .filter(Boolean);
-  const topTrendingSlugFilter = encodePostgrestQuotedList(topTrendingSlugs);
-
-  // Fetch trending reasons for these people
-  let trendingWithReasons = [];
-  if (topTrendingSlugs.length > 0) {
-    try {
-      const reasonsData = await fetch(
-        `${apiBaseUrl}/trend_news?date=eq.${yesterday}&lang=eq.${lang}&slug=in.(${topTrendingSlugFilter})&select=slug,title,reason,llm_metadata`,
-        {
-          next: {revalidate: REVALIDATE_PERIODS.SHORT * 2},
-        },
-      )
-        .then(res => res.json())
-        .then(data => (Array.isArray(data) ? data : []))
-        .catch(error => {
-          console.error(`Error fetching trending reasons for ${lang}:`, error);
-          return [];
-        });
-
-      // Build a map of slug -> reason data
-      const reasonsMap = reasonsData.reduce((acc, item) => {
-        acc[item.slug] = {
-          trending_reason: item.reason || "",
-          llm_metadata: item.llm_metadata,
-          localized_name: item.title || "",
-        };
-        return acc;
-      }, {});
-
-      // Merge reasons with trending people
-      trendingWithReasons = trendingAll
-        .filter(person => reasonsMap[person.slug])
-        .map(person => ({
-          ...person,
-          trending_reason: reasonsMap[person.slug].trending_reason,
-          llm_metadata: reasonsMap[person.slug].llm_metadata,
-          localized_name: reasonsMap[person.slug].localized_name,
-        }));
-    } catch (error) {
-      console.error("Error processing trending reasons:", error);
-    }
-  }
+  const trendingWithReasons = await fetchTrendReasons({
+    slugs: topTrendingSlugs,
+    lang,
+    baseApi: apiBaseUrl,
+  });
 
   return (
     <div className="container">
