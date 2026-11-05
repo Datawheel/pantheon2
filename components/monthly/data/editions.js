@@ -26,6 +26,80 @@ const MONTH_NAMES = [
 ];
 
 const EDITION_META = {
+  "2026-10": {
+    headline: "The Nobel Effect",
+    subhead:
+      "Nobel week sent Navi Pillay up nearly 400-fold, lifted Anne Carson and Karl Deisseroth, and brought most of this year's laureates into Pantheon for the first time. RJ Mitte and Patrick Stewart had the month's biggest gains, Brazil and Israel went to the polls, and September's true-crime wave receded.",
+    editorial: {
+      sections: [
+        {
+          paragraphs: [
+            'Every October, the Nobel Prizes turn a handful of scientists, writers, and activists into household names for a week. This year the Peace laureate rose almost 400-fold, and most of the new winners were famous enough by the end of the month to join Pantheon. Two close elections, a run of hit TV shows, and the deaths of RJ Mitte and Patrick Stewart filled in the rest.',
+          ],
+        },
+        {
+          heading: "Nobel Week",
+          paragraphs: [
+            '<a href="/profile/person/Navi_Pillay">Navi Pillay</a>, the South African judge and former UN human rights chief, won the Nobel Peace Prize on October 9. Her page rose almost 400-fold. <a href="/profile/person/Karl_Deisseroth">Karl Deisseroth</a> shared the medicine prize for optogenetics, a way of controlling brain cells with light, and rose 184-fold. Poet <a href="/profile/person/Anne_Carson">Anne Carson</a> won the literature prize and rose more than 90-fold.',
+            'Most of this year\'s other winners had no Pantheon page to rise. They joined this month instead &mdash; see <a href="#new-to-pantheon">New to Pantheon this month</a> below.',
+          ],
+        },
+        {
+          heading: "Farewells",
+          paragraphs: [
+            '<a href="/profile/person/RJ_Mitte">RJ Mitte</a>, who played Walter White Jr. in <em>Breaking Bad</em>, died on October 12 at 34. He was also a longtime advocate for people with disabilities. His page went from under 100,000 views in September to nearly 6.5 million in October, the biggest gain of the month.',
+            'Two weeks later, <a href="/profile/person/Patrick_Stewart">Patrick Stewart</a> died in Los Angeles at 86, after living with Alzheimer\'s disease and Lewy body dementia. Best known as Captain Jean-Luc Picard and Professor X, he added six million views. <em>Star Trek</em> lost another original crew member the same week: <a href="/profile/person/Walter_Koenig">Walter Koenig</a>, the first Ensign Chekov, died on October 25 at 90. Stewart\'s X-Men co-star <a href="/profile/person/Ian_McKellen">Ian McKellen</a> rose alongside them.',
+            'The month\'s sharpest jump came from Spain. <a href="/profile/person/Fátima_Báñez">Fátima Báñez</a>, the country\'s first woman labour minister, was killed on October 28 when two high-speed trains collided near Urda, in Toledo. Her page had 801 views in September and more than 900,000 in October.',
+            'Film and television lost several more familiar faces. <a href="/profile/person/Eva_Marie_Saint">Eva Marie Saint</a>, one of the earliest Oscar winners still living, died on October 6 at 102. Indian actor <a href="/profile/person/Nana_Patekar">Nana Patekar</a> died of a cardiac arrest on October 8 at 75, and <a href="/profile/person/Tom_Skerritt">Tom Skerritt</a>, of <em>M*A*S*H</em> and <em>Top Gun</em>, on October 21 at 93. Looney Tunes voice actor <a href="/profile/person/Eric_Bauza">Eric Bauza</a> and <a href="/profile/person/Susan_Saint_James">Susan Saint James</a> died a day apart, and the month also took <a href="/profile/person/Barbara_Barrie">Barbara Barrie</a>, <a href="/profile/person/Elke_Sommer">Elke Sommer</a>, and <em>Office Space</em>\'s <a href="/profile/person/Richard_Riehle">Richard Riehle</a>.',
+            'The losses reached well beyond Hollywood. British novelist <a href="/profile/person/Jeffrey_Archer">Jeffrey Archer</a> died on October 5, Japanese novelist <a href="/profile/person/Ryū_Murakami">Ryū Murakami</a> on October 17, and manga pioneer <a href="/profile/person/Tetsuya_Chiba">Tetsuya Chiba</a> on October 22. <a href="/profile/person/Cuauhtémoc_Cárdenas">Cuauhtémoc Cárdenas</a>, whose 1988 presidential campaign helped end one-party rule in Mexico, died on October 28. Two September deaths also showed up in October\'s numbers: Venom frontman Cronos (<a href="/profile/person/Conrad_Lant">Conrad Lant</a>), whose death was announced on October 1, and Apollo software pioneer <a href="/profile/person/Margaret_Hamilton_(software_engineer)">Margaret Hamilton</a>, who died on September 30.',
+          ],
+        },
+        {
+          heading: "Elections and Washington",
+          paragraphs: [
+            'In Brazil, <a href="/profile/person/Luiz_Inácio_Lula_da_Silva">Lula</a> came from behind in the October 25 runoff to beat <a href="/profile/person/Flávio_Bolsonaro">Flávio Bolsonaro</a> and win a fourth term. It was the first time a first-round leader had lost a Brazilian runoff. Flávio\'s father, former president <a href="/profile/person/Jair_Bolsonaro">Jair Bolsonaro</a>, rose almost elevenfold along with them.',
+            'Israel voted on October 27 and ended up with no clear winner. <a href="/profile/person/Gadi_Eisenkot">Gadi Eisenkot</a>, whose new Yashar party won 21 seats, rose sevenfold, and <a href="/profile/person/Benjamin_Netanyahu">Benjamin Netanyahu</a> rose too.',
+            'In Washington, the Pentagon announced on October 5 that President Trump had approved the execution of Fort Hood gunman <a href="/profile/person/Nidal_Hasan">Nidal Hasan</a> by firing squad. That was the month\'s third-largest gain. <a href="/profile/person/Kimberly_Guilfoyle">Kimberly Guilfoyle</a> resigned at Trump\'s request on October 13 after the <em>Wall Street Journal</em> reported on a $100,000 wire transfer, and federal agents searched <a href="/profile/person/Ilhan_Omar">Ilhan Omar</a>\'s Washington home on October 12. <a href="/profile/person/Kim_Jong_Un">Kim Jong Un</a> rose fivefold as Trump first floated, then played down, a meeting during his Asia trip.',
+            'In Europe, <a href="/profile/person/Bärbel_Bas">Bärbel Bas</a> resigned as co-leader of Germany\'s Social Democrats and as labour minister on October 12. <a href="/profile/person/Russell_Brand">Russell Brand</a>\'s rape trial opened in October; he was convicted on November 5.',
+          ],
+        },
+        {
+          heading: "On Screen",
+          paragraphs: [
+            'The second series of BBC One\'s <em>The Celebrity Traitors</em> ran from October 1 to 30 and put most of its cast on the chart. Joint winner <a href="/profile/person/Sebastian_Croft">Sebastian Croft</a> rose 25-fold, with <a href="/profile/person/Bella_Ramsey">Bella Ramsey</a>, <a href="/profile/person/Jerry_Hall">Jerry Hall</a>, <a href="/profile/person/James_Blunt">James Blunt</a>, <a href="/profile/person/Richard_E._Grant">Richard E. Grant</a>, <a href="/profile/person/Miranda_Hart">Miranda Hart</a>, and <a href="/profile/person/Hannah_Fry">Hannah Fry</a> close behind.',
+            'Netflix released all of <em>East of Eden</em> on October 1, lifting <a href="/profile/person/Florence_Pugh">Florence Pugh</a>, <a href="/profile/person/Christopher_Abbott">Christopher Abbott</a>, and the novel\'s author, <a href="/profile/person/John_Steinbeck">John Steinbeck</a>. The thriller <em>Verity</em> opened on October 2 with <a href="/profile/person/Josh_Hartnett">Josh Hartnett</a> and <a href="/profile/person/Dakota_Johnson">Dakota Johnson</a>, and <a href="/profile/person/Mike_Flanagan_(filmmaker)">Mike Flanagan</a>\'s <em>Carrie</em> series, which premiered on Prime Video on October 7, lifted <a href="/profile/person/Josie_Totah">Josie Totah</a> and <a href="/profile/person/Kate_Siegel">Kate Siegel</a>, who narrates the series and directed its third episode. A Netflix documentary, <em>The One About Matthew Perry</em>, brought <a href="/profile/person/Matthew_Perry">Matthew Perry</a> back up as the third anniversary of his death approached.',
+            'Away from the screen, <a href="/profile/person/Harry_Kane">Harry Kane</a> equalled Peter Shilton\'s England record of 125 caps on October 6, and <a href="/profile/person/Hideki_Matsui">Hideki Matsui</a> was named manager of the Yomiuri Giants on October 23. <a href="/profile/person/Selma_Blair">Selma Blair</a> was hospitalized after a confrontation on a Delta flight on October 11.',
+          ],
+        },
+        {
+          heading: "Coming Back Down",
+          paragraphs: [
+            'As usual, the biggest falls belong to last month\'s headlines. <a href="/profile/person/Lizzie_Borden">Lizzie Borden</a> lost nearly ten million views as Netflix\'s <em>Monster</em> season left its first weeks behind, though she still had more than four million in October.',
+            'The US Open\'s champions and finalists &mdash; <a href="/profile/person/Elena_Rybakina">Elena Rybakina</a>, <a href="/profile/person/Ben_Shelton">Ben Shelton</a>, <a href="/profile/person/Alexander_Zverev">Alexander Zverev</a>, and <a href="/profile/person/Aryna_Sabalenka">Aryna Sabalenka</a> &mdash; each fell by 85 to 97 percent. <a href="/profile/person/Gloria_Steinem">Gloria Steinem</a>, <a href="/profile/person/Dolly_Parton">Dolly Parton</a>, and <a href="/profile/person/Hayden_Panettiere">Hayden Panettiere</a> kept easing back after their deaths in August and September, and <a href="/profile/person/Macklemore">Macklemore</a>, <a href="/profile/person/Theo_James">Theo James</a>, and <a href="/profile/person/Alice_Weidel">Alice Weidel</a> followed them down.',
+          ],
+        },
+      ],
+    },
+    newPeopleIntro: [
+      'Pantheon adds people once enough Wikipedia editions are writing about them. This month\'s group is led by the 2026 Nobel laureates. Chemists <a href="/profile/person/Henri_B._Kagan">Henri B. Kagan</a> and <a href="/profile/person/Kensō_Soai">Kensō Soai</a> won on October 7 for work on how reactions can favour one mirror-image form of a molecule over the other. Physicist <a href="/profile/person/Francis_Halzen">Francis Halzen</a> won for the IceCube neutrino observatory, buried in the ice at the South Pole. <a href="/profile/person/Georg_Nagel">Georg Nagel</a> and <a href="/profile/person/Peter_Hegemann">Peter Hegemann</a> shared the medicine prize with Karl Deisseroth, and <a href="/profile/person/Michael_Woodford">Michael Woodford</a> and <a href="/profile/person/Robert_E._Hall">Robert E. Hall</a> won in economics.',
+      'Each of them now has an article in 32 to 46 language editions of Wikipedia. Two 2025 laureates join them: <a href="/profile/person/Shimon_Sakaguchi">Shimon Sakaguchi</a>, who tops the list with 47 editions, and <a href="/profile/person/Susumu_Kitagawa">Susumu Kitagawa</a>.',
+      'Many of the other new arrivals came straight from October\'s news. <a href="/profile/person/Justina_Shiroka_Pula">Justina Shiroka Pula</a> was elected president of Kosovo on October 7, and <a href="/profile/person/Luca_Niculescu">Luca Niculescu</a> was sworn in as Romania\'s prime minister on October 20. <a href="/profile/person/Katie_Zacharia">Katie Zacharia</a> became White House press secretary as <a href="/profile/person/Karoline_Leavitt">Karoline Leavitt</a> left for Fox News. <a href="/profile/person/Samantha_Sloyan">Samantha Sloyan</a> plays Margaret White in Flanagan\'s <em>Carrie</em>, and Haas gave racing driver <a href="/profile/person/Ryo_Hirakawa">Ryo Hirakawa</a> his Formula One debut at the Mexico City Grand Prix. And <a href="/profile/person/Annie_Edson_Taylor">Annie Edson Taylor</a>, the first person to go over Niagara Falls in a barrel and survive, joined in the week of that ride\'s 125th anniversary on October 24.',
+    ],
+    moverSummaries: {
+      "rising:RJ_Mitte":
+        "RJ Mitte was October's biggest mover. The Breaking Bad actor and disability advocate died on October 12 at 34, and his page rose to nearly 6.5 million views.",
+      "rising:Patrick_Stewart":
+        "Patrick Stewart added six million views after the actor who played Jean-Luc Picard and Professor X died in Los Angeles at 86, late in October.",
+      "rising:Nidal_Hasan":
+        "Nidal Hasan rose fiftyfold after the Pentagon said on October 5 that President Trump had approved his execution by firing squad, set for December 3 at Fort Hood.",
+      "falling:Lizzie_Borden":
+        "Lizzie Borden was October's steepest faller, losing nearly ten million views as Netflix's Monster: The Lizzie Borden Story left its first weeks behind.",
+      "falling:Elena_Rybakina":
+        "Elena Rybakina fell by 95 percent as attention from her September US Open title faded.",
+      "falling:Ben_Shelton":
+        "Ben Shelton lost almost all of the views his run to the US Open final brought him in September, falling by 97 percent.",
+    },
+  },
   "2026-09": {
     headline: "Lizzie Borden Takes September",
     subhead:
@@ -229,7 +303,13 @@ export async function getEdition(year, month) {
     editionCache.set(key, loadEdition(key));
   }
 
-  return editionCache.get(key);
+  // Resolve the hero outside the cache: it is usually added after the edition
+  // first loads, and a cached "no hero" would hide it until a restart.
+  const [edition, heroImage] = await Promise.all([
+    editionCache.get(key),
+    resolveHeroImage(key),
+  ]);
+  return edition ? {...edition, heroImage} : edition;
 }
 
 export async function getAllEditionKeys() {
@@ -251,10 +331,10 @@ async function loadEdition(key) {
   const monthNum = Number(monthPart);
 
   try {
-    const [csvText, archive, heroImage] = await Promise.all([
+    const [csvText, archive, newPeople] = await Promise.all([
       fs.readFile(csvPath, "utf8"),
       buildArchive(),
-      resolveHeroImage(key),
+      loadNewPeople(key),
     ]);
 
     const rows = parseMonthlyCsv(csvText);
@@ -277,7 +357,6 @@ async function loadEdition(key) {
       monthNum,
       headline: meta.headline,
       subhead: meta.subhead,
-      heroImage,
       editorial: meta.editorial,
       stats: buildStats(topRiser),
       movers: [
@@ -289,6 +368,8 @@ async function loadEdition(key) {
       deceasedSlugs: rows
         .filter(row => row.deathdate && row.deathdate.startsWith(key))
         .map(row => row.slug),
+      newPeople,
+      newPeopleIntro: meta.newPeopleIntro || null,
       archive,
     };
   } catch (error) {
@@ -296,6 +377,35 @@ async function loadEdition(key) {
       return null;
     }
 
+    throw error;
+  }
+}
+
+// Optional companion file listing the people added to Pantheon during the
+// edition month (their Wikidata entries crossed the 15-sitelink threshold).
+// Editions without one simply skip the "New to Pantheon" section.
+async function loadNewPeople(key) {
+  try {
+    const text = await fs.readFile(
+      path.join(MONTHLY_DATA_DIR, `${key}-new.csv`),
+      "utf8",
+    );
+    return parseCsvRecords(text)
+      .filter(row => row.slug)
+      .map(row => ({
+        id: toNumber(row.id),
+        slug: row.slug,
+        name: row.name,
+        birthyear: row.birthyear === "" ? null : toNumber(row.birthyear),
+        deathyear: row.deathyear === "" ? null : toNumber(row.deathyear),
+        gender: row.gender || "",
+        occupation: row.occupation || "",
+        languages: toNumber(row.languages),
+        sitelinks: toNumber(row.sitelinks),
+      }))
+      .sort((a, b) => b.sitelinks - a.sitelinks || b.languages - a.languages);
+  } catch (error) {
+    if (error && error.code === "ENOENT") return [];
     throw error;
   }
 }
@@ -448,7 +558,7 @@ function monthToNum(month) {
   return MONTH_NAMES.indexOf(String(month).toLowerCase()) + 1;
 }
 
-function parseMonthlyCsv(text) {
+function parseCsvRecords(text) {
   const lines = text.trim().split(/\r?\n/);
   if (lines.length <= 1) return [];
 
@@ -456,11 +566,15 @@ function parseMonthlyCsv(text) {
 
   return lines.slice(1).map(line => {
     const values = parseCsvLine(line);
-    const row = headers.reduce((acc, header, index) => {
+    return headers.reduce((acc, header, index) => {
       acc[header] = values[index] ?? "";
       return acc;
     }, {});
+  });
+}
 
+function parseMonthlyCsv(text) {
+  return parseCsvRecords(text).map(row => {
     return {
       wpId: toNumber(row.wp_id),
       slug: row.slug,

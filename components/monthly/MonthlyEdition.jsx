@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import {Fragment, useState} from "react";
 import Link from "next/link";
 import SimpleTooltip from "@/components/common/SimpleTooltip";
 import PersonImage from "@/components/utils/PersonImage";
@@ -10,6 +10,21 @@ function formatViews(n) {
   if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
   if (n >= 1e3) return `${(n / 1e3).toFixed(0)}K`;
   return String(n);
+}
+
+const NEW_PEOPLE_PAGE = 12;
+
+function formatYear(year) {
+  if (year === null || year === undefined) return "";
+  return year < 0 ? `${Math.abs(year)} BC` : String(year);
+}
+
+function formatLifespan(person) {
+  const born = formatYear(person.birthyear);
+  if (person.deathyear !== null && person.deathyear !== undefined) {
+    return `${born}–${formatYear(person.deathyear)}`;
+  }
+  return born ? `b. ${born}` : "";
 }
 
 function anomalyTier(score) {
@@ -52,6 +67,19 @@ export default function MonthlyEdition({edition, locale}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showFallers, setShowFallers] = useState(false);
   const [visibleCount, setVisibleCount] = useState(50);
+  const [newPeopleCount, setNewPeopleCount] = useState(NEW_PEOPLE_PAGE);
+  const newPeople = edition.newPeople || [];
+  // Newer editions split the editorial into headed sections; older ones are
+  // three plain paragraphs (intro / middle / conclusion).
+  const editorialSections = edition.editorial.sections || [
+    {
+      paragraphs: [
+        edition.editorial.intro,
+        edition.editorial.middle,
+        edition.editorial.conclusion,
+      ],
+    },
+  ];
 
   const monthLabel =
     edition.month.charAt(0).toUpperCase() + edition.month.slice(1);
@@ -87,6 +115,13 @@ export default function MonthlyEdition({edition, locale}) {
                 <span className="nav-icon">&#8599;</span> Trending Now
               </a>
             </li>
+            {newPeople.length > 0 && (
+              <li>
+                <a href="#new-to-pantheon">
+                  <span className="nav-icon">&#10010;</span> New to Pantheon
+                </a>
+              </li>
+            )}
             <li>
               <a href="#deep-dive">
                 <span className="nav-icon">&#9783;</span> The Deep Dive
@@ -149,31 +184,28 @@ export default function MonthlyEdition({edition, locale}) {
 
           {/* Editorial */}
           <section className="monthly-editorial">
-            <p
-              className="monthly-editorial-intro"
-              dangerouslySetInnerHTML={{
-                __html: localizeEditorialHtml(
-                  edition.editorial.intro,
-                  localePrefix,
-                ),
-              }}
-            />
-            <p
-              dangerouslySetInnerHTML={{
-                __html: localizeEditorialHtml(
-                  edition.editorial.middle,
-                  localePrefix,
-                ),
-              }}
-            />
-            <p
-              dangerouslySetInnerHTML={{
-                __html: localizeEditorialHtml(
-                  edition.editorial.conclusion,
-                  localePrefix,
-                ),
-              }}
-            />
+            {editorialSections.map((section, sectionIndex) => (
+              <Fragment key={section.heading || sectionIndex}>
+                {section.heading && (
+                  <h3 className="monthly-editorial-heading">
+                    {section.heading}
+                  </h3>
+                )}
+                {section.paragraphs.map((html, paragraphIndex) => (
+                  <p
+                    key={paragraphIndex}
+                    className={
+                      sectionIndex === 0 && paragraphIndex === 0
+                        ? "monthly-editorial-intro"
+                        : undefined
+                    }
+                    dangerouslySetInnerHTML={{
+                      __html: localizeEditorialHtml(html, localePrefix),
+                    }}
+                  />
+                ))}
+              </Fragment>
+            ))}
           </section>
 
           {/* Stats */}
@@ -285,6 +317,86 @@ export default function MonthlyEdition({edition, locale}) {
           </section>
 
           <hr className="monthly-divider" />
+
+          {/* New to Pantheon: people added during the edition month */}
+          {newPeople.length > 0 && (
+            <>
+              <section id="new-to-pantheon" className="monthly-newcomers">
+                <div className="monthly-section-header">
+                  <h2 className="monthly-section-title">
+                    New to Pantheon this month
+                  </h2>
+                  <a
+                    href={`${localePrefix}/profile/recently-added`}
+                    className="monthly-section-link"
+                  >
+                    Recently Added
+                  </a>
+                </div>
+                {edition.newPeopleIntro?.length > 0 && (
+                  <div className="monthly-editorial monthly-newcomers-story">
+                    {edition.newPeopleIntro.map((html, index) => (
+                      <p
+                        key={index}
+                        dangerouslySetInnerHTML={{
+                          __html: localizeEditorialHtml(html, localePrefix),
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+                <p className="monthly-newcomers-note">
+                  {newPeople.length} people joined Pantheon this month after
+                  their Wikidata entries reached 15 sitelinks, our threshold
+                  for inclusion. They are ordered by sitelinks; the figure on
+                  each card is the number of Wikipedia language editions with
+                  an article about them.
+                </p>
+                <ol className="monthly-newcomers-grid">
+                  {newPeople.slice(0, newPeopleCount).map(person => (
+                    <li key={person.slug} className="monthly-newcomer">
+                      <Link
+                        href={`${localePrefix}/profile/person/${person.slug}`}
+                        className="monthly-newcomer-link"
+                      >
+                        <PersonImage
+                          person={person}
+                          src={person.id ? `/profile/people/${person.id}.jpg` : undefined}
+                          fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+                          alt={person.name}
+                          className="monthly-newcomer-avatar"
+                        />
+                        <span className="monthly-newcomer-text">
+                          <span className="monthly-newcomer-name">{person.name}</span>
+                          <span className="monthly-newcomer-meta">
+                            {[person.occupation, formatLifespan(person)]
+                              .filter(Boolean)
+                              .join(" · ")}
+                          </span>
+                          <span className="monthly-newcomer-langs">
+                            {person.languages} languages
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+                {newPeopleCount < newPeople.length && (
+                  <div className="monthly-show-more">
+                    <button
+                      onClick={() =>
+                        setNewPeopleCount(prev => prev + NEW_PEOPLE_PAGE * 4)
+                      }
+                    >
+                      Show More ({newPeople.length - newPeopleCount} more)
+                    </button>
+                  </div>
+                )}
+              </section>
+
+              <hr className="monthly-divider" />
+            </>
+          )}
 
           {/* The Deep Dive */}
           <section id="deep-dive" className="monthly-deepdive">

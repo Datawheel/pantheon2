@@ -9,7 +9,7 @@ import {getTranslations} from "@/app/translations";
 import HomeSearch from "@/components/home/HomeSearch";
 import {localizePersonGroups} from "@/app/utils/personLocalization";
 import {fetchTrendReasons} from "@/app/utils/trendReasons";
-// import {getEditionHeroImage} from "@/components/monthly/data/editions";
+import {getEditionHeroImage} from "@/components/monthly/data/editions";
 const baseUrl = process.env.URL || "https://pantheon.world";
 const apiBaseUrl = process.env.BASE_API || "https://api.pantheon.world";
 
@@ -26,8 +26,8 @@ export default async function Home(props) {
 
   const date30DaysAgo = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
-  // Latest Pantheon Monthly edition promoted on the homepage (callout hidden)
-  // const latestEditionHero = await getEditionHeroImage("2026-09");
+  // Latest Pantheon Monthly edition promoted on the homepage
+  const latestEditionHero = await getEditionHeroImage("2026-10");
 
   // Fetch initial data server-side using the URL locale
   const trendingAll = await fetch(
@@ -168,33 +168,30 @@ export default async function Home(props) {
         </div>
       </div>
 
-      {/* Pantheon Monthly callout, hidden late in the month. To re-enable,
-          restore this block and the getEditionHeroImage call above.
-      <Link href={`/${lang}/monthly/2026/september`} className="monthly-callout">
+      {/* Pantheon Monthly callout. Late in the month, comment this block and
+          the getEditionHeroImage call above out to hide it. */}
+      <Link href={`/${lang}/monthly/2026/october`} className="monthly-callout">
         {latestEditionHero && (
           <div className="monthly-callout-image">
-            <img src={latestEditionHero} alt="September 2026 Pantheon Monthly" />
+            <img src={latestEditionHero} alt="October 2026 Pantheon Monthly" />
           </div>
         )}
         <div className="monthly-callout-body">
           <span className="monthly-callout-badge">New Edition</span>
           <h2 className="monthly-callout-title">
-            Pantheon Monthly: September 2026
+            Pantheon Monthly: October 2026
           </h2>
           <p className="monthly-callout-description">
-            Lizzie Borden Takes September &mdash; a Netflix season put a woman
-            acquitted in 1893 at the top of the chart, with Elizabeth Holmes,
-            Ted Kaczynski, and Aileen Wuornos right behind her. Zverev and
-            Rybakina won in New York, Gloria Steinem died at 92, and
-            August&rsquo;s obituaries gave back almost everything they had
-            gained.
+            The Nobel Effect &mdash; Nobel week sent Navi Pillay up nearly
+            400-fold and brought most of this year&apos;s laureates into Pantheon,
+            while RJ Mitte and Patrick Stewart had the month&apos;s biggest gains
+            and Brazil and Israel went to the polls.
           </p>
           <span className="monthly-callout-link">
-            Read the September Edition &rarr;
+            Read the October Edition &rarr;
           </span>
         </div>
       </Link>
-      */}
 
       <TrendingGrid
         title={t.home.trendingProfiles}
