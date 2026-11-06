@@ -75,7 +75,9 @@ export default function TrendingNews({languageSections, currentLang, currentDate
     return response || responses[0];
   };
 
-  // Get trending reason from API data
+  // Get trending reason from API data. micromark emits block-level HTML
+  // (`<p>…</p>`), so the result must be injected into a block container — a
+  // <p> here produces invalid nesting and breaks hydration.
   const getPeopleSummary = person => {
     const response = getActiveModelResponse(person);
     return micromark(response?.reason || "");
@@ -192,7 +194,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
               {person.localized_occupation || person.occupation || "Unknown"}
             </span>
             {!isExpanded && (
-              <p className="mobile-card-preview" dangerouslySetInnerHTML={{__html: getPeopleSummary(person)}} />
+              <div className="mobile-card-preview" dangerouslySetInnerHTML={{__html: getPeopleSummary(person)}} />
             )}
           </div>
           <span className={`mobile-expand-icon ${isExpanded ? "open" : ""}`}>&#9662;</span>
@@ -201,7 +203,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
         {/* Mobile expanded detail */}
         {isExpanded && (
           <div className="mobile-card-detail">
-            <p
+            <div
               className="trending-news-summary"
               dangerouslySetInnerHTML={{__html: getPeopleSummary(person)}}
             />
@@ -284,7 +286,7 @@ export default function TrendingNews({languageSections, currentLang, currentDate
             <p className="trending-news-occupation">
               {person.localized_occupation || person.occupation || "Unknown"}
             </p>
-            <p
+            <div
               className="trending-news-summary"
               dangerouslySetInnerHTML={{__html: getPeopleSummary(person)}}
             />
