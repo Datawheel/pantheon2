@@ -1,6 +1,6 @@
 import PersonImage from "@/components/utils/PersonImage";
 
-const PersonReveal = ({question, correct, onNext}) => {
+const PersonReveal = ({question, correct, onNext, isLastQuestion = false}) => {
   const {explanation, personSlug, personId, personName} = question;
 
   const photoSrc = personId
@@ -47,13 +47,13 @@ const PersonReveal = ({question, correct, onNext}) => {
       {/* Explanation */}
       <p className="reveal-explanation">{explanation}</p>
 
-      {/* Next Question button */}
+      {/* Continue to the next question or results */}
       <button
         type="button"
         className={`reveal-next-btn ${correct ? "btn-correct" : "btn-incorrect"}`}
         onClick={e => { e.stopPropagation(); onNext(); }}
       >
-        Next Question &raquo;
+        {isLastQuestion ? "See Results" : "Next Question"} &raquo;
       </button>
     </div>
   );

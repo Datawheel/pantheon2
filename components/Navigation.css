@@ -481,11 +481,15 @@
 }
 
 .mobileNavigation {
-  position: absolute;
-  display: block;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
   z-index: 99;
   background-color: var(--colorEggshell);
-  min-height: 690px;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   opacity: 1;
   /* transform: translateY(-100%); */
   transition:
@@ -496,11 +500,8 @@
     display: none;
   }
 
-  &.expand {
-    position: absolute;
-  }
-
   & .logo-container {
+    flex-shrink: 0;
     padding: 12px 0;
     display: flex;
     justify-content: center;
@@ -529,8 +530,11 @@
     background-color: var(--colorEggshell);
     border-bottom: 1px solid var(--colorTan);
     box-sizing: border-box;
-    overflow: scroll;
-    max-height: calc(100vh - 51px);
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
   }
 
   & .item {

@@ -5,6 +5,7 @@ import Image from "next/image";
 import {usePathname, useParams} from "next/navigation";
 import {useSearchVisibility} from "@/contexts/SearchContext";
 import {getTranslations} from "@/app/translations";
+import {getVsLandingStrings} from "@/app/vsLandingTranslations";
 import {
   DEFAULT_LOCALE,
   LOCALE_NATIVE_NAMES,
@@ -46,6 +47,8 @@ export default function Navigation() {
   const locale = params?.locale || DEFAULT_LOCALE;
   const lang = SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE;
   const t = getTranslations(lang);
+  const vsLabel = getVsLandingStrings(lang).nav;
+  const vsHref = `${lang === DEFAULT_LOCALE ? "" : `/${lang}`}/vs`;
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
@@ -165,7 +168,7 @@ export default function Navigation() {
               </li>
               <li>
                 <a href={`/${lang}/profile/born-on-this-day`} className="item-link">
-                  {t.nav.bornOnThisDay || "Born on This Day"} <span className="new-badge">{t.nav.newBadge}</span>
+                  {t.nav.bornOnThisDay || "Born on This Day"}
                 </a>
               </li>
               <li>
@@ -189,6 +192,11 @@ export default function Navigation() {
                   className="item-link"
                 >
                   {t.nav.occupationCountry}
+                </a>
+              </li>
+              <li>
+                <a href={vsHref} className="item-link">
+                  {vsLabel} <span className="new-badge">{t.nav.newBadge}</span>
                 </a>
               </li>
               <li>
@@ -419,6 +427,11 @@ export default function Navigation() {
                 {t.nav.rankings}
               </a>
             </li>
+            <li className="item">
+              <a href={vsHref} className="item-link rankings-link">
+                {vsLabel} <span className="new-badge">{t.nav.newBadge}</span>
+              </a>
+            </li>
             <li className="item" onClick={() => toggleSubNav("profiles")}>
               <a
                 className="item-link profiles-link"
@@ -433,7 +446,7 @@ export default function Navigation() {
                   </li>
                   <li>
                     <a href={`/${lang}/profile/born-on-this-day`}>
-                      {t.nav.bornOnThisDay || "Born on This Day"} <span className="new-badge">{t.nav.newBadge}</span>
+                      {t.nav.bornOnThisDay || "Born on This Day"}
                     </a>
                   </li>
                   <li>

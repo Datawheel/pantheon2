@@ -409,6 +409,7 @@ export default function Trivia() {
               question={question}
               correct={state.answers[state.answers.length - 1]?.correct}
               onNext={handleRevealTap}
+              isLastQuestion={state.currentIndex === state.questions.length - 1}
             />
           </div>
         </div>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <!-- Nine-slice frame: keep the 40px corners intact; stretch only the rules. -->
+  <g stroke="#A07030" stroke-linejoin="miter">
+    <rect x="3" y="3" width="114" height="114" stroke-width="1" opacity=".6"/>
+    <rect x="10" y="10" width="100" height="100" stroke-width="1.8"/>
+    <g stroke-width="1.8">
+      <path d="M10 32H32V20H20V26"/>
+      <path d="M10 32H32V20H20V26" transform="rotate(90 60 60)"/>
+      <path d="M10 32H32V20H20V26" transform="rotate(180 60 60)"/>
+      <path d="M10 32H32V20H20V26" transform="rotate(270 60 60)"/>
+    </g>
+  </g>
+</svg>

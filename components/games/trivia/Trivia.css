@@ -78,37 +78,20 @@
   }
 }
 
-/* ===== Greek Key Meander Border ===== */
-/* ::before = all 4 strips (behind corners) */
+/* ===== Greek Frame ===== */
+/* Nine-slice SVG keeps corners intact as cards change size. Only the straight
+   rules stretch, so there are no clipped repeats or overlapping corner tiles. */
 .mode-parchment::before,
 .quiz-container::before,
 .results-container::before {
   content: '';
   position: absolute;
-  inset: 14px;
+  inset: 12px;
+  border: 18px solid transparent;
+  border-image: url('/images/trivia/greek-frame.svg') 40 / 18px stretch;
   pointer-events: none;
   z-index: 1;
-  background:
-    url('/images/trivia/horizontal-border.png') top left / auto 24px repeat-x,
-    url('/images/trivia/horizontal-border.png') bottom left / auto 24px repeat-x,
-    url('/images/trivia/vertical-border.png') top left / 24px auto repeat-y,
-    url('/images/trivia/vertical-border.png') top right / 24px auto repeat-y;
-}
-
-/* ::after = all 4 corners (on top of strips) */
-.mode-parchment::after,
-.quiz-container::after,
-.results-container::after {
-  content: '';
-  position: absolute;
-  inset: 14px;
-  pointer-events: none;
-  z-index: 2;
-  background:
-    url('/images/trivia/corner-border.png') top left / 28px 28px no-repeat,
-    url('/images/trivia/corner-border.png') top right / 28px 28px no-repeat,
-    url('/images/trivia/corner-border.png') bottom left / 28px 28px no-repeat,
-    url('/images/trivia/corner-border.png') bottom right / 28px 28px no-repeat;
+  opacity: 0.8;
 }
 
 @media (min-width: 768px) {
@@ -116,22 +99,8 @@
   .quiz-container::before,
   .results-container::before {
     inset: 20px;
-    background:
-      url('/images/trivia/horizontal-border.png') top left / auto 30px repeat-x,
-      url('/images/trivia/horizontal-border.png') bottom left / auto 30px repeat-x,
-      url('/images/trivia/vertical-border.png') top left / 30px auto repeat-y,
-      url('/images/trivia/vertical-border.png') top right / 30px auto repeat-y;
-  }
-
-  .mode-parchment::after,
-  .quiz-container::after,
-  .results-container::after {
-    inset: 20px;
-    background:
-      url('/images/trivia/corner-border.png') top left / 35px 35px no-repeat,
-      url('/images/trivia/corner-border.png') top right / 35px 35px no-repeat,
-      url('/images/trivia/corner-border.png') bottom left / 35px 35px no-repeat,
-      url('/images/trivia/corner-border.png') bottom right / 35px 35px no-repeat;
+    border-width: 24px;
+    border-image-width: 24px;
   }
 }
 
@@ -140,22 +109,8 @@
   .quiz-container::before,
   .results-container::before {
     inset: 24px;
-    background:
-      url('/images/trivia/horizontal-border.png') top left / auto 34px repeat-x,
-      url('/images/trivia/horizontal-border.png') bottom left / auto 34px repeat-x,
-      url('/images/trivia/vertical-border.png') top left / 34px auto repeat-y,
-      url('/images/trivia/vertical-border.png') top right / 34px auto repeat-y;
-  }
-
-  .mode-parchment::after,
-  .quiz-container::after,
-  .results-container::after {
-    inset: 24px;
-    background:
-      url('/images/trivia/corner-border.png') top left / 40px 40px no-repeat,
-      url('/images/trivia/corner-border.png') top right / 40px 40px no-repeat,
-      url('/images/trivia/corner-border.png') bottom left / 40px 40px no-repeat,
-      url('/images/trivia/corner-border.png') bottom right / 40px 40px no-repeat;
+    border-width: 28px;
+    border-image-width: 28px;
   }
 }
 

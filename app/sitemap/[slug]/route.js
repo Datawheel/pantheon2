@@ -78,6 +78,7 @@ const STATIC_PATHS = [
   "/game/birthle",
   "/game/yearbook",
   "/game/trivia",
+  "/vs",
   "/data/api",
   "/data/datasets",
   "/data/faq",

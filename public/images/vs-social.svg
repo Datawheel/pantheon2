@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#f5f0e7"/>
+<g fill="none" stroke="#d7ccba"><rect x="45" y="160" width="1110" height="380" rx="190"/><rect x="65" y="180" width="1070" height="340" rx="170"/><rect x="85" y="200" width="1030" height="300" rx="150"/></g>
+<text x="600" y="100" font-family="serif" font-size="46" letter-spacing="14" fill="#352f29" text-anchor="middle">PANTHEON</text>
+<path d="M240 160L530 195V530L385 470L240 530Z" fill="#a3482f"/><path d="M670 195L960 160V530L815 470L670 530Z" fill="#2f6690"/>
+<path d="M320 370L385 240L450 370M345 325H425" fill="none" stroke="#f5f0e7" stroke-width="12"/>
+<path d="M775 240V370H830C885 370 885 305 830 305H775M830 305C878 305 878 240 830 240H775" fill="none" stroke="#f5f0e7" stroke-width="12"/>
+<circle cx="600" cy="340" r="100" fill="#f5f0e7" stroke="#b28a45" stroke-width="2"/><circle cx="600" cy="340" r="88" fill="none" stroke="#b28a45"/>
+<text x="600" y="367" text-anchor="middle" fill="#352f29" font-size="80" font-family="serif">VS</text>
+</svg>
