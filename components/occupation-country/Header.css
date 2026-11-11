@@ -140,6 +140,29 @@ header.occupation-profile-hero {
   }
 }
 
+/* The kicker lives inside the h1 (so the heading text is the full phrase)
+   but keeps the small label look it had as a separate paragraph. */
+header.occupation-country-hero h1.oc-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  font-size: inherit;
+
+  & .profile-type {
+    display: block;
+    font-family: var(--fontBody);
+  }
+
+  & .profile-name {
+    display: block;
+  }
+
+  &.kicker-after .profile-type {
+    order: -1;
+  }
+}
+
 header.occupation-country-hero .profile-count,
 header.occupation-profile-hero .profile-count {
   align-self: center;

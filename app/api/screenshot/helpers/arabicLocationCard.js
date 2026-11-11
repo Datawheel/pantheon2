@@ -2,7 +2,7 @@ import sharp from "sharp";
 
 const FONT_REVALIDATE_SECONDS = 7 * 24 * 60 * 60;
 
-function escapeXml(value) {
+export function escapeXml(value) {
   return `${value ?? ""}`
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -15,7 +15,7 @@ function uniqueFontText(text) {
   return Array.from(new Set(Array.from(text))).join("");
 }
 
-async function fetchArabicFonts(text) {
+export async function fetchArabicFonts(text) {
   const cssUrl = new URL("https://fonts.googleapis.com/css2");
   cssUrl.searchParams.set("family", "Noto Sans Arabic:wght@400;700");
   cssUrl.searchParams.set("text", uniqueFontText(text));
@@ -52,7 +52,7 @@ async function fetchArabicFonts(text) {
   );
 }
 
-function wrapText(value, maxCharacters = 27, maxLines = 2) {
+export function wrapText(value, maxCharacters = 27, maxLines = 2) {
   const words = `${value || ""}`.trim().split(/\s+/).filter(Boolean);
   if (!words.length) return [];
 

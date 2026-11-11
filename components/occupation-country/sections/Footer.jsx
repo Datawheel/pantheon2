@@ -1,104 +1,140 @@
-import {plural} from "pluralize";
-import {toTitleCase} from "../../utils/vizHelpers";
 import {DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
+import {
+  cap,
+  englishCountry,
+  fixFromCountry,
+  formatNumber,
+  getOcStrings,
+  occupationPluralFor,
+} from "@/app/occupationCountryTranslations";
 import "../../common/Footer.css";
+import "./OccupationCountry.css";
 
-export default function Footer({
-  allCountriesInOccupation,
-  allOccupationsInCountry,
-  locale = "en",
-}) {
-  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+const CARDS = 3;
+const CJK = new Set(["ja", "zh"]);
+const LINKS = 12;
+
+// "Keep exploring": the same occupation in other countries and other
+// occupations in this country. Image cards for the first few, then plain
+// text links so every sibling page gets a crawlable, descriptive link.
+export default function Footer({data, names, locale = DEFAULT_LOCALE}) {
+  const {occupation, country, standings, occupationsInCountry} = data;
   const t = getTranslations(locale);
   const tEn = getTranslations(DEFAULT_LOCALE);
-  const tc = {...tEn.occupationCountry, ...t.occupationCountry};
+  const s = getOcStrings(locale);
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+  const occSlug = occupation.occupation_slug;
 
-  // Helper to get localized country name
-  const getCountryName = (item) =>
-    item.country_data?.[`${locale}_country`] || item.country_data?.country || item.country;
+  const otherCountries = standings
+    .filter(row => row.country !== country.id)
+    .map(row => {
+      const cd = row.country_data || {};
+      const name = cd[`${locale}_country`] || cd.country || row.country;
+      // Japanese/Chinese read better as "サッカー選手 / 日本" than with the
+      // DB's "日本から"; everything else uses the localized "from" phrase.
+      const from = locale === "en"
+        ? `from ${englishCountry(cd.country || row.country)}`
+        : CJK.has(locale)
+          ? name
+          : fixFromCountry(cd[`${locale}_from_country`], locale) || `${s.from} ${name}`;
+      return {
+        key: row.country,
+        slug: cd.slug || row.country_slug,
+        name,
+        from,
+        count: row.num_people,
+      };
+    });
 
-  // Helper to get localized "from country" phrase (e.g., "from Germany", "da Alemanha")
-  const getFromCountry = (item) =>
-    item.country_data?.[`${locale}_from_country`] ||
-    `${tc.from || "from"} ${getCountryName(item)}`;
+  const otherOccupations = occupationsInCountry.map(row => {
+    const od = row.occupation_data || {};
+    const slug = od.occupation_slug || row.occupation_slug;
+    return {
+      key: row.occupation,
+      slug,
+      name: occupationPluralFor(slug, od[`${locale}_occupation`] || od.occupation, locale),
+      count: row.num_people,
+    };
+  });
 
-  // Helper to get localized occupation name
-  const getOccupation = (item) =>
-    item.occupation_data?.[`${locale}_occupation`] || item.occupation_data?.occupation || item.occupation;
+  if (!otherCountries.length && !otherOccupations.length) return null;
+  const occupationTitle = cap(names.occPluralTitle);
 
-  // Helper to format occupation for display (plural + title case for English)
-  const formatOccupation = (occupation) =>
-    locale === "en" ? toTitleCase(plural(occupation)) : occupation;
+  const cards = [
+    ...otherCountries.slice(0, CARDS).map(c => ({
+      key: `c-${c.key}`,
+      href: `${localePrefix}/profile/occupation/${occSlug}/country/${c.slug}`,
+      image: `https://static.pantheon.world/profile/country/${c.slug}.jpg`,
+      title: occupationTitle,
+      subtitle: c.from,
+    })),
+    ...otherOccupations.slice(0, CARDS).map(o => ({
+      key: `o-${o.key}`,
+      href: `${localePrefix}/profile/occupation/${o.slug}/country/${country.slug}`,
+      image: `https://static.pantheon.world/profile/occupation/${o.slug}.jpg`,
+      title: o.name,
+      subtitle: CJK.has(locale) ? names.country : names.fromCountry,
+    })),
+  ];
 
   return (
-    <footer className="profile-footer">
+    <footer className="profile-footer oc-related">
       <div className="footer-container">
-        <h4 className="footer-title">{tc.keepExploring || "Keep Exploring"}</h4>
+        <h2 className="footer-title">
+          {t.occupationCountry?.keepExploring || s.keepExploring || tEn.occupationCountry.keepExploring}
+        </h2>
         <ul className="footer-carousel-container">
-          {allCountriesInOccupation.slice(0, 3).map(countryOccupation => {
-            const countryName = getCountryName(countryOccupation);
-            const fromCountry = getFromCountry(countryOccupation);
-            const occupation = formatOccupation(countryOccupation.occupation);
-            const countrySlug = countryOccupation.country_data?.slug || countryOccupation.country_slug;
-
-            return (
-              <li
-                className="footer-carousel-item"
-                key={countryOccupation.country}
-              >
-                <div className="footer-carousel-item-photo">
-                  <a
-                    aria-label={`${tc.top || "Top"} ${occupation} ${fromCountry}`}
-                    href={`${localePrefix}/profile/occupation/${countryOccupation.occupation_slug}/country/${countrySlug}`}
-                    style={{
-                      backgroundImage: `url(https://static.pantheon.world/profile/country/${countrySlug}.jpg)`,
-                    }}
-                  ></a>
-                </div>
-                <h4 className="footer-carousel-item-title">
-                  <a
-                    href={`${localePrefix}/profile/occupation/${countryOccupation.occupation_slug}/country/${countrySlug}`}
-                  >
-                    {tc.top || "Top"} {occupation}
-                  </a>
-                </h4>
-                <p>{fromCountry}</p>
-              </li>
-            );
-          })}
-          {allOccupationsInCountry.slice(0, 3).map(occupationCountry => {
-            const occupation = formatOccupation(getOccupation(occupationCountry));
-            const occupationSlug = occupationCountry.occupation_data?.occupation_slug || occupationCountry.occupation_slug;
-            const countrySlug = occupationCountry.country_slug;
-            const countryName = occupationCountry.country;
-
-            return (
-              <li
-                className="footer-carousel-item"
-                key={`${occupationSlug}-${countrySlug}`}
-              >
-                <div className="footer-carousel-item-photo">
-                  <a
-                    aria-label={`${tc.top || "Top"} ${occupation}`}
-                    href={`${localePrefix}/profile/occupation/${occupationSlug}/country/${countrySlug}`}
-                    style={{
-                      backgroundImage: `url(https://static.pantheon.world/profile/occupation/${occupationSlug}.jpg)`,
-                    }}
-                  ></a>
-                </div>
-                <h4 className="footer-carousel-item-title">
-                  <a
-                    href={`${localePrefix}/profile/occupation/${occupationSlug}/country/${countrySlug}`}
-                  >
-                    {tc.top || "Top"} {occupation}
-                  </a>
-                </h4>
-                <p>{tc.from || "from"} {countryName}</p>
-              </li>
-            );
-          })}
+          {cards.map(card => (
+            <li className="footer-carousel-item" key={card.key}>
+              <div className="footer-carousel-item-photo">
+                <a
+                  href={card.href}
+                  aria-hidden="true"
+                  tabIndex={-1}
+                  style={{backgroundImage: `url(${card.image})`}}
+                ></a>
+              </div>
+              <h3 className="footer-carousel-item-title">
+                <a href={card.href}>{card.title}</a>
+              </h3>
+              <p>{card.subtitle}</p>
+            </li>
+          ))}
         </ul>
+
+        <div className="oc-related-columns">
+          {otherCountries.length > CARDS && (
+            <nav className="oc-related-col" aria-label={s.relatedSameOcc(names)}>
+              <h3>{cap(s.relatedSameOcc(names))}</h3>
+              <ul>
+                {otherCountries.slice(CARDS, CARDS + LINKS).map(c => (
+                  <li key={c.key}>
+                    <a href={`${localePrefix}/profile/occupation/${occSlug}/country/${c.slug}`}>
+                      {c.name}
+                    </a>
+                    <span>{formatNumber(c.count, locale)}</span>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+          {otherOccupations.length > CARDS && (
+            <nav className="oc-related-col" aria-label={s.relatedSameCountry(names)}>
+              <h3>{cap(s.relatedSameCountry(names))}</h3>
+              <ul>
+                {otherOccupations.slice(CARDS, CARDS + LINKS).map(o => (
+                  <li key={o.key}>
+                    <a href={`${localePrefix}/profile/occupation/${o.slug}/country/${country.slug}`}>
+                      {o.name}
+                    </a>
+                    <span>{formatNumber(o.count, locale)}</span>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+        </div>
       </div>
     </footer>
   );

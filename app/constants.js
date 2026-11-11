@@ -6,6 +6,10 @@ export const REVALIDATE_PERIODS = {
   // Add more as needed
 };
 
+// Edition year of the HPI in person_ranks (hpi); hpi_prev/l_prev are the
+// edition before it. Update when person_ranks is rebuilt for a new year.
+export const HPI_YEAR = 2025;
+
 // Server-side API (uses localhost to bypass nginx rate limits)
 export const BASE_API = process.env.BASE_API || "http://localhost:3100";
 

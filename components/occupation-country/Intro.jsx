@@ -1,117 +1,89 @@
-import AnchorList from "../utils/AnchorList";
-import {plural} from "pluralize";
-import {toTitleCase} from "../utils/vizHelpers";
-import {FORMATTERS} from "../utils/consts";
-import {getTranslations} from "@/app/translations";
 import {DEFAULT_LOCALE} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
+import {
+  formatNumber,
+  formatShare,
+  formatYear,
+  getOcStrings,
+} from "@/app/occupationCountryTranslations";
 import "../common/Intro.css";
+import "./sections/OccupationCountry.css";
 
-export default function Intro({country, occupation, allCountriesInOccupation, locale = DEFAULT_LOCALE}) {
+export default function Intro({data, names, locale = DEFAULT_LOCALE}) {
+  const s = getOcStrings(locale);
   const t = getTranslations(locale);
-  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
-  const allCountriesInOccupationSorted = allCountriesInOccupation.sort(
-    (a, b) => {
-      if (b.num_people === a.num_people) {
-        return b.hpi - a.hpi;
-      }
-      return b.num_people - a.num_people;
-    }
-  );
-  const countryIndex = allCountriesInOccupationSorted.findIndex(
-    d => d.country === country.id
-  );
-  const countriesAheadInRanking =
-    countryIndex > 1
-      ? allCountriesInOccupationSorted.slice(countryIndex - 2, countryIndex)
-      : null;
-
-  // For English, use plural form with toTitleCase; for other languages, use the occupation as-is
-  const occupationPlural = locale === "en"
-    ? toTitleCase(plural(occupation.occupation))
-    : occupation.occupation;
-
-  // Create occupation link
-  const occupationLink = `<a href="${localePrefix}/profile/occupation/${occupation.occupation_slug}">${occupationPlural}</a>`;
-
-  // Create country link
-  const countryLink = `<a href="${localePrefix}/profile/country/${country.slug}">${country.country}</a>`;
-
-  // Format numbers with proper locale
-  const totalCount = occupation.num_born.toLocaleString(locale);
-  const countryCount = allCountriesInOccupationSorted[countryIndex]?.num_people.toLocaleString(locale);
-
-  // Get rank ordinal
-  const rank = countryIndex ? FORMATTERS.ordinal(countryIndex + 1) : "";
-
-  // Build countries behind list with links
-  let countriesBehindText = "";
-  if (countriesAheadInRanking) {
-    const countryLinks = countriesAheadInRanking.map(d => {
-      // Use localized country name if available, fallback to English
-      const countryName = d.country_data?.[`${locale}_country`] || d.country_data?.country || d.country;
-      return `<a href="${localePrefix}/profile/occupation/${occupation.occupation_slug}/country/${d.country_slug}/">${countryName}</a>`;
-    });
-    if (countryLinks.length === 1) {
-      countriesBehindText = countryLinks[0];
-    } else if (countryLinks.length === 2) {
-      countriesBehindText = `${countryLinks[0]} ${t.occupationCountry.and} ${countryLinks[1]}`;
-    }
-  }
-
-  // Get the intro text
-  let introHTML = t.occupationCountry.introText({
-    demonym: country.demonym,
-    occupationPlural,
-    totalCount,
-    countryCount,
-    country: country.country,
-    rank,
-    countriesBehind: countriesBehindText,
-  });
-
-  // Replace occupation and country names with links
-  // Replace first occurrence of occupationPlural with link
-  introHTML = introHTML.replace(new RegExp(`(${totalCount}\\s+)${occupationPlural}`, 'i'), `$1${occupationLink}`);
-  // Replace country names with links
-  introHTML = introHTML.replace(new RegExp(`(in|en|em|в|в|in|en)\\s+${country.country}`, 'gi'), (match) => {
-    return match.replace(country.country, countryLink);
-  });
-
-  // Direct route to the unfiltered country profile
   const tEn = getTranslations(DEFAULT_LOCALE);
+  const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+  const {occupation, country, stats} = data;
+
+  const params = {
+    ...names,
+    count: stats.count,
+    countFormatted: formatNumber(stats.count, locale),
+    rank: stats.rank,
+    totalCountries: formatNumber(stats.totalCountries, locale),
+    share: stats.share != null ? formatShare(stats.share, locale) : "",
+    occTotal: formatNumber(stats.occTotal, locale),
+  };
+
+  // summary() is "{lead sentence}{rank sentence}". One-person pages swap
+  // the lead for "X is the only Y in Pantheon" instead of "ranks 1 Y".
+  const lead = s.summary({...params, rank: null});
+  const summary = stats.count === 1 && data.people[0]
+    ? s.summarySingle({...params, top: data.people[0].localizedName}) + s.summary(params).slice(lead.length)
+    : s.summary(params);
+
+  const facts = [
+    {value: params.countFormatted, label: s.statCount(params)},
+    stats.rank && {value: `#${stats.rank}`, label: s.statRank(params)},
+    stats.share != null && {value: params.share, label: s.statShare},
+    stats.rca >= 1.5 && stats.count >= 3 && {
+      value: `${new Intl.NumberFormat(locale, {maximumFractionDigits: 1}).format(stats.rca)}×`,
+      label: s.statRca,
+      hint: s.statRcaHint,
+    },
+    stats.count >= 3 && {value: formatNumber(stats.women, locale), label: s.statWomen},
+    stats.count >= 3 && {value: formatNumber(stats.living, locale), label: s.statLiving},
+    stats.count >= 2 && stats.minYear !== stats.maxYear && {
+      value: `${formatYear(stats.minYear, locale)}–${formatYear(stats.maxYear, locale)}`,
+      label: s.statBorn,
+    },
+  ].filter(Boolean);
+
   const allPeopleFromCountry =
-    t.occupationCountry.allPeopleFromCountry ||
-    tEn.occupationCountry.allPeopleFromCountry;
+    t.occupationCountry?.allPeopleFromCountry || tEn.occupationCountry.allPeopleFromCountry;
   const countryTotal = country.num_born || 0;
-  const allPeopleLabel =
-    countryTotal > 0
-      ? allPeopleFromCountry({
-          totalFormatted: countryTotal.toLocaleString(locale),
-          country: country.country,
-          fromCountry:
-            country.fromCountry ||
-            `${t.occupationCountry.from} ${country.country}`,
-        })
-      : null;
 
   return (
-    <section className="intro-section">
+    <section className="intro-section oc-intro">
       <div className="intro-content">
         <div className="intro-text">
           <div className="intro-icon" aria-hidden="true">
             <img src="/images/ui/profile-w.svg" alt="" />
           </div>
-          <p dangerouslySetInnerHTML={{__html: introHTML}} />
-          {allPeopleLabel && (
-            <p>
-              <a
-                className="deep-link"
-                href={`${localePrefix}/profile/country/${country.slug}`}
-              >
-                {allPeopleLabel}
+          <p className="oc-summary">{summary}</p>
+          <dl className="oc-stats">
+            {facts.map(fact => (
+              <div className="oc-stat" key={fact.label} title={fact.hint}>
+                <dt className="oc-stat-label">{fact.label}</dt>
+                <dd className="oc-stat-value">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="oc-intro-links">
+            <a className="deep-link" href={`${localePrefix}/profile/occupation/${occupation.occupation_slug}`}>
+              {s.allOccWorldwide(names)}
+            </a>
+            {countryTotal > 0 && (
+              <a className="deep-link" href={`${localePrefix}/profile/country/${country.slug}`}>
+                {allPeopleFromCountry({
+                  totalFormatted: formatNumber(countryTotal, locale),
+                  country: names.country,
+                  fromCountry: names.fromCountry,
+                })}
               </a>
-            </p>
-          )}
+            )}
+          </p>
         </div>
       </div>
     </section>

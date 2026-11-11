@@ -49,6 +49,8 @@ export async function GET() {
   for (const locale of SUPPORTED_LOCALES) {
     sitemaps.push(`${SITE_URL}/sitemap/countries-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/occupations-${locale}`);
+    sitemaps.push(`${SITE_URL}/sitemap/occupation-countries-${locale}`);
+    sitemaps.push(`${SITE_URL}/sitemap/occupation-country-comparisons-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/eras-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/news-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/rankings-${locale}`);

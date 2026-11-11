@@ -1,133 +1,101 @@
-"use client";
-
-import {useState} from "react";
-import {plural} from "pluralize";
 import PersonImage from "@/components/utils/PersonImage";
 import {DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
-import {toTitleCase} from "@/components/utils/vizHelpers";
+import {formatYear, getOcStrings} from "@/app/occupationCountryTranslations";
+import {imagePerson} from "../data";
 import "../../born-on-this-day/OccupationBreakdown.css";
 import "../../common/Section.css";
 import "./BirthDecades.css";
 
-function getDecade(year) {
-  if (!year || Number.isNaN(Number(year))) return null;
-  return Math.floor(Number(year) / 10) * 10;
+const VISIBLE = 10;
+// Beyond this many per group, link to the rankings explorer instead of
+// rendering everyone (US actors born in the 1960s alone are ~900 people;
+// every rendered chip is repeated in the RSC payload).
+const EXPANDED_MAX = 30;
+
+function PersonChip({person, localePrefix}) {
+  return (
+    <a
+      href={`${localePrefix}/profile/person/${person.slug}`}
+      className="occupation-person"
+      title={person.localizedName}
+    >
+      <PersonImage
+        person={imagePerson(person)}
+        src={`/profile/people/${person.id}.jpg`}
+        alt=""
+        loading="lazy"
+        fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
+      />
+      <span className="occupation-person__name">{person.localizedName}</span>
+    </a>
+  );
 }
 
-export default function BirthDecades({
-  people = [],
-  country,
-  occupation,
-  locale = DEFAULT_LOCALE,
-}) {
+// Server component: the old client version shipped every person row (with
+// descriptions) in the RSC payload — 6.3MB of HTML for US actors.
+export default function BirthDecades({data, rankingsHref, locale = DEFAULT_LOCALE}) {
+  const {eras, stats} = data;
+  if (stats.count <= 10 || eras.groups.length < 2) return null;
+
   const t = getTranslations(locale);
   const tEn = getTranslations(DEFAULT_LOCALE);
   const tc = {...tEn.occupationCountry, ...t.occupationCountry};
+  const s = getOcStrings(locale);
   const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+  const isCentury = eras.unit === "century";
 
-  const occupationPlural =
-    locale === "en"
-      ? toTitleCase(plural(occupation.occupation))
-      : occupation.occupation;
-
-  const [expandedGroups, setExpandedGroups] = useState({});
-
-  if (!people.length || people.length <= 10) return null;
-
-  const toggleGroup = (key) => {
-    setExpandedGroups(prev => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+  const labelFor = ({start, end}) => {
+    if (isCentury || start < 0) return `${formatYear(start, locale)}–${formatYear(end, locale)}`;
+    return tc.decadeLabel ? tc.decadeLabel({decade: start}) : `${start}s`;
   };
-
-  const grouped = people.reduce((acc, person) => {
-    const decade = getDecade(person.birthyear);
-    const key = decade ? `${decade}` : "unknown";
-    if (!acc[key]) {
-      acc[key] = {
-        decade,
-        people: [],
-      };
-    }
-    acc[key].people.push(person);
-    return acc;
-  }, {});
-
-  const sortedGroups = Object.entries(grouped)
-    .map(([key, group]) => ({
-      key,
-      decade: group.decade,
-      people: group.people.sort((a, b) => (b.hpi || 0) - (a.hpi || 0)),
-    }))
-    .sort((a, b) => {
-      if (!a.decade && !b.decade) return 0;
-      if (!a.decade) return 1;
-      if (!b.decade) return -1;
-      return b.decade - a.decade;
-    });
 
   return (
     <section className="profile-section occupation-breakdown occupation-decades">
-      <h2>{tc.birthDecadesTitle || "People by Birth Decade"}</h2>
+      <h2>{isCentury ? s.centuriesTitle : s.decadesTitle}</h2>
       <div className="section-body">
-        <p>
-          {tc.birthDecadesIntro?.({
-            demonym: country.demonym,
-            occupationPlural,
-          }) ||
-            `Browse notable ${country.demonym} ${occupationPlural} grouped by birth decade. Each decade shows the top 10 by HPI; expand to see everyone.`}
-        </p>
+        <p>{s.erasIntro}</p>
       </div>
 
       <div className="occupation-groups">
-        {sortedGroups.map(({key, decade, people: groupPeople}) => {
-          const isExpanded = expandedGroups[key];
-          const displayPeople = isExpanded ? groupPeople : groupPeople.slice(0, 10);
-          const remainingCount = groupPeople.length - 10;
-          const label = decade
-            ? (tc.decadeLabel?.({decade}) || `${decade}s`)
-            : (t.unknown || "Unknown");
+        {eras.groups.map(group => {
+          const visible = group.people.slice(0, VISIBLE);
+          const hidden = group.people.slice(VISIBLE, EXPANDED_MAX);
+          const overflow = group.people.length - VISIBLE - hidden.length;
+          const yearsHref = rankingsHref.replace(/years=[^&]*/, `years=${group.start},${group.end}`);
 
           return (
-            <div key={key} className="occupation-group">
+            <div
+              key={group.start}
+              className={`occupation-group${group.people.length <= 3 ? " is-small" : ""}`}
+            >
               <h3 className="occupation-group__title">
-                <span>{label}</span>
-                <span className="occupation-group__count">({groupPeople.length})</span>
+                <span>{labelFor(group)}</span>
+                <span className="occupation-group__count">({group.people.length})</span>
               </h3>
               <div className="occupation-group__people">
-                {displayPeople.map(person => {
-                  const personName = person.localizedName || person.name;
-
-                  return (
-                    <a
-                      key={person.id}
-                      href={`${localePrefix}/profile/person/${person.slug}`}
-                      className="occupation-person"
-                      title={personName}
-                    >
-                      <PersonImage
-                        person={person}
-                        src={`/profile/people/${person.id}.jpg`}
-                        alt={personName}
-                        fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
-                      />
-                      <span className="occupation-person__name">{personName}</span>
-                    </a>
-                  );
-                })}
-                {groupPeople.length > 10 && (
-                  <button
-                    className="occupation-group__more"
-                    onClick={() => toggleGroup(key)}
-                  >
-                    {isExpanded
-                      ? (tc.showLess || "Show less")
-                      : (tc.more?.({count: remainingCount}) || `+${remainingCount} more`)}
-                  </button>
-                )}
+                {visible.map(person => (
+                  <PersonChip key={person.id} person={person} localePrefix={localePrefix} />
+                ))}
               </div>
+              {hidden.length > 0 && (
+                <details className="occupation-group__details">
+                  <summary className="occupation-group__more">
+                    <span className="when-closed">{s.more({count: group.people.length - VISIBLE})}</span>
+                    <span className="when-open">{tc.showLess || "Show less"}</span>
+                  </summary>
+                  <div className="occupation-group__people">
+                    {hidden.map(person => (
+                      <PersonChip key={person.id} person={person} localePrefix={localePrefix} />
+                    ))}
+                  </div>
+                  {overflow > 0 && (
+                    <a className="occupation-group__all" href={yearsHref}>
+                      {s.seeAll} →
+                    </a>
+                  )}
+                </details>
+              )}
             </div>
           );
         })}
