@@ -5,7 +5,7 @@
 .occupation-country-page.vs-page {
   /* Side A takes the domain accent; side B a contrasting hue set inline
      from VS_SIDE_B_COLORS. */
-  --vs-a: var(--oc-accent);
+  --vs-a: var(--oc-accent, #9a3412);
 }
 
 /* --------------------------------------------
@@ -28,7 +28,7 @@ header.vs-hero .vs-hero-side {
   padding-bottom: 0.8rem;
   color: var(--colorDark);
   text-decoration: none;
-  border-bottom: 3px solid var(--vs-side);
+  border-bottom: 3px solid var(--vs-side, currentColor);
 
   &:hover {
     text-decoration: none;
@@ -41,13 +41,13 @@ header.vs-hero .vs-hero-side {
 }
 
 header.vs-hero .vs-hero-side--a {
-  --vs-side: var(--vs-a);
+  --vs-side: var(--vs-a, #9a3412);
   align-items: flex-end;
   text-align: end;
 }
 
 header.vs-hero .vs-hero-side--b {
-  --vs-side: var(--vs-b);
+  --vs-side: var(--vs-b, #2f6690);
   align-items: flex-start;
   text-align: start;
 }
@@ -87,7 +87,7 @@ header.vs-hero .vs-hero-vs {
   gap: 0.6rem 2rem;
   margin: 0 0 1.4rem;
   font-size: 1.25rem;
-  color: var(--oc-muted);
+  color: var(--oc-muted, #6b6a67);
 }
 
 .vs-legend-item::before {
@@ -98,18 +98,18 @@ header.vs-hero .vs-hero-vs {
   margin-inline-end: 0.6rem;
   border-radius: 2px;
   vertical-align: -0.1rem;
-  background: var(--vs-a);
+  background: var(--vs-a, #9a3412);
 }
 
 .vs-legend-item--b::before {
-  background: var(--vs-b);
+  background: var(--vs-b, #2f6690);
 }
 
 .vs-tally {
   margin: -1.2rem 0 2.2rem;
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--oc-ink);
+  color: var(--oc-ink, var(--colorDark));
 }
 
 /* --------------------------------------------
@@ -132,15 +132,15 @@ header.vs-hero .vs-hero-vs {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  border-bottom: 2px solid var(--oc-rule);
+  border-bottom: 2px solid var(--oc-rule, rgba(59, 51, 46, 0.12));
 
   & .vs-score-head-a {
     text-align: end;
-    color: var(--vs-a);
+    color: var(--vs-a, #9a3412);
   }
 
   & .vs-score-head-b {
-    color: var(--vs-b);
+    color: var(--vs-b, #2f6690);
   }
 }
 
@@ -150,7 +150,7 @@ header.vs-hero .vs-hero-vs {
 
 .vs-score-row {
   padding: 1.2rem 0;
-  border-bottom: 1px solid var(--oc-rule);
+  border-bottom: 1px solid var(--oc-rule, rgba(59, 51, 46, 0.12));
 }
 
 .vs-score-label {
@@ -159,7 +159,7 @@ header.vs-hero .vs-hero-vs {
   font-size: 1.15rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--oc-muted);
+  color: var(--oc-muted, #6b6a67);
   line-height: 1.35;
 
   &[title] {
@@ -176,14 +176,14 @@ header.vs-hero .vs-hero-vs {
 }
 
 .vs-score-cell--a {
-  --vs-side: var(--vs-a);
+  --vs-side: var(--vs-a, #9a3412);
   grid-area: a;
   align-items: flex-end;
   text-align: end;
 }
 
 .vs-score-cell--b {
-  --vs-side: var(--vs-b);
+  --vs-side: var(--vs-b, #2f6690);
   grid-area: b;
   align-items: flex-start;
   text-align: start;
@@ -193,12 +193,12 @@ header.vs-hero .vs-hero-vs {
   font-family: var(--fontTitle);
   font-size: clamp(1.9rem, 2vw, 2.4rem);
   line-height: 1.15;
-  color: var(--oc-ink);
+  color: var(--oc-ink, var(--colorDark));
   font-variant-numeric: tabular-nums;
 }
 
 .vs-score-cell.is-winner .vs-score-value {
-  color: var(--vs-side);
+  color: var(--vs-side, currentColor);
   font-weight: 700;
 }
 
@@ -208,7 +208,7 @@ header.vs-hero .vs-hero-vs {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 1.25rem;
-  color: var(--oc-muted);
+  color: var(--oc-muted, #6b6a67);
 }
 
 .vs-score-bar {
@@ -222,9 +222,9 @@ header.vs-hero .vs-hero-vs {
 
   & > span {
     display: block;
-    width: var(--w);
+    width: var(--w, 0%);
     height: 100%;
-    background: var(--vs-side);
+    background: var(--vs-side, currentColor);
     opacity: 0.85;
   }
 }
@@ -270,7 +270,7 @@ header.vs-hero .vs-hero-vs {
   align-items: center;
   gap: 1.2rem;
   padding: 0.5rem 0;
-  border-bottom: 1px solid var(--oc-rule);
+  border-bottom: 1px solid var(--oc-rule, rgba(59, 51, 46, 0.12));
 }
 
 .vs-matchup-rank {
@@ -293,7 +293,7 @@ header.vs-hero .vs-hero-vs {
   min-width: 0;
   padding: 0.8rem 1.2rem;
   border-radius: 10px;
-  color: var(--oc-ink);
+  color: var(--oc-ink, var(--colorDark));
   text-decoration: none;
 
   &:is(a):hover {
@@ -308,23 +308,23 @@ header.vs-hero .vs-hero-vs {
 
   &.is-empty {
     justify-content: center;
-    color: var(--oc-muted);
+    color: var(--oc-muted, #6b6a67);
   }
 }
 
 .vs-match-person--a {
-  --vs-side: var(--vs-a);
+  --vs-side: var(--vs-a, #9a3412);
   flex-direction: row-reverse;
   text-align: end;
 }
 
 .vs-match-person--b {
-  --vs-side: var(--vs-b);
+  --vs-side: var(--vs-b, #2f6690);
 }
 
 .vs-match-person.is-winner {
-  background: color-mix(in srgb, var(--vs-side) 9%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vs-side) 28%, transparent);
+  background: color-mix(in srgb, var(--vs-side, currentColor) 9%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vs-side, currentColor) 28%, transparent);
 
   & .vs-match-name {
     font-weight: 700;
@@ -339,7 +339,7 @@ img.vs-match-avatar {
   object-fit: cover;
   object-position: 50% 25%;
   background: var(--colorLint);
-  box-shadow: 0 0 0 2px var(--vs-side);
+  box-shadow: 0 0 0 2px var(--vs-side, currentColor);
 }
 
 .vs-match-text {
@@ -360,7 +360,7 @@ img.vs-match-avatar {
 
 .vs-match-meta {
   font-size: 1.2rem;
-  color: var(--oc-muted);
+  color: var(--oc-muted, #6b6a67);
   font-variant-numeric: tabular-nums;
 }
 
@@ -435,12 +435,12 @@ img.vs-match-avatar {
 }
 
 .vs-split-a {
-  background: var(--vs-a);
+  background: var(--vs-a, #9a3412);
 }
 
 .vs-split-b {
   justify-content: flex-end;
-  background: var(--vs-b);
+  background: var(--vs-b, #2f6690);
 }
 
 .vs-combined {
@@ -452,11 +452,11 @@ img.vs-match-avatar {
 }
 
 .vs-combined-row--a {
-  --vs-side: var(--vs-a);
+  --vs-side: var(--vs-a, #9a3412);
 }
 
 .vs-combined-row--b {
-  --vs-side: var(--vs-b);
+  --vs-side: var(--vs-b, #2f6690);
 }
 
 .vs-combined-rank {
@@ -466,7 +466,7 @@ img.vs-match-avatar {
   width: 2.8rem;
   height: 2.8rem;
   border-radius: 50%;
-  background: var(--vs-side);
+  background: var(--vs-side, currentColor);
   color: #fff;
   font-weight: 700;
   font-size: 1.2rem;
@@ -478,12 +478,12 @@ img.vs-match-avatar {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 1.3rem;
-  color: var(--vs-side);
+  color: var(--vs-side, currentColor);
   font-weight: 700;
 }
 
 .vs-combined-bar {
-  background: linear-gradient(var(--vs-side), var(--vs-side)) no-repeat 0 0 / var(--w) 100%, var(--colorLint);
+  background: linear-gradient(var(--vs-side, currentColor), var(--vs-side, currentColor)) no-repeat 0 0 / var(--w, 0%) 100%, var(--colorLint);
 }
 
 @media (max-width: 750px) {
@@ -524,7 +524,7 @@ img.vs-match-avatar {
   text-align: center;
   white-space: nowrap;
   font-size: 1.15rem;
-  color: var(--oc-muted);
+  color: var(--oc-muted, #6b6a67);
   font-variant-numeric: tabular-nums;
 }
 
@@ -537,27 +537,27 @@ img.vs-match-avatar {
 }
 
 .vs-era-side--a {
-  --vs-side: var(--vs-a);
+  --vs-side: var(--vs-a, #9a3412);
   flex-direction: row-reverse;
 }
 
 .vs-era-side--b {
-  --vs-side: var(--vs-b);
+  --vs-side: var(--vs-b, #2f6690);
 }
 
 .vs-era-bar {
   flex: 0 0 auto;
-  width: calc(var(--w) * 0.55);
+  width: calc(var(--w, 0%) * 0.55);
   height: 1.4rem;
   border-radius: 2px;
-  background: var(--vs-side);
+  background: var(--vs-side, currentColor);
 }
 
 .vs-era-count {
   flex-shrink: 0;
   font-size: 1.2rem;
   font-variant-numeric: tabular-nums;
-  color: var(--oc-ink);
+  color: var(--oc-ink, var(--colorDark));
 }
 
 .vs-era-top {
@@ -566,7 +566,7 @@ img.vs-match-avatar {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 1.15rem;
-  color: var(--oc-muted);
+  color: var(--oc-muted, #6b6a67);
   text-decoration: none;
 
   &:hover {
@@ -589,7 +589,7 @@ img.vs-match-avatar {
   }
 
   .vs-era-bar {
-    width: calc(var(--w) * 0.75);
+    width: calc(var(--w, 0%) * 0.75);
   }
 }
 
