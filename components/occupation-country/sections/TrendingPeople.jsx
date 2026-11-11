@@ -1,12 +1,10 @@
 import Link from "next/link";
-import {plural} from "pluralize";
 import PersonImage from "../../utils/PersonImage";
-import {FORMATTERS} from "../../utils/consts";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {DEFAULT_LOCALE, getLocalizedLanguageName} from "@/app/locales";
 import {encodePostgrestValue} from "@/app/utils/postgrest";
 import {getTranslations} from "@/app/translations";
-import {toTitleCase} from "../../utils/vizHelpers";
+import {cap, cleanPersonName, formatLifespan} from "@/app/occupationCountryTranslations";
 import TrendingReasonToggle from "./TrendingReasonToggle";
 import "./TrendingPeople.css";
 
@@ -183,7 +181,7 @@ async function getTrendingPeopleForOccupationCountry({
     .slice(0, limit);
 
   const trendingSlugs = deduped.map(t => `"${t.slug}"`).join(",");
-  const fullDataUrl = `${BASE_API}/person?slug=in.(${trendingSlugs})&select=id,name,localized_name:translations->>${locale},slug,birthyear,deathyear,occupation(occupation)`;
+  const fullDataUrl = `${BASE_API}/person?slug=in.(${trendingSlugs})&select=id,name,localized_name:translations->>${locale},slug,gender,birthyear,deathyear`;
   const fullData = await safeFetchJson(fullDataUrl, {next: {revalidate: REVALIDATE_PERIODS.SHORT}}, []);
   const fullDataBySlug = new Map(fullData.map(person => [person.slug, person]));
 
@@ -194,7 +192,7 @@ async function getTrendingPeopleForOccupationCountry({
       ...trend,
       ...person,
       id: personId,
-      localizedName: person.localized_name || person.name || trend.name,
+      localizedName: cleanPersonName(person.localized_name, locale) || person.name || trend.name,
       trendReason: buildTrendReason(
         {trend, languageRanks: trend.languageRanks, translations},
         locale
@@ -205,7 +203,7 @@ async function getTrendingPeopleForOccupationCountry({
 
 export default async function TrendingPeople({
   occupation,
-  country,
+  names,
   countryName,
   countrySlug,
   locale = DEFAULT_LOCALE,
@@ -215,15 +213,16 @@ export default async function TrendingPeople({
   const tc = {...tEn.occupationCountry, ...t.occupationCountry};
   const trendingInPrefix = t.news?.trendingIn || tEn.news?.trendingIn;
   const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
-  const occupationPlural = locale === "en"
-    ? toTitleCase(plural(occupation.occupation))
-    : occupation.occupation;
-  const rawFromCountry = country.fromCountry;
-  // If fromCountry exists, it's a prepositional form (e.g., "do Japão", "from Japan", "d'Espagne")
-  // that should come after the occupation name, not before
-  const hasFromPrefix = !!rawFromCountry;
+  // Trending titles never start with the occupation, so keep the
+  // language's mid-sentence casing ("En tendencia futbolistas de Brasil").
+  const occupationPlural = locale === "en" ? cap(names.occPluralTitle) : names.occPlural;
+  // fromCountry is a prepositional phrase ("do Japão", "from the United
+  // States") that goes after the occupation name.
+  const hasFromPrefix = true;
   const locationLabel =
-    rawFromCountry || (country.country ? `from ${country.country}` : "");
+    locale === "zh" ? names.country
+      : locale === "ja" ? `${names.country}出身の`
+        : names.fromCountry;
   const titleLine = tc.trendingTitle
     ? tc.trendingTitle({locationLabel, occupationPlural, hasFromPrefix})
     : locationLabel
@@ -285,10 +284,11 @@ export default async function TrendingPeople({
                   </div>
                   <div className="trending-person-image">
                     <PersonImage
-                      person={person}
+                      person={{id: person.id, gender: person.gender, occupation_slug: occupation.occupation_slug}}
                       fallbackSrc="https://static.pantheon.world/icons/icon-person.svg"
                       src={`/profile/people/${person.id}.jpg`}
-                      alt={`Photo of ${person.localizedName || person.name}`}
+                      alt={person.localizedName || person.name}
+                      loading="lazy"
                     />
                   </div>
                   <div className="trending-person-content">
@@ -296,11 +296,7 @@ export default async function TrendingPeople({
                       {person.localizedName || person.name}
                     </h3>
                     <p className="trending-person-dates">
-                      {person.birthyear && (
-                        person.deathyear
-                          ? `${FORMATTERS.year(person.birthyear)} - ${FORMATTERS.year(person.deathyear)}`
-                          : `b. ${FORMATTERS.year(person.birthyear)}`
-                      )}
+                      {formatLifespan(person, locale)}
                     </p>
                   </div>
                 </Link>

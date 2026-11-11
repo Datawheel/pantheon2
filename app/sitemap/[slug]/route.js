@@ -1,5 +1,10 @@
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {
+  VS_SITEMAP_MIN_PEOPLE,
+  VS_SITEMAP_TOP,
+  vsPath,
+} from "@/components/occupation-country/vs";
 
 const SITE_URL = "https://pantheon.world";
 const ITEMS_PER_SITEMAP = 25000;
@@ -197,6 +202,64 @@ async function generateRankingsSitemap(locale) {
   return entries;
 }
 
+// Occupation × country pages (/profile/occupation/actor/country/japan) are
+// the site's highest-traffic template but were missing from the sitemap, so
+// Google could only find them by crawling. Single-person combos stay out of
+// the sitemap (they're still linked from sibling pages) to keep the
+// submitted set to pages with an actual list on them.
+const OCCUPATION_COUNTRY_MIN_PEOPLE = 2;
+
+async function generateOccupationCountrySitemap(locale) {
+  const url = `${BASE_API}/occupation_country?select=occupation_slug,country_slug&num_people=gte.${OCCUPATION_COUNTRY_MIN_PEOPLE}&occupation_slug=not.is.null&country_slug=not.is.null&order=num_people.desc,occupation_slug,country_slug`;
+  try {
+    const res = await fetch(url, {next: {revalidate: REVALIDATE_PERIODS.LONG}});
+    if (!res.ok) return [];
+    const rows = await res.json();
+    const prefix = `${SITE_URL}${localePrefix(locale)}/profile/occupation`;
+    return rows.map(row =>
+      buildUrlEntry(`${prefix}/${encodeURIComponent(row.occupation_slug)}/country/${encodeURIComponent(row.country_slug)}`),
+    );
+  } catch (e) {
+    console.error("[sitemap] occupation_country fetch error:", e.message);
+    return [];
+  }
+}
+
+// Country-vs-country pages: every pair among each occupation's top
+// countries that both have a real list (see components/occupation-country/vs.js).
+async function generateOccupationCountryVsSitemap(locale) {
+  const url = `${BASE_API}/occupation_country?select=occupation_slug,country_slug,num_people&num_people=gte.${VS_SITEMAP_MIN_PEOPLE}&occupation_slug=not.is.null&country_slug=not.is.null&order=occupation_slug,num_people.desc,hpi.desc.nullslast,country_slug`;
+  try {
+    const res = await fetch(url, {next: {revalidate: REVALIDATE_PERIODS.LONG}});
+    if (!res.ok) return [];
+    const rows = await res.json();
+    const byOccupation = new Map();
+    for (const row of rows) {
+      const list = byOccupation.get(row.occupation_slug) || [];
+      if (list.length < VS_SITEMAP_TOP) list.push(row.country_slug);
+      byOccupation.set(row.occupation_slug, list);
+    }
+    const prefix = `${SITE_URL}${localePrefix(locale)}`;
+    const entries = [];
+    for (const [occupationSlug, countries] of byOccupation) {
+      for (let i = 0; i < countries.length; i++) {
+        for (let j = i + 1; j < countries.length; j++) {
+          const path = vsPath(
+            encodeURIComponent(occupationSlug),
+            encodeURIComponent(countries[i]),
+            encodeURIComponent(countries[j]),
+          );
+          entries.push(buildUrlEntry(`${prefix}${path}`));
+        }
+      }
+    }
+    return entries;
+  } catch (e) {
+    console.error("[sitemap] occupation_country vs fetch error:", e.message);
+    return [];
+  }
+}
+
 function parseSlug(slug) {
   if (slug === "static") {
     return {type: "static"};
@@ -209,6 +272,16 @@ function parseSlug(slug) {
   const matchNews = slug.match(/^news-([a-z]{2})$/);
   if (matchNews && SUPPORTED_LOCALES.includes(matchNews[1])) {
     return {type: "news", locale: matchNews[1]};
+  }
+
+  const matchOccCountryVs = slug.match(/^occupation-country-comparisons-([a-z]{2})$/);
+  if (matchOccCountryVs && SUPPORTED_LOCALES.includes(matchOccCountryVs[1])) {
+    return {type: "occupation-country-comparisons", locale: matchOccCountryVs[1]};
+  }
+
+  const matchOccCountry = slug.match(/^occupation-countries-([a-z]{2})$/);
+  if (matchOccCountry && SUPPORTED_LOCALES.includes(matchOccCountry[1])) {
+    return {type: "occupation-countries", locale: matchOccCountry[1]};
   }
 
   const matchRankings = slug.match(/^rankings-([a-z]{2})$/);
@@ -255,6 +328,10 @@ export async function GET(request, context) {
     entries = generateNewsSitemap(parsed.locale);
   } else if (parsed.type === "rankings") {
     entries = await generateRankingsSitemap(parsed.locale);
+  } else if (parsed.type === "occupation-countries") {
+    entries = await generateOccupationCountrySitemap(parsed.locale);
+  } else if (parsed.type === "occupation-country-comparisons") {
+    entries = await generateOccupationCountryVsSitemap(parsed.locale);
   } else {
     entries = await generateEntitySitemap(parsed.locale, parsed.entity, parsed.page);
   }

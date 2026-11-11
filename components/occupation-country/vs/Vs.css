@@ -1,0 +1,627 @@
+/* ============================================
+   Country vs country (occupation) pages
+   ============================================ */
+
+.occupation-country-page.vs-page {
+  /* Side A takes the domain accent; side B a contrasting hue set inline
+     from VS_SIDE_B_COLORS. */
+  --vs-a: var(--oc-accent);
+}
+
+/* --------------------------------------------
+   Hero
+   -------------------------------------------- */
+
+header.vs-hero .vs-hero-sides {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  gap: 1.6rem;
+  margin-top: 2.4rem;
+}
+
+header.vs-hero .vs-hero-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  padding-bottom: 0.8rem;
+  color: var(--colorDark);
+  text-decoration: none;
+  border-bottom: 3px solid var(--vs-side);
+
+  &:hover {
+    text-decoration: none;
+
+    & .vs-hero-country {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+}
+
+header.vs-hero .vs-hero-side--a {
+  --vs-side: var(--vs-a);
+  align-items: flex-end;
+  text-align: end;
+}
+
+header.vs-hero .vs-hero-side--b {
+  --vs-side: var(--vs-b);
+  align-items: flex-start;
+  text-align: start;
+}
+
+header.vs-hero .vs-hero-count {
+  font-family: var(--fontTitle);
+  font-size: clamp(2.6rem, 3.4vw, 3.6rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+header.vs-hero .vs-hero-country {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #575654;
+}
+
+header.vs-hero .vs-hero-vs {
+  padding-bottom: 1.2rem;
+  font-family: var(--fontTitle);
+  font-size: 1.6rem;
+  color: #575654;
+}
+
+/* --------------------------------------------
+   Shared bits
+   -------------------------------------------- */
+
+.vs-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2rem;
+  margin: 0 0 1.4rem;
+  font-size: 1.25rem;
+  color: var(--oc-muted);
+}
+
+.vs-legend-item::before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-inline-end: 0.6rem;
+  border-radius: 2px;
+  vertical-align: -0.1rem;
+  background: var(--vs-a);
+}
+
+.vs-legend-item--b::before {
+  background: var(--vs-b);
+}
+
+.vs-tally {
+  margin: -1.2rem 0 2.2rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--oc-ink);
+}
+
+/* --------------------------------------------
+   By the numbers
+   -------------------------------------------- */
+
+.vs-score-head,
+.vs-score-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, 220px) minmax(0, 1fr);
+  grid-template-areas: "a label b";
+  align-items: center;
+  gap: 1.6rem;
+  max-width: 860px;
+}
+
+.vs-score-head {
+  padding-bottom: 0.8rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--oc-rule);
+
+  & .vs-score-head-a {
+    text-align: end;
+    color: var(--vs-a);
+  }
+
+  & .vs-score-head-b {
+    color: var(--vs-b);
+  }
+}
+
+.vs-score-table {
+  margin: 0;
+}
+
+.vs-score-row {
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--oc-rule);
+}
+
+.vs-score-label {
+  grid-area: label;
+  text-align: center;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--oc-muted);
+  line-height: 1.35;
+
+  &[title] {
+    cursor: help;
+  }
+}
+
+.vs-score-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.vs-score-cell--a {
+  --vs-side: var(--vs-a);
+  grid-area: a;
+  align-items: flex-end;
+  text-align: end;
+}
+
+.vs-score-cell--b {
+  --vs-side: var(--vs-b);
+  grid-area: b;
+  align-items: flex-start;
+  text-align: start;
+}
+
+.vs-score-value {
+  font-family: var(--fontTitle);
+  font-size: clamp(1.9rem, 2vw, 2.4rem);
+  line-height: 1.15;
+  color: var(--oc-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.vs-score-cell.is-winner .vs-score-value {
+  color: var(--vs-side);
+  font-weight: 700;
+}
+
+.vs-score-person {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.25rem;
+  color: var(--oc-muted);
+}
+
+.vs-score-bar {
+  display: flex;
+  width: 100%;
+  max-width: 240px;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--colorLint);
+
+  & > span {
+    display: block;
+    width: var(--w);
+    height: 100%;
+    background: var(--vs-side);
+    opacity: 0.85;
+  }
+}
+
+/* Bars grow outward from the center column */
+.vs-score-cell--a .vs-score-bar {
+  justify-content: flex-end;
+}
+
+@media (max-width: 600px) {
+  .vs-score-head,
+  .vs-score-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "label label"
+      "a b";
+    gap: 0.6rem 2rem;
+  }
+
+  .vs-score-head {
+    grid-template-areas: "a b";
+
+    & > span:nth-child(2) {
+      display: none;
+    }
+  }
+}
+
+/* --------------------------------------------
+   Top 10 head to head
+   -------------------------------------------- */
+
+.vs-matchups {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 960px;
+}
+
+.vs-matchup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3.6rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--oc-rule);
+}
+
+.vs-matchup-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background: var(--colorLint);
+  font-family: var(--fontTitle);
+  font-size: 1.5rem;
+  color: var(--colorSlate);
+}
+
+.vs-match-person {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  min-width: 0;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  color: var(--oc-ink);
+  text-decoration: none;
+
+  &:is(a):hover {
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.8);
+
+    & .vs-match-name {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+
+  &.is-empty {
+    justify-content: center;
+    color: var(--oc-muted);
+  }
+}
+
+.vs-match-person--a {
+  --vs-side: var(--vs-a);
+  flex-direction: row-reverse;
+  text-align: end;
+}
+
+.vs-match-person--b {
+  --vs-side: var(--vs-b);
+}
+
+.vs-match-person.is-winner {
+  background: color-mix(in srgb, var(--vs-side) 9%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vs-side) 28%, transparent);
+
+  & .vs-match-name {
+    font-weight: 700;
+  }
+}
+
+img.vs-match-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 25%;
+  background: var(--colorLint);
+  box-shadow: 0 0 0 2px var(--vs-side);
+}
+
+.vs-match-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  & > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.vs-match-name {
+  font-size: 1.5rem;
+}
+
+.vs-match-meta {
+  font-size: 1.2rem;
+  color: var(--oc-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 600px) {
+  .vs-matchup {
+    grid-template-columns: minmax(0, 1fr) 2.8rem minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+
+  .vs-matchup-rank {
+    width: 2.8rem;
+    height: 2.8rem;
+    font-size: 1.25rem;
+  }
+
+  .vs-match-person {
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0.8rem 0.4rem;
+    text-align: center;
+  }
+
+  .vs-match-person--a {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .vs-match-text {
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .vs-match-name {
+    font-size: 1.3rem;
+  }
+
+  .vs-match-meta {
+    font-size: 1.1rem;
+  }
+
+  img.vs-match-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* --------------------------------------------
+   Combined top 20
+   -------------------------------------------- */
+
+.vs-split {
+  display: flex;
+  max-width: 860px;
+  height: 3.2rem;
+  margin: 0 0 2.4rem;
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+
+  & > span {
+    display: flex;
+    align-items: center;
+    flex-basis: 0;
+    min-width: 0;
+    padding-inline: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.vs-split-a {
+  background: var(--vs-a);
+}
+
+.vs-split-b {
+  justify-content: flex-end;
+  background: var(--vs-b);
+}
+
+.vs-combined {
+  max-width: 960px;
+}
+
+.vs-combined-row {
+  grid-template-columns: 3.6rem minmax(0, 2.2fr) minmax(0, 1fr) minmax(110px, 1fr);
+}
+
+.vs-combined-row--a {
+  --vs-side: var(--vs-a);
+}
+
+.vs-combined-row--b {
+  --vs-side: var(--vs-b);
+}
+
+.vs-combined-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: var(--vs-side);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.vs-combined-country {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.3rem;
+  color: var(--vs-side);
+  font-weight: 700;
+}
+
+.vs-combined-bar {
+  background: linear-gradient(var(--vs-side), var(--vs-side)) no-repeat 0 0 / var(--w) 100%, var(--colorLint);
+}
+
+@media (max-width: 750px) {
+  .vs-combined-row {
+    grid-template-columns: 3rem minmax(0, 1fr) auto 4.4rem;
+  }
+
+  .vs-combined-country {
+    max-width: 9rem;
+    font-size: 1.15rem;
+  }
+}
+
+/* --------------------------------------------
+   Birth eras, mirrored bars
+   -------------------------------------------- */
+
+.vs-eras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 960px;
+}
+
+.vs-era-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 10rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.2rem 0;
+
+  &:nth-child(even) {
+    background: rgba(255, 255, 255, 0.45);
+  }
+}
+
+.vs-era-label {
+  text-align: center;
+  white-space: nowrap;
+  font-size: 1.15rem;
+  color: var(--oc-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.vs-era-side {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  min-height: 2.4rem;
+}
+
+.vs-era-side--a {
+  --vs-side: var(--vs-a);
+  flex-direction: row-reverse;
+}
+
+.vs-era-side--b {
+  --vs-side: var(--vs-b);
+}
+
+.vs-era-bar {
+  flex: 0 0 auto;
+  width: calc(var(--w) * 0.55);
+  height: 1.4rem;
+  border-radius: 2px;
+  background: var(--vs-side);
+}
+
+.vs-era-count {
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--oc-ink);
+}
+
+.vs-era-top {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.15rem;
+  color: var(--oc-muted);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 600px) {
+  .vs-era-row {
+    grid-template-columns: minmax(0, 1fr) 7.4rem minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+
+  .vs-era-label {
+    font-size: 1.05rem;
+  }
+
+  .vs-era-top {
+    display: none;
+  }
+
+  .vs-era-bar {
+    width: calc(var(--w) * 0.75);
+  }
+}
+
+/* --------------------------------------------
+   Related links
+   -------------------------------------------- */
+
+.vs-related-lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  & a {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    font-size: 1.4rem;
+    color: var(--colorEggshell);
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--colorEggshell);
+      text-decoration: none;
+    }
+  }
+}
+
+.vs-related-columns .oc-related-col ul {
+  columns: 1;
+}

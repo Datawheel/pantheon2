@@ -1,3 +1,19 @@
 .occupation-decades {
   margin-top: 2rem;
 }
+
+/* Sparse eras (ancient philosophers: one or two per century) flow side by
+   side instead of stacking a full-width box per person. */
+.occupation-decades .occupation-groups {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.occupation-decades .occupation-group {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.occupation-decades .occupation-group.is-small {
+  flex: 1 1 auto;
+}

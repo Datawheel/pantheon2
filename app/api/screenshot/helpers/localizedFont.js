@@ -10,7 +10,14 @@ export async function loadLocalizedGoogleFonts(
   text,
   name = "LocalizedText",
 ) {
-  const family = GOOGLE_FONT_FAMILIES[locale];
+  return loadGoogleFontSubset(GOOGLE_FONT_FAMILIES[locale], text, name);
+}
+
+/**
+ * Loads just the glyphs `text` needs from a Google Fonts family, as Satori
+ * font entries named `name`. Returns [] on any failure.
+ */
+export async function loadGoogleFontSubset(family, text, name = "LocalizedText") {
   if (!family || !text) return [];
 
   const uniqueText = Array.from(new Set(Array.from(text))).join("");
