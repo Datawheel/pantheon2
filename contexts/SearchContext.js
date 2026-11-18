@@ -20,24 +20,24 @@ export const SearchProvider = ({children}) => {
     }
   }, []);
 
+  const opener = useRef(null);
   const openSearch = useCallback(() => {
+    opener.current = document.activeElement;
     flushSync(() => {
       setSearchVisible(true);
     });
 
     focusSearchInput();
-
-    if (typeof window !== "undefined") {
-      window.requestAnimationFrame(focusSearchInput);
-    }
   }, [focusSearchInput]);
 
-  const closeSearch = useCallback(() => {
+  const closeSearch = useCallback((restoreFocus = false) => {
     setSearchVisible(false);
+    if (restoreFocus) opener.current?.focus({preventScroll: true});
   }, []);
 
   // Function to toggle the search based on key presses
   const toggleSearchVisibility = useCallback(event => {
+    if (event.isComposing || event.keyCode === 229 || event.defaultPrevented) return;
     const tag = event.target.tagName;
     const isTyping = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || event.target.isContentEditable;
     const isSearchShortcut = event.key.toLowerCase() === "s" && !event.metaKey && !event.ctrlKey && !event.altKey;
@@ -45,7 +45,7 @@ export const SearchProvider = ({children}) => {
       event.preventDefault();
       openSearch();
     } else if (event.key === "Escape" && isSearchVisible) {
-      closeSearch();
+      closeSearch(true);
     }
   }, [isSearchVisible, openSearch, closeSearch]);
 

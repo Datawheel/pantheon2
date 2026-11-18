@@ -170,7 +170,7 @@ export default async function Home(props) {
 
       {/* Pantheon Monthly callout. Late in the month, comment this block and
           the getEditionHeroImage call above out to hide it. */}
-      <Link href={`/${lang}/monthly/2026/october`} className="monthly-callout">
+      {/* <Link href={`/${lang}/monthly/2026/october`} className="monthly-callout">
         {latestEditionHero && (
           <div className="monthly-callout-image">
             <img src={latestEditionHero} alt="October 2026 Pantheon Monthly" />
@@ -191,7 +191,7 @@ export default async function Home(props) {
             Read the October Edition &rarr;
           </span>
         </div>
-      </Link>
+      </Link> */}
 
       <TrendingGrid
         title={t.home.trendingProfiles}

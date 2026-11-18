@@ -1,218 +1,193 @@
-import React, {useState, useEffect, useCallback} from "react";
+import {useEffect, useId, useRef, useState} from "react";
+import Image from "next/image";
 import axios from "axios";
-import {TrendingUp, Search as SearchIcon} from "lucide-react";
-import {useParams, usePathname} from "next/navigation";
+import {TrendingUp, X} from "lucide-react";
+import {useParams} from "next/navigation";
 import {useSearchVisibility} from "@/contexts/SearchContext";
 import {PUBLIC_API} from "@/app/constants";
-import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
+import {DEFAULT_LOCALE, SUPPORTED_LOCALES} from "@/app/locales";
+import {getTranslations} from "@/app/translations";
 import "./Search.css";
 
-async function getLatestTrendResults(locale) {
-  const response = await axios.get(`/api/wikiTrends?lang=${locale}&limit=12`);
-  return response.data.map(d => ({
-    "entity_id": d.pid,
-    name: d.name,
-    "profile_type": "person",
-    "primary_meta": d.occupation,
-    slug: d.slug,
-  }));
+async function getSuggestions(query, locale, signal) {
+  if (query === null) {
+    const {data} = await axios.get("/api/wikiTrends", {params: {lang: locale, limit: 12}, signal});
+    return data.map(row => ({
+      "entity_id": row.pid,
+      "profile_type": "person",
+      name: row.name,
+      "primary_meta": row.occupation,
+      slug: row.slug,
+    }));
+  }
+  const {data} = await axios.get(`${PUBLIC_API}/rpc/search_hybrid`, {params: {q: query, lim: 50}, signal});
+  return data;
 }
 
-const SearchComponent = () => {
-  const params = useParams();
-  const pathname = usePathname();
+const iconNames = {person: "person", occupation: "prof", country: "country", place: "place", era: "era"};
 
-  // Determine locale from params or pathname
-  const getLocale = () => {
-    if (params?.locale && SUPPORTED_LOCALES.includes(params.locale)) {
-      return params.locale;
-    }
-    // Check pathname for locale
-    const pathMatch = pathname?.match(new RegExp(`^/(${SUPPORTED_LOCALES.join('|')})(/|$)`));
-    if (pathMatch) {
-      return pathMatch[1];
-    }
-    return DEFAULT_LOCALE;
-  };
-  const locale = getLocale();
-  const [inputValue, setInputValue] = useState("");
-  const [results, setResults] = useState([]);
-  const [showTrending, setShowTrending] = useState(true);
-  const [debouncedValue, setDebouncedValue] = useState("");
+function suggestionQuery(value) {
+  return value.length < 3 ? null : value.trim();
+}
+
+function SearchPanel({value, setValue, locale}) {
+  const {searchInputRef, closeSearch} = useSearchVisibility();
+  const t = getTranslations(locale);
+  const list = useRef(null);
+  const listId = useId();
+  const [expanded, setExpanded] = useState(true);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const {
-    isSearchVisible,
-    closeSearch,
-    focusSearchInput,
-    searchInputRef,
-  } = useSearchVisibility();
+  const [retry, setRetry] = useState(0);
+  const [response, setResponse] = useState(null);
+  const query = suggestionQuery(value);
+  const current = response?.query === query && response.retry === retry ? response : null;
+  const results = current?.results ?? [];
+  const active = expanded && results[activeIndex];
 
-  // Function to fetch latest trend data from API
-  const fetchLatestTrendData = useCallback(async () => {
-    try {
-      const results = await getLatestTrendResults(locale);
-      setShowTrending(true);
-      setResults(results);
-    } catch (error) {
-      console.error("Error fetching latest trend data:", error);
-      setResults([]);
-    }
-  }, [locale]);
+  useEffect(() => {
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const results = await getSuggestions(query, locale, controller.signal);
+        if (!controller.signal.aborted) setResponse({query, retry, results});
+      } catch {
+        if (!controller.signal.aborted) setResponse({query, retry, error: true});
+      }
+    }, query === null ? 0 : 800);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query, locale, retry]);
 
-  // Function to fetch data from API
-  const fetchData = useCallback(async query => {
-    if (!query || query.length < 3) {
-      fetchLatestTrendData();
+  useEffect(() => {
+    if (active) list.current.children[activeIndex].scrollIntoView({block: "nearest"});
+  }, [active, activeIndex]);
+
+  function collapse() {
+    setExpanded(false);
+    setActiveIndex(-1);
+  }
+
+  function onKeyDown(event) {
+    if (event.nativeEvent.isComposing || event.keyCode === 229) return;
+    if (event.key === "Tab") {
+      collapse();
       return;
     }
-    try {
-      setShowTrending(false);
-      const cleanedQuery = query.trim();
-      const response = await axios.get(
-        `${PUBLIC_API}/rpc/search_hybrid?q=${cleanedQuery}&lim=50`,
-      );
-      setResults(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setResults([]);
+    if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+    switch (event.key) {
+      case "ArrowDown":
+      case "ArrowUp":
+        event.preventDefault();
+        setExpanded(true);
+        if (results.length) {
+          const last = results.length - 1;
+          if (event.key === "ArrowDown") {
+            setActiveIndex(index => Math.min(index + 1, last));
+          } else {
+            setActiveIndex(index => index === -1 ? last : Math.max(0, index - 1));
+          }
+        }
+        break;
+      case "Enter":
+        if (active) {
+          event.preventDefault();
+          list.current.children[activeIndex].click();
+        }
+        break;
+      case "Escape":
+        if (expanded) {
+          event.preventDefault();
+          event.stopPropagation();
+          collapse();
+        }
+        break;
+      case "Home":
+      case "End":
+      case "ArrowLeft":
+      case "ArrowRight":
+        setActiveIndex(-1);
+        break;
     }
-  }, [fetchLatestTrendData]);
+  }
 
-  useEffect(() => {
-    let cancelled = false;
-    getLatestTrendResults(locale)
-      .then(results => {
-        if (cancelled) return;
-        setShowTrending(true);
-        setResults(results);
-      })
-      .catch(error => {
-        if (cancelled) return;
-        console.error("Error fetching latest trend data:", error);
-        setResults([]);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [locale]);
-
-  useEffect(() => {
-    if (!isSearchVisible) return;
-
-    focusSearchInput();
-    const frame = window.requestAnimationFrame(focusSearchInput);
-    const timer = window.setTimeout(focusSearchInput, 100);
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearTimeout(timer);
-    };
-  }, [isSearchVisible, focusSearchInput]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setDebouncedValue(inputValue);
-      fetchData(inputValue);
-    }, 800);
-
-    return () => clearTimeout(timeout);
-  }, [inputValue, fetchData]);
-
-  useEffect(() => {
-    if (!isSearchVisible || !results || !results.length) return;
-    const handleKeyDown = event => {
-      if (event.key === "ArrowUp") {
-        setActiveIndex(
-          prevIndex => (prevIndex - 1 + results.length) % results.length,
-        );
-      } else if (event.key === "ArrowDown") {
-        setActiveIndex(prevIndex => (prevIndex + 1) % results.length);
-      } else if (event.key === "Enter" && activeIndex !== -1) {
-        // Follow the link for the active item
-        const activeItem = results[activeIndex];
-        const localePrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
-        window.location.href = `${localePrefix}/profile/${activeItem.profile_type}/${activeItem.slug}`;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [results, activeIndex, isSearchVisible, locale]);
-
-  const handleChange = e => {
-    setInputValue(e.target.value);
-  };
-
-  if (!isSearchVisible) return null;
+  let status = t.searchSuggestions.count(results.length);
+  if (!current) status = t.person.loading;
+  else if (current.error) status = t.searchSuggestions.error;
+  else if (!results.length) status = t.searchSuggestions.empty;
 
   return (
-    <div className="search">
-      <button className="search-close" onClick={closeSearch}>
-        <i>
-          <span className="close-perimeter" />
-          <span className="close-x close-back" />
-          <span className="close-x close-for" />
-        </i>
-      </button>
-      <div className="search-results">
-        <label className="search-result-input">
-          <div className="search-mg">
-            <div className="search-mg-perimeter" />
-            <div className="search-mg-handle" />
-          </div>
-          <>
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={inputValue}
-              onChange={handleChange}
-            />
-          </>
-        </label>
-        {showTrending ? (
-          <div className="trending-text">
-            <TrendingUp size={20} /> Trending Searches...
-          </div>
-        ) : null}
-        {results ? (
-          results.length ? (
-            <ul className="results-list">
-              {results.map((result, index) => (
-                <li
-                  key={`${result.profile_type}_${result.entity_id ?? result.pid ?? `${result.slug}_${index}`}`}
-                  className={`result-${result.profile_type}`}
-                >
-                  <a href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/profile/${result.profile_type}/${result.slug}`}>
-                    {index === activeIndex && "→ "}
-                    {result.name}
-                    <sub>
-                      {result.primary_meta ? (
-                        <span>{result.primary_meta}</span>
-                      ) : null}
-                      {result.secondary_meta ? (
-                        <span>{result.secondary_meta}</span>
-                      ) : null}
-                    </sub>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="search-no-results">
-              <SearchIcon size={48} strokeWidth={1} />
-              <h3>No results found</h3>
-              <p>
-                Unable to find results for &ldquo;
-                <code>{debouncedValue}</code>
-                &rdquo;.
-              </p>
-            </div>
-          )
-        ) : null}
+    <section className="search" aria-label={t.nav.search}
+      onBlur={event => {
+        if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) closeSearch();
+      }}>
+      <div className="search-controls">
+        <button type="button" aria-label={t.searchSuggestions.close} onClick={() => closeSearch(true)}>
+          <X aria-hidden="true" size={18}/>
+        </button>
+        <input ref={searchInputRef} name="q" type="text" autoComplete="off"
+          role="combobox" aria-label={t.home.searchPlaceholder} placeholder={t.home.searchPlaceholder}
+          aria-expanded={expanded} aria-controls={listId} aria-autocomplete="list"
+          aria-activedescendant={active ? `${listId}-${activeIndex}` : undefined}
+          value={value} onKeyDown={onKeyDown} onBlur={event => {
+            if (!list.current?.contains(event.relatedTarget)) collapse();
+          }}
+          onClick={() => setExpanded(true)}
+          onChange={event => {
+            if (suggestionQuery(event.target.value) !== query) setResponse(null);
+            setValue(event.target.value);
+            setActiveIndex(-1);
+            setExpanded(true);
+            if (list.current) list.current.scrollTop = 0;
+          }}/>
+        {current?.error && (
+          <button type="button" onClick={() => {
+            searchInputRef.current.focus();
+            setExpanded(true);
+            setRetry(count => count + 1);
+          }}>{t.searchSuggestions.retry}</button>
+        )}
       </div>
+      <div className="search-popup" hidden={!expanded}>
+        {query === null && results.length > 0 && (
+          <div className="search-trending"><TrendingUp size={16} aria-hidden="true"/>{t.person.sections.trending}</div>
+        )}
+        <div role="listbox" id={listId} ref={list} className="results-list" aria-label={t.nav.search}>
+          {results.map((result, index) => (
+            <a role="option" tabIndex={-1} aria-selected={index === activeIndex}
+              key={`${result.profile_type}_${result.entity_id ?? result.pid ?? `${result.slug}_${index}`}`}
+              id={`${listId}-${index}`}
+              href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/profile/${result.profile_type}/${result.slug}`}
+              onMouseDown={event => event.preventDefault()}>
+              <span aria-hidden="true" className="search-icon">
+                {iconNames[result.profile_type] && <Image alt="" width="18" height="18" src={`/images/icons/icon-${iconNames[result.profile_type]}.svg`}/>}
+              </span>
+              <span className="search-name">{result.name}</span>
+              {(result.primary_meta || result.secondary_meta) && (
+                <span className="search-meta">{[result.primary_meta, result.secondary_meta].filter(Boolean).join(" · ")}</span>
+              )}
+            </a>
+          ))}
+        </div>
+      </div>
+      <div role="status" aria-atomic="true" className={expanded && !results.length ? "search-message" : "search-announcement"}>
+        {expanded ? status : ""}
+      </div>
+    </section>
+  );
+}
+
+export default function SearchComponent() {
+  const {locale} = useParams();
+  const {isSearchVisible, closeSearch} = useSearchVisibility();
+  const [value, setValue] = useState("");
+  return isSearchVisible && (
+    <div className="search-overlay" onClick={event => {
+      if (event.target === event.currentTarget) closeSearch(true);
+    }}>
+      <SearchPanel key={locale} locale={SUPPORTED_LOCALES.includes(locale) ? locale : DEFAULT_LOCALE}
+        value={value} setValue={setValue}/>
     </div>
   );
-};
-
-export default SearchComponent;
+}

@@ -1,6 +1,13 @@
 // UI translations for different languages
 export const translations = {
   en: {
+    searchSuggestions: {
+      close: "Close search",
+      empty: "No results found.",
+      error: "Suggestions could not load.",
+      retry: "Try again",
+      count: n => `${n} suggestion${n === 1 ? "" : "s"} available.`,
+    },
     stillAlive: "today",
     birthdayToast: ({name, possessiveName}) => `Today is ${possessiveName || `${name}'s`} birthday`,
     personMetaDescription: ({name, birthYear, deathYear, demonym, occupation, rank, possessiveName}) =>
@@ -501,6 +508,13 @@ export const translations = {
     },
   },
   es: {
+    searchSuggestions: {
+      close: "Cerrar búsqueda",
+      empty: "Sin resultados.",
+      error: "No se pudieron cargar las sugerencias.",
+      retry: "Reintentar",
+      count: n => `Sugerencias disponibles: ${n}.`,
+    },
     stillAlive: "presente",
     person: {
       loading: "Cargando...",
@@ -1083,6 +1097,13 @@ export const translations = {
     },
   },
   fr: {
+    searchSuggestions: {
+      close: "Fermer la recherche",
+      empty: "Aucun résultat.",
+      error: "Impossible de charger les suggestions.",
+      retry: "Réessayer",
+      count: n => `Suggestions disponibles : ${n}.`,
+    },
     stillAlive: "aujourd'hui",
     person: {
       loading: "Chargement...",
@@ -1680,6 +1701,13 @@ export const translations = {
     },
   },
   de: {
+    searchSuggestions: {
+      close: "Suche schließen",
+      empty: "Keine Ergebnisse gefunden.",
+      error: "Vorschläge konnten nicht geladen werden.",
+      retry: "Erneut versuchen",
+      count: n => `Verfügbare Vorschläge: ${n}.`,
+    },
     stillAlive: "heute",
     person: {
       loading: "Wird geladen...",
@@ -2256,6 +2284,13 @@ export const translations = {
     },
   },
   ru: {
+    searchSuggestions: {
+      close: "Закрыть поиск",
+      empty: "Ничего не найдено.",
+      error: "Не удалось загрузить подсказки.",
+      retry: "Повторить",
+      count: n => `Доступно подсказок: ${n}.`,
+    },
     stillAlive: "настоящее время",
     person: {
       loading: "Загрузка...",
@@ -2859,6 +2894,13 @@ export const translations = {
     },
   },
   zh: {
+    searchSuggestions: {
+      close: "关闭搜索",
+      empty: "未找到结果。",
+      error: "无法加载建议。",
+      retry: "重试",
+      count: n => `有 ${n} 条搜索建议。`,
+    },
     stillAlive: "至今",
     person: {
       loading: "加载中...",
@@ -3436,6 +3478,13 @@ export const translations = {
     },
   },
   ja: {
+    searchSuggestions: {
+      close: "検索を閉じる",
+      empty: "結果が見つかりません。",
+      error: "候補を読み込めませんでした。",
+      retry: "再試行",
+      count: n => `候補は${n}件です。`,
+    },
     stillAlive: "現在",
     person: {
       loading: "読み込み中...",
@@ -4023,6 +4072,13 @@ export const translations = {
     },
   },
   ar: {
+    searchSuggestions: {
+      close: "إغلاق البحث",
+      empty: "لم يتم العثور على نتائج.",
+      error: "تعذّر تحميل الاقتراحات.",
+      retry: "إعادة المحاولة",
+      count: n => `عدد الاقتراحات المتاحة: ${n}.`,
+    },
     stillAlive: "حتى اليوم",
     person: {
       loading: "جارٍ التحميل...",
@@ -4602,6 +4658,13 @@ export const translations = {
     },
   },
   it: {
+    searchSuggestions: {
+      close: "Chiudi la ricerca",
+      empty: "Nessun risultato.",
+      error: "Impossibile caricare i suggerimenti.",
+      retry: "Riprova",
+      count: n => `Suggerimenti disponibili: ${n}.`,
+    },
     stillAlive: "presente",
     person: {
       loading: "Caricamento...",
@@ -5218,6 +5281,13 @@ export const translations = {
     },
   },
   pt: {
+    searchSuggestions: {
+      close: "Fechar pesquisa",
+      empty: "Nenhum resultado encontrado.",
+      error: "Não foi possível carregar as sugestões.",
+      retry: "Tentar novamente",
+      count: n => `Sugestões disponíveis: ${n}.`,
+    },
     stillAlive: "presente",
     person: {
       loading: "Carregando...",
@@ -5823,6 +5893,13 @@ export const translations = {
     },
   },
   hu: {
+    searchSuggestions: {
+      close: "Keresés bezárása",
+      empty: "Nincs találat.",
+      error: "A javaslatokat nem sikerült betölteni.",
+      retry: "Újra",
+      count: n => `${n} javaslat érhető el.`,
+    },
     stillAlive: "napjainkig",
     person: {
       loading: "Betöltés...",
@@ -6377,6 +6454,13 @@ export const translations = {
     },
   },
   nl: {
+    searchSuggestions: {
+      close: "Zoeken sluiten",
+      empty: "Geen resultaten gevonden.",
+      error: "Suggesties laden is mislukt.",
+      retry: "Opnieuw proberen",
+      count: n => `Beschikbare suggesties: ${n}.`,
+    },
     stillAlive: "heden",
     person: {
       loading: "Laden...",
@@ -6962,6 +7046,13 @@ export const translations = {
     },
   },
   pl: {
+    searchSuggestions: {
+      close: "Zamknij wyszukiwanie",
+      empty: "Brak wyników.",
+      error: "Nie udało się wczytać podpowiedzi.",
+      retry: "Spróbuj ponownie",
+      count: n => `Liczba dostępnych podpowiedzi: ${n}.`,
+    },
     stillAlive: "obecnie",
     person: {
       loading: "Ładowanie...",

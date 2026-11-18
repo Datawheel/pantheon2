@@ -10,15 +10,15 @@ export default function HomeSearch({lang = "en"}) {
 
   return (
     <div className="home-search">
-      <a onClick={openSearch}>
+      <button type="button" onClick={openSearch}>
         <Image
           src="/images/icons/icon-search.svg"
-          alt="search icon"
+          alt=""
           width={16}
           height={16}
         />
         {t.home.searchPlaceholder}
-      </a>
+      </button>
     </div>
   );
 }
