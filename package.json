@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@chenglou/pretext": "^1.0.0",
-    "@next/third-parties": "^16.4.4",
+    "@next/third-parties": "^16.4.6",
     "@radix-ui/react-tooltip": "^1.4.1",
     "@reduxjs/toolkit": "^2.13.0",
     "@tanstack/react-table": "^8.21.3",
@@ -28,7 +28,7 @@
     "echarts": "^6.1.0",
     "lucide-react": "^1.67.0",
     "micromark": "^4.0.3",
-    "next": "^16.4.4",
+    "next": "^16.4.6",
     "next-intl": "^4.14.9",
     "nextjs-toploader": "^3.9.17",
     "pluralize": "^8.0.0",
@@ -42,7 +42,7 @@
   "devDependencies": {
     "@playwright/test": "^1.64.1",
     "eslint": "^10.14.0",
-    "eslint-config-next": "^16.4.4",
+    "eslint-config-next": "^16.4.6",
     "postcss-css-variables": "^0.19.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^16.2.0",
