@@ -1,0 +1,86 @@
+import {cache} from "react";
+import {notFound, permanentRedirect} from "next/navigation";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
+import PersonImage from "@/components/utils/PersonImage";
+import {OccupationAnalysis, PlaceAnalysis} from "@/components/country/vs/CountryAnalysis";
+import {countryComparison} from "@/components/country/vs/data";
+import {VsPoster, VsMatchups, VsScoreboard} from "@/components/occupation-country/vs/VsSections";
+import {vsPath, vsSlugs} from "@/components/occupation-country/vs";
+import {cutoutSrc} from "@/components/occupation-country/vs/portraits";
+import {vsBackdrop} from "@/components/occupation-country/vs/backdrop";
+import {countryComparisonLead, getVsLandingStrings} from "@/app/vsLandingTranslations";
+import {getVsStrings} from "@/app/occupationCountryVsTranslations";
+import {getTranslations} from "@/app/translations";
+import {SUPPORTED_LOCALES} from "@/app/locales";
+import {buildCanonical, localizePath, buildLanguageAlternates} from "@/app/utils/hreflang";
+import "@/components/country/vs/CountryVs.css";
+
+const load = cache(async (locale, id, otherId) => {
+  if (!SUPPORTED_LOCALES.includes(locale)) notFound();
+  if (id === otherId) permanentRedirect(localizePath(locale, `/profile/country/${id}`));
+  const [a, b] = vsSlugs(id, otherId);
+  const path = vsPath(null, a, b);
+  if (a !== id) permanentRedirect(localizePath(locale, path));
+  const model = await countryComparison(a, b, locale);
+  if (!model) notFound();
+  return {path, model};
+});
+
+export async function generateMetadata({params}) {
+  const {locale, id, otherId} = await params;
+  const {path, model} = await load(locale, id, otherId);
+  const t = getVsLandingStrings(locale);
+  const title = `${model.pair} · ${t.peopleTitle} | Pantheon`;
+  const description = `${model.pair} · ${countryComparisonLead(locale, model.sides)}`;
+  const url = buildCanonical(locale, path);
+  const images = [buildCanonical("en", "/images/vs-social.png")];
+  return {title, description, alternates: {canonical: url, languages: buildLanguageAlternates(path)},
+    openGraph: {type: "website", url, title, description, images},
+    twitter: {card: "summary_large_image", title, description, images}};
+}
+
+export default async function Page({params}) {
+  const {locale, id, otherId} = await params;
+  const {path, model} = await load(locale, id, otherId);
+  const t = getVsLandingStrings(locale);
+  const vs = getVsStrings(locale);
+  const crumbs = [
+    {label: getTranslations(locale).nav.home, href: localizePath(locale, "/")},
+    {label: t.nav, href: localizePath(locale, "/vs")},
+    {label: model.pair},
+  ];
+  const url = buildCanonical(locale, path);
+  const schema = {"@context": "https://schema.org", "@type": "CollectionPage", url,
+    name: model.pair, inLanguage: locale,
+    about: model.sides.map(s => ({"@type": "Country", name: s.label, url: buildCanonical(locale, s.path)})),
+    breadcrumb: {"@type": "BreadcrumbList", itemListElement: crumbs.map((c,i) => ({
+      "@type": "ListItem", position: i + 1, name: c.label, item: c.href ? new URL(c.href, url).href : url,
+    }))}};
+  return (
+    <div className="person occupation-country-page vs-page country-vs" style={vsBackdrop(null)}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(schema).replace(/</g, "\\u003c")}}/>
+      <VsPoster className="country-poster" breadcrumbs={<Breadcrumbs items={crumbs}/>} pair={model.pair}
+        kicker={t.peopleTitle} countLabel={vs.rowCount} localePrefix={localizePath(locale, "")} sides={model.sides}>
+        <div className="country-collage">
+          {model.sides.map(side => <div className="country-lineup" key={side.path}>
+            {side.portraits.map(person => <a key={person.id} href={localizePath(locale, `/profile/person/${person.slug}`)}
+              title={person.localizedName} aria-label={person.localizedName}>
+              <PersonImage className={person.cutout ? "vs-cutout" : "vs-photo"} person={person} wrap={false} alt=""
+                src={person.cutout ? cutoutSrc(person.id) : `/profile/people/${person.id}.jpg`}/>
+            </a>)}
+          </div>)}
+        </div>
+      </VsPoster>
+      <VsScoreboard locale={locale} model={model} summary={`${countryComparisonLead(locale, model.sides)} ${t.summary}`}/>
+      <OccupationAnalysis sides={model.sides} locale={locale}/>
+      <PlaceAnalysis sides={model.sides} locale={locale}/>
+      <VsMatchups locale={locale} model={model}/>
+      {model.sharedFields.length > 0 && <section className="profile-section oc-section country-fields">
+        <h2 className="oc-section-title">{getTranslations(locale).nav.occupations}</h2>
+        <ul>{model.sharedFields.map(field => <li key={field.slug}>
+          <a href={localizePath(locale, vsPath(field.slug, id, otherId))}>{field.label}</a>
+        </li>)}</ul>
+      </section>}
+    </div>
+  );
+}

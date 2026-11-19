@@ -1,6 +1,7 @@
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {
+  VS_MIN_PEOPLE,
   VS_SITEMAP_MIN_PEOPLE,
   VS_SITEMAP_TOP,
   vsPath,
@@ -275,6 +276,11 @@ function parseSlug(slug) {
     return {type: "news", locale: matchNews[1]};
   }
 
+  const countryPairs = slug.match(/^country-comparisons-([a-z]{2})$/);
+  if (countryPairs && SUPPORTED_LOCALES.includes(countryPairs[1])) {
+    return {type: "country-comparisons", locale: countryPairs[1]};
+  }
+
   const matchOccCountryVs = slug.match(/^occupation-country-comparisons-([a-z]{2})$/);
   if (matchOccCountryVs && SUPPORTED_LOCALES.includes(matchOccCountryVs[1])) {
     return {type: "occupation-country-comparisons", locale: matchOccCountryVs[1]};
@@ -329,6 +335,11 @@ export async function GET(request, context) {
     entries = generateNewsSitemap(parsed.locale);
   } else if (parsed.type === "rankings") {
     entries = await generateRankingsSitemap(parsed.locale);
+  } else if (parsed.type === "country-comparisons") {
+    const countries = await fetchSlugs("country", "slug", `&num_born=gte.${VS_MIN_PEOPLE}`, 1000, 0);
+    const prefix = `${SITE_URL}${localePrefix(parsed.locale)}`;
+    entries = countries.flatMap((a, i) => countries.slice(i + 1).map(b =>
+      buildUrlEntry(prefix + vsPath(null, a, b))));
   } else if (parsed.type === "occupation-countries") {
     entries = await generateOccupationCountrySitemap(parsed.locale);
   } else if (parsed.type === "occupation-country-comparisons") {

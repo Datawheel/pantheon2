@@ -12,6 +12,7 @@ import {buildVsFaq, buildVsModel} from "@/components/occupation-country/vs/model
 import {VS_SIDE_B_COLORS, vsSlugs} from "@/components/occupation-country/vs";
 import {loadOccupationCountry} from "@/components/occupation-country/data";
 import {COLORS_DOMAIN} from "@/components/utils/consts";
+import {vsBackdrop} from "@/components/occupation-country/vs/backdrop";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import {cap} from "@/app/occupationCountryTranslations";
@@ -146,6 +147,7 @@ export default async function Page(props) {
       style={{
         "--oc-accent": COLORS_DOMAIN[occupation.domain_slug] || "#9a3412",
         "--vs-b": VS_SIDE_B_COLORS[occupation.domain_slug] || "#2f6690",
+        ...vsBackdrop(occupation.domain_slug),
       }}
     >
       {jsonLd.map((block, i) => (

@@ -1,7 +1,8 @@
 import PersonImage from "../../utils/PersonImage";
-import {HeroMosaic} from "../Header";
+import {portraitId, cutoutSrc} from "./portraits";
 import {imagePerson} from "../data";
-import {COLORS_DOMAIN} from "../../utils/consts";
+import {vsPath} from "../vs";
+import {getVsLandingStrings} from "@/app/vsLandingTranslations";
 import {DEFAULT_LOCALE} from "@/app/locales";
 import {getTranslations} from "@/app/translations";
 import {
@@ -30,40 +31,54 @@ export function VsHeader({model, breadcrumbs, locale = DEFAULT_LOCALE}) {
   const vs = getVsStrings(locale);
   const {occupation, dataA, dataB, countryA, countryB, namesA, namesB, pair, v} = model;
   const localePrefix = prefixFor(locale);
-  const a = dataA.people;
-  const b = dataB.people;
-  // Left half one country, right half the other.
-  const mosaic = Math.min(a.length, b.length) >= 4
-    ? [a[0], a[1], b[0], b[1], a[2], a[3], b[2], b[3]]
-    : [a[0], a[1], b[0], b[1]];
-  const sep = locale === "ja" || locale === "zh" ? "：" : ": ";
-
+  const sides = [
+    {country: countryA, label: namesA.country, count: v.nA, people: dataA.people},
+    {country: countryB, label: namesB.country, count: v.nB, people: dataB.people},
+  ];
   return (
-    <header
-      className="hero occupation-country-hero vs-hero"
-      style={{"--hero-accent": COLORS_DOMAIN[occupation.domain_slug] || "#BB3B57"}}
-    >
-      <HeroMosaic people={mosaic} />
-      {breadcrumbs}
-      <div className="info">
-        {/* Reads "Argentina vs Brazil: Most Famous Soccer Players"; the
-            kicker is shown above the pair. */}
-        <h1 className="oc-title kicker-after">
-          <span className="profile-name">{pair}</span>
-          <span className="u-visually-hidden">{sep}</span>
-          <span className="profile-type">{vs.kicker(v)}</span>
-        </h1>
-        <div className="vs-hero-sides">
-          <a className="vs-hero-side vs-hero-side--a" href={`${localePrefix}${ocPath(occupation, countryA)}`}>
-            <span className="vs-hero-count">{v.nA}</span>
-            <span className="vs-hero-country">{namesA.country}</span>
-          </a>
-          <span className="vs-hero-vs" aria-hidden="true">{vs.vs}</span>
-          <a className="vs-hero-side vs-hero-side--b" href={`${localePrefix}${ocPath(occupation, countryB)}`}>
-            <span className="vs-hero-count">{v.nB}</span>
-            <span className="vs-hero-country">{namesB.country}</span>
-          </a>
+    <VsPoster breadcrumbs={breadcrumbs} pair={pair} kicker={vs.kicker(v)} countLabel={vs.rowCount}
+      localePrefix={localePrefix} sides={sides.map(side => ({...side, path: ocPath(occupation, side.country)}))}>
+        <div className="vs-portraits">
+          {sides.map(({country, label, people}) => {
+            const id = portraitId(occupation.occupation_slug, country.slug);
+            const featured = people.find(person => Number(person.id) === id);
+            const person = featured || people[0];
+            return (
+              <a className="vs-portrait" key={country.slug} href={`${localePrefix}/profile/person/${person.slug}`}>
+                <PersonImage
+                  className={featured ? "vs-cutout" : "vs-photo"}
+                  src={featured ? cutoutSrc(id) : `/profile/people/${person.id}.jpg`}
+                  person={imagePerson(person)} alt="" wrap={false}
+                />
+                <span className="vs-caption"><small>{label}</small>{person.localizedName}</span>
+              </a>
+            );
+          })}
         </div>
+    </VsPoster>
+  );
+}
+
+export function VsPoster({breadcrumbs, pair, kicker, countLabel, localePrefix, sides, children, className = ""}) {
+  return (
+    <header className={'vs-poster ' + className}>
+      {breadcrumbs}
+      <div className="vs-poster-layout">
+        <div className="vs-poster-copy">
+          <h1>
+            <span className="vs-poster-field">{kicker}</span>
+            <span className="vs-poster-title">{pair}</span>
+          </h1>
+          <p className="vs-count-label">{countLabel}</p>
+          <div className="vs-poster-counts">
+            {sides.map(({path, label, count}) => (
+              <a key={path} href={`${localePrefix}${path}`}>
+                <strong>{count}</strong><span>{label} <span aria-hidden="true">↗</span></span>
+              </a>
+            ))}
+          </div>
+        </div>
+        {children}
       </div>
     </header>
   );
@@ -106,13 +121,13 @@ function ScoreCell({row, side, locale, localePrefix}) {
   );
 }
 
-export function VsScoreboard({model, locale = DEFAULT_LOCALE}) {
+export function VsScoreboard({model, locale = DEFAULT_LOCALE, summary}) {
   const vs = getVsStrings(locale);
   const localePrefix = prefixFor(locale);
   return (
     <section className="profile-section oc-section vs-section vs-score" id="numbers">
       <h2 className="oc-section-title">{vs.scoreTitle}</h2>
-      <p className="oc-section-intro">{vs.summary(model.v)}</p>
+      <p className="oc-section-intro">{summary ?? vs.summary(model.v)}</p>
       <div className="vs-score-head" aria-hidden="true">
         <span className="vs-score-head-a">{model.namesA.country}</span>
         <span />
@@ -170,7 +185,7 @@ export function VsMatchups({model, locale = DEFAULT_LOCALE}) {
     <section className="profile-section oc-section vs-section vs-matchups-section" id="head-to-head">
       <h2 className="oc-section-title">{vs.matchupsTitle}</h2>
       <p className="oc-section-intro">{vs.matchupsIntro}</p>
-      {contested > 0 && <p className="vs-tally">{vs.matchupsTally(model.tallyParams)}</p>}
+      {contested > 0 && model.tallyParams && <p className="vs-tally">{vs.matchupsTally(model.tallyParams)}</p>}
       <SideLegend model={model} />
       <ol className="vs-matchups">
         {model.matchups.map(m => (
@@ -356,7 +371,7 @@ export function VsRelated({model, locale = DEFAULT_LOCALE}) {
           />
           <LinkColumn
             title={vs.sameRivalryTitle(v)}
-            links={model.sameRivalry}
+            links={[{key: "all", href: vsPath(null, countryA.slug, countryB.slug), label: getVsLandingStrings(locale).all}, ...model.sameRivalry]}
             localePrefix={localePrefix}
           />
         </div>

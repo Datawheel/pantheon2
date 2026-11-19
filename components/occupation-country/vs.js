@@ -23,6 +23,7 @@ export function vsSlugs(slugA, slugB) {
 
 export function vsPath(occupationSlug, slugA, slugB) {
   const [a, b] = vsSlugs(slugA, slugB);
+  if (!occupationSlug) return `/profile/country/${a}/vs/${b}`;
   return `/profile/occupation/${occupationSlug}/country/${a}/vs/${b}`;
 }
 

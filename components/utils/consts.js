@@ -42,6 +42,21 @@ export const COLORS_DOMAIN = {
   "arts": "#D28629",
 };
 
+// Pastel tints of COLORS_DOMAIN for backgrounds, at equal OKLCH lightness so
+// dark text reads the same on all of them. `bg` (L .925) fills a surface;
+// `wash` (L .835) marks shapes on top of it. Humanities is shifted toward
+// violet so it doesn't read as the same pink as sports.
+export const COLORS_DOMAIN_PASTEL = {
+  "arts": {bg: "#fae1c9", wash: "#efbe8e"},
+  "business-law": {bg: "#e0eccd", wash: "#bcd396"},
+  "exploration": {bg: "#dce5ff", wash: "#b5c6ff"},
+  "humanities": {bg: "#f5def1", wash: "#e4b9dd"},
+  "institutions": {bg: "#ffded1", wash: "#fab79e"},
+  "public-figure": {bg: "#cff0de", wash: "#96dbb8"},
+  "science-technology": {bg: "#c7f0ed", wash: "#91d8d4"},
+  "sports": {bg: "#ffdade", wash: "#ffafb9"},
+};
+
 export const COLORS_CONTINENT = {
   Africa: "#BB3B57",
   Americas: "#67AF8C",
