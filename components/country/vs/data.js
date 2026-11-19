@@ -4,7 +4,7 @@ import {cache} from "react";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {formatDecimal, formatNumber, formatShare, cleanPersonName, englishCountry, occupationPluralFor} from "@/app/occupationCountryTranslations";
 import {formatPair, getVsStrings} from "@/app/occupationCountryVsTranslations";
-import {VS_MIN_PEOPLE} from "@/components/occupation-country/vs";
+import {VS_MIN_PEOPLE, pickRivals, vsPath} from "@/components/occupation-country/vs";
 import {countryPortraitIds} from "@/components/occupation-country/vs/portraits";
 
 async function rows(table, params) {
@@ -53,7 +53,7 @@ const loadSide = cache(async (countryId, slug, locale) => {
     order: "hpi.desc,id.asc", limit: 10,
   }), rows("occupation_country", {
     country: `eq.${countryId}`,
-    select: `occupation,occupation_slug,num_people,num_people_country,rca,info:occupation!occupation(occupation,label:translations->${locale}->>occupation)`,
+    select: `occupation,occupation_slug,num_people,num_people_country,rca,info:occupation!occupation(occupation,domain_slug,label:translations->${locale}->>occupation)`,
     order: "num_people.desc,occupation_slug",
   }), rows("person_ranks", {
     // Top people in every occupation at once: ~35KB for the largest countries.
@@ -134,10 +134,19 @@ export const countryComparison = cache(async (slugA, slugB, locale) => {
     .map(row => ({
       slug: row.occupation_slug,
       label: occupationPluralFor(row.occupation_slug, row.info?.label || row.info?.occupation, locale),
+      domain: row.info?.domain_slug,
+      counts: [row.num_people, countsB.get(row.occupation_slug)],
       count: Math.min(row.num_people, countsB.get(row.occupation_slug)),
     }))
     .sort((x, y) => y.count - x.count).slice(0, 12);
-  return {sides, sharedFields, pair: formatPair(a.label, b.label, locale), namesA: {country: a.label},
+  // Other countries to compare each side with: the largest by number of
+  // people plus each side's neighbors in that ranking (see pickRivals).
+  const standings = catalog.filter(c => c.num_born >= VS_MIN_PEOPLE)
+    .map(c => ({country: c.id, "country_slug": c.slug, "num_people": c.num_born, name: c.label || c.country}))
+    .sort((x, y) => y.num_people - x.num_people);
+  const rivals = (side, other) => pickRivals(standings, side.country.id, {exclude: [other.country.id], max: 6})
+    .map(row => ({key: row.country, href: vsPath(null, side.country.slug, row.country_slug), opponent: row.name}));
+  return {sides, sharedFields, rivalsA: rivals(a, b), rivalsB: rivals(b, a), pair: formatPair(a.label, b.label, locale), namesA: {country: a.label},
     namesB: {country: b.label}, rows: scoreRows, matchups};
 });
 

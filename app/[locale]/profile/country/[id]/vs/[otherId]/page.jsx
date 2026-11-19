@@ -4,12 +4,13 @@ import Breadcrumbs from "@/components/common/Breadcrumbs";
 import PersonImage from "@/components/utils/PersonImage";
 import {OccupationAnalysis, PlaceAnalysis} from "@/components/country/vs/CountryAnalysis";
 import {countryComparison} from "@/components/country/vs/data";
-import {VsPoster, VsMatchups, VsScoreboard} from "@/components/occupation-country/vs/VsSections";
+import {VsMore, VsPoster, VsMatchups, VsScoreboard} from "@/components/occupation-country/vs/VsSections";
 import {vsPath, vsSlugs} from "@/components/occupation-country/vs";
 import {cutoutSrc} from "@/components/occupation-country/vs/portraits";
 import {vsBackdrop} from "@/components/occupation-country/vs/backdrop";
 import {countryComparisonLead, getVsLandingStrings} from "@/app/vsLandingTranslations";
 import {getVsStrings} from "@/app/occupationCountryVsTranslations";
+import {englishCountry} from "@/app/occupationCountryTranslations";
 import {getTranslations} from "@/app/translations";
 import {SUPPORTED_LOCALES} from "@/app/locales";
 import {buildCanonical, localizePath, buildLanguageAlternates} from "@/app/utils/hreflang";
@@ -75,12 +76,18 @@ export default async function Page({params}) {
       <OccupationAnalysis sides={model.sides} locale={locale}/>
       <PlaceAnalysis sides={model.sides} locale={locale}/>
       <VsMatchups locale={locale} model={model}/>
-      {model.sharedFields.length > 0 && <section className="profile-section oc-section country-fields">
-        <h2 className="oc-section-title">{getTranslations(locale).nav.occupations}</h2>
-        <ul>{model.sharedFields.map(field => <li key={field.slug}>
-          <a href={localizePath(locale, vsPath(field.slug, id, otherId))}>{field.label}</a>
-        </li>)}</ul>
-      </section>}
+      <VsMore
+        locale={locale}
+        fieldsTitle={getTranslations(locale).nav.occupations}
+        fields={model.sharedFields.map(field => ({...field, key: field.slug, href: vsPath(field.slug, id, otherId)}))}
+        rivals={model.sides.map((side, i) => ({
+          key: i ? "b" : "a", name: side.label, links: i ? model.rivalsB : model.rivalsA,
+          title: vs.moreTitle({X: side.label, XThe: locale === "en" ? englishCountry(side.country.country) : side.label}),
+        }))}
+        listsTitle={vs.fullListsTitle}
+        lists={[...model.sides.map(side => ({key: side.path, href: side.path, label: side.label})),
+          {key: "vs", href: "/vs", label: t.nav}]}
+      />
     </div>
   );
 }

@@ -22,17 +22,6 @@ header.country-poster {
 }
 
 
-.country-fields ul { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }
-.country-fields a {
-  display: block;
-  padding: 9px 14px;
-  border: 1px solid #c8bdb6;
-  border-radius: 22px;
-  color: #342a30;
-  text-decoration: none;
-}
-.country-fields a:hover, .country-fields a:focus-visible { background: var(--vs-paper, #f7d7e1); }
-
 .country-analysis { font-variant-numeric: tabular-nums; scroll-margin-top: 7rem; }
 .country-analysis h3 { margin: 0 0 1.5rem; font: 400 clamp(2.1rem, 2vw, 2.6rem)/1.25 var(--fontTitle); }
 .analysis-block { margin-block: 3rem; }

@@ -1,5 +1,6 @@
 import PersonImage from "../../utils/PersonImage";
 import {portraitId, cutoutSrc} from "./portraits";
+import {vsBackdrop} from "./backdrop";
 import {imagePerson} from "../data";
 import {vsPath} from "../vs";
 import {getVsLandingStrings} from "@/app/vsLandingTranslations";
@@ -319,63 +320,94 @@ export function VsEras({model, locale = DEFAULT_LOCALE}) {
 /* Related links                                                              */
 /* -------------------------------------------------------------------------- */
 
-function LinkColumn({title, links, localePrefix}) {
-  if (!links.length) return null;
+/* -------------------------------------------------------------------------- */
+/* Keep comparing                                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * End-of-page links shared by both comparison pages: the same two countries
+ * in other fields (tiles in each domain's pastel, with both counts), other
+ * opponents for each side, and the full lists.
+ */
+export function VsMore({fieldsTitle, fields, rivals, listsTitle, lists, locale = DEFAULT_LOCALE}) {
+  const localePrefix = prefixFor(locale);
+  const vs = getVsStrings(locale).vs;
   return (
-    <nav className="oc-related-col" aria-label={title}>
-      <h3>{title}</h3>
-      <ul>
-        {links.map(link => (
-          <li key={link.key}>
-            <a href={`${localePrefix}${link.href}`}>{link.label}</a>
-          </li>
+    <section className="profile-section oc-section vs-more">
+      {fields.length > 0 && <nav className="vs-more-block" aria-labelledby="vs-more-fields">
+        <h2 className="oc-section-title" id="vs-more-fields">{fieldsTitle}</h2>
+        <ul className="vs-field-grid">
+          {fields.map(({key, href, label, domain, counts: [a, b]}) => (
+            <li key={key}>
+              <a className="vs-field-tile" href={`${localePrefix}${href}`} style={vsBackdrop(domain)}>
+                <span className="vs-field-name"><span className="vs-more-label">{label}</span><span className="vs-more-go" aria-hidden="true">↗</span></span>
+                <span className="vs-field-counts">
+                  <span className="vs-field-a">{formatNumber(a, locale)}</span>
+                  <span className="vs-field-vs">{vs}</span>
+                  <span className="vs-field-b">{formatNumber(b, locale)}</span>
+                </span>
+                <span className="vs-field-split" aria-hidden="true">
+                  <span style={{flexGrow: a}}/><span style={{flexGrow: b}}/>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>}
+      {rivals.some(side => side.links.length) && <div className="vs-more-block vs-rivals">
+        {rivals.filter(side => side.links.length).map(side => (
+          <nav key={side.key} className={`vs-rival-col vs-rival-col--${side.key}`} aria-labelledby={`vs-more-rivals-${side.key}`}>
+            <h2 className="vs-more-subtitle" id={`vs-more-rivals-${side.key}`}>{side.title}</h2>
+            <ul>
+              {side.links.map(link => (
+                <li key={link.key}>
+                  <a className="vs-rival" href={`${localePrefix}${link.href}`}>
+                    <span className="vs-rival-self">{side.name}</span>
+                    <span className="vs-rival-vs">{vs}</span>
+                    <span className="vs-rival-other vs-more-label">{link.opponent}</span>
+                    <span className="vs-more-go" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         ))}
-      </ul>
-    </nav>
+      </div>}
+      {lists.length > 0 && <nav className="vs-more-lists" aria-labelledby="vs-more-lists">
+        <h2 className="vs-more-subtitle" id="vs-more-lists">{listsTitle}</h2>
+        <ul>
+          {lists.map(link => (
+            <li key={link.key}><a href={`${localePrefix}${link.href}`}><span className="vs-more-label">{link.label}</span> <span className="vs-more-go" aria-hidden="true">↗</span></a></li>
+          ))}
+        </ul>
+      </nav>}
+    </section>
   );
 }
 
 export function VsRelated({model, locale = DEFAULT_LOCALE}) {
   const vs = getVsStrings(locale);
   const s = getOcStrings(locale);
-  const localePrefix = prefixFor(locale);
   const {occupation, countryA, countryB, namesA, namesB, v} = model;
-
-  const fullLists = [
-    {key: "a", href: ocPath(occupation, countryA), label: cap(namesA.groupTitle)},
-    {key: "b", href: ocPath(occupation, countryB), label: cap(namesB.groupTitle)},
-    {key: "all", href: `/profile/occupation/${occupation.occupation_slug}`, label: cap(s.allOccWorldwide(namesA))},
-  ];
-
+  const allFields = {
+    key: "all", href: vsPath(null, countryA.slug, countryB.slug), label: getVsLandingStrings(locale).all,
+    domain: null, counts: [countryA.num_born || 0, countryB.num_born || 0],
+  };
   return (
-    <footer className="profile-footer oc-related vs-related">
-      <div className="footer-container">
-        <h2 className="footer-title">{vs.fullListsTitle}</h2>
-        <ul className="vs-related-lists">
-          {fullLists.map(link => (
-            <li key={link.key}>
-              <a href={`${localePrefix}${link.href}`}>{link.label}</a>
-            </li>
-          ))}
-        </ul>
-        <div className="oc-related-columns vs-related-columns">
-          <LinkColumn
-            title={vs.moreTitle({X: namesA.country, XThe: namesA.countryThe})}
-            links={model.rivalsA}
-            localePrefix={localePrefix}
-          />
-          <LinkColumn
-            title={vs.moreTitle({X: namesB.country, XThe: namesB.countryThe})}
-            links={model.rivalsB}
-            localePrefix={localePrefix}
-          />
-          <LinkColumn
-            title={vs.sameRivalryTitle(v)}
-            links={[{key: "all", href: vsPath(null, countryA.slug, countryB.slug), label: getVsLandingStrings(locale).all}, ...model.sameRivalry]}
-            localePrefix={localePrefix}
-          />
-        </div>
-      </div>
-    </footer>
+    <VsMore
+      locale={locale}
+      fieldsTitle={vs.sameRivalryTitle(v)}
+      fields={allFields.counts.every(Boolean) ? [allFields, ...model.sameRivalry] : model.sameRivalry}
+      rivals={[
+        {key: "a", name: namesA.country, title: vs.moreTitle({X: namesA.country, XThe: namesA.countryThe}), links: model.rivalsA},
+        {key: "b", name: namesB.country, title: vs.moreTitle({X: namesB.country, XThe: namesB.countryThe}), links: model.rivalsB},
+      ]}
+      listsTitle={vs.fullListsTitle}
+      lists={[
+        {key: "a", href: ocPath(occupation, countryA), label: cap(namesA.groupTitle)},
+        {key: "b", href: ocPath(occupation, countryB), label: cap(namesB.groupTitle)},
+        {key: "all", href: `/profile/occupation/${occupation.occupation_slug}`, label: cap(s.allOccWorldwide(namesA))},
+      ]}
+    />
   );
 }

@@ -63,3 +63,17 @@ test("Germany and Guyana show independent occupation rankings and comparable pla
   await expect(leadingPlace(deaths).locator("small")).toHaveText("3 / 4");
   await expect(leadingPlace(deaths).locator("strong")).toHaveText("75%");
 });
+
+test("occupation comparisons end with the pair in other fields, other opponents and full lists", async ({page}) => {
+  await page.goto("/profile/occupation/soccer-player/country/argentina/vs/brazil");
+  const more = page.locator(".vs-more");
+  const tiles = more.locator(".vs-field-tile");
+  await expect(tiles.first()).toHaveAttribute("href", "/profile/country/argentina/vs/brazil");
+  await expect(tiles.first().locator(".vs-field-counts")).toHaveText(/^[\d,]+vs[\d,]+$/);
+  // Each field tile takes its domain's pastel: athletes are sports.
+  const athletes = tiles.filter({hasText: "Athletes"});
+  await expect(athletes).toHaveAttribute("href", "/profile/occupation/athlete/country/argentina/vs/brazil");
+  expect(await athletes.evaluate(n => getComputedStyle(n).backgroundColor)).toBe("rgb(255, 218, 222)");
+  await expect(more.locator(".vs-rival-col--b .vs-rival").first()).toHaveAttribute("href", /^\/profile\/occupation\/soccer-player\/country\/.+\/vs\/.+$/);
+  await expect(more.locator(".vs-more-lists a")).toHaveCount(3);
+});

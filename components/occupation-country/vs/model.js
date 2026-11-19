@@ -187,6 +187,7 @@ export function buildVsModel(dataA, dataB, lang = DEFAULT_LOCALE) {
       key: row.country,
       href: vsPath(occSlug, data.country.slug, rowSlug(row)),
       label: formatPair(names.country, rowName(row), lang),
+      opponent: rowName(row),
     }));
 
   const occB = new Map(dataB.occupationsInCountry.map(row => [row.occupation, row]));
@@ -199,6 +200,8 @@ export function buildVsModel(dataA, dataB, lang = DEFAULT_LOCALE) {
         key: row.occupation,
         href: vsPath(slug, dataA.country.slug, dataB.country.slug),
         label: occupationPluralFor(slug, od[`${lang}_occupation`] || od.occupation, lang),
+        domain: od.domain_slug,
+        counts: [row.num_people, occB.get(row.occupation).num_people],
         min: Math.min(row.num_people, occB.get(row.occupation).num_people),
       };
     })

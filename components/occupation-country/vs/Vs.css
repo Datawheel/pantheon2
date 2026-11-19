@@ -642,34 +642,88 @@ img.vs-match-avatar {
 }
 
 /* --------------------------------------------
-   Related links
+   Keep comparing (VsMore)
    -------------------------------------------- */
 
-.vs-related-lists {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.vs-more { padding-bottom: clamp(4rem, 7vw, 8rem); }
+.vs-more-block + .vs-more-block, .vs-more-lists { margin-top: clamp(3.6rem, 5vw, 5.6rem); }
+.vs-more :is(a, button):focus-visible { outline: 2px solid var(--oc-ink, #282125); outline-offset: 2px; }
+/* One hover for every link here: underline the label, darken the arrow. */
+.vs-more a:hover { text-decoration: none; color: var(--oc-ink, #282125); }
+.vs-more a:is(:hover, :focus-visible) .vs-more-label { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.vs-more-go { flex: none; font-size: 1.5rem; line-height: 1; color: var(--oc-muted, #6b6a67); transition: color .15s; }
+.vs-more a:is(:hover, :focus-visible) .vs-more-go { color: var(--oc-ink, #282125); }
+[dir="rtl"] .vs-more-go { display: inline-block; scale: -1 1; }
+
+/* Same pair, other fields: tiles in each domain's pastel (vsBackdrop). */
+.vs-field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   gap: 1rem;
-  margin: 0;
+  margin: 2rem 0 0;
   padding: 0;
   list-style: none;
+}
+.vs-field-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  padding: 1.6rem 1.6rem 1.4rem;
+  background: var(--vs-stripe, none) top / 100% 4px no-repeat, var(--vs-paper, #f3eadc);
+  color: var(--oc-ink, #282125);
+  text-decoration: none;
+}
+.vs-field-name { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; font: 400 2rem/1.2 var(--fontTitle); overflow-wrap: anywhere; }
+.vs-field-counts { display: flex; align-items: baseline; gap: .6rem; margin-top: auto; font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.vs-field-a { color: var(--vs-a, #9a3412); }
+.vs-field-b { color: var(--vs-b, #2f6690); }
+.vs-field-vs { font-size: 1.1rem; font-weight: 400; color: var(--oc-muted, #6b6a67); }
+.vs-field-split { display: flex; gap: 2px; height: 4px; }
+.vs-field-split > span { min-width: 3px; background: var(--vs-a, #9a3412); }
+.vs-field-split > span + span { background: var(--vs-b, #2f6690); }
 
-  & a {
-    display: inline-block;
-    padding: 0.8rem 1.6rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 999px;
-    font-size: 1.4rem;
-    color: var(--colorEggshell);
-    text-decoration: none;
+/* Other opponents for each side, styled as small fixtures. */
+.vs-rivals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem clamp(2rem, 6vw, 7rem); }
+.vs-more-subtitle {
+  margin: 0 0 1.2rem;
+  font: 700 1.2rem/1.4 var(--fontBody);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--oc-muted, #6b6a67);
+}
+.vs-rival-col--a { --vs-side: var(--vs-a, #9a3412); }
+.vs-rival-col--b { --vs-side: var(--vs-b, #2f6690); }
+.vs-rival-col ul { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--vs-side); }
+.vs-rival {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: .8rem;
+  padding: 1.1rem .6rem;
+  border-bottom: 1px solid var(--oc-rule, rgba(59, 51, 46, .12));
+  color: var(--oc-ink, #282125);
+  text-decoration: none;
+}
+.vs-rival-self { font-size: 1.4rem; font-weight: 600; color: var(--vs-side); }
+.vs-rival-vs { font-size: 1.1rem; color: var(--oc-muted, #6b6a67); }
+.vs-rival-other { min-width: 0; font: 400 2rem/1.2 var(--fontTitle); overflow-wrap: anywhere; }
 
-    &:hover {
-      border-color: var(--colorEggshell);
-      text-decoration: none;
-    }
-  }
+/* Full lists */
+.vs-more-lists ul { display: flex; flex-wrap: wrap; gap: .8rem; margin: 0; padding: 0; list-style: none; }
+.vs-more-lists a {
+  display: inline-block;
+  padding: .8rem 1.4rem;
+  border: 1px solid rgb(40 33 37 / 25%);
+  border-radius: 999px;
+  color: var(--oc-ink, #282125);
+  font-size: 1.4rem;
+  text-decoration: none;
 }
 
-.vs-related-columns .oc-related-col ul {
-  columns: 1;
+@media (max-width: 700px) {
+  .vs-field-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+  .vs-field-tile { padding: 1.2rem; }
+  .vs-field-name { font-size: 1.7rem; }
+  .vs-rivals { grid-template-columns: minmax(0, 1fr); }
 }

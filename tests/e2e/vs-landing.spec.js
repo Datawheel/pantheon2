@@ -170,7 +170,15 @@ for (const locale of Object.keys(headings)) {
     await expect(page.locator('.country-lineup img.vs-cutout')).toHaveCount(6);
     await expect(page.locator('.vs-matchup')).toHaveCount(10);
     await expect(page.locator('.vs-score-row')).toHaveCount(5);
-    await expect(page.locator('.country-fields a').first()).toHaveAttribute('href', new RegExp(`^${prefix}/profile/occupation/[^/]+/country/france/vs/japan$`));
+    await expect(page.locator('.vs-field-tile').first()).toHaveAttribute('href', new RegExp(`^${prefix}/profile/occupation/[^/]+/country/france/vs/japan$`));
+    // Other opponents for each side, never the current pair.
+    const rivals = page.locator('.vs-rival-col--a .vs-rival');
+    expect(await rivals.count()).toBeGreaterThan(2);
+    for (const href of await rivals.evaluateAll(links => links.map(a => a.getAttribute('href')))) {
+      expect(href).toMatch(new RegExp(`^${prefix}/profile/country/[^/]+/vs/[^/]+$`));
+      expect(href).toContain('france');
+      expect(href).not.toContain('japan');
+    }
     const schema = await page.locator('.country-vs script[type="application/ld+json"]').evaluate(n => JSON.parse(n.textContent));
     expect(schema.inLanguage).toBe(locale);
     expect(schema.about).toHaveLength(2);
