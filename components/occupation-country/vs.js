@@ -6,8 +6,7 @@
 // Both countries need at least this many people for the page to render.
 export const VS_MIN_PEOPLE = 3;
 
-// Pairs submitted in the sitemap: among each occupation's top countries by
-// count, both with a real list. ~2,300 pairs.
+// Prioritize these leading countries when suggesting related comparisons.
 export const VS_SITEMAP_TOP = 10;
 export const VS_SITEMAP_MIN_PEOPLE = 10;
 

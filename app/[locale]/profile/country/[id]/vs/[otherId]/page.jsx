@@ -34,7 +34,9 @@ export async function generateMetadata({params}) {
   const title = `${model.pair} · ${t.peopleTitle} | Pantheon`;
   const description = `${model.pair} · ${countryComparisonLead(locale, model.sides)}`;
   const url = buildCanonical(locale, path);
-  const images = [buildCanonical("en", "/images/vs-social.png")];
+  const query = new URLSearchParams({a: id, b: otherId, lang: locale});
+  const alt = [model.pair, ...model.sides.map(side => side.people[0]?.localizedName)].filter(Boolean).join(" · ");
+  const images = [{url: buildCanonical("en", `/api/screenshot/country-vs?${query}`), width: 1200, height: 630, type: "image/png", alt}];
   return {title, description, alternates: {canonical: url, languages: buildLanguageAlternates(path)},
     openGraph: {type: "website", url, title, description, images},
     twitter: {card: "summary_large_image", title, description, images}};

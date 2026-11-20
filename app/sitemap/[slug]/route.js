@@ -1,9 +1,8 @@
+import {occupationGroups, occupationPairPaths} from "@/app/utils/comparisonSitemaps";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {SUPPORTED_LOCALES, DEFAULT_LOCALE} from "@/app/locales";
 import {
   VS_MIN_PEOPLE,
-  VS_SITEMAP_MIN_PEOPLE,
-  VS_SITEMAP_TOP,
   vsPath,
 } from "@/components/occupation-country/vs";
 
@@ -227,41 +226,6 @@ async function generateOccupationCountrySitemap(locale) {
   }
 }
 
-// Country-vs-country pages: every pair among each occupation's top
-// countries that both have a real list (see components/occupation-country/vs.js).
-async function generateOccupationCountryVsSitemap(locale) {
-  const url = `${BASE_API}/occupation_country?select=occupation_slug,country_slug,num_people&num_people=gte.${VS_SITEMAP_MIN_PEOPLE}&occupation_slug=not.is.null&country_slug=not.is.null&order=occupation_slug,num_people.desc,hpi.desc.nullslast,country_slug`;
-  try {
-    const res = await fetch(url, {next: {revalidate: REVALIDATE_PERIODS.LONG}});
-    if (!res.ok) return [];
-    const rows = await res.json();
-    const byOccupation = new Map();
-    for (const row of rows) {
-      const list = byOccupation.get(row.occupation_slug) || [];
-      if (list.length < VS_SITEMAP_TOP) list.push(row.country_slug);
-      byOccupation.set(row.occupation_slug, list);
-    }
-    const prefix = `${SITE_URL}${localePrefix(locale)}`;
-    const entries = [];
-    for (const [occupationSlug, countries] of byOccupation) {
-      for (let i = 0; i < countries.length; i++) {
-        for (let j = i + 1; j < countries.length; j++) {
-          const path = vsPath(
-            encodeURIComponent(occupationSlug),
-            encodeURIComponent(countries[i]),
-            encodeURIComponent(countries[j]),
-          );
-          entries.push(buildUrlEntry(`${prefix}${path}`));
-        }
-      }
-    }
-    return entries;
-  } catch (e) {
-    console.error("[sitemap] occupation_country vs fetch error:", e.message);
-    return [];
-  }
-}
-
 function parseSlug(slug) {
   if (slug === "static") {
     return {type: "static"};
@@ -281,9 +245,9 @@ function parseSlug(slug) {
     return {type: "country-comparisons", locale: countryPairs[1]};
   }
 
-  const matchOccCountryVs = slug.match(/^occupation-country-comparisons-([a-z]{2})$/);
+  const matchOccCountryVs = slug.match(/^occupation-country-comparisons-([a-z]{2})(?:-([1-9]\d*))?$/);
   if (matchOccCountryVs && SUPPORTED_LOCALES.includes(matchOccCountryVs[1])) {
-    return {type: "occupation-country-comparisons", locale: matchOccCountryVs[1]};
+    return {type: "occupation-country-comparisons", locale: matchOccCountryVs[1], page: Number(matchOccCountryVs[2] || 0)};
   }
 
   const matchOccCountry = slug.match(/^occupation-countries-([a-z]{2})$/);
@@ -343,7 +307,9 @@ export async function GET(request, context) {
   } else if (parsed.type === "occupation-countries") {
     entries = await generateOccupationCountrySitemap(parsed.locale);
   } else if (parsed.type === "occupation-country-comparisons") {
-    entries = await generateOccupationCountryVsSitemap(parsed.locale);
+    const prefix = SITE_URL + localePrefix(parsed.locale);
+    entries = Array.from(occupationPairPaths(await occupationGroups(), parsed.page), path => buildUrlEntry(prefix + path));
+    if (!entries.length && parsed.page) return new Response("Not found", {status: 404});
   } else {
     entries = await generateEntitySitemap(parsed.locale, parsed.entity, parsed.page);
   }

@@ -215,3 +215,20 @@ test('country-wide picker, redirects, invalid pairs and sitemap', async ({page, 
   expect(xml).toContain('/fr/profile/country/france/vs/japan</loc>');
   expect(xml).not.toContain('/fr/profile/country/japan/vs/france</loc>');
 });
+
+test('country comparison sitemap and share card agree on the canonical pair', async ({page, request}) => {
+  const path = '/profile/country/jersey/vs/palau';
+  await page.goto(path);
+  const card = '/api/screenshot/country-vs?a=jersey&b=palau&lang=en';
+  for (const selector of ['meta[property="og:image"]', 'meta[name="twitter:image"]']) {
+    await expect(page.locator(selector)).toHaveAttribute('content', 'https://pantheon.world' + card);
+  }
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', /Jersey.*Palau.*Wace.*Remengesau/);
+  const image = await request.get(card);
+  expect(image.headers()['content-type']).toBe('image/png');
+  const bytes = await image.body();
+  expect([bytes.readUInt32BE(16), bytes.readUInt32BE(20)]).toEqual([1200, 630]);
+  const sitemap = await (await request.get('/sitemap/country-comparisons-en')).text();
+  expect(sitemap).toContain(`<loc>https://pantheon.world${path}</loc>`);
+  expect(sitemap).not.toContain('/palau/vs/jersey</loc>');
+});

@@ -1,3 +1,4 @@
+import {occupationGroups, pairCount, PAIRS_PER_SITEMAP} from "@/app/utils/comparisonSitemaps";
 import {BASE_API, REVALIDATE_PERIODS} from "@/app/constants";
 import {SUPPORTED_LOCALES} from "@/app/locales";
 
@@ -32,14 +33,16 @@ async function getCount(endpoint, filter = "") {
 }
 
 export async function GET() {
-  const [personCount, placeCount] = await Promise.all([
+  const [personCount, placeCount, groups] = await Promise.all([
     getCount("person", "&slug=not.is.null"),
     getCount("place", "&num_born=gt.0&slug=not.is.null"),
+    occupationGroups(),
   ]);
 
   const personPages = Math.max(1, Math.ceil(personCount / ITEMS_PER_SITEMAP));
   const placePages = Math.max(1, Math.ceil(placeCount / ITEMS_PER_SITEMAP));
 
+  const comparisons = [...groups.values()].reduce((total, countries) => total + pairCount(countries), 0);
   const sitemaps = [];
 
   // Static pages (all locales in one file)
@@ -51,7 +54,9 @@ export async function GET() {
     sitemaps.push(`${SITE_URL}/sitemap/country-comparisons-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/occupations-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/occupation-countries-${locale}`);
-    sitemaps.push(`${SITE_URL}/sitemap/occupation-country-comparisons-${locale}`);
+    for (let i = 0; i < Math.ceil(comparisons / PAIRS_PER_SITEMAP); i++) {
+      sitemaps.push(`${SITE_URL}/sitemap/occupation-country-comparisons-${locale}${i ? `-${i}` : ""}`);
+    }
     sitemaps.push(`${SITE_URL}/sitemap/eras-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/news-${locale}`);
     sitemaps.push(`${SITE_URL}/sitemap/rankings-${locale}`);
