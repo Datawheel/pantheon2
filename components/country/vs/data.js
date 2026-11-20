@@ -113,6 +113,7 @@ export const countryComparison = cache(async (slugA, slugB, locale) => {
     const first = value(a);
     const second = value(b);
     const cell = (n, side) => ({
+      raw: n,
       text: Number.isFinite(n) ? format(n, locale) : "—",
       person: label === vs.rowTop ? side.people[0] : null,
     });

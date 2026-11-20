@@ -25,7 +25,7 @@ async function getCountry(slug) {
   return rows[0] || null;
 }
 
-async function getCountriesForOccupation(occupationId, lang) {
+export async function getCountriesForOccupation(occupationId, lang) {
   return safeFetchArray(
     `${BASE_API}/occupation_country?occupation=eq.${encodePostgrestValue(occupationId)}&order=num_people.desc.nullslast&select=country,country_slug,num_people,hpi,rca,country_data:country!country(slug,country,${lang}_country:translations->${lang}->>country,${lang}_from_country:translations->${lang}->>from_country)`,
     CACHE,

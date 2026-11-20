@@ -37,7 +37,9 @@ export function VsHeader({model, breadcrumbs, locale = DEFAULT_LOCALE}) {
     {country: countryB, label: namesB.country, count: v.nB, people: dataB.people},
   ];
   return (
-    <VsPoster breadcrumbs={breadcrumbs} pair={pair} kicker={vs.kicker(v)} countLabel={vs.rowCount}
+    <VsPoster className="occupation-poster" breadcrumbs={breadcrumbs} pair={pair} kicker={vs.kicker(v)} countLabel={vs.rowCount}
+      countryComparisonHref={localePrefix + vsPath(null, countryA.slug, countryB.slug)}
+      countryComparisonLabel={getVsLandingStrings(locale).compareAll}
       localePrefix={localePrefix} sides={sides.map(side => ({...side, path: ocPath(occupation, side.country)}))}>
         <div className="vs-portraits">
           {sides.map(({country, label, people}) => {
@@ -60,7 +62,7 @@ export function VsHeader({model, breadcrumbs, locale = DEFAULT_LOCALE}) {
   );
 }
 
-export function VsPoster({breadcrumbs, pair, kicker, countLabel, localePrefix, sides, children, className = ""}) {
+export function VsPoster({breadcrumbs, pair, kicker, countLabel, localePrefix, sides, countryComparisonHref, countryComparisonLabel, children, className = ""}) {
   return (
     <header className={'vs-poster ' + className}>
       {breadcrumbs}
@@ -70,6 +72,9 @@ export function VsPoster({breadcrumbs, pair, kicker, countLabel, localePrefix, s
             <span className="vs-poster-field">{kicker}</span>
             <span className="vs-poster-title">{pair}</span>
           </h1>
+          {countryComparisonHref && <a className="vs-all-occupations" href={countryComparisonHref}>
+            {countryComparisonLabel}<span aria-hidden="true">→</span>
+          </a>}
           <p className="vs-count-label">{countLabel}</p>
           <div className="vs-poster-counts">
             {sides.map(({path, label, count}) => (
@@ -102,10 +107,11 @@ function ScoreCell({row, side, locale, localePrefix}) {
   const vs = getVsStrings(locale);
   const cell = row[side];
   const isWinner = row.winner === side;
+  const isZero = cell.raw === 0 && row.key !== "earliest";
   return (
     <dd className={`vs-score-cell vs-score-cell--${side}${isWinner ? " is-winner" : ""}`}>
       <span className="vs-score-value">
-        {cell.text}
+        {isZero ? <><span aria-hidden="true">—</span><span className="u-visually-hidden">{cell.text}</span></> : cell.text}
         {isWinner && <span className="u-visually-hidden"> ({vs.leads})</span>}
       </span>
       {cell.person && (
@@ -113,7 +119,7 @@ function ScoreCell({row, side, locale, localePrefix}) {
           {cell.person.localizedName}
         </a>
       )}
-      {row.bar && (
+      {row.bar && !isZero && (
         <span className="vs-score-bar" aria-hidden="true">
           <span style={{"--w": `${side === "a" ? row.widthA : row.widthB}%`}} />
         </span>
@@ -329,22 +335,24 @@ export function VsEras({model, locale = DEFAULT_LOCALE}) {
  * in other fields (tiles in each domain's pastel, with both counts), other
  * opponents for each side, and the full lists.
  */
-export function VsMore({fieldsTitle, fields, rivals, listsTitle, lists, locale = DEFAULT_LOCALE}) {
+export function VsMore({fieldsTitle, fields = [], fieldGroups = [{key: "all", fields}], rivals = [], listsTitle, lists = [], children, locale = DEFAULT_LOCALE}) {
   const localePrefix = prefixFor(locale);
   const vs = getVsStrings(locale).vs;
   return (
     <section className="profile-section oc-section vs-more">
-      {fields.length > 0 && <nav className="vs-more-block" aria-labelledby="vs-more-fields">
+      {fieldGroups.some(group => group.fields.length) && <nav className="vs-more-block" aria-labelledby="vs-more-fields">
         <h2 className="oc-section-title" id="vs-more-fields">{fieldsTitle}</h2>
-        <ul className="vs-field-grid">
-          {fields.map(({key, href, label, domain, counts: [a, b]}) => (
+        {fieldGroups.filter(group => group.fields.length).map(group => <div key={group.key} className="vs-field-group">
+          {group.title && <h3>{group.title}</h3>}
+          <ul className="vs-field-grid">
+          {group.fields.map(({key, href, label, domain, counts: [a, b]}) => (
             <li key={key}>
               <a className="vs-field-tile" href={`${localePrefix}${href}`} style={vsBackdrop(domain)}>
                 <span className="vs-field-name"><span className="vs-more-label">{label}</span><span className="vs-more-go" aria-hidden="true">↗</span></span>
                 <span className="vs-field-counts">
-                  <span className="vs-field-a">{formatNumber(a, locale)}</span>
+                  <span className="vs-field-a">{group.title && rivals[0].name + " "}{formatNumber(a, locale)}</span>
                   <span className="vs-field-vs">{vs}</span>
-                  <span className="vs-field-b">{formatNumber(b, locale)}</span>
+                  <span className="vs-field-b">{group.title && rivals[1].name + " "}{formatNumber(b, locale)}</span>
                 </span>
                 <span className="vs-field-split" aria-hidden="true">
                   <span style={{flexGrow: a}}/><span style={{flexGrow: b}}/>
@@ -352,8 +360,10 @@ export function VsMore({fieldsTitle, fields, rivals, listsTitle, lists, locale =
               </a>
             </li>
           ))}
-        </ul>
+          </ul>
+        </div>)}
       </nav>}
+      {children}
       {rivals.some(side => side.links.length) && <div className="vs-more-block vs-rivals">
         {rivals.filter(side => side.links.length).map(side => (
           <nav key={side.key} className={`vs-rival-col vs-rival-col--${side.key}`} aria-labelledby={`vs-more-rivals-${side.key}`}>
@@ -397,7 +407,13 @@ export function VsRelated({model, locale = DEFAULT_LOCALE}) {
     <VsMore
       locale={locale}
       fieldsTitle={vs.sameRivalryTitle(v)}
-      fields={allFields.counts.every(Boolean) ? [allFields, ...model.sameRivalry] : model.sameRivalry}
+      fieldGroups={[
+        {key: "all", fields: allFields.counts.every(Boolean) ? [allFields] : []},
+        ...model.sameRivalry.map((fields, i) => ({
+          key: ["a", "b", "tie"][i], fields,
+          title: i === 2 ? vs.equalCounts : `${vs.morePeople} · ${[namesA.country, namesB.country][i]}`,
+        })),
+      ]}
       rivals={[
         {key: "a", name: namesA.country, title: vs.moreTitle({X: namesA.country, XThe: namesA.countryThe}), links: model.rivalsA},
         {key: "b", name: namesB.country, title: vs.moreTitle({X: namesB.country, XThe: namesB.countryThe}), links: model.rivalsB},

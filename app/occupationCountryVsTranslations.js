@@ -64,6 +64,7 @@ const STRINGS = {
       ? `Neither: the ${v.k} most famous ${v.occPlural} from either country split evenly, ${v.ka} each.`
       : `${cap(v.KWThe)}, with ${v.kW} of the ${v.k} most famous ${v.occPlural} from either country.`),
     moreTitle: v => `Compare ${v.XThe} with Other Countries`,
+    morePeople: "More ranked people", equalCounts: "Equal counts",
     sameRivalryTitle: v => `${v.pair} in Other Fields`,
     fullListsTitle: "Full Lists",
     compareTitle: "Head-to-Head Comparisons",
@@ -106,6 +107,7 @@ const STRINGS = {
       ? `Ninguno: los ${v.k} ${v.occPlural} más famosos de ambos países se reparten a partes iguales, ${v.ka} cada uno.`
       : `${v.KW}, con ${v.kW} de los ${v.k} ${v.occPlural} más famosos de ambos países.`),
     moreTitle: v => `Compara ${v.X} con otros países`,
+    morePeople: "Más personas en el ranking", equalCounts: "Igual número de personas",
     sameRivalryTitle: v => `${v.pair} en otros ámbitos`,
     fullListsTitle: "Listas completas",
     compareTitle: "Comparaciones cara a cara",
@@ -146,6 +148,7 @@ const STRINGS = {
       ? `Aucun : les ${v.k} ${v.occPlural} les plus célèbres des deux pays se répartissent à égalité, ${v.ka} chacun.`
       : `Avantage ${v.KW}, avec ${v.kW} des ${v.k} ${v.occPlural} les plus célèbres des deux pays.`),
     moreTitle: v => `Autres comparaisons : ${v.X}`,
+    morePeople: "Plus de personnes classées", equalCounts: "Même nombre de personnes",
     sameRivalryTitle: v => `${v.pair} dans d'autres domaines`,
     fullListsTitle: "Listes complètes",
     compareTitle: "Comparaisons face à face",
@@ -186,6 +189,7 @@ const STRINGS = {
       ? `Keines: Die ${v.k} berühmtesten ${v.occPlural} beider Länder teilen sich gleichmäßig auf, jeweils ${v.ka}.`
       : `${v.KW}: ${v.kW} der ${v.k} berühmtesten ${v.occPlural} beider Länder.`),
     moreTitle: v => `Weitere Vergleiche: ${v.X}`,
+    morePeople: "Mehr Personen in der Rangliste", equalCounts: "Gleiche Anzahl",
     sameRivalryTitle: v => `${v.pair} in anderen Bereichen`,
     fullListsTitle: "Vollständige Listen",
     compareTitle: "Direkte Vergleiche",
@@ -226,6 +230,7 @@ const STRINGS = {
       ? `Nessuno dei due: ${v.ka} a testa.`
       : `${v.KW}, con ${v.kW} su ${v.k}.`),
     moreTitle: v => `Altri confronti: ${v.X}`,
+    morePeople: "Più persone in classifica", equalCounts: "Stesso numero di persone",
     sameRivalryTitle: v => `${v.pair} in altri campi`,
     fullListsTitle: "Liste complete",
     compareTitle: "Confronti diretti",
@@ -266,6 +271,7 @@ const STRINGS = {
       ? `Nenhum: ${v.ka} para cada lado.`
       : `${v.KW}, com ${v.kW} dos ${v.k} ${v.occPlural} mais famosos dos dois países.`),
     moreTitle: v => `Outras comparações: ${v.X}`,
+    morePeople: "Mais pessoas no ranking", equalCounts: "Mesmo número de pessoas",
     sameRivalryTitle: v => `${v.pair} em outras áreas`,
     fullListsTitle: "Listas completas",
     compareTitle: "Comparações diretas",
@@ -306,6 +312,7 @@ const STRINGS = {
       ? `Geen van beide: elk ${v.ka}.`
       : `${v.KW}, met ${v.kW} van de ${v.k} beroemdste ${v.occPlural} uit beide landen.`),
     moreTitle: v => `Meer vergelijkingen: ${v.X}`,
+    morePeople: "Meer personen in de ranglijst", equalCounts: "Evenveel personen",
     sameRivalryTitle: v => `${v.pair} in andere vakgebieden`,
     fullListsTitle: "Volledige lijsten",
     compareTitle: "Directe vergelijkingen",
@@ -344,6 +351,7 @@ const STRINGS = {
     faqCombinedQ: v => `Чьих представителей больше в общем топ-${v.k}?`,
     faqCombinedA: v => (v.ka === v.kb ? `Поровну: по ${v.ka}.` : `${v.KW}: ${v.kW} из ${v.k}.`),
     moreTitle: v => `Другие сравнения: ${v.X}`,
+    morePeople: "Больше людей в рейтинге", equalCounts: "Одинаковое число людей",
     sameRivalryTitle: v => `${v.pair}: другие профессии`,
     fullListsTitle: "Полные списки",
     compareTitle: "Сравнения стран",
@@ -382,6 +390,7 @@ const STRINGS = {
     faqCombinedQ: v => `Kto ma więcej osób we wspólnym top ${v.k}?`,
     faqCombinedA: v => (v.ka === v.kb ? `Remis: po ${v.ka}.` : `${v.KW}: ${v.kW} z ${v.k}.`),
     moreTitle: v => `Inne porównania: ${v.X}`,
+    morePeople: "Więcej osób w rankingu", equalCounts: "Taka sama liczba osób",
     sameRivalryTitle: v => `${v.pair}: inne zawody`,
     fullListsTitle: "Pełne listy",
     compareTitle: "Porównania krajów",
@@ -420,6 +429,7 @@ const STRINGS = {
     faqCombinedQ: v => `Melyik országból van több a közös toplistán (top ${v.k})?`,
     faqCombinedA: v => (v.ka === v.kb ? `Döntetlen: mindkét országból ${v.ka}.` : `${v.KW}: ${v.kW} (összesen ${v.k}).`),
     moreTitle: v => `További összehasonlítások: ${v.X}`,
+    morePeople: "Több rangsorolt személy", equalCounts: "Azonos létszám",
     sameRivalryTitle: v => `${v.pair}: más területek`,
     fullListsTitle: "Teljes listák",
     compareTitle: "Országok összehasonlítása",
@@ -458,6 +468,7 @@ const STRINGS = {
     faqCombinedQ: v => `أي البلدين لديه عدد أكبر في التصنيف المشترك لأفضل ${v.k}؟`,
     faqCombinedA: v => (v.ka === v.kb ? `تعادل: ${v.ka} لكل منهما.` : `${v.KW}: ${v.kW} من ${v.k}.`),
     moreTitle: v => `مقارنات أخرى: ${v.X}`,
+    morePeople: "عدد أكبر من الشخصيات المصنّفة", equalCounts: "عدد متساوٍ من الشخصيات",
     sameRivalryTitle: v => `${v.pair}: مجالات أخرى`,
     fullListsTitle: "القوائم الكاملة",
     compareTitle: "مقارنات مباشرة",
@@ -496,6 +507,7 @@ const STRINGS = {
     faqCombinedQ: v => `合同トップ${v.k}に多く入っているのはどちらの国ですか？`,
     faqCombinedA: v => (v.ka === v.kb ? `同数で、${v.ka}人ずつです。` : `${v.KW}で、${v.k}人中${v.kW}人です。`),
     moreTitle: v => `${v.X}と他の国を比較`,
+    morePeople: "ランク入りした人物が多い国", equalCounts: "同人数",
     sameRivalryTitle: v => `${v.pair}：他の分野`,
     fullListsTitle: "全リスト",
     compareTitle: "国別の直接比較",
@@ -534,6 +546,7 @@ const STRINGS = {
     faqCombinedQ: v => `在合并前${v.k}名中，哪个国家的人数更多？`,
     faqCombinedA: v => (v.ka === v.kb ? `两国持平，各${v.ka}位。` : `${v.KW}，占${v.k}位中的${v.kW}位。`),
     moreTitle: v => `${v.X}与其他国家对比`,
+    morePeople: "收录人数较多的国家", equalCounts: "收录人数相同",
     sameRivalryTitle: v => `${v.pair}：其他领域`,
     fullListsTitle: "完整榜单",
     compareTitle: "国家对比",

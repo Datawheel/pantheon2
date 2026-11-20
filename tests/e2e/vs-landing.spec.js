@@ -232,3 +232,20 @@ test('country comparison sitemap and share card agree on the canonical pair', as
   expect(sitemap).toContain(`<loc>https://pantheon.world${path}</loc>`);
   expect(sitemap).not.toContain('/palau/vs/jersey</loc>');
 });
+
+test('occupation footer offers suggested matchups and a custom country pair with counts', async ({page}) => {
+  await page.setViewportSize({width: 390, height: 844});
+  await page.goto('/profile/occupation/film-director');
+  const footer = page.locator('.occupation-page > section:last-child');
+  await expect(footer.getByRole('link', {name: /Japan vs United States/})).toBeVisible();
+  await expect(footer.locator('.vs-field-tile').first()).toHaveAttribute('href', /\/film-director\/country\/japan\/vs\/united-states$/);
+  const [a, b] = await footer.getByRole('combobox').all();
+  await a.selectOption('mexico');
+  await expect(b.locator('option[value="mexico"]')).toHaveJSProperty('disabled', true);
+  await b.selectOption('canada');
+  await expect(a.locator('option:checked')).toHaveText(/Mexico \([\d,]+\)/);
+  await expect(b.locator('option:checked')).toHaveText(/Canada \([\d,]+\)/);
+  await footer.getByRole('button', {name: /Compare countries/}).click();
+  await expect(page).toHaveURL(/\/film-director\/country\/canada\/vs\/mexico$/);
+  await expect(page.locator('.vs-poster-title')).toHaveText('Canada vs Mexico');
+});

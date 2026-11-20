@@ -77,3 +77,32 @@ test("occupation comparisons end with the pair in other fields, other opponents 
   await expect(more.locator(".vs-rival-col--b .vs-rival").first()).toHaveAttribute("href", /^\/profile\/occupation\/soccer-player\/country\/.+\/vs\/.+$/);
   await expect(more.locator(".vs-more-lists a")).toHaveCount(3);
 });
+
+test("singer follow-ups distinguish count leaders for the same countries", async ({page}) => {
+  await page.setViewportSize({width: 390, height: 844});
+  await page.goto("/profile/occupation/singer/country/argentina/vs/brazil");
+  const groups = page.locator(".vs-field-group").filter({has: page.locator("h3")});
+  for (const [title, sign] of [["More ranked people · Argentina", 1], ["More ranked people · Brazil", -1]]) {
+    const group = groups.filter({has: page.getByRole("heading", {name: title, exact: true})});
+    await expect(group).toBeVisible();
+    for (const tile of await group.locator("a").all()) {
+      const a = await tile.locator(".vs-field-a").innerText();
+      const b = await tile.locator(".vs-field-b").innerText();
+      expect(a).toMatch(/^Argentina [\d,]+$/);
+      expect(b).toMatch(/^Brazil [\d,]+$/);
+      const count = text => Number(text.split(" ").pop().replaceAll(",", ""));
+      expect(Math.sign(count(a) - count(b))).toBe(sign);
+      expect(await tile.getAttribute("href")).toMatch(/^\/profile\/occupation\/(?!singer\/)[^/]+\/country\/argentina\/vs\/brazil$/);
+    }
+  }
+});
+
+test("tied occupations are presented separately", async ({page}) => {
+  await page.goto("/profile/occupation/painter/country/france/vs/italy");
+  const group = page.locator(".vs-field-group").filter({has: page.getByRole("heading", {name: "Equal counts"})});
+  await expect(group).toBeVisible();
+  const tile = group.locator("a").first();
+  expect((await tile.locator(".vs-field-a").innerText()).replace("France ", "")).toBe(
+    (await tile.locator(".vs-field-b").innerText()).replace("Italy ", ""),
+  );
+});

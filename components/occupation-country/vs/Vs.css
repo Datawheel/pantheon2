@@ -60,6 +60,18 @@ header.vs-poster {
   border-radius: 50%;
   background: var(--oc-accent, #c6401a);
 }
+.occupation-poster .vs-poster-field {
+  font-size: clamp(2rem, 2vw, 2.8rem);
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: none;
+  text-wrap: balance;
+}
+.occupation-poster .vs-poster-field::before {
+  width: .45em;
+  height: .45em;
+  vertical-align: .1em;
+}
 .vs-poster-title {
   display: block;
   margin-top: 12px;
@@ -727,3 +739,23 @@ img.vs-match-avatar {
   .vs-field-name { font-size: 1.7rem; }
   .vs-rivals { grid-template-columns: minmax(0, 1fr); }
 }
+
+.vs-poster-layout a.vs-all-occupations {
+  display: inline-flex;
+  align-items: center;
+  gap: .8em;
+  min-height: 44px;
+  margin-block-start: 1.4rem;
+  padding: .6rem 1.6rem;
+  border-radius: 2rem;
+  background: #342a30;
+  color: #fff;
+  font: 600 1.5rem/1.35 var(--fontBody);
+}
+.vs-all-occupations:hover { text-decoration: underline; }
+.vs-poster .vs-all-occupations:focus-visible { outline-offset: 3px; }
+[dir="rtl"] .vs-all-occupations span { transform: scaleX(-1); }
+
+.vs-field-group h3 { margin: 2.4rem 0 .8rem; font: 600 1.8rem/1.35 var(--fontBody); }
+.vs-field-group h3 + .vs-field-grid { margin-top: 0; }
+.vs-field-counts { flex-wrap: wrap; }

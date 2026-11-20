@@ -18,7 +18,7 @@ import {VS_MIN_PEOPLE, pickRivals, rowSlug, vsPath} from "../vs";
 
 const MATCHUPS = 10;
 const COMBINED = 20;
-const RELATED_OCCUPATIONS = 12;
+const RELATED_PER_LEADER = 6;
 const RIVALS = 6;
 
 const mean = values => (values.length ? values.reduce((sum, v) => sum + v, 0) / values.length : null);
@@ -191,7 +191,7 @@ export function buildVsModel(dataA, dataB, lang = DEFAULT_LOCALE) {
     }));
 
   const occB = new Map(dataB.occupationsInCountry.map(row => [row.occupation, row]));
-  const sameRivalry = dataA.occupationsInCountry
+  const related = dataA.occupationsInCountry
     .filter(row => row.num_people >= VS_MIN_PEOPLE && occB.get(row.occupation)?.num_people >= VS_MIN_PEOPLE)
     .map(row => {
       const od = row.occupation_data || {};
@@ -205,8 +205,13 @@ export function buildVsModel(dataA, dataB, lang = DEFAULT_LOCALE) {
         min: Math.min(row.num_people, occB.get(row.occupation).num_people),
       };
     })
-    .sort((x, y) => y.min - x.min)
-    .slice(0, RELATED_OCCUPATIONS);
+    .sort((x, y) => y.min - x.min || x.key.localeCompare(y.key));
+  const byLead = [
+    related.filter(({counts: [a, b]}) => a > b),
+    related.filter(({counts: [a, b]}) => b > a),
+    related.filter(({counts: [a, b]}) => a === b),
+  ];
+  const sameRivalry = byLead.map((fields, i) => fields.slice(0, i === 2 ? 3 : RELATED_PER_LEADER));
 
   return {
     occupation,

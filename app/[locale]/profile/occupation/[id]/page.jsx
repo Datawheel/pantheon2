@@ -1,6 +1,7 @@
 import {cloneElement} from "react";
 import {plural} from "pluralize";
-// import ProfileNav from "../../../../components/common/Nav";
+import OccupationMatchups from "@/components/occupation/OccupationMatchups";
+import {getCountriesForOccupation} from "@/components/occupation-country/data";
 import Intro from "@/components/occupation/Intro";
 import Header from "@/components/occupation/Header";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
@@ -143,9 +144,10 @@ export default async function Page(props) {
     notFound();
   }
 
-  const [peopleAttrs, peopleHpi] = await Promise.all([
+  const [peopleAttrs, peopleHpi, countries] = await Promise.all([
     getPeople(occupation.id),
     getPeopleHpi(occupation.id),
+    getCountriesForOccupation(occupation.id, lang),
   ]);
 
   const people = peopleAttrs
@@ -248,6 +250,7 @@ export default async function Page(props) {
           title: section.title,
         }),
       )}
+      <OccupationMatchups occupation={occupation} rows={countries} locale={lang}/>
     </div>
   );
 }

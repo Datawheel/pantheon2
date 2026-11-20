@@ -1,0 +1,9 @@
+.occupation-pair-picker { margin-block-start: 3rem; }
+.occupation-pair-picker fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.occupation-pair-picker legend { margin-bottom: 1rem; font: 400 2.4rem/1.3 var(--fontTitle); }
+.occupation-pair-picker fieldset > div { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; }
+.occupation-pair-picker label { display: grid; gap: .5rem; flex: 1 1 20rem; min-width: 0; font: 600 1.4rem/1.4 var(--fontBody); }
+.occupation-pair-picker :is(select, button) { min-height: 44px; padding: .7rem 1rem; border: 1px solid #807c76; border-radius: 4px; font: 500 1.6rem/1.4 var(--fontBody); }
+.occupation-pair-picker select { width: 100%; color: #302b28; background: white; }
+.occupation-pair-picker button { color: white; background: #342a30; cursor: pointer; }
+.occupation-pair-picker select:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
