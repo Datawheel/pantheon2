@@ -40,14 +40,38 @@ test("Germany and Guyana show independent occupation rankings and comparable pla
   const summary = occupations.locator("summary");
   await summary.focus();
   await page.keyboard.press("Enter");
+  // Each country has its own People and RCA columns under a spanning heading.
+  await expect(occupations.locator("thead th[colspan]")).toHaveText(["Germany", "Guyana"]);
+  await expect(occupations.locator("thead tr").nth(1).getByRole("columnheader")).toHaveText([/^Biographies/, /^RCA/, /^Biographies/, /^RCA/]);
   const politicianCells = occupations.getByRole("row", {name: /Politicians/}).getByRole("cell");
-  const [germany, guyana] = await politicianCells.allTextContents();
-  const unpack = cell => cell.replaceAll(",", "").replace("×", "").split(" · ").map(Number);
-  const [gCount, gRca] = unpack(germany);
-  const [yCount, yRca] = unpack(guyana);
+  const [gCount, gRca, yCount, yRca] = (await politicianCells.allTextContents())
+    .map(cell => Number(cell.replaceAll(",", "").replace("×", "")));
   expect(gCount).toBeGreaterThan(yCount);
   expect(gRca).toBeLessThan(yRca);
-  await expect(occupations.getByRole("row", {name: /^Chemists /}).getByRole("cell").last()).toHaveText("0 · 0×");
+  // No people in a field: a muted zero and no ratio.
+  await expect(occupations.getByRole("row", {name: /^Chemists /}).getByRole("cell").nth(2)).toHaveText("0");
+  await expect(occupations.getByRole("row", {name: /^Chemists /}).getByRole("cell").nth(3)).toHaveText("—");
+  // Counts link to the occupation's list in that country; empty fields don't.
+  const politicians = occupations.getByRole("row", {name: /^Politicians/});
+  await expect(politicians.getByRole("link", {name: "Politicians · Guyana: 12"}))
+    .toHaveAttribute("href", "/profile/occupation/politician/country/guyana");
+  await expect(occupations.getByRole("row", {name: /^Chemists /}).getByRole("link")).toHaveCount(1);
+
+  // Headers sort: numbers largest first, a second click reverses, occupation goes back to A–Z.
+  const firstRow = () => occupations.locator("tbody tr").first().getByRole("rowheader");
+  const sortBy = n => occupations.locator("thead tr").nth(1).getByRole("button").nth(n);
+  await sortBy(3).click();
+  await expect(firstRow()).toHaveText("Cricketers");
+  await expect(occupations.locator("thead tr").nth(1).getByRole("columnheader").nth(3)).toHaveAttribute("aria-sort", "descending");
+  await sortBy(0).click();
+  await expect(firstRow()).toHaveText("Politicians");
+  await sortBy(0).click();
+  await expect(occupations.locator("thead tr").nth(1).getByRole("columnheader").nth(0)).toHaveAttribute("aria-sort", "ascending");
+  const germanCounts = (await occupations.locator("tbody tr td:first-of-type").allTextContents())
+    .map(text => Number(text.replaceAll(",", "")));
+  expect(germanCounts).toEqual([...germanCounts].sort((a, b) => a - b));
+  await occupations.getByRole("button", {name: /Occupations/}).click();
+  await expect(firstRow()).toHaveText("Actors");
 
   const geography = page.locator("#place-comparison");
   const births = geography.locator(".analysis-block").first();

@@ -4,6 +4,7 @@ import {formatNumber, formatShare, occupationPluralFor} from "@/app/occupationCo
 import {getTranslations} from "@/app/translations";
 import {localizePath} from "@/app/utils/hreflang";
 import {analysisStrings} from "./analysisTranslations";
+import OccupationTable from "./OccupationTable";
 import {comparisonGeography, rankOccupations} from "./data";
 
 function multiplier(value, locale) {
@@ -73,21 +74,25 @@ export function OccupationAnalysis({sides, locale}) {
     <OccupationRanking sides={sides} metric="rca" locale={locale} labels={labels} empty={empty}/>
     {labels.size > 0 && <details className="analysis-details">
       <summary>{t.all} ({formatNumber(labels.size, locale)})</summary>
-      <table aria-label={t.all}>
-        <thead><tr><th scope="col">{getTranslations(locale).nav.occupations}</th>
-          {sides.map(side => <th key={side.path} scope="col">{side.label}<small>{t.records} · RCA</small></th>)}
-        </tr></thead>
-        <tbody>{alphabetical.map(([slug, label]) => <tr key={slug}>
-          <th scope="row">{label}</th>
-          {byCountry.map((map, i) => {
-            if (!map.size) return <td key={sides[i].path}>{empty}</td>;
+      <OccupationTable caption={t.all} locale={locale} empty={empty}
+        headings={{occupation: getTranslations(locale).nav.occupations, count: t.records, rca: "RCA"}}
+        sides={sides.map((side, i) => ({key: side.path, label: side.label, missing: !byCountry[i].size}))}
+        rows={alphabetical.map(([slug, label]) => {
+          const cells = byCountry.map(map => {
             const row = map.get(slug);
-            return <td key={sides[i].path}>{formatNumber(row?.num_people ?? 0, locale)} · <bdi>{
-              multiplier(row ? row.rca : 0, locale)
-            }</bdi></td>;
-          })}
-        </tr>)}</tbody>
-      </table>
+            const count = row?.num_people ?? 0;
+            return {count, rca: count ? row.rca : 0};
+          });
+          return {
+            slug, label,
+            values: cells.flatMap(({count, rca}) => [count, rca]),
+            text: cells.flatMap(({count, rca}) => [formatNumber(count, locale), count ? multiplier(rca, locale) : "—"]),
+            // Each non-zero count links to that occupation's list for the country.
+            hrefs: cells.map(({count}, i) => count
+              ? localizePath(locale, `/profile/occupation/${slug}/country/${sides[i].country.slug}`)
+              : null),
+          };
+        })}/>
     </details>}
   </section>;
 }

@@ -52,9 +52,37 @@ header.country-poster {
 .analysis-details summary { cursor: pointer; padding: 1.3rem .4rem; font: 600 1.5rem/1.45 var(--fontBody); }
 .analysis-details table { border-collapse: collapse; table-layout: fixed; width: 100%; font-size: 1.4rem; }
 .analysis-details :is(th, td) { padding: .8rem .4rem; border-block-start: 1px solid #d6d0cb; text-align: end; overflow-wrap: anywhere; }
-.analysis-details th:first-child { text-align: start; width: 38%; }
+.analysis-details :is(tbody th, thead tr:first-child th:first-child) { text-align: start; }
+.analysis-col-label { width: 36%; }
 .analysis-details tbody th { font-weight: 400; }
 .analysis-details small { display: block; }
+/* Country names span their People and RCA columns. */
+.analysis-details thead th { vertical-align: bottom; font-size: 1.2rem; font-weight: 600; color: #595653; }
+.analysis-details thead tr:first-child th[colspan] { border-block-end: 2px solid var(--panel-ink); font-size: 1.4rem; color: var(--panel-ink); text-align: center; }
+.analysis-details thead tr + tr th { border-block-start: 0; }
+.analysis-side-a { --panel-ink: #28724f; }
+.analysis-side-b { --panel-ink: #66518a; }
+.analysis-details td:nth-of-type(2n + 1) { padding-inline-end: 1.6rem; }
+.analysis-details thead tr + tr th:nth-child(2n) { padding-inline-end: 1.6rem; }
+.analysis-details .is-zero { color: #a29d98; }
+/* Sortable headers: the whole label is the button; the arrow shows on hover
+   and stays for the active column. */
+.analysis-sort { display: inline-flex; align-items: baseline; gap: .3em; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: inherit; cursor: pointer; }
+.analysis-sort:hover { color: #211f1c; }
+.analysis-sort-icon { opacity: 0; transition: opacity .15s; }
+.analysis-sort:is(:hover, :focus-visible) .analysis-sort-icon { opacity: .5; }
+.analysis-sort-icon.is-active, .analysis-sort:hover .analysis-sort-icon.is-active { opacity: 1; }
+.analysis-details th[aria-sort] { color: #211f1c; }
+/* Counts link to the occupation's list for that country. */
+.analysis-details td a { color: inherit; text-decoration: underline; text-decoration-color: #c8c0b9; text-underline-offset: .2em; }
+.analysis-details td a:hover { color: #211f1c; text-decoration-color: currentColor; }
+.analysis-details thead tr + tr th { overflow-wrap: normal; hyphens: auto; }
+@media (max-width: 620px) {
+  .analysis-col-label { width: 30%; }
+  .analysis-details table { font-size: 1.3rem; }
+  .analysis-details thead tr + tr th { font-size: 1.05rem; }
+  .analysis-details td:nth-of-type(2n + 1), .analysis-details thead tr + tr th:nth-child(2n) { padding-inline-end: .8rem; }
+}
 .place-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin: 1.6rem 0 .5rem; }
 .place-stats dt { font: 500 1.25rem/1.35 var(--fontBody); color: #595653; overflow-wrap: anywhere; }
 .place-stats dd { margin: .25rem 0 0; font: 400 2.7rem/1.15 var(--fontTitle); }
