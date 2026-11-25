@@ -2,6 +2,12 @@
 export const translations = {
   en: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Occupation by country",
+        "country_vs": "Country comparison",
+        "occupation_country_vs": "Occupation comparison",
+      },
       close: "Close search",
       empty: "No results found.",
       error: "Suggestions could not load.",
@@ -509,6 +515,12 @@ export const translations = {
   },
   es: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Ocupación por país",
+        "country_vs": "Comparación de países",
+        "occupation_country_vs": "Comparación por ocupación",
+      },
       close: "Cerrar búsqueda",
       empty: "Sin resultados.",
       error: "No se pudieron cargar las sugerencias.",
@@ -1098,6 +1110,12 @@ export const translations = {
   },
   fr: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Profession par pays",
+        "country_vs": "Comparaison de pays",
+        "occupation_country_vs": "Comparaison par profession",
+      },
       close: "Fermer la recherche",
       empty: "Aucun résultat.",
       error: "Impossible de charger les suggestions.",
@@ -1702,6 +1720,12 @@ export const translations = {
   },
   de: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Beruf nach Land",
+        "country_vs": "Ländervergleich",
+        "occupation_country_vs": "Berufsvergleich",
+      },
       close: "Suche schließen",
       empty: "Keine Ergebnisse gefunden.",
       error: "Vorschläge konnten nicht geladen werden.",
@@ -2285,6 +2309,12 @@ export const translations = {
   },
   ru: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Профессия по странам",
+        "country_vs": "Сравнение стран",
+        "occupation_country_vs": "Сравнение по профессии",
+      },
       close: "Закрыть поиск",
       empty: "Ничего не найдено.",
       error: "Не удалось загрузить подсказки.",
@@ -2895,6 +2925,12 @@ export const translations = {
   },
   zh: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "按国家划分的职业",
+        "country_vs": "国家对比",
+        "occupation_country_vs": "职业对比",
+      },
       close: "关闭搜索",
       empty: "未找到结果。",
       error: "无法加载建议。",
@@ -3479,6 +3515,12 @@ export const translations = {
   },
   ja: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "国別の職業",
+        "country_vs": "国の比較",
+        "occupation_country_vs": "職業別の国比較",
+      },
       close: "検索を閉じる",
       empty: "結果が見つかりません。",
       error: "候補を読み込めませんでした。",
@@ -4073,6 +4115,12 @@ export const translations = {
   },
   ar: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "المهنة حسب البلد",
+        "country_vs": "مقارنة بين البلدان",
+        "occupation_country_vs": "مقارنة المهن",
+      },
       close: "إغلاق البحث",
       empty: "لم يتم العثور على نتائج.",
       error: "تعذّر تحميل الاقتراحات.",
@@ -4659,6 +4707,12 @@ export const translations = {
   },
   it: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Professione per paese",
+        "country_vs": "Confronto tra paesi",
+        "occupation_country_vs": "Confronto per professione",
+      },
       close: "Chiudi la ricerca",
       empty: "Nessun risultato.",
       error: "Impossibile caricare i suggerimenti.",
@@ -5282,6 +5336,12 @@ export const translations = {
   },
   pt: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Profissão por país",
+        "country_vs": "Comparação de países",
+        "occupation_country_vs": "Comparação por profissão",
+      },
       close: "Fechar pesquisa",
       empty: "Nenhum resultado encontrado.",
       error: "Não foi possível carregar as sugestões.",
@@ -5894,6 +5954,12 @@ export const translations = {
   },
   hu: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Foglalkozás országonként",
+        "country_vs": "Országok összehasonlítása",
+        "occupation_country_vs": "Foglalkozások összehasonlítása",
+      },
       close: "Keresés bezárása",
       empty: "Nincs találat.",
       error: "A javaslatokat nem sikerült betölteni.",
@@ -6455,6 +6521,12 @@ export const translations = {
   },
   nl: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Beroep per land",
+        "country_vs": "Landenvergelijking",
+        "occupation_country_vs": "Beroepenvergelijking",
+      },
       close: "Zoeken sluiten",
       empty: "Geen resultaten gevonden.",
       error: "Suggesties laden is mislukt.",
@@ -7047,6 +7119,12 @@ export const translations = {
   },
   pl: {
     searchSuggestions: {
+      // labels for the compound-page results (profile_type -> text)
+      types: {
+        "occupation_country": "Zawód według kraju",
+        "country_vs": "Porównanie krajów",
+        "occupation_country_vs": "Porównanie zawodów",
+      },
       close: "Zamknij wyszukiwanie",
       empty: "Brak wyników.",
       error: "Nie udało się wczytać podpowiedzi.",

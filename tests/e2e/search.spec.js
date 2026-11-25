@@ -22,7 +22,7 @@ test("search results use entity identity when slugs collide", async ({page}) => 
     },
   ];
 
-  await page.route("**/rpc/search_hybrid*", route =>
+  await page.route("**/rpc/search_v3*", route =>
     route.fulfill({json: collidingResults}),
   );
   await goto(page, "/data/faq");
@@ -36,6 +36,63 @@ test("search results use entity identity when slugs collide", async ({page}) => 
   await expect(resultItems).toHaveCount(2);
   await expect(resultItems.last()).toContainText("Poxoréu");
   watch.assertClean();
+});
+
+test("compound pages are labelled, linked by their path, and searched in the UI language", async ({page}) => {
+  const watch = attachErrorWatch(page);
+  const requests = [];
+  const row = (type, name, path, extra = {}) => ({
+    "profile_type": type, "entity_id": path, name, slug: path, "primary_meta": "ignored", "secondary_meta": null,
+    weight: 1, score: 1, method: "combo", path, ...extra,
+  });
+  await page.route("**/rpc/search_v3*", route => {
+    requests.push(new URL(route.request().url()).searchParams);
+    return route.fulfill({json: [
+      row("country_vs", "France vs Japan", "/profile/country/france/vs/japan"),
+      row("occupation_country_vs", "France vs Japan · Musician", "/profile/occupation/musician/country/france/vs/japan"),
+      row("occupation_country", "Soccer Player · Spain", "/profile/occupation/soccer-player/country/spain"),
+      {...row("person", "Lionel Messi", "/profile/person/Lionel_Messi"), "primary_meta": "SOCCER PLAYER", "secondary_meta": "Rosario"},
+    ]});
+  });
+  await goto(page, "/fr/data/faq");
+  await expect(async () => {
+    await page.locator(".navigation .search-btn button").click();
+    await expect(page.getByRole("combobox")).toBeVisible({timeout: 1000});
+  }).toPass({timeout: 10000});
+  await page.getByRole("combobox").fill("france japon");
+
+  const options = page.getByRole("option");
+  await expect(options).toHaveCount(4);
+  // the link comes from `path`, prefixed with the locale
+  await expect(options.nth(0)).toHaveAttribute("href", "/fr/profile/country/france/vs/japan");
+  await expect(options.nth(1)).toHaveAttribute("href", "/fr/profile/occupation/musician/country/france/vs/japan");
+  await expect(options.nth(2)).toHaveAttribute("href", "/fr/profile/occupation/soccer-player/country/spain");
+  // compound pages show a localized type label instead of the API's English meta
+  await expect(options.nth(0)).toContainText("Comparaison de pays");
+  await expect(options.nth(1)).toContainText("Comparaison par profession");
+  await expect(options.nth(2)).toContainText("Profession par pays");
+  await expect(options.nth(0)).not.toContainText("ignored");
+  // people keep occupation · birthplace
+  await expect(options.nth(3)).toContainText("SOCCER PLAYER · Rosario");
+  expect(requests.at(-1).get("lang")).toBe("fr");
+  expect(requests.at(-1).get("q")).toBe("france japon");
+  watch.assertClean();
+});
+
+test("a two-letter query already searches", async ({page}) => {
+  const requests = [];
+  await page.route("**/rpc/search_v3*", route => {
+    requests.push(new URL(route.request().url()).searchParams.get("q"));
+    return route.fulfill({json: [{
+      "profile_type": "person", "entity_id": "1", name: "Li Bai", slug: "Li_Bai", "primary_meta": "WRITER",
+      "secondary_meta": "Tang", path: "/profile/person/Li_Bai",
+    }]});
+  });
+  const input = await openSearch(page);
+  await input.fill("li");
+  await expect(page.getByRole("option")).toHaveCount(1);
+  await expect(page.getByRole("option")).toContainText("Li Bai");
+  expect(requests).toEqual(["li"]);
 });
 
 const trends = Array.from({length: 12}, (_, i) => ({
@@ -57,7 +114,7 @@ async function openSearch(page) {
 
 test("keyboard-only selection opens the third result", async ({page}) => {
   const input = await openSearch(page);
-  await input.pressSequentially("jo");
+  await input.pressSequentially("j");
   await input.press("Enter");
   await expect(input).toBeFocused();
   for (let i = 0; i < 3; i++) await input.press("ArrowDown");
@@ -72,7 +129,7 @@ test("keyboard-only selection opens the third result", async ({page}) => {
 test("scrolling, dismissal and tab order preserve the query", async ({page}) => {
   await page.setViewportSize({width: 390, height: 640});
   const input = await openSearch(page);
-  await input.fill("jo");
+  await input.fill("j");
   for (let i = 0; i < 10; i++) await input.press("ArrowDown");
   const list = page.getByRole("listbox");
   await expect.poll(() => list.evaluate(node => node.scrollTop)).toBeGreaterThan(0);
@@ -82,14 +139,14 @@ test("scrolling, dismissal and tab order preserve the query", async ({page}) => 
   expect(visibleRow.y + visibleRow.height).toBeLessThanOrEqual(bounds.y + bounds.height + 1);
   await input.press("Escape");
   await expect(input).toBeFocused();
-  await expect(input).toHaveValue("jo");
+  await expect(input).toHaveValue("j");
   await expect(input).toHaveAttribute("aria-expanded", "false");
   await input.press("ArrowUp");
   await expect(page.getByRole("option").last()).toHaveAttribute("aria-selected", "true");
   await input.press("Shift+Tab");
   await expect(page.getByRole("button", {name: "Close search"})).toBeFocused();
   await expect(list).toBeHidden();
-  await expect(input).toHaveValue("jo");
+  await expect(input).toHaveValue("j");
   await page.keyboard.press("Tab");
   await expect(input).toBeFocused();
   await input.press("ArrowDown");
@@ -111,7 +168,7 @@ test("hover leaves keyboard selection intact and click follows the pointed optio
 
 test("query edits reset selection and announce loading, empty, and failed requests", async ({page}) => {
   const input = await openSearch(page);
-  await page.route("**/rpc/search_hybrid*", route => {
+  await page.route("**/rpc/search_v3*", route => {
     const query = new URL(route.request().url()).searchParams.get("q");
     return query === "none" ? route.fulfill({json: []}) : route.abort();
   });
@@ -123,7 +180,7 @@ test("query edits reset selection and announce loading, empty, and failed reques
   await expect(status).toContainText("No results");
   await input.press("Backspace");
   await expect(status).toContainText("could not load");
-  await page.route("**/rpc/search_hybrid*", route => route.fulfill({json: []}));
+  await page.route("**/rpc/search_v3*", route => route.fulfill({json: []}));
   await input.press("Tab");
   const retry = page.getByRole("button", {name: "Try again"});
   await expect(retry).toBeFocused();
@@ -131,6 +188,7 @@ test("query edits reset selection and announce loading, empty, and failed reques
   await expect(input).toBeFocused();
   await expect(status).toContainText("No results");
   await input.press("Backspace");
+  await input.press("Backspace");   // "no" still searches; one letter is back to the trending list
   await expect(status).toContainText("12 suggestions");
   await expect(page.getByRole("option", {selected: true})).toHaveCount(0);
   await page.mouse.click(3, 600);

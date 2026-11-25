@@ -20,14 +20,38 @@ async function getSuggestions(query, locale, signal) {
       slug: row.slug,
     }));
   }
-  const {data} = await axios.get(`${PUBLIC_API}/rpc/search_hybrid`, {params: {q: query, lim: 50}, signal});
+  // search_v3 (etl/search in pantheon-etl): people, entities and the compound pages
+  // (occupation x country, country vs country, occupation x country vs country).
+  const {data} = await axios.get(`${PUBLIC_API}/rpc/search_v3`, {params: {q: query, lim: 30, lang: locale}, signal});
   return data;
 }
 
-const iconNames = {person: "person", occupation: "prof", country: "country", place: "place", era: "era"};
+// Wait for a pause in typing, but not long enough to feel broken.
+const SEARCH_DEBOUNCE_MS = 200;
+
+const iconNames = {
+  person: "person", occupation: "prof", country: "country", place: "place", era: "era",
+  "occupation_country": "prof", "country_vs": "country", "occupation_country_vs": "prof",
+};
+
+// Every result carries `path` (e.g. /profile/country/france/vs/japan); the fallback keeps an
+// older API response working.
+function resultHref(result, locale) {
+  const path = result.path || `/profile/${result.profile_type}/${result.slug}`;
+  return `${locale === DEFAULT_LOCALE ? "" : `/${locale}`}${path}`;
+}
 
 function suggestionQuery(value) {
-  return value.length < 3 ? null : value.trim();
+  const trimmed = value.trim();
+  // "li" is a real prefix now that the backend completes words; one CJK character is a real name
+  return trimmed.length >= 2 || /[^\u0000-\u007f]/.test(trimmed) ? trimmed : null;
+}
+
+// Compound pages say what they are ("Country comparison"); everything else shows the
+// API's own meta (occupation · birthplace for a person, industry for an occupation ...).
+function searchMeta(result, t) {
+  return t.searchSuggestions.types?.[result.profile_type]
+    || [result.primary_meta, result.secondary_meta].filter(Boolean).join(" · ");
 }
 
 function SearchPanel({value, setValue, locale}) {
@@ -53,7 +77,7 @@ function SearchPanel({value, setValue, locale}) {
       } catch {
         if (!controller.signal.aborted) setResponse({query, retry, error: true});
       }
-    }, query === null ? 0 : 800);
+    }, query === null ? 0 : SEARCH_DEBOUNCE_MS);
     return () => {
       clearTimeout(timer);
       controller.abort();
@@ -158,15 +182,13 @@ function SearchPanel({value, setValue, locale}) {
             <a role="option" tabIndex={-1} aria-selected={index === activeIndex}
               key={`${result.profile_type}_${result.entity_id ?? result.pid ?? `${result.slug}_${index}`}`}
               id={`${listId}-${index}`}
-              href={`${locale === DEFAULT_LOCALE ? "" : `/${locale}`}/profile/${result.profile_type}/${result.slug}`}
+              href={resultHref(result, locale)}
               onMouseDown={event => event.preventDefault()}>
               <span aria-hidden="true" className="search-icon">
                 {iconNames[result.profile_type] && <Image alt="" width="18" height="18" src={`/images/icons/icon-${iconNames[result.profile_type]}.svg`}/>}
               </span>
               <span className="search-name">{result.name}</span>
-              {(result.primary_meta || result.secondary_meta) && (
-                <span className="search-meta">{[result.primary_meta, result.secondary_meta].filter(Boolean).join(" · ")}</span>
-              )}
+              {searchMeta(result, t) && <span className="search-meta">{searchMeta(result, t)}</span>}
             </a>
           ))}
         </div>
