@@ -46,7 +46,7 @@ header.country-poster {
 .analysis-value { flex: none; flex-wrap: wrap; justify-content: flex-end; }
 .analysis-value small, .analysis-details small { font-size: 1.2rem; color: #595653; }
 .analysis-track { height: 5px; margin-block-start: .65rem; background: #e6e1dc; position: relative; }
-.analysis-track span { display: block; height: 100%; background: var(--panel-ink); }
+.analysis-track span { display: block; height: 100%; background: var(--panel-ink, #28724f); }
 .analysis-track i { position: absolute; inset-block: -2px; border-inline-start: 1px solid #211f1c; }
 .analysis-details { border-block: 1px solid #c8c0b9; }
 .analysis-details summary { cursor: pointer; padding: 1.3rem .4rem; font: 600 1.5rem/1.45 var(--fontBody); }
@@ -58,7 +58,7 @@ header.country-poster {
 .analysis-details small { display: block; }
 /* Country names span their People and RCA columns. */
 .analysis-details thead th { vertical-align: bottom; font-size: 1.2rem; font-weight: 600; color: #595653; }
-.analysis-details thead tr:first-child th[colspan] { border-block-end: 2px solid var(--panel-ink); font-size: 1.4rem; color: var(--panel-ink); text-align: center; }
+.analysis-details thead tr:first-child th[colspan] { border-block-end: 2px solid var(--panel-ink, #28724f); font-size: 1.4rem; color: var(--panel-ink, #28724f); text-align: center; }
 .analysis-details thead tr + tr th { border-block-start: 0; }
 .analysis-side-a { --panel-ink: #28724f; }
 .analysis-side-b { --panel-ink: #66518a; }
