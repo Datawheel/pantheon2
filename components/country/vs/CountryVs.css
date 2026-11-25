@@ -62,7 +62,7 @@ header.country-poster {
 .analysis-details thead tr + tr th { border-block-start: 0; }
 .analysis-side-a { --panel-ink: #28724f; }
 .analysis-side-b { --panel-ink: #66518a; }
-.analysis-details td:nth-of-type(2n + 1) { padding-inline-end: 1.6rem; }
+.analysis-details td.analysis-count { padding-inline-end: 1.6rem; }
 .analysis-details thead tr + tr th:nth-child(2n) { padding-inline-end: 1.6rem; }
 .analysis-details .is-zero { color: #a29d98; }
 /* Sortable headers: the whole label is the button; the arrow shows on hover
@@ -77,11 +77,24 @@ header.country-poster {
 .analysis-details td a { color: inherit; text-decoration: underline; text-decoration-color: #c8c0b9; text-underline-offset: .2em; }
 .analysis-details td a:hover { color: #211f1c; text-decoration-color: currentColor; }
 .analysis-details thead tr + tr th { overflow-wrap: normal; hyphens: auto; }
+/* Between the sides: an arrow toward the leader on the sorted metric. */
+.analysis-col-lead { width: 2.8rem; }
+.analysis-details :is(th, td).analysis-lead { padding-inline: 0; text-align: center; font-weight: 700; color: #a29d98; }
+.analysis-details .analysis-lead.is-a { color: #28724f; }
+.analysis-details .analysis-lead.is-b { color: #66518a; }
+.analysis-lead span[aria-hidden] { display: inline-block; font-size: 1.8rem; line-height: 1; }
+.analysis-lead span[aria-hidden]:dir(rtl) { transform: scaleX(-1); }
+/* Rows take a light wash of the leading country's color. */
+.analysis-details tr.is-lead-a { background: #e1efe5; }
+.analysis-details tr.is-lead-b { background: #ece4f6; }
+.analysis-details td.is-lead { font-weight: 700; color: #211f1c; }
+.analysis-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 620px) {
   .analysis-col-label { width: 30%; }
+  .analysis-col-lead { width: 2rem; }
   .analysis-details table { font-size: 1.3rem; }
   .analysis-details thead tr + tr th { font-size: 1.05rem; }
-  .analysis-details td:nth-of-type(2n + 1), .analysis-details thead tr + tr th:nth-child(2n) { padding-inline-end: .8rem; }
+  .analysis-details td.analysis-count, .analysis-details thead tr + tr th:nth-child(2n) { padding-inline-end: .8rem; }
 }
 .place-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin: 1.6rem 0 .5rem; }
 .place-stats dt { font: 500 1.25rem/1.35 var(--fontBody); color: #595653; overflow-wrap: anywhere; }

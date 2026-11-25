@@ -43,14 +43,18 @@ test("Germany and Guyana show independent occupation rankings and comparable pla
   // Each country has its own People and RCA columns under a spanning heading.
   await expect(occupations.locator("thead th[colspan]")).toHaveText(["Germany", "Guyana"]);
   await expect(occupations.locator("thead tr").nth(1).getByRole("columnheader")).toHaveText([/^Biographies/, /^RCA/, /^Biographies/, /^RCA/]);
-  const politicianCells = occupations.getByRole("row", {name: /Politicians/}).getByRole("cell");
+  const politicianCells = occupations.getByRole("row", {name: /Politicians/}).locator("td:not(.analysis-lead)");
   const [gCount, gRca, yCount, yRca] = (await politicianCells.allTextContents())
     .map(cell => Number(cell.replaceAll(",", "").replace("×", "")));
   expect(gCount).toBeGreaterThan(yCount);
   expect(gRca).toBeLessThan(yRca);
   // No people in a field: a muted zero and no ratio.
-  await expect(occupations.getByRole("row", {name: /^Chemists /}).getByRole("cell").nth(2)).toHaveText("0");
-  await expect(occupations.getByRole("row", {name: /^Chemists /}).getByRole("cell").nth(3)).toHaveText("—");
+  await expect(occupations.getByRole("row", {name: /^Chemists /}).locator("td:not(.analysis-lead)").nth(2)).toHaveText("0");
+  await expect(occupations.getByRole("row", {name: /^Chemists /}).locator("td:not(.analysis-lead)").nth(3)).toHaveText("—");
+  // The middle arrow points to the leader: by biographies, then by RCA once an RCA column is sorted.
+  const politicianLead = occupations.getByRole("row", {name: /^Politicians/}).locator(".analysis-lead");
+  await expect(politicianLead).toHaveClass(/is-a/);
+  await expect(politicianLead).toContainText("Germany");
   // Counts link to the occupation's list in that country; empty fields don't.
   const politicians = occupations.getByRole("row", {name: /^Politicians/});
   await expect(politicians.getByRole("link", {name: "Politicians · Guyana: 12"}))
@@ -62,6 +66,7 @@ test("Germany and Guyana show independent occupation rankings and comparable pla
   const sortBy = n => occupations.locator("thead tr").nth(1).getByRole("button").nth(n);
   await sortBy(3).click();
   await expect(firstRow()).toHaveText("Cricketers");
+  await expect(politicianLead).toHaveClass(/is-b/);
   await expect(occupations.locator("thead tr").nth(1).getByRole("columnheader").nth(3)).toHaveAttribute("aria-sort", "descending");
   await sortBy(0).click();
   await expect(firstRow()).toHaveText("Politicians");
