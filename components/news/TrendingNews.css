@@ -358,6 +358,16 @@
   margin: 0 0 1rem 0;
 }
 
+/* The summary holds markdown rendered to block-level HTML, so the spacing
+   belongs to the paragraphs inside it. */
+.trending-news-summary p {
+  margin: 0 0 1rem 0;
+}
+
+.trending-news-summary p:last-child {
+  margin-bottom: 0;
+}
+
 .citations-container {
   margin-top: 1rem;
 }
